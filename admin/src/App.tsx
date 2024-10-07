@@ -15,6 +15,8 @@ import { Admin, CustomRoutes, Resource } from 'react-admin';
 import { Route } from 'react-router-dom';
 import CustomLayout from './components/layout/layout';
 import { Role } from './entities/Administrator';
+import activityCategories from './pages/activity-categories';
+import activityThemes from './pages/activity-themes';
 import EditAdministratorProfile from './pages/admin-profile/edit';
 import administrators from './pages/administrators';
 import LoginPage from './pages/auth/login';
@@ -133,6 +135,12 @@ const App = () => (
                             options={{ label: 'interest_categories.label' }}
                             {...categoryInterest}
                         />
+                        <Resource
+                            name="activities/categories"
+                            options={{ label: 'interest_categories.label' }}
+                            {...activityCategories}
+                        />
+                        <Resource name="activities/themes" {...activityThemes} />
                         <Resource
                             icon={CheckCircleIcon}
                             name="objectives"

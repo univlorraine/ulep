@@ -43,6 +43,27 @@ export class ActivityThemeResponse {
   }
 }
 
+export class GetActivityThemeResponse {
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @Expose({ groups: ['read'] })
+  id: string;
+
+  @Swagger.ApiProperty({ type: () => TextContentResponse })
+  @Expose({ groups: ['read'] })
+  content: TextContentResponse;
+
+  constructor(partial: Partial<GetActivityThemeResponse>) {
+    Object.assign(this, partial);
+  }
+
+  static from(category: ActivityTheme) {
+    return new GetActivityThemeResponse({
+      id: category.id,
+      content: TextContentResponse.fromDomain(category.content),
+    });
+  }
+}
+
 export class ActivityThemeCategoryResponse {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
   @Expose({ groups: ['read'] })
@@ -73,6 +94,27 @@ export class ActivityThemeCategoryResponse {
       themes: activityThemeCategory.themes.map((theme) =>
         ActivityThemeResponse.from(theme, languageCode),
       ),
+    });
+  }
+}
+
+export class GetActivityThemeCategoryResponse {
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @Expose({ groups: ['read'] })
+  id: string;
+
+  @Swagger.ApiProperty({ type: () => TextContentResponse })
+  @Expose({ groups: ['read'] })
+  content: TextContentResponse;
+
+  constructor(partial: Partial<GetActivityThemeCategoryResponse>) {
+    Object.assign(this, partial);
+  }
+
+  static from(category: ActivityThemeCategory) {
+    return new GetActivityThemeCategoryResponse({
+      id: category.id,
+      content: TextContentResponse.fromDomain(category.content),
     });
   }
 }

@@ -15,6 +15,7 @@ import { CONVERSATION_CATEGORY } from '../entities/Report';
 import { RoutineExecution } from '../entities/RoutineExecution';
 import { TandemStatus } from '../entities/Tandem';
 import User from '../entities/User';
+import ActivitiesCategoriesQuery from '../queries/ActivitiesCategoriesQuery';
 import AdministratorsQuery from '../queries/AdministratorsQuery';
 import ChatQuery from '../queries/ChatQuery';
 import CountriesQuery from '../queries/CountriesQuery';
@@ -189,6 +190,9 @@ const customDataProvider = {
         let url = new URL(`${process.env.REACT_APP_API_URL}/${resource}`);
 
         switch (resource) {
+            case 'activities/categories':
+                url.search = ActivitiesCategoriesQuery(params);
+                break;
             case 'users/administrators':
                 url.search = AdministratorsQuery(params);
                 break;

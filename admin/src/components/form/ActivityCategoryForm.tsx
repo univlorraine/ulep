@@ -4,21 +4,13 @@ import { Button, useTranslate } from 'react-admin';
 import IndexedTranslation from '../../entities/IndexedTranslation';
 import TranslationForm from './TranslationForm';
 
-interface InterestFormProps {
+interface ActivityCategoryFormProps {
     handleSubmit: (name: string, translations: IndexedTranslation[]) => void;
     name?: string;
-    tradKey: string;
-    tradModeKey: string;
     translations?: IndexedTranslation[];
 }
 
-const InterestForm: React.FC<InterestFormProps> = ({
-    handleSubmit,
-    name,
-    translations,
-    tradKey = 'interests',
-    tradModeKey = 'create',
-}) => {
+const ActivityCategoryForm: React.FC<ActivityCategoryFormProps> = ({ handleSubmit, name, translations }) => {
     const translate = useTranslate();
     const [newName, setNewName] = useState<string>(name || '');
     const [newTranslations, setNewTranslations] = useState<IndexedTranslation[]>(translations || []);
@@ -30,7 +22,7 @@ const InterestForm: React.FC<InterestFormProps> = ({
 
     return (
         <Box sx={{ m: 4 }}>
-            <Typography variant="subtitle1">{translate(`${tradKey}.${tradModeKey}.name`)}</Typography>
+            <Typography variant="subtitle1">{translate(`activities_categories.name`)}</Typography>
 
             <Box alignItems="center" display="flex" flexDirection="row">
                 <Input
@@ -63,4 +55,4 @@ const InterestForm: React.FC<InterestFormProps> = ({
     );
 };
 
-export default InterestForm;
+export default ActivityCategoryForm;

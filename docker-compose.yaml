@@ -1,4 +1,4 @@
-version: '3.4'
+version: "3.4"
 
 services:
   api:
@@ -69,6 +69,7 @@ services:
       REACT_APP_CHAT_URL: ${REACT_APP_CHAT_URL:-http://0.0.0.0:3003}
       REACT_APP_SOCKET_CHAT_URL: ${REACT_APP_SOCKET_CHAT_URL:-ws://0.0.0.0:5001}
       REACT_APP_JITSI_DOMAIN: ${REACT_APP_JITSI_DOMAIN:-jitsi.ulep.thestaging.io}
+      REACT_APP_DEFAULT_TRANSLATION_LANGUAGE: ${REACT_APP_DEFAULT_TRANSLATION_LANGUAGE:-FR}
       WDS_SOCKET_PORT: 0
 
   auth:

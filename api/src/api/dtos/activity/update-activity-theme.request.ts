@@ -6,12 +6,7 @@ export class UpdateActivityThemeRequest {
   @Swagger.ApiProperty({ type: 'string' })
   @IsString()
   @IsOptional()
-  name?: string;
-
-  @Swagger.ApiProperty({ type: 'string' })
-  @IsString()
-  @IsOptional()
-  languageCode?: string;
+  content: string;
 
   @Swagger.ApiPropertyOptional({ type: 'array' })
   @IsOptional()

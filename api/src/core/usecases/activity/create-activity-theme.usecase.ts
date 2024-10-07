@@ -12,7 +12,7 @@ import {
 
 export class CreateActivityThemeCommand {
   categoryId: string;
-  name: string;
+  content: string;
   languageCode: string;
   translations: Translation[];
 }
@@ -29,7 +29,7 @@ export class CreateActivityThemeUsecase {
     const activityTheme =
       await this.activityRepository.ofThemeNameAndCategoryId(
         command.categoryId,
-        command.name,
+        command.content,
       );
     if (activityTheme) {
       throw new RessourceAlreadyExists();
@@ -42,7 +42,7 @@ export class CreateActivityThemeUsecase {
 
     return this.activityRepository.createTheme({
       categoryId: command.categoryId,
-      content: command.name,
+      content: command.content,
       languageCode: command.languageCode,
       translations: command.translations,
     });

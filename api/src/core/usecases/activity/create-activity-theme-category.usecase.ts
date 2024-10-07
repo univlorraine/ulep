@@ -11,9 +11,9 @@ import {
 } from 'src/core/ports/language.repository';
 
 export class CreateActivityThemeCategoryCommand {
-  name: string;
+  content: string;
   languageCode: string;
-  translations: Translation[];
+  translations?: Translation[];
 }
 @Injectable()
 export class CreateActivityThemeCategoryUsecase {
@@ -26,7 +26,7 @@ export class CreateActivityThemeCategoryUsecase {
 
   async execute(command: CreateActivityThemeCategoryCommand) {
     const activityThemeCategory =
-      await this.activityRepository.ofCategoryThemeName(command.name);
+      await this.activityRepository.ofCategoryThemeName(command.content);
     if (activityThemeCategory) {
       throw new RessourceAlreadyExists();
     }
@@ -37,7 +37,7 @@ export class CreateActivityThemeCategoryUsecase {
     }
 
     return this.activityRepository.createThemeCategory({
-      content: command.name,
+      content: command.content,
       languageCode: command.languageCode,
       translations: command.translations,
     });
