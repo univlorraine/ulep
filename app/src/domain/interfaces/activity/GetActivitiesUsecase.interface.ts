@@ -7,7 +7,7 @@ export type GetActivitiesFilters = {
     language: Language[];
     proficiency: CEFR[];
     activityTheme: ActivityTheme[];
-    isMe: boolean;
+    shouldTakeAllMine: boolean;
     page: number;
     searchTitle?: string;
 };
