@@ -7,20 +7,40 @@ interface AvailabilityLineProps {
     onPress?: ({ id, occurence }: { id: string; occurence: AvailabilitiesOptions }) => void;
 }
 
-const AvailabilityLine: React.FC<AvailabilityLineProps> = ({ availability, day, onPress }) => {
-    const { t } = useTranslation();
-    let color: string;
+interface AvailabilityTextProps {
+    day: string;
+    availability: AvailabilitiesOptions;
+    className?: string;
+}
 
+const getColor = (availability: AvailabilitiesOptions) => {
     switch (availability) {
         case 'AVAILABLE':
-            color = '#FF8700';
-            break;
+            return '#FF8700';
         case 'UNAVAILABLE':
-            color = '#F60C36';
-            break;
+            return '#F60C36';
         default:
-            color = '#00FF47';
+            return '#00FF47';
     }
+};
+
+export const AvailabilityText: React.FC<AvailabilityTextProps> = ({ day, availability, className }) => {
+    const { t } = useTranslation();
+    return (
+        <div className={`${styles['availability-text']} ${className}`}>
+            <span
+                className={styles['availability-day']}
+                style={{ color: availability === 'UNAVAILABLE' ? '#767676' : 'black' }}
+            >
+                {t(`days.${day}`)}
+            </span>
+            <div style={{ backgroundColor: getColor(availability) }} className={styles.dot} />
+        </div>
+    );
+};
+
+const AvailabilityLine: React.FC<AvailabilityLineProps> = ({ availability, day, onPress }) => {
+    const { t } = useTranslation();
 
     return (
         <button
@@ -37,7 +57,7 @@ const AvailabilityLine: React.FC<AvailabilityLineProps> = ({ availability, day, 
                 {t(`days.${day}`)}
             </span>
             <div className={styles['availability-container']}>
-                <div style={{ backgroundColor: color }} className={styles.dot} />
+                <div style={{ backgroundColor: getColor(availability) }} className={styles.dot} />
                 <span
                     className={styles['availability-status']}
                     style={{ color: availability === 'UNAVAILABLE' ? '#767676' : 'black' }}

@@ -54,6 +54,13 @@
     position: fixed;
     bottom: 20px;
     right: 20px;
+    z-index: 100;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+}
+
+.little-button {
+    height: 40px;
+    width: auto;
 }
 
 .add-button-icon {

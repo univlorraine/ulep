@@ -1,6 +1,5 @@
-import FAQPng from './FAQ.png';
 import AddSvg from './add.svg';
-import AdviceSvg from './advice.svg';
+import AdvicePng from './advice.png';
 import ArrowDownSvg from './arrow-down.svg';
 import ArrowRightSvg from './arrow-right.svg';
 import ArrowUpSvg from './arrow-up.svg';
@@ -13,6 +12,7 @@ import BonjourBubbleSvg from './bonjour-bubble.svg';
 import ConversationsSvg from './bottom-bar/conversations.svg';
 import HomeSvg from './bottom-bar/home.svg';
 import CalendarSvg from './calendar.svg';
+import CancelledPng from './cancelled.png';
 import CameraSvg from './camera.svg';
 import ChatSvg from './chat.svg';
 import CheckSvg from './check.svg';
@@ -20,13 +20,15 @@ import ChineseBubble from './china-bubble.svg';
 import ClockPng from './clock.png';
 import CloseSvg from './close.svg';
 import CloseBlackSvg from './close_black.svg';
+import CloseWhiteSvg from './close_white.svg';
 import CreateAccountPng from './create-account-logo.png';
 import DicePng from './dice.png';
-import DiceSvg from './dice.svg';
+import DicesPng from './dices.png';
 import DisconnectSvg from './disconnect.svg';
 import DownloadSvg from './download.svg';
 import EditPng from './edit.png';
 import EyeSvg from './eye.svg';
+import FAQPng from './FAQ.png';
 import FicheSvg from './fiche.svg';
 import HiBubbleSvg from './hi-bubble.svg';
 import InfoSvg from './info.svg';
@@ -49,18 +51,18 @@ import QuizzPng from './quizz.png';
 import RecordSvg from './record.svg';
 import ReportSvg from './report.svg';
 import SenderSvg from './sender.svg';
-import SettingsSvg from './settings.svg';
+import SettingsPng from './settings.png';
 import SmallAvatarPng from './small-avatar.png';
 import StarPng from './star.png';
 import TandemPng from './tandem.png';
 import TandemNotFoundPng from './tandem_not_found.png';
 import TrophiePng from './trophie.png';
 import AvatarPlaceholderPng from './user_placeholder.png';
-import VocabularySvg from './vocabulary.svg';
+import VocabularyPng from './vocabulary.png';
 import WritingSkillPng from './writing_skill.png';
 export {
     AddSvg,
-    AdviceSvg,
+    AdvicePng,
     ArrowDownSvg,
     ArrowLeftSvg,
     ArrowRightSvg,
@@ -73,17 +75,19 @@ export {
     BackgroundYellowPng,
     BonjourBubbleSvg,
     CalendarSvg,
+    CancelledPng,
     CameraSvg,
     ChatSvg,
     CheckSvg,
     ChineseBubble,
     ClockPng,
     CloseBlackSvg,
+    CloseWhiteSvg,
     CloseSvg,
     ConversationsSvg,
     CreateAccountPng,
     DicePng,
-    DiceSvg,
+    DicesPng,
     DisconnectSvg,
     DownloadSvg,
     EditPng,
@@ -111,12 +115,12 @@ export {
     RecordSvg,
     ReportSvg,
     SenderSvg,
-    SettingsSvg,
+    SettingsPng,
     SmallAvatarPng,
     StarPng,
     TandemNotFoundPng,
     TandemPng,
     TrophiePng,
-    VocabularySvg,
+    VocabularyPng,
     WritingSkillPng,
 };

@@ -1,0 +1,42 @@
+.container {
+    background: #8bc4c4;
+}
+
+.availabilities_container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+    margin-top: 16px;
+}
+
+.title {
+    font-size: 16px;
+    font-weight: 700;
+    font-family: 'Roboto', sans-serif;
+    line-height: 20px;
+    margin: 0;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 16px;
+    cursor: pointer;
+}
+
+.content {
+    padding: 0 16px 16px 16px;
+}
+
+.note {
+    margin-top: 5px;
+    font-size: 16px;
+    font-weight: 400;
+    font-family: 'Maven Pro', sans-serif;
+    line-height: 20px;
+    background-color: #fff;
+    padding: 16px;
+    border-radius: 5px;
+}

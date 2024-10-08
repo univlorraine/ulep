@@ -13,14 +13,14 @@ import {
   LearningLanguageRepositoryGetProps,
 } from 'src/core/ports/learning-language.repository';
 import {
-  HistorizedUnmatchedLearningLanguageRelation,
   historizedUnmatchedLearningLanguageMapper,
+  HistorizedUnmatchedLearningLanguageRelation,
 } from 'src/providers/persistance/mappers/historizedUnmatchedLearningLanguage.mapper';
 import {
-  LearningLanguageRelations,
-  LearningLanguageWithTandemRelations,
   learningLanguageMapper,
+  LearningLanguageRelations,
   learningLanguageWithTandemMapper,
+  LearningLanguageWithTandemRelations,
 } from '../mappers/learningLanguage.mapper';
 
 @Injectable()
@@ -145,9 +145,7 @@ export class PrismaLearningLanguageRepository
         },
         OR: [
           {
-            Tandem: {
-              is: null,
-            },
+            Tandem: null,
           },
           {
             Tandem: {
@@ -187,9 +185,7 @@ export class PrismaLearningLanguageRepository
         },
         OR: [
           {
-            Tandem: {
-              is: null,
-            },
+            Tandem: null,
           },
           {
             Tandem: {
@@ -275,9 +271,7 @@ export class PrismaLearningLanguageRepository
         },
         OR: [
           {
-            Tandem: {
-              is: null,
-            },
+            Tandem: null,
           },
           {
             Tandem: {
@@ -358,9 +352,7 @@ export class PrismaLearningLanguageRepository
             },
           },
           {
-            Tandem: {
-              is: null,
-            },
+            Tandem: null,
           },
         ],
       });
@@ -387,9 +379,7 @@ export class PrismaLearningLanguageRepository
             },
           },
           {
-            Tandem: {
-              is: null,
-            },
+            Tandem: null,
           },
         ],
       });
@@ -416,9 +406,7 @@ export class PrismaLearningLanguageRepository
             },
           },
           {
-            Tandem: {
-              is: null,
-            },
+            Tandem: null,
           },
         ],
       });
@@ -521,9 +509,7 @@ export class PrismaLearningLanguageRepository
   async getUnmatchedLearningLanguages() {
     const learningLanguages = await this.prisma.learningLanguages.findMany({
       where: {
-        Tandem: {
-          is: null,
-        },
+        Tandem: null,
       },
       include: LearningLanguageRelations,
     });

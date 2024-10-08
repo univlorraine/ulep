@@ -1,27 +1,43 @@
 export const EMAIL_GATEWAY = 'email.gateway';
 
+type UserParams = {
+  firstname: string;
+  lastname: string;
+};
+
+type UserParamsWithUniversity = UserParams & {
+  university: string;
+};
+
+type SessionParams = {
+  date: string;
+  hour: string;
+  partnerName: string;
+  comment: string;
+};
+
 export interface SendWelcomeMailProps {
   to: string;
   language: string;
-  user: { firstname: string; lastname: string };
+  user: UserParams;
 }
 
 export interface NewUserRegistrationNoticeEmailProps {
   to: string;
   language: string;
-  user: { firstname: string; lastname: string };
+  user: UserParams;
 }
 
 export interface PasswordChangeDeniedEmailProps {
   to: string;
   language: string;
-  user: { firstname: string; lastname: string };
+  user: UserParams;
 }
 
 export interface AccountBlockedEmailProps {
   to: string;
   language: string;
-  user: { firstname: string; lastname: string };
+  user: UserParams;
 }
 
 export interface TandemValidationNoticeEmailProps {
@@ -32,42 +48,42 @@ export interface TandemValidationNoticeEmailProps {
 export interface NewPartnerEmail {
   to: string;
   language: string;
-  user: { firstname: string; lastname: string; university: string };
-  partner: { firstname: string; lastname: string; university: string };
+  user: UserParamsWithUniversity;
+  partner: UserParamsWithUniversity;
 }
 
 export interface NewTandemNoticeEmailProps {
   to: string;
   language: string;
-  user: { firstname: string; lastname: string; university: string };
-  partner: { firstname: string; lastname: string; university: string };
+  user: UserParamsWithUniversity;
+  partner: UserParamsWithUniversity;
 }
 
 export interface TandemCanceledEmailProps {
   to: string;
   language: string;
-  user: { firstname: string; lastname: string; university: string };
-  partner: { firstname: string; lastname: string; university: string };
+  user: UserParamsWithUniversity;
+  partner: UserParamsWithUniversity;
 }
 
 export interface TandemPausedUnpausedEmailProps {
   to: string;
   language: string;
-  user: { firstname: string; lastname: string; university: string };
-  partner: { firstname: string; lastname: string; university: string };
+  user: UserParamsWithUniversity;
+  partner: UserParamsWithUniversity;
 }
 
 export interface TandemCanceledNoticeEmailProps {
   to: string;
   language: string;
-  user: { firstname: string; lastname: string; university: string };
-  partner: { firstname: string; lastname: string; university: string };
+  user: UserParamsWithUniversity;
+  partner: UserParamsWithUniversity;
 }
 
 export interface TandemClosureNoticeEmailProps {
   to: string;
   language: string;
-  user: { firstname: string; lastname: string };
+  user: UserParams;
   university: { name: string; closeDate: string };
 }
 export type TandemPausedUnpausedFunction = (
@@ -78,23 +94,52 @@ export interface NewMessageEmailProps {
   to: string;
   language: string;
   content: string;
-  user: { firstname: string; lastname: string };
-  sender: { firstname: string; lastname: string };
+  user: UserParams;
+  sender: UserParams;
 }
 
 export interface NewReportEmailProps {
   to: string;
   language: string;
   reportType: string;
-  user: { firstname: string; lastname: string };
+  user: UserParams;
 }
 
 export interface NewReportMessageEmailProps {
   to: string;
   language: string;
   reportType: string;
-  user: { firstname: string; lastname: string };
-  reportedUser: { firstname: string; lastname: string };
+  user: UserParams;
+  reportedUser: UserParams;
+}
+
+export interface SessionStartEmailProps {
+  to: string;
+  language: string;
+  user: UserParams;
+  session: SessionParams;
+  type: 'FifteenMinutes' | 'Daily';
+}
+
+export interface SessionCanceledEmailProps {
+  to: string;
+  language: string;
+  user: UserParams;
+  session: SessionParams;
+}
+
+export interface SessionUpdatedEmailProps {
+  to: string;
+  language: string;
+  user: UserParams;
+  session: SessionParams;
+}
+
+export interface SessionCreatedEmailProps {
+  to: string;
+  language: string;
+  user: UserParams;
+  session: SessionParams;
 }
 
 export interface EmailGateway {
@@ -158,4 +203,16 @@ export interface EmailGateway {
 
   // Notifies users about a new report message
   sendNewReportMessageEmail(props: NewReportMessageEmailProps): Promise<void>;
+
+  // Notifies users about a session start
+  sendSessionStartEmail(props: SessionStartEmailProps): Promise<void>;
+
+  // Notifies users about a session cancellation
+  sendSessionCanceledEmail(props: SessionCanceledEmailProps): Promise<void>;
+
+  // Notifies users about a session update
+  sendSessionUpdatedEmail(props: SessionUpdatedEmailProps): Promise<void>;
+
+  // Notifies users about a session creation
+  sendSessionCreatedEmail(props: SessionCreatedEmailProps): Promise<void>;
 }

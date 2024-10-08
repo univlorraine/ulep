@@ -1,0 +1,22 @@
+.container {
+    border-radius: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    height: 100%;
+    margin-top: 12px;
+}
+
+.session-container {
+    align-items: flex-start;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .container {
+        background-color: #f2f4f7;
+    }
+}

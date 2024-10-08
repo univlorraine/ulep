@@ -14,10 +14,12 @@ import AskForAccountDeletion from '../domain/usecases/AskForAccountDeletionUseca
 import AskForLanguageUsecase from '../domain/usecases/AskForLanguageUsecase';
 import AskForLearningLanguageUsecase from '../domain/usecases/AskForLearningLanguageUsecase';
 import { GetInitialUrlUsecase, GetTokenFromCodeUsecase } from '../domain/usecases/AuthStandardFlow';
+import CancelSessionUsecase from '../domain/usecases/CancelSessionUsecase';
 import CreateOrUpdateTestedLanguageUsecase from '../domain/usecases/CreateOrUpdateTestedLanguageUsecase';
 import CreateProfileUsecase from '../domain/usecases/CreateProfileUsecase';
 import CreateReportMessageUsecase from '../domain/usecases/CreateReportMessageUsecase';
 import CreateReportUsecase from '../domain/usecases/CreateReportUsecase';
+import CreateSessionUsecase from '../domain/usecases/CreateSessionUsecase';
 import CreateUserUsecase from '../domain/usecases/CreateUserUsecase';
 import EditProfileUsecase from '../domain/usecases/EditProfileUsecase';
 import EditUserUsecase from '../domain/usecases/EditUserUsecase';
@@ -26,6 +28,7 @@ import GetAllGoalsUsecase from '../domain/usecases/GetAllGoalsUsecase';
 import GetAllInterestCategoriesUsecase from '../domain/usecases/GetAllInterestCategoriesUsecase';
 import GetAllLanguagesUsecase from '../domain/usecases/GetAllLanguagesUsecase';
 import GetAllReportCategoriesUsecase from '../domain/usecases/GetAllReportCategoriesUsecase';
+import GetAllSessionsUsecase from '../domain/usecases/GetAllSessionsUsecase';
 import GetAllTandemsUsecase from '../domain/usecases/GetAllTandemsUsecase';
 import GetAllUniversitiesUsecase from '../domain/usecases/GetAllUniversitiesUsecase';
 import GetConversationsUsecase from '../domain/usecases/GetConversationsUsecase';
@@ -47,6 +50,7 @@ import SearchMessagesIdsFromConversationUsecase from '../domain/usecases/SearchM
 import SendMessageUsecase from '../domain/usecases/SendMessageUsecase';
 import UpdateAvatarUsecase from '../domain/usecases/UpdateAvatarUsecase';
 import UpdateNotificationPermissionUsecase from '../domain/usecases/UpdateNotificationPermissionUsecase';
+import UpdateSessionUsecase from '../domain/usecases/UpdateSessionUsecase';
 import CreateVocabularyListUsecase from '../domain/usecases/vocabulary/CreateVocabularyListUsecase';
 import CreateVocabularyUsecase from '../domain/usecases/vocabulary/CreateVocabularyUsecase';
 import DeleteVocabularyListUsecase from '../domain/usecases/vocabulary/DeleteVocabularyListUsecase';
@@ -119,6 +123,7 @@ const getConfigContextValue = ({
     const getAllLanguages = new GetAllLanguagesUsecase(domainHttpAdapter);
     const getAllReportCategories = new GetAllReportCategoriesUsecase(domainHttpAdapter);
     const getAllTandems = new GetAllTandemsUsecase(domainHttpAdapter);
+    const getAllSessions = new GetAllSessionsUsecase(domainHttpAdapter);
     const getAllUniversities = new GetAllUniversitiesUsecase(domainHttpAdapter);
     const getHistoricEmailPartner = new GetHistoricEmailPartnerUsecase(domainHttpAdapter);
     const getPartnersToUniversity = new GetPartnersToUniversityUsecase(domainHttpAdapter);
@@ -167,6 +172,11 @@ const getConfigContextValue = ({
     const getActivity = new GetActivityUsecase(domainHttpAdapter);
     const getActivityThemes = new GetActivityThemesUsecase(domainHttpAdapter);
 
+    // Session
+    const createSession = new CreateSessionUsecase(domainHttpAdapter);
+    const updateSession = new UpdateSessionUsecase(domainHttpAdapter);
+    const cancelSession = new CancelSessionUsecase(domainHttpAdapter);
+
     return {
         accessToken,
         addDevice,
@@ -194,6 +204,7 @@ const getConfigContextValue = ({
         getAllLanguages,
         getAllReportCategories,
         getAllTandems,
+        getAllSessions,
         getAllUniversities,
         getConversations,
         getHistoricEmailPartner,
@@ -227,6 +238,9 @@ const getConfigContextValue = ({
         createVocabularyList,
         updateVocabularyList,
         deleteVocabularyList,
+        createSession,
+        updateSession,
+        cancelSession,
     };
 };
 
