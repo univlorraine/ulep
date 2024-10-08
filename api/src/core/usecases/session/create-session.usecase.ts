@@ -73,8 +73,6 @@ export class CreateSessionUsecase {
       (learningLanguage) => learningLanguage.profile.user.id === user.sub,
     );
 
-    console.log({ user, learningLanguagePartner, learningLanguageUser });
-
     const userPartner = learningLanguagePartner.profile.user;
 
     const language = learningLanguagePartner.profile.nativeLanguage.code;

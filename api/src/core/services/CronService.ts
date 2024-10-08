@@ -145,8 +145,8 @@ export class CronService {
       const profile1 = tandem.learningLanguages[0].profile;
       const profile2 = tandem.learningLanguages[1].profile;
 
-      await this.sendSessionStart(profile1, profile2, tandem, session, 'Daily');
-      await this.sendSessionStart(profile2, profile1, tandem, session, 'Daily');
+      await this.sendSessionStart(profile1, profile2, session, 'Daily');
+      await this.sendSessionStart(profile2, profile1, session, 'Daily');
     });
   }
 
@@ -170,14 +170,12 @@ export class CronService {
       await this.sendSessionStart(
         profile1,
         profile2,
-        tandem,
         session,
         'FifteenMinutes',
       );
       await this.sendSessionStart(
         profile2,
         profile1,
-        tandem,
         session,
         'FifteenMinutes',
       );
@@ -187,7 +185,6 @@ export class CronService {
   private async sendSessionStart(
     profile: Profile,
     partner: Profile,
-    tandem: Tandem,
     session: Session,
     type: 'FifteenMinutes' | 'Daily',
   ) {

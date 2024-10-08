@@ -267,7 +267,6 @@ export class ProfileController {
   @Swagger.ApiOkResponse({ type: () => SessionResponse, isArray: true })
   async getSessions(
     @Param('id', ParseUUIDPipe) id: string,
-    @Headers('Language-code') languageCode?: string,
   ): Promise<SessionResponse[]> {
     const sessions = await this.getSessionsForProfileUsecase.execute({
       profileId: id,
