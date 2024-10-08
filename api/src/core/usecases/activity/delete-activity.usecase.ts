@@ -47,6 +47,12 @@ export class DeleteActivityUsecase {
       activityId: activity.id,
     });
 
+    await Promise.all(
+      activity.activityExercises.map(async (exercise) => {
+        await this.activityRepository.deleteExercise(exercise.id);
+      }),
+    );
+
     return this.activityRepository.deleteActivity(id);
   }
 }

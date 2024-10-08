@@ -141,7 +141,7 @@ const ActivityList = () => {
                 filter={!identity?.isCentralUniversity ? { university: identity.universityId } : undefined}
                 filters={<Filters useRefresh={refresh} />}
             >
-                <Datagrid bulkActionButtons={false} rowClick="show">
+                <Datagrid rowClick="show">
                     <FunctionField
                         label={translate('activities.list.language')}
                         render={(record: any) => <span>{codeLanguageToFlag(record.language.code)}</span>}

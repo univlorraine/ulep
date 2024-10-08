@@ -40,6 +40,8 @@ export class DeleteAudioVocabularyActivityUsecase {
         vocabulary.pronunciationActivityVocabulary,
       );
     }
+
+    await this.activityRepository.deleteVocabulary(command.vocabularyId);
   }
 
   private async tryToFindTheVocabularyOfId(
