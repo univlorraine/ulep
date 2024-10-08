@@ -100,6 +100,7 @@ const customDataProvider = {
         return { data: result };
     },
     update: async (resource: string, params: UpdateParams) => {
+        console.log({ params });
         let url = `${process.env.REACT_APP_API_URL}/${resource}`;
         if (params.id) {
             url += `/${params.id}`;
@@ -112,7 +113,20 @@ const customDataProvider = {
             body = JSON.stringify(params.data);
         }
 
-        const method = resource === 'users' ? 'POST' : 'PUT';
+        let method = 'PUT';
+
+        switch (resource) {
+            case 'users':
+                method = 'POST';
+                break;
+            case 'activities':
+                method = 'POST';
+                url = `${process.env.REACT_APP_API_URL}/activities/${params.id}/update`;
+                break;
+            default:
+                break;
+        }
+
         const response = await fetch(new URL(url), httpClientOptions({ method, body }));
 
         if (!response.ok) {

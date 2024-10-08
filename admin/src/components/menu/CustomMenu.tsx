@@ -99,27 +99,39 @@ export const subMenus: SubMenusType = {
 
 const RA_ACTIVE_CLASS = 'RaMenuItemLink-active';
 
-const manageSubMenusActiveClass = (ref: HTMLDivElement, currentPathname: string, subMenuName: string) => {
-    const aElement = ref.firstElementChild;
-
+const manageSubMenusActiveClass = (aElement: any, currentPathname: string, subMenuName: string) => {
     const resources = subMenus[subMenuName].map((link) => link.resource);
-    const currentResource = resources.filter((resource) => currentPathname.startsWith(resource.split('/')[0])); // The resource is split because of "interest" subpages
+    const currentResource = resources.filter((resource) => currentPathname.includes(resource));
 
     if (aElement && currentResource.length !== 0) {
         aElement.classList.add(RA_ACTIVE_CLASS);
-        if (currentPathname === 'activities') {
-            // The configuration item is not active when the user is on the activities page
-            aElement.classList.remove(RA_ACTIVE_CLASS);
-        }
     } else if (aElement) {
         aElement.classList.remove(RA_ACTIVE_CLASS);
+    }
+};
+
+const manageUniversitySubMenuActiveClass = (
+    universityRef: HTMLDivElement,
+    currentPathname: string,
+    subMenuName: string
+) => {
+    const aElement = universityRef.firstElementChild;
+    manageSubMenusActiveClass(aElement, currentPathname, subMenuName);
+};
+
+const manageConfigSubMenuActiveClass = (configRef: HTMLDivElement, currentPathname: string, subMenuName: string) => {
+    const aElement = configRef.firstElementChild;
+    manageSubMenusActiveClass(aElement, currentPathname, subMenuName);
+
+    if (currentPathname.includes('activities/themes') || currentPathname.includes('interests/')) {
+        aElement?.classList.add(RA_ACTIVE_CLASS);
     }
 };
 
 const manageProfilesPathActiveClass = (profilesRef: HTMLDivElement, currentPathname: string) => {
     const aElement = profilesRef.firstElementChild;
 
-    if (currentPathname.includes('profiles/')) {
+    if (currentPathname.includes('profiles/with-tandems')) {
         aElement?.classList.remove(RA_ACTIVE_CLASS);
     } else if (currentPathname.includes('profiles')) {
         aElement?.classList.add(RA_ACTIVE_CLASS);
@@ -129,9 +141,9 @@ const manageProfilesPathActiveClass = (profilesRef: HTMLDivElement, currentPathn
 const manageActivitiesPathActiveClass = (activitiesRef: HTMLDivElement, currentPathname: string) => {
     const aElement = activitiesRef.firstElementChild;
 
-    if (currentPathname.includes('activities/')) {
+    if (currentPathname.includes('activities/categories')) {
         aElement?.classList.remove(RA_ACTIVE_CLASS);
-    } else if (currentPathname.includes('activities')) {
+    } else if (currentPathname.includes('activities') && !currentPathname.includes('activities/themes')) {
         aElement?.classList.add(RA_ACTIVE_CLASS);
     }
 };
@@ -148,10 +160,10 @@ const CustomMenu = () => {
     const [activitiesRef, setActivitiesRef] = useState<HTMLDivElement>();
 
     if (universitiesRef) {
-        manageSubMenusActiveClass(universitiesRef, currentPathname, 'universities');
+        manageUniversitySubMenuActiveClass(universitiesRef, currentPathname, 'universities');
     }
     if (configurationRef) {
-        manageSubMenusActiveClass(configurationRef, currentPathname, 'configuration');
+        manageConfigSubMenuActiveClass(configurationRef, currentPathname, 'configuration');
     }
     if (profilesRef) {
         manageProfilesPathActiveClass(profilesRef, currentPathname);

@@ -6,11 +6,12 @@ import ReferenceUploadImageField from './field/ReferenceUploadImageField';
 
 interface ImageUploaderProps {
     source?: string;
+    imageUrl?: string;
     maxSize?: number;
     onImageSelect: (file: File) => void;
 }
 
-const ImageUploader: React.FC<ImageUploaderProps> = ({ source, maxSize = 1000000, onImageSelect }) => {
+const ImageUploader: React.FC<ImageUploaderProps> = ({ source, imageUrl, maxSize = 1000000, onImageSelect }) => {
     const translate = useTranslate();
     const notify = useNotify();
     const [isDragOver, setDragOver] = useState<boolean>(false);
@@ -74,7 +75,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ source, maxSize = 1000000
 
             {!source && !currentFile && (
                 <Button onClick={() => fileInputRef.current?.click()}>
-                    <ImageField source="imageURL" />
+                    <ImageField source={imageUrl ?? 'imageURL'} />
                 </Button>
             )}
 

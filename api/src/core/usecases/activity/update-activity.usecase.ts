@@ -128,8 +128,8 @@ export class UpdateActivityUsecase {
 
     for (const vocabulary of activity.activityVocabularies) {
       if (
-        vocabulary.pronunciationActivityVocabulary &&
-        !vocabulary.pronunciationActivityVocabularyUrl
+        vocabulary?.pronunciationActivityVocabulary &&
+        !vocabulary?.pronunciationActivityVocabularyUrl
       ) {
         const audioUrl = await this.storage.temporaryUrl(
           vocabulary.pronunciationActivityVocabulary.bucket,

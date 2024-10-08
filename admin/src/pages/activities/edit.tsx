@@ -27,8 +27,7 @@ const EditActivity = () => {
         formData.append('languageLevel', payload.languageLevel);
         formData.append('languageCode', payload.languageCode);
         formData.append('themeId', payload.themeId);
-        formData.append('universityId', payload.universityId);
-        formData.append('image', payload.image);
+        if (payload.image !== undefined) formData.append('image', payload.image);
         formData.append('creditImage', payload.creditImage);
         formData.append('ressourceUrl', payload.ressourceUrl);
         payload.exercises.forEach((exercise: any, index: number) => {
@@ -36,7 +35,9 @@ const EditActivity = () => {
             formData.append(`exercises[${index}][order]`, exercise.order);
         });
         payload.vocabularies.forEach((vocabulary: any, index: number) => {
-            formData.append(`vocabularies[${index}]`, vocabulary.content);
+            formData.append(`vocabularies[${index}][content]`, vocabulary.content);
+            formData.append(`vocabularies[${index}][pronunciationUrl]`, vocabulary.pronunciationUrl);
+            formData.append(`vocabularies[${index}][id]`, vocabulary.id);
         });
         vocabulariesFiles?.forEach((vocabularyFile: File, index: number) => {
             formData.append(`vocabulariesFiles[${index}]`, vocabularyFile);
@@ -47,7 +48,7 @@ const EditActivity = () => {
         try {
             return await update(
                 'activities',
-                { data: formData },
+                { id: payload.id, data: formData },
                 {
                     onSettled: (_, error: unknown) => {
                         if (!error) {
@@ -68,7 +69,7 @@ const EditActivity = () => {
     return (
         <>
             <PageTitle>{translate('activities.label')}</PageTitle>
-            <Edit title={translate('activities.edit.title')}>
+            <Edit>
                 <ActivityForm handleSubmit={handleSubmit} />
             </Edit>
         </>

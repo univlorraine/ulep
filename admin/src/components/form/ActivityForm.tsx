@@ -2,6 +2,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import UploadFileIcon from '@mui/icons-material/UploadFile';
 import { Box, MenuItem, OutlinedInput, Select, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { Button, Loading, TabbedForm, useGetIdentity, useGetList, useRecordContext, useTranslate } from 'react-admin';
@@ -42,16 +43,17 @@ const ActivityForm: React.FC<ActivityFormProps> = ({ handleSubmit }) => {
     const [newTitle, setNewTitle] = useState<string>(record?.title || '');
     const [newDescription, setNewDescription] = useState<string>(record?.description || '');
     const [newImage, setNewImage] = useState<File>();
-    const [newImageCredit, setNewImageCredit] = useState<string>(record?.imageCredit || '');
-    const [newLanguage, setNewLanguage] = useState<string>(record?.language.id || '');
-    const [newLevel, setNewLevel] = useState<string>(record?.level || '');
+    const [newImageCredit, setNewImageCredit] = useState<string>(record?.creditImage || '');
+    const [newLanguage, setNewLanguage] = useState<string>(record?.language.code || '');
+    const [newLevel, setNewLevel] = useState<string>(record?.languageLevel || '');
     const [newThemeCategory, setNewThemeCategory] = useState<string>(record?.theme?.category?.id || '');
-    const [newTheme, setNewTheme] = useState<ActivityTheme>(record?.theme || '');
-    const [ressourceChoice, setRessourceChoice] = useState<'url' | 'file' | null>(null);
+    const [newTheme, setNewTheme] = useState<string>(record?.theme.id || '');
+    const activityResourceType = record?.ressourceUrl ? 'url' : 'file';
+    const [ressourceChoice, setRessourceChoice] = useState<'url' | 'file' | null>(record ? activityResourceType : null);
     const [newResourceURL, setNewResourceURL] = useState<string>(record?.ressourceUrl || '');
     const [newResourceFile, setNewResourceFile] = useState<File>();
     const [newExercises, setNewExercises] = useState<ActivityExercise[]>(record?.exercises || DEFAULT_EXCERCISES);
-    const [newVocabulary, setNewVocabulary] = useState<ActivityVocabulary[]>(record?.vocabulary || []);
+    const [newVocabulary, setNewVocabulary] = useState<ActivityVocabulary[]>(record?.vocabularies || []);
 
     const universitiesLanguages = useGetUniversitiesLanguages();
     const proficiencyLevels = Object.values(ProficiencyLevel);
@@ -132,18 +134,12 @@ const ActivityForm: React.FC<ActivityFormProps> = ({ handleSubmit }) => {
         setNewVocabulary(vocabularies);
     };
 
-    console.log({ newVocabulary });
-
     const onCreatePressed = () =>
-        /*         if (!) {
-            return notify(translate('admin_groups_picker.mandatory'));
-        } */
-
         handleSubmit({
             id: record?.id,
             title: newTitle,
             description: newDescription,
-            image: newImage,
+            image: newImage || undefined,
             creditImage: newImageCredit,
             languageCode: newLanguage,
             languageLevel: newLevel,
@@ -154,8 +150,6 @@ const ActivityForm: React.FC<ActivityFormProps> = ({ handleSubmit }) => {
             exercises: newExercises,
             vocabularies: newVocabulary,
         });
-
-    console.log({ activityThemesCategories });
 
     return (
         <Box
@@ -182,7 +176,10 @@ const ActivityForm: React.FC<ActivityFormProps> = ({ handleSubmit }) => {
                         <Box sx={{ display: 'flex', gap: '20px' }}>
                             <Box>
                                 <Typography variant="subtitle1">{translate(`activities.form.image`)}</Typography>
-                                <ImageUploader onImageSelect={setNewImage} source="image.id" />
+                                <ImageUploader
+                                    imageUrl={record?.imageUrl ? 'imageUrl' : undefined}
+                                    onImageSelect={setNewImage}
+                                />
                             </Box>
                             <Box sx={{ flex: 1 }}>
                                 <Typography variant="subtitle1">{translate(`activities.form.imageCredit`)}</Typography>
@@ -219,9 +216,9 @@ const ActivityForm: React.FC<ActivityFormProps> = ({ handleSubmit }) => {
                         <Box>
                             <Typography variant="subtitle1">{translate(`activities.form.level`)}</Typography>
                             <Select onChange={(e: any) => setNewLevel(e.target.value as string)} value={newLevel}>
-                                {proficiencyLevels.map((languageFromUniversity) => (
-                                    <MenuItem key={languageFromUniversity} value={languageFromUniversity}>
-                                        {languageFromUniversity}
+                                {proficiencyLevels.map((level) => (
+                                    <MenuItem key={level} value={level}>
+                                        {level}
                                     </MenuItem>
                                 ))}
                             </Select>
@@ -242,10 +239,7 @@ const ActivityForm: React.FC<ActivityFormProps> = ({ handleSubmit }) => {
                         {newThemeCategory && (
                             <Box>
                                 <Typography variant="subtitle1">{translate(`activities.form.theme`)}</Typography>
-                                <Select
-                                    onChange={(e: any) => setNewTheme(e.target.value as ActivityTheme)}
-                                    value={newTheme}
-                                >
+                                <Select onChange={(e: any) => setNewTheme(e.target.value as string)} value={newTheme}>
                                     {activityThemesCategories.data
                                         ?.find((category) => category.id === newThemeCategory)
                                         ?.themes.map((subcategory: ActivityTheme) => (
@@ -302,7 +296,17 @@ const ActivityForm: React.FC<ActivityFormProps> = ({ handleSubmit }) => {
                                         {translate(`activities.form.ressourceFile`)}
                                     </Typography>
                                     <Box sx={{ display: 'flex', gap: '10px' }}>
-                                        <FileUploader onFileSelect={setNewResourceFile} />
+                                        {record?.ressourceFileUrl && (
+                                            <a href={record.ressourceFileUrl} rel="noreferrer" target="_blank">
+                                                <UploadFileIcon />
+                                            </a>
+                                        )}
+                                        <FileUploader
+                                            accept="application/pdf"
+                                            fileType="PDF"
+                                            onFileSelect={setNewResourceFile}
+                                            source="resourceFile.id"
+                                        />
                                         <Button onClick={() => setRessourceChoice(null)}>
                                             <CloseIcon />
                                         </Button>
@@ -399,8 +403,14 @@ const ActivityForm: React.FC<ActivityFormProps> = ({ handleSubmit }) => {
                                             {vocabulary.file && (
                                                 <AudioLine audioFile={vocabulary.file} hideProgressBar />
                                             )}
+                                            {vocabulary.pronunciationActivityVocabularyUrl && (
+                                                <AudioLine
+                                                    audioFile={vocabulary.pronunciationActivityVocabularyUrl}
+                                                    hideProgressBar
+                                                />
+                                            )}
                                         </Box>
-                                        {vocabulary.file ? (
+                                        {vocabulary.file || vocabulary.pronunciationActivityVocabularyUrl ? (
                                             <Button onClick={() => onDeletePronunciation(index)}>
                                                 <span>{translate(`activities.form.deletePronunciation`)}</span>
                                             </Button>
@@ -430,11 +440,11 @@ const ActivityForm: React.FC<ActivityFormProps> = ({ handleSubmit }) => {
                 disabled={
                     !newTitle ||
                     !newDescription ||
-                    !newImage ||
+                    (!record && !newImage) ||
                     !newLanguage ||
                     !newLevel ||
                     !newTheme ||
-                    (!newResourceFile && !newResourceURL) ||
+                    (!record && !newResourceFile && !newResourceURL) ||
                     newExercises.some((exercise) => !exercise.content) ||
                     newVocabulary.length === 0 ||
                     newVocabulary.some((vocabulary) => !vocabulary.content)

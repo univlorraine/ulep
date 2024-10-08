@@ -175,6 +175,8 @@ export class ActivityController {
     @UploadedFiles()
     files?: Express.Multer.File[],
   ) {
+    console.log({ files });
+
     //TODO: Add Pipe files validators
     const vocabulariesWithFiles = body.vocabularies?.map((vocabulary) => ({
       content: vocabulary,
@@ -350,6 +352,8 @@ export class ActivityController {
   async getActivity(@Param('id') id: string) {
     const activity = await this.getActivityUsecase.execute(id);
 
+    console.log({ activity });
+
     return ActivityWithThemeCategoryResponse.from(activity);
   }
 
@@ -400,6 +404,8 @@ export class ActivityController {
           file.fieldname.includes('vocabulariesFiles'),
       ),
     }));
+
+    console.log({ vocabulariesWithFiles });
 
     const activity = await this.updateActivityUsecase.execute({
       id,

@@ -12,15 +12,15 @@ export type Activity = {
     title: string;
     description: string;
     image: MediaObject;
-    imageCredit: string;
+    creditImage: string;
     imageUrl: string;
     language: Language;
-    level: ProficiencyLevel;
+    languageLevel: ProficiencyLevel;
     theme: ActivityTheme;
     ressourceUrl: string;
     ressourceFileUrl: string;
     exercises: ActivityExercise[];
-    vocabulary: ActivityVocabulary[];
+    vocabularies: ActivityVocabulary[];
 };
 
 export type ActivityVocabulary = {
