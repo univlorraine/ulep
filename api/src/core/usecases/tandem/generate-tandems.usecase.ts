@@ -8,6 +8,7 @@ import {
   Tandem,
   TandemStatus,
 } from 'src/core/models';
+import { CHAT_SERVICE } from 'src/core/ports/chat.service';
 import {
   EMAIL_GATEWAY,
   EmailGateway,
@@ -35,6 +36,7 @@ import {
   UuidProviderInterface,
 } from 'src/core/ports/uuid.provider';
 import { IMatchScorer, MatchScorer } from 'src/core/services/MatchScorer';
+import { ChatService } from 'src/providers/services/chat.service';
 
 export type GenerateTandemsCommand = {
   universityIds: string[];
@@ -65,6 +67,8 @@ export class GenerateTandemsUsecase {
     private readonly refusedTandemsRepository: RefusedTandemsRepository,
     @Inject(EMAIL_GATEWAY)
     private readonly emailGateway: EmailGateway,
+    @Inject(CHAT_SERVICE)
+    private readonly chatService: ChatService,
   ) {}
 
   async execute(command: GenerateTandemsCommand): Promise<Tandem[]> {
@@ -319,6 +323,22 @@ export class GenerateTandemsUsecase {
     }
 
     await this.tandemsRepository.saveMany(tandems);
+
+    const conversationsToCreate = [];
+    for (const tandem of tandems) {
+      if (tandem.status === TandemStatus.ACTIVE) {
+        conversationsToCreate.push({
+          participants: tandem.learningLanguages.map(
+            (learningLanguage) => learningLanguage.profile.user.id,
+          ),
+          tandemId: tandem.id,
+        });
+      }
+    }
+
+    if (conversationsToCreate.length > 0) {
+      await this.chatService.createConversations(conversationsToCreate);
+    }
 
     for (const notificationEmail of notificationEmails) {
       const method = notificationEmail.type;
