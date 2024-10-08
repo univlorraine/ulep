@@ -13,3 +13,5 @@ export * from './upload-image-activity.usecase';
 export * from './upload-media-activity.usecase';
 export * from './upload-objective-image.usecase';
 export * from './upload-university-image.usecase';
+export * from './upload-news-image.usecase';
+export * from './delete-news-image.usecase';

@@ -58,6 +58,12 @@ export const subMenus: SubMenusType = {
             role: Role.SUPER_ADMIN,
         },
         {
+            resource: 'activities/categories',
+            type: 'list',
+            label: 'activities_categories.tabLabel',
+            role: Role.SUPER_ADMIN,
+        },
+        {
             resource: 'countries',
             type: 'list',
             label: 'countries.tabLabel',
@@ -143,6 +149,7 @@ const CustomMenu = () => {
             </Box>
             <Menu.ResourceItem name="profiles/with-tandems-profiles" />
             <Menu.ResourceItem name="chat" />
+            <Menu.ResourceItem name="news" />
             {permissions.checkRole(Role.MANAGER) && data && data.universityId && (
                 <Menu.Item
                     leftIcon={<SchoolIcon />}

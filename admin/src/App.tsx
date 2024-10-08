@@ -3,6 +3,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import HelpIcon from '@mui/icons-material/Help';
 import InterestsIcon from '@mui/icons-material/Interests';
 import LanguageIcon from '@mui/icons-material/Language';
+import NewspaperIcon from '@mui/icons-material/Newspaper';
 import PeopleIcon from '@mui/icons-material/People';
 import PersonIcon from '@mui/icons-material/Person';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
@@ -14,6 +15,8 @@ import { Admin, CustomRoutes, Resource } from 'react-admin';
 import { Route } from 'react-router-dom';
 import CustomLayout from './components/layout/layout';
 import { Role } from './entities/Administrator';
+import activityCategories from './pages/activity-categories';
+import activityThemes from './pages/activity-themes';
 import EditAdministratorProfile from './pages/admin-profile/edit';
 import administrators from './pages/administrators';
 import LoginPage from './pages/auth/login';
@@ -26,6 +29,7 @@ import instance from './pages/instance';
 import interests from './pages/interests';
 import JitsiPage from './pages/jitsi/JitsiPage';
 import languages from './pages/languages';
+import news from './pages/news';
 import objectives from './pages/objectives';
 import profiles from './pages/profiles';
 import profilesWithTandem from './pages/profiles-with-tandems-profiles';
@@ -69,6 +73,7 @@ const App = () => (
                     {...reports}
                 />
                 <Resource icon={ChatIcon} name="chat" options={{ label: 'chat.label' }} {...chat} />
+                <Resource icon={NewspaperIcon} name="news" options={{ label: 'news.label' }} {...news} />
                 {permissions.checkRole(Role.MANAGER) && (
                     <Resource
                         edit={universities.manager.edit}
@@ -130,6 +135,12 @@ const App = () => (
                             options={{ label: 'interest_categories.label' }}
                             {...categoryInterest}
                         />
+                        <Resource
+                            name="activities/categories"
+                            options={{ label: 'interest_categories.label' }}
+                            {...activityCategories}
+                        />
+                        <Resource name="activities/themes" {...activityThemes} />
                         <Resource
                             icon={CheckCircleIcon}
                             name="objectives"

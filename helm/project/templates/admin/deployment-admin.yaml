@@ -75,6 +75,8 @@ spec:
               value: "https://{{ .Values.chatUrl }}.{{ .Values.domain }}"
             - name: REACT_APP_SOCKET_CHAT_URL
               value: "https://{{ .Values.socketChatUrl }}.{{ .Values.domain }}"
+            - name: REACT_APP_DEFAULT_TRANSLATION_LANGUAGE
+              value: "{{ .Values.api.env.defaultTranslationLanguage }}"
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

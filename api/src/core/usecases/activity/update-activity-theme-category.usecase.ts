@@ -12,8 +12,8 @@ import {
 
 export class UpdateActivityThemeCategoryCommand {
   id: string;
-  name?: string;
-  languageCode?: string;
+  content: string;
+  languageCode: string;
   translations?: Translation[];
 }
 @Injectable()
@@ -40,7 +40,7 @@ export class UpdateActivityThemeCategoryUsecase {
     return this.activityRepository.updateThemeCategory({
       id: command.id,
       textContentId: activityThemeCategory.content.id,
-      content: command.name || activityThemeCategory.content.content,
+      content: command.content,
       languageCode: command.languageCode,
       translations: command.translations,
     });

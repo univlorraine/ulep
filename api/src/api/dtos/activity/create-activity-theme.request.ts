@@ -11,12 +11,7 @@ export class CreateActivityThemeRequest {
   @Swagger.ApiProperty({ type: 'string' })
   @IsString()
   @IsNotEmpty()
-  name: string;
-
-  @Swagger.ApiProperty({ type: 'string' })
-  @IsString()
-  @IsNotEmpty()
-  languageCode: string;
+  content: string;
 
   @Swagger.ApiPropertyOptional({ type: 'array' })
   @IsOptional()

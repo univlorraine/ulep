@@ -115,6 +115,7 @@ model Organizations {
   Image                 MediaObjects? @relation("UniversitiesImage", fields: [image_id], references: [id])
   Contact               Contacts?      @relation(fields: [default_contact_id], references: [id])
   DefaultCertificateFile MediaObjects? @relation("UniversitiesDefaultCertificateFile", fields: [default_certificate_file_id], references: [id])
+  News                       News[]
 
   @@unique([name])
   @@map("organizations")
@@ -224,6 +225,7 @@ model MediaObjects {
   ActivityVocabulary ActivityVocabulary?
   InstanceDefaultCertificateFile Instance?
   UniversitiesDefaultCertificateFile Organizations? @relation("UniversitiesDefaultCertificateFile")
+  News       News?
 
   @@unique([name, bucket])
   @@map("media_objects")
@@ -245,6 +247,8 @@ model TextContent {
   Interests            Interests?
   Goals                LearningObjectives?
   Translations         Translations[]
+  NewsTitle            News[] @relation("NewsTitleTextContent")
+  NewsContent          News[] @relation("NewsContentTextContent")
   ActivityThemes       ActivityThemes?
   ActivityThemesCategories ActivityThemeCategories?
 
@@ -569,13 +573,13 @@ model  Vocabulary {
   pronunciation_word_id   String? @unique
   pronunciation_translation_id   String? @unique
 
-
   VocabularyList VocabularyList @relation(fields: [vocabulary_list_id], references: [id], onDelete: Cascade)
   PronunciationWord MediaObjects? @relation("PronunciationWord", fields: [pronunciation_word_id], references: [id])
   PronunciationTranslation MediaObjects? @relation("PronunciationTranslation", fields: [pronunciation_translation_id], references: [id])
 
     @@map("vocabulary")
 }
+
 
 
 //  * ****************************************************
@@ -660,4 +664,26 @@ model ActivityExercises {
   Activity Activity @relation(fields: [activity_id], references: [id])
 
   @@map("activity_exercises")
+}
+
+
+//  * ****************************************************
+//  * News
+//  * ****************************************************
+
+model News {
+  id         String   @id @default(uuid())
+  title_text_content_id String
+  content_text_content_id String
+  university_id String
+  image_id String? @unique
+  status String @default("DRAFT")
+  start_publication_date DateTime
+  end_publication_date DateTime
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  Organization Organizations @relation(fields: [university_id], references: [id], onDelete: Cascade)
+  Image MediaObjects? @relation(fields: [image_id], references: [id])
+  TitleTextContent     TextContent   @relation("NewsTitleTextContent", fields: [title_text_content_id], references: [id], onDelete: Cascade)
+  ContentTextContent     TextContent   @relation("NewsContentTextContent", fields: [content_text_content_id], references: [id], onDelete: Cascade)
 }

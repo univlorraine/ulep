@@ -13,6 +13,7 @@ import {
   CreateActivityThemeCategoryProps,
   CreateActivityThemeProps,
   GetActivitiesProps,
+  GetAllActivityThemesProps,
   UpdateActivityThemeCategoryProps,
   UpdateActivityThemeProps,
 } from 'src/core/ports/activity.repository';
@@ -91,7 +92,7 @@ export class PrismaActivityRepository implements ActivityRepository {
   async all(
     props: GetActivitiesProps,
   ): Promise<{ items: Activity[]; totalItems: number }> {
-    let where: Prisma.ActivityWhereInput = {};
+    const where: Prisma.ActivityWhereInput = {};
 
     if (props.languagesCodes) {
       where.LanguageCode = {
@@ -161,13 +162,24 @@ export class PrismaActivityRepository implements ActivityRepository {
     };
   }
 
-  async allThemes(): Promise<ActivityThemeCategory[]> {
+  async allThemes(
+    props: GetAllActivityThemesProps,
+  ): Promise<{ items: ActivityThemeCategory[]; totalItems: number }> {
+    const count = await this.prisma.activityThemeCategories.count();
+
     const activityThemesCategories =
       await this.prisma.activityThemeCategories.findMany({
+        skip: props.pagination?.page
+          ? (props.pagination.page - 1) * props.pagination.limit
+          : 0,
+        take: props.pagination?.limit,
         ...ActivityThemeCategoryRelations,
       });
 
-    return activityThemesCategories.map(activityThemeCategoryMapper);
+    return {
+      items: activityThemesCategories.map(activityThemeCategoryMapper),
+      totalItems: count,
+    };
   }
 
   async ofId(id: string): Promise<Activity> {

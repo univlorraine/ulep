@@ -12,7 +12,7 @@ import {
 
 export class UpdateActivityThemeCommand {
   id: string;
-  name?: string;
+  content: string;
   languageCode?: string;
   translations?: Translation[];
 }
@@ -39,7 +39,7 @@ export class UpdateActivityThemeUsecase {
     return this.activityRepository.updateTheme({
       id: command.id,
       textContentId: activityTheme.content.id,
-      content: command.name || activityTheme.content.content,
+      content: command.content,
       languageCode: command.languageCode,
       translations: command.translations,
     });

@@ -1,4 +1,18 @@
 {
+    "activities_categories": {
+        "tabLabel": "Catégories d'Activités",
+        "name": "Nom",
+        "themes": "Thèmes",
+        "create": {
+            "error": "Une erreur est survenue pendant la création du thème d'activité"
+        },
+        "update": {
+            "error": "Une erreur est survenue pendant la mise à jour du thème d'activité"
+        },
+        "show": {
+            "name": "Nom"
+        }
+    },
     "administrators": {
         "all": "Tout",
         "create": {
@@ -218,7 +232,7 @@
         },
         "interests": "Intérêts",
         "label": "Catégorie d'intérêts",
-        "tabLabel": "Catégorie d'intérêts",
+        "tabLabel": "Catégories d'intérêts",
         "name": "Nom",
         "update": {
             "name": "Nom de la catégorie",
@@ -264,6 +278,51 @@
         "connect": "Connexion",
         "loginError": "Mauvais email ou mot de passe",
         "password": "Mot de passe"
+    },
+    "news": {
+        "label": "Actualités",
+        "title": "Actualités",
+        "form": {
+            "title": "Titre",
+            "content": "Contenu",
+            "illustration": "Illustration",
+            "author": "Auteur",
+            "change_language": "Changer de langue",
+            "add_translation": "Ajouter une traduction",
+            "remove_translation": "Supprimer la traduction",
+            "error": {
+                "notFound": "Actualité non trouvée",
+                "required": "Les dates de publication, le titre et le contenu sont obligatoires"
+            },
+            "start_publication_date": "Date de début de publication",
+            "end_publication_date": "Date de fin de publication"
+        },
+        "status": {
+            "label": "Statut",
+            "READY": "Prêt",
+            "DRAFT": "Brouillon"
+        },
+        "create": {
+            "cta": "Créer"
+        },
+        "update": {
+            "cta": "Mettre à jour"
+        },
+        "list": {
+            "title": "Titre",
+            "university": "Université",
+            "defaultLanguage": "Langue par défaut",
+            "translations": "Traductions",
+            "status": "Statut",
+            "startPublicationDate": "Début de publication",
+            "endPublicationDate": "Fin de publication",
+            "filters": {
+                "university": "Université",
+                "status": "Statut",
+                "title": "Titre",
+                "language": "Available language"
+            }
+        }
     },
     "objectives": {
         "edit": {
