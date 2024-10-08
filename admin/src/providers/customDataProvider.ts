@@ -198,9 +198,6 @@ const customDataProvider = {
             case 'activities/categories':
                 url.search = ActivitiesCategoriesQuery(params);
                 break;
-            case 'activities/categories':
-                url.search = ActivitiesCategoriesQuery(params);
-                break;
             case 'users/administrators':
                 url.search = AdministratorsQuery(params);
                 break;

@@ -4,8 +4,8 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { Box, MenuItem, OutlinedInput, Select, Typography } from '@mui/material';
 import React, { useState } from 'react';
-import { Button, Loading, TabbedForm, useGetIdentity, useGetList, useTranslate } from 'react-admin';
-import { ActivityExercise, ActivityVocabulary } from '../../entities/Activity';
+import { Button, Loading, TabbedForm, useGetIdentity, useGetList, useRecordContext, useTranslate } from 'react-admin';
+import { Activity, ActivityExercise, ActivityVocabulary } from '../../entities/Activity';
 import { ActivityTheme } from '../../entities/ActivityTheme';
 import ProficiencyLevel from '../../entities/Proficiency';
 import AudioLine from '../chat/AudioLine';
@@ -16,32 +16,13 @@ import ImageUploader from '../ImageUploader';
 import useGetUniversitiesLanguages from './useGetUniversitiesLanguages';
 
 interface ActivityFormProps {
-    id?: string;
-    title?: string;
-    description?: string;
-    image?: File;
-    imageCredit?: string;
-    language?: string;
-    level?: string;
-    theme?: string;
-    resourceURL?: string;
-    resourceFile?: File;
     handleSubmit: (payload: any) => void;
 }
 
-const ActivityForm: React.FC<ActivityFormProps> = ({
-    id,
-    title,
-    description,
-    image,
-    imageCredit,
-    language,
-    level,
-    theme,
-    resourceURL,
-    resourceFile,
-    handleSubmit,
-}) => {
+const ActivityForm: React.FC<ActivityFormProps> = ({ handleSubmit }) => {
+    const translate = useTranslate();
+    const record: Activity = useRecordContext();
+
     const DEFAULT_EXCERCISES = [
         {
             content: '',
@@ -57,34 +38,29 @@ const ActivityForm: React.FC<ActivityFormProps> = ({
         },
     ];
 
-    const { hasPermission, isRecording, startRecording, stopRecording } = useAudioRecorder();
-
-    const translate = useTranslate();
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
-    const [newTitle, setNewTitle] = useState<string>(title || '');
-    const [newDescription, setNewDescription] = useState<string>(description || '');
+    const [newTitle, setNewTitle] = useState<string>(record?.title || '');
+    const [newDescription, setNewDescription] = useState<string>(record?.description || '');
     const [newImage, setNewImage] = useState<File>();
-    const [newImageCredit, setNewImageCredit] = useState<string>(imageCredit || '');
-    const [newLanguage, setNewLanguage] = useState<string>(language || '');
-    const [newLevel, setNewLevel] = useState<string>(level || '');
-    const [newThemeCategory, setNewThemeCategory] = useState<string>(theme || '');
-    const [newTheme, setNewTheme] = useState<string>('');
+    const [newImageCredit, setNewImageCredit] = useState<string>(record?.imageCredit || '');
+    const [newLanguage, setNewLanguage] = useState<string>(record?.language.id || '');
+    const [newLevel, setNewLevel] = useState<string>(record?.level || '');
+    const [newThemeCategory, setNewThemeCategory] = useState<string>(record?.theme?.category?.id || '');
+    const [newTheme, setNewTheme] = useState<ActivityTheme>(record?.theme || '');
     const [ressourceChoice, setRessourceChoice] = useState<'url' | 'file' | null>(null);
-    const [newResourceURL, setNewResourceURL] = useState<string>(resourceURL || '');
+    const [newResourceURL, setNewResourceURL] = useState<string>(record?.ressourceUrl || '');
     const [newResourceFile, setNewResourceFile] = useState<File>();
-    const [newExercises, setNewExercises] = useState<ActivityExercise[]>(DEFAULT_EXCERCISES);
-    const [newVocabulary, setNewVocabulary] = useState<ActivityVocabulary[]>([]);
+    const [newExercises, setNewExercises] = useState<ActivityExercise[]>(record?.exercises || DEFAULT_EXCERCISES);
+    const [newVocabulary, setNewVocabulary] = useState<ActivityVocabulary[]>(record?.vocabulary || []);
+
     const universitiesLanguages = useGetUniversitiesLanguages();
     const proficiencyLevels = Object.values(ProficiencyLevel);
     const activityThemesCategories = useGetList('activities/categories');
-    // const activityThemes = activityThemesCategories.data?.map((category) => category.themes).flat();
+    const { hasPermission, isRecording, startRecording, stopRecording } = useAudioRecorder();
 
     if (isLoadingIdentity || !identity) {
         return <Loading />;
     }
-
-    console.log({ image });
-    console.log({ resourceFile });
 
     const onDeleteExcercisePressed = (order: number) => {
         const excercises = [...newExercises];
@@ -164,7 +140,7 @@ const ActivityForm: React.FC<ActivityFormProps> = ({
         } */
 
         handleSubmit({
-            id,
+            id: record?.id,
             title: newTitle,
             description: newDescription,
             image: newImage,
@@ -266,7 +242,10 @@ const ActivityForm: React.FC<ActivityFormProps> = ({
                         {newThemeCategory && (
                             <Box>
                                 <Typography variant="subtitle1">{translate(`activities.form.theme`)}</Typography>
-                                <Select onChange={(e: any) => setNewTheme(e.target.value as string)} value={newTheme}>
+                                <Select
+                                    onChange={(e: any) => setNewTheme(e.target.value as ActivityTheme)}
+                                    value={newTheme}
+                                >
                                     {activityThemesCategories.data
                                         ?.find((category) => category.id === newThemeCategory)
                                         ?.themes.map((subcategory: ActivityTheme) => (

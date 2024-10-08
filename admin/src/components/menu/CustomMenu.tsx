@@ -107,17 +107,31 @@ const manageSubMenusActiveClass = (ref: HTMLDivElement, currentPathname: string,
 
     if (aElement && currentResource.length !== 0) {
         aElement.classList.add(RA_ACTIVE_CLASS);
+        if (currentPathname === 'activities') {
+            // The configuration item is not active when the user is on the activities page
+            aElement.classList.remove(RA_ACTIVE_CLASS);
+        }
     } else if (aElement) {
         aElement.classList.remove(RA_ACTIVE_CLASS);
     }
 };
 
-const manageCurrentPathActiveClass = (ref: HTMLDivElement, currentPathname: string) => {
-    const aElement = ref.firstElementChild;
+const manageProfilesPathActiveClass = (profilesRef: HTMLDivElement, currentPathname: string) => {
+    const aElement = profilesRef.firstElementChild;
 
-    if (currentPathname.includes('profiles/with-tandem')) {
+    if (currentPathname.includes('profiles/')) {
         aElement?.classList.remove(RA_ACTIVE_CLASS);
     } else if (currentPathname.includes('profiles')) {
+        aElement?.classList.add(RA_ACTIVE_CLASS);
+    }
+};
+
+const manageActivitiesPathActiveClass = (activitiesRef: HTMLDivElement, currentPathname: string) => {
+    const aElement = activitiesRef.firstElementChild;
+
+    if (currentPathname.includes('activities/')) {
+        aElement?.classList.remove(RA_ACTIVE_CLASS);
+    } else if (currentPathname.includes('activities')) {
         aElement?.classList.add(RA_ACTIVE_CLASS);
     }
 };
@@ -131,6 +145,7 @@ const CustomMenu = () => {
     const [universitiesRef, setUniversitiesRef] = useState<HTMLDivElement>();
     const [configurationRef, setConfigurationRef] = useState<HTMLDivElement>();
     const [profilesRef, setProfilesRef] = useState<HTMLDivElement>();
+    const [activitiesRef, setActivitiesRef] = useState<HTMLDivElement>();
 
     if (universitiesRef) {
         manageSubMenusActiveClass(universitiesRef, currentPathname, 'universities');
@@ -139,7 +154,10 @@ const CustomMenu = () => {
         manageSubMenusActiveClass(configurationRef, currentPathname, 'configuration');
     }
     if (profilesRef) {
-        manageCurrentPathActiveClass(profilesRef, currentPathname);
+        manageProfilesPathActiveClass(profilesRef, currentPathname);
+    }
+    if (activitiesRef) {
+        manageActivitiesPathActiveClass(activitiesRef, currentPathname);
     }
 
     return (
@@ -150,7 +168,9 @@ const CustomMenu = () => {
             <Menu.ResourceItem name="profiles/with-tandems-profiles" />
             <Menu.ResourceItem name="chat" />
             <Menu.ResourceItem name="news" />
-            <Menu.ResourceItem name="activities" />
+            <Box ref={(newRef: HTMLDivElement) => setActivitiesRef(newRef)} sx={{ marginTop: 0 }}>
+                <Menu.ResourceItem name="activities" />
+            </Box>
             {permissions.checkRole(Role.MANAGER) && data && data.universityId && (
                 <Menu.Item
                     leftIcon={<SchoolIcon />}

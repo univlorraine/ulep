@@ -12,6 +12,7 @@ export type Activity = {
     title: string;
     description: string;
     image: MediaObject;
+    imageCredit: string;
     imageUrl: string;
     language: Language;
     level: ProficiencyLevel;

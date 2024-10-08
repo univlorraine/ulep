@@ -21,7 +21,7 @@ export type GetActivitiesProps = {
   searchTitle?: string;
   status?: ActivityStatus[];
   profileId?: string;
-  pagination: ActivityPagination;
+  pagination?: ActivityPagination;
 };
 
 export type GetAllActivityThemesProps = {
