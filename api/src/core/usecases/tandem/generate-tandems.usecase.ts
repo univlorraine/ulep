@@ -8,7 +8,7 @@ import {
   Tandem,
   TandemStatus,
 } from 'src/core/models';
-import { CHAT_SERVICE } from 'src/core/ports/chat.service';
+import { CHAT_SERVICE, ChatServicePort } from 'src/core/ports/chat.service';
 import {
   EMAIL_GATEWAY,
   EmailGateway,
@@ -36,7 +36,6 @@ import {
   UuidProviderInterface,
 } from 'src/core/ports/uuid.provider';
 import { IMatchScorer, MatchScorer } from 'src/core/services/MatchScorer';
-import { ChatService } from 'src/providers/services/chat.service';
 
 export type GenerateTandemsCommand = {
   universityIds: string[];
@@ -68,7 +67,7 @@ export class GenerateTandemsUsecase {
     @Inject(EMAIL_GATEWAY)
     private readonly emailGateway: EmailGateway,
     @Inject(CHAT_SERVICE)
-    private readonly chatService: ChatService,
+    private readonly chatService: ChatServicePort,
   ) {}
 
   async execute(command: GenerateTandemsCommand): Promise<Tandem[]> {
