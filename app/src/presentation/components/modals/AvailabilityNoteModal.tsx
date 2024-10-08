@@ -36,7 +36,7 @@ const AvailabilityNoteModal: React.FC<AvailabilityNoteModalProps> = ({
                     <TextInput
                         customHeight={170}
                         onChange={setNote}
-                        title={t('signup_availabilities_page.modal.note')}
+                        title={t('signup_availabilities_page.modal.note') as string}
                         type="text-area"
                         value={note}
                     />
