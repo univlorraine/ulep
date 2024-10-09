@@ -11,6 +11,11 @@ import TandemStatusModal from '../components/modals/TandemStatusModal';
 import useGetHomeData from '../hooks/useGetHomeData';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../utils';
+import Session from '../../domain/entities/Session';
+import SessionsContentModal, {
+    DisplaySessionModalEnum,
+    DisplaySessionModal,
+} from '../components/modals/SessionsContentModal';
 
 const HomePage: React.FC = () => {
     const { t } = useTranslation();
@@ -21,8 +26,8 @@ const HomePage: React.FC = () => {
     const profile = useStoreState((state) => state.profile);
     const [selectedTandem, setSelectedTandem] = useState<Tandem>();
     const [refresh, setRefresh] = useState<boolean>(false);
-
-    const { tandems, error, isLoading } = useGetHomeData(refresh);
+    const [displaySessionModal, setDisplaySessionModal] = useState<DisplaySessionModal>();
+    const { tandems, sessions, error, isLoading } = useGetHomeData(refresh);
 
     if (error) {
         showToast({ message: t(error.message), duration: 5000 });
@@ -37,6 +42,52 @@ const HomePage: React.FC = () => {
         return <Redirect to={'/'} />;
     }
 
+    const onShowSessionListPressed = () => {
+        if (isHybrid) {
+            history.push('/sessions', { tandems, sessions });
+        } else {
+            setDisplaySessionModal({
+                type: DisplaySessionModalEnum.list,
+            });
+        }
+    };
+
+    const onShowSessionPressed = (session: Session, tandem: Tandem, confirmCreation?: boolean) => {
+        if (isHybrid) {
+            history.push('show-session', { session, tandem, confirmCreation });
+        } else {
+            setDisplaySessionModal({
+                type: DisplaySessionModalEnum.show,
+                tandem,
+                session,
+                confirmCreation
+            });
+        }
+    };
+
+    const onUpdateSessionPressed = (session: Session, tandem: Tandem) => {
+        if (isHybrid) {
+            history.push('update-session', { session, tandem });
+        } else {
+            setDisplaySessionModal({
+                type: DisplaySessionModalEnum.form,
+                tandem,
+                session
+            });
+        }
+    };
+
+    const onCreateSessionPressed = (tandem: Tandem) => {
+        if (isHybrid) {
+            history.push('create-session', { tandem });
+        } else {
+            setDisplaySessionModal({
+                type: DisplaySessionModalEnum.form,
+                tandem
+            });
+        }
+    };
+
     if (isHybrid) {
         return (
             <IonContent>
@@ -46,6 +97,11 @@ const HomePage: React.FC = () => {
                     isLoading={isLoading}
                     profile={profile}
                     tandems={tandems}
+                    sessions={sessions}
+                    onShowSessionPressed={onShowSessionPressed}
+                    onUpdateSessionPressed={onUpdateSessionPressed}
+                    onCreateSessionPressed={onCreateSessionPressed}
+                    onShowSessionListPressed={onShowSessionListPressed}
                 />
             </IonContent>
         );
@@ -59,6 +115,11 @@ const HomePage: React.FC = () => {
                     profile={profile}
                     onValidatedTandemPressed={onValidatedTandemPressed}
                     tandems={tandems}
+                    sessions={sessions}
+                    onShowSessionPressed={onShowSessionPressed}
+                    onUpdateSessionPressed={onUpdateSessionPressed}
+                    onCreateSessionPressed={onCreateSessionPressed}
+                    onShowSessionListPressed={onShowSessionListPressed}
                 />
             </OnlineWebLayout>
             <TandemStatusModal
@@ -81,6 +142,17 @@ const HomePage: React.FC = () => {
                 partnerLearningLanguage={selectedTandem?.partnerLearningLanguage}
                 pedagogy={selectedTandem?.pedagogy}
                 profile={selectedTandem?.partner}
+            />
+            <SessionsContentModal
+                isVisible={displaySessionModal !== undefined}
+                onClose={() => setDisplaySessionModal(undefined)}
+                profile={profile}
+                tandems={tandems}
+                sessions={sessions}
+                displaySessionModal={displaySessionModal}
+                onShowSessionPressed={onShowSessionPressed}
+                onUpdateSessionPressed={onUpdateSessionPressed}
+                onCreateSessionPressed={onCreateSessionPressed}
             />
         </>
     );

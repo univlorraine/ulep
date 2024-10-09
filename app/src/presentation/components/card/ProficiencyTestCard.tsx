@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
-import { AdviceSvg } from '../../../assets';
+import { AdvicePng } from '../../../assets';
 import TestedLanguage from '../../../domain/entities/TestedLanguage';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 import { codeLanguageToFlag, HYBRID_MAX_WIDTH } from '../../utils';
@@ -26,7 +26,7 @@ const ProficiencyTestCard: React.FC<ProficiencyTestCardProps> = ({ testedLanguag
             <div className={styles.container}>
                 <div className={styles['container-content']}>
                     <div className={styles['container-image']}>
-                        <img alt="" className={styles.image} src={AdviceSvg} aria-hidden={true} />
+                        <img alt="" className={styles.image} src={AdvicePng} aria-hidden={true} />
                     </div>
                     <TestedLanguageComponent testedLanguages={testedLanguages} />
                 </div>

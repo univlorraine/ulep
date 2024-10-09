@@ -1,0 +1,145 @@
+.container {
+    border-left: 1px solid #00000020;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
+    padding: 0 !important;
+}
+
+.show_session_content {
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+    gap: 10px;
+}
+
+.confirm_title {
+    font-size: 37px;
+    font-weight: 700;
+    font-family: 'Roboto', sans-serif;
+    line-height: 40px;
+    margin-bottom: 0;
+}
+
+.confirm_message {
+    font-size: 16px;
+    font-family: 'Maven Pro', sans-serif;
+    line-height: 20px;
+    margin-top: 0;
+}
+
+.confirm_header {
+    margin: 30px auto;
+    text-align: center;
+}
+
+.header {
+    background-color: white;
+    height: 50px;
+    text-align: center;
+    border-bottom: 1px solid #00000020;
+}
+
+.title {
+    color: #000;
+    font-family: 'Roboto', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    margin: 0;
+    line-height: 50px;
+}
+
+.back_button {
+    position: absolute;
+    left: 10px;
+    top: 3px;
+}
+
+.block {
+    background-color: #F2F4F7;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.block_title {
+    font-size: 16px;
+    font-weight: 700;
+    font-family: 'Roboto', sans-serif;
+    line-height: 20px;
+    margin-top: 0;
+}
+
+.line {
+    display: flex;
+    align-items: start;
+    gap: 5px;
+}
+
+.icon {
+    font-size: 20px;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+.datetimeInfo {
+    font-size: 13px;
+    color: #737373;
+    font-family: 'Maven Pro', sans-serif;
+}
+
+.buttons {
+    position: absolute;
+    bottom: 0;
+    text-align: center;
+    width: 100%;
+    padding: 20px;
+}
+
+.cancelled_title {
+    font-size: 35px;
+    font-weight: 700;
+    font-family: 'Roboto', sans-serif;
+    line-height: 24px;
+    z-index: 2;
+}
+
+.block_cancelled {
+    position: relative;
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding-top: 50px;
+}
+
+.cancelled_icon {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+    background-color: white;
+    border-radius: 50%;
+    padding: 20px;
+    position: relative;
+    z-index: 2;
+}
+
+.background_image {
+    position: absolute;
+    bottom: 15%;
+    left: 0;
+    scale: 2;
+    width: 75%;
+    height: 75%;
+    z-index: 1;
+}
+
+@media (min-width: 768px) {
+    .header {
+        padding: 12px;
+    }
+}

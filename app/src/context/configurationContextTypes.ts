@@ -5,16 +5,21 @@ import FileAdapterInterface from '../adapter/interfaces/FileAdapter.interface';
 import NotificationAdapterInterface from '../adapter/interfaces/NotificationAdapter.interface';
 import RecorderAdapterInterface from '../adapter/interfaces/RecorderAdapter.interface';
 import Configuration from '../domain/entities/Confirguration';
-import AddDeviceUsecaseInterface from '../domain/interfaces/AddDeviceUsecase.interface';
 import AskForAccountDeletionUsecaseInterface from '../domain/interfaces/AskForAccountDeletionUsecase.interface';
 import AskForLanguageUsecaseInterface from '../domain/interfaces/AskForLanguageUsecase.interface';
 import AskForLearningLanguageUsecaseInterface from '../domain/interfaces/AskForLearningLanguageUsecase.interface';
 import GetInitialUrlUsecaseInterface from '../domain/interfaces/AuthStandardFlow/GetInitialUrlUsecase.interface';
 import GetTokenFromCodeUsecaseInterface from '../domain/interfaces/AuthStandardFlow/GetTokenFromCodeUsecase.interface';
+import CancelSessionUsecaseInterface from '../domain/interfaces/CancelSessionUsecase.interface';
+import GetConversationsUsecaseInterface from '../domain/interfaces/chat/GetConversationsUsecase.interface';
+import GetMessagesFromConversationUsecaseInterface from '../domain/interfaces/chat/GetMessagesFromConversationUsecase.interface';
+import SearchMessagesIdsFromConversationUsecaseInterface from '../domain/interfaces/chat/SearchMessagesIdsFromConversationUsecase.interface';
+import SendMessageUsecaseInterface from '../domain/interfaces/chat/SendMessageUsecase.interface';
 import CreateOrUpdateTestedLanguageUsecaseInterface from '../domain/interfaces/CreateOrUpdateTestedLanguageUsecase.interface';
 import CreateProfileUsecaseInterface from '../domain/interfaces/CreateProfileUsecase.interface';
 import CreateReportMessageUsecaseInterface from '../domain/interfaces/CreateReportMessageUsecase.interface';
 import CreateReportUsecaseInterface from '../domain/interfaces/CreateReportUsecase.interface';
+import CreateSessionUsecaseInterface from '../domain/interfaces/CreateSessionUsecase.interface';
 import CreateUserUsecaseInterface from '../domain/interfaces/CreateUserUsecase.interface';
 import EditProfileUsecaseInterface from '../domain/interfaces/EditProfileUsecase.interface';
 import EditUserUsecaseInterface from '../domain/interfaces/EditUserUsecase.interface';
@@ -22,9 +27,10 @@ import GetAllCountriesUsecaseInterface from '../domain/interfaces/GetAllCountrie
 import GetAllGoalsUsecaseInterface from '../domain/interfaces/GetAllGoalsUsecase.interface';
 import GetAllInterestCategoriessUsecase from '../domain/interfaces/GetAllInterestCategoriesUsecase.interface';
 import GetAllLanguagesUsecaseInterface from '../domain/interfaces/GetAllLanguagesUsecase.interface';
+import GetAllReportCategoriesUsecaseInterface from '../domain/interfaces/GetAlllReportCategoriesUsecase.interface';
+import GetAllSessionsUsecaseInterface from '../domain/interfaces/GetAllSessionsUsecase.interface';
 import GetAllTandemsUsecaseInterface from '../domain/interfaces/GetAllTandemsUsecase.interface';
 import GetAllUniversitiesUsecaseInterface from '../domain/interfaces/GetAllUniversitiesUsecase.interface';
-import GetAllReportCategoriesUsecaseInterface from '../domain/interfaces/GetAlllReportCategoriesUsecase.interface';
 import GetHistoricEmailPartnerUsecaseInterface from '../domain/interfaces/GetHistoricEmailPartnerUsecase.interface';
 import GetJitsiTokenUsecaseInterface from '../domain/interfaces/GetJitsiTokenUsecase.interface';
 import GetMediaObjectUsecaseInterface from '../domain/interfaces/GetMediaObjectUsecase.interface';
@@ -44,10 +50,7 @@ import CreateActivityUsecaseInterface from '../domain/interfaces/activity/Create
 import GetActivitiesUsecaseInterface from '../domain/interfaces/activity/GetActivitiesUsecase.interface';
 import GetActivityThemesUsecaseInterface from '../domain/interfaces/activity/GetActivityThemesUsecase.interface';
 import GetActivityUsecaseInterface from '../domain/interfaces/activity/GetActivityUsecase.interface';
-import GetConversationsUsecaseInterface from '../domain/interfaces/chat/GetConversationsUsecase.interface';
-import GetMessagesFromConversationUsecaseInterface from '../domain/interfaces/chat/GetMessagesFromConversationUsecase.interface';
-import SearchMessagesIdsFromConversationUsecaseInterface from '../domain/interfaces/chat/SearchMessagesIdsFromConversationUsecase.interface';
-import SendMessageUsecaseInterface from '../domain/interfaces/chat/SendMessageUsecase.interface';
+import UpdateSessionUsecaseInterface from '../domain/interfaces/UpdateSessionUsecase.interface';
 import CreateVocabularyListUsecaseInterface from '../domain/interfaces/vocabulary/CreateVocabularyListUsecase.interface';
 import CreateVocabularyUsecaseInterface from '../domain/interfaces/vocabulary/CreateVocabularyUsecase.interface';
 import DeleteVocabularyListUsecaseInterface from '../domain/interfaces/vocabulary/DeleteVocabularyListUsecase.interface';
@@ -57,6 +60,7 @@ import GetVocabularyListPdfUsecaseInterface from '../domain/interfaces/vocabular
 import GetVocabularyListsUsecaseInterface from '../domain/interfaces/vocabulary/GetVocabularyListsUsecase.interface';
 import UpdateVocabularyListUsecaseInterface from '../domain/interfaces/vocabulary/UpdateVocabularyListUsecase.interface';
 import UpdateVocabularyUsecaseInterface from '../domain/interfaces/vocabulary/UpdateVocabularyUsecase.interface';
+import AddDeviceUsecaseInterface from '../domain/interfaces/AddDeviceUsecase.interface';
 
 export interface ConfigContextValueType {
     accessToken: string;
@@ -83,6 +87,7 @@ export interface ConfigContextValueType {
     getAllLanguages: GetAllLanguagesUsecaseInterface;
     getAllReportCategories: GetAllReportCategoriesUsecaseInterface;
     getAllTandems: GetAllTandemsUsecaseInterface;
+    getAllSessions: GetAllSessionsUsecaseInterface;
     getAllUniversities: GetAllUniversitiesUsecaseInterface;
     getConversations: GetConversationsUsecaseInterface;
     getHistoricEmailPartner: GetHistoricEmailPartnerUsecaseInterface;
@@ -121,4 +126,8 @@ export interface ConfigContextValueType {
     updateVocabularyList: UpdateVocabularyListUsecaseInterface;
     deleteVocabularyList: DeleteVocabularyListUsecaseInterface;
     getVocabularyLists: GetVocabularyListsUsecaseInterface;
+    // Session
+    createSession: CreateSessionUsecaseInterface;
+    updateSession: UpdateSessionUsecaseInterface;
+    cancelSession: CancelSessionUsecaseInterface;
 }

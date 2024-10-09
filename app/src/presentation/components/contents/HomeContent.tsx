@@ -2,11 +2,13 @@ import { useTranslation } from 'react-i18next';
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 import { ReportSvg } from '../../../assets';
 import Profile from '../../../domain/entities/Profile';
+import Session from '../../../domain/entities/Session';
 import Tandem from '../../../domain/entities/Tandem';
 import Loader from '../../components/Loader';
 import TandemList from '../../components/tandems/TandemList';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../../utils';
+import SessionListHome from '../sessions/SessionListHome';
 import styles from './HomeContent.module.css';
 
 interface HomeContentProps {
@@ -15,6 +17,11 @@ interface HomeContentProps {
     onReportPressed?: () => void;
     onValidatedTandemPressed: (tandem: Tandem) => void;
     tandems: Tandem[];
+    sessions: Session[];
+    onShowSessionPressed: (session: Session, tandem: Tandem, confirmCreation?: boolean) => void;
+    onUpdateSessionPressed: (session: Session, tandem: Tandem) => void;
+    onCreateSessionPressed: (tandem: Tandem) => void;
+    onShowSessionListPressed: () => void;
 }
 
 const HomeContent: React.FC<HomeContentProps> = ({
@@ -23,6 +30,11 @@ const HomeContent: React.FC<HomeContentProps> = ({
     onReportPressed,
     onValidatedTandemPressed,
     tandems,
+    sessions,
+    onShowSessionPressed,
+    onUpdateSessionPressed,
+    onCreateSessionPressed,
+    onShowSessionListPressed,
 }) => {
     const { t } = useTranslation();
     const currentDate = new Date();
@@ -55,6 +67,19 @@ const HomeContent: React.FC<HomeContentProps> = ({
                             <Masonry className={styles.masonery} gutter="20px">
                                 {tandems.find((tandem) => tandem.status === 'ACTIVE') && (
                                     <TandemList onTandemPressed={onValidatedTandemPressed} tandems={tandems} />
+                                )}
+                            </Masonry>
+                            <Masonry className={styles.masonery} gutter="20px">
+                                {tandems.find((tandem) => tandem.status === 'ACTIVE') && (
+                                    <SessionListHome
+                                        tandems={tandems}
+                                        sessions={sessions}
+                                        onShowSessionListPressed={onShowSessionListPressed}
+                                        onShowSessionPressed={onShowSessionPressed}
+                                        onUpdateSessionPressed={onUpdateSessionPressed}
+                                        onCreateSessionPressed={onCreateSessionPressed}
+                                        isHybrid={isHybrid}
+                                    />
                                 )}
                             </Masonry>
                         </ResponsiveMasonry>

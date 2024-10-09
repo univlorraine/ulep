@@ -1,6 +1,6 @@
 import { IonButton, IonIcon, IonImg } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
-import { AddSvg, LeftChevronSvg, VocabularySvg } from '../../../assets';
+import { AddSvg, LeftChevronSvg, VocabularyPng } from '../../../assets';
 import Profile from '../../../domain/entities/Profile';
 import VocabularyList from '../../../domain/entities/VocabularyList';
 import VocabularyListLine from '../vocabulary/VocabularyListLine';
@@ -41,7 +41,7 @@ const VocabularyListContent: React.FC<VocabularyListContentProps> = ({
             <div className={styles.content}>
                 {!isLoading && vocabularyLists.length === 0 && (
                     <div className={styles.emptyContainer}>
-                        <IonImg alt="" aria-hidden className={styles.emptyImage} src={VocabularySvg} />
+                        <IonImg alt="" aria-hidden className={styles.emptyImage} src={VocabularyPng} />
                         <p className={styles.emptyText}>{t('vocabulary.list.empty')}</p>
                         <IonButton className="tertiary-button" fill="clear" onClick={onAddVocabularyList}>
                             <IonIcon aria-hidden slot="start" name="add-outline" />

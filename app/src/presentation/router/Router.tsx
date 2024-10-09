@@ -5,6 +5,9 @@ import { useStoreState } from '../../store/storeTypes';
 import useIsUniversityOpen from '../hooks/useIsUniversityOpen';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import AuthFlowPage from '../pages/AuthFlowPage';
+import CEFRQuizzEndPage from '../pages/cefr-quizz/CEFRQuizzEndPage';
+import CEFRQuizzLanguagePage from '../pages/cefr-quizz/CEFRQuizzLanguagePage';
+import CEFRQuizzOtherLanguagesPage from '../pages/cefr-quizz/CEFRQuizzOtherLanguagesPage';
 import ConnectPage from '../pages/ConnectPage';
 import ConversationsPage from '../pages/ConversationsPage';
 import EditInformationsPage from '../pages/EditInformationsPage';
@@ -14,6 +17,16 @@ import HomePage from '../pages/HomePage';
 import JitsiPage from '../pages/Jitsi';
 import LearningPage from '../pages/LearningPage';
 import LoginPage from '../pages/LoginPage';
+import ActivitiesPage from '../pages/mobile/ActivitiesPage';
+import ChatPage from '../pages/mobile/ChatPage';
+import CreateSessionPage from '../pages/mobile/CreateSessionPage';
+import MediaPage from '../pages/mobile/MediaPage';
+import ProfilePage from '../pages/mobile/ProfilePage';
+import ReportPage from '../pages/mobile/ReportPage';
+import SessionListPage from '../pages/mobile/SessionListPage';
+import SettingsPage from '../pages/mobile/SettingsPage';
+import TandemProfilePage from '../pages/mobile/TandemProfilePage';
+import TandemStatusPage from '../pages/mobile/TandemStatusPage';
 import PairingConfirmLanguagePage from '../pages/PairingConfirmLanguagePage';
 import PairingFinalPage from '../pages/PairingFinalPage';
 import PairingLanguagesPage from '../pages/PairingLanguagesPage';
@@ -43,21 +56,12 @@ import SuspendedPage from '../pages/SuspendedPage';
 import VocabularyListPage from '../pages/VocabularyListPage';
 import VocabularyPage from '../pages/VocabularyPage';
 import WelcomePage from '../pages/WelcomePage';
-import CEFRQuizzEndPage from '../pages/cefr-quizz/CEFRQuizzEndPage';
-import CEFRQuizzLanguagePage from '../pages/cefr-quizz/CEFRQuizzLanguagePage';
-import CEFRQuizzOtherLanguagesPage from '../pages/cefr-quizz/CEFRQuizzOtherLanguagesPage';
-import ActivitiesPage from '../pages/mobile/ActivitiesPage';
-import ChatPage from '../pages/mobile/ChatPage';
-import MediaPage from '../pages/mobile/MediaPage';
-import ProfilePage from '../pages/mobile/ProfilePage';
-import ReportPage from '../pages/mobile/ReportPage';
-import SettingsPage from '../pages/mobile/SettingsPage';
-import TandemProfilePage from '../pages/mobile/TandemProfilePage';
-import TandemStatusPage from '../pages/mobile/TandemStatusPage';
 import { HYBRID_MAX_WIDTH } from '../utils';
 import BottomBar from './BottomBar';
 import MobileRoute from './MobileRoute';
 import PrivateRoute from './PrivateRoute';
+import UpdateSessionPage from '../pages/mobile/UpdateSessionPage';
+import ShowSessionPage from '../pages/mobile/ShowSessionPage';
 
 const OfflineRouter: React.FC = () => {
     const { width } = useWindowDimensions();
@@ -122,6 +126,18 @@ const OfflineRouter: React.FC = () => {
                 </MobileRoute>
                 <MobileRoute exact path={'/media'}>
                     <MediaPage />
+                </MobileRoute>
+                <MobileRoute exact path={'/sessions'}>
+                    <SessionListPage />
+                </MobileRoute>
+                <MobileRoute exact path={'/create-session'}>
+                    <CreateSessionPage />
+                </MobileRoute>
+                <MobileRoute exact path={'/show-session'}>
+                    <ShowSessionPage />
+                </MobileRoute>
+                <MobileRoute exact path={'/update-session'}>
+                    <UpdateSessionPage />
                 </MobileRoute>
                 <PrivateRoute exact path="/jitsi">
                     <JitsiPage />

@@ -430,7 +430,59 @@
             "tandem_unavailable": "Tandem indisponible",
             "tandem_paused": "Tandem en pause",
             "title": "Mes demandes en attentes"
+        },
+        "session": {
+            "title": "Sessions à venir ({{count}})",
+            "show_session_list_button": "Voir toutes les sessions"
         }
+    },
+    "session": {
+        "show_title": "Session avec {{name}}",
+        "cancel_title": "Session annulée",
+        "availabilities": {
+            "open": "Ouvrir",
+            "title": "Disponibilités de {{name}}",
+            "note": "Note"
+        },
+        "form": {
+            "create_title": "Programmer une session avec {{name}}",
+            "update_title": "Modifier une session avec {{name}}",
+            "cancel": "Annuler",
+            "submit": "Valider",
+            "update": "Enregistrer"
+        },
+        "list": {
+            "title": "Sessions à venir ({{count}})",
+            "this_week": "Cette semaine ({{count}})",
+            "this_month": "Ce mois ({{count}})",
+            "at_month": "En {{month}} ({{count}})"
+        },
+        "confirm_cancel": {
+            "title": "Voulez-vous vraiment annuler la session ?",
+            "content": "Si tu annules trop régulièrement des sessions, ton tandem pourrait croire que tu n’es plus intéressé(e) !",
+            "comment_label": "N’hésite pas à écrire à ton tandem pour lui expliquer les raisons de cette annulation :",
+            "confirm_btn": "Annuler la session",
+            "cancel_btn": "Ne rien faire"
+        },
+        "card": {
+            "session_with": "Session avec {{name}}",
+            "no_session": "Vous n'avez pas encore de session programmée",
+            "create_session": "Programmer",
+            "update_session": "Modifier",
+            "cancel_session": "Annuler",
+            "join_session": "Rejoindre",
+            "show_session": "Voir",
+            "cancelled": "Annulée"
+        },
+        "date_and_hour": "Date & heure",
+        "time_for_partner": "Horaire pour {{name}} :",
+        "comment": "Commentaire",
+        "confirm_creation_title": "Proposition envoyée !",
+        "confirm_creation_message": "{{name}} sera notifiée de ta proposition.",
+        "close_modal": "Fermer",
+        "update_session_btn": "Modifier la session",
+        "cancel_session_btn": "Annuler la session",
+        "select_partner_title": "Pour quel tandem souhaitez-vous ajouter une session ?"
     },
     "learning": {
         "title": "Espace apprentissage",

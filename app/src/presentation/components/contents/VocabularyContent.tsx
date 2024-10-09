@@ -13,7 +13,7 @@ import {
 import { arrowRedoOutline, downloadOutline } from 'ionicons/icons';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { AddSvg, KebabSvg, LeftChevronSvg, VocabularySvg } from '../../../assets';
+import { AddSvg, KebabSvg, LeftChevronSvg, VocabularyPng } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
 import Profile from '../../../domain/entities/Profile';
 import Vocabulary from '../../../domain/entities/Vocabulary';
@@ -125,7 +125,7 @@ const VocabularyContent: React.FC<VocabularyContentProps> = ({
             <div className={styles.content}>
                 {!isLoading && !search && vocabularyPairs.length === 0 && (
                     <div className={styles.emptyContainer}>
-                        <IonImg alt="" aria-hidden className={styles.emptyImage} src={VocabularySvg} />
+                        <IonImg alt="" aria-hidden className={styles.emptyImage} src={VocabularyPng} />
                         <p className={styles.emptyText}>{t('vocabulary.pair.empty')}</p>
                         <IonButton
                             className="tertiary-button no-padding"

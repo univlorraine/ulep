@@ -44,7 +44,7 @@ const ForgotPasswordForm = () => {
                     <TextInput
                         autocomplete="email"
                         onChange={setEmail}
-                        title={t('global.email')}
+                        title={t('global.email') as string}
                         value={email}
                         type="email"
                     />

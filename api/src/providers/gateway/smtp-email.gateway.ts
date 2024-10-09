@@ -14,6 +14,10 @@ import {
   NewUserRegistrationNoticeEmailProps,
   PasswordChangeDeniedEmailProps,
   SendWelcomeMailProps,
+  SessionCanceledEmailProps,
+  SessionCreatedEmailProps,
+  SessionStartEmailProps,
+  SessionUpdatedEmailProps,
   TandemCanceledEmailProps,
   TandemCanceledNoticeEmailProps,
   TandemClosureNoticeEmailProps,
@@ -420,6 +424,78 @@ export class SmtpEmailGateway implements EmailGateway {
         images: this.images,
         ...translations,
         footer: this.footer,
+      },
+    });
+  }
+
+  async sendSessionStartEmail(props: SessionStartEmailProps): Promise<void> {
+    const translations = this.translate(
+      `sessionStart${props.type}`,
+      props.language,
+      {
+        ...props,
+      },
+    );
+
+    await this.mailer.sendMail({
+      to: props.to,
+      subject: translations.title,
+      template: 'user',
+      variables: {
+        links: this.links,
+        images: this.images,
+        ...translations,
+      },
+    });
+  }
+
+  async sendSessionCanceledEmail(props: SessionCanceledEmailProps): Promise<void> {
+    const translations = this.translate('sessionCanceled', props.language, {
+      ...props,
+    });
+
+    await this.mailer.sendMail({
+      to: props.to,
+      subject: translations.title,
+      template: 'user',
+      variables: {
+        links: this.links,
+        images: this.images,
+        ...translations,
+      },
+    });
+  }
+
+  async sendSessionUpdatedEmail(props: SessionUpdatedEmailProps): Promise<void> {
+    const translations = this.translate('sessionUpdated', props.language, {
+      ...props,
+    });
+
+    await this.mailer.sendMail({
+      to: props.to,
+      subject: translations.title,
+      template: 'user',
+      variables: {
+        links: this.links,
+        images: this.images,
+        ...translations,
+      },
+    });
+  }
+
+  async sendSessionCreatedEmail(props: SessionCreatedEmailProps): Promise<void> {
+    const translations = this.translate('sessionCreated', props.language, {
+      ...props,
+    });
+
+    await this.mailer.sendMail({
+      to: props.to,
+      subject: translations.title,
+      template: 'user',
+      variables: {
+        links: this.links,
+        images: this.images,
+        ...translations,
       },
     });
   }

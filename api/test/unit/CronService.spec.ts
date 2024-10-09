@@ -21,6 +21,8 @@ import InMemoryEmailGateway from 'src/providers/gateway/in-memory-email.gateway'
 import InMemoryNotificaitonGateway from 'src/providers/gateway/in-memory-notification.gateway';
 import { InMemoryInstanceRepository } from 'src/providers/persistance/repositories/in-memory-instance-repository';
 import { InMemoryLearningLanguageRepository } from 'src/providers/persistance/repositories/in-memory-learning-language-repository';
+import { InMemorySessionRepository } from 'src/providers/persistance/repositories/in-memory-session-repository';
+import { InMemoryTandemRepository } from 'src/providers/persistance/repositories/in-memory-tandem-repository';
 import { InMemoryUniversityRepository } from 'src/providers/persistance/repositories/in-memory-university-repository';
 
 const country = {
@@ -53,7 +55,7 @@ const centralUniversity = new University({
   country,
   name: 'university 1',
   campus: [],
-  timezone: 'GMT+1',
+  timezone: 'Europe/Paris',
   admissionStart: new Date('01/01/2024'),
   admissionEnd: new Date('01/01/2025'),
   openServiceDate: new Date('01/01/2024'),
@@ -157,12 +159,16 @@ describe('Cron', () => {
   const universityRepository = new InMemoryUniversityRepository();
   const inMemoryEmail = new InMemoryEmailGateway();
   const inMemoryNotification = new InMemoryNotificaitonGateway();
+  const inMemorySessionRepository = new InMemorySessionRepository();
+  const inMemoryTandemRepository = new InMemoryTandemRepository();
   const cronService = new CronService(
     inMemoryEmail,
     instanceRepository,
     inMemoryNotification,
     universityRepository,
     learningLanguageRepository,
+    inMemorySessionRepository,
+    inMemoryTandemRepository,
   );
 
   beforeEach(() => {
