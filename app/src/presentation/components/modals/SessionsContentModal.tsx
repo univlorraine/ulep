@@ -81,7 +81,7 @@ const SessionsContentModal: React.FC<SessionsContentModalProps> = ({
                         profile={profile}
                         session={displaySessionModal.session}
                         tandem={displaySessionModal.tandem}
-                        confirmCreation={false}
+                        confirmCreation={displaySessionModal.confirmCreation || false}
                         onUpdateSessionPressed={onUpdateSessionPressed}
                     />
                 )}

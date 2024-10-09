@@ -23,7 +23,7 @@ const SelectTandemModal: React.FC<SelectTandemModalProps> = ({ isVisible, onClos
                 </div>
                 <h2 className={styles.title}>{t('session.select_partner_title')}</h2>
                 <div className={styles.list} role="list">
-                    {tandems.map((tandem) => (
+                    {tandems.filter(tandem => tandem.status === 'ACTIVE').map((tandem) => (
                         <div role="listitem" key={tandem.id}>
                             <TandemBubble
                                 language={tandem.learningLanguage}
