@@ -1,17 +1,11 @@
-import {
-  ValidateTandemUsecase,
-  CreateTandemUsecase,
-  GenerateTandemsUsecase,
-  GetTandemsUsecase,
-  RefuseTandemUsecase,
-  UpdateTandemUsecase,
-} from 'src/core/usecases/tandem';
-import { RoutineStatus } from 'src/core/models/routine-execution.model';
+import { Collection } from '@app/common';
+import { KeycloakUser } from '@app/keycloak';
 import {
   Body,
   Controller,
   Get,
   Inject,
+  Logger,
   Param,
   ParseUUIDPipe,
   Post,
@@ -20,29 +14,38 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
-import { Collection } from '@app/common';
+import { RoutineStatus } from 'src/core/models/routine-execution.model';
+import {
+  RoutineExecutionRepository,
+  ROUTINE_EXECUTION_REPOSITORY,
+} from 'src/core/ports/routine-execution.repository';
+import {
+  CreateTandemUsecase,
+  GenerateTandemsUsecase,
+  GetTandemsUsecase,
+  RefuseTandemUsecase,
+  UpdateTandemUsecase,
+  ValidateTandemUsecase,
+} from 'src/core/usecases/tandem';
 import { CollectionResponse, CurrentUser } from '../decorators';
+import { Role, Roles } from '../decorators/roles.decorator';
 import {
   CreateTandemRequest,
   PaginationDto,
   RefuseTandemRequest,
   TandemResponse,
 } from '../dtos';
-import { Role, Roles } from '../decorators/roles.decorator';
-import { AuthenticationGuard } from '../guards';
 import {
   GenerateTandemsRequest,
   UpdateTandemRequest,
 } from '../dtos/tandems/generate-tandems.request';
-import {
-  ROUTINE_EXECUTION_REPOSITORY,
-  RoutineExecutionRepository,
-} from 'src/core/ports/routine-execution.repository';
-import { KeycloakUser } from '@app/keycloak';
+import { AuthenticationGuard } from '../guards';
 
 @Controller('tandems')
 @Swagger.ApiTags('Tandems')
 export class TandemController {
+  private readonly logger = new Logger(TandemController.name);
+
   constructor(
     private readonly generateTandemsUsecase: GenerateTandemsUsecase,
     private readonly getTandemsUsecase: GetTandemsUsecase,
@@ -139,8 +142,8 @@ export class TandemController {
           RoutineStatus.ENDED,
         );
       })
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       .catch((err: unknown) => {
+        this.logger.error(err);
         return this.routineExecutionRepository.updateStatus(
           routineExecution.id,
           RoutineStatus.ERROR,

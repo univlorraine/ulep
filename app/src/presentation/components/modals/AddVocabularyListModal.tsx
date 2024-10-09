@@ -76,14 +76,14 @@ const AddVocabularyListModal: React.FC<AddVocabularyListModalProps> = ({
 
                 <TextInput
                     onChange={(text) => setName(text)}
-                    title={t('vocabulary.list.add.name')}
+                    title={t('vocabulary.list.add.name') as string}
                     value={name}
                     maxLength={50}
                     errorMessage={errorMessage?.type === 'name' ? errorMessage.message : undefined}
                 />
                 <TextInput
                     onChange={(text) => setSymbol(text)}
-                    title={t('vocabulary.list.add.symbol')}
+                    title={t('vocabulary.list.add.symbol') as string}
                     value={symbol}
                     maxLength={2}
                     errorMessage={errorMessage?.type === 'symbol' ? errorMessage.message : undefined}

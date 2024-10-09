@@ -10,6 +10,10 @@ import {
   NewUserRegistrationNoticeEmailProps,
   PasswordChangeDeniedEmailProps,
   SendWelcomeMailProps,
+  SessionCanceledEmailProps,
+  SessionCreatedEmailProps,
+  SessionStartEmailProps,
+  SessionUpdatedEmailProps,
   TandemCanceledEmailProps,
   TandemCanceledNoticeEmailProps,
   TandemClosureNoticeEmailProps,
@@ -99,6 +103,22 @@ export default class InMemoryEmailGateway implements EmailGateway {
   }
 
   sendNewReportMessageEmail(props: NewReportMessageEmailProps): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendSessionStartEmail(props: SessionStartEmailProps): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendSessionCanceledEmail(props: SessionCanceledEmailProps): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendSessionUpdatedEmail(props: SessionUpdatedEmailProps): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendSessionCreatedEmail(props: SessionCreatedEmailProps): Promise<void> {
     return Promise.resolve();
   }
 }

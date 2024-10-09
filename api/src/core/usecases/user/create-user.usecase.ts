@@ -1,26 +1,26 @@
 import { KeycloakClient } from '@app/keycloak';
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { toZonedTime } from 'date-fns-tz';
 import {
   RessourceAlreadyExists,
   RessourceDoesNotExist,
   UnauthorizedOperation,
 } from 'src/core/errors';
 import { Gender, Role, User } from 'src/core/models';
+import { CHAT_SERVICE } from 'src/core/ports/chat.service';
 import {
-  COUNTRY_REPOSITORY,
   CountryRepository,
+  COUNTRY_REPOSITORY,
 } from 'src/core/ports/country.repository';
-import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
+import { EmailGateway, EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
 import {
-  UNIVERSITY_REPOSITORY,
   UniversityRepository,
+  UNIVERSITY_REPOSITORY,
 } from 'src/core/ports/university.repository';
 import {
-  USER_REPOSITORY,
   UserRepository,
+  USER_REPOSITORY,
 } from 'src/core/ports/user.repository';
-import { utcToZonedTime } from 'date-fns-tz';
-import { CHAT_SERVICE } from 'src/core/ports/chat.service';
 import { ChatService } from 'src/providers/services/chat.service';
 
 export class CreateUserCommand {
@@ -87,12 +87,12 @@ export class CreateUserUsecase {
       throw new BadRequestException('Domain is invalid');
     }
 
-    const now = utcToZonedTime(new Date(), university.timezone);
-    const admissionEndTimezoned = utcToZonedTime(
+    const now = toZonedTime(new Date(), university.timezone);
+    const admissionEndTimezoned = toZonedTime(
       university.admissionEnd,
       university.timezone,
     );
-    const admissionStartTimezoned = utcToZonedTime(
+    const admissionStartTimezoned = toZonedTime(
       university.admissionStart,
       university.timezone,
     );

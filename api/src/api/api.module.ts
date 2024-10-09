@@ -1,3 +1,4 @@
+// organize-imports-ignore
 import { Module } from '@nestjs/common';
 import { TerminusModule } from '@nestjs/terminus';
 import { CoreModule } from 'src/core/core.module';
@@ -36,8 +37,7 @@ import { ChatController } from 'src/api/controllers/chat.controller';
 import { VocabularyController } from 'src/api/controllers/vocabulary.controller';
 import { NewsController } from './controllers/news.controller';
 import { ActivityController } from 'src/api/controllers/activity.controller';
-
-//TODO: Change Swagger ApiOperation because when we change the order of imports there is an error
+import { SessionController } from './controllers/session.controller';
 
 @Module({
   imports: [CoreModule, TerminusModule, HttpModule, ConfigModule],
@@ -67,6 +67,7 @@ import { ActivityController } from 'src/api/controllers/activity.controller';
     RoutineExecutionController,
     UniversityConnectorController,
     VocabularyController,
+    SessionController,
   ],
   providers: [
     PrismaService,

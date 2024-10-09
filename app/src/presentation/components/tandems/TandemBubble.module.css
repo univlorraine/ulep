@@ -12,6 +12,11 @@
     position: relative;
 }
 
+.container:focus-visible {
+    outline: none;
+    box-shadow: 0 0 3pt 2pt var(--primary-color);
+}
+
 .flag {
     color: #000;
     text-align: center;

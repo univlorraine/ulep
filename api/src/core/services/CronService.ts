@@ -1,23 +1,32 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
-import { format } from 'date-fns-tz';
-import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
+import { formatInTimeZone } from 'date-fns-tz';
+import { EmailGateway, EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
 import {
-  INSTANCE_REPOSITORY,
   InstanceRepository,
+  INSTANCE_REPOSITORY,
 } from 'src/core/ports/instance.repository';
 import {
-  LEARNING_LANGUAGE_REPOSITORY,
   LearningLanguageRepository,
+  LEARNING_LANGUAGE_REPOSITORY,
 } from 'src/core/ports/learning-language.repository';
 import {
-  NOTIFICATION_GATEWAY,
   NotificationGateway,
+  NOTIFICATION_GATEWAY,
 } from 'src/core/ports/notification.gateway';
 import {
-  UNIVERSITY_REPOSITORY,
   UniversityRepository,
+  UNIVERSITY_REPOSITORY,
 } from 'src/core/ports/university.repository';
+import { Profile, Session, Tandem } from '../models';
+import {
+  SessionRepository,
+  SESSION_REPOSITORY,
+} from '../ports/session.repository';
+import {
+  TandemRepository,
+  TANDEM_REPOSITORY,
+} from '../ports/tandem.repository';
 
 @Injectable()
 export class CronService {
@@ -33,9 +42,13 @@ export class CronService {
     private readonly universityRepository: UniversityRepository,
     @Inject(LEARNING_LANGUAGE_REPOSITORY)
     private readonly learningLanguageRepository: LearningLanguageRepository,
+    @Inject(SESSION_REPOSITORY)
+    private readonly sessionRepository: SessionRepository,
+    @Inject(TANDEM_REPOSITORY)
+    private readonly tandemRepository: TandemRepository,
   ) {}
 
-  @Cron('0 14 * * *')
+  @Cron('0 14 * * *') // Every day at 14h
   async processDailyNotifications() {
     this.#logger.log('processDailyNotifications');
     const today = new Date(Date.now());
@@ -86,7 +99,11 @@ export class CronService {
               },
               university: {
                 name: university.name,
-                closeDate: format(university.closeServiceDate, 'dd/MM/yyyy'),
+                closeDate: formatInTimeZone(
+                  university.closeServiceDate,
+                  university.timezone,
+                  'dd/MM/yyyy',
+                ),
               },
             });
 
@@ -106,9 +123,112 @@ export class CronService {
         to: deviceToNotify,
         university: {
           name: university.name,
-          closeDate: format(university.closeServiceDate, 'dd/MM/yyyy'),
+          closeDate: formatInTimeZone(
+            university.closeServiceDate,
+            university.timezone,
+            'dd/MM/yyyy',
+          ),
         },
       });
+    });
+
+    const sessionsOneDayFromBeingStarted =
+      await this.sessionRepository.findSessionsOneDayFromBeingStarted();
+
+    sessionsOneDayFromBeingStarted.forEach(async (session) => {
+      const tandem = await this.tandemRepository.ofId(session.tandemId);
+
+      if (!tandem || !tandem.learningLanguages) {
+        return;
+      }
+
+      const profile1 = tandem.learningLanguages[0].profile;
+      const profile2 = tandem.learningLanguages[1].profile;
+
+      await this.sendSessionStart(profile1, profile2, session, 'Daily');
+      await this.sendSessionStart(profile2, profile1, session, 'Daily');
+    });
+  }
+
+  @Cron('45 * * * * *') // Every minutes at 45 seconds
+  async processEveryMinutesNotifications() {
+    this.#logger.log('processEveryMinutesNotifications');
+
+    const sessionsFifteenMinutesFromBeingStarted =
+      await this.sessionRepository.findSessionsFifteenMinutesFromBeingStarted();
+
+    sessionsFifteenMinutesFromBeingStarted.forEach(async (session) => {
+      const tandem = await this.tandemRepository.ofId(session.tandemId);
+
+      if (!tandem || !tandem.learningLanguages) {
+        return;
+      }
+
+      const profile1 = tandem.learningLanguages[0].profile;
+      const profile2 = tandem.learningLanguages[1].profile;
+
+      await this.sendSessionStart(
+        profile1,
+        profile2,
+        session,
+        'FifteenMinutes',
+      );
+      await this.sendSessionStart(
+        profile2,
+        profile1,
+        session,
+        'FifteenMinutes',
+      );
+    });
+  }
+
+  private async sendSessionStart(
+    profile: Profile,
+    partner: Profile,
+    session: Session,
+    type: 'FifteenMinutes' | 'Daily',
+  ) {
+    const university = profile.user.university;
+
+    if (!profile.user.acceptsEmail) {
+      return;
+    }
+
+    this.emailGateway.sendSessionStartEmail({
+      to: profile.user.email,
+      language: profile.nativeLanguage.code,
+      user: {
+        firstname: profile.user.firstname,
+        lastname: profile.user.lastname,
+      },
+      session: {
+        date: formatInTimeZone(
+          session.startAt,
+          university.timezone,
+          'dd/MM/yyyy',
+        ),
+        hour: formatInTimeZone(session.startAt, university.timezone, 'HH:mm'),
+        partnerName: partner.user.firstname,
+        comment: session.comment || '',
+      },
+      type,
+    });
+
+    await this.notificationGateway.sendSessionStartNotification({
+      type,
+      to: profile.user.devices.map((device) => ({
+        token: device.token,
+        language: profile.nativeLanguage.code,
+      })),
+      session: {
+        date: formatInTimeZone(
+          session.startAt,
+          university.timezone,
+          'dd/MM/yyyy',
+        ),
+        hour: formatInTimeZone(session.startAt, university.timezone, 'HH:mm'),
+        partnerName: partner.user.firstname,
+      },
     });
   }
 }

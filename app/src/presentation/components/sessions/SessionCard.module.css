@@ -1,0 +1,93 @@
+.container {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.content {
+    display: flex;
+    gap: 5px;
+    flex-direction: row;
+    height: 100%;
+    position: relative;
+    padding: 0 10px;
+    flex-grow: 1;
+}
+
+.avatar {
+    border-radius: 50%;
+    height: 90px;
+    width: 90px;
+    object-fit: cover;
+}
+
+.bubble {
+    padding-left: 10px;
+    min-width: 100px;
+    align-self: center;
+}
+
+.buttons {
+    align-items: center;
+    flex-wrap: wrap;
+    display: flex;
+    flex-direction: row;
+}
+
+.card {
+    flex-wrap: wrap;
+    align-items: center;
+    background: var(--primary-color);
+    z-index: 2;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.name {
+    color: #000;
+    font-family: 'Roboto';
+    font-size: 16px;
+    font-style: normal;
+    line-height: 18.75px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.text-container {
+    display: flex;
+    flex-direction: row;
+    margin-top: auto;
+    line-height: 25px;
+    gap: 10px;
+    align-items: center;
+}
+
+.cancelled {
+    padding: 0 10px;
+    border: 1px solid red;
+    background-color: black;
+    border-radius: 10px;
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.text {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+@media (min-width: 768px) {
+    .content {
+        flex-direction: column;
+    }
+
+    .card {
+        flex-wrap: nowrap;
+    }
+}
