@@ -209,6 +209,10 @@ export class ActivityResponse {
 
   @Swagger.ApiProperty({ type: 'string' })
   @Expose({ groups: ['read'] })
+  creditImage?: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @Expose({ groups: ['read'] })
   ressourceUrl?: string;
 
   @Swagger.ApiProperty({ type: 'string' })
@@ -245,6 +249,7 @@ export class ActivityResponse {
       language: LanguageResponse.fromLanguage(activity.language),
       languageLevel: activity.languageLevel,
       imageUrl: activity.imageUrl,
+      creditImage: activity.creditImage,
       ressourceUrl: activity.ressourceUrl,
       ressourceFileUrl: activity.ressourceFileUrl,
       theme: ActivityThemeResponse.from(activity.activityTheme, languageCode),

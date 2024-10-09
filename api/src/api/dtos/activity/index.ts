@@ -5,3 +5,4 @@ export * from './create-activity.request';
 export * from './get-activities.request';
 export * from './update-activity-theme-category.request';
 export * from './update-activity-theme.request';
+export * from './update-activity.request';

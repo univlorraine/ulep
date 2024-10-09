@@ -7,6 +7,7 @@ import { Activity, ActivityTheme, ActivityThemeCategory } from '../../../../doma
 import Language from '../../../../domain/entities/Language';
 import Profile from '../../../../domain/entities/Profile';
 import { CreateActivityCommand } from '../../../../domain/interfaces/activity/CreateActivityUsecase.interface';
+import { UpdateActivityCommand } from '../../../../domain/interfaces/activity/UpdateActivityUsecase.interface';
 import useGetDataForActivityCreation from '../../../hooks/useGetDataForActivityCreation';
 import CreateActivityExcerciseContent from './CreateActivityExcerciseContent';
 import CreateActivityInformationsContent from './CreateActivityInformationsContent';
@@ -21,6 +22,7 @@ enum CreateActivityMode {
 }
 
 interface CreateActivityContentProps {
+    activityToUpdate?: Activity;
     themes: ActivityThemeCategory[];
     onBackPressed: () => void;
     onNavigatePressed: (activityId: string) => void;
@@ -39,7 +41,20 @@ export interface CreateActivityInformationsOutput {
     ressource?: File;
 }
 
+export interface UpdateActivityInformationsOutput {
+    title: string;
+    description: string;
+    language: Language;
+    theme: ActivityTheme;
+    level: CEFR;
+    image?: File;
+    creditImage?: string;
+    ressourceUrl?: string;
+    ressource?: File;
+}
+
 export const CreateActivityContent: React.FC<CreateActivityContentProps> = ({
+    activityToUpdate,
     onBackPressed,
     onNavigatePressed,
     profile,
@@ -47,13 +62,27 @@ export const CreateActivityContent: React.FC<CreateActivityContentProps> = ({
 }) => {
     const [showToast] = useIonToast();
     const [mode, setMode] = useState<CreateActivityMode>(CreateActivityMode.INFORMATIONS);
-    const [informations, setInformations] = useState<CreateActivityInformationsOutput>();
+    const [informations, setInformations] = useState<
+        CreateActivityInformationsOutput | UpdateActivityInformationsOutput
+    >();
     const [excercises, setExcercises] = useState<{ content: string; order: number }[]>();
     const [activity, setActivity] = useState<Activity>();
-    const { createActivity } = useConfig();
+    const { createActivity, updateActivity } = useConfig();
 
     const onCreateActivity = async (data: CreateActivityCommand) => {
         const result = await createActivity.execute(data);
+        if (result instanceof Error) {
+            return showToast({
+                message: result.message,
+                duration: 3000,
+            });
+        }
+        setMode(CreateActivityMode.SUCCESS);
+        setActivity(result);
+    };
+
+    const onUpdateActivity = async (data: UpdateActivityCommand) => {
+        const result = await updateActivity.execute(activityToUpdate!.id, data);
         if (result instanceof Error) {
             return showToast({
                 message: result.message,
@@ -86,7 +115,7 @@ export const CreateActivityContent: React.FC<CreateActivityContentProps> = ({
         }
     };
 
-    const handleInformationsSubmit = (data: CreateActivityInformationsOutput) => {
+    const handleInformationsSubmit = (data: CreateActivityInformationsOutput | UpdateActivityInformationsOutput) => {
         setInformations(data);
         setMode(CreateActivityMode.EXERCICES);
     };
@@ -96,60 +125,46 @@ export const CreateActivityContent: React.FC<CreateActivityContentProps> = ({
         setMode(CreateActivityMode.VOCABULARY);
     };
 
-    const handleVocabularySubmit = (data: { content: string; file?: File }[]) => {
+    const handleVocabularySubmit = (
+        data: {
+            id?: string;
+            content: string;
+            file?: File;
+            pronunciationUrl?: string;
+        }[]
+    ) => {
         if (!informations || !excercises) {
             return;
         }
-        onCreateActivity({
-            title: informations.title,
-            description: informations.description,
-            languageLevel: informations.level,
-            languageCode: informations.language.code,
-            themeId: informations.theme.id,
-            image: informations.image,
-            ressourceUrl: informations.ressourceUrl,
-            ressource: informations.ressource,
-            creditImage: informations.creditImage,
-            profileId: profile.id,
-            exercises: excercises,
-            vocabularies: data,
-        });
-    };
-
-    const renderContent = () => {
-        switch (mode) {
-            case CreateActivityMode.INFORMATIONS:
-                return (
-                    <CreateActivityInformationsContent
-                        activityThemesDropDown={activityThemesDropDown}
-                        cefrLevelsDropDown={cefrLevelsDropDown}
-                        languagesDropDown={languagesDropDown}
-                        onBackPressed={handleBackPressed}
-                        onSubmit={handleInformationsSubmit}
-                    />
-                );
-            case CreateActivityMode.EXERCICES:
-                return (
-                    <CreateActivityExcerciseContent
-                        onSubmit={handleExcerciseSubmit}
-                        onBackPressed={handleBackPressed}
-                    />
-                );
-            case CreateActivityMode.VOCABULARY:
-                return (
-                    <CreateActivityVocabularyContent
-                        onBackPressed={handleBackPressed}
-                        onSubmit={handleVocabularySubmit}
-                    />
-                );
-            case CreateActivityMode.SUCCESS:
-                return (
-                    <CreateActivitySuccessContent
-                        onBackPressed={handleBackPressed}
-                        activity={activity!}
-                        onNavigatePressed={onNavigatePressed}
-                    />
-                );
+        if (!activityToUpdate) {
+            onCreateActivity({
+                title: informations.title,
+                description: informations.description,
+                languageLevel: informations.level,
+                languageCode: informations.language.code,
+                themeId: informations.theme.id,
+                image: informations.image,
+                ressourceUrl: informations.ressourceUrl,
+                ressource: informations.ressource,
+                creditImage: informations.creditImage,
+                profileId: profile.id,
+                exercises: excercises,
+                vocabularies: data,
+            } as CreateActivityCommand);
+        } else {
+            onUpdateActivity({
+                title: informations.title,
+                description: informations.description,
+                languageLevel: informations.level,
+                languageCode: informations.language.code,
+                themeId: informations.theme.id,
+                image: informations.image,
+                ressourceUrl: informations.ressourceUrl,
+                ressource: informations.ressource,
+                creditImage: informations.creditImage,
+                exercises: excercises,
+                vocabularies: data,
+            } as UpdateActivityCommand);
         }
     };
 
@@ -166,7 +181,39 @@ export const CreateActivityContent: React.FC<CreateActivityContentProps> = ({
                 <p className="subcontent-title">{t('activity.create.title')}</p>
                 <div />
             </div>
-            {renderContent()}
+            {mode === CreateActivityMode.SUCCESS && (
+                <CreateActivitySuccessContent
+                    onBackPressed={handleBackPressed}
+                    activity={activity!}
+                    onNavigatePressed={onNavigatePressed}
+                />
+            )}
+            {mode === CreateActivityMode.VOCABULARY && (
+                <CreateActivityVocabularyContent
+                    onBackPressed={handleBackPressed}
+                    onSubmit={handleVocabularySubmit}
+                    activityToUpdate={activityToUpdate}
+                />
+            )}
+
+            {mode === CreateActivityMode.EXERCICES && (
+                <CreateActivityExcerciseContent
+                    onSubmit={handleExcerciseSubmit}
+                    onBackPressed={handleBackPressed}
+                    activityToUpdate={activityToUpdate}
+                />
+            )}
+
+            {mode === CreateActivityMode.INFORMATIONS && (
+                <CreateActivityInformationsContent
+                    activityThemesDropDown={activityThemesDropDown}
+                    cefrLevelsDropDown={cefrLevelsDropDown}
+                    languagesDropDown={languagesDropDown}
+                    onBackPressed={handleBackPressed}
+                    onSubmit={handleInformationsSubmit}
+                    activityToUpdate={activityToUpdate}
+                />
+            )}
         </div>
     );
 };

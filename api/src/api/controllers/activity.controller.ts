@@ -19,6 +19,7 @@ import { ConfigService } from '@nestjs/config';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import * as Swagger from '@nestjs/swagger';
 import { CurrentUser } from 'src/api/decorators';
+import { Role, Roles } from 'src/api/decorators/roles.decorator';
 import {
   ActivityResponse,
   ActivityThemeCategoryResponse,
@@ -26,6 +27,7 @@ import {
   CreateActivityThemeCategoryRequest,
   CreateActivityThemeRequest,
   GetActivitiesRequest,
+  UpdateActivityRequest,
   GetActivityThemeCategoryResponse,
   GetActivityThemeResponse,
   UpdateActivityThemeCategoryRequest,
@@ -48,6 +50,7 @@ import {
   GetAllActivityThemesUsecase,
   UpdateActivityThemeCategoryUsecase,
   UpdateActivityThemeUsecase,
+  UpdateActivityUsecase,
   UploadImageActivityUsecase,
   UploadMediaActivityUsecase,
 } from 'src/core/usecases';
@@ -76,6 +79,7 @@ export class ActivityController {
     private readonly deleteActivityUsecase: DeleteActivityUsecase,
     private readonly uploadImageActivityUsecase: UploadImageActivityUsecase,
     private readonly uploadMediaActivityUsecase: UploadMediaActivityUsecase,
+    private readonly updateActivityUsecase: UpdateActivityUsecase,
     private readonly env: ConfigService<Env, true>,
   ) {
     this.defaultLanguageCode = env.get<string>('DEFAULT_TRANSLATION_LANGUAGE');
@@ -93,7 +97,7 @@ export class ActivityController {
     files?: Express.Multer.File[],
   ) {
     //TODO: Add Pipe files validators
-    const vocabulariesWithFiles = body.vocabularies.map((vocabulary) => ({
+    const vocabulariesWithFiles = body.vocabularies?.map((vocabulary) => ({
       content: vocabulary,
       pronunciation: files?.find(
         (file) =>
@@ -132,6 +136,7 @@ export class ActivityController {
   }
 
   @Post('themes')
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Create a new Activity theme.' })
   @Swagger.ApiCreatedResponse({ type: () => GetActivityThemeResponse })
@@ -155,6 +160,7 @@ export class ActivityController {
   }
 
   @Put('themes/:id')
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Update a Activity theme.' })
   @Swagger.ApiCreatedResponse({ type: () => GetActivityThemeResponse })
@@ -172,6 +178,7 @@ export class ActivityController {
   }
 
   @Delete('themes/:id')
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Delete a Activity theme.' })
   async deleteActivityTheme(@Param('id') id: string) {
@@ -190,6 +197,7 @@ export class ActivityController {
   }
 
   @Post('categories')
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Create a new Activity theme category.' })
   @Swagger.ApiCreatedResponse({ type: () => GetActivityThemeCategoryResponse })
@@ -207,6 +215,7 @@ export class ActivityController {
 
   // The "id" is used threw payload instead of path param because of react-admin list cache
   @Put('categories')
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Update an Activity theme category.' })
   @Swagger.ApiCreatedResponse({ type: () => GetActivityThemeCategoryResponse })
@@ -223,6 +232,7 @@ export class ActivityController {
   }
 
   @Delete('categories/:id')
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Delete a Activity theme category.' })
   async deleteActivityCategory(@Param('id') id: string) {
@@ -311,6 +321,7 @@ export class ActivityController {
   }
 
   @Get('admin')
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Get all Activity ressources.' })
   @Swagger.ApiOkResponse({ type: () => ActivityResponse })
@@ -319,6 +330,7 @@ export class ActivityController {
   }
 
   @Delete(':id')
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Delete a Activity ressource.' })
   @Swagger.ApiOkResponse({ type: () => ActivityResponse })
@@ -326,11 +338,58 @@ export class ActivityController {
     await this.deleteActivityUsecase.execute(id);
   }
 
-  @Put(':id')
+  @Post(':id/update')
   @UseGuards(AuthenticationGuard)
+  @UseInterceptors(AnyFilesInterceptor())
   @Swagger.ApiOperation({ summary: 'Update a Activity ressource.' })
+  @Swagger.ApiConsumes('multipart/form-data')
   @Swagger.ApiOkResponse({ type: () => ActivityResponse })
-  async updateActivity() {
-    this.logger.log('updateActivity');
+  async updateActivity(
+    @Param('id') id: string,
+    @Body() body: UpdateActivityRequest,
+    @UploadedFiles()
+    files?: Express.Multer.File[],
+  ) {
+    const vocabulariesWithFiles = body.vocabularies?.map((vocabulary) => ({
+      id: vocabulary.id,
+      content: vocabulary.content,
+      pronunciationUrl: vocabulary.pronunciationUrl,
+      pronunciation: files?.find(
+        (file) =>
+          file.originalname
+            .toLowerCase()
+            .includes(vocabulary.content.toLowerCase()) &&
+          file.fieldname.includes('vocabulariesFiles'),
+      ),
+    }));
+
+    const activity = await this.updateActivityUsecase.execute({
+      id,
+      ...body,
+      vocabularies: vocabulariesWithFiles,
+    });
+
+    const imageFile = files?.find((file) => file.fieldname === 'image');
+    const ressourceFile = files?.find((file) => file.fieldname === 'ressource');
+
+    if (imageFile) {
+      const imageUrl = await this.uploadImageActivityUsecase.execute({
+        activityId: activity.id,
+        file: imageFile,
+      });
+
+      activity.imageUrl = imageUrl;
+    }
+
+    if (ressourceFile) {
+      const ressourceFileUrl = await this.uploadMediaActivityUsecase.execute({
+        activityId: activity.id,
+        file: ressourceFile,
+      });
+
+      activity.ressourceFileUrl = ressourceFileUrl;
+    }
+
+    return ActivityResponse.from(activity);
   }
 }

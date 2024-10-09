@@ -106,7 +106,7 @@ const ActivityFilterModal: React.FC<ActivityFilterModalProps> = ({
                         ))}
                     </div>
 
-                    <p className={styles.filter}>{t('activity.list.filter.level')}</p>
+                    <p className={styles.filter}>{t('activity.list.filter.levels')}</p>
                     <div className={styles.line}>
                         {CEFR_LEVELS.map((level) => (
                             <Checkbox

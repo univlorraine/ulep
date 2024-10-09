@@ -30,6 +30,13 @@ export interface SendMessageNotification {
   };
 }
 
+export interface SendActivityStatusChangeNotification {
+  to: Notification[];
+  activity: {
+    title: string;
+  };
+}
+
 type SessionParams = {
   date: string;
   hour: string;
@@ -65,6 +72,12 @@ export interface NotificationGateway {
   sendPausedTandemNotification: NotificationFunction;
   sendUnpausedTandemNotification: NotificationFunction;
   sendMessageNotification(props: SendMessageNotification): Promise<void>;
+  sendActivityRejectedNotification(
+    props: SendActivityStatusChangeNotification,
+  ): Promise<void>;
+  sendActivityPublishedNotification(
+    props: SendActivityStatusChangeNotification,
+  ): Promise<void>;
   sendSessionStartNotification(
     props: SendSessionStartNotification,
   ): Promise<void>;

@@ -3,20 +3,21 @@ import { addSharp, closeCircle, documentOutline, trashBinOutline } from 'ionicon
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useConfig } from '../../../../context/ConfigurationContext';
-import { ActivityTheme } from '../../../../domain/entities/Activity';
+import { Activity, ActivityTheme } from '../../../../domain/entities/Activity';
 import Language from '../../../../domain/entities/Language';
 import Dropdown, { DropDownItem } from '../../DropDown';
 import RequiredField from '../../forms/RequiredField';
 import TextInput from '../../TextInput';
-import { CreateActivityInformationsOutput } from './CreateActivityContent';
 import styles from './CreateActivityInformationsContent.module.css';
+import { CreateActivityInformationsOutput, UpdateActivityInformationsOutput } from './CreateOrUpdateActivityContent';
 
 interface CreateActivityInformationsContentProps {
     onBackPressed: () => void;
-    onSubmit: (data: CreateActivityInformationsOutput) => void;
+    onSubmit: (data: CreateActivityInformationsOutput | UpdateActivityInformationsOutput) => void;
     activityThemesDropDown: DropDownItem<ActivityTheme>[];
     cefrLevelsDropDown: DropDownItem<CEFR>[];
     languagesDropDown: DropDownItem<Language>[];
+    activityToUpdate?: Activity;
 }
 
 export const CreateActivityInformationsContent = ({
@@ -25,19 +26,22 @@ export const CreateActivityInformationsContent = ({
     activityThemesDropDown,
     cefrLevelsDropDown,
     languagesDropDown,
+    activityToUpdate,
 }: CreateActivityInformationsContentProps) => {
     const { t } = useTranslation();
     const { cameraAdapter, fileAdapter } = useConfig();
-    const [title, setTitle] = useState<string>('');
+    const [title, setTitle] = useState<string>(activityToUpdate?.title ?? '');
     const [image, setImage] = useState<File>();
-    const [creditImage, setCreditImage] = useState<string>('');
-    const [description, setDescription] = useState<string>('');
-    const [language, setLanguage] = useState<Language>();
-    const [theme, setTheme] = useState<ActivityTheme>();
-    const [level, setLevel] = useState<CEFR>();
-    const [ressourceUrl, setRessourceUrl] = useState<string>('');
+    const [creditImage, setCreditImage] = useState<string | undefined>(activityToUpdate?.creditImage);
+    const [hideUrlImage, setHideUrlImage] = useState<boolean>(false);
+    const [description, setDescription] = useState<string>(activityToUpdate?.description ?? '');
+    const [language, setLanguage] = useState<Language | undefined>(activityToUpdate?.language);
+    const [theme, setTheme] = useState<ActivityTheme | undefined>(activityToUpdate?.activityTheme);
+    const [level, setLevel] = useState<CEFR | undefined>(activityToUpdate?.languageLevel);
+    const [ressourceUrl, setRessourceUrl] = useState<string | undefined>(activityToUpdate?.ressourceUrl);
     const [ressourceFile, setRessourceFile] = useState<File>();
-    const [isRessourceUrl, setIsRessourceUrl] = useState<boolean>(false);
+    const [isRessourceUrl, setIsRessourceUrl] = useState<boolean>(!!activityToUpdate?.ressourceUrl);
+    const [hideRessourceActivity, setHideRessourceActivity] = useState<boolean>(false);
 
     const onImagePressed = async () => {
         const image = await cameraAdapter.getPictureFromGallery();
@@ -56,7 +60,27 @@ export const CreateActivityInformationsContent = ({
     };
 
     const allRequiredFieldsAreFilled = () => {
-        return title && image && description && language && level && theme && (ressourceUrl || ressourceFile);
+        return (
+            title &&
+            (image || (activityToUpdate?.imageUrl && !hideUrlImage)) &&
+            description &&
+            language &&
+            level &&
+            theme &&
+            (ressourceUrl || (activityToUpdate?.ressourceFileUrl && !hideRessourceActivity) || ressourceFile)
+        );
+    };
+
+    const clearImage = () => {
+        setImage(undefined);
+        setHideUrlImage(true);
+    };
+
+    const clearRessource = () => {
+        setRessourceFile(undefined);
+        setRessourceUrl(undefined);
+        setHideRessourceActivity(true);
+        setIsRessourceUrl(false);
     };
 
     const handleSubmit = () => {
@@ -70,12 +94,14 @@ export const CreateActivityInformationsContent = ({
             language: language!,
             level: level!,
             theme: theme!,
-            image: image!,
+            image,
             creditImage,
             ressourceUrl,
             ressource: ressourceFile,
         });
     };
+
+    const showFileRessource = ressourceFile || (activityToUpdate?.ressourceFileUrl && !hideRessourceActivity);
 
     return (
         <div>
@@ -92,18 +118,21 @@ export const CreateActivityInformationsContent = ({
             <span className={styles['input-label']}>
                 {t('activity.create.image')} <RequiredField />
             </span>
-            {!image ? (
+            {!image && (!activityToUpdate?.imageUrl || hideUrlImage) ? (
                 <IonButton fill="clear" className="tertiary-button no-padding margin-bottom" onClick={onImagePressed}>
                     <IonIcon icon={addSharp} />
                     {t('activity.create.image_button')}
                 </IonButton>
             ) : (
                 <div className={`${styles.imageContainer} margin-bottom`}>
-                    <IonImg className={styles.image} src={URL.createObjectURL(image)} />
+                    <IonImg
+                        className={styles.image}
+                        src={image ? URL.createObjectURL(image) : activityToUpdate?.imageUrl}
+                    />
                     <IonButton
                         fill="clear"
                         className="image"
-                        onClick={() => setImage(undefined)}
+                        onClick={clearImage}
                         aria-label={t('activity.create.delete_image_button') as string}
                     >
                         <IonIcon icon={trashBinOutline} color="dark" aria-hidden />
@@ -113,7 +142,7 @@ export const CreateActivityInformationsContent = ({
             <TextInput
                 title=""
                 onChange={(text) => setCreditImage(text)}
-                value={creditImage}
+                value={creditImage ?? ''}
                 placeholder={t('activity.create.credit_image_placeholder') as string}
             />
 
@@ -132,6 +161,7 @@ export const CreateActivityInformationsContent = ({
                 options={languagesDropDown}
                 onChange={(text) => setLanguage(text)}
                 placeholder={t('activity.create.language_placeholder') as string}
+                value={language ? { label: language.name, value: language } : undefined}
                 required
             />
 
@@ -140,6 +170,7 @@ export const CreateActivityInformationsContent = ({
                 onChange={(text) => setLevel(text)}
                 options={cefrLevelsDropDown}
                 placeholder={t('activity.create.level_placeholder') as string}
+                value={level ? { label: level, value: level } : undefined}
                 required
             />
 
@@ -148,6 +179,7 @@ export const CreateActivityInformationsContent = ({
                 onChange={(text) => setTheme(text)}
                 options={activityThemesDropDown}
                 placeholder={t('activity.create.theme_placeholder') as string}
+                value={theme ? { label: theme.content, value: theme } : undefined}
                 required
             />
 
@@ -156,48 +188,52 @@ export const CreateActivityInformationsContent = ({
                     {t('activity.create.ressource')} <RequiredField />
                 </span>
             </div>
-            {!isRessourceUrl && !ressourceFile && (
-                <>
-                    <div className={`${styles['button-container']}`}>
-                        <IonButton
-                            fill="clear"
-                            className="tertiary-button no-padding"
-                            onClick={() => setIsRessourceUrl(true)}
-                        >
-                            {t('activity.create.ressource_url')}
-                        </IonButton>
-                        <IonButton fill="clear" className="tertiary-button no-padding" onClick={onRessourcePressed}>
-                            {t('activity.create.ressource_file')}
-                        </IonButton>
-                    </div>
-                    <span className={styles.infos}>{t('activity.create.ressource_infos')}</span>
-                </>
-            )}
-            {isRessourceUrl && (
+            {!isRessourceUrl &&
+                (!activityToUpdate?.ressourceFileUrl || !activityToUpdate?.ressourceUrl || hideRessourceActivity) &&
+                !ressourceFile && (
+                    <>
+                        <div className={`${styles['button-container']}`}>
+                            <IonButton
+                                fill="clear"
+                                className="tertiary-button no-padding"
+                                onClick={() => setIsRessourceUrl(true)}
+                            >
+                                {t('activity.create.ressource_url')}
+                            </IonButton>
+                            <IonButton fill="clear" className="tertiary-button no-padding" onClick={onRessourcePressed}>
+                                {t('activity.create.ressource_file')}
+                            </IonButton>
+                        </div>
+                        <span className={styles.infos}>{t('activity.create.ressource_infos')}</span>
+                    </>
+                )}
+            {isRessourceUrl && !showFileRessource && (
                 <div className={styles.imageContainer}>
                     <TextInput
                         title={''}
                         onChange={(text) => setRessourceUrl(text)}
-                        value={ressourceUrl}
+                        value={ressourceUrl ?? ''}
                         placeholder={t('activity.create.ressource_url_placeholder') as string}
                     />
                     <IonButton
                         fill="clear"
-                        onClick={() => setIsRessourceUrl(false)}
+                        onClick={clearRessource}
                         aria-label={t('activity.create.close_ressource_url') as string}
                     >
                         <IonIcon icon={closeCircle} color="dark" aria-hidden />
                     </IonButton>
                 </div>
             )}
-            {ressourceFile && (
+            {showFileRessource && (
                 <div className={styles.ressourceContainer}>
                     <IonIcon className={styles.ressourceIcon} icon={documentOutline} color="dark" />
-                    <IonText className={styles.ressourceTitle}>{ressourceFile.name}</IonText>
+                    <IonText className={styles.ressourceTitle}>
+                        {ressourceFile?.name || activityToUpdate?.title}
+                    </IonText>
                     <IonButton
                         className={styles.closeButton}
                         fill="clear"
-                        onClick={() => setRessourceFile(undefined)}
+                        onClick={clearRessource}
                         aria-label={t('activity.create.close_ressource_file') as string}
                     >
                         <IonIcon icon={closeCircle} color="dark" aria-hidden />

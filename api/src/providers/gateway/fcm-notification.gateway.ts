@@ -5,6 +5,7 @@ import { Env } from 'src/configuration';
 import {
   NotificationGateway,
   NotificationParams,
+  SendActivityStatusChangeNotification,
   SendMessageNotification,
   SendSessionCanceledNotification,
   SendSessionCreatedNotification,
@@ -151,6 +152,51 @@ export class FCMNotificationGateway implements NotificationGateway {
 
     await this.sender.sendNotifications(notifications);
   }
+  async sendActivityPublishedNotification(
+    props: SendActivityStatusChangeNotification,
+  ): Promise<void> {
+    const image = this.images.notification;
+    const notifications = props.to.map((notification) => {
+      const translation = this.translate(
+        'activityPublished',
+        notification.language,
+        {
+          ...props,
+        },
+      );
+      return {
+        token: notification.token,
+        title: translation.title,
+        body: translation.body,
+        image,
+      };
+    });
+
+    await this.sender.sendNotifications(notifications);
+  }
+
+  async sendActivityRejectedNotification(
+    props: SendActivityStatusChangeNotification,
+  ): Promise<void> {
+    const image = this.images.notification;
+    const notifications = props.to.map((notification) => {
+      const translation = this.translate(
+        'activityRejected',
+        notification.language,
+        {
+          ...props,
+        },
+      );
+      return {
+        token: notification.token,
+        title: translation.title,
+        body: translation.body,
+        image,
+      };
+    });
+
+    await this.sender.sendNotifications(notifications);
+  }
 
   async sendSessionStartNotification(
     props: SendSessionStartNotification,
@@ -171,6 +217,7 @@ export class FCMNotificationGateway implements NotificationGateway {
         image,
       };
     });
+
     await this.sender.sendNotifications(notifications);
   }
 

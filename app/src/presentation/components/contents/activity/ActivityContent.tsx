@@ -1,10 +1,10 @@
-import { IonButton, IonIcon, useIonToast } from '@ionic/react';
-import { arrowBackOutline, downloadOutline, helpOutline } from 'ionicons/icons';
+import { IonButton, IonContent, IonIcon, IonItem, IonLabel, IonList, IonPopover, useIonToast } from '@ionic/react';
+import { arrowBackOutline, downloadOutline, hammerOutline, helpOutline } from 'ionicons/icons';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowRightSvg, KebabSvg } from '../../../../assets';
 import { useConfig } from '../../../../context/ConfigurationContext';
-import { ActivityStatus } from '../../../../domain/entities/Activity';
+import { Activity, ActivityStatus } from '../../../../domain/entities/Activity';
 import Profile from '../../../../domain/entities/Profile';
 import useGetActivity from '../../../hooks/useGetActivity';
 import AudioLine from '../../AudioLine';
@@ -16,16 +16,24 @@ import styles from './ActivityContent.module.css';
 interface ActivityContentProps {
     activityId: string;
     onBackPressed: () => void;
+    onUpdateActivityPressed: (activity: Activity) => void;
     profile: Profile;
 }
 
-export const ActivityContent: React.FC<ActivityContentProps> = ({ activityId, onBackPressed, profile }) => {
+export const ActivityContent: React.FC<ActivityContentProps> = ({
+    activityId,
+    onBackPressed,
+    onUpdateActivityPressed,
+    profile,
+}) => {
     const { t } = useTranslation();
-    const { browserAdapter, fileAdapter } = useConfig();
+    const { browserAdapter, fileAdapter, updateActivity } = useConfig();
     const [showToast] = useIonToast();
-    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [refreshActivity, setRefreshActivity] = useState(false);
+    const [showMenu, setShowMenu] = useState(false);
+    const [isModalShareVisible, setIsModalShareVisible] = useState(false);
     const [isModalRejectedVisible, setIsModalRejectedVisible] = useState(false);
-    const { activity, error, isLoading } = useGetActivity(activityId);
+    const { activity, error, isLoading } = useGetActivity(activityId, refreshActivity);
     const name = profile.id === activity?.creator.id ? t('activity.show.me') : activity?.creator.user.firstname;
 
     if (error) {
@@ -54,6 +62,26 @@ export const ActivityContent: React.FC<ActivityContentProps> = ({ activityId, on
         });
     };
 
+    const onShareActivity = async () => {
+        const result = await updateActivity.execute(activity.id, {
+            status: ActivityStatus.IN_VALIDATION,
+        });
+
+        if (result instanceof Error) {
+            return showToast({
+                message: result.message,
+                duration: 2000,
+            });
+        }
+
+        showToast({
+            message: t('activity.show.activity_shared'),
+            duration: 2000,
+        });
+        setRefreshActivity(!refreshActivity);
+        return setIsModalShareVisible(false);
+    };
+
     return (
         <div className="subcontent-container content-wrapper" style={{ padding: 0 }}>
             <div className="subcontent-header">
@@ -61,9 +89,26 @@ export const ActivityContent: React.FC<ActivityContentProps> = ({ activityId, on
                     <IonIcon icon={arrowBackOutline} color="dark" />
                 </IonButton>
                 <p className="subcontent-title">{t('activity.show.title')}</p>
-                <IonButton fill="clear" aria-label={t('activity.show.kebab_button') as string}>
+                <IonButton
+                    fill="clear"
+                    id="click-trigger"
+                    onClick={() => setShowMenu(!showMenu)}
+                    aria-label={t('activity.show.kebab_button') as string}
+                >
                     <IonIcon icon={KebabSvg} color="dark" />
                 </IonButton>
+                <IonPopover trigger="click-trigger" triggerAction="click" isOpen={showMenu} showBackdrop={false}>
+                    <IonContent>
+                        <IonList lines="none">
+                            {activity.status !== ActivityStatus.PUBLISHED && activity.creator.id === profile.id && (
+                                <IonItem button={true} detail={false} onClick={() => onUpdateActivityPressed(activity)}>
+                                    <IonIcon icon={hammerOutline} aria-hidden="true" />
+                                    <IonLabel className={styles['popover-label']}>{t('activity.show.update')}</IonLabel>
+                                </IonItem>
+                            )}
+                        </IonList>
+                    </IonContent>
+                </IonPopover>
             </div>
             {isLoading ? (
                 <div className={styles.loader}>
@@ -122,13 +167,13 @@ export const ActivityContent: React.FC<ActivityContentProps> = ({ activityId, on
                             <IonButton
                                 fill="clear"
                                 className="primary-button no-padding"
-                                onClick={() => setIsModalVisible(true)}
+                                onClick={() => setIsModalShareVisible(true)}
                             >
                                 {t('activity.show.share')}
                             </IonButton>
                         )}
 
-                        {activity.ressourceUrl && (
+                        {activity.ressourceUrl && !activity.ressourceFileUrl && (
                             <div className={styles['ressource-line']}>
                                 <div className={styles['ressource-container']}>
                                     {activity.ressourceOgUrl && (
@@ -225,19 +270,19 @@ export const ActivityContent: React.FC<ActivityContentProps> = ({ activityId, on
                     </IonButton>
                 </div>
             </Modal>
-            <Modal isVisible={isModalVisible} onClose={() => setIsModalVisible(false)}>
+            <Modal isVisible={isModalShareVisible} onClose={() => setIsModalShareVisible(false)}>
                 <div className={styles['modal-container']}>
-                    <p className={styles['modal-title']}>{t('activity.show.modal_title')}</p>
+                    <p className={styles['modal-title']}>{t('activity.show.modal_share_title')}</p>
                     <span className={styles['modal-description']}>{t('activity.show.modal_share_description1')}</span>
                     <br />
                     <span className={styles['modal-description']}>{t('activity.show.modal_share_description2')}</span>
                     <br />
                     <span className={styles['modal-description']}>{t('activity.show.modal_share_description3')}</span>
 
-                    <IonButton fill="clear" className="primary-button" onClick={() => {}}>
+                    <IonButton fill="clear" className="primary-button" onClick={onShareActivity}>
                         {t('activity.show.modal_share_submit')}
                     </IonButton>
-                    <IonButton fill="clear" className="secondary-button" onClick={() => setIsModalVisible(false)}>
+                    <IonButton fill="clear" className="secondary-button" onClick={() => setIsModalShareVisible(false)}>
                         {t('activity.show.modal_share_close')}
                     </IonButton>
                 </div>

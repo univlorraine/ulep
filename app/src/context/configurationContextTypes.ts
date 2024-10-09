@@ -61,6 +61,7 @@ import GetVocabularyListsUsecaseInterface from '../domain/interfaces/vocabulary/
 import UpdateVocabularyListUsecaseInterface from '../domain/interfaces/vocabulary/UpdateVocabularyListUsecase.interface';
 import UpdateVocabularyUsecaseInterface from '../domain/interfaces/vocabulary/UpdateVocabularyUsecase.interface';
 import AddDeviceUsecaseInterface from '../domain/interfaces/AddDeviceUsecase.interface';
+import UpdateActivityUsecaseInterface from '../domain/interfaces/activity/UpdateActivityUsecase.interface';
 
 export interface ConfigContextValueType {
     accessToken: string;
@@ -116,6 +117,7 @@ export interface ConfigContextValueType {
     getActivities: GetActivitiesUsecaseInterface;
     getActivity: GetActivityUsecaseInterface;
     getActivityThemes: GetActivityThemesUsecaseInterface;
+    updateActivity: UpdateActivityUsecaseInterface;
     // Vocabulary
     createVocabulary: CreateVocabularyUsecaseInterface;
     updateVocabulary: UpdateVocabularyUsecaseInterface;

@@ -251,3 +251,8 @@
     line-height: 20px;
     text-align: left;
 }
+
+.popover-label {
+    padding-left: 10px;
+    font-size: 14px;
+}

@@ -8,6 +8,7 @@ export enum ActivityStatus {
   DRAFT = 'DRAFT',
   PUBLISHED = 'PUBLISHED',
   IN_VALIDATION = 'IN_VALIDATION',
+  REJECTED = 'REJECTED',
 }
 
 interface ActivityProps {

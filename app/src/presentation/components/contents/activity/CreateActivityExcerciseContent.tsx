@@ -2,35 +2,38 @@ import { IonButton, IonIcon } from '@ionic/react';
 import { addSharp, chevronDownOutline, chevronUpOutline, trashBinOutline } from 'ionicons/icons';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Activity } from '../../../../domain/entities/Activity';
 import TextInput from '../../TextInput';
 import styles from './CreateActivityExcerciseContent.module.css';
 
 interface CreateActivityExcerciseContentProps {
     onSubmit: (excercises: { content: string; order: number }[]) => void;
     onBackPressed: () => void;
+    activityToUpdate?: Activity;
 }
-
-const DEFAULT_EXCERCISE = [
-    {
-        content: '',
-        order: 0,
-    },
-    {
-        content: '',
-        order: 1,
-    },
-    {
-        content: '',
-        order: 2,
-    },
-];
 
 export const CreateActivityExcerciseContent: React.FC<CreateActivityExcerciseContentProps> = ({
     onSubmit,
     onBackPressed,
+    activityToUpdate,
 }) => {
     const { t } = useTranslation();
-    const [excercises, setExcercises] = useState<{ content: string; order: number }[]>(DEFAULT_EXCERCISE);
+    const [excercises, setExcercises] = useState<{ content: string; order: number }[]>(
+        activityToUpdate?.exercises ?? [
+            {
+                content: '',
+                order: 0,
+            },
+            {
+                content: '',
+                order: 1,
+            },
+            {
+                content: '',
+                order: 2,
+            },
+        ]
+    );
 
     const allRequiredFieldsAreFilled = () => {
         return excercises.filter((excercise) => excercise.content.length > 0).length >= 3;
@@ -56,7 +59,10 @@ export const CreateActivityExcerciseContent: React.FC<CreateActivityExcerciseCon
     const onDeleteExcercisePressed = (order: number) => {
         const newExcercises = [...excercises];
         newExcercises.splice(order, 1);
-        setExcercises(newExcercises);
+        const exercicesUpdated = newExcercises
+            .sort((a, b) => a.order - b.order)
+            .map((exc, index) => ({ ...exc, order: index }));
+        setExcercises(exercicesUpdated);
     };
 
     const onUpExcercisePressed = (order: number) => {

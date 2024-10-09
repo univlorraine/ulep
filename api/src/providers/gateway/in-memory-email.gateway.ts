@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   AccountBlockedEmailProps,
+  ActivityStatusChangeEmailProps,
   EmailGateway,
   NewMessageEmailProps,
   NewPartnerEmail,
@@ -103,6 +104,23 @@ export default class InMemoryEmailGateway implements EmailGateway {
   }
 
   sendNewReportMessageEmail(props: NewReportMessageEmailProps): Promise<void> {
+    return Promise.resolve();
+  }
+  sendNewActivityProposalEmail(
+    props: ActivityStatusChangeEmailProps,
+  ): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendActivityPublishedEmail(
+    props: ActivityStatusChangeEmailProps,
+  ): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendActivityRejectedEmail(
+    props: ActivityStatusChangeEmailProps,
+  ): Promise<void> {
     return Promise.resolve();
   }
 
