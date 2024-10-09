@@ -9,11 +9,35 @@ import {
     FunctionField,
     ArrayField,
     Datagrid,
+    TopToolbar,
+    EditButton,
+    DeleteButton,
+    Button,
+    useRecordContext,
 } from 'react-admin';
 import AudioLine from '../../components/chat/AudioLine';
 import PageTitle from '../../components/PageTitle';
 import { Activity, ActivityExercise, ActivityVocabulary } from '../../entities/Activity';
 import codeLanguageToFlag from '../../utils/codeLanguageToFlag';
+
+const ActivityShowAction = () => {
+    const record = useRecordContext();
+
+    const isFromStudent = record.creator;
+
+    return (
+        <TopToolbar>
+            <EditButton />
+            <DeleteButton mutationMode="pessimistic" redirect="/activities" />
+            {isFromStudent && (
+                <>
+                    <Button color="success" label="Validate" onClick={() => {}} variant="contained" />
+                    <Button color="error" label="Refuse" onClick={() => {}} variant="contained" />
+                </>
+            )}
+        </TopToolbar>
+    );
+};
 
 const ActivityShow = () => {
     const translate = useTranslate();
@@ -21,7 +45,7 @@ const ActivityShow = () => {
     return (
         <>
             <PageTitle>{translate('activities.label')}</PageTitle>
-            <Show>
+            <Show actions={<ActivityShowAction />}>
                 <TabbedShowLayout>
                     <TabbedShowLayout.Tab label={translate('activities.show.mainInfos.label')}>
                         <TextField label={translate('activities.show.mainInfos.title')} source="title" />
