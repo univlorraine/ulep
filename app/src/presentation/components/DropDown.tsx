@@ -37,7 +37,7 @@ const Dropdown = <T,>({
     const prevOptions = useRef<DropDownItem<T>[]>(options);
 
     useEffect(() => {
-        if (!placeholder && options.length > 0 && !compareArrays(options, prevOptions.current)) {
+        if (options.length > 0 && !compareArrays(options, prevOptions.current) && selectedOption) {
             setSelectedOption(options[0]);
             prevOptions.current = options;
         }

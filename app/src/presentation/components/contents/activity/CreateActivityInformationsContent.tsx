@@ -1,9 +1,9 @@
 import { IonButton, IonIcon, IonImg, IonText } from '@ionic/react';
 import { addSharp, closeCircle, documentOutline, trashBinOutline } from 'ionicons/icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useConfig } from '../../../../context/ConfigurationContext';
-import { Activity, ActivityTheme } from '../../../../domain/entities/Activity';
+import { Activity, ActivityTheme, ActivityThemeCategory } from '../../../../domain/entities/Activity';
 import Language from '../../../../domain/entities/Language';
 import Dropdown, { DropDownItem } from '../../DropDown';
 import RequiredField from '../../forms/RequiredField';
@@ -14,7 +14,7 @@ import { CreateActivityInformationsOutput, UpdateActivityInformationsOutput } fr
 interface CreateActivityInformationsContentProps {
     onBackPressed: () => void;
     onSubmit: (data: CreateActivityInformationsOutput | UpdateActivityInformationsOutput) => void;
-    activityThemesDropDown: DropDownItem<ActivityTheme>[];
+    activityThemesCategoryDropDown: DropDownItem<ActivityThemeCategory>[];
     cefrLevelsDropDown: DropDownItem<CEFR>[];
     languagesDropDown: DropDownItem<Language>[];
     activityToUpdate?: Activity;
@@ -23,7 +23,7 @@ interface CreateActivityInformationsContentProps {
 export const CreateActivityInformationsContent = ({
     onSubmit,
     onBackPressed,
-    activityThemesDropDown,
+    activityThemesCategoryDropDown,
     cefrLevelsDropDown,
     languagesDropDown,
     activityToUpdate,
@@ -36,12 +36,49 @@ export const CreateActivityInformationsContent = ({
     const [hideUrlImage, setHideUrlImage] = useState<boolean>(false);
     const [description, setDescription] = useState<string>(activityToUpdate?.description ?? '');
     const [language, setLanguage] = useState<Language | undefined>(activityToUpdate?.language);
+    const [selectedThemeCategory, setSelectedThemeCategory] = useState<ActivityThemeCategory | undefined>();
+    const [selectableThemesDropDown, setSelectableThemesDropDown] = useState<DropDownItem<ActivityTheme>[]>([]);
     const [theme, setTheme] = useState<ActivityTheme | undefined>(activityToUpdate?.activityTheme);
     const [level, setLevel] = useState<CEFR | undefined>(activityToUpdate?.languageLevel);
     const [ressourceUrl, setRessourceUrl] = useState<string | undefined>(activityToUpdate?.ressourceUrl);
     const [ressourceFile, setRessourceFile] = useState<File>();
     const [isRessourceUrl, setIsRessourceUrl] = useState<boolean>(!!activityToUpdate?.ressourceUrl);
     const [hideRessourceActivity, setHideRessourceActivity] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (selectedThemeCategory) {
+            setTheme(selectedThemeCategory.themes[0]);
+            setSelectableThemesDropDown(
+                selectedThemeCategory.themes.map((theme) => ({
+                    label: theme.content,
+                    value: theme,
+                })),
+            );
+        }
+    }, [selectedThemeCategory]);
+
+    const findAndSetActivityThemeCategory = (activityToUpdate: Activity | undefined) => {
+        if (!activityToUpdate) return;
+
+        const activityThemeCategory = activityThemesCategoryDropDown.find((category) =>
+            category.value.themes.some((theme) => theme.id === activityToUpdate.activityTheme?.id)
+        )?.value;
+
+        if (activityThemeCategory) {
+            setSelectedThemeCategory(activityThemeCategory);
+            setSelectableThemesDropDown(
+                activityThemeCategory.themes.map((theme) => ({
+                    label: theme.content,
+                    value: theme,
+                })) as DropDownItem<ActivityTheme>[]
+            );
+        }
+    };
+
+    useEffect(() => {
+        findAndSetActivityThemeCategory(activityToUpdate);
+    }, [activityToUpdate, activityThemesCategoryDropDown]);
+
 
     const onImagePressed = async () => {
         const image = await cameraAdapter.getPictureFromGallery();
@@ -152,7 +189,8 @@ export const CreateActivityInformationsContent = ({
                 value={description}
                 placeholder={t('activity.create.description_placeholder') as string}
                 type="text-area"
-                maxLength={100}
+                maxLength={1000}
+                showLimit
                 required
             />
 
@@ -174,14 +212,25 @@ export const CreateActivityInformationsContent = ({
                 required
             />
 
-            <Dropdown<ActivityTheme>
-                title={t('activity.create.theme') as string}
-                onChange={(text) => setTheme(text)}
-                options={activityThemesDropDown}
-                placeholder={t('activity.create.theme_placeholder') as string}
-                value={theme ? { label: theme.content, value: theme } : undefined}
+            <Dropdown<ActivityThemeCategory>
+                title={t('activity.create.theme_category') as string}
+                onChange={(themeCategory) => setSelectedThemeCategory(themeCategory)}
+                options={activityThemesCategoryDropDown}
+                placeholder={t('activity.create.theme_category_placeholder') as string}
+                value={selectedThemeCategory ? { label: selectedThemeCategory.content, value: selectedThemeCategory } : undefined}
                 required
-            />
+                />
+
+            {selectedThemeCategory && (
+                <Dropdown<ActivityTheme>
+                    title={t('activity.create.theme') as string}
+                    onChange={(theme) => setTheme(theme)}
+                    options={selectableThemesDropDown}
+                    placeholder={t('activity.create.theme_placeholder') as string}
+                    value={theme ? { label: theme.content, value: theme } : undefined}
+                    required
+                />
+            )}
 
             <div className="margin-top">
                 <span className={`${styles['input-label']} margin-top`}>

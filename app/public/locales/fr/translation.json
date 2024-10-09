@@ -149,7 +149,9 @@
             "success_description": "Votre fiche a bien été créée !",
             "success_description_2": "Tu peux la retrouver dans ton espace apprentissage, dans l’onglet “Mes fiches”",
             "success_navigate_button": "Voir ma fiche de préparation",
-            "success_close_button": "Fermer"
+            "success_close_button": "Fermer",
+            "theme_category": "Catégorie de thème",
+            "theme_category_placeholder": "Sélectionner une catégorie de thème"
         }
     },
     "navigation": {

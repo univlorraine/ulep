@@ -93,7 +93,7 @@ export const CreateActivityContent: React.FC<CreateActivityContentProps> = ({
         setActivity(result);
     };
 
-    const { activityThemesDropDown, cefrLevelsDropDown, languagesDropDown } = useGetDataForActivityCreation(
+    const { activityThemesCategoryDropDown, cefrLevelsDropDown, languagesDropDown } = useGetDataForActivityCreation(
         themes,
         profile
     );
@@ -206,7 +206,7 @@ export const CreateActivityContent: React.FC<CreateActivityContentProps> = ({
 
             {mode === CreateActivityMode.INFORMATIONS && (
                 <CreateActivityInformationsContent
-                    activityThemesDropDown={activityThemesDropDown}
+                    activityThemesCategoryDropDown={activityThemesCategoryDropDown}
                     cefrLevelsDropDown={cefrLevelsDropDown}
                     languagesDropDown={languagesDropDown}
                     onBackPressed={handleBackPressed}
