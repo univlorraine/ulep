@@ -40,9 +40,12 @@ const load = async () => {
       await prisma.learningLanguages.deleteMany();
       await prisma.masteredLanguages.deleteMany();
       await prisma.testedLanguages.deleteMany();
-      await prisma.users.deleteMany();
+      await prisma.activityVocabulary.deleteMany();
+      await prisma.activityExercises.deleteMany();
+      await prisma.activity.deleteMany();
       await prisma.activityThemeCategories.deleteMany();
       await prisma.activityThemes.deleteMany();
+      await prisma.users.deleteMany();
       await prisma.refusedTandems.deleteMany();
       await prisma.organizations.deleteMany();
       await prisma.translations.deleteMany();

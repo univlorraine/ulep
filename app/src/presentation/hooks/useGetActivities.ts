@@ -88,7 +88,14 @@ const useGetActivity = (filters: Omit<GetActivitiesFilters, 'page'>) => {
         };
 
         fetchData();
-    }, [profile, filters.activityTheme, filters.isMe, filters.language, filters.proficiency, filters.searchTitle]);
+    }, [
+        profile,
+        filters.activityTheme,
+        filters.shouldTakeAllMine,
+        filters.language,
+        filters.proficiency,
+        filters.searchTitle,
+    ]);
 
     return activitiesResult;
 };

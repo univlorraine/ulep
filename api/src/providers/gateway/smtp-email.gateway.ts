@@ -15,6 +15,10 @@ import {
   NewUserRegistrationNoticeEmailProps,
   PasswordChangeDeniedEmailProps,
   SendWelcomeMailProps,
+  SessionCanceledEmailProps,
+  SessionCreatedEmailProps,
+  SessionStartEmailProps,
+  SessionUpdatedEmailProps,
   TandemCanceledEmailProps,
   TandemCanceledNoticeEmailProps,
   TandemClosureNoticeEmailProps,
@@ -444,6 +448,25 @@ export class SmtpEmailGateway implements EmailGateway {
     });
   }
 
+  async sendNewActivityProposalEmail(
+    props: ActivityStatusChangeEmailProps,
+  ): Promise<void> {
+    const translations = this.translate('activityProposal', props.language, {
+      ...props,
+    });
+
+    await this.mailer.sendMail({
+      to: props.to,
+      subject: translations.title,
+      template: 'user',
+      variables: {
+        links: this.links,
+        images: this.images,
+        ...translations,
+      },
+    });
+  }
+
   async sendActivityRejectedEmail(
     props: ActivityStatusChangeEmailProps,
   ): Promise<void> {
@@ -461,19 +484,73 @@ export class SmtpEmailGateway implements EmailGateway {
         ...translations,
       },
     });
+}
+
+
+  async sendSessionStartEmail(props: SessionStartEmailProps): Promise<void> {
+    const translations = this.translate(
+      `sessionStart${props.type}`,
+      props.language,
+      {
+        ...props,
+      },
+    );
+
+    await this.mailer.sendMail({
+      to: props.to,
+      subject: translations.title,
+      template: 'user',
+      variables: {
+        links: this.links,
+        images: this.images,
+        ...translations,
+      },
+    });
   }
 
-  async sendNewActivityProposalEmail(
-    props: ActivityStatusChangeEmailProps,
-  ): Promise<void> {
-    const translations = this.translate('activityProposal', props.language, {
+  async sendSessionCanceledEmail(props: SessionCanceledEmailProps): Promise<void> {
+    const translations = this.translate('sessionCanceled', props.language, {
       ...props,
     });
 
     await this.mailer.sendMail({
       to: props.to,
       subject: translations.title,
-      template: 'admin',
+      template: 'user',
+      variables: {
+        links: this.links,
+        images: this.images,
+        ...translations,
+      },
+    });
+  }
+
+  async sendSessionUpdatedEmail(props: SessionUpdatedEmailProps): Promise<void> {
+    const translations = this.translate('sessionUpdated', props.language, {
+      ...props,
+    });
+
+    await this.mailer.sendMail({
+      to: props.to,
+      subject: translations.title,
+      template: 'user',
+      variables: {
+        links: this.links,
+        images: this.images,
+        ...translations,
+      },
+    });
+  }
+
+  async sendSessionCreatedEmail(props: SessionCreatedEmailProps): Promise<void> {
+    const translations = this.translate('sessionCreated', props.language, {
+      ...props,
+    });
+
+    await this.mailer.sendMail({
+      to: props.to,
+      subject: translations.title,
+      template: 'user',
       variables: {
         links: this.links,
         images: this.images,

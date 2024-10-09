@@ -100,7 +100,7 @@ const ReportContent: React.FC<ReportContentProps> = ({ onClose }) => {
                 </div>
                 <TextInput
                     onChange={setNote}
-                    title={t('home_page.report.note')}
+                    title={t('home_page.report.note') as string}
                     type="text-area"
                     value={note}
                     maxLength={1000}

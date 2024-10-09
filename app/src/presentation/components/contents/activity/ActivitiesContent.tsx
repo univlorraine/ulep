@@ -24,7 +24,7 @@ enum FilterType {
     LANGUAGE = 'language',
     PROFICIENCY = 'proficiency',
     ACTIVITY_THEME = 'activity_theme',
-    IS_ME = 'is_me',
+    SHOULD_TAKE_ALL_MINE = 'should_take_all_mine',
 }
 
 type Filter = {
@@ -45,7 +45,7 @@ export const ActivitiesContent: React.FC<ActivitiesContentProps> = ({
     const [languageFilter, setLanguageFilter] = useState<Language[]>([]);
     const [proficiencyFilter, setProficiencyFilter] = useState<CEFR[]>([]);
     const [activityThemeFilter, setActivityThemeFilter] = useState<ActivityTheme[]>([]);
-    const [isMeFilter, setIsMeFilter] = useState<boolean>(false);
+    const [shouldTakeAllMineFilter, setShouldTakeAllMineFilter] = useState<boolean>(false);
     const [showFiltersModal, setShowFiltersModal] = useState<boolean>(false);
 
     const contentRef = useRef<HTMLDivElement>(null);
@@ -54,7 +54,7 @@ export const ActivitiesContent: React.FC<ActivitiesContentProps> = ({
         language: languageFilter,
         proficiency: proficiencyFilter,
         activityTheme: activityThemeFilter,
-        isMe: isMeFilter,
+        shouldTakeAllMine: shouldTakeAllMineFilter,
         searchTitle: searchTitle,
     });
 
@@ -83,12 +83,12 @@ export const ActivitiesContent: React.FC<ActivitiesContentProps> = ({
         languages: Language[];
         levels: CEFR[];
         themes: ActivityTheme[];
-        isMine: boolean;
+        shouldTakeAllMine: boolean;
     }) => {
         setLanguageFilter(filters.languages);
         setProficiencyFilter(filters.levels);
         setActivityThemeFilter(filters.themes);
-        setIsMeFilter(filters.isMine);
+        setShouldTakeAllMineFilter(filters.shouldTakeAllMine);
         setShowFiltersModal(false);
     };
 
@@ -111,8 +111,12 @@ export const ActivitiesContent: React.FC<ActivitiesContentProps> = ({
             });
         }
 
-        if (isMeFilter) {
-            filters.push({ id: 'is_me', name: t('activity.list.filter.is_mine'), type: FilterType.IS_ME });
+        if (shouldTakeAllMineFilter) {
+            filters.push({
+                id: 'is_me',
+                name: t('activity.list.filter.is_mine'),
+                type: FilterType.SHOULD_TAKE_ALL_MINE,
+            });
         }
 
         return filters;
@@ -129,8 +133,8 @@ export const ActivitiesContent: React.FC<ActivitiesContentProps> = ({
             case FilterType.ACTIVITY_THEME:
                 setActivityThemeFilter(activityThemeFilter.filter((activity) => activity.id !== filter.id));
                 break;
-            case FilterType.IS_ME:
-                setIsMeFilter(false);
+            case FilterType.SHOULD_TAKE_ALL_MINE:
+                setShouldTakeAllMineFilter(false);
                 break;
         }
     };
@@ -139,7 +143,7 @@ export const ActivitiesContent: React.FC<ActivitiesContentProps> = ({
         setLanguageFilter([]);
         setProficiencyFilter([]);
         setActivityThemeFilter([]);
-        setIsMeFilter(false);
+        setShouldTakeAllMineFilter(false);
     };
 
     const allFilters = allFiltersName();
@@ -207,7 +211,7 @@ export const ActivitiesContent: React.FC<ActivitiesContentProps> = ({
                 onFilterApplied={onFilterApplied}
                 profile={profile}
                 themes={themes}
-                currentIsMineFilter={isMeFilter}
+                currentShouldTakeAllMineFilter={shouldTakeAllMineFilter}
                 currentLanguagesFilter={languageFilter}
                 currentLevelsFilter={proficiencyFilter}
                 currentThemesFilter={activityThemeFilter}

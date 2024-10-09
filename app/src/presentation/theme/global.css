@@ -107,6 +107,7 @@ ion-radio {
 }
 
 .subcontent-container {
+    color: #000;
     background-color: white;
     display: flex;
     flex-direction: column;
@@ -168,6 +169,10 @@ ion-radio {
 
     .container {
         min-height: calc(100vh - 64px);
+    }
+
+    .subcontent-container {
+        width: 50%;
     }
 
     .home-card {

@@ -7,6 +7,10 @@ import {
   NotificationParams,
   SendActivityStatusChangeNotification,
   SendMessageNotification,
+  SendSessionCanceledNotification,
+  SendSessionCreatedNotification,
+  SendSessionStartNotification,
+  SendSessionUpdatedNotification,
   SendTandemClosureNoticeNotification,
 } from 'src/core/ports/notification.gateway';
 
@@ -148,7 +152,6 @@ export class FCMNotificationGateway implements NotificationGateway {
 
     await this.sender.sendNotifications(notifications);
   }
-
   async sendActivityPublishedNotification(
     props: SendActivityStatusChangeNotification,
   ): Promise<void> {
@@ -192,6 +195,95 @@ export class FCMNotificationGateway implements NotificationGateway {
       };
     });
 
+    await this.sender.sendNotifications(notifications);
+  }
+
+  async sendSessionStartNotification(
+    props: SendSessionStartNotification,
+  ): Promise<void> {
+    const image = this.images.notification;
+    const notifications = props.to.map((notification) => {
+      const translation = this.translate(
+        `sessionStart${props.type}`,
+        notification.language,
+        {
+          ...props,
+        },
+      );
+      return {
+        token: notification.token,
+        title: translation.title,
+        body: translation.body,
+        image,
+      };
+    });
+
+    await this.sender.sendNotifications(notifications);
+  }
+
+  async sendSessionCanceledNotification(
+    props: SendSessionCanceledNotification,
+  ): Promise<void> {
+    const image = this.images.notification;
+    const notifications = props.to.map((notification) => {
+      const translation = this.translate(
+        'sessionCanceled',
+        notification.language,
+        {
+          ...props,
+        },
+      );
+      return {
+        token: notification.token,
+        title: translation.title,
+        body: translation.body,
+        image,
+      };
+    });
+    await this.sender.sendNotifications(notifications);
+  }
+
+  async sendSessionUpdatedNotification(
+    props: SendSessionUpdatedNotification,
+  ): Promise<void> {
+    const image = this.images.notification;
+    const notifications = props.to.map((notification) => {
+      const translation = this.translate(
+        'sessionUpdated',
+        notification.language,
+        {
+          ...props,
+        },
+      );
+      return {
+        token: notification.token,
+        title: translation.title,
+        body: translation.body,
+        image,
+      };
+    });
+    await this.sender.sendNotifications(notifications);
+  }
+
+  async sendSessionCreatedNotification(
+    props: SendSessionCreatedNotification,
+  ): Promise<void> {
+    const image = this.images.notification;
+    const notifications = props.to.map((notification) => {
+      const translation = this.translate(
+        'sessionCreated',
+        notification.language,
+        {
+          ...props,
+        },
+      );
+      return {
+        token: notification.token,
+        title: translation.title,
+        body: translation.body,
+        image,
+      };
+    });
     await this.sender.sendNotifications(notifications);
   }
 }

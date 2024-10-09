@@ -76,14 +76,14 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
                     <TextInput
                         autocomplete="email"
                         onChange={setEmail}
-                        title={t('global.email')}
+                        title={t('global.email') as string}
                         type="email"
                         value={email}
                     />
                     <TextInput
                         autocomplete="current-password"
                         onChange={setPassword}
-                        title={t('global.password')}
+                        title={t('global.password') as string}
                         type="password"
                         value={password}
                     />

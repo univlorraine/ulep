@@ -29,8 +29,8 @@ class GetActivitiesUsecase implements GetActivitiesUsecaseInterface {
                     queryParams.append('themesIds', activityTheme.id);
                 });
             }
-            if (filters.isMe) {
-                queryParams.append('shouldTakeOnlyMine', filters.isMe as unknown as string);
+            if (filters.shouldTakeAllMine) {
+                queryParams.append('shouldTakeOnlyMine', filters.shouldTakeAllMine as unknown as string);
             }
 
             if (filters.page) {

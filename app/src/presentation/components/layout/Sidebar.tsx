@@ -3,7 +3,7 @@ import { alertCircleOutline } from 'ionicons/icons';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router';
-import { ConversationsSvg, DisconnectSvg, HomeSvg, LearningSvg, ProfileSvg, SettingsSvg } from '../../../assets';
+import { ConversationsSvg, DisconnectSvg, HomeSvg, LearningSvg, ProfileSvg, SettingsPng } from '../../../assets';
 import styles from './Sidebar.module.css';
 
 interface SidebarProps {
@@ -65,7 +65,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onDisconnect, onDisplaySettings, onDi
             </IonItem>
             <div className={styles.separator}></div>
             <IonItem button={true} className={styles.line} onClick={onDisplaySettings}>
-                <img alt="" src={SettingsSvg} aria-hidden={true} className={styles.image} />
+                <img alt="" src={SettingsPng} aria-hidden={true} className={styles.image} />
                 <span className={styles.title}>{t('navigation.sidebar.settings')}</span>
             </IonItem>
             <IonItem button={true} className={styles.line} onClick={onDisconnect}>

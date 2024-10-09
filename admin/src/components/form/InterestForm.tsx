@@ -33,7 +33,12 @@ const InterestForm: React.FC<InterestFormProps> = ({
             <Typography variant="subtitle1">{translate(`${tradKey}.${tradModeKey}.name`)}</Typography>
 
             <Box alignItems="center" display="flex" flexDirection="row">
-                <Input name="Language" sx={{ mx: 4, my: 2, width: '80px' }} value="FR" disableUnderline />
+                <Input
+                    name="Language"
+                    sx={{ mx: 4, my: 2, width: '80px' }}
+                    value={process.env.REACT_APP_DEFAULT_TRANSLATION_LANGUAGE}
+                    disableUnderline
+                />
                 <Input
                     name="Content"
                     onChange={(e) => setNewName(e.target.value)}

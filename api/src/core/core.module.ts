@@ -70,9 +70,11 @@ import {
   GenerateConversationsUsecase,
   GenerateTandemsUsecase,
   GetActivitiesUsecase,
+  GetActivityThemeCategoryUsecase,
+  GetActivityThemeUsecase,
   GetActivityUsecase,
-  GetAdministratorUsecase,
   GetAdministratorsUsecase,
+  GetAdministratorUsecase,
   GetAllActivityThemesUsecase,
   GetAllConversationsFromUserIdUsecase,
   GetCategoriesUsecase,
@@ -80,8 +82,8 @@ import {
   GetCountriesUsecase,
   GetInstanceUsecase,
   GetInterestCategoryUsecase,
-  GetInterestUsecase,
   GetInterestsByCategoriesUsecase,
+  GetInterestUsecase,
   GetLearningLanguageMatchesUsecase,
   GetLearningLanguageOfIdUsecase,
   GetLearningLanguageOfProfileUsecase,
@@ -92,27 +94,27 @@ import {
   GetOtherUserEmailInTandemUsecase,
   GetPartnersToUniversityUsecase,
   GetProfileByUserIdUsecase,
-  GetProfileUsecase,
-  GetProfileWithTandemsProfilesUsecase,
   GetProfilesUsecase,
   GetProfilesWithTandemsProfilesUsecase,
-  GetQuestionUsecase,
+  GetProfileUsecase,
+  GetProfileWithTandemsProfilesUsecase,
   GetQuestionsByLevelUsecase,
   GetQuestionsUsecase,
+  GetQuestionUsecase,
   GetReportCategoryByIdUsecase,
-  GetReportUsecase,
   GetReportsByStatusUsecase,
+  GetReportUsecase,
   GetTandemsByIdsUsecase,
   GetTandemsForProfileUsecase,
   GetTandemsUsecase,
-  GetTestUsecase,
   GetTestsUsecase,
+  GetTestUsecase,
   GetUniversitiesUsecase,
   GetUniversityDivisionsUsecase,
   GetUniversityUsecase,
   GetUserPersonalData,
-  GetUserUsecase,
   GetUsersUsecase,
+  GetUserUsecase,
   RefuseTandemUsecase,
   UpdateActivityThemeCategoryUsecase,
   UpdateActivityThemeUsecase,
@@ -139,6 +141,13 @@ import {
   UploadImageActivityUsecase,
   UploadMediaActivityUsecase,
   UploadUniversityImageUsecase,
+  GetNewsUsecase,
+  CreateNewsUsecase,
+  UploadNewsImageUsecase,
+  GetOneNewsUsecase,
+  UpdateNewsUsecase,
+  DeleteNewsImageUsecase,
+  DeleteNewsUsecase,
 } from './usecases';
 import { GetJitsiTokenUsecase } from './usecases/jitsi/get-jitsi-token.usecase';
 import { DeleteLearningLanguageUsecase } from './usecases/learningLanguage/delete-learning-langugage.usecase';
@@ -148,6 +157,10 @@ import { UploadUniversityDefaultCertificateUsecase } from './usecases/media/uplo
 import { ArchiveTandemsAndDeleteUsersUsecase } from './usecases/purges/archive-tandems.usecase';
 import { LogoutAllSessionsUsecase } from './usecases/security/logout-all-sessions.usecase';
 import { ResetPasswordUsecase } from './usecases/security/reset-password.usecase';
+import { CancelSessionUsecase } from './usecases/session/cancel-session.usecase';
+import { CreateSessionUsecase } from './usecases/session/create-session.usecase';
+import { GetSessionsForProfileUsecase } from './usecases/session/get-sessions-for-profile.usecase';
+import { UpdateSessionUsecase } from './usecases/session/update-session.usecase';
 import { ValidateTandemUsecase } from './usecases/tandem/validate-tandem.usecase';
 import { GetKeycloakAdminGroupsUsecase } from './usecases/user/get-keycloak-admin-groups.usecase';
 import { RevokeSessionsUsecase } from './usecases/user/revoke-sessions.usecase';
@@ -158,8 +171,10 @@ const usecases: Provider[] = [
   GetAllActivityThemesUsecase,
   GetActivityUsecase,
   GetActivitiesUsecase,
+  GetActivityThemeCategoryUsecase,
   CreateActivityThemeCategoryUsecase,
   CreateActivityThemeUsecase,
+  GetActivityThemeUsecase,
   DeleteActivityUsecase,
   DeleteActivityThemeCategoryUsecase,
   DeleteActivityThemeUsecase,
@@ -209,6 +224,14 @@ const usecases: Provider[] = [
   UploadMediaActivityUsecase,
   UploadInstanceDefaultCertificateUsecase,
   UploadUniversityDefaultCertificateUsecase,
+  // News
+  GetNewsUsecase,
+  GetOneNewsUsecase,
+  CreateNewsUsecase,
+  UpdateNewsUsecase,
+  DeleteNewsUsecase,
+  UploadNewsImageUsecase,
+  DeleteNewsImageUsecase,
   // Objectives
   CreateObjectiveUsecase,
   DeleteObjectiveUsecase,
@@ -318,6 +341,11 @@ const usecases: Provider[] = [
   UpdateVocabularyUsecase,
   UpdateVocabularyListUsecase,
   GetVocabularyListPdfUsecase,
+  // Session
+  CancelSessionUsecase,
+  CreateSessionUsecase,
+  GetSessionsForProfileUsecase,
+  UpdateSessionUsecase,
 ];
 
 const services: Provider[] = [MatchScorer, CronService];

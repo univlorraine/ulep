@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { DiceSvg, FicheSvg, JournalSvg, VocabularySvg } from '../../../assets';
+import { DicesPng, FicheSvg, JournalSvg, VocabularyPng } from '../../../assets';
 import LearningCard from './LearningCard';
 import styles from './RessourcesCard.module.css';
 
@@ -26,7 +26,7 @@ const RessourcesCard: React.FC<RessourcesCardProps> = ({
                     <p className={styles.title}>{t('ressources.journal')}</p>
                 </button>
                 <button className={styles.card} onClick={onVocabularyPressed}>
-                    <img src={VocabularySvg} alt="" />
+                    <img src={VocabularyPng} alt="" />
                     <p className={styles.title}>{t('ressources.vocabulary')}</p>
                 </button>
                 <button className={styles.card} onClick={onActivityPressed}>
@@ -34,7 +34,7 @@ const RessourcesCard: React.FC<RessourcesCardProps> = ({
                     <p className={styles.title}>{t('ressources.activity')}</p>
                 </button>
                 <button className={styles.card} onClick={onGamePressed}>
-                    <img src={DiceSvg} alt="" />
+                    <img src={DicesPng} alt="" />
                     <p className={styles.title}>{t('ressources.game')}</p>
                 </button>
             </div>

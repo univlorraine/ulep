@@ -1,0 +1,42 @@
+.container {
+    border-left: 1px solid #00000020;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    position: relative;
+    padding: 0 !important;
+}
+
+.header {
+    background-color: white;
+    height: 50px;
+    text-align: center;
+    border-bottom: 1px solid #00000020;
+}
+
+.title {
+    color: #000;
+    font-family: 'Roboto', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    margin: 0;
+    line-height: 50px;
+}
+
+.back_button {
+    position: absolute;
+    left: 10px;
+    top: 3px;
+}
+
+.content {
+    margin: 0;
+}
+
+@media (min-width: 768px) {
+    .header {
+        padding: 12px;
+    }
+}

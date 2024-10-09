@@ -11,6 +11,7 @@ export * from './proficiency';
 export * from './profiles';
 export * from './reports';
 export * from './security';
+export * from './session';
 export * from './tandems';
 export * from './tested-languages';
 export * from './universities';

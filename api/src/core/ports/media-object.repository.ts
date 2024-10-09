@@ -1,5 +1,11 @@
 import { Activity } from 'src/core/models/activity.model';
-import { LearningObjective, MediaObject, University, User } from '../models';
+import {
+  LearningObjective,
+  MediaObject,
+  News,
+  University,
+  User,
+} from '../models';
 import { Instance } from '../models/Instance.model';
 
 export const MEDIA_OBJECT_REPOSITORY = 'media-object.repository';
@@ -51,6 +57,8 @@ export interface MediaObjectRepository {
     university: University,
     object: MediaObject,
   ) => Promise<void>;
+
+  saveNewsImage: (news: News, object: MediaObject) => Promise<void>;
 
   findOne(id: string): Promise<MediaObject | null>;
 

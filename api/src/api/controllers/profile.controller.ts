@@ -35,6 +35,7 @@ import {
   GetTandemsForProfileUsecase,
   UpdateProfileUsecase,
 } from 'src/core/usecases';
+import { GetSessionsForProfileUsecase } from 'src/core/usecases/session/get-sessions-for-profile.usecase';
 import { CollectionResponse, CurrentUser } from '../decorators';
 import { Role, Roles } from '../decorators/roles.decorator';
 import {
@@ -43,6 +44,7 @@ import {
   LearningLanguageResponse,
   ProfileQueryFilter,
   ProfileResponse,
+  SessionResponse,
   TestedLanguageProps,
   UpdateProfileRequest,
   UserTandemResponse,
@@ -70,6 +72,7 @@ export class ProfileController {
     private readonly updateProfileUsecase: UpdateProfileUsecase,
     private readonly createOrUpdateTestedLanguageUsecase: CreateOrUpdateTestedLanguageUsecase,
     private readonly getAdminUsecase: GetAdministratorUsecase,
+    private readonly getSessionsForProfileUsecase: GetSessionsForProfileUsecase,
   ) {}
 
   @Post()
@@ -253,6 +256,23 @@ export class ProfileController {
     return tandems.map((tandem) =>
       UserTandemResponse.fromDomain(id, tandem, languageCode),
     );
+  }
+
+  @Get(':id/sessions')
+  @UseGuards(AuthenticationGuard)
+  @SerializeOptions({ groups: ['read', 'learning-language:profile'] })
+  @Swagger.ApiOperation({
+    summary: 'Retrieve the collection of Session ressource.',
+  })
+  @Swagger.ApiOkResponse({ type: () => SessionResponse, isArray: true })
+  async getSessions(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<SessionResponse[]> {
+    const sessions = await this.getSessionsForProfileUsecase.execute({
+      profileId: id,
+    });
+
+    return sessions.map((tandem) => SessionResponse.from(tandem));
   }
 
   @Get('me')

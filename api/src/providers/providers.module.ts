@@ -21,6 +21,7 @@ import { PURGE_REPOSITORY } from 'src/core/ports/purge.repository';
 import { REFUSED_TANDEMS_REPOSITORY } from 'src/core/ports/refused-tandems.repository';
 import { REPORT_REPOSITORY } from 'src/core/ports/report.repository';
 import { ROUTINE_EXECUTION_REPOSITORY } from 'src/core/ports/routine-execution.repository';
+import { SESSION_REPOSITORY } from 'src/core/ports/session.repository';
 import { STORAGE_INTERFACE } from 'src/core/ports/storage.interface';
 import { TANDEM_HISTORY_REPOSITORY } from 'src/core/ports/tandem-history.repository';
 import { TANDEM_REPOSITORY } from 'src/core/ports/tandem.repository';
@@ -52,11 +53,14 @@ import { PrismaPurgeRepository } from './persistance/repositories/prisma-purge.r
 import { PrismaRefusedTandemsRepository } from './persistance/repositories/prisma-refused-tandems.repository';
 import { PrismaReportRepository } from './persistance/repositories/prisma-report.repository';
 import { PrismaRoutineExecutionRepository } from './persistance/repositories/prisma-routine-execution-repository';
+import { PrismaSessionRepository } from './persistance/repositories/prisma-session-repository';
 import { PrismaTandemRepository } from './persistance/repositories/prisma-tandem-repository';
 import { PrismaUniversityRepository } from './persistance/repositories/prisma-university.repository';
 import { PrismaUserRepository } from './persistance/repositories/prisma-user.repository';
 import { UuidProvider } from './services/uuid.provider';
 import { MinioStorage } from './storage/minio.storage';
+import { NEWS_REPOSITORY } from 'src/core/ports/news.repository';
+import { PrismaNewsRepository } from './persistance/repositories/prisma-news-repository';
 
 const providers: Provider[] = [
   { provide: INSTANCE_REPOSITORY, useClass: PrismaInstanceRepository },
@@ -79,6 +83,10 @@ const providers: Provider[] = [
   {
     provide: MEDIA_OBJECT_REPOSITORY,
     useClass: PrismaMediaObjectRepository,
+  },
+  {
+    provide: NEWS_REPOSITORY,
+    useClass: PrismaNewsRepository,
   },
   {
     provide: OBJECTIVE_REPOSITORY,
@@ -167,6 +175,10 @@ const providers: Provider[] = [
   {
     provide: ACTIVITY_REPOSITORY,
     useClass: PrismaActivityRepository,
+  },
+  {
+    provide: SESSION_REPOSITORY,
+    useClass: PrismaSessionRepository,
   },
 ];
 

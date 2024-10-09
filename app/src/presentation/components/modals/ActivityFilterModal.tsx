@@ -13,17 +13,17 @@ interface ActivityFilterModalProps {
     isVisible: boolean;
     onClose: () => void;
     onFilterApplied: ({
-        isMine,
+        shouldTakeAllMine,
         languages,
         levels,
         themes,
     }: {
-        isMine: boolean;
+        shouldTakeAllMine: boolean;
         languages: Language[];
         levels: CEFR[];
         themes: ActivityTheme[];
     }) => void;
-    currentIsMineFilter: boolean;
+    currentShouldTakeAllMineFilter: boolean;
     currentLanguagesFilter: Language[];
     currentLevelsFilter: CEFR[];
     currentThemesFilter: ActivityTheme[];
@@ -36,7 +36,7 @@ const ActivityFilterModal: React.FC<ActivityFilterModalProps> = ({
     onClose,
     profile,
     onFilterApplied,
-    currentIsMineFilter,
+    currentShouldTakeAllMineFilter,
     currentLanguagesFilter,
     currentLevelsFilter,
     currentThemesFilter,
@@ -46,7 +46,7 @@ const ActivityFilterModal: React.FC<ActivityFilterModalProps> = ({
     const [selectedLanguages, setSelectedLanguages] = useState<Language[]>([]);
     const [selectedThemes, setSelectedThemes] = useState<ActivityTheme[]>([]);
     const [proficiencyLevelsSelected, setProficiencyLevelsSelected] = useState<CEFR[]>([]);
-    const [isMine, setIsMine] = useState<boolean>(false);
+    const [shouldTakeAllMine, setShouldTakeAllMine] = useState<boolean>(false);
 
     const addOrRemoveLanguage = (language: Language) => {
         if (selectedLanguages.includes(language)) {
@@ -73,7 +73,7 @@ const ActivityFilterModal: React.FC<ActivityFilterModalProps> = ({
     };
 
     useEffect(() => {
-        setIsMine(currentIsMineFilter);
+        setShouldTakeAllMine(currentShouldTakeAllMineFilter);
         setSelectedLanguages(currentLanguagesFilter);
         setProficiencyLevelsSelected(currentLevelsFilter);
         setSelectedThemes(currentThemesFilter);
@@ -86,9 +86,9 @@ const ActivityFilterModal: React.FC<ActivityFilterModalProps> = ({
                 <div className={styles.filterContainer}>
                     <h1>{t('activity.list.filter.title')}</h1>
                     <Checkbox
-                        isSelected={isMine}
+                        isSelected={shouldTakeAllMine}
                         onPressed={() => {
-                            setIsMine(!isMine);
+                            setShouldTakeAllMine(!shouldTakeAllMine);
                         }}
                         name={t(`activity.list.filter.is_mine`)}
                     />
@@ -150,7 +150,7 @@ const ActivityFilterModal: React.FC<ActivityFilterModalProps> = ({
                     className="primary-button no-padding"
                     onClick={() =>
                         onFilterApplied({
-                            isMine,
+                            shouldTakeAllMine: shouldTakeAllMine,
                             languages: selectedLanguages,
                             levels: proficiencyLevelsSelected,
                             themes: selectedThemes,

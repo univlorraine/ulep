@@ -79,7 +79,7 @@ const SignUpBiographyPage: React.FC = () => {
                             errorMessage={errorMessage?.id === 'power' ? errorMessage.value : undefined}
                             onChange={setPowerBiography}
                             placeholder={t('signup_biography_page.power_placeholder')}
-                            title={t('signup_biography_page.power_title')}
+                            title={t('signup_biography_page.power_title') as string}
                             type="text-area"
                             value={powerBiography}
                             required={true}
@@ -91,7 +91,7 @@ const SignUpBiographyPage: React.FC = () => {
                             errorMessage={errorMessage?.id === 'incredible' ? errorMessage.value : undefined}
                             onChange={setIncredibleBiography}
                             placeholder={t('signup_biography_page.incredible_placeholder')}
-                            title={t('signup_biography_page.incredible_title')}
+                            title={t('signup_biography_page.incredible_title') as string}
                             type="text-area"
                             value={incredibleBiography}
                             required={true}
@@ -103,7 +103,7 @@ const SignUpBiographyPage: React.FC = () => {
                             errorMessage={errorMessage?.id === 'place' ? errorMessage.value : undefined}
                             onChange={setPlaceBiography}
                             placeholder={t('signup_biography_page.place_placeholder')}
-                            title={t('signup_biography_page.place_title')}
+                            title={t('signup_biography_page.place_title') as string}
                             type="text-area"
                             value={placeBiography}
                             required={true}
@@ -115,7 +115,7 @@ const SignUpBiographyPage: React.FC = () => {
                             errorMessage={errorMessage?.id === 'travel' ? errorMessage.value : undefined}
                             onChange={setTravelBiography}
                             placeholder={t('signup_biography_page.travel_placeholder')}
-                            title={t('signup_biography_page.travel_title')}
+                            title={t('signup_biography_page.travel_title') as string}
                             type="text-area"
                             value={travelBiography}
                             required={true}

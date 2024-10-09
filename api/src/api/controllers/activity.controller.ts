@@ -15,6 +15,7 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import * as Swagger from '@nestjs/swagger';
 import { CurrentUser } from 'src/api/decorators';
@@ -22,16 +23,18 @@ import { Role, Roles } from 'src/api/decorators/roles.decorator';
 import {
   ActivityResponse,
   ActivityThemeCategoryResponse,
-  ActivityThemeResponse,
   CreateActivityRequest,
   CreateActivityThemeCategoryRequest,
   CreateActivityThemeRequest,
   GetActivitiesRequest,
   UpdateActivityRequest,
+  GetActivityThemeCategoryResponse,
+  GetActivityThemeResponse,
   UpdateActivityThemeCategoryRequest,
   UpdateActivityThemeRequest,
 } from 'src/api/dtos/activity';
 import { AuthenticationGuard } from 'src/api/guards';
+import { Env } from 'src/configuration';
 import { ActivityStatus } from 'src/core/models/activity.model';
 import {
   CreateActivityThemeCategoryUsecase,
@@ -41,6 +44,8 @@ import {
   DeleteActivityThemeUsecase,
   DeleteActivityUsecase,
   GetActivitiesUsecase,
+  GetActivityThemeCategoryUsecase,
+  GetActivityThemeUsecase,
   GetActivityUsecase,
   GetAllActivityThemesUsecase,
   UpdateActivityThemeCategoryUsecase,
@@ -49,16 +54,22 @@ import {
   UploadImageActivityUsecase,
   UploadMediaActivityUsecase,
 } from 'src/core/usecases';
+import { GetActivitiesCategoriesRequest } from '../dtos/activity/get-activity-categories.request';
 
 @Controller('activities')
-@Swagger.ApiTags('Activity')
+@Swagger.ApiTags('Activities')
 export class ActivityController {
   logger = new Logger(ActivityController.name);
+
+  private readonly defaultLanguageCode: string;
+
   constructor(
     private readonly createActivityUsecase: CreateActivityUsecase,
+    private readonly getActivityThemeCategoryUsecase: GetActivityThemeCategoryUsecase,
     private readonly createActivityThemeCategoryUsecase: CreateActivityThemeCategoryUsecase,
     private readonly createActivityThemeUsecase: CreateActivityThemeUsecase,
     private readonly getActivityUsecase: GetActivityUsecase,
+    private readonly getActivityThemeUsecase: GetActivityThemeUsecase,
     private readonly getActivitiesUsecase: GetActivitiesUsecase,
     private readonly getAllActivityThemesUsecase: GetAllActivityThemesUsecase,
     private readonly updateActivityThemeCategoryUsecase: UpdateActivityThemeCategoryUsecase,
@@ -69,7 +80,10 @@ export class ActivityController {
     private readonly uploadImageActivityUsecase: UploadImageActivityUsecase,
     private readonly uploadMediaActivityUsecase: UploadMediaActivityUsecase,
     private readonly updateActivityUsecase: UpdateActivityUsecase,
-  ) {}
+    private readonly env: ConfigService<Env, true>,
+  ) {
+    this.defaultLanguageCode = env.get<string>('DEFAULT_TRANSLATION_LANGUAGE');
+  }
 
   @Post()
   @UseGuards(AuthenticationGuard)
@@ -125,18 +139,31 @@ export class ActivityController {
   @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Create a new Activity theme.' })
-  @Swagger.ApiCreatedResponse({ type: () => ActivityThemeCategoryResponse })
+  @Swagger.ApiCreatedResponse({ type: () => GetActivityThemeResponse })
   async createActivityTheme(@Body() body: CreateActivityThemeRequest) {
-    const activityTheme = await this.createActivityThemeUsecase.execute(body);
+    const activityTheme = await this.createActivityThemeUsecase.execute({
+      ...body,
+      languageCode: this.defaultLanguageCode,
+    });
 
-    return ActivityThemeResponse.from(activityTheme);
+    return GetActivityThemeResponse.from(activityTheme);
+  }
+
+  @Get('themes/:id')
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Get an Activity theme.' })
+  @Swagger.ApiOkResponse({ type: () => GetActivityThemeResponse })
+  async getThemeCategory(@Param('id') id: string) {
+    const activityTheme = await this.getActivityThemeUsecase.execute(id);
+
+    return GetActivityThemeResponse.from(activityTheme);
   }
 
   @Put('themes/:id')
   @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Update a Activity theme.' })
-  @Swagger.ApiCreatedResponse({ type: () => ActivityThemeCategoryResponse })
+  @Swagger.ApiCreatedResponse({ type: () => GetActivityThemeResponse })
   async updateActivityTheme(
     @Param('id') id: string,
     @Body() body: UpdateActivityThemeRequest,
@@ -144,9 +171,10 @@ export class ActivityController {
     const activityTheme = await this.updateActivityThemeUsecase.execute({
       id,
       ...body,
+      languageCode: this.defaultLanguageCode,
     });
 
-    return ActivityThemeResponse.from(activityTheme);
+    return GetActivityThemeResponse.from(activityTheme);
   }
 
   @Delete('themes/:id')
@@ -157,36 +185,50 @@ export class ActivityController {
     await this.deleteActivityThemeUsecase.execute(id);
   }
 
+  @Get('categories/:id')
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Get an Activity theme category.' })
+  @Swagger.ApiOkResponse({ type: () => GetActivityThemeCategoryResponse })
+  async getActivityCategory(@Param('id') id: string) {
+    const activityThemeCategory =
+      await this.getActivityThemeCategoryUsecase.execute(id);
+
+    return GetActivityThemeCategoryResponse.from(activityThemeCategory);
+  }
+
   @Post('categories')
   @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Create a new Activity theme category.' })
-  @Swagger.ApiCreatedResponse({ type: () => ActivityThemeCategoryResponse })
+  @Swagger.ApiCreatedResponse({ type: () => GetActivityThemeCategoryResponse })
   async createActivityCategory(
     @Body() body: CreateActivityThemeCategoryRequest,
   ) {
     const activityThemeCategory =
-      await this.createActivityThemeCategoryUsecase.execute(body);
+      await this.createActivityThemeCategoryUsecase.execute({
+        ...body,
+        languageCode: this.defaultLanguageCode,
+      });
 
-    return ActivityThemeCategoryResponse.from(activityThemeCategory);
+    return GetActivityThemeCategoryResponse.from(activityThemeCategory);
   }
 
-  @Put('categories/:id')
+  // The "id" is used threw payload instead of path param because of react-admin list cache
+  @Put('categories')
   @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
-  @Swagger.ApiOperation({ summary: 'Update a Activity theme category.' })
-  @Swagger.ApiCreatedResponse({ type: () => ActivityThemeCategoryResponse })
+  @Swagger.ApiOperation({ summary: 'Update an Activity theme category.' })
+  @Swagger.ApiCreatedResponse({ type: () => GetActivityThemeCategoryResponse })
   async updateActivityCategory(
-    @Param('id') id: string,
     @Body() body: UpdateActivityThemeCategoryRequest,
   ) {
     const activityThemeCategory =
       await this.updateActivityThemeCategoryUsecase.execute({
-        id,
         ...body,
+        languageCode: this.defaultLanguageCode,
       });
 
-    return ActivityThemeCategoryResponse.from(activityThemeCategory);
+    return GetActivityThemeCategoryResponse.from(activityThemeCategory);
   }
 
   @Delete('categories/:id')
@@ -199,14 +241,27 @@ export class ActivityController {
 
   @Get('categories')
   @UseGuards(AuthenticationGuard)
-  @Swagger.ApiOperation({ summary: 'Get all Activity themes.' })
+  @Swagger.ApiOperation({
+    summary: 'Get all Activity themes categories and themes.',
+  })
   @Swagger.ApiOkResponse({ type: () => ActivityThemeCategoryResponse })
-  async getActivityThemes(@Headers('Language-code') languageCode?: string) {
-    const activityThemes = await this.getAllActivityThemesUsecase.execute();
+  async getActivityThemes(
+    @Headers('Language-code') languageCode?: string,
+    @Query() query?: GetActivitiesCategoriesRequest,
+  ) {
+    const activityThemes = await this.getAllActivityThemesUsecase.execute({
+      pagination: {
+        page: query.page,
+        limit: query.limit,
+      },
+    });
 
-    return activityThemes.map((activityTheme) =>
-      ActivityThemeCategoryResponse.from(activityTheme, languageCode),
-    );
+    return new Collection<ActivityThemeCategoryResponse>({
+      items: activityThemes.items.map((activityTheme) =>
+        ActivityThemeCategoryResponse.from(activityTheme, languageCode),
+      ),
+      totalItems: activityThemes.totalItems,
+    });
   }
 
   @Get(':id')
