@@ -97,6 +97,13 @@ export interface NewReportMessageEmailProps {
   reportedUser: { firstname: string; lastname: string };
 }
 
+export interface ActivityStatusChangeEmailProps {
+  to: string;
+  language: string;
+  user: { firstname: string; lastname: string };
+  activity: { title: string };
+}
+
 export interface EmailGateway {
   // Notifies a user with a welcome email.
   sendWelcomeMail(props: SendWelcomeMailProps): Promise<void>;
@@ -158,4 +165,19 @@ export interface EmailGateway {
 
   // Notifies users about a new report message
   sendNewReportMessageEmail(props: NewReportMessageEmailProps): Promise<void>;
+
+  // Notifies university about an activity proposal
+  sendNewActivityProposalEmail(
+    props: ActivityStatusChangeEmailProps,
+  ): Promise<void>;
+
+  // Notifies user about an activity publication
+  sendActivityPublishedEmail(
+    props: ActivityStatusChangeEmailProps,
+  ): Promise<void>;
+
+  // Notifies user about an activity rejection
+  sendActivityRejectedEmail(
+    props: ActivityStatusChangeEmailProps,
+  ): Promise<void>;
 }

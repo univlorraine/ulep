@@ -5,6 +5,7 @@ import { Env } from 'src/configuration';
 
 import {
   AccountBlockedEmailProps,
+  ActivityStatusChangeEmailProps,
   EmailGateway,
   NewMessageEmailProps,
   NewPartnerEmail,
@@ -420,6 +421,63 @@ export class SmtpEmailGateway implements EmailGateway {
         images: this.images,
         ...translations,
         footer: this.footer,
+      },
+    });
+  }
+
+  async sendActivityPublishedEmail(
+    props: ActivityStatusChangeEmailProps,
+  ): Promise<void> {
+    const translations = this.translate('activityPublished', props.language, {
+      ...props,
+    });
+
+    await this.mailer.sendMail({
+      to: props.to,
+      subject: translations.title,
+      template: 'user',
+      variables: {
+        links: this.links,
+        images: this.images,
+        ...translations,
+      },
+    });
+  }
+
+  async sendActivityRejectedEmail(
+    props: ActivityStatusChangeEmailProps,
+  ): Promise<void> {
+    const translations = this.translate('activityRejected', props.language, {
+      ...props,
+    });
+
+    await this.mailer.sendMail({
+      to: props.to,
+      subject: translations.title,
+      template: 'user',
+      variables: {
+        links: this.links,
+        images: this.images,
+        ...translations,
+      },
+    });
+  }
+
+  async sendNewActivityProposalEmail(
+    props: ActivityStatusChangeEmailProps,
+  ): Promise<void> {
+    const translations = this.translate('activityProposal', props.language, {
+      ...props,
+    });
+
+    await this.mailer.sendMail({
+      to: props.to,
+      subject: translations.title,
+      template: 'admin',
+      variables: {
+        links: this.links,
+        images: this.images,
+        ...translations,
       },
     });
   }
