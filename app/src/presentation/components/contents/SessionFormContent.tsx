@@ -7,7 +7,7 @@ import Session from '../../../domain/entities/Session';
 import Tandem from '../../../domain/entities/Tandem';
 import ProfileAvailabilities from '../sessions/ProfileAvailabilities';
 import SessionForm from '../sessions/SessionForm';
-import styles from './SessIonFormContent.module.css';
+import styles from './SessionFormContent.module.css';
 
 interface SessionFormContentProps {
     goBack?: () => void;
