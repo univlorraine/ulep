@@ -23,6 +23,7 @@ import { InMemoryLanguageRepository } from 'src/providers/persistance/repositori
 import { InMemoryLearningLanguageRepository } from 'src/providers/persistance/repositories/in-memory-learning-language-repository';
 import { InMemoryRefusedTandemsRepository } from 'src/providers/persistance/repositories/in-memory-refused-tandems-repository';
 import { InMemoryTandemRepository } from 'src/providers/persistance/repositories/in-memory-tandem-repository';
+import { InMemoryChatService } from 'src/providers/services/in-memory.chat.service';
 import { UuidProvider } from 'src/providers/services/uuid.provider';
 
 // Note: learning language comparison is based on ID
@@ -67,6 +68,7 @@ describe('GenerateTandem UC', () => {
   const languageRepository = new InMemoryLanguageRepository();
   const refusedTandemsRepository = new InMemoryRefusedTandemsRepository();
   const inMemoryEmailGateway = new InMemoryEmailGateway();
+  const chatService = new InMemoryChatService();
 
   const uc = new GenerateTandemsUsecase(
     tandemsRepository,
@@ -75,6 +77,7 @@ describe('GenerateTandem UC', () => {
     languageRepository,
     refusedTandemsRepository,
     inMemoryEmailGateway,
+    chatService,
   );
 
   ///////// Data /////////

@@ -5,12 +5,8 @@ import { Env } from 'src/configuration';
 import {
   ChatPaginationDirection,
   ChatServicePort,
+  CreateConversations,
 } from 'src/core/ports/chat.service';
-
-export interface CreateConversations {
-  participants: string[];
-  tandemId?: string;
-}
 
 @Injectable()
 export class ChatService implements ChatServicePort {

@@ -35,6 +35,7 @@ import GetUniversityInterface from '../domain/interfaces/GetUniversity.interface
 import GetUniversityLanguagesUsecaseInterface from '../domain/interfaces/GetUniversityLanguagesUsecase.interface';
 import GetUserUsecaseInterface from '../domain/interfaces/GetUserUsecase.interface';
 import LoginUsecaseInterface from '../domain/interfaces/LoginUsecase.interface';
+import RefreshTokensUsecaseInterface from '../domain/interfaces/RefreshTokensUsecase.interface';
 import ResetPasswordUsecaseInterface from '../domain/interfaces/ResetPasswordUsecase.interface';
 import RetrievePersonInfoUsecaseInterface from '../domain/interfaces/RetrievePersonInfoUsecase.interface';
 import RevokeSessionsUsecaseInterface from '../domain/interfaces/RevokeSessionsUsecase.interface';
@@ -93,4 +94,5 @@ export interface ConfigContextValueType {
     getTokenFromCodeUsecase: GetTokenFromCodeUsecaseInterface;
     getInitialUrlUsecase: GetInitialUrlUsecaseInterface;
     revokeSessionsUsecase: RevokeSessionsUsecaseInterface;
+    refreshTokensUsecase: RefreshTokensUsecaseInterface;
 }

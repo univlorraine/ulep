@@ -13,6 +13,7 @@ export interface HttpAdapterInterface {
     put: (path: string, body: Body, args?: RequestInit, isTokenNeeded?: boolean) => Promise<Response>;
     patch: (path: string, body: Body, args?: RequestInit, isTokenNeeded?: boolean) => Promise<Response>;
     delete: (path: string, args?: RequestInit, isTokenNeeded?: boolean) => Promise<Response>;
+    handleTokens: (isTokenNeeded: boolean) => Promise<void>;
 }
 
 interface RefreshUsecaseCommand {

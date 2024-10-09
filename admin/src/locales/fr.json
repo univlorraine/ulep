@@ -332,7 +332,8 @@
         "status": "Statut",
         "title": "Inscrits",
         "update": {
-            "title": "Modifier le profil"
+            "title": "Modifier le profil",
+            "unauthorized": "Vous n'êtes pas autorisé à modifier ce profil"
         }
     },
     "purge": {

@@ -15,7 +15,7 @@ import {
     TopToolbar,
     BooleanField,
     usePermissions,
-    ShowActionsProps,
+    useGetIdentity,
 } from 'react-admin';
 import PageTitle from '../../components/PageTitle';
 import { Role } from '../../entities/Administrator';
@@ -40,16 +40,30 @@ const Title = () => {
     );
 };
 
-interface CustomShowActionsProps extends ShowActionsProps {
-    readOnly: boolean;
-}
+export const ShowActions = () => {
+    const recordContext = useRecordContext();
 
-export const ShowActions = ({ readOnly }: CustomShowActionsProps) => (
-    <TopToolbar>
-        <ProfileExportButton />
-        {!readOnly && <EditButton />}
-    </TopToolbar>
-);
+    const { permissions } = usePermissions();
+    const identity = useGetIdentity();
+
+    const adminUniversityId = identity.identity?.universityId;
+    const adminUniversityIsCentral = identity.identity?.isCentralUniversity;
+    const profileUniversityId = recordContext?.user?.university?.id;
+
+    const actionsRestricted = !adminUniversityIsCentral && adminUniversityId !== profileUniversityId;
+    const readOnly: boolean = permissions.checkRole(Role.ANIMATOR);
+
+    return (
+        <TopToolbar>
+            {!actionsRestricted && (
+                <>
+                    <ProfileExportButton />
+                    {!readOnly && <EditButton />}
+                </>
+            )}
+        </TopToolbar>
+    );
+};
 
 const ProfileTab = () => {
     const translate = useTranslate();
@@ -220,15 +234,12 @@ const ProfileTab = () => {
 
 const ProfileShow = (props: any) => {
     const translate = useTranslate();
-    const { permissions } = usePermissions();
-
-    const readOnly: boolean = permissions.checkRole(Role.ANIMATOR);
 
     return (
         <>
             <PageTitle>{translate('profiles.title')}</PageTitle>
 
-            <Show actions={<ShowActions readOnly={readOnly} />} title={<Title />} {...props}>
+            <Show actions={<ShowActions />} title={<Title />} {...props}>
                 <ProfileTab />
             </Show>
         </>

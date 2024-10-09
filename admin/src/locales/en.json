@@ -332,7 +332,8 @@
         "status": "Status",
         "title": "Profiles",
         "update": {
-            "title": "Modify profile"
+            "title": "Modify profile",
+            "unauthorized": "You are not allowed to edit this profile"
         }
     },
     "purge": {

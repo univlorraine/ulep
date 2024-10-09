@@ -23,7 +23,7 @@ import {
 import ColoredChips, { ChipsColors } from '../../../components/ColoredChips';
 import PageTitle from '../../../components/PageTitle';
 import { Role } from '../../../entities/Administrator';
-import { LearningType, LearningLanguageWithTandemWithPartnerProfile } from '../../../entities/LearningLanguage';
+import { LearningLanguageWithTandemWithPartnerProfile, LearningType } from '../../../entities/LearningLanguage';
 import { getProfileDisplayName } from '../../../entities/Profile';
 import { ProfileWithTandemsProfiles } from '../../../entities/ProfileWithTandemsProfiles';
 import { TandemStatus } from '../../../entities/Tandem';
@@ -467,12 +467,19 @@ const LearningLanguageList = () => {
                                         (learningLanguage: LearningLanguageWithTandemWithPartnerProfile) => {
                                             if (
                                                 learningLanguage.tandem &&
-                                                learningLanguage.tandem.status !== 'ACTIVE' &&
-                                                learningLanguage.tandem.status !== 'PAUSED'
+                                                learningLanguage.tandem.status !== TandemStatus.ACTIVE &&
+                                                learningLanguage.tandem.status !== TandemStatus.PAUSED
                                             ) {
                                                 return (
                                                     <Box key={learningLanguage.code} className="line">
                                                         <TandemActions
+                                                            disableCreateButton={
+                                                                learningLanguage.tandem.status ===
+                                                                    TandemStatus.VALIDATED_BY_ONE_UNIVERSITY &&
+                                                                learningLanguage.tandem.universityValidations?.includes(
+                                                                    identity.universityId
+                                                                )
+                                                            }
                                                             learningLanguageIds={[
                                                                 learningLanguage.id,
                                                                 learningLanguage.tandem.partnerLearningLanguage.id,
@@ -487,6 +494,13 @@ const LearningLanguageList = () => {
                                                                 learningLanguage?.id ===
                                                                 learningLanguage.tandem.partnerLearningLanguage.id
                                                             }
+                                                            tandemId={
+                                                                learningLanguage.tandem.status ===
+                                                                TandemStatus.VALIDATED_BY_ONE_UNIVERSITY
+                                                                    ? learningLanguage.tandem?.id
+                                                                    : undefined
+                                                            }
+                                                            tandemStatus={learningLanguage.tandem?.status}
                                                         />
                                                     </Box>
                                                 );
@@ -494,8 +508,8 @@ const LearningLanguageList = () => {
 
                                             if (
                                                 learningLanguage.tandem &&
-                                                (learningLanguage.tandem.status === 'ACTIVE' ||
-                                                    learningLanguage.tandem.status === 'PAUSED')
+                                                (learningLanguage.tandem.status === TandemStatus.ACTIVE ||
+                                                    learningLanguage.tandem.status === TandemStatus.PAUSED)
                                             ) {
                                                 return (
                                                     <Box key={learningLanguage.code} className="line">
