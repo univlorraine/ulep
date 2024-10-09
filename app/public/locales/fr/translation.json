@@ -47,7 +47,22 @@
             "published": "Validée"
         },
         "list": {
-            "title": "Fiches d'activités"
+            "title": "Fiches d'activités",
+            "filter_title": "Filtre",
+            "filter_clear": "Effacer les filtres",
+            "language": "Langue",
+            "level": "Niveau",
+            "theme": "Thème",
+            "search": "Rechercher une activité",
+            "filter": {
+                "title": "Filtrer les fiches d’activité",
+                "languages": "Langues",
+                "levels": "Niveaux",
+                "themes": "Thèmes",
+                "apply": "Appliquer",
+                "cancel": "Annuler",
+                "is_mine": "Mes fiches"
+            }
         },
         "show": {
             "status_rejected": "Afficher la raison du rejet",
@@ -75,7 +90,16 @@
             "modal_share_submit": "Soumettre ma fiche",
             "modal_share_close": "Fermer",
             "ressource_file": "Télécharger le fichier",
-            "ressource_file_downloaded": "Fichier téléchargé"
+            "ressource_file_downloaded": "Fichier téléchargé",
+            "filter": {
+                "title": "Filtrer les fiches d’activité",
+                "languages": "Langues",
+                "levels": "Niveaux",
+                "themes": "Thèmes",
+                "apply": "Appliquer",
+                "cancel": "Annuler",
+                "is_mine": "Mes fiches"
+            }
         },
         "create": {
             "up_excercise_button": "Déplacer l'exercice vers le haut",

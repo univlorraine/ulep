@@ -47,7 +47,22 @@
             "published": "Published"
         },
         "list": {
-            "title": "Activity sheets"
+            "title": "Activity sheets",
+            "filter_title": "Filter",
+            "filter_clear": "Clear filters",
+            "language": "Language",
+            "level": "Level",
+            "theme": "Theme",
+            "search": "Search activity",
+            "filter": {
+                "title": "Filter activity sheets",
+                "languages": "Languages",
+                "levels": "Levels",
+                "themes": "Themes",
+                "apply": "Apply",
+                "cancel": "Cancel",
+                "is_mine": "My sheets"
+            }
         },
         "show": {
             "status_rejected": "Show the reason for rejection",

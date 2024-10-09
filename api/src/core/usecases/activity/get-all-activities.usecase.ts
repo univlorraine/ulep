@@ -14,6 +14,10 @@ import {
   PROFILE_REPOSITORY,
   ProfileRepository,
 } from 'src/core/ports/profile.repository';
+import {
+  STORAGE_INTERFACE,
+  StorageInterface,
+} from 'src/core/ports/storage.interface';
 
 interface GetActivitiesCommand {
   languagesCodes?: string[];
@@ -34,6 +38,8 @@ export class GetActivitiesUsecase {
     private readonly profileRepository: ProfileRepository,
     @Inject(LANGUAGE_REPOSITORY)
     private readonly languageRepository: LanguageRepository,
+    @Inject(STORAGE_INTERFACE)
+    private readonly storage: StorageInterface,
   ) {}
 
   async execute(command: GetActivitiesCommand) {
@@ -69,6 +75,17 @@ export class GetActivitiesUsecase {
       themesIds: themesIds.length > 0 ? themesIds : undefined,
       profileId: profile?.id,
     });
+
+    for (const activity of activities.items) {
+      if (activity.image) {
+        const imageUrl = await this.storage.temporaryUrl(
+          activity.image.bucket,
+          activity.image.name,
+          3600,
+        );
+        activity.imageUrl = imageUrl;
+      }
+    }
 
     return activities;
   }

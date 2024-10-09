@@ -3,7 +3,7 @@ import { t } from 'i18next';
 import { arrowBackOutline } from 'ionicons/icons';
 import { useState } from 'react';
 import { useConfig } from '../../../../context/ConfigurationContext';
-import { Activity, ActivityTheme } from '../../../../domain/entities/Activity';
+import { Activity, ActivityTheme, ActivityThemeCategory } from '../../../../domain/entities/Activity';
 import Language from '../../../../domain/entities/Language';
 import Profile from '../../../../domain/entities/Profile';
 import { CreateActivityCommand } from '../../../../domain/interfaces/activity/CreateActivityUsecase.interface';
@@ -21,6 +21,7 @@ enum CreateActivityMode {
 }
 
 interface CreateActivityContentProps {
+    themes: ActivityThemeCategory[];
     onBackPressed: () => void;
     onNavigatePressed: (activityId: string) => void;
     profile: Profile;
@@ -42,6 +43,7 @@ export const CreateActivityContent: React.FC<CreateActivityContentProps> = ({
     onBackPressed,
     onNavigatePressed,
     profile,
+    themes,
 }) => {
     const [showToast] = useIonToast();
     const [mode, setMode] = useState<CreateActivityMode>(CreateActivityMode.INFORMATIONS);
@@ -62,7 +64,10 @@ export const CreateActivityContent: React.FC<CreateActivityContentProps> = ({
         setActivity(result);
     };
 
-    const { activityThemesDropDown, cefrLevelsDropDown, languagesDropDown } = useGetDataForActivityCreation(profile);
+    const { activityThemesDropDown, cefrLevelsDropDown, languagesDropDown } = useGetDataForActivityCreation(
+        themes,
+        profile
+    );
 
     const handleBackPressed = () => {
         switch (mode) {

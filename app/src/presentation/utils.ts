@@ -1,6 +1,8 @@
 import LearningLanguage from '../domain/entities/LearningLanguage';
 import TestedLanguage from '../domain/entities/TestedLanguage';
 
+export const CEFR_LEVELS: CEFR[] = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+
 const countriesCodeWithFlags: [string, string][] = [
     ['aa', '🇪🇹'], // Afar - Ethiopia
     ['ab', '🇬🇪'], // Abkhaz - Georgia

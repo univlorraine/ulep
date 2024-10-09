@@ -5,10 +5,6 @@ import FileAdapterInterface from '../adapter/interfaces/FileAdapter.interface';
 import NotificationAdapterInterface from '../adapter/interfaces/NotificationAdapter.interface';
 import RecorderAdapterInterface from '../adapter/interfaces/RecorderAdapter.interface';
 import Configuration from '../domain/entities/Confirguration';
-import CreateActivityUsecaseInterface from '../domain/interfaces/activity/CreateActivityUsecase.interface';
-import GetActivityThemesUsecaseInterface from '../domain/interfaces/activity/GetActivityThemesUsecase.interface';
-import GetActivityUsecaseInterface from '../domain/interfaces/activity/GetActivityUsecase.interface';
-import AddDeviceUsecaseInterface from '../domain/interfaces/AddDeviceUsecase.interface';
 import AskForAccountDeletionUsecaseInterface from '../domain/interfaces/AskForAccountDeletionUsecase.interface';
 import AskForLanguageUsecaseInterface from '../domain/interfaces/AskForLanguageUsecase.interface';
 import AskForLearningLanguageUsecaseInterface from '../domain/interfaces/AskForLearningLanguageUsecase.interface';
@@ -50,6 +46,10 @@ import RetrievePersonInfoUsecaseInterface from '../domain/interfaces/RetrievePer
 import RevokeSessionsUsecaseInterface from '../domain/interfaces/RevokeSessionsUsecase.interface';
 import UpdateAvatarUsecaseInterface from '../domain/interfaces/UpdateAvatarUsecase.interface';
 import UpdateNotificationPermissionUsecaseInterface from '../domain/interfaces/UpdateNotificationPermissionUsecase.interface';
+import CreateActivityUsecaseInterface from '../domain/interfaces/activity/CreateActivityUsecase.interface';
+import GetActivitiesUsecaseInterface from '../domain/interfaces/activity/GetActivitiesUsecase.interface';
+import GetActivityThemesUsecaseInterface from '../domain/interfaces/activity/GetActivityThemesUsecase.interface';
+import GetActivityUsecaseInterface from '../domain/interfaces/activity/GetActivityUsecase.interface';
 import UpdateSessionUsecaseInterface from '../domain/interfaces/UpdateSessionUsecase.interface';
 import CreateVocabularyListUsecaseInterface from '../domain/interfaces/vocabulary/CreateVocabularyListUsecase.interface';
 import CreateVocabularyUsecaseInterface from '../domain/interfaces/vocabulary/CreateVocabularyUsecase.interface';
@@ -60,6 +60,7 @@ import GetVocabularyListPdfUsecaseInterface from '../domain/interfaces/vocabular
 import GetVocabularyListsUsecaseInterface from '../domain/interfaces/vocabulary/GetVocabularyListsUsecase.interface';
 import UpdateVocabularyListUsecaseInterface from '../domain/interfaces/vocabulary/UpdateVocabularyListUsecase.interface';
 import UpdateVocabularyUsecaseInterface from '../domain/interfaces/vocabulary/UpdateVocabularyUsecase.interface';
+import AddDeviceUsecaseInterface from '../domain/interfaces/AddDeviceUsecase.interface';
 
 export interface ConfigContextValueType {
     accessToken: string;
@@ -112,6 +113,7 @@ export interface ConfigContextValueType {
     revokeSessionsUsecase: RevokeSessionsUsecaseInterface;
     // Activity
     createActivity: CreateActivityUsecaseInterface;
+    getActivities: GetActivitiesUsecaseInterface;
     getActivity: GetActivityUsecaseInterface;
     getActivityThemes: GetActivityThemesUsecaseInterface;
     // Vocabulary
