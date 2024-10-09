@@ -1,6 +1,7 @@
 import { HttpResponse } from '../../../adapter/BaseHttpAdapter';
 import { HttpAdapterInterface } from '../../../adapter/DomainHttpAdapter';
 import { ActivityThemeCategoryCommand, activityThemeCategoryCommandToDomain } from '../../../command/ActivityCommand';
+import { CollectionCommand } from '../../../command/CollectionCommand';
 import { ActivityThemeCategory } from '../../entities/Activity';
 import GetActivityThemesUsecaseInterface from '../../interfaces/activity/GetActivityThemesUsecase.interface';
 
@@ -9,15 +10,14 @@ class GetActivityThemesUsecase implements GetActivityThemesUsecaseInterface {
 
     async execute(): Promise<ActivityThemeCategory[] | Error> {
         try {
-            const httpResponse: HttpResponse<ActivityThemeCategoryCommand[]> = await this.domainHttpAdapter.get(
-                `/activities/categories`
-            );
+            const httpResponse: HttpResponse<CollectionCommand<ActivityThemeCategoryCommand>> =
+                await this.domainHttpAdapter.get(`/activities/categories`);
 
-            if (!httpResponse.parsedBody) {
+            if (!httpResponse.parsedBody || !httpResponse.parsedBody.items) {
                 return new Error('errors.global');
             }
 
-            return httpResponse.parsedBody.map((activityThemeCategoryCommand) =>
+            return httpResponse.parsedBody.items.map((activityThemeCategoryCommand) =>
                 activityThemeCategoryCommandToDomain(activityThemeCategoryCommand)
             );
         } catch (error: any) {
