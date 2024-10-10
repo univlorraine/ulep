@@ -187,6 +187,8 @@ const TandemTable = ({ rows, actions, displayTandemLanguage, pagination }: Tande
                 <Typography sx={{ p: 1 }}>{`Interests : ${selectedMatchScore?.interests}`}</Typography>
                 <Typography sx={{ p: 1 }}>{`Level : ${selectedMatchScore?.level}`}</Typography>
                 <Typography sx={{ p: 1 }}>{`Status : ${selectedMatchScore?.status}`}</Typography>
+                <Typography sx={{ p: 1 }}>{`Meeting Frequency : ${selectedMatchScore?.meetingFrequency}`}</Typography>
+                <Typography sx={{ p: 1 }}>{`Certificate Option : ${selectedMatchScore?.certificateOption}`}</Typography>
                 <Typography sx={{ p: 1 }}>{`Total : ${selectedMatchScore?.total}`}</Typography>
             </Popover>
         </Table>
