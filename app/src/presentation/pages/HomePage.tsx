@@ -42,6 +42,10 @@ const HomePage: React.FC = () => {
         return <Redirect to={'/'} />;
     }
 
+    const handleRefresh = () => {
+        setRefresh(!refresh)
+    };
+
     const onShowSessionListPressed = () => {
         if (isHybrid) {
             history.push('/sessions', { tandems, sessions });
@@ -56,6 +60,7 @@ const HomePage: React.FC = () => {
         if (isHybrid) {
             history.push('show-session', { session, tandem, confirmCreation });
         } else {
+            handleRefresh();
             setDisplaySessionModal({
                 type: DisplaySessionModalEnum.show,
                 tandem,
@@ -109,7 +114,7 @@ const HomePage: React.FC = () => {
 
     return (
         <>
-            <OnlineWebLayout profile={profile} onRefresh={() => setRefresh(!refresh)}>
+            <OnlineWebLayout profile={profile} onRefresh={handleRefresh}>
                 <HomeContent
                     isLoading={isLoading}
                     profile={profile}
