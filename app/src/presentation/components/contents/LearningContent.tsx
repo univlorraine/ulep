@@ -49,7 +49,9 @@ const LearningContent: React.FC<LearningContentProps> = ({
 
     // WARNING: this useEffect is a workaround to avoid currentLearningLanguage being undefined sometimes
     useEffect(() => {
-        setCurrentTandem(tandems[0]);
+        if (tandems.length > 0) {
+            setCurrentTandem(tandems[0]);
+        }
     }, [tandems]);
 
     return (
@@ -112,13 +114,15 @@ const LearningContent: React.FC<LearningContentProps> = ({
                                 onPress={openUniversityInfos}
                             />
                         )}
-                        <ProficiencyTestCard
-                            testedLanguages={learningLanguagesToTestedLanguages(
-                                profile.learningLanguages,
+                        {currentTandem && (
+                            <ProficiencyTestCard
+                                testedLanguages={learningLanguagesToTestedLanguages(
+                                    profile.learningLanguages,
                                 profile.testedLanguages,
                                 currentTandem?.learningLanguage.code
-                            )}
-                        />
+                                )}
+                            />
+                        )}
                         <CreateLearningLanguageCard onPress={openAddLearningLanguagePressed} />
                     </Masonry>
                 </ResponsiveMasonry>
