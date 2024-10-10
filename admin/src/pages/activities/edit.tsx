@@ -27,17 +27,21 @@ const EditActivity = () => {
         formData.append('languageLevel', payload.languageLevel);
         formData.append('languageCode', payload.languageCode);
         formData.append('themeId', payload.themeId);
-        if (payload.image !== undefined) formData.append('image', payload.image);
-        formData.append('creditImage', payload.creditImage);
-        formData.append('ressourceUrl', payload.ressourceUrl);
+        if (payload.image) formData.append('image', payload.image);
+        if (payload.creditImage) formData.append('creditImage', payload.creditImage);
+        if (payload.ressourceUrl) formData.append('ressourceUrl', payload.ressourceUrl);
         payload.exercises.forEach((exercise: any, index: number) => {
             formData.append(`exercises[${index}][content]`, exercise.content);
             formData.append(`exercises[${index}][order]`, exercise.order);
         });
         payload.vocabularies.forEach((vocabulary: any, index: number) => {
             formData.append(`vocabularies[${index}][content]`, vocabulary.content);
-            formData.append(`vocabularies[${index}][pronunciationUrl]`, vocabulary.pronunciationUrl);
-            formData.append(`vocabularies[${index}][id]`, vocabulary.id);
+            if (vocabulary.pronunciationActivityVocabularyUrl)
+                formData.append(
+                    `vocabularies[${index}][pronunciationUrl]`,
+                    vocabulary.pronunciationActivityVocabularyUrl
+                );
+            if (vocabulary.id) formData.append(`vocabularies[${index}][id]`, vocabulary.id);
         });
         vocabulariesFiles?.forEach((vocabularyFile: File, index: number) => {
             formData.append(`vocabulariesFiles[${index}]`, vocabularyFile);
@@ -55,14 +59,14 @@ const EditActivity = () => {
                             return redirect('/activities');
                         }
 
-                        return notify('activities.update.error');
+                        return notify('activities.error.update');
                     },
                 }
             );
         } catch (err) {
             console.error(err);
 
-            return notify('activities.update.error');
+            return notify('activities.error.update');
         }
     };
 

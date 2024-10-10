@@ -55,6 +55,8 @@ const ActivityForm: React.FC<ActivityFormProps> = ({ handleSubmit }) => {
     const [newExercises, setNewExercises] = useState<ActivityExercise[]>(record?.exercises || DEFAULT_EXCERCISES);
     const [newVocabulary, setNewVocabulary] = useState<ActivityVocabulary[]>(record?.vocabularies || []);
 
+    console.log({ newVocabulary });
+
     const universitiesLanguages = useGetUniversitiesLanguages();
     const proficiencyLevels = Object.values(ProficiencyLevel);
     const activityThemesCategories = useGetList('activities/categories');

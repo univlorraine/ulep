@@ -15,6 +15,7 @@ import {
     Button,
     useRecordContext,
 } from 'react-admin';
+import ActivityStatusChips from '../../components/ActivityStatusChipsProps';
 import AudioLine from '../../components/chat/AudioLine';
 import PageTitle from '../../components/PageTitle';
 import { Activity, ActivityExercise, ActivityVocabulary } from '../../entities/Activity';
@@ -48,6 +49,28 @@ const ActivityShow = () => {
             <Show actions={<ActivityShowAction />}>
                 <TabbedShowLayout>
                     <TabbedShowLayout.Tab label={translate('activities.show.mainInfos.label')}>
+                        <FunctionField
+                            label={translate('activities.list.status')}
+                            render={(record: any) => <ActivityStatusChips status={record.status} />}
+                            sortable={false}
+                            source="language"
+                        />
+                        <FunctionField
+                            label={translate('activities.list.creator')}
+                            render={(record: Activity) => {
+                                if (!record?.creator) {
+                                    return 'Admin';
+                                }
+
+                                return `${record.creator.user.firstname} ${record.creator.user.lastname}`;
+                            }}
+                            sortable={false}
+                        />
+                        <TextField
+                            label={translate('activities.list.university')}
+                            sortable={false}
+                            source="university.name"
+                        />
                         <TextField label={translate('activities.show.mainInfos.title')} source="title" />
                         <ImageField label={translate('activities.show.mainInfos.image')} source="imageUrl" />
                         <TextField label={translate('activities.show.mainInfos.credit')} source="creditImage" />

@@ -65,6 +65,10 @@
             "published": "Publié",
             "in_validation": "En attente de validation",
             "rejected": "Rejeté"
+        },
+        "error": {
+            "update": "Une erreur est survenue pendant la mise à jour de l'activité",
+            "create": "Une erreur est survenue pendant la création de l'activité"
         }
     },
     "activities_categories": {
