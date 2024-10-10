@@ -1,11 +1,12 @@
 import { IonContent, useIonToast } from '@ionic/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Redirect, useHistory } from 'react-router';
+import { Redirect, useHistory, useLocation } from 'react-router';
 import Tandem from '../../domain/entities/Tandem';
 import { useStoreState } from '../../store/storeTypes';
 import HomeContent from '../components/contents/HomeContent';
 import OnlineWebLayout from '../components/layout/OnlineWebLayout';
+import EndSessionModal from '../components/modals/EndSessionModal';
 import TandemProfileModal from '../components/modals/TandemProfileModal';
 import TandemStatusModal from '../components/modals/TandemStatusModal';
 import useGetHomeData from '../hooks/useGetHomeData';
@@ -16,6 +17,10 @@ import SessionsContentModal, {
     DisplaySessionModalEnum,
     DisplaySessionModal,
 } from '../components/modals/SessionsContentModal';
+
+interface HomePageLocationProps {
+    endSession: boolean;
+}
 
 const HomePage: React.FC = () => {
     const { t } = useTranslation();
@@ -28,12 +33,16 @@ const HomePage: React.FC = () => {
     const [refresh, setRefresh] = useState<boolean>(false);
     const [displaySessionModal, setDisplaySessionModal] = useState<DisplaySessionModal>();
     const { tandems, sessions, error, isLoading } = useGetHomeData(refresh);
+    const location = useLocation<HomePageLocationProps>();
+    const [isEndSessionModalOpen, setIsEndSessionModalOpen] = useState<boolean>(location.state?.endSession || false);
 
     if (error) {
         showToast({ message: t(error.message), duration: 5000 });
     }
 
     const onReportPressed = () => (isHybrid ? history.push('/report') : undefined);
+
+    const onCompleteLearningJournalPressed = () => setIsEndSessionModalOpen(false);
 
     const onValidatedTandemPressed = (tandem: Tandem) =>
         !isHybrid ? setSelectedTandem(tandem) : history.push('/tandem-profil', { tandem });
@@ -158,6 +167,11 @@ const HomePage: React.FC = () => {
                 onShowSessionPressed={onShowSessionPressed}
                 onUpdateSessionPressed={onUpdateSessionPressed}
                 onCreateSessionPressed={onCreateSessionPressed}
+            />
+            <EndSessionModal
+                isOpen={isEndSessionModalOpen}
+                onClose={() => setIsEndSessionModalOpen(false)}
+                onCompleteLearningJournalPressed={onCompleteLearningJournalPressed}
             />
         </>
     );

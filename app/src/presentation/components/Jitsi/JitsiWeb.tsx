@@ -2,11 +2,15 @@ import { JitsiMeeting } from '@jitsi/react-sdk';
 import IJitsiMeetExternalApi from '@jitsi/react-sdk/lib/types/IJitsiMeetExternalApi';
 import { useRef } from 'react';
 import { useHistory } from 'react-router';
+import useWindowDimensions from '../../hooks/useWindowDimensions';
+import { HYBRID_MAX_WIDTH } from '../../utils';
 import { JitsiProps } from './VisioContainer';
 
 const JitsiWeb = ({ jitsiUrl, language, roomName, jitsiToken }: JitsiProps) => {
     const history = useHistory();
     const apiRef = useRef<IJitsiMeetExternalApi>();
+    const { width } = useWindowDimensions();
+    const isHybrid = width < HYBRID_MAX_WIDTH;
 
     const handleApiReady = (apiObj: IJitsiMeetExternalApi) => {
         apiRef.current = apiObj;
@@ -68,7 +72,9 @@ const JitsiWeb = ({ jitsiUrl, language, roomName, jitsiToken }: JitsiProps) => {
                     // you can also store it locally to execute commands
                     handleApiReady(externalApi);
                 }}
-                onReadyToClose={() => history.push('/home')}
+                onReadyToClose={() =>
+                    isHybrid ? history.push('end-session') : history.push('/home', { endSession: true })
+                }
                 getIFrameRef={(iframeRef) => {
                     iframeRef.style.height = '100%';
                 }}

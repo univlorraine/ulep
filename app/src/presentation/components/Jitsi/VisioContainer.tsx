@@ -21,7 +21,6 @@ const VisioContainer = () => {
     const history = useHistory();
     const [jitsiToken, setJitsiToken] = useState<string>();
     const jitsiUrl = useStoreState((state) => state.jitsiUrl);
-
     const roomName = location.search ? location.search.split('roomName=')[1] : '';
 
     const fetchJitsiToken = async () => {

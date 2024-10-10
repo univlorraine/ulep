@@ -438,6 +438,13 @@
         "session": {
             "title": "Sessions à venir ({{count}})",
             "show_session_list_button": "Voir toutes les sessions"
+        },
+        "end_session": {
+            "title": "Session terminée !",
+            "close_button": "Fermer",
+            "complete_learning_journal_button": "Compléter mon journal d'apprentissage",
+            "time_past": "Le temps que vous avez passé ensemble a été comptabilisé.",
+            "complete_learning_journal": "Tu pourras le retrouver plus tard dans ton journal d'apprentissage."
         }
     },
     "session": {
