@@ -33,8 +33,6 @@ class CreateActivityUsecase implements CreateActivityUsecaseInterface {
                 languageCode: command.languageCode,
                 themeId: command.themeId,
                 image: command.image,
-                creditImage: command.creditImage,
-                ressourceUrl: command.ressourceUrl,
                 profileId: command.profileId,
                 exercises: command.exercises,
                 vocabularies: command.vocabularies.map((vocabulary) => vocabulary.content),
@@ -48,6 +46,13 @@ class CreateActivityUsecase implements CreateActivityUsecaseInterface {
                     formData.vocabulariesFiles.push(newFile);
                 }
             });
+            if (command.creditImage) {
+                formData.creditImage = command.creditImage;
+            }
+
+            if (command.ressourceUrl) {
+                formData.ressourceUrl = command.ressourceUrl;
+            }
 
             if (command.ressource) {
                 formData.ressource = command.ressource;

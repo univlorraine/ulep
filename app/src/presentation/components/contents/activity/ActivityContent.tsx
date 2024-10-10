@@ -27,7 +27,7 @@ export const ActivityContent: React.FC<ActivityContentProps> = ({
     profile,
 }) => {
     const { t } = useTranslation();
-    const { browserAdapter, fileAdapter, updateActivity } = useConfig();
+    const { browserAdapter, fileAdapter, updateActivityStatus } = useConfig();
     const [showToast] = useIonToast();
     const [refreshActivity, setRefreshActivity] = useState(false);
     const [showMenu, setShowMenu] = useState(false);
@@ -63,9 +63,7 @@ export const ActivityContent: React.FC<ActivityContentProps> = ({
     };
 
     const onShareActivity = async () => {
-        const result = await updateActivity.execute(activity.id, {
-            status: ActivityStatus.IN_VALIDATION,
-        });
+        const result = await updateActivityStatus.execute(activity.id, ActivityStatus.IN_VALIDATION);
 
         if (result instanceof Error) {
             return showToast({

@@ -10,6 +10,7 @@ import CreateActivityUsecase from '../domain/usecases/activity/CreateActivityUse
 import GetActivitiesUsecase from '../domain/usecases/activity/GetActivitiesUsecase';
 import GetActivityThemesUsecase from '../domain/usecases/activity/GetActivityThemesUsecase';
 import GetActivityUsecase from '../domain/usecases/activity/GetActivityUsecase';
+import UpdateActivityStatusUsecase from '../domain/usecases/activity/UpdateActivityStatusUsecase';
 import UpdateActivityUsecase from '../domain/usecases/activity/UpdateActivityUsecase';
 import AddDeviceUsecase from '../domain/usecases/AddDeviceUsecase';
 import AskForAccountDeletion from '../domain/usecases/AskForAccountDeletionUsecase';
@@ -177,6 +178,7 @@ const getConfigContextValue = ({
     const getActivity = new GetActivityUsecase(domainHttpAdapter);
     const getActivityThemes = new GetActivityThemesUsecase(domainHttpAdapter);
     const updateActivity = new UpdateActivityUsecase(domainHttpAdapter);
+    const updateActivityStatus = new UpdateActivityStatusUsecase(domainHttpAdapter);
 
     // Session
     const createSession = new CreateSessionUsecase(domainHttpAdapter);
@@ -247,6 +249,7 @@ const getConfigContextValue = ({
         updateVocabularyList,
         deleteVocabularyList,
         updateActivity,
+        updateActivityStatus,
         createSession,
         updateSession,
         cancelSession,

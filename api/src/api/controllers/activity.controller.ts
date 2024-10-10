@@ -27,9 +27,10 @@ import {
   CreateActivityThemeCategoryRequest,
   CreateActivityThemeRequest,
   GetActivitiesRequest,
-  UpdateActivityRequest,
   GetActivityThemeCategoryResponse,
   GetActivityThemeResponse,
+  UpdateActivityRequest,
+  UpdateActivityStatusRequest,
   UpdateActivityThemeCategoryRequest,
   UpdateActivityThemeRequest,
 } from 'src/api/dtos/activity';
@@ -48,6 +49,7 @@ import {
   GetActivityThemeUsecase,
   GetActivityUsecase,
   GetAllActivityThemesUsecase,
+  UpdateActivityStatusUsecase,
   UpdateActivityThemeCategoryUsecase,
   UpdateActivityThemeUsecase,
   UpdateActivityUsecase,
@@ -80,6 +82,7 @@ export class ActivityController {
     private readonly uploadImageActivityUsecase: UploadImageActivityUsecase,
     private readonly uploadMediaActivityUsecase: UploadMediaActivityUsecase,
     private readonly updateActivityUsecase: UpdateActivityUsecase,
+    private readonly updateActivityStatusUsecase: UpdateActivityStatusUsecase,
     private readonly env: ConfigService<Env, true>,
   ) {
     this.defaultLanguageCode = env.get<string>('DEFAULT_TRANSLATION_LANGUAGE');
@@ -336,6 +339,20 @@ export class ActivityController {
   @Swagger.ApiOkResponse({ type: () => ActivityResponse })
   async deleteActivity(@Param('id') id: string) {
     await this.deleteActivityUsecase.execute(id);
+  }
+
+  @Put(':id')
+  @UseGuards(AuthenticationGuard)
+  @UseInterceptors(AnyFilesInterceptor())
+  @Swagger.ApiOperation({ summary: 'Update a Activity status ressource.' })
+  async updateActivityStatus(
+    @Param('id') id: string,
+    @Body() body: UpdateActivityStatusRequest,
+  ) {
+    await this.updateActivityStatusUsecase.execute({
+      id,
+      ...body,
+    });
   }
 
   @Post(':id/update')
