@@ -176,11 +176,12 @@ export class LearningLanguageController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body() body: GenerateCertificateRequest,
   ): Promise<LearningLanguageResponse> {
-    const certificate = await this.generateCertificateUsecase.execute(id);
+    const certificate = await this.generateCertificateUsecase.execute(id, body);
 
     await this.uploadLearningLangugaeCertificateUsecase.execute({
       id,
-      file: certificate,
+      file: certificate.file,
+      language: certificate.language,
     });
 
     const learningLanguage = await this.updateLearningLanguageUsecase.execute(

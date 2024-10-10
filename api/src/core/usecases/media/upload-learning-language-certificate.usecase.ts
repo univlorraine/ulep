@@ -2,23 +2,24 @@ import { Inject, Injectable } from '@nestjs/common';
 import { UnauthorizedOperation } from 'src/core/errors';
 import { LearningLanguage, MediaObject } from 'src/core/models';
 import {
-  LEARNING_LANGUAGE_REPOSITORY,
   LearningLanguageRepository,
+  LEARNING_LANGUAGE_REPOSITORY,
 } from 'src/core/ports/learning-language.repository';
 import { v4 } from 'uuid';
 import {
-  MEDIA_OBJECT_REPOSITORY,
   MediaObjectRepository,
+  MEDIA_OBJECT_REPOSITORY,
 } from '../../ports/media-object.repository';
 import {
   File,
-  STORAGE_INTERFACE,
   StorageInterface,
+  STORAGE_INTERFACE,
 } from '../../ports/storage.interface';
 
 export class UploadLearningLanguageCertificateCommand {
   id: string;
   file: File;
+  language: string;
 }
 
 @Injectable()
@@ -41,13 +42,16 @@ export class UploadLearningLanguageCertificateUsecase {
     const learningLanguage = await this.tryToFindLearningLanguage(command.id);
     const previousFile = await this.tryToFindTheFile(learningLanguage);
 
-    await this.deletePreviousFile(learningLanguage, previousFile);
+    await this.deletePreviousFile(
+      learningLanguage,
+      previousFile,
+      command.language,
+    );
 
-    return this.upload(learningLanguage, command.file);
+    return this.upload(learningLanguage, command.file, command.language);
   }
 
-  private getFileName(learningLanguage: LearningLanguage) {
-    const language = learningLanguage.language.name;
+  private getFileName(learningLanguage: LearningLanguage, language: string) {
     const name = `${learningLanguage.profile.user.firstname} ${learningLanguage.profile.user.lastname}`;
     const userId = learningLanguage.profile.user.id;
     return this.#name
@@ -78,10 +82,11 @@ export class UploadLearningLanguageCertificateUsecase {
   private async upload(
     learningLanguage: LearningLanguage,
     file: Express.Multer.File,
+    language: string,
   ): Promise<MediaObject> {
     const mediaObject = new MediaObject({
       id: v4(),
-      name: this.getFileName(learningLanguage),
+      name: this.getFileName(learningLanguage, language),
       bucket: this.#bucket,
       mimetype: file.mimetype,
       size: file.size,
@@ -98,8 +103,12 @@ export class UploadLearningLanguageCertificateUsecase {
   private async deletePreviousFile(
     learningLanguage: LearningLanguage,
     mediaObject: MediaObject | null,
+    language: string,
   ) {
-    await this.storage.delete(this.#bucket, this.getFileName(learningLanguage));
+    await this.storage.delete(
+      this.#bucket,
+      this.getFileName(learningLanguage, language),
+    );
     if (!mediaObject) return;
     await this.mediaObjectRepository.remove(mediaObject.id);
   }
