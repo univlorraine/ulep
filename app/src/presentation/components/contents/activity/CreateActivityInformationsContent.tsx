@@ -189,7 +189,7 @@ export const CreateActivityInformationsContent = ({
                 value={description}
                 placeholder={t('activity.create.description_placeholder') as string}
                 type="text-area"
-                maxLength={1000}
+                maxLength={100}
                 showLimit
                 required
             />
