@@ -5,6 +5,7 @@ import {
   endOfTomorrow,
   setSeconds,
   startOfTomorrow,
+  subHours,
 } from 'date-fns';
 import { Session } from 'src/core/models/session.model';
 import {
@@ -93,7 +94,7 @@ export class PrismaSessionRepository implements SessionRepository {
           },
         },
         start_at: {
-          gte: new Date(),
+          gte: subHours(new Date(), 2),
         },
       },
       orderBy: {
