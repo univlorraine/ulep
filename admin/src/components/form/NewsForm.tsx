@@ -271,7 +271,7 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                                         onChange={(e: any) => {
                                             const newTranslations = [...translations];
                                             newTranslations[index].title = e.target.value;
-                                            setTranslations([...translations]);
+                                            setTranslations(newTranslations);
                                         }}
                                         placeholder="Title"
                                         type="text"
@@ -287,7 +287,13 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                                     defaultValue={translation.content || ''}
                                     onChange={(e: any) => {
                                         const newTranslations = [...translations];
-                                        newTranslations[index].content = e;
+                                        const newTranslation = {
+                                            languageCode: translation.languageCode,
+                                            title: translation.title,
+                                            content: e,
+                                        };
+                                        newTranslations[index] = newTranslation;
+
                                         setTranslations(newTranslations);
                                     }}
                                     source={translation.languageCode}
