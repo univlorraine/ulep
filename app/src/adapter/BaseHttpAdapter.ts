@@ -35,7 +35,7 @@ class BaseHttpAdapter {
                             encodedBody.append(`${key}[${index}]`, item);
                         }
                     });
-                } else {
+                } else if (value !== undefined || value !== null) {
                     encodedBody.append(key, value);
                 }
             });

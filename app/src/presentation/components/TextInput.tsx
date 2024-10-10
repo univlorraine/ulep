@@ -75,6 +75,7 @@ interface TextInputProps {
     fieldInfo?: JSX.Element;
     required?: boolean;
     beforeInput?: React.ReactNode;
+    showLimit?: boolean;
 }
 
 const TextInput: React.FC<TextInputProps> = ({
@@ -91,6 +92,7 @@ const TextInput: React.FC<TextInputProps> = ({
     fieldInfo = null,
     required = false,
     beforeInput,
+    showLimit = false,
 }) => {
     const [showPasword, setShowPassword] = useState<boolean>(false);
     const inputId = `input-${title}}`;
@@ -147,6 +149,11 @@ const TextInput: React.FC<TextInputProps> = ({
                     value={value}
                     required
                 />
+            )}
+            {showLimit && (
+                <div className={style.limitContainer}>
+                    <span className={style.limit}>{`${value.length} / ${maxLength}`}</span>
+                </div>
             )}
             {errorMessage && <p className={style['input-label-error']}>{errorMessage}</p>}
         </div>

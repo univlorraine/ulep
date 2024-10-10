@@ -9,13 +9,13 @@ export const CEFR_VALUES: CEFR[] = ['A0', 'A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 
 const useGetDataForActivityCreation = (themes: ActivityThemeCategory[], profile: Profile, refresh?: boolean) => {
     const [dataForActivityCreation, setDataForActivityCreation] = useState<{
-        activityThemesDropDown: DropDownItem<ActivityTheme>[];
+        activityThemesCategoryDropDown: DropDownItem<ActivityThemeCategory>[];
         cefrLevelsDropDown: DropDownItem<CEFR>[];
         languagesDropDown: DropDownItem<Language>[];
         error: Error | undefined;
         isLoading: boolean;
     }>({
-        activityThemesDropDown: [],
+        activityThemesCategoryDropDown: [],
         cefrLevelsDropDown: [],
         languagesDropDown: [],
         error: undefined,
@@ -31,14 +31,10 @@ const useGetDataForActivityCreation = (themes: ActivityThemeCategory[], profile:
                 isLoading: true,
             });
 
-            const activityThemesDropDown = themes
-                .map((activityTheme) => {
-                    return activityTheme.themes.map((theme) => ({
-                        label: theme.content,
-                        value: theme,
-                    }));
-                })
-                .flat() as DropDownItem<ActivityTheme>[];
+            const activityThemesCategoryDropDown = themes.map((theme) => ({
+                label: theme.content,
+                value: theme,
+            }));
 
             const cefrLevelsDropDown = CEFR_VALUES.map((cefr) => ({
                 label: cefr,
@@ -56,7 +52,7 @@ const useGetDataForActivityCreation = (themes: ActivityThemeCategory[], profile:
 
             return setDataForActivityCreation({
                 ...dataForActivityCreation,
-                activityThemesDropDown,
+                activityThemesCategoryDropDown,
                 cefrLevelsDropDown,
                 languagesDropDown,
                 isLoading: false,

@@ -140,7 +140,9 @@
             "success_description": "Your sheet has been created !",
             "success_description_2": "You can find it in your learning space, in the “My sheets” tab",
             "success_navigate_button": "See my preparation sheet",
-            "success_close_button": "Close"
+            "success_close_button": "Close",
+            "theme_category": "Theme category",
+            "theme_category_placeholder": "Select a theme category"
         }
     },
     "navigation": {

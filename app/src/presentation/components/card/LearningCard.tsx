@@ -19,7 +19,7 @@ const LearningCard: React.FC<LearningCardProps> = ({ buttonText, children, onBut
             <div className={styles.header}>
                 <span className="home-card-title">{title}</span>
                 {!isHybrid && onButtonPressed && (
-                    <IonButton fill="clear" className={`primary-button ${styles.button}`} onClick={onButtonPressed}>
+                    <IonButton fill="clear" className={`primary-button little-button no-padding ${styles.button}`} onClick={onButtonPressed}>
                         <span>{buttonText}</span>
                     </IonButton>
                 )}
