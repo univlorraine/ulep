@@ -255,7 +255,7 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
                     <Box flex="1" sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                         <Box>
                             <Typography variant="subtitle1">{translate(`universities.${tradKey}.logo`)}</Typography>
-                            <ImageUploader onImageSelect={setFile} source="image.id" />
+                            <ImageUploader onImageSelect={setFile} source="logo.id" />
                         </Box>
 
                         <Box>
