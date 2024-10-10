@@ -392,6 +392,8 @@ export class ActivityController {
     @UploadedFiles()
     files?: Express.Multer.File[],
   ) {
+    console.log({ body });
+
     const vocabulariesWithFiles = body.vocabularies?.map((vocabulary) => ({
       id: vocabulary.id,
       content: vocabulary.content,
@@ -404,8 +406,6 @@ export class ActivityController {
           file.fieldname.includes('vocabulariesFiles'),
       ),
     }));
-
-    console.log({ vocabulariesWithFiles });
 
     const activity = await this.updateActivityUsecase.execute({
       id,

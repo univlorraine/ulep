@@ -1,4 +1,5 @@
 import UploadFileIcon from '@mui/icons-material/UploadFile';
+import { Box } from '@mui/material';
 import React from 'react';
 import {
     useTranslate,
@@ -14,29 +15,98 @@ import {
     DeleteButton,
     Button,
     useRecordContext,
+    useUpdate,
+    useNotify,
 } from 'react-admin';
 import ActivityStatusChips from '../../components/ActivityStatusChipsProps';
 import AudioLine from '../../components/chat/AudioLine';
 import PageTitle from '../../components/PageTitle';
-import { Activity, ActivityExercise, ActivityVocabulary } from '../../entities/Activity';
+import { Activity, ActivityExercise, ActivityStatus, ActivityVocabulary } from '../../entities/Activity';
 import codeLanguageToFlag from '../../utils/codeLanguageToFlag';
 
-const ActivityShowAction = () => {
-    const record = useRecordContext();
+const ActivityShowAction = () => (
+    <TopToolbar>
+        <EditButton />
+        <DeleteButton mutationMode="pessimistic" redirect="/activities" />
+    </TopToolbar>
+);
 
-    const isFromStudent = record.creator;
+const ActivityStatusComponent = () => {
+    const record = useRecordContext();
+    const translate = useTranslate();
+    const [update] = useUpdate();
+    const notify = useNotify();
+
+    const handlePublish = async () => {
+        try {
+            return await update('activities', { id: record.id, data: { status: ActivityStatus.PUBLISHED } });
+        } catch (err) {
+            console.error(err);
+
+            return notify('activities.error.update');
+        }
+    };
+
+    const handleRefuse = async () => {
+        try {
+            return await update('activities', { id: record.id, data: { status: ActivityStatus.REJECTED } });
+        } catch (err) {
+            console.error(err);
+
+            return notify('activities.error.update');
+        }
+    };
+
+    const handleUnpublish = async () => {
+        try {
+            return await update('activities', { id: record.id, data: { status: ActivityStatus.DRAFT } });
+        } catch (err) {
+            console.error(err);
+
+            return notify('activities.error.update');
+        }
+    };
 
     return (
-        <TopToolbar>
-            <EditButton />
-            <DeleteButton mutationMode="pessimistic" redirect="/activities" />
-            {isFromStudent && (
-                <>
-                    <Button color="success" label="Validate" onClick={() => {}} variant="contained" />
-                    <Button color="error" label="Refuse" onClick={() => {}} variant="contained" />
-                </>
+        <Box display="flex" flexDirection="row" gap="50px">
+            <ActivityStatusChips status={record.status} />
+            {record?.status === ActivityStatus.IN_VALIDATION && (
+                <Box display="flex" flexDirection="row" gap="10px">
+                    <Button
+                        color="success"
+                        label={translate('activities.show.actions.publish')}
+                        onClick={handlePublish}
+                        variant="contained"
+                    />
+                    <Button
+                        color="error"
+                        label={translate('activities.show.actions.refuse')}
+                        onClick={handleRefuse}
+                        variant="contained"
+                    />
+                </Box>
             )}
-        </TopToolbar>
+            {record?.status === ActivityStatus.PUBLISHED && (
+                <Box display="flex" flexDirection="row" gap="10px">
+                    <Button
+                        color="info"
+                        label={translate('activities.show.actions.unpublish')}
+                        onClick={handleUnpublish}
+                        variant="contained"
+                    />
+                </Box>
+            )}
+            {record?.status === ActivityStatus.DRAFT && (
+                <Box display="flex" flexDirection="row" gap="10px">
+                    <Button
+                        color="success"
+                        label={translate('activities.show.actions.publish')}
+                        onClick={handlePublish}
+                        variant="contained"
+                    />
+                </Box>
+            )}
+        </Box>
     );
 };
 
@@ -51,15 +121,15 @@ const ActivityShow = () => {
                     <TabbedShowLayout.Tab label={translate('activities.show.mainInfos.label')}>
                         <FunctionField
                             label={translate('activities.list.status')}
-                            render={(record: any) => <ActivityStatusChips status={record.status} />}
+                            render={() => <ActivityStatusComponent />}
                             sortable={false}
                             source="language"
                         />
                         <FunctionField
                             label={translate('activities.list.creator')}
                             render={(record: Activity) => {
-                                if (!record?.creator) {
-                                    return 'Admin';
+                                if (!record.creator) {
+                                    return translate('activities.show.mainInfos.admin');
                                 }
 
                                 return `${record.creator.user.firstname} ${record.creator.user.lastname}`;
@@ -93,7 +163,11 @@ const ActivityShow = () => {
                             label={translate('activities.show.mainInfos.resource')}
                             render={(record: Activity) => {
                                 if (record.ressourceUrl) {
-                                    return <a href={record.ressourceUrl}>{record.ressourceUrl}</a>;
+                                    return (
+                                        <a href={record.ressourceUrl} rel="noreferrer" target="_blank">
+                                            {record.ressourceUrl}
+                                        </a>
+                                    );
                                 }
                                 if (record.ressourceFileUrl) {
                                     return (

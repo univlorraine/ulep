@@ -34,7 +34,8 @@
             "university": "Université",
             "creator": "Auteur",
             "title": "Titre",
-            "status": "Statut"
+            "status": "Statut",
+            "admin": "Administrateur"
         },
         "show": {
             "mainInfos": {
@@ -48,7 +49,8 @@
                 "category": "Catégorie",
                 "theme": "Thème",
                 "resource": "Ressource (URL ou fichier)",
-                "url": "URL"
+                "url": "URL",
+                "admin": "Administrateur"
             },
             "exercices": {
                 "label": "Exercices",
@@ -58,6 +60,12 @@
             "vocabulary": {
                 "label": "Vocabulaire",
                 "pronunciation": "Prononciation"
+            },
+            "actions": {
+                "validate": "Valider",
+                "refuse": "Refuser",
+                "unpublish": "Dépublier",
+                "publish": "Publier"
             }
         },
         "status": {

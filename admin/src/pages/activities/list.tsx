@@ -140,7 +140,7 @@ const ActivityList = () => {
                         label={translate('activities.list.creator')}
                         render={(record: Activity) => {
                             if (!record.creator) {
-                                return 'Admin';
+                                return translate('activities.list.admin');
                             }
 
                             return `${record.creator.user.firstname} ${record.creator.user.lastname}`;

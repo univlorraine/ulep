@@ -3,7 +3,80 @@
         "label": "Activities",
         "tabLabel": "Activities",
         "form": {
-            "mainInfos": "Main informations"
+            "mainInfos": "Main informations",
+            "title": "Title",
+            "image": "Illustration image",
+            "imageCredit": "Image credit",
+            "description": "Description",
+            "language": "Language",
+            "level": "Level",
+            "category": "Category",
+            "theme": "Theme",
+            "ressource": "Resource",
+            "url": "URL",
+            "file": "File",
+            "ressourceURL": "URL",
+            "ressourceFile": "File",
+            "exercices": "Exercices",
+            "exercice": "Exercice",
+            "addExercice": "Add an exercice",
+            "vocabulary": "Vocabulary",
+            "pronunciation": "Pronunciation",
+            "addVocabulary": "Add a vocabulary",
+            "vocabularyPlaceholder": "Enter a word or a sentence",
+            "deletePronunciation": "Delete the pronunciation"
+        },
+        "list": {
+            "language": "Language",
+            "level": "Level",
+            "category": "Category",
+            "theme": "Theme",
+            "university": "University",
+            "creator": "Author",
+            "title": "Title",
+            "status": "Status",
+            "admin": "Administrator"
+        },
+        "show": {
+            "mainInfos": {
+                "label": "Main informations",
+                "title": "Title",
+                "image": "Image",
+                "credit": "Credit",
+                "description": "Description",
+                "language": "Language",
+                "level": "Level",
+                "category": "Category",
+                "theme": "Theme",
+                "resource": "Resource (URL or file)",
+                "url": "URL",
+                "admin": "Administrator"
+            },
+            "exercices": {
+                "label": "Exercices",
+                "content": "Content",
+                "order": "Order"
+            },
+            "vocabulary": {
+                "label": "Vocabulary",
+                "pronunciation": "Pronunciation"
+            },
+            "actions": {
+                "validate": "Validate",
+                "refuse": "Refuse",
+                "unpublish": "Unpublish",
+                "publish": "Publish"
+            }
+        },
+        "status": {
+            "draft": "Draft",
+            "published": "Published",
+            "in_validation": "In validation",
+            "rejected": "Rejected"
+        },
+        "error": {
+            "update": "An error occurred while updating the activity",
+            "create": "An error occurred while creating the activity"
         }
     },
     "activities_categories": {
