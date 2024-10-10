@@ -1,5 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import {
+  LearningLanguage,
   Match,
   MatchScores,
   PairingMode,
@@ -7,6 +8,7 @@ import {
   Tandem,
   TandemStatus,
 } from 'src/core/models';
+import { CHAT_SERVICE, ChatServicePort } from 'src/core/ports/chat.service';
 import {
   EMAIL_GATEWAY,
   EmailGateway,
@@ -64,6 +66,8 @@ export class GenerateTandemsUsecase {
     private readonly refusedTandemsRepository: RefusedTandemsRepository,
     @Inject(EMAIL_GATEWAY)
     private readonly emailGateway: EmailGateway,
+    @Inject(CHAT_SERVICE)
+    private readonly chatService: ChatServicePort,
   ) {}
 
   async execute(command: GenerateTandemsCommand): Promise<Tandem[]> {
@@ -229,9 +233,15 @@ export class GenerateTandemsUsecase {
           ? TandemStatus.ACTIVE
           : TandemStatus.DRAFT;
 
+      const learningType = LearningLanguage.getLearningType(
+        pair.owner,
+        pair.target,
+      );
+
       const tandem = new Tandem({
         id: this.uuidProvider.generate(),
         learningLanguages: [pair.owner, pair.target],
+        learningType,
         status: tandemStatus,
         compatibilityScore: pair.total,
       });
@@ -312,6 +322,22 @@ export class GenerateTandemsUsecase {
     }
 
     await this.tandemsRepository.saveMany(tandems);
+
+    const conversationsToCreate = [];
+    for (const tandem of tandems) {
+      if (tandem.status === TandemStatus.ACTIVE) {
+        conversationsToCreate.push({
+          participants: tandem.learningLanguages.map(
+            (learningLanguage) => learningLanguage.profile.user.id,
+          ),
+          tandemId: tandem.id,
+        });
+      }
+    }
+
+    if (conversationsToCreate.length > 0) {
+      await this.chatService.createConversations(conversationsToCreate);
+    }
 
     for (const notificationEmail of notificationEmails) {
       const method = notificationEmail.type;

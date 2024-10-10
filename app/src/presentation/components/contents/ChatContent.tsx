@@ -35,7 +35,7 @@ const Content: React.FC<ChatContentProps> = ({
 }) => {
     const { t } = useTranslation();
     const { socket } = useSocket();
-    const { recorderAdapter } = useConfig();
+    const { recorderAdapter, refreshTokensUsecase } = useConfig();
     const isBlocked = conversation.isBlocked;
     const [showMenu, setShowMenu] = useState(false);
     const [currentMessageSearchId, setCurrentMessageSearchId] = useState<string>();
@@ -55,6 +55,7 @@ const Content: React.FC<ChatContentProps> = ({
         conversationId: conversation.id,
     });
     const partner = Conversation.getMainConversationPartner(conversation, profile.id);
+    let disconnectInterval: NodeJS.Timeout;
 
     const setSearchMode = () => {
         setShowMenu(false);
@@ -84,11 +85,30 @@ const Content: React.FC<ChatContentProps> = ({
         socket.connect(accessToken);
         socket.onMessage(conversation.id, addNewMessage);
 
+        const refreshTokens = async () => {
+            await refreshTokensUsecase.execute();
+        };
+
+        // Its a trick to reconnect the socket if it is disconnected when the socket wont reconnect by itself
+        // Must be changed when the websocket is fixed
+        socket.onDisconnect(() => {
+            disconnectInterval = setInterval(() => {
+                if (!socket.isConnected()) {
+                    refreshTokens();
+                    socket.connect(accessToken);
+                } else {
+                    clearInterval(disconnectInterval);
+                }
+            }, 3000);
+        });
+
         return () => {
             socket.disconnect();
             socket.offMessage();
+            socket.offDisconnect();
+            clearInterval(disconnectInterval);
         };
-    }, [conversation.id]);
+    }, [conversation.id, accessToken]);
 
     return (
         <div className={`${styles.container} content-wrapper`}>

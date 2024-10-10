@@ -391,7 +391,8 @@
         "status": "Status",
         "title": "Profiles",
         "update": {
-            "title": "Modify profile"
+            "title": "Modify profile",
+            "unauthorized": "You are not allowed to edit this profile"
         }
     },
     "purge": {
@@ -601,6 +602,9 @@
                 "division": {
                     "label": "Division",
                     "fetchError": "An error occured while loading divisions"
+                },
+                "learningType": {
+                    "label": "Learning type"
                 }
             },
             "globalRoutineModal": {

@@ -12,6 +12,11 @@ export type Conversation = {
   metadata: any;
 };
 
+export interface CreateConversations {
+  participants: string[];
+  tandemId?: string;
+}
+
 export type ConversationWithUsers = {
   id: string;
   createdAt: Date;
@@ -66,5 +71,6 @@ export interface ChatServicePort {
     tandemId?: string,
     metadata?: any,
   ): Promise<any>;
+  createConversations(conversations: CreateConversations[]): Promise<any>;
   deleteConversation(tandemId: string): Promise<any>;
 }

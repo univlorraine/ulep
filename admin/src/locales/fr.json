@@ -393,7 +393,8 @@
         "status": "Statut",
         "title": "Inscrits",
         "update": {
-            "title": "Modifier le profil"
+            "title": "Modifier le profil",
+            "unauthorized": "Vous n'êtes pas autorisé à modifier ce profil"
         }
     },
     "purge": {
@@ -610,6 +611,9 @@
                 "division": {
                     "label": "Département",
                     "fetchError": "Une erreur est survenue lors du chargement des départements"
+                },
+                "learningType": {
+                    "label": "Mode d'apprentissage"
                 }
             },
             "globalRoutineModal": {

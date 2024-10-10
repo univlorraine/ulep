@@ -35,6 +35,10 @@ class HttpAdapter implements HttpAdapterInterface {
         this.error = null;
     }
 
+    handleTokens() {
+        return Promise.resolve();
+    }
+
     private handleResponse(): Promise<Response> {
         if (this.error) {
             throw this.error;

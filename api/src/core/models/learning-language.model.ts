@@ -131,6 +131,20 @@ export class LearningLanguage {
       (lang) => lang.id === this.language.id,
     );
   }
+
+  public static getLearningType(
+    learningLanguage: LearningLanguage,
+    learningLanguageMatch: LearningLanguage,
+  ) {
+    if (
+      learningLanguage.profile.user.university.isCentralUniversity() &&
+      learningLanguageMatch.profile.user.university.isCentralUniversity() &&
+      learningLanguage.campus?.id === learningLanguageMatch.campus?.id
+    ) {
+      return LearningType.TANDEM;
+    }
+    return LearningType.ETANDEM;
+  }
 }
 
 interface LearningLanguageWithTandemProps extends LearningLanguageProps {

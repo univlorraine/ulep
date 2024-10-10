@@ -1,5 +1,5 @@
+import { IonModal } from '@ionic/react';
 import ReportContent from '../contents/ReportContent';
-import Modal from './Modal';
 
 interface ReportModalProps {
     isVisible: boolean;
@@ -8,9 +8,9 @@ interface ReportModalProps {
 
 const ReportModal: React.FC<ReportModalProps> = ({ isVisible, onClose }) => {
     return (
-        <Modal isVisible={isVisible} onClose={onClose} hideWhiteBackground>
+        <IonModal animated isOpen={isVisible} onDidDismiss={onClose}>
             <ReportContent onClose={onClose} />
-        </Modal>
+        </IonModal>
     );
 };
 

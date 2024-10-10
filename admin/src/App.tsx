@@ -58,7 +58,13 @@ const App = () => (
         {(permissions: GetPermissionsInterface) => (
             <>
                 <Resource edit={EditAdministratorProfile} name="admin-profile" />
-                <Resource icon={PersonAddIcon} name="profiles" options={{ label: 'profiles.label' }} {...profiles} />
+                <Resource
+                    icon={PersonAddIcon}
+                    list={profiles.list}
+                    name="profiles"
+                    options={{ label: 'profiles.label' }}
+                    show={profiles.show}
+                />
                 <Resource
                     icon={PeopleIcon}
                     name="profiles/with-tandems-profiles"
@@ -84,12 +90,20 @@ const App = () => (
                     />
                 )}
                 {permissions.checkRoles([Role.MANAGER, Role.SUPER_ADMIN]) && (
-                    <Resource
-                        icon={PersonIcon}
-                        name="users/administrators"
-                        options={{ label: 'administrators.label' }}
-                        {...administrators}
-                    />
+                    <>
+                        <Resource
+                            icon={PersonIcon}
+                            name="users/administrators"
+                            options={{ label: 'administrators.label' }}
+                            {...administrators}
+                        />
+                        <Resource
+                            icon={PersonAddIcon}
+                            name="profiles"
+                            options={{ label: 'profiles.label' }}
+                            {...profiles}
+                        />
+                    </>
                 )}
                 {permissions.checkRole(Role.SUPER_ADMIN) && (
                     <>

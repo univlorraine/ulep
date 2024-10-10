@@ -11,6 +11,10 @@ class SocketIoAdapter implements SocketIoAdapterInterface {
         this.chatUrl = chatUrl;
     }
 
+    isConnected(): boolean {
+        return this.socket?.connected ?? false;
+    }
+
     connect(accessToken: string): void {
         if (this.socket && this.socket.connected) {
             return;
@@ -22,6 +26,10 @@ class SocketIoAdapter implements SocketIoAdapterInterface {
         if (this.socket && this.socket.connected) {
             this.socket.disconnect();
         }
+    }
+
+    onDisconnect(handler: () => void): void {
+        this.socket!.on('disconnect', handler);
     }
 
     emit(message: Message): Message {
@@ -60,6 +68,10 @@ class SocketIoAdapter implements SocketIoAdapterInterface {
 
     offMessage(): void {
         this.socket!.off('message');
+    }
+
+    offDisconnect(): void {
+        this.socket!.off('disconnect');
     }
 }
 

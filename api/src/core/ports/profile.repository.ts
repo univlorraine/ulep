@@ -1,5 +1,5 @@
 import { Collection, SortOrder, StringFilter } from '@app/common';
-import { Profile } from '../models';
+import { LearningType, Profile } from '../models';
 import { ProfileWithTandemsProfiles } from '../models/profileWithTandemsProfiles.model';
 
 export const PROFILE_REPOSITORY = 'profile.repository';
@@ -42,6 +42,7 @@ export interface ProfileWithTandemsProfilesQueryWhere {
     division?: string;
   };
   learningLanguage?: string;
+  learningType?: LearningType;
 }
 
 export interface ProfileQueryOrderBy {

@@ -45,6 +45,7 @@ import GetUniversityLanguagesUsecase from '../domain/usecases/GetUniversityLangu
 import GetUniversityUsecase from '../domain/usecases/GetUniversityUsecase';
 import GetUserUsecase from '../domain/usecases/GetUserUsecase';
 import LoginUsecase from '../domain/usecases/LoginUsecase';
+import RefreshTokensUsecase from '../domain/usecases/RefreshTokensUsecase';
 import ResetPasswordUsecase from '../domain/usecases/ResetPasswordUsecase';
 import RetrievePersonInfoUsecase from '../domain/usecases/RetrievePersonInfoUsecase';
 import RevokeSessionsUsecase from '../domain/usecases/RevokeSessionsUsecase';
@@ -111,6 +112,7 @@ const getConfigContextValue = ({
         logout
     );
 
+    const refreshTokensUsecase = new RefreshTokensUsecase(domainHttpAdapter);
     const addDevice = new AddDeviceUsecase(domainHttpAdapter);
     const askForAccountDeletion = new AskForAccountDeletion(domainHttpAdapter);
     const askForLanguage = new AskForLanguageUsecase(domainHttpAdapter);
@@ -234,6 +236,7 @@ const getConfigContextValue = ({
         getTokenFromCodeUsecase,
         getInitialUrlUsecase,
         revokeSessionsUsecase,
+        refreshTokensUsecase,
         createVocabulary,
         updateVocabulary,
         deleteVocabulary,
