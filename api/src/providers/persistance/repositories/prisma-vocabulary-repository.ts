@@ -97,7 +97,6 @@ export class PrismaVocabularyRepository implements VocabularyRepository {
     where?: VocabularyQueryWhere,
     pagination?: VocabularyPagination,
   ): Promise<Vocabulary[]> {
-    const search = where?.search?.toLowerCase();
     const vocabulary = await this.prisma.vocabulary.findMany({
       where: {
         AND: [
@@ -106,12 +105,14 @@ export class PrismaVocabularyRepository implements VocabularyRepository {
             OR: [
               {
                 word: {
-                  contains: search,
+                  contains: where?.search,
+                  mode: 'insensitive',
                 },
               },
               {
                 translation: {
-                  contains: search,
+                  contains: where?.search,
+                  mode: 'insensitive',
                 },
               },
             ],

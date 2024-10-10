@@ -137,7 +137,7 @@ const VocabularyContent: React.FC<VocabularyContentProps> = ({
                         </IonButton>
                     </div>
                 )}
-                {!isLoading && vocabularyPairs.length > 0 && (
+                {!isLoading && (vocabularyPairs.length > 0 || search) && (
                     <IonSearchbar
                         placeholder={t('vocabulary.pair.search') as string}
                         onIonChange={(e) => onSearchChange(e.detail.value as string)}
