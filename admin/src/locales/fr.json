@@ -320,7 +320,7 @@
                 "university": "Université",
                 "status": "Statut",
                 "title": "Titre",
-                "language": "Available language"
+                "language": "Langue disponible"
             }
         }
     },
@@ -578,7 +578,9 @@
         "drag_drop_file": "Glissez et déposez un %{fileType} ou",
         "drop_file": "Déposer le fichier ici",
         "select_file": "Choisissez un %{fileType}",
-        "file": "fichier"
+        "file": "fichier",
+        "maxSize": "Taille maximale de %{maxSize} MB",
+        "maxSizeError": "La taille maximale de l'image est de %{maxSize} MB"
     },
     "users": {
         "searchEmail": "Chercher par email",

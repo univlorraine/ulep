@@ -240,7 +240,7 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                         </Box>
                     </TabbedForm.Tab>
 
-                    {translations?.map((translation) => (
+                    {translations?.map((translation, index) => (
                         <TabbedForm.Tab
                             key={translation.languageCode}
                             label={translation.languageCode}
@@ -249,11 +249,11 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                             <Box sx={{ display: 'flex', width: '100%', justifyContent: 'flex-end' }}>
                                 <Button
                                     onClick={() => {
-                                        const filteredTranslation = translations?.filter(
+                                        const filteredTranslations = translations?.filter(
                                             (originalTranslation) =>
                                                 translation.languageCode !== originalTranslation.languageCode
                                         );
-                                        setTranslations(filteredTranslation);
+                                        setTranslations(filteredTranslations);
                                     }}
                                     variant="outlined"
                                 >
@@ -269,18 +269,9 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                                     <OutlinedInput
                                         name="Title"
                                         onChange={(e: any) => {
-                                            const filteredTranslation = translations?.filter(
-                                                (originalTranslation) =>
-                                                    translation.languageCode !== originalTranslation.languageCode
-                                            );
-                                            setTranslations([
-                                                ...filteredTranslation,
-                                                {
-                                                    languageCode: translation.languageCode,
-                                                    title: e.target.value,
-                                                    content: translation.content,
-                                                },
-                                            ]);
+                                            const newTranslations = [...translations];
+                                            newTranslations[index].title = e.target.value;
+                                            setTranslations([...translations]);
                                         }}
                                         placeholder="Title"
                                         type="text"
@@ -295,18 +286,9 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                                 <RichTextInput
                                     defaultValue={translation.content || ''}
                                     onChange={(e: any) => {
-                                        const filteredTranslation = translations?.filter(
-                                            (originalTranslation) =>
-                                                translation.languageCode !== originalTranslation.languageCode
-                                        );
-                                        setTranslations([
-                                            ...filteredTranslation,
-                                            {
-                                                languageCode: translation.languageCode,
-                                                title: translation.title,
-                                                content: e,
-                                            },
-                                        ]);
+                                        const newTranslations = [...translations];
+                                        newTranslations[index].content = e;
+                                        setTranslations(newTranslations);
                                     }}
                                     source={translation.languageCode}
                                     fullWidth
