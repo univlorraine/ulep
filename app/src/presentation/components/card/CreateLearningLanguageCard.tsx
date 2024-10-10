@@ -11,7 +11,7 @@ const CreateLearningLanguageCard: React.FC<CreateLearningLanguageCard> = ({ onPr
     return (
         <div className={styles.container}>
             <p className={styles.title}>{t('create_learning_language.title')}</p>
-            <IonButton className={`primary-button`} fill="clear" onClick={onPress}>
+            <IonButton className={`primary-button no-padding`} fill="clear" onClick={onPress}>
                 {t('create_learning_language.button')}
             </IonButton>
         </div>
