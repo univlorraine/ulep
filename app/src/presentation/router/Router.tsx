@@ -56,6 +56,7 @@ import SuspendedPage from '../pages/SuspendedPage';
 import VocabularyListPage from '../pages/VocabularyListPage';
 import VocabularyPage from '../pages/VocabularyPage';
 import WelcomePage from '../pages/WelcomePage';
+import EndSessionPage from '../pages/mobile/EndSessionPage';
 import { HYBRID_MAX_WIDTH } from '../utils';
 import BottomBar from './BottomBar';
 import MobileRoute from './MobileRoute';
@@ -138,6 +139,9 @@ const OfflineRouter: React.FC = () => {
                 </MobileRoute>
                 <MobileRoute exact path={'/update-session'}>
                     <UpdateSessionPage />
+                </MobileRoute>
+                <MobileRoute exact path={'/end-session'}>
+                    <EndSessionPage />
                 </MobileRoute>
                 <PrivateRoute exact path="/jitsi">
                     <JitsiPage />

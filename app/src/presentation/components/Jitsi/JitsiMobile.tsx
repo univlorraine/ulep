@@ -46,7 +46,7 @@ const JitsiMobile = ({ jitsiUrl, roomName, jitsiToken }: JitsiProps) => {
             window.removeEventListener('onConferenceLeft', onJitsiUnloaded);
         }
 
-        history.push('/home');
+        history.push('/end-session');
     };
 
     useEffect(() => {
