@@ -108,7 +108,12 @@ const SessionCard: React.FC<SessionCardProps> = ({
         }
 
         if (session.startAt.toDateString() === new Date().toDateString()) {
-            return <JoinSessionButton tandem={tandem} />;
+            return (
+                <>
+                    <JoinSessionButton tandem={tandem} />
+                    <ShowSessionButton session={session} tandem={tandem} onShowSessionPressed={onShowSessionPressed} />
+                </>
+            );
         }
 
         if (session.cancelledAt !== null) {
