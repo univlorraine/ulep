@@ -222,6 +222,9 @@ export class PrismaActivityRepository implements ActivityRepository {
         ? (props.pagination.page - 1) * props.pagination.limit
         : 0,
       take: props.pagination?.limit,
+      orderBy: {
+        updated_at: 'desc',
+      },
       ...ActivityWithThemeWithCategoryRelations,
     });
 
@@ -267,7 +270,7 @@ export class PrismaActivityRepository implements ActivityRepository {
       return null;
     }
 
-    return activityWithCategoryMapper(activity as any); // Typescript seems to wrongly infers the type of activity returned by prisma
+    return activityWithCategoryMapper(activity);
   }
 
   async ofThemeId(themeId: string): Promise<ActivityTheme> {

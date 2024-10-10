@@ -2,38 +2,25 @@ import * as Swagger from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import {
   ActivityExerciseResponse,
+  ActivityResponse,
   ActivityThemeCategoryResponse,
+  ActivityThemeResponse,
   ActivityVocabularyResponse,
   LanguageResponse,
   ProfileResponse,
   UniversityResponse,
 } from 'src/api/dtos';
 import { OGResponse } from 'src/api/dtos/chat';
-import { MediaObjectResponse } from 'src/api/dtos/medias';
-import {
-  TextContentResponse,
-  textContentTranslationResponse,
-} from 'src/api/dtos/text-content';
-import {
-  Activity,
-  ActivityStatus,
-  ActivityTheme,
-} from 'src/core/models/activity.model';
+import { textContentTranslationResponse } from 'src/api/dtos/text-content';
+import { Activity, ActivityTheme } from 'src/core/models/activity.model';
 
-export class ActivityThemeWithCategoryResponse {
-  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
-  @Expose({ groups: ['read'] })
-  id: string;
-
-  @Swagger.ApiProperty({ type: () => TextContentResponse })
-  @Expose({ groups: ['read'] })
-  content: string;
-
+export class ActivityThemeWithCategoryResponse extends ActivityThemeResponse {
   @Swagger.ApiProperty({ type: () => ActivityThemeCategoryResponse })
   @Expose({ groups: ['read'] })
   category: ActivityThemeCategoryResponse;
 
   constructor(partial: Partial<ActivityThemeWithCategoryResponse>) {
+    super(partial);
     Object.assign(this, partial);
   }
 
@@ -52,72 +39,13 @@ export class ActivityThemeWithCategoryResponse {
   }
 }
 
-export class ActivityWithThemeCategoryResponse {
-  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
-  @Expose({ groups: ['read'] })
-  id: string;
-
-  @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['read'] })
-  title: string;
-
-  @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['read'] })
-  description: string;
-
-  @Swagger.ApiProperty({ type: () => ProfileResponse })
-  @Expose({ groups: ['read'] })
-  creator?: ProfileResponse;
-
-  @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['read'] })
-  university: UniversityResponse;
-
-  @Swagger.ApiProperty({ type: () => MediaObjectResponse })
-  @Expose({ groups: ['read'] })
-  status: ActivityStatus;
-
-  @Swagger.ApiProperty({ type: () => LanguageResponse })
-  @Expose({ groups: ['read'] })
-  language?: LanguageResponse;
-
-  @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['read'] })
-  languageLevel?: string;
-
-  @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['read'] })
-  imageUrl?: string;
-
-  @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['read'] })
-  creditImage?: string;
-
-  @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['read'] })
-  ressourceUrl?: string;
-
-  @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['read'] })
-  ressourceFileUrl?: string;
-
+export class ActivityWithThemeCategoryResponse extends ActivityResponse {
   @Swagger.ApiProperty({ type: () => ActivityThemeWithCategoryResponse })
   @Expose({ groups: ['read'] })
   theme: ActivityThemeWithCategoryResponse;
 
-  @Swagger.ApiProperty({ type: () => ActivityVocabularyResponse })
-  @Expose({ groups: ['read'] })
-  vocabularies: ActivityVocabularyResponse[];
-
-  @Swagger.ApiProperty({ type: () => ActivityExerciseResponse })
-  @Expose({ groups: ['read'] })
-  exercises: ActivityExerciseResponse[];
-
-  @Swagger.ApiProperty({ type: () => OGResponse })
-  @Expose({ groups: ['read'] })
-  ressourceOgUrl?: OGResponse;
-
   constructor(partial: Partial<ActivityWithThemeCategoryResponse>) {
+    super(partial);
     Object.assign(this, partial);
   }
 

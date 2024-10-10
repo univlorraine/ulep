@@ -650,7 +650,13 @@
     "uploader": {
         "drag_drop": "Drag and drop your image or",
         "drop_image": "Drop iamge here",
-        "select_image": "Select an image"
+        "select_image": "Select an image",
+        "drag_drop_file": "Drag and drop a %{fileType} or",
+        "drop_file": "Drop file here",
+        "select_file": "Choose a %{fileType}",
+        "file": "file",
+        "maxSize": "Maximum size of %{maxSize} MB",
+        "maxSizeError": "The maximum size of the image is %{maxSize} MB"
     },
     "users": {
         "searchEmail": "Search email",

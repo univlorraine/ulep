@@ -1,7 +1,7 @@
 import { useUpdate, useNotify, useRedirect, useTranslate, Edit } from 'react-admin';
 import ActivityForm from '../../components/form/ActivityForm';
 import PageTitle from '../../components/PageTitle';
-import { ActivityVocabulary } from '../../entities/Activity';
+import { ActivityExercise, ActivityVocabulary } from '../../entities/Activity';
 
 const EditActivity = () => {
     const translate = useTranslate();
@@ -9,7 +9,23 @@ const EditActivity = () => {
     const redirect = useRedirect();
     const [update] = useUpdate();
 
-    const handleSubmit = async (payload: any) => {
+    type handleUpdateSubmitPayload = {
+        id: string;
+        title: string;
+        description: string;
+        image?: File | string;
+        creditImage?: string;
+        language: string;
+        languageLevel: string;
+        themeId: string;
+        ressourceUrl?: string;
+        resourceFile?: File | string;
+        universityId: string;
+        exercises: ActivityExercise[];
+        vocabularies: ActivityVocabulary[];
+    };
+
+    const handleSubmit = async (payload: handleUpdateSubmitPayload) => {
         const vocabulariesFiles: File[] = [];
         payload.vocabularies?.forEach((vocabulary: ActivityVocabulary) => {
             if (vocabulary.file) {
@@ -25,11 +41,8 @@ const EditActivity = () => {
         formData.append('title', payload.title);
         formData.append('description', payload.description);
         formData.append('languageLevel', payload.languageLevel);
-        formData.append('languageCode', payload.languageCode);
+        formData.append('languageCode', payload.language);
         formData.append('themeId', payload.themeId);
-        if (payload.image) formData.append('image', payload.image);
-        if (payload.creditImage) formData.append('creditImage', payload.creditImage);
-        if (payload.ressourceUrl) formData.append('ressourceUrl', payload.ressourceUrl);
         payload.exercises.forEach((exercise: any, index: number) => {
             formData.append(`exercises[${index}][content]`, exercise.content);
             formData.append(`exercises[${index}][order]`, exercise.order);
@@ -46,8 +59,10 @@ const EditActivity = () => {
         vocabulariesFiles?.forEach((vocabularyFile: File, index: number) => {
             formData.append(`vocabulariesFiles[${index}]`, vocabularyFile);
         });
+        if (payload.image) formData.append('image', payload.image);
+        if (payload.creditImage) formData.append('creditImage', payload.creditImage);
+        if (payload.ressourceUrl) formData.append('ressourceUrl', payload.ressourceUrl);
         if (payload.resourceFile) formData.append('ressource', payload.resourceFile);
-        if (payload.profileId) formData.append('profileId', payload.profileId);
 
         try {
             return await update(

@@ -31,12 +31,7 @@ const Filters = (props: any) => {
             perPage: 9999,
         },
     });
-    const { data: categories } = useGetList('activities/categories', {
-        pagination: {
-            page: 1,
-            perPage: 9999,
-        },
-    });
+    const { data: categories } = useGetList('activities/categories');
 
     if (isLoadingIdentity || !identity || !categories || !universities || !languages) {
         return <Loading />;

@@ -1,12 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import {
-  ACTIVITY_REPOSITORY,
   ActivityRepository,
+  ACTIVITY_REPOSITORY,
 } from 'src/core/ports/activity.repository';
 import {
-  STORAGE_INTERFACE,
   StorageInterface,
+  STORAGE_INTERFACE,
 } from 'src/core/ports/storage.interface';
 
 @Injectable()
@@ -20,8 +20,6 @@ export class GetActivityUsecase {
 
   async execute(id: string) {
     const activity = await this.activityRepository.ofId(id);
-
-    console.log({ activity });
 
     if (!activity) {
       throw new RessourceDoesNotExist();

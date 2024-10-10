@@ -3,16 +3,16 @@ import { UnauthorizedOperation } from 'src/core/errors';
 import { ActivityVocabulary } from 'src/core/models/activity.model';
 import { MediaObject } from 'src/core/models/media.model';
 import {
-  ACTIVITY_REPOSITORY,
   ActivityRepository,
+  ACTIVITY_REPOSITORY,
 } from 'src/core/ports/activity.repository';
 import {
-  MEDIA_OBJECT_REPOSITORY,
   MediaObjectRepository,
+  MEDIA_OBJECT_REPOSITORY,
 } from 'src/core/ports/media-object.repository';
 import {
-  STORAGE_INTERFACE,
   StorageInterface,
+  STORAGE_INTERFACE,
 } from '../../ports/storage.interface';
 
 export class DeleteAudioVocabularyActivityCommand {
@@ -40,8 +40,6 @@ export class DeleteAudioVocabularyActivityUsecase {
         vocabulary.pronunciationActivityVocabulary,
       );
     }
-
-    await this.activityRepository.deleteVocabulary(command.vocabularyId);
   }
 
   private async tryToFindTheVocabularyOfId(

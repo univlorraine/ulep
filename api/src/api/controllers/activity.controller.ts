@@ -175,8 +175,6 @@ export class ActivityController {
     @UploadedFiles()
     files?: Express.Multer.File[],
   ) {
-    console.log({ files });
-
     //TODO: Add Pipe files validators
     const vocabulariesWithFiles = body.vocabularies?.map((vocabulary) => ({
       content: vocabulary,
@@ -332,8 +330,8 @@ export class ActivityController {
   ) {
     const activityThemes = await this.getAllActivityThemesUsecase.execute({
       pagination: {
-        page: query.page,
-        limit: query.limit,
+        page: query?.page,
+        limit: query?.limit,
       },
     });
 
@@ -351,8 +349,6 @@ export class ActivityController {
   @Swagger.ApiOkResponse({ type: () => ActivityWithThemeCategoryResponse })
   async getActivity(@Param('id') id: string) {
     const activity = await this.getActivityUsecase.execute(id);
-
-    console.log({ activity });
 
     return ActivityWithThemeCategoryResponse.from(activity);
   }
@@ -392,8 +388,6 @@ export class ActivityController {
     @UploadedFiles()
     files?: Express.Multer.File[],
   ) {
-    console.log({ body });
-
     const vocabulariesWithFiles = body.vocabularies?.map((vocabulary) => ({
       id: vocabulary.id,
       content: vocabulary.content,

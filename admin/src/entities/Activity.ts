@@ -12,13 +12,13 @@ export type Activity = {
     title: string;
     description: string;
     image: MediaObject;
-    creditImage: string;
+    creditImage?: string;
     imageUrl: string;
     language: Language;
     languageLevel: ProficiencyLevel;
     theme: ActivityTheme;
-    ressourceUrl: string;
-    ressourceFileUrl: string;
+    ressourceUrl?: string;
+    ressourceFileUrl?: string;
     exercises: ActivityExercise[];
     vocabularies: ActivityVocabulary[];
 };

@@ -610,7 +610,7 @@ model Activity {
   RessourceFile MediaObjects? @relation("RessourceFile", fields: [ressource_file_id], references: [id])
   LanguageCode LanguageCodes @relation(fields: [language_code_id], references: [id])
   Creator Profiles? @relation(fields: [creator_id], references: [id])
-  University Organizations? @relation(fields: [university_id], references: [id])
+  University Organizations @relation(fields: [university_id], references: [id])
   ActivityVocabulary ActivityVocabulary[]
   ActivityExercises ActivityExercises[]
   ActivityThemes ActivityThemes @relation(fields: [activity_theme_id], references: [id], onDelete: Cascade)

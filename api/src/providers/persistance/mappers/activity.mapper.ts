@@ -127,13 +127,40 @@ export const activityThemeCategoryMapper = (
   });
 };
 
+export const ActivityThemeCategoryOnlyInclude =
+  Prisma.validator<Prisma.ActivityThemeCategoriesInclude>()({
+    TextContent: TextContentRelations,
+  });
+
+export const ActivityThemeCategoryOnlyRelations = {
+  include: ActivityThemeCategoryOnlyInclude,
+};
+
+export type ActivityThemeCategoryOnlySnapshot =
+  Prisma.ActivityThemeCategoriesGetPayload<
+    typeof ActivityThemeCategoryOnlyRelations
+  >;
+
+export const activityThemeCategoryOnlyMapper = (
+  snapshot: ActivityThemeCategoryOnlySnapshot,
+): ActivityThemeCategory => {
+  return new ActivityThemeCategory({
+    id: snapshot.id,
+    content: textContentMapper(snapshot.TextContent),
+    createdAt: snapshot.created_at,
+    updatedAt: snapshot.updated_at,
+  });
+};
+
 export const activityThemeWithCategoryMapper = (
-  snapshot: ActivityThemeSnapshot & { Category: ActivityThemeCategorySnapshot },
+  snapshot: ActivityThemeSnapshot & {
+    Category: ActivityThemeCategoryOnlySnapshot;
+  },
 ): ActivityTheme => {
   return new ActivityTheme({
     id: snapshot.id,
     content: textContentMapper(snapshot.TextContent),
-    category: activityThemeCategoryMapper(snapshot.Category),
+    category: activityThemeCategoryOnlyMapper(snapshot.Category),
     createdAt: snapshot.created_at,
     updatedAt: snapshot.updated_at,
   });
@@ -217,12 +244,11 @@ export const ActivityWithThemeWithCategoryRelations = {
   include: ActivityWithThemeWithCategoryInclude,
 };
 
+export type ActivityWithThemeWithCategoryRelationsSnapshot =
+  Prisma.ActivityGetPayload<typeof ActivityWithThemeWithCategoryRelations>;
+
 export const activityWithCategoryMapper = (
-  snapshot: ActivitySnapshot & {
-    ActivityThemes: ActivityThemeSnapshot & {
-      Category: ActivityThemeCategorySnapshot;
-    };
-  },
+  snapshot: ActivityWithThemeWithCategoryRelationsSnapshot,
 ): Activity => {
   return new Activity({
     id: snapshot.id,

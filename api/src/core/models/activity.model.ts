@@ -134,7 +134,7 @@ export class ActivityTheme {
 interface ActivityThemeCategoryProps {
   id: string;
   content: TextContent;
-  themes: ActivityTheme[];
+  themes?: ActivityTheme[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -142,7 +142,7 @@ interface ActivityThemeCategoryProps {
 export class ActivityThemeCategory {
   readonly id: string;
   readonly content: TextContent;
-  readonly themes: ActivityTheme[];
+  readonly themes?: ActivityTheme[];
   readonly createdAt: Date;
   readonly updatedAt: Date;
 

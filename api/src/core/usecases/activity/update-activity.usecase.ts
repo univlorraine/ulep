@@ -15,10 +15,7 @@ import {
   LanguageRepository,
   LANGUAGE_REPOSITORY,
 } from 'src/core/ports/language.repository';
-import {
-  StorageInterface,
-  STORAGE_INTERFACE,
-} from 'src/core/ports/storage.interface';
+import { STORAGE_INTERFACE } from 'src/core/ports/storage.interface';
 import {
   DeleteAudioVocabularyActivityUsecase,
   UploadAudioVocabularyActivityUsecase,
@@ -128,8 +125,8 @@ export class UpdateActivityUsecase {
 
     for (const vocabulary of activity.activityVocabularies) {
       if (
-        vocabulary?.pronunciationActivityVocabulary &&
-        !vocabulary?.pronunciationActivityVocabularyUrl
+        vocabulary.pronunciationActivityVocabulary &&
+        !vocabulary.pronunciationActivityVocabularyUrl
       ) {
         const audioUrl = await this.storage.temporaryUrl(
           vocabulary.pronunciationActivityVocabulary.bucket,

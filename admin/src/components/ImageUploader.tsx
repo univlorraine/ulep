@@ -11,7 +11,12 @@ interface ImageUploaderProps {
     onImageSelect: (file: File) => void;
 }
 
-const ImageUploader: React.FC<ImageUploaderProps> = ({ source, imageUrl, maxSize = 1000000, onImageSelect }) => {
+const ImageUploader: React.FC<ImageUploaderProps> = ({
+    source,
+    imageUrl = 'imageURL',
+    maxSize = 1000000,
+    onImageSelect,
+}) => {
     const translate = useTranslate();
     const notify = useNotify();
     const [isDragOver, setDragOver] = useState<boolean>(false);
@@ -75,7 +80,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ source, imageUrl, maxSize
 
             {!source && !currentFile && (
                 <Button onClick={() => fileInputRef.current?.click()}>
-                    <ImageField source={imageUrl ?? 'imageURL'} />
+                    <ImageField source={imageUrl} />
                 </Button>
             )}
 

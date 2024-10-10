@@ -100,7 +100,6 @@ const customDataProvider = {
         return { data: result };
     },
     update: async (resource: string, params: UpdateParams) => {
-        console.log({ params });
         let url = `${process.env.REACT_APP_API_URL}/${resource}`;
         if (params.id) {
             url += `/${params.id}`;

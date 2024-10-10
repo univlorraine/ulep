@@ -1,22 +1,22 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import {
-  ACTIVITY_REPOSITORY,
   ActivityRepository,
+  ACTIVITY_REPOSITORY,
 } from 'src/core/ports/activity.repository';
 import {
-  DeleteAudioVocabularyActivityUsecase,
   DeleteImageActivityUsecase,
   DeleteMediaActivityUsecase,
 } from 'src/core/usecases/media';
+import { DeleteVocabularyActivityUsecase } from './delete-vocabulary-activity.usecase';
 
 @Injectable()
 export class DeleteActivityUsecase {
   constructor(
     @Inject(ACTIVITY_REPOSITORY)
     private readonly activityRepository: ActivityRepository,
-    @Inject(DeleteAudioVocabularyActivityUsecase)
-    private readonly deleteAudioVocabularyActivityUsecase: DeleteAudioVocabularyActivityUsecase,
+    @Inject(DeleteVocabularyActivityUsecase)
+    private readonly deleteVocabularyActivityUsecase: DeleteVocabularyActivityUsecase,
     @Inject(DeleteImageActivityUsecase)
     private readonly deleteImageActivityUsecase: DeleteImageActivityUsecase,
     @Inject(DeleteMediaActivityUsecase)
@@ -31,7 +31,7 @@ export class DeleteActivityUsecase {
 
     await Promise.all(
       activity.activityVocabularies.map(async (vocabulary) => {
-        await this.deleteAudioVocabularyActivityUsecase.execute({
+        await this.deleteVocabularyActivityUsecase.execute({
           vocabularyId: vocabulary.id,
         });
       }),
