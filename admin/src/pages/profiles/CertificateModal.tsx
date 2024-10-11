@@ -42,17 +42,17 @@ const CertificateModal = ({ profile }: { profile: Profile }) => {
                         if (!error) {
                             refresh();
 
-                            return notify('ra.notification.updated', { messageArgs: { smart_count: 1 } });
+                            return notify('certificates.success');
                         }
 
-                        return notify('administrators.update.error');
+                        return notify((error as Error)?.message ? (error as Error)?.message : 'certificates.error');
                     },
                 }
             );
         } catch (err) {
             console.error(err);
 
-            return notify('administrators.update.error');
+            return notify('certificates.error');
         }
     };
 

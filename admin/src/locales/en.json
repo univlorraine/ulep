@@ -759,6 +759,10 @@
     "universitiesPicker": {
         "error": "An error occured while fetching universities"
     },
+    "certificates": {
+        "error": "An error occured while generating the certificate",
+        "success": "The certificate has been generated successfully"
+    },
     "languages_code": {
         "aa": "Afar",
         "ab": "Abkhazian",
