@@ -79,6 +79,7 @@ import {
   GetActivityUsecase,
   GetAdministratorsUsecase,
   GetAdministratorUsecase,
+  GetAllActivitiesByAdminUsecase,
   GetAllActivityThemesUsecase,
   GetAllConversationsFromUserIdUsecase,
   GetCategoriesUsecase,
@@ -150,6 +151,7 @@ import {
   UploadNewsImageUsecase,
   UploadUniversityImageUsecase,
 } from './usecases';
+import { UpdateActivityStatusUsecase } from './usecases/activity/update-activity-status.usecase';
 import { GetJitsiTokenUsecase } from './usecases/jitsi/get-jitsi-token.usecase';
 import { DeleteLearningLanguageUsecase } from './usecases/learningLanguage/delete-learning-langugage.usecase';
 import { GetLearningLanguageTandemUsecase } from './usecases/learningLanguage/getLearningLanguageTandem.usecase';

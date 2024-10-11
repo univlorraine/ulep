@@ -122,6 +122,9 @@ const customDataProvider = {
                 method = 'POST';
                 url = `${process.env.REACT_APP_API_URL}/activities/${params.id}/update`;
                 break;
+            case 'activities/status':
+                url = `${process.env.REACT_APP_API_URL}/activities/${params.id}/status`;
+                break;
             default:
                 break;
         }

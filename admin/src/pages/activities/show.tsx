@@ -17,6 +17,7 @@ import {
     useRecordContext,
     useUpdate,
     useNotify,
+    useRefresh,
 } from 'react-admin';
 import ActivityStatusChips from '../../components/ActivityStatusChipsProps';
 import AudioLine from '../../components/chat/AudioLine';
@@ -36,35 +37,24 @@ const ActivityStatusComponent = () => {
     const translate = useTranslate();
     const [update] = useUpdate();
     const notify = useNotify();
+    const refresh = useRefresh();
 
-    const handlePublish = async () => {
-        try {
-            return await update('activities', { id: record.id, data: { status: ActivityStatus.PUBLISHED } });
-        } catch (err) {
-            console.error(err);
+    const handleChangeStatus = async (status: ActivityStatus) => {
+        await update(
+            'activities/status',
+            { id: record.id, data: { status } },
+            {
+                onSettled: (_, error: unknown) => {
+                    if (!error) {
+                        return refresh();
+                    }
 
-            return notify('activities.error.update');
-        }
-    };
-
-    const handleRefuse = async () => {
-        try {
-            return await update('activities', { id: record.id, data: { status: ActivityStatus.REJECTED } });
-        } catch (err) {
-            console.error(err);
-
-            return notify('activities.error.update');
-        }
-    };
-
-    const handleUnpublish = async () => {
-        try {
-            return await update('activities', { id: record.id, data: { status: ActivityStatus.DRAFT } });
-        } catch (err) {
-            console.error(err);
-
-            return notify('activities.error.update');
-        }
+                    return notify('activities.error.update', {
+                        type: 'error',
+                    });
+                },
+            }
+        );
     };
 
     return (
@@ -75,13 +65,13 @@ const ActivityStatusComponent = () => {
                     <Button
                         color="success"
                         label={translate('activities.show.actions.publish')}
-                        onClick={handlePublish}
+                        onClick={() => handleChangeStatus(ActivityStatus.PUBLISHED)}
                         variant="contained"
                     />
                     <Button
                         color="error"
                         label={translate('activities.show.actions.refuse')}
-                        onClick={handleRefuse}
+                        onClick={() => handleChangeStatus(ActivityStatus.REJECTED)}
                         variant="contained"
                     />
                 </Box>
@@ -91,7 +81,7 @@ const ActivityStatusComponent = () => {
                     <Button
                         color="info"
                         label={translate('activities.show.actions.unpublish')}
-                        onClick={handleUnpublish}
+                        onClick={() => handleChangeStatus(ActivityStatus.DRAFT)}
                         variant="contained"
                     />
                 </Box>
@@ -101,7 +91,7 @@ const ActivityStatusComponent = () => {
                     <Button
                         color="success"
                         label={translate('activities.show.actions.publish')}
-                        onClick={handlePublish}
+                        onClick={() => handleChangeStatus(ActivityStatus.PUBLISHED)}
                         variant="contained"
                     />
                 </Box>
@@ -144,11 +134,7 @@ const ActivityShow = () => {
                         <TextField label={translate('activities.show.mainInfos.title')} source="title" />
                         <ImageField label={translate('activities.show.mainInfos.image')} source="imageUrl" />
                         <TextField label={translate('activities.show.mainInfos.credit')} source="creditImage" />
-                        <TextField
-                            label={translate('activities.show.mainInfos.description')}
-                            source="description"
-                            multiline
-                        />
+                        <TextField label={translate('activities.show.mainInfos.description')} source="description" />
                         <TextField label={translate('activities.show.mainInfos.level')} source="languageLevel" />
                         <FunctionField
                             label={translate('activities.show.mainInfos.language')}

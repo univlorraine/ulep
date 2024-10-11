@@ -58,25 +58,21 @@ const CreateActivity = () => {
         if (payload.ressourceUrl) formData.append('ressourceUrl', payload.ressourceUrl);
         if (payload.resourceFile) formData.append('ressource', payload.resourceFile);
 
-        try {
-            return await create(
-                'activities',
-                { data: formData },
-                {
-                    onSettled: (_, error: unknown) => {
-                        if (!error) {
-                            return redirect('/activities');
-                        }
+        await create(
+            'activities',
+            { data: formData },
+            {
+                onSettled: (_, error: unknown) => {
+                    if (!error) {
+                        return redirect('/activities');
+                    }
 
-                        return notify('activities.create.error');
-                    },
-                }
-            );
-        } catch (err) {
-            console.error(err);
-
-            return notify('activities.create.error');
-        }
+                    return notify('activities.create.error', {
+                        type: 'error',
+                    });
+                },
+            }
+        );
     };
 
     return (

@@ -64,25 +64,21 @@ const EditActivity = () => {
         if (payload.ressourceUrl) formData.append('ressourceUrl', payload.ressourceUrl);
         if (payload.resourceFile) formData.append('ressource', payload.resourceFile);
 
-        try {
-            return await update(
-                'activities',
-                { id: payload.id, data: formData },
-                {
-                    onSettled: (_, error: unknown) => {
-                        if (!error) {
-                            return redirect('/activities');
-                        }
+        await update(
+            'activities',
+            { id: payload.id, data: formData },
+            {
+                onSettled: (_, error: unknown) => {
+                    if (!error) {
+                        return redirect('/activities');
+                    }
 
-                        return notify('activities.error.update');
-                    },
-                }
-            );
-        } catch (err) {
-            console.error(err);
-
-            return notify('activities.error.update');
-        }
+                    return notify('activities.error.update', {
+                        type: 'error',
+                    });
+                },
+            }
+        );
     };
 
     return (

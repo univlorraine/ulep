@@ -15,7 +15,10 @@ import {
   LanguageRepository,
   LANGUAGE_REPOSITORY,
 } from 'src/core/ports/language.repository';
-import { STORAGE_INTERFACE } from 'src/core/ports/storage.interface';
+import {
+  StorageInterface,
+  STORAGE_INTERFACE,
+} from 'src/core/ports/storage.interface';
 import {
   DeleteAudioVocabularyActivityUsecase,
   UploadAudioVocabularyActivityUsecase,

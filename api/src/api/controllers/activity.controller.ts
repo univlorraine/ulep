@@ -48,6 +48,7 @@ import {
   GetActivityThemeCategoryUsecase,
   GetActivityThemeUsecase,
   GetActivityUsecase,
+  GetAllActivitiesByAdminUsecase,
   GetAllActivityThemesUsecase,
   UpdateActivityThemeCategoryUsecase,
   UpdateActivityThemeUsecase,
@@ -55,6 +56,7 @@ import {
   UploadImageActivityUsecase,
   UploadMediaActivityUsecase,
 } from 'src/core/usecases';
+import { UpdateActivityStatusUsecase } from 'src/core/usecases/activity/update-activity-status.usecase';
 import { ActivityWithThemeCategoryResponse } from '../dtos/activity/activity-with-theme-category.response';
 import { GetActivitiesByAdminRequest } from '../dtos/activity/get-activities-by-admin.request';
 import { GetActivitiesCategoriesRequest } from '../dtos/activity/get-activity-categories.request';
@@ -362,18 +364,21 @@ export class ActivityController {
     await this.deleteActivityUsecase.execute(id);
   }
 
-  @Put(':id/update')
+  @Put(':id/status')
   @UseGuards(AuthenticationGuard)
   @UseInterceptors(AnyFilesInterceptor())
   @Swagger.ApiOperation({ summary: 'Update a Activity status ressource.' })
+  @Swagger.ApiOkResponse({ type: () => ActivityResponse })
   async updateActivityStatus(
     @Param('id') id: string,
     @Body() body: UpdateActivityStatusRequest,
   ) {
-    await this.updateActivityStatusUsecase.execute({
+    const activity = await this.updateActivityStatusUsecase.execute({
       id,
       ...body,
     });
+
+    return ActivityResponse.from(activity);
   }
 
   @Post(':id/update')
