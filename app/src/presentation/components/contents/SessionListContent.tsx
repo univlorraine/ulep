@@ -1,9 +1,10 @@
-import { IonButton, IonIcon, IonImg, IonPage } from '@ionic/react';
+import { IonButton, IonImg, IonPage } from '@ionic/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { AddSvg, LeftChevronSvg } from '../../../assets';
+import { AddSvg } from '../../../assets';
 import Session from '../../../domain/entities/Session';
 import Tandem from '../../../domain/entities/Tandem';
+import HeaderSubContent from '../HeaderSubContent';
 import SelectTandemModal from '../modals/SelectTandemModal';
 import SessionList from '../sessions/SessionList';
 import styles from './SessionListContent.module.css';
@@ -40,19 +41,10 @@ const Content: React.FC<SessionListContentProps> = ({
 
     return (
         <div className={`${styles.container} subcontent-container content-wrapper`}>
-            <div className={styles.header}>
-                {goBack && (
-                    <IonButton
-                        fill="clear"
-                        onClick={goBack}
-                        aria-label={t('chat.conversation_menu.return_to_conversations_aria_label') as string}
-                        className={styles.back_button}
-                    >
-                        <IonIcon icon={LeftChevronSvg} size="medium" aria-hidden="true" />
-                    </IonButton>
-                )}
-                <h2 className={styles.title}>{t('session.list.title', { count: sessions.length })}</h2>
-            </div>
+            <HeaderSubContent
+                title={t('session.list.title', { count: sessions.length })}
+                onBackPressed={() => goBack?.()}
+            />
             <SessionList
                 tandems={tandems}
                 sessions={sessions}

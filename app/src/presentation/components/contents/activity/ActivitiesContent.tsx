@@ -11,6 +11,7 @@ import ActivityCard from '../../card/ActivityCard';
 import Loader from '../../Loader';
 import ActivityFilterModal from '../../modals/ActivityFilterModal';
 import styles from './ActivitiesContent.module.css';
+import HeaderSubContent from '../../HeaderSubContent';
 
 interface ActivitiesContentProps {
     themes: ActivityThemeCategory[];
@@ -148,15 +149,11 @@ export const ActivitiesContent: React.FC<ActivitiesContentProps> = ({
 
     const allFilters = allFiltersName();
     return (
-        <div className="subcontent-container content-wrapper" ref={contentRef}>
-            <div className="subcontent-header">
-                <IonButton fill="clear" onClick={onBackPressed}>
-                    <IonIcon icon={arrowBackOutline} color="dark" />
-                </IonButton>
-                <p className="subcontent-title">{t('activity.list.title')}</p>
-                <div />
-            </div>
-
+        <div className="subcontent-container content-wrapper" style={{ paddingTop: 0 }} ref={contentRef}>
+            <HeaderSubContent
+                title={t('activity.list.title')}
+                onBackPressed={onBackPressed}
+            />
             <div className="activity-list">
                 <IonSearchbar
                     placeholder={t('activity.list.search') as string}

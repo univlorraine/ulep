@@ -1,17 +1,18 @@
-import { IonButton, IonIcon, IonPage } from '@ionic/react';
+import { IonButton, IonPage } from '@ionic/react';
 import { formatInTimeZone } from 'date-fns-tz';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
-import { CancelledPng, LeftChevronSvg } from '../../../assets';
+import { CancelledPng } from '../../../assets';
+import { ReactComponent as Background } from '../../../assets/background.svg';
 import { useConfig } from '../../../context/ConfigurationContext';
 import Profile from '../../../domain/entities/Profile';
 import Session from '../../../domain/entities/Session';
 import Tandem from '../../../domain/entities/Tandem';
+import HeaderSubContent from '../HeaderSubContent';
+import ConfirmCancelSessionModal from '../modals/ConfirmCancelSessionModal';
 import DateFormatted from '../sessions/DateFormatted';
 import styles from './ShowSessionContent.module.css';
-import ConfirmCancelSessionModal from '../modals/ConfirmCancelSessionModal';
-import { useState } from 'react';
-import { ReactComponent as Background } from '../../../assets/background.svg';
 
 interface ShowSessionContentProps {
     goBack?: () => void;
@@ -38,7 +39,7 @@ const Content: React.FC<ShowSessionContentProps> = ({
     const userTz = profile?.user?.university?.timezone;
     const partnerTz = tandem.partner?.user?.university?.timezone;
     const updateSession = () => onUpdateSessionPressed(session, tandem);
-    
+
     const handleCancelSession = async (comment: string) => {
         await cancelSession.execute({
             id: session.id,
@@ -60,22 +61,15 @@ const Content: React.FC<ShowSessionContentProps> = ({
             {confirmCreation ? (
                 <div className={styles.confirm_header}>
                     <h1 className={styles.confirm_title}>{t('session.confirm_creation_title')}</h1>
-                    <p className={styles.confirm_message}>{t('session.confirm_creation_message', { name: tandem.partner?.user?.firstname })}</p>
+                    <p className={styles.confirm_message}>
+                        {t('session.confirm_creation_message', { name: tandem.partner?.user?.firstname })}
+                    </p>
                 </div>
             ) : (
-                <div className={styles.header}>
-                    {goBack && (
-                        <IonButton
-                            fill="clear"
-                            onClick={goBack}
-                            aria-label={t('chat.conversation_menu.return_to_conversations_aria_label') as string}
-                            className={styles.back_button}
-                        >
-                            <IonIcon icon={LeftChevronSvg} size="medium" aria-hidden="true" />
-                        </IonButton>
-                    )}
-                    <h1 className={styles.title}>{t('session.show_title', { name: tandem.partner?.user?.firstname })}</h1>
-                </div>
+                <HeaderSubContent
+                    title={t('session.show_title', { name: tandem.partner?.user?.firstname })}
+                    onBackPressed={() => goBack?.()}
+                />
             )}
             <div className={styles.show_session_content}>
                 {isSessionCancelled ? (
@@ -85,7 +79,9 @@ const Content: React.FC<ShowSessionContentProps> = ({
                             className={styles.background_image}
                             aria-hidden={true}
                         />
-                        <div className={styles.cancelled_icon}><img src={CancelledPng} alt="" aria-hidden="true" /></div>
+                        <div className={styles.cancelled_icon}>
+                            <img src={CancelledPng} alt="" aria-hidden="true" />
+                        </div>
                         <h3 className={styles.cancelled_title}>{t('session.cancel_title')}</h3>
                     </div>
                 ) : (
@@ -100,12 +96,18 @@ const Content: React.FC<ShowSessionContentProps> = ({
                         <div className={styles.line}>
                             <div className={styles.icon}>⏰</div>
                             <div className={styles.line_content}>
-                                <p>{formatInTimeZone(session.startAt, profile?.user?.university.timezone as string, 'HH:mm (zzzz, zzz)')}</p>
+                                <p>
+                                    {formatInTimeZone(
+                                        session.startAt,
+                                        profile?.user?.university.timezone as string,
+                                        'HH:mm (zzzz, zzz)'
+                                    )}
+                                </p>
                                 {userTz !== partnerTz && (
                                     <p className={styles.datetimeInfo}>
-                                        {t('session.time_for_partner', { name: tandem.partner?.user?.firstname})}
-                                        <strong> {formatInTimeZone(session.startAt, partnerTz, 'HH:mm')} </strong>
-                                        ({formatInTimeZone(session.startAt, partnerTz, 'zzzz, zzz')})
+                                        {t('session.time_for_partner', { name: tandem.partner?.user?.firstname })}
+                                        <strong> {formatInTimeZone(session.startAt, partnerTz, 'HH:mm')} </strong>(
+                                        {formatInTimeZone(session.startAt, partnerTz, 'zzzz, zzz')})
                                     </p>
                                 )}
                             </div>
@@ -115,9 +117,9 @@ const Content: React.FC<ShowSessionContentProps> = ({
                 {session.comment && (
                     <div className={styles.block}>
                         <h3 className={styles.block_title}>{t('session.comment')}</h3>
-                    <div className={styles.line}>
-                        <div className={styles.icon}>💬</div>
-                        <div className={styles.line_content}>
+                        <div className={styles.line}>
+                            <div className={styles.icon}>💬</div>
+                            <div className={styles.line_content}>
                                 <p>{session.comment}</p>
                             </div>
                         </div>
@@ -134,7 +136,11 @@ const Content: React.FC<ShowSessionContentProps> = ({
                         <IonButton fill="clear" className="primary-button" onClick={updateSession}>
                             {t('session.update_session_btn')}
                         </IonButton>
-                        <IonButton fill="clear" className="secondary-button" onClick={() => setIsCancelSessionModalVisible(true)}>
+                        <IonButton
+                            fill="clear"
+                            className="secondary-button"
+                            onClick={() => setIsCancelSessionModalVisible(true)}
+                        >
                             {t('session.cancel_session_btn')}
                         </IonButton>
                     </>
