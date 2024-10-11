@@ -1,6 +1,12 @@
+import { I18nService } from '@app/common';
+import { KeycloakClient } from '@app/keycloak';
 import { Inject, Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { formatInTimeZone } from 'date-fns-tz';
 import { PDFDocument } from 'pdf-lib';
+import { Env } from 'src/configuration';
 import { RessourceDoesNotExist } from 'src/core/errors';
+import { LearningLanguage, Tandem } from 'src/core/models';
 import {
   LearningLanguageRepository,
   LEARNING_LANGUAGE_REPOSITORY,
@@ -14,13 +20,6 @@ import {
   TANDEM_REPOSITORY,
 } from 'src/core/ports/tandem.repository';
 import { File as FileType } from '../../ports/storage.interface';
-
-import { I18nService } from '@app/common';
-import { KeycloakClient } from '@app/keycloak';
-import { ConfigService } from '@nestjs/config';
-import { formatInTimeZone } from 'date-fns-tz';
-import { Env } from 'src/configuration';
-import { LearningLanguage, Tandem } from 'src/core/models';
 
 export class GenerateCertificateCommand {
   learningJournal?: boolean;
@@ -70,6 +69,12 @@ export class GenerateCertificateUsecase {
     const certificateModel =
       learningLanguage.profile.user.university.defaultCertificateFile;
 
+    if (!certificateModel) {
+      throw new RessourceDoesNotExist(
+        `Certificate model does not exist for ${learningLanguage.profile.user.university.name}`,
+      );
+    }
+
     const readableStream = await this.storage.read(
       certificateModel.bucket,
       certificateModel.name,
@@ -117,8 +122,6 @@ export class GenerateCertificateUsecase {
 
     const form = pdfDoc.getForm();
 
-    console.log({ fileds: form.getFields().map((field) => field.getName()) });
-
     const tandemTypeField = form.getTextField('TandemType');
     tandemTypeField.setText(tandem.learningType);
 
@@ -164,17 +167,6 @@ export class GenerateCertificateUsecase {
       );
       contactNameField.setText(`${contact.firstName} ${contact.lastName}`);
     }
-
-    learningLanguage.profile.objectives.forEach((objective, index) => {
-      const objectiveField = form.getTextField(`GoalName${index + 1}`);
-      const translateCode =
-        learningLanguage.profile.user.university.nativeLanguage.code;
-      objectiveField.setText(
-        translateCode === 'fr'
-          ? objective.name.content
-          : objective.name.translations[translateCode],
-      );
-    });
 
     const learningJournalBooleanField = form.getTextField(
       'LearningJournalBoolean',
