@@ -171,15 +171,18 @@ export class GenerateCertificateUsecase {
     const learningJournalBooleanField = form.getTextField(
       'LearningJournalBoolean',
     );
+    // TODO: translate 'Oui' and 'Non' with i18n
     learningJournalBooleanField.setText(learningJournal ? 'Oui' : 'Non');
 
     const consultingInterviewBooleanField = form.getTextField(
       'ConsultingInterviewBoolean',
     );
+    // TODO: translate 'Oui' and 'Non' with i18n
     consultingInterviewBooleanField.setText(
       consultingInterview ? 'Oui' : 'Non',
     );
 
+    // TODO: Add visio time from learningLanguage.visioTime with learningJournal
     const visioTimeField = form.getTextField('VisioTime');
     visioTimeField.setText('50');
 

@@ -46,7 +46,7 @@ export class LearningLanguageController {
     private deleteLearningLanguageUsecase: DeleteLearningLanguageUsecase,
     private updateLearningLanguageUsecase: UpdateLearningLanguageUsecase,
     private generateCertificateUsecase: GenerateCertificateUsecase,
-    private uploadLearningLangugaeCertificateUsecase: UploadLearningLanguageCertificateUsecase,
+    private uploadLearningLanguageCertificateUsecase: UploadLearningLanguageCertificateUsecase,
   ) {}
 
   @Get()
@@ -178,7 +178,7 @@ export class LearningLanguageController {
   ): Promise<LearningLanguageResponse> {
     const certificate = await this.generateCertificateUsecase.execute(id, body);
 
-    await this.uploadLearningLangugaeCertificateUsecase.execute({
+    await this.uploadLearningLanguageCertificateUsecase.execute({
       id,
       file: certificate.file,
       language: certificate.language,
