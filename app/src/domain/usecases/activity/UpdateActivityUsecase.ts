@@ -1,14 +1,13 @@
 import { HttpResponse } from '../../../adapter/BaseHttpAdapter';
 import { HttpAdapterInterface } from '../../../adapter/DomainHttpAdapter';
 import { ActivityCommand, activityCommandToDomain } from '../../../command/ActivityCommand';
-import { Activity, ActivityStatus } from '../../entities/Activity';
+import { Activity } from '../../entities/Activity';
 import UpdateActivityUsecaseInterface, {
     UpdateActivityCommand,
 } from '../../interfaces/activity/UpdateActivityUsecase.interface';
 
 interface ActivityPayload {
     title?: string;
-    status?: ActivityStatus;
     description?: string;
     languageLevel?: string;
     languageCode?: string;
@@ -64,10 +63,6 @@ class UpdateActivityUsecase implements UpdateActivityUsecaseInterface {
                             : (formData.vocabulariesFiles = [newFile]);
                     }
                 });
-            }
-
-            if (command.status) {
-                formData.status = command.status;
             }
 
             if (command.ressource) {
