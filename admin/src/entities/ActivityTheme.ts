@@ -1,10 +1,10 @@
-import { ActivityThemeCategory } from './ActivityThemeCategory';
+import { ActivityThemeCategoryWithoutThemes } from './ActivityThemeCategoryWithoutThemes';
 import TextContent from './TextContent';
 import Translation from './Translation';
 
 export type ActivityTheme = {
     id: string;
-    category?: ActivityThemeCategory;
+    category?: ActivityThemeCategoryWithoutThemes;
     content: string;
     translations: Translation[];
 };
