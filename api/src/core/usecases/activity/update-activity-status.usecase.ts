@@ -13,7 +13,7 @@ import {
 
 export class UpdateActivityStatusCommand {
   id: string;
-  status?: ActivityStatus;
+  status: ActivityStatus;
 }
 
 @Injectable()
@@ -40,7 +40,7 @@ export class UpdateActivityStatusUsecase {
 
     const updatedActivity = await this.activityRepository.updateActivityStatus(
       command.id,
-      command.status || activity.status,
+      command.status,
     );
 
     await this.sendNotifications(updatedActivity, activity);

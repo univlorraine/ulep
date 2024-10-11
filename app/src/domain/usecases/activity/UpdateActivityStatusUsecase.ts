@@ -10,7 +10,7 @@ class UpdateActivityStatusUsecase implements UpdateActivityStatusUsecaseInterfac
         try {
 
             const httpResponse: HttpResponse<void> = await this.domainHttpAdapter.put(
-                `/activities/${id}`,
+                `/activities/${id}/update`,
                 { status }
             );
 

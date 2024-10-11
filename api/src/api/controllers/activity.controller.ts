@@ -341,7 +341,7 @@ export class ActivityController {
     await this.deleteActivityUsecase.execute(id);
   }
 
-  @Put(':id')
+  @Put(':id/update')
   @UseGuards(AuthenticationGuard)
   @UseInterceptors(AnyFilesInterceptor())
   @Swagger.ApiOperation({ summary: 'Update a Activity status ressource.' })
