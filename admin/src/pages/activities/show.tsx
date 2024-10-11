@@ -86,7 +86,7 @@ const ActivityStatusComponent = () => {
                     />
                 </Box>
             )}
-            {record?.status === ActivityStatus.DRAFT && (
+            {record?.status === ActivityStatus.DRAFT && !record?.creator && (
                 <Box display="flex" flexDirection="row" gap="10px">
                     <Button
                         color="success"
