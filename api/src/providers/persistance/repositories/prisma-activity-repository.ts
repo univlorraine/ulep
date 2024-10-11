@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import {
   Activity,
+  ActivityStatus,
   ActivityTheme,
   ActivityThemeCategory,
   ActivityVocabulary,
@@ -13,8 +14,8 @@ import {
   CreateActivityThemeCategoryProps,
   CreateActivityThemeProps,
   GetActivitiesProps,
-  UpdateActivityProps,
   GetAllActivityThemesProps,
+  UpdateActivityProps,
   UpdateActivityThemeCategoryProps,
   UpdateActivityThemeProps,
 } from 'src/core/ports/activity.repository';
@@ -423,7 +424,6 @@ export class PrismaActivityRepository implements ActivityRepository {
         credit_image: props.creditImage,
         metadata: props.metadata,
         ressource_url: props.ressourceUrl,
-        status: props.status,
         ...data,
         ActivityExercises: {
           deleteMany: {},
@@ -437,6 +437,25 @@ export class PrismaActivityRepository implements ActivityRepository {
 
     const updatedActivity = await this.prisma.activity.findUnique({
       where: { id: props.id },
+      ...ActivityRelations,
+    });
+
+    return activityMapper(updatedActivity);
+  }
+
+  async updateActivityStatus(
+    id: string,
+    status: ActivityStatus,
+  ): Promise<Activity> {
+    await this.prisma.activity.update({
+      where: { id },
+      data: {
+        status: status,
+      },
+    });
+
+    const updatedActivity = await this.prisma.activity.findUnique({
+      where: { id: id },
       ...ActivityRelations,
     });
 

@@ -72,7 +72,6 @@ export type UpdateActivityThemeProps = {
 
 export type UpdateActivityProps = {
   id: string;
-  status: ActivityStatus;
   title: string;
   description: string;
   themeId: string;
@@ -124,6 +123,7 @@ export interface ActivityRepository {
   deleteExercise(exerciseId: string): Promise<void>;
   deleteVocabulary(vocabularyId: string): Promise<void>;
   updateActivity(props: UpdateActivityProps): Promise<Activity>;
+  updateActivityStatus(id: string, status: ActivityStatus): Promise<Activity>;
   updateTheme(props: UpdateActivityThemeProps): Promise<ActivityTheme>;
   deleteCategoryTheme(id: string): Promise<void>;
   deleteTheme(id: string): Promise<void>;
