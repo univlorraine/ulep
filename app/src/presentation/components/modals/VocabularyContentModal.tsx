@@ -1,15 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useConfig } from '../../../context/ConfigurationContext';
 import Profile from '../../../domain/entities/Profile';
+import Tandem from '../../../domain/entities/Tandem';
 import Vocabulary from '../../../domain/entities/Vocabulary';
 import { CreateVocabularyListCommand } from '../../../domain/interfaces/vocabulary/CreateVocabularyListUsecase.interface';
 import useVocabulary from '../../hooks/useVocabulary';
+import ErrorPage from '../../pages/ErrorPage';
 import CreateOrUpdateVocabularyContent from '../contents/CreateOrUpdateVocabularyContent';
 import VocabularyContent from '../contents/VocabularyContent';
 import VocabularyListContent from '../contents/VocabularyListContent';
 import AddVocabularyListModal from './AddVocabularyListModal';
 import Modal from './Modal';
-import ShareVocabularyListModal from './ShareVocabularyListModale';
+import SelectTandemModal from './SelectTandemModal';
 
 interface VocabularyContentModalProps {
     isVisible: boolean;
@@ -22,10 +24,9 @@ const VocabularyContentModal: React.FC<VocabularyContentModalProps> = ({ isVisib
     const [vocabularySelected, setVocabularySelected] = useState<Vocabulary>();
     const [showAddVocabularyListModal, setShowAddVocabularyListModal] = useState(false);
     const [showShareVocabularyListModal, setShowShareVocabularyListModal] = useState(false);
-    const [profilesTandems, setProfilesTandems] = useState<Profile[]>([]);
+    const [tandems, setTandems] = useState<Tandem[]>([]);
     const [addContentMode, setAddContentMode] = useState(false);
 
-    //TODO: Handle error
     const {
         vocabularies,
         vocabularyLists,
@@ -81,8 +82,9 @@ const VocabularyContentModal: React.FC<VocabularyContentModalProps> = ({ isVisib
         setAddContentMode(false);
     };
 
-    const handleShareVocabularyList = async (profiles: Profile[]) => {
-        await onShareVocabularyList(profiles);
+    const handleShareVocabularyList = async (tandems: Tandem[]) => {
+        const tandemsWithProfile = tandems.filter((tandem) => tandem.partner !== undefined);
+        await onShareVocabularyList(tandemsWithProfile.map((tandem) => tandem.partner) as Profile[]);
         setShowShareVocabularyListModal(false);
     };
 
@@ -96,12 +98,16 @@ const VocabularyContentModal: React.FC<VocabularyContentModalProps> = ({ isVisib
             return [];
         }
 
-        setProfilesTandems(tandems.filter((tandem) => tandem.partner).map((tandem) => tandem.partner) as Profile[]);
+        setTandems(tandems);
     };
 
     useEffect(() => {
         getProfilesTandems();
     }, [profile]);
+
+    if (error) {
+        return <ErrorPage />;
+    }
 
     return (
         <Modal isVisible={isVisible} onClose={onClose} position="flex-end" hideWhiteBackground>
@@ -143,12 +149,14 @@ const VocabularyContentModal: React.FC<VocabularyContentModalProps> = ({ isVisib
                     onCreateVocabularyList={handleCreateVocabularyList}
                     profile={profile}
                 />
-                <ShareVocabularyListModal
+                <SelectTandemModal
                     isVisible={showShareVocabularyListModal}
                     onClose={() => setShowShareVocabularyListModal(false)}
-                    onShareVocabularyList={handleShareVocabularyList}
-                    tandemsProfiles={profilesTandems}
-                    vocabularyList={vocabularyListSelected}
+                    onSelectTandem={handleShareVocabularyList}
+                    selectedProfilesIds={vocabularyListSelected?.editorsIds}
+                    tandems={tandems}
+                    title="vocabulary.list.share.title"
+                    multiple
                 />
             </>
         </Modal>

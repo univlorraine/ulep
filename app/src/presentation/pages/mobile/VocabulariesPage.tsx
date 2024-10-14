@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Redirect, useHistory } from 'react-router';
 import { useConfig } from '../../../context/ConfigurationContext';
 import Profile from '../../../domain/entities/Profile';
+import Tandem from '../../../domain/entities/Tandem';
 import Vocabulary from '../../../domain/entities/Vocabulary';
 import { CreateVocabularyListCommand } from '../../../domain/interfaces/vocabulary/CreateVocabularyListUsecase.interface';
 import { useStoreState } from '../../../store/storeTypes';
@@ -10,7 +11,7 @@ import CreateOrUpdateVocabularyContent from '../../components/contents/CreateOrU
 import VocabularyContent from '../../components/contents/VocabularyContent';
 import VocabularyListContent from '../../components/contents/VocabularyListContent';
 import AddVocabularyListModal from '../../components/modals/AddVocabularyListModal';
-import ShareVocabularyListModal from '../../components/modals/ShareVocabularyListModale';
+import SelectTandemModal from '../../components/modals/SelectTandemModal';
 import useVocabulary from '../../hooks/useVocabulary';
 
 const VocabulariesPage = () => {
@@ -20,7 +21,7 @@ const VocabulariesPage = () => {
     const [vocabularySelected, setVocabularySelected] = useState<Vocabulary>();
     const [showAddVocabularyListModal, setShowAddVocabularyListModal] = useState(false);
     const [showShareVocabularyListModal, setShowShareVocabularyListModal] = useState(false);
-    const [profilesTandems, setProfilesTandems] = useState<Profile[]>([]);
+    const [tandems, setTandems] = useState<Tandem[]>([]);
     const [addContentMode, setAddContentMode] = useState(false);
 
     const {
@@ -78,8 +79,9 @@ const VocabulariesPage = () => {
         setAddContentMode(false);
     };
 
-    const handleShareVocabularyList = async (profiles: Profile[]) => {
-        await onShareVocabularyList(profiles);
+    const handleShareVocabularyList = async (tandems: Tandem[]) => {
+        const tandemsWithProfile = tandems.filter((tandem) => tandem.partner !== undefined);
+        await onShareVocabularyList(tandemsWithProfile.map((tandem) => tandem.partner) as Profile[]);
         setShowShareVocabularyListModal(false);
     };
 
@@ -93,7 +95,7 @@ const VocabulariesPage = () => {
             return [];
         }
 
-        setProfilesTandems(tandems.filter((tandem) => tandem.partner).map((tandem) => tandem.partner) as Profile[]);
+        setTandems(tandems);
     };
 
     useEffect(() => {
@@ -104,9 +106,9 @@ const VocabulariesPage = () => {
         return <Redirect to="/" />;
     }
 
-    const goBack = () => {
-        history.push('/learning');
-    };
+    if (error) {
+        return <Redirect to="/learning" />;
+    }
 
     return (
         <IonContent>
@@ -148,12 +150,14 @@ const VocabulariesPage = () => {
                     onCreateVocabularyList={handleCreateVocabularyList}
                     profile={profile}
                 />
-                <ShareVocabularyListModal
+                <SelectTandemModal
                     isVisible={showShareVocabularyListModal}
                     onClose={() => setShowShareVocabularyListModal(false)}
-                    onShareVocabularyList={handleShareVocabularyList}
-                    tandemsProfiles={profilesTandems}
-                    vocabularyList={vocabularyListSelected}
+                    onSelectTandem={handleShareVocabularyList}
+                    selectedProfilesIds={vocabularyListSelected?.editorsIds}
+                    tandems={tandems}
+                    title="vocabulary.list.share.title"
+                    multiple
                 />
             </>
         </IonContent>

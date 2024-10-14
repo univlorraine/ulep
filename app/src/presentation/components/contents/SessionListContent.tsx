@@ -34,8 +34,8 @@ const Content: React.FC<SessionListContentProps> = ({
         setShowSelectTandemModal(true);
     };
 
-    const onSelectTandem = (tandem: Tandem) => {
-        onCreateSessionPressed(tandem);
+    const onSelectTandem = (tandems: Tandem[]) => {
+        onCreateSessionPressed(tandems[0]);
         setShowSelectTandemModal(false);
     };
 
@@ -60,6 +60,7 @@ const Content: React.FC<SessionListContentProps> = ({
                 isVisible={showSelectTandemModal}
                 onClose={() => setShowSelectTandemModal(false)}
                 onSelectTandem={onSelectTandem}
+                title="session.select_partner_title"
                 tandems={tandems}
             />
         </div>
