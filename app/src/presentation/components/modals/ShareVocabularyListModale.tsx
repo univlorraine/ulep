@@ -12,7 +12,7 @@ interface ShareVocabularyListModalProps {
     onClose: () => void;
     onShareVocabularyList: (profile: Profile[]) => void;
     tandemsProfiles: Profile[];
-    vocabularyList: VocabularyList;
+    vocabularyList?: VocabularyList;
 }
 
 const ShareVocabularyListModal: React.FC<ShareVocabularyListModalProps> = ({
@@ -32,7 +32,9 @@ const ShareVocabularyListModal: React.FC<ShareVocabularyListModalProps> = ({
     };
 
     useEffect(() => {
-        setProfilesToShare(tandemsProfiles.filter((profile) => !vocabularyList.editorsIds.includes(profile.id)));
+        if (vocabularyList) {
+            setProfilesToShare(tandemsProfiles.filter((profile) => !vocabularyList.editorsIds.includes(profile.id)));
+        }
     }, [isVisible, tandemsProfiles, vocabularyList]);
 
     useEffect(() => {

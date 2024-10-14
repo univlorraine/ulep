@@ -7,7 +7,7 @@ import { KebabSvg } from '../../assets';
 interface HeaderSubContentProps {
     title: string;
     onBackPressed: () => void;
-    kebabContent?: React.ReactNode;
+    kebabContent?: (closeMenu: () => void) => React.ReactNode;
 }
 
 const HeaderSubContent: React.FC<HeaderSubContentProps> = ({ title, onBackPressed, kebabContent }) => {
@@ -30,7 +30,7 @@ const HeaderSubContent: React.FC<HeaderSubContentProps> = ({ title, onBackPresse
                         <IonIcon icon={KebabSvg} color="dark" />
                     </IonButton>
                     <IonPopover trigger="click-trigger" triggerAction="click" isOpen={showMenu} showBackdrop={false}>
-                        {kebabContent}
+                        {kebabContent(() => setShowMenu(false))}
                     </IonPopover>
                 </>
             ) : (

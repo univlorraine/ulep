@@ -9,6 +9,7 @@ import OnlineWebLayout from '../components/layout/OnlineWebLayout';
 import ActivitiesContentModal from '../components/modals/ActivitiesContentModal';
 import TandemProfileModal from '../components/modals/TandemProfileModal';
 import TandemStatusModal from '../components/modals/TandemStatusModal';
+import VocabularyContentModal from '../components/modals/VocabularyContentModal';
 import useGetLearningData from '../hooks/useGetLearningData';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../utils';
@@ -21,6 +22,7 @@ const LearningPage = () => {
     const isHybrid = width < HYBRID_MAX_WIDTH;
     const [selectedTandem, setSelectedTandem] = useState<Tandem>();
     const [displayActivitiesContent, setDisplayActivitiesContent] = useState<boolean>(false);
+    const [displayVocabularyContent, setDisplayVocabularyContent] = useState<boolean>(false);
     const profile = useStoreState((state) => state.profile);
 
     const { tandems, error, isLoading } = useGetLearningData();
@@ -31,7 +33,8 @@ const LearningPage = () => {
     const onValidatedTandemPressed = (tandem: Tandem) =>
         !isHybrid ? setSelectedTandem(tandem) : history.push('/tandem-profil', { tandem });
 
-    const onVocabularyListPressed = () => history.push('/vocabulary-list');
+    const onVocabularyContentPressed = () =>
+        !isHybrid ? setDisplayVocabularyContent(true) : history.push('/vocabularies');
 
     const onActivitiesContentPressed = () =>
         !isHybrid ? setDisplayActivitiesContent(true) : history.push('/activities');
@@ -53,7 +56,7 @@ const LearningPage = () => {
                     tandems={tandems}
                     onTandemPressed={onTandemPressed}
                     onValidatedTandemPressed={onValidatedTandemPressed}
-                    onVocabularyListPressed={onVocabularyListPressed}
+                    onVocabularyListPressed={onVocabularyContentPressed}
                     onActivitiesContentPressed={onActivitiesContentPressed}
                 />
             </IonContent>
@@ -69,7 +72,7 @@ const LearningPage = () => {
                     tandems={tandems}
                     onTandemPressed={onTandemPressed}
                     onValidatedTandemPressed={onValidatedTandemPressed}
-                    onVocabularyListPressed={onVocabularyListPressed}
+                    onVocabularyListPressed={onVocabularyContentPressed}
                     onActivitiesContentPressed={onActivitiesContentPressed}
                 />
             </OnlineWebLayout>
@@ -97,6 +100,11 @@ const LearningPage = () => {
             <ActivitiesContentModal
                 isVisible={displayActivitiesContent}
                 onClose={() => setDisplayActivitiesContent(false)}
+                profile={profile}
+            />
+            <VocabularyContentModal
+                isVisible={displayVocabularyContent}
+                onClose={() => setDisplayVocabularyContent(false)}
                 profile={profile}
             />
         </>

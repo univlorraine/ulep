@@ -1,12 +1,12 @@
-import { IonButton, IonIcon, useIonToast } from '@ionic/react';
+import { IonButton, useIonToast } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { LeftChevronSvg } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
 import Vocabulary from '../../../domain/entities/Vocabulary';
 import VocabularyList from '../../../domain/entities/VocabularyList';
 import { codeLanguageToFlag } from '../../utils';
 import AudioLine from '../AudioLine';
+import HeaderSubContent from '../HeaderSubContent';
 import RecordingButton from '../RecordingButton';
 import TextInput from '../TextInput';
 import styles from './CreateOrUpdateVocabularyContent.module.css';
@@ -116,18 +116,11 @@ const CreateOrUpdateVocabularyContent: React.FC<CreateOrUpdateVocabularyContentP
     }, []);
 
     return (
-        <div className={styles.container}>
-            <div className={styles.header}>
-                {goBack && (
-                    <IonButton fill="clear" onClick={goBack} aria-label={t('vocabulary.pair.go_back') as string}>
-                        <IonIcon icon={LeftChevronSvg} size="small" aria-hidden="true" />
-                    </IonButton>
-                )}
-                <h2 className={styles.title}>
-                    {vocabulary ? t('vocabulary.pair.add.edit_title') : t('vocabulary.pair.add.title')}
-                </h2>
-                <div />
-            </div>
+        <div className={`subcontent-container content-wrapper`}>
+            <HeaderSubContent
+                title={`${vocabularyList.symbol} ${vocabularyList.name}`}
+                onBackPressed={() => goBack?.()}
+            />
             <h1 className={styles.language}>{vocabularyList.translationLanguage.name}</h1>
             <div className={styles.content}>
                 <TextInput

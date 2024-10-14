@@ -86,16 +86,23 @@ export const ActivityContent: React.FC<ActivityContentProps> = ({
             <HeaderSubContent
                 title={t('activity.show.title')}
                 onBackPressed={onBackPressed}
-                kebabContent={
+                kebabContent={(closeMenu) => (
                     <IonList lines="none">
                         {activity.status !== ActivityStatus.PUBLISHED && activity.creator.id === profile.id && (
-                            <IonItem button={true} detail={false} onClick={() => onUpdateActivityPressed(activity)}>
+                            <IonItem
+                                button={true}
+                                detail={false}
+                                onClick={() => {
+                                    onUpdateActivityPressed(activity);
+                                    closeMenu();
+                                }}
+                            >
                                 <IonIcon icon={hammerOutline} aria-hidden="true" />
                                 <IonLabel className={styles['popover-label']}>{t('activity.show.update')}</IonLabel>
                             </IonItem>
                         )}
                     </IonList>
-                }
+                )}
             />
             {isLoading ? (
                 <div className={styles.loader}>

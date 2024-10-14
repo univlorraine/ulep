@@ -1,8 +1,9 @@
 import { IonButton, IonIcon, IonImg } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
-import { AddSvg, LeftChevronSvg, VocabularyPng } from '../../../assets';
+import { AddSvg, VocabularyPng } from '../../../assets';
 import Profile from '../../../domain/entities/Profile';
 import VocabularyList from '../../../domain/entities/VocabularyList';
+import HeaderSubContent from '../HeaderSubContent';
 import VocabularyListLine from '../vocabulary/VocabularyListLine';
 import styles from './VocabularyListContent.module.css';
 
@@ -26,24 +27,14 @@ const VocabularyListContent: React.FC<VocabularyListContentProps> = ({
     const { t } = useTranslation();
 
     return (
-        <div className={`${styles.container} content-wrapper`}>
-            <div className={styles.header}>
-                {goBack && (
-                    <IonButton fill="clear" onClick={goBack} aria-label={t('vocabulary.list.go_back') as string}>
-                        <IonIcon icon={LeftChevronSvg} size="small" aria-hidden="true" />
-                    </IonButton>
-                )}
-                <div className={styles['title-container']}>
-                    <h2 className={styles.title}>{t('vocabulary.list.title')}</h2>
-                </div>
-                <div />
-            </div>
+        <div className={`subcontent-container content-wrapper`}>
+            <HeaderSubContent title={t('vocabulary.list.title')} onBackPressed={() => goBack?.()} />
             <div className={styles.content}>
                 {!isLoading && vocabularyLists.length === 0 && (
                     <div className={styles.emptyContainer}>
                         <IonImg alt="" aria-hidden className={styles.emptyImage} src={VocabularyPng} />
                         <p className={styles.emptyText}>{t('vocabulary.list.empty')}</p>
-                        <IonButton className="tertiary-button" fill="clear" onClick={onAddVocabularyList}>
+                        <IonButton className="tertiary-button no-padding" fill="clear" onClick={onAddVocabularyList}>
                             <IonIcon aria-hidden slot="start" name="add-outline" />
                             {t('vocabulary.list.create')}
                         </IonButton>
