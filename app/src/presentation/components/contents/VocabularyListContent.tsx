@@ -1,6 +1,6 @@
 import { IonButton, IonIcon, IonImg } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
-import { AddSvg, LeftChevronSvg, VocabularyPng } from '../../../assets';
+import { AddSvg, LeftChevronSvg, VocabularyPng, FlashcardPng } from '../../../assets';
 import Profile from '../../../domain/entities/Profile';
 import VocabularyList from '../../../domain/entities/VocabularyList';
 import VocabularyListLine from '../vocabulary/VocabularyListLine';
@@ -13,6 +13,7 @@ interface VocabularyListContentProps {
     onAddVocabularyList: () => void;
     onSelectVocabularyList: (vocabularyList: VocabularyList) => void;
     isLoading: boolean;
+    onStartQuiz: () => void;
 }
 
 const VocabularyListContent: React.FC<VocabularyListContentProps> = ({
@@ -22,6 +23,7 @@ const VocabularyListContent: React.FC<VocabularyListContentProps> = ({
     onAddVocabularyList,
     onSelectVocabularyList,
     isLoading,
+    onStartQuiz,
 }) => {
     const { t } = useTranslation();
 
@@ -36,7 +38,6 @@ const VocabularyListContent: React.FC<VocabularyListContentProps> = ({
                 <div className={styles['title-container']}>
                     <h2 className={styles.title}>{t('vocabulary.list.title')}</h2>
                 </div>
-                <div />
             </div>
             <div className={styles.content}>
                 {!isLoading && vocabularyLists.length === 0 && (
@@ -58,7 +59,17 @@ const VocabularyListContent: React.FC<VocabularyListContentProps> = ({
                             vocabularyList={vocabularyList}
                             onSelectVocabularyList={onSelectVocabularyList}
                         />
-                    ))}
+                    ))
+                }
+                
+                <div className={styles.flashcard}>
+                    <IonImg aria-hidden className={styles.flashcardImage} src={FlashcardPng} />
+                    <p className={styles.title}>{t('vocabulary.list.flashcard.title')}</p>
+                    <p className={styles.text}>{t('vocabulary.list.flashcard.paragraph')}</p>
+                    <IonButton className="primary-button" fill="clear" size="small" onClick={() => onStartQuiz()}>
+                        {t('vocabulary.list.flashcard.button')}
+                    </IonButton>
+                </div>
             </div>
 
             <IonButton fill="clear" className={styles.addButton} onClick={onAddVocabularyList}>

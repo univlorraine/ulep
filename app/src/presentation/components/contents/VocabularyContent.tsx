@@ -20,6 +20,7 @@ import Vocabulary from '../../../domain/entities/Vocabulary';
 import VocabularyList from '../../../domain/entities/VocabularyList';
 import VocabularyLine from '../vocabulary/VocabularyLine';
 import styles from './VocabularyListContent.module.css';
+import { useHistory } from 'react-router-dom';
 
 interface VocabularyContentProps {
     goBack?: () => void;
@@ -47,6 +48,7 @@ const VocabularyContent: React.FC<VocabularyContentProps> = ({
     const { getVocabularyListPdf } = useConfig();
     const [showMenu, setShowMenu] = useState(false);
     const [search, setSearch] = useState('');
+    const history = useHistory();    
 
     const exportToPdf = async () => {
         const result = await getVocabularyListPdf.execute(vocabularyList.id);
@@ -67,6 +69,12 @@ const VocabularyContent: React.FC<VocabularyContentProps> = ({
     const onShareVocabularyListPressed = () => {
         setShowMenu(false);
         onShareVocabularyList();
+    };
+
+    const onStartQuizzPressed = () => {
+        setShowMenu(false);
+        const selectedListsId = [vocabularyList.id]
+        history.push('/flipcards', { selectedListsId });
     };
 
     let vocabulariesWithoutPronunciation;
@@ -117,6 +125,12 @@ const VocabularyContent: React.FC<VocabularyContentProps> = ({
                             <IonItem button={true} detail={false} onClick={exportToPdf}>
                                 <IonIcon icon={downloadOutline} aria-hidden="true" />
                                 <IonLabel className={styles['popover-label']}>{t('vocabulary.pair.export')}</IonLabel>
+                            </IonItem>
+                            <IonItem button={true} detail={false} onClick={onStartQuizzPressed}>
+                                <IonIcon icon={arrowRedoOutline} aria-hidden="true" />
+                                <IonLabel className={styles['popover-label']}>
+                                    {t('vocabulary.list.start_quiz_menu')}
+                                </IonLabel>
                             </IonItem>
                         </IonList>
                     </IonContent>
