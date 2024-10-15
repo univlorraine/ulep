@@ -5,6 +5,7 @@ import { createCountries } from './countries';
 import { createInstance } from './instance';
 import { createInterests } from './interests';
 import { createLanguageCodes } from './languages';
+import { createNews } from './news';
 import { createLearningObjectives } from './objective';
 import { createProficiencyTests } from './proficiency';
 import { createProfiles } from './profiles';
@@ -60,6 +61,7 @@ const load = async () => {
       await prisma.routineExecutions.deleteMany();
       await prisma.tandems.deleteMany();
       await prisma.instance.deleteMany();
+      await prisma.news.deleteMany();
     }
 
     await createInstance(prisma);
@@ -83,6 +85,7 @@ const load = async () => {
       console.info('[DB seed] random dataset');
       await createUsers(200, 100, prisma);
       await createProfiles(prisma);
+      await createNews(20, prisma);
     }
   } catch (e) {
     console.error(e);
