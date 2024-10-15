@@ -8,6 +8,7 @@ import {
   LearningType,
 } from 'src/core/models';
 import { CampusResponse } from '../campus';
+import { MediaObjectResponse } from '../medias';
 import { ProfileResponse } from '../profiles';
 import { TandemResponse } from '../tandems';
 import { TandemWithPartnerLearningLanguageResponse } from '../tandems/tandem-with-patner-learning-language.response';
@@ -46,6 +47,22 @@ export class LearningLanguageResponse {
   @ApiProperty({ type: 'boolean' })
   @Expose({ groups: ['read'] })
   certificateOption: boolean;
+
+  @ApiProperty({ type: 'boolean' })
+  @Expose({ groups: ['read'] })
+  learningJournal: boolean;
+
+  @ApiProperty({ type: 'boolean' })
+  @Expose({ groups: ['read'] })
+  consultingInterview: boolean;
+
+  @ApiProperty({ type: 'boolean' })
+  @Expose({ groups: ['read'] })
+  sharedCertificate: boolean;
+
+  @ApiProperty({ type: () => MediaObjectResponse })
+  @Expose({ groups: ['read'] })
+  certificateFile: MediaObjectResponse;
 
   @ApiProperty({ type: 'boolean' })
   @Expose({ groups: ['read'] })
@@ -93,6 +110,12 @@ export class LearningLanguageResponse {
         learningLanguage.campus &&
         CampusResponse.fromCampus(learningLanguage.campus),
       certificateOption: learningLanguage.certificateOption,
+      learningJournal: learningLanguage.learningJournal,
+      consultingInterview: learningLanguage.consultingInterview,
+      sharedCertificate: learningLanguage.sharedCertificate,
+      certificateFile:
+        learningLanguage.certificateFile &&
+        MediaObjectResponse.fromMediaObject(learningLanguage.certificateFile),
       specificProgram: learningLanguage.specificProgram,
       learningType: learningLanguage.learningType,
       sameGender: learningLanguage.sameGender,

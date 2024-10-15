@@ -70,6 +70,7 @@ import {
   FindAllVocabularyFromListIdUsecase,
   FindAllVocabularyListUsecase,
   FindOneObjectiveUsecase,
+  GenerateCertificateUsecase,
   GenerateConversationsUsecase,
   GenerateTandemsUsecase,
   GetActivitiesUsecase,
@@ -131,6 +132,7 @@ import {
   UpdateInterestCategoryUsecase,
   UpdateInterestUsecase,
   UpdateLanguageCodeUsecase,
+  UpdateLearningLanguageUsecase,
   UpdateNewsUsecase,
   UpdateProfileUsecase,
   UpdateQuestionUsecase,
@@ -146,6 +148,7 @@ import {
   UploadAudioVocabularyUsecase,
   UploadAvatarUsecase,
   UploadImageActivityUsecase,
+  UploadLearningLanguageCertificateUsecase,
   UploadMediaActivityUsecase,
   UploadNewsImageUsecase,
   UploadUniversityImageUsecase,
@@ -226,6 +229,7 @@ const usecases: Provider[] = [
   UploadMediaActivityUsecase,
   UploadInstanceDefaultCertificateUsecase,
   UploadUniversityDefaultCertificateUsecase,
+  UploadLearningLanguageCertificateUsecase,
   // News
   GetNewsUsecase,
   GetOneNewsUsecase,
@@ -284,6 +288,8 @@ const usecases: Provider[] = [
   GetLearningLanguageOfProfileUsecase,
   GetLearningLanguageTandemUsecase,
   DeleteLearningLanguageUsecase,
+  UpdateLearningLanguageUsecase,
+  GenerateCertificateUsecase,
   // History Tandem
   GetOtherUserEmailInTandemUsecase,
   // Tandems

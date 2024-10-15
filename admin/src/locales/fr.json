@@ -691,6 +691,11 @@
                 "certificateOption": "Option certificat",
                 "specificProgram": "Option programme spécifique",
                 "hasPriority": "Langue prioritaire (sans réponse au cycle précedent)",
+                "learningJournal": "Journal d'apprentissage confirmé",
+                "consultingInterview": "Entretien conseil",
+                "sharedCertificate": "Certificat partagé",
+                "certificateFile": "Certificat",
+                "generateCertificate": "Générer un certificat",
                 "score": "Score",
                 "masteredLanguages": "Langues maîtrisées"
             },
@@ -759,10 +764,20 @@
         "roles": {
             "STAFF": "Personnel",
             "STUDENT": "Etudiant"
+        },
+        "certificateDialog": {
+            "title": "Générer le certificat de %{name}",
+            "editCertificateBtn": "Editer le certificat",
+            "generateCertificateBtn": "Générer le certificat",
+            "certificateGenerated": "Certificat généré"
         }
     },
     "universitiesPicker": {
         "error": "Une erreur est survenue lors de la récupération des universités"
+    },
+    "certificates": {
+        "error": "Une erreur est survenue lors de la génération du certificat",
+        "success": "Le certificat a été généré avec succès"
     },
     "languages_code": {
         "aa": "Afar",

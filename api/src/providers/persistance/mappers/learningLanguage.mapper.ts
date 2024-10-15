@@ -1,21 +1,18 @@
 import * as Prisma from '@prisma/client';
 import {
-  ProfileSnapshot,
-  ProfilesRelations,
-  profileMapper,
-} from './profile.mapper';
-import {
   LearningLanguage,
   LearningLanguageWithTandem,
   LearningType,
+  MediaObject,
   ProficiencyLevel,
   Tandem,
   TandemStatus,
 } from 'src/core/models';
-import { languageMapper } from './language.mapper';
 import { campusMapper } from './campus.mapper';
-import { UserRelations } from './user.mapper';
+import { languageMapper } from './language.mapper';
+import { ProfileSnapshot, profileMapper } from './profile.mapper';
 import { TextContentRelations } from './translation.mapper';
+import { UserRelations } from './user.mapper';
 
 export const LearningLanguageRelations = {
   Profile: {
@@ -44,6 +41,7 @@ export const LearningLanguageRelations = {
           LanguageCode: true,
           Tandem: true,
           Campus: true,
+          CertificateFile: true,
         },
       },
     },
@@ -51,6 +49,7 @@ export const LearningLanguageRelations = {
   LanguageCode: true,
   Campus: true,
   TandemLanguage: true,
+  CertificateFile: true,
 };
 
 export type LearningLanguageSnapshot = Prisma.LearningLanguages & {
@@ -58,6 +57,7 @@ export type LearningLanguageSnapshot = Prisma.LearningLanguages & {
   LanguageCode: Prisma.LanguageCodes;
   Campus: Prisma.Places;
   TandemLanguage?: Prisma.LanguageCodes;
+  CertificateFile?: Prisma.MediaObjects;
 };
 
 export const learningLanguageMapper = (
@@ -78,6 +78,18 @@ export const learningLanguageMapper = (
     certificateOption: Boolean(instance.certificate_option),
     specificProgram: Boolean(instance.specific_program),
     hasPriority: Boolean(instance.has_priority),
+    learningJournal: instance.learning_journal ?? false,
+    consultingInterview: instance.consulting_interview ?? false,
+    sharedCertificate: instance.shared_certificate ?? false,
+    certificateFile:
+      instance.CertificateFile &&
+      new MediaObject({
+        id: instance.CertificateFile.id,
+        name: instance.CertificateFile.name,
+        bucket: instance.CertificateFile.bucket,
+        mimetype: instance.CertificateFile.mime,
+        size: instance.CertificateFile.size,
+      }),
     tandemLanguage:
       instance.TandemLanguage && languageMapper(instance.TandemLanguage),
   });
@@ -109,3 +121,8 @@ export const learningLanguageWithTandemMapper = (
       }),
   });
 };
+function mediaObjectMapper(
+  CertificateFile: any,
+): import('src/core/models').MediaObject {
+  throw new Error('Function not implemented.');
+}

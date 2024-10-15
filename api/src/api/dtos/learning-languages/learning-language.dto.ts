@@ -1,11 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
-  JOKER_LANGUAGE_CODE,
-  LearningLanguage,
-  LearningType,
-  ProficiencyLevel,
-} from 'src/core/models';
-import {
   IsBoolean,
   IsEnum,
   IsNotEmpty,
@@ -13,6 +7,12 @@ import {
   IsString,
   IsUUID,
 } from 'class-validator';
+import {
+  JOKER_LANGUAGE_CODE,
+  LearningType,
+  MediaObject,
+  ProficiencyLevel,
+} from 'src/core/models';
 
 export class LearningLanguageDto {
   @ApiProperty({ type: 'string', example: 'EN' })
@@ -51,6 +51,26 @@ export class LearningLanguageDto {
   @IsBoolean()
   @IsOptional()
   certificateOption?: boolean;
+
+  @ApiProperty()
+  @IsBoolean()
+  @IsOptional()
+  learningJournal?: boolean;
+
+  @ApiProperty()
+  @IsBoolean()
+  @IsOptional()
+  consultingInterview?: boolean;
+
+  @ApiProperty()
+  @IsBoolean()
+  @IsOptional()
+  sharedCertificate?: boolean;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  certificateFile?: MediaObject;
 
   @ApiProperty()
   @IsBoolean()
