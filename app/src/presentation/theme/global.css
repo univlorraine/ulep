@@ -128,7 +128,7 @@ ion-radio {
 
 .subcontent-title {
     color: #000;
-    font-family: Roboto;
+    font-family: 'Roboto';
     font-size: 17px;
     font-weight: 700;
     line-height: 21px;
@@ -162,7 +162,7 @@ ion-radio {
         display: flex;
         flex-direction: column;
         height: 100%;
-        padding: 20px;
+        padding: 0px 20px;
         overflow-y: auto;
         width: 50%;
     }

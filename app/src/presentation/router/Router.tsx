@@ -20,13 +20,17 @@ import LoginPage from '../pages/LoginPage';
 import ActivitiesPage from '../pages/mobile/ActivitiesPage';
 import ChatPage from '../pages/mobile/ChatPage';
 import CreateSessionPage from '../pages/mobile/CreateSessionPage';
+import EndSessionPage from '../pages/mobile/EndSessionPage';
 import MediaPage from '../pages/mobile/MediaPage';
 import ProfilePage from '../pages/mobile/ProfilePage';
 import ReportPage from '../pages/mobile/ReportPage';
 import SessionListPage from '../pages/mobile/SessionListPage';
 import SettingsPage from '../pages/mobile/SettingsPage';
+import ShowSessionPage from '../pages/mobile/ShowSessionPage';
 import TandemProfilePage from '../pages/mobile/TandemProfilePage';
 import TandemStatusPage from '../pages/mobile/TandemStatusPage';
+import UpdateSessionPage from '../pages/mobile/UpdateSessionPage';
+import VocabulariesPage from '../pages/mobile/VocabulariesPage';
 import PairingConfirmLanguagePage from '../pages/PairingConfirmLanguagePage';
 import PairingFinalPage from '../pages/PairingFinalPage';
 import PairingLanguagesPage from '../pages/PairingLanguagesPage';
@@ -53,16 +57,11 @@ import SignUpInterestsPage from '../pages/SignUpInterestsPage';
 import SignUpLanguagesPage from '../pages/SignUpLanguagesPage';
 import SignUpPage from '../pages/SignUpPage';
 import SuspendedPage from '../pages/SuspendedPage';
-import VocabularyListPage from '../pages/VocabularyListPage';
-import VocabularyPage from '../pages/VocabularyPage';
 import WelcomePage from '../pages/WelcomePage';
-import EndSessionPage from '../pages/mobile/EndSessionPage';
 import { HYBRID_MAX_WIDTH } from '../utils';
 import BottomBar from './BottomBar';
 import MobileRoute from './MobileRoute';
 import PrivateRoute from './PrivateRoute';
-import UpdateSessionPage from '../pages/mobile/UpdateSessionPage';
-import ShowSessionPage from '../pages/mobile/ShowSessionPage';
 
 const OfflineRouter: React.FC = () => {
     const { width } = useWindowDimensions();
@@ -115,6 +114,9 @@ const OfflineRouter: React.FC = () => {
                 </MobileRoute>
                 <MobileRoute exact path={'/activities'}>
                     <ActivitiesPage />
+                </MobileRoute>
+                <MobileRoute exact path={'/vocabularies'}>
+                    <VocabulariesPage />
                 </MobileRoute>
                 <MobileRoute exact path={'/settings'}>
                     <SettingsPage />
@@ -218,13 +220,6 @@ const OfflineRouter: React.FC = () => {
                 <Route exact path="/edit/informations">
                     <EditInformationsPage />
                 </Route>
-                {/* Vocabulary route */}
-                <PrivateRoute exact path="/vocabulary-list">
-                    <VocabularyListPage />
-                </PrivateRoute>
-                <PrivateRoute exact path="/vocabulary">
-                    <VocabularyPage />
-                </PrivateRoute>
                 {/* Quizz route */}
                 <PrivateRoute exact path="/cefr/languages">
                     <CEFRQuizzLanguagePage />

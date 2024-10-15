@@ -1,10 +1,10 @@
-import { IonButton, IonIcon, IonPage } from '@ionic/react';
+import { IonPage } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
-import { LeftChevronSvg } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
 import Profile from '../../../domain/entities/Profile';
 import Session from '../../../domain/entities/Session';
 import Tandem from '../../../domain/entities/Tandem';
+import HeaderSubContent from '../HeaderSubContent';
 import ProfileAvailabilities from '../sessions/ProfileAvailabilities';
 import SessionForm from '../sessions/SessionForm';
 import styles from './SessionFormContent.module.css';
@@ -24,13 +24,7 @@ export interface SessionFormData {
     comment: string;
 }
 
-const Content: React.FC<SessionFormContentProps> = ({
-    goBack,
-    tandem,
-    session,
-    profile,
-    onShowSessionPressed,
-}) => {
+const Content: React.FC<SessionFormContentProps> = ({ goBack, tandem, session, profile, onShowSessionPressed }) => {
     const { t } = useTranslation();
     const { createSession, updateSession } = useConfig();
 
@@ -64,22 +58,21 @@ const Content: React.FC<SessionFormContentProps> = ({
 
     return (
         <div className={`${styles.container} subcontent-container content-wrapper`}>
-            <div className={styles.header}>
-                {goBack && (
-                    <IonButton
-                        fill="clear"
-                        onClick={goBack}
-                        aria-label={t('chat.conversation_menu.return_to_conversations_aria_label') as string}
-                        className={styles.back_button}
-                    >
-                        <IonIcon icon={LeftChevronSvg} size="medium" aria-hidden="true" />
-                    </IonButton>
-                )}
-                <h2 className={styles.title}>{t(session ? 'session.form.update_title' : 'session.form.create_title', { name: tandem?.partner?.user?.firstname })}</h2>
-            </div>
+            <HeaderSubContent
+                title={t(session ? 'session.form.update_title' : 'session.form.create_title', {
+                    name: tandem?.partner?.user?.firstname,
+                })}
+                onBackPressed={() => goBack?.()}
+            />
             <div className={styles.content}>
                 <ProfileAvailabilities partner={tandem.partner} />
-                <SessionForm onSubmit={handleSubmit} onBackPressed={goBack} session={session} profile={profile} partner={tandem.partner} />
+                <SessionForm
+                    onSubmit={handleSubmit}
+                    onBackPressed={goBack}
+                    session={session}
+                    profile={profile}
+                    partner={tandem.partner}
+                />
             </div>
         </div>
     );
@@ -103,7 +96,7 @@ const SessionFormContent: React.FC<SessionFormContentProps> = ({
                 session={session}
                 onShowSessionPressed={onShowSessionPressed}
             />
-        );  
+        );
     }
 
     return (

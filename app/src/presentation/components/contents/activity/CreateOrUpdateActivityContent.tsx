@@ -1,7 +1,6 @@
-import { IonButton, IonIcon, useIonToast } from '@ionic/react';
-import { t } from 'i18next';
-import { arrowBackOutline } from 'ionicons/icons';
+import { useIonToast } from '@ionic/react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useConfig } from '../../../../context/ConfigurationContext';
 import { Activity, ActivityTheme, ActivityThemeCategory } from '../../../../domain/entities/Activity';
 import Language from '../../../../domain/entities/Language';
@@ -9,6 +8,7 @@ import Profile from '../../../../domain/entities/Profile';
 import { CreateActivityCommand } from '../../../../domain/interfaces/activity/CreateActivityUsecase.interface';
 import { UpdateActivityCommand } from '../../../../domain/interfaces/activity/UpdateActivityUsecase.interface';
 import useGetDataForActivityCreation from '../../../hooks/useGetDataForActivityCreation';
+import HeaderSubContent from '../../HeaderSubContent';
 import CreateActivityExcerciseContent from './CreateActivityExcerciseContent';
 import CreateActivityInformationsContent from './CreateActivityInformationsContent';
 import CreateActivitySuccessContent from './CreateActivitySuccessContent';
@@ -61,6 +61,7 @@ export const CreateActivityContent: React.FC<CreateActivityContentProps> = ({
     themes,
 }) => {
     const [showToast] = useIonToast();
+    const { t } = useTranslation();
     const [mode, setMode] = useState<CreateActivityMode>(CreateActivityMode.INFORMATIONS);
     const [informations, setInformations] = useState<
         CreateActivityInformationsOutput | UpdateActivityInformationsOutput
@@ -170,17 +171,7 @@ export const CreateActivityContent: React.FC<CreateActivityContentProps> = ({
 
     return (
         <div className="subcontent-container content-wrapper">
-            <div className="subcontent-header">
-                <IonButton
-                    fill="clear"
-                    onClick={handleBackPressed}
-                    aria-label={t('activity.create.back_button') as string}
-                >
-                    <IonIcon icon={arrowBackOutline} color="dark" />
-                </IonButton>
-                <p className="subcontent-title">{t('activity.create.title')}</p>
-                <div />
-            </div>
+            <HeaderSubContent title={t('activity.title') as string} onBackPressed={handleBackPressed} />
             {mode === CreateActivityMode.SUCCESS && (
                 <CreateActivitySuccessContent
                     onBackPressed={handleBackPressed}

@@ -1,23 +1,13 @@
-import {
-    IonButton,
-    IonContent,
-    IonIcon,
-    IonImg,
-    IonItem,
-    IonLabel,
-    IonList,
-    IonPopover,
-    IonSearchbar,
-    useIonToast,
-} from '@ionic/react';
+import { IonButton, IonIcon, IonImg, IonItem, IonLabel, IonList, IonSearchbar, useIonToast } from '@ionic/react';
 import { arrowRedoOutline, downloadOutline } from 'ionicons/icons';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { AddSvg, KebabSvg, LeftChevronSvg, VocabularyPng } from '../../../assets';
+import { AddSvg, VocabularyPng } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
 import Profile from '../../../domain/entities/Profile';
 import Vocabulary from '../../../domain/entities/Vocabulary';
 import VocabularyList from '../../../domain/entities/VocabularyList';
+import HeaderSubContent from '../HeaderSubContent';
 import VocabularyLine from '../vocabulary/VocabularyLine';
 import styles from './VocabularyListContent.module.css';
 
@@ -45,7 +35,6 @@ const VocabularyContent: React.FC<VocabularyContentProps> = ({
     const { t } = useTranslation();
     const [showToast] = useIonToast();
     const { getVocabularyListPdf } = useConfig();
-    const [showMenu, setShowMenu] = useState(false);
     const [search, setSearch] = useState('');
 
     const exportToPdf = async () => {
@@ -65,7 +54,6 @@ const VocabularyContent: React.FC<VocabularyContentProps> = ({
     };
 
     const onShareVocabularyListPressed = () => {
-        setShowMenu(false);
         onShareVocabularyList();
     };
 
@@ -89,39 +77,37 @@ const VocabularyContent: React.FC<VocabularyContentProps> = ({
     }
 
     return (
-        <div className={`${styles.container} content-wrapper`}>
-            <div className={styles.header}>
-                {goBack && (
-                    <IonButton fill="clear" onClick={goBack} aria-label={t('vocabulary.pair.go_back') as string}>
-                        <IonIcon icon={LeftChevronSvg} size="small" aria-hidden="true" />
-                    </IonButton>
+        <div className={`subcontent-container content-wrapper`}>
+            <HeaderSubContent
+                title={`${vocabularyList.symbol} ${vocabularyList.name}`}
+                onBackPressed={() => goBack?.()}
+                kebabContent={(closeMenu) => (
+                    <IonList lines="none">
+                        <IonItem
+                            button={true}
+                            detail={false}
+                            onClick={() => {
+                                onShareVocabularyListPressed();
+                                closeMenu();
+                            }}
+                        >
+                            <IonIcon icon={arrowRedoOutline} aria-hidden="true" />
+                            <IonLabel className={styles['popover-label']}>{t('vocabulary.pair.share_button')}</IonLabel>
+                        </IonItem>
+                        <IonItem
+                            button={true}
+                            detail={false}
+                            onClick={() => {
+                                exportToPdf();
+                                closeMenu();
+                            }}
+                        >
+                            <IonIcon icon={downloadOutline} aria-hidden="true" />
+                            <IonLabel className={styles['popover-label']}>{t('vocabulary.pair.export')}</IonLabel>
+                        </IonItem>
+                    </IonList>
                 )}
-                <h2 className={styles.title}>{`${vocabularyList.symbol} ${vocabularyList.name}`}</h2>
-                <IonButton
-                    fill="clear"
-                    id="click-trigger"
-                    onClick={() => setShowMenu(!showMenu)}
-                    aria-label={t('vocabulary.pair.menu') as string}
-                >
-                    <IonIcon icon={KebabSvg} size="medium" aria-hidden="true" />
-                </IonButton>
-                <IonPopover trigger="click-trigger" triggerAction="click" isOpen={showMenu} showBackdrop={false}>
-                    <IonContent>
-                        <IonList lines="none">
-                            <IonItem button={true} detail={false} onClick={onShareVocabularyListPressed}>
-                                <IonIcon icon={arrowRedoOutline} aria-hidden="true" />
-                                <IonLabel className={styles['popover-label']}>
-                                    {t('vocabulary.pair.share_button')}
-                                </IonLabel>
-                            </IonItem>
-                            <IonItem button={true} detail={false} onClick={exportToPdf}>
-                                <IonIcon icon={downloadOutline} aria-hidden="true" />
-                                <IonLabel className={styles['popover-label']}>{t('vocabulary.pair.export')}</IonLabel>
-                            </IonItem>
-                        </IonList>
-                    </IonContent>
-                </IonPopover>
-            </div>
+            />
             <div className={styles.content}>
                 {!isLoading && !search && vocabularyPairs.length === 0 && (
                     <div className={styles.emptyContainer}>
