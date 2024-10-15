@@ -1,0 +1,118 @@
+import { Language } from './language.model';
+import { MediaObject } from './media.model';
+import { University } from './university.model';
+import { User } from './user.model';
+
+export enum EventStatus {
+  DRAFT = 'DRAFT',
+  READY = 'READY',
+}
+
+export enum EventType {
+  ONLINE = 'ONLINE',
+  PRESENTIAL = 'PRESENTIAL',
+}
+
+export interface EventTranslation {
+  languageCode: string;
+  content: string;
+  title: string;
+}
+
+export interface EventObjectProps {
+  id: string;
+  title: string;
+  content: string;
+  languageCode: string;
+  translations: EventTranslation[];
+  authorUniversity: University;
+  imageURL?: string;
+  image?: MediaObject;
+  status: EventStatus;
+  startDate: Date;
+  endDate: Date;
+  type: EventType;
+  eventURL?: string;
+  address?: string;
+  addressName?: string;
+  deepLink?: string;
+  withSubscription: boolean;
+  diffusionLanguages?: Language[];
+  concernedUniversities?: University[];
+  enrolledUsers?: User[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export class EventObject {
+  id: string;
+  title: string;
+  content: string;
+  languageCode: string;
+  translations: EventTranslation[];
+  authorUniversity: University;
+  imageURL?: string;
+  image?: MediaObject;
+  status: EventStatus;
+  startDate: Date;
+  endDate: Date;
+  type: EventType;
+  eventURL?: string;
+  address?: string;
+  addressName?: string;
+  deepLink?: string;
+  withSubscription: boolean;
+  diffusionLanguages?: Language[];
+  concernedUniversities?: University[];
+  enrolledUsers?: User[];
+  createdAt: Date;
+  updatedAt: Date;
+
+  constructor({
+    id,
+    title,
+    content,
+    languageCode,
+    translations,
+    authorUniversity,
+    imageURL,
+    image,
+    status,
+    startDate,
+    endDate,
+    type,
+    eventURL,
+    address,
+    addressName,
+    deepLink,
+    withSubscription,
+    diffusionLanguages,
+    concernedUniversities,
+    enrolledUsers,
+    createdAt,
+    updatedAt,
+  }: EventObjectProps) {
+    this.id = id;
+    this.title = title;
+    this.content = content;
+    this.languageCode = languageCode;
+    this.translations = translations;
+    this.authorUniversity = authorUniversity;
+    this.imageURL = imageURL;
+    this.image = image;
+    this.status = status;
+    this.startDate = startDate;
+    this.endDate = endDate;
+    this.type = type;
+    this.eventURL = eventURL;
+    this.address = address;
+    this.addressName = addressName;
+    this.deepLink = deepLink;
+    this.withSubscription = withSubscription;
+    this.diffusionLanguages = diffusionLanguages;
+    this.concernedUniversities = concernedUniversities;
+    this.enrolledUsers = enrolledUsers;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+  }
+}
