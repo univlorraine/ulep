@@ -1,22 +1,25 @@
 import { useEffect, useState } from 'react';
 import { useConfig } from '../../context/ConfigurationContext';
+import News from '../../domain/entities/News';
 import Session from '../../domain/entities/Session';
 import Tandem from '../../domain/entities/Tandem';
 import { useStoreState } from '../../store/storeTypes';
 import { LearningType } from '../pages/PairingPedagogyPage';
 
 const useGetHomeData = (refresh?: boolean) => {
-    const { getAllTandems, getAllSessions } = useConfig();
+    const { getAllTandems, getAllSessions, getAllNews } = useConfig();
     const profile = useStoreState((state) => state.profile);
 
     const [homeResult, setHomeResult] = useState<{
         tandems: Tandem[];
         sessions: Session[];
+        news: News[];
         error: Error | undefined;
         isLoading: boolean;
     }>({
         tandems: [],
         sessions: [],
+        news: [],
         error: undefined,
         isLoading: false,
     });
@@ -31,10 +34,16 @@ const useGetHomeData = (refresh?: boolean) => {
             });
             const tandemsResult = await getAllTandems.execute(profile.id);
             const sessionsResult = await getAllSessions.execute(profile.id);
+            const newsResult = await getAllNews.execute({
+                universityId: profile.user.university.id,
+                languageCode: profile.nativeLanguage.code,
+            });
             if (tandemsResult instanceof Error) {
                 setHomeResult({ ...homeResult, error: tandemsResult, isLoading: false });
             } else if (sessionsResult instanceof Error) {
                 setHomeResult({ ...homeResult, error: sessionsResult, isLoading: false });
+            } else if (newsResult instanceof Error) {
+                setHomeResult({ ...homeResult, error: newsResult, isLoading: false });
             } else {
                 const waitingLearningLanguages: Tandem[] = [];
                 profile?.learningLanguages.map((learningLanguage) => {
@@ -55,6 +64,7 @@ const useGetHomeData = (refresh?: boolean) => {
                 setHomeResult({
                     tandems: [...tandemsResult, ...waitingLearningLanguages],
                     sessions: sessionsResult,
+                    news: newsResult,
                     error: undefined,
                     isLoading: false,
                 });

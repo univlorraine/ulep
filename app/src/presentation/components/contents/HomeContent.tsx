@@ -1,3 +1,4 @@
+import { IonButton } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 import { ReportSvg } from '../../../assets';
@@ -22,6 +23,7 @@ interface HomeContentProps {
     onUpdateSessionPressed: (session: Session, tandem: Tandem) => void;
     onCreateSessionPressed: (tandem: Tandem) => void;
     onShowSessionListPressed: () => void;
+    onShowNewsPressed: () => void;
 }
 
 const HomeContent: React.FC<HomeContentProps> = ({
@@ -35,6 +37,7 @@ const HomeContent: React.FC<HomeContentProps> = ({
     onUpdateSessionPressed,
     onCreateSessionPressed,
     onShowSessionListPressed,
+    onShowNewsPressed,
 }) => {
     const { t } = useTranslation();
     const currentDate = new Date();
@@ -81,6 +84,9 @@ const HomeContent: React.FC<HomeContentProps> = ({
                                         isHybrid={isHybrid}
                                     />
                                 )}
+                            </Masonry>
+                            <Masonry className={styles.masonery} gutter="20px">
+                                <IonButton onClick={onShowNewsPressed}>{t('home_page.news.title')}</IonButton>
                             </Masonry>
                         </ResponsiveMasonry>
                     )}
