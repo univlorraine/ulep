@@ -70,6 +70,13 @@ export class InMemoryReportsRepository implements ReportRepository {
     return this.#reports.filter((report) => report.status === status);
   }
 
+  async findReportsByUser(userId: string): Promise<Report[]> {
+    const filteredReports = this.#reports.filter(
+      (report) => report.user.id === userId,
+    );
+    return filteredReports;
+  }
+
   async reportOfId(id: string): Promise<Report> {
     const index = this.#reports.findIndex((report) => report.id === id);
 

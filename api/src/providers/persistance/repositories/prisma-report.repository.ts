@@ -7,11 +7,12 @@ import {
   ReportRepository,
 } from 'src/core/ports/report.repository';
 import {
-  ReportRelations,
   reportCategoryMapper,
   reportMapper,
+  ReportRelations,
 } from '../mappers/report.mapper';
 import { TextContentRelations } from '../mappers/translation.mapper';
+import { UserRelations } from '../mappers/user.mapper';
 
 @Injectable()
 export class PrismaReportRepository implements ReportRepository {
@@ -134,6 +135,31 @@ export class PrismaReportRepository implements ReportRepository {
             TextContent: TextContentRelations,
           },
         },
+      },
+    });
+
+    return reports.map(reportMapper);
+  }
+
+  async findReportsByUser(userId: string): Promise<Report[]> {
+    const reports = await this.prisma.reports.findMany({
+      where: {
+        User: {
+          id: userId,
+        },
+      },
+      include: {
+        Category: {
+          include: {
+            TextContent: TextContentRelations,
+          },
+        },
+        User: {
+          include: UserRelations,
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
       },
     });
 
