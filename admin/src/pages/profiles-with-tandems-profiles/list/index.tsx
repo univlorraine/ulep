@@ -68,7 +68,12 @@ const LearningLanguageList = () => {
             perPage: 9999,
         },
     });
-    const { data: universities } = useGetList('universities');
+    const { data: universities } = useGetList('universities', {
+        sort: {
+            field: 'name',
+            order: 'ASC',
+        },
+    });
     const [selectedLearningLanguages, setSelectedLearningLanguages] = useState<string[]>([]);
     const [universityDivisions, setUniversityDivisions] = useState<string[]>([]);
 

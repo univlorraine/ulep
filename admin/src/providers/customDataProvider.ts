@@ -25,6 +25,7 @@ import ProfilesQuery from '../queries/ProfilesQuery';
 import ProfilesWithTandemsQuery from '../queries/ProfilesWithTandemsQuery';
 import QuestionsQuery from '../queries/QuestionsQuery';
 import ReportsQuery from '../queries/ReportsQuery';
+import UniversitiesQuery from '../queries/UniversitiesQuery';
 import { http, refreshAuth } from './authProvider';
 import jwtManager from './jwtManager';
 import SocketIoProvider from './socketIoProvider';
@@ -224,6 +225,9 @@ const customDataProvider = {
             case 'learning-languages/matches':
                 url = new URL(`${process.env.REACT_APP_API_URL}/learning-languages/${params.filter.id}/matches`);
                 url.search = LearningLanguageMatchesQuery(params);
+                break;
+            case 'universities':
+                url.search = UniversitiesQuery(params);
                 break;
             default:
                 break;
