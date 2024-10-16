@@ -937,6 +937,20 @@
         "error_update": "Une erreur est survenue lors de la mise à jour du signalement",
         "go_back": "Retour"
     },
+    "learning_journal": {
+        "title": "Mon activité",
+        "certificate_title": "Road to certificat",
+        "certificate_text": "Complète tous les objectifs listés afin d’obtenir ton certificat !",
+        "sessions_duration_title": "Heures d’échange en visio",
+        "vocabulary_title": "Vocabulaire",
+        "activities_title": "Fiches d’activité",
+        "ask_for_certificate_button": "Demander mon certificat",
+        "how_to_get_certificate_button": "Comment obtenir mon certificat ?"
+    },
+    "learning_goal": {
+        "title": "Mes objectifs ({{count}})",
+        "button": "Voir tous mes objectifs"
+    },
     "languages_code": {
         "aa": "Afar",
         "ab": "Abkhaze",

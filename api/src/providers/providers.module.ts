@@ -6,6 +6,7 @@ import { CAMPUS_REPOSITORY } from 'src/core/ports/campus.repository';
 import { CHAT_SERVICE } from 'src/core/ports/chat.service';
 import { CONTACT_REPOSITORY } from 'src/core/ports/contact.repository';
 import { COUNTRY_REPOSITORY } from 'src/core/ports/country.repository';
+import { CUSTOM_LEARNING_GOAL_REPOSITORY } from 'src/core/ports/custom-learning-goal.repository';
 import { EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
 import { EVENT_REPOSITORY } from 'src/core/ports/event.repository';
 import { INSTANCE_REPOSITORY } from 'src/core/ports/instance.repository';
@@ -44,6 +45,7 @@ import { ChatService } from 'src/providers/services/chat.service';
 import { PdfService } from 'src/providers/services/pdf.service';
 import { SmtpEmailGateway } from './gateway/smtp-email.gateway';
 import { PrismaCountryCodeRepository } from './persistance/repositories/prisma-country.repository';
+import { PrismaCustomLearningGoalRepository } from './persistance/repositories/prisma-custom-learning-goal-repository';
 import { PrismaEventRepository } from './persistance/repositories/prisma-events.repository';
 import { PrismaInterestRepository } from './persistance/repositories/prisma-interest.repository';
 import { PrismaLanguageRepository } from './persistance/repositories/prisma-language.repository';
@@ -185,6 +187,10 @@ const providers: Provider[] = [
   {
     provide: EVENT_REPOSITORY,
     useClass: PrismaEventRepository,
+  },
+  {
+    provide: CUSTOM_LEARNING_GOAL_REPOSITORY,
+    useClass: PrismaCustomLearningGoalRepository,
   },
 ];
 

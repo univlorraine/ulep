@@ -15,6 +15,8 @@ import Loader from '../Loader';
 import ActiveTandemCard from '../tandems/ActiveTandemCard';
 import PendingTandemCard from '../tandems/PendingTandemCard';
 import styles from './LearningContent.module.css';
+import LearningJournalCard from '../tandems/LearningJournalCard';
+import LearningGoalCard from '../tandems/LearningGoalCard';
 
 interface LearningContentProps {
     isLoading: boolean;
@@ -24,6 +26,7 @@ interface LearningContentProps {
     onValidatedTandemPressed: (tandem: Tandem) => void;
     onVocabularyListPressed: () => void;
     onActivitiesContentPressed: () => void;
+    onShowAllGoalsPressed: () => void;
 }
 
 const LearningContent: React.FC<LearningContentProps> = ({
@@ -34,6 +37,7 @@ const LearningContent: React.FC<LearningContentProps> = ({
     onValidatedTandemPressed,
     onVocabularyListPressed,
     onActivitiesContentPressed,
+    onShowAllGoalsPressed,
 }) => {
     const { t } = useTranslation();
     const history = useHistory();
@@ -91,16 +95,28 @@ const LearningContent: React.FC<LearningContentProps> = ({
                 <ResponsiveMasonry columnsCountBreakPoints={{ 300: 1, 1024: 2 }}>
                     <Masonry className={styles.masonery} gutter="20px">
                         {currentTandem && currentTandem.status === 'ACTIVE' && (
-                            <ActiveTandemCard
-                                tandem={currentTandem}
-                                onTandemPressed={() => onValidatedTandemPressed(currentTandem)}
-                            />
-                        )}
-                        {currentTandem && currentTandem.status !== 'ACTIVE' && (
-                            <PendingTandemCard
-                                tandem={currentTandem}
-                                onTandemPressed={() => onTandemPressed(currentTandem)}
-                            />
+                            <>
+                                <ActiveTandemCard
+                                    tandem={currentTandem}
+                                    onTandemPressed={() => onValidatedTandemPressed(currentTandem)}
+                                />
+                                <PendingTandemCard
+                                    tandem={currentTandem}
+                                    onTandemPressed={() => onTandemPressed(currentTandem)}
+                                />
+                                {currentTandem.learningLanguage.certificateOption && (
+                                    <>
+                                        <LearningJournalCard
+                                            tandem={currentTandem}
+                                            onTandemPressed={() => onValidatedTandemPressed(currentTandem)}
+                                        />
+                                        <LearningGoalCard
+                                            profile={profile}
+                                            onShowAllGoalsPressed={() => onShowAllGoalsPressed()}
+                                        />
+                                    </>
+                                )}
+                            </>
                         )}
                         <RessourcesCard
                             onLearningJournalPressed={() => console.log('onLearningJournalPressed')}

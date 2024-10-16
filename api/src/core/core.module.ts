@@ -71,6 +71,7 @@ import {
   FindAllVocabularyFromListIdUsecase,
   FindAllVocabularyFromSelectedListsIdUsecase,
   FindAllVocabularyListUsecase,
+  FindCustomLearningGoalsUsecase,
   FindOneObjectiveUsecase,
   GenerateCertificateUsecase,
   GenerateConversationsUsecase,
@@ -383,6 +384,8 @@ const usecases: Provider[] = [
   UpdateEventUsecase,
   SubscribeToEventUsecase,
   UnsubscribeToEventUsecase,
+  // Custom Learning Goals
+  FindCustomLearningGoalsUsecase,
 ];
 
 const services: Provider[] = [MatchScorer, CronService];

@@ -1,12 +1,13 @@
 import * as Swagger from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { IsString, IsNotEmpty, IsArray, IsOptional } from 'class-validator';
+import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { MediaObjectResponse } from 'src/api/dtos/medias';
 import {
   TextContentResponse,
   textContentTranslationResponse,
 } from 'src/api/dtos/text-content';
 import { LearningObjective, Translation } from 'src/core/models';
+import { CustomLearningGoal } from 'src/core/models/custom-learning-goal.model';
 
 export class CreateObjectiveRequest {
   @Swagger.ApiProperty({ type: 'string' })
@@ -95,4 +96,64 @@ export class ObjectiveResponse {
       name,
     });
   }
+}
+
+export class CustomLearningGoalResponse {
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @Expose({ groups: ['read'] })
+  id: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @Expose({ groups: ['read'] })
+  title: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @Expose({ groups: ['read'] })
+  description: string;
+
+  constructor(partial: Partial<CustomLearningGoalResponse>) {
+    Object.assign(this, partial);
+  }
+
+  static fromDomain(instance: CustomLearningGoal) {
+    return new CustomLearningGoalResponse({
+      id: instance.id,
+      title: instance.title,
+      description: instance.description,
+    });
+  }
+}
+
+export class CreateCustomLearningGoalRequest {
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  @IsNotEmpty()
+  title: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  @IsNotEmpty()
+  description: string;
+
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @IsString()
+  @IsNotEmpty()
+  learningLanguageId: string;
+}
+
+export class UpdateCustomLearningGoalRequest {
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @IsString()
+  @IsNotEmpty()
+  id: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  @IsNotEmpty()
+  title: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @IsString()
+  @IsNotEmpty()
+  description: string;
 }

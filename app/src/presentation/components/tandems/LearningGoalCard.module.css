@@ -1,0 +1,44 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.content {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: left;
+    list-style-type: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.goalItem {
+    background-color: #F2F4F7;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+    width: 100%;
+}
+
+.image {
+    height: 50px;
+    width: 50px;
+}
+
+.imageContainer {
+    display: flex;
+    justify-content: center;
+    margin: 20px;
+    min-width: 50px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}

@@ -13,6 +13,7 @@ import VocabularyContentModal from '../components/modals/VocabularyContentModal'
 import useGetLearningData from '../hooks/useGetLearningData';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../utils';
+import GoalsContentModal from '../components/modals/GoalsContentModal';
 
 const LearningPage = () => {
     const { t } = useTranslation();
@@ -23,6 +24,7 @@ const LearningPage = () => {
     const [selectedTandem, setSelectedTandem] = useState<Tandem>();
     const [displayActivitiesContent, setDisplayActivitiesContent] = useState<boolean>(false);
     const [displayVocabularyContent, setDisplayVocabularyContent] = useState<boolean>(false);
+    const [displayAllGoalsContent, setDisplayAllGoalsContent] = useState<boolean>(false);
     const profile = useStoreState((state) => state.profile);
 
     const { tandems, error, isLoading } = useGetLearningData();
@@ -38,6 +40,9 @@ const LearningPage = () => {
 
     const onActivitiesContentPressed = () =>
         !isHybrid ? setDisplayActivitiesContent(true) : history.push('/activities');
+
+    const onShowAllGoalsPressed = () =>
+        !isHybrid ? setDisplayAllGoalsContent(true) : history.push('/goals');
 
     if (error) {
         showToast({ message: t(error.message), duration: 5000 });
@@ -58,6 +63,7 @@ const LearningPage = () => {
                     onValidatedTandemPressed={onValidatedTandemPressed}
                     onVocabularyListPressed={onVocabularyContentPressed}
                     onActivitiesContentPressed={onActivitiesContentPressed}
+                    onShowAllGoalsPressed={onShowAllGoalsPressed}
                 />
             </IonContent>
         );
@@ -74,6 +80,7 @@ const LearningPage = () => {
                     onValidatedTandemPressed={onValidatedTandemPressed}
                     onVocabularyListPressed={onVocabularyContentPressed}
                     onActivitiesContentPressed={onActivitiesContentPressed}
+                    onShowAllGoalsPressed={onShowAllGoalsPressed}
                 />
             </OnlineWebLayout>
             <TandemStatusModal
@@ -106,6 +113,12 @@ const LearningPage = () => {
                 isVisible={displayVocabularyContent}
                 onClose={() => setDisplayVocabularyContent(false)}
                 profile={profile}
+            />
+            <GoalsContentModal
+                isVisible={displayAllGoalsContent}
+                onClose={() => setDisplayAllGoalsContent(false)}
+                profile={profile}
+                learningLanguage={selectedTandem?.learningLanguage}
             />
         </>
     );

@@ -9,8 +9,9 @@ import {
   TandemStatus,
 } from 'src/core/models';
 import { campusMapper } from './campus.mapper';
+import { CustomLearningGoalSnapshot } from './customLearningGoal.mapper';
 import { languageMapper } from './language.mapper';
-import { ProfileSnapshot, profileMapper } from './profile.mapper';
+import { profileMapper, ProfileSnapshot } from './profile.mapper';
 import { TextContentRelations } from './translation.mapper';
 import { UserRelations } from './user.mapper';
 
@@ -42,6 +43,7 @@ export const LearningLanguageRelations = {
           Tandem: true,
           Campus: true,
           CertificateFile: true,
+          CustomLearningGoals: true,
         },
       },
     },
@@ -50,6 +52,7 @@ export const LearningLanguageRelations = {
   Campus: true,
   TandemLanguage: true,
   CertificateFile: true,
+  CustomLearningGoals: true,
 };
 
 export type LearningLanguageSnapshot = Prisma.LearningLanguages & {
@@ -58,6 +61,7 @@ export type LearningLanguageSnapshot = Prisma.LearningLanguages & {
   Campus: Prisma.Places;
   TandemLanguage?: Prisma.LanguageCodes;
   CertificateFile?: Prisma.MediaObjects;
+  CustomLearningGoals: CustomLearningGoalSnapshot[];
 };
 
 export const learningLanguageMapper = (
@@ -121,8 +125,3 @@ export const learningLanguageWithTandemMapper = (
       }),
   });
 };
-function mediaObjectMapper(
-  CertificateFile: any,
-): import('src/core/models').MediaObject {
-  throw new Error('Function not implemented.');
-}
