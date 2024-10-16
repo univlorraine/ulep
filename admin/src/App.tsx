@@ -10,6 +10,7 @@ import PublicIcon from '@mui/icons-material/Public';
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 import SettingsIcon from '@mui/icons-material/Settings';
 import WarningAmberOutlinedIcon from '@mui/icons-material/WarningAmberOutlined';
+import { polyfillCountryFlagEmojis } from 'country-flag-emoji-polyfill';
 import { Admin, CustomRoutes, Resource } from 'react-admin';
 import { Route } from 'react-router-dom';
 import CustomLayout from './components/layout/layout';
@@ -39,6 +40,8 @@ import customDataProvider from './providers/customDataProvider';
 import i18nProvider from './providers/i18nProvider';
 import queryClient from './queryClient';
 import theme from './theme/theme';
+
+polyfillCountryFlagEmojis();
 
 const App = () => (
     <Admin
