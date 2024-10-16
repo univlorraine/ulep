@@ -1,19 +1,27 @@
 import { FormControl, MenuItem, Select } from '@mui/material';
 import React from 'react';
 import { useTranslate } from 'react-admin';
-import { KeycloakGroup } from '../../entities/Administrator';
+import { AdminGroup, KeycloakGroup } from '../../entities/Administrator';
+import University, { isCentralUniversity } from '../../entities/University';
 import useGetAdminGroup from './useGetAdminGroups';
 
 interface GroupPickerProps {
     onChange: (value: KeycloakGroup) => void;
     value?: KeycloakGroup;
+    university?: University;
 }
 
-const AdminGroupPicker: React.FC<GroupPickerProps> = ({ onChange, value }) => {
+const AdminGroupPicker: React.FC<GroupPickerProps> = ({ onChange, value, university }) => {
     const translate = useTranslate();
     const keycloakGroups = useGetAdminGroup();
 
-    if (keycloakGroups.length === 0) return <>Loading..</>;
+    if (keycloakGroups.length === 0 || !university) return <>Loading..</>;
+
+    const filteredGroups = keycloakGroups.filter(
+        (group) =>
+            (isCentralUniversity(university) || group.name !== AdminGroup.SUPER_ADMIN) &&
+            (!isCentralUniversity(university) || group.name !== AdminGroup.MANAGER)
+    );
 
     return (
         <FormControl>
@@ -24,7 +32,7 @@ const AdminGroupPicker: React.FC<GroupPickerProps> = ({ onChange, value }) => {
                 value={value && value.id}
                 disableUnderline
             >
-                {keycloakGroups.map((group: KeycloakGroup) => (
+                {filteredGroups.map((group: KeycloakGroup) => (
                     <MenuItem key={group.id} value={group.id}>
                         {translate(`admin_groups_picker.${group.name.toLowerCase()}`)}
                     </MenuItem>

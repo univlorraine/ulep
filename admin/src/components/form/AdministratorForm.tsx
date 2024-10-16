@@ -1,8 +1,8 @@
 import { Box, OutlinedInput, Typography } from '@mui/material';
 import React, { useState } from 'react';
-import { Button, Loading, useGetIdentity, useNotify, usePermissions, useTranslate } from 'react-admin';
+import { Button, Loading, useGetIdentity, useGetList, useNotify, usePermissions, useTranslate } from 'react-admin';
 import { AdminGroup, AdministratorFormPayload, KeycloakGroup, Role } from '../../entities/Administrator';
-import University from '../../entities/University';
+import University, { isCentralUniversity } from '../../entities/University';
 import isPasswordValid from '../../utils/isPasswordValid';
 import AdminGroupPicker from '../adminGroups/AdminGroupPicker';
 import ImageUploader from '../ImageUploader';
@@ -35,11 +35,12 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({
     const notify = useNotify();
     const { permissions } = usePermissions();
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
+    const { data: universities } = useGetList<University>('universities');
     const [newEmail, setNewEmail] = useState<string>(email || '');
     const [password, setPassword] = useState<string>('');
     const [newFirstname, setNewFirstname] = useState<string>(firstname || '');
     const [newLastname, setNewLastname] = useState<string>(lastname || '');
-    const [university, setUniversity] = useState<University>();
+    const [university, setUniversity] = useState<University | undefined>(universities?.find(isCentralUniversity));
     const [newGroup, setNewGroup] = useState<KeycloakGroup | undefined>(group);
     const [file, setFile] = useState<File>();
 
@@ -92,10 +93,6 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({
 
             {!isProfileEdit && (
                 <>
-                    <Box>
-                        <Typography variant="subtitle1">{translate('admin_groups_picker.placeholder')}</Typography>
-                        <AdminGroupPicker onChange={setNewGroup} value={newGroup} />
-                    </Box>
                     {newGroup?.name === AdminGroup.SUPER_ADMIN ||
                         (permissions.checkRole(Role.SUPER_ADMIN) && (
                             <Box>
@@ -109,6 +106,10 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({
                                 />
                             </Box>
                         ))}
+                    <Box>
+                        <Typography variant="subtitle1">{translate('admin_groups_picker.placeholder')}</Typography>
+                        <AdminGroupPicker onChange={setNewGroup} university={university} value={newGroup} />
+                    </Box>
                 </>
             )}
 
