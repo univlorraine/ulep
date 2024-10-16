@@ -380,6 +380,9 @@
             "error": "An error occurred while updating the alert",
             "status": "Update the status of the alert",
             "title": "Report update"
+        },
+        "error": {
+            "unauthorized": "You are not authorized to edit this report"
         }
     },
     "report_categories": {

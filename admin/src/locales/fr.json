@@ -380,6 +380,9 @@
             "error": "Une erreur est survenue pendant la mise à jour du signalement",
             "status": "Mettez à jour l'état du signalement",
             "title": "Mise à jour du signalement"
+        },
+        "error": {
+            "unauthorized": "Vous n'êtes pas autorisé à modifier ce signalement"
         }
     },
     "report_categories": {
