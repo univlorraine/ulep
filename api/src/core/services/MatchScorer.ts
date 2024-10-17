@@ -493,6 +493,8 @@ export class MatchScorer implements IMatchScorer {
       learningLanguage1.learningType === LearningType.BOTH &&
       (learningLanguage2.learningType === LearningType.BOTH ||
         learningLanguage2.learningType === LearningType.TANDEM) &&
+      learningLanguage1.campus &&
+      learningLanguage2.campus &&
       learningLanguage1.campus.id !== learningLanguage2.campus.id
     ) {
       return false;
