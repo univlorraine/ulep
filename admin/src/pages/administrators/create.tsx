@@ -17,6 +17,7 @@ const CreateAdministrator = () => {
         formData.append('lastname', payload.lastname || '');
         formData.append('password', payload.password || '');
         formData.append('universityId', payload.universityId || '');
+        formData.append('languageId', payload.languageId || '');
         formData.append('group[id]', payload.group.id || '');
         formData.append('group[name]', payload.group.name || '');
         formData.append('group[path]', payload.group.path || '');
@@ -59,7 +60,7 @@ const CreateAdministrator = () => {
         <>
             <ConfigPagesHeader />
             <Create title={translate('administrators.create.title')}>
-                <AdministratorForm handleSubmit={handleSubmit} type="create" />
+                <AdministratorForm handleSubmit={handleSubmit} type="create" universityId="central" />
             </Create>
         </>
     );

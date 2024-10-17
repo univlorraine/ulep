@@ -236,7 +236,7 @@
         "genderValues": {
             "male": "Homme",
             "female": "Femme",
-            "other": "Autre"
+            "other": "Non binaire"
         }
     },
     "header": {
@@ -521,6 +521,9 @@
             "error": "Une erreur est survenue pendant la mise à jour du signalement",
             "status": "Mettez à jour l'état du signalement",
             "title": "Mise à jour du signalement"
+        },
+        "error": {
+            "unauthorized": "Vous n'êtes pas autorisé à modifier ce signalement"
         }
     },
     "report_categories": {
@@ -696,6 +699,9 @@
                 },
                 "learningType": {
                     "label": "Mode d'apprentissage"
+                },
+                "tandem": {
+                    "label": "Tandem"
                 }
             },
             "globalRoutineModal": {
@@ -834,7 +840,8 @@
             "DRAFT": "En attente",
             "VALIDATED_BY_ONE_UNIVERSITY": "Validé par une université",
             "PAUSED": "En pause",
-            "ACTIVE": "Apparié"
+            "ACTIVE": "Apparié",
+            "NO_TANDEM": "Sans tandem"
         },
         "types": {
             "BOTH": "E-tandem / Tandem",

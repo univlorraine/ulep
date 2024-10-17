@@ -10,7 +10,7 @@
   "loginTheme": "ulep",
   "emailTheme": "ulep",
   "supportedLocales": ["en", "fr"],
-  "defaultLocale": "fr",
+  "defaultLocale": "en",
   "smtpServer": {
     "starttls": "false",
     "port": "{{ .Values.api.env.smtpPort }}",
@@ -187,7 +187,7 @@
         "attributes": {}
       },
       {
-        "id": "01a25df8-b1ef-42e6-8052-efccce028672",
+        "id": "011a04fb-1d91-4ecc-9988-1c4dbfcf3ade",
         "name": "animator",
         "description": "Group of users who can read and write some parts of their university",
         "composite": false,

@@ -28,6 +28,7 @@ import ProfilesQuery from '../queries/ProfilesQuery';
 import ProfilesWithTandemsQuery from '../queries/ProfilesWithTandemsQuery';
 import QuestionsQuery from '../queries/QuestionsQuery';
 import ReportsQuery from '../queries/ReportsQuery';
+import UniversitiesQuery from '../queries/UniversitiesQuery';
 import { http, refreshAuth } from './authProvider';
 import jwtManager from './jwtManager';
 import SocketIoProvider from './socketIoProvider';
@@ -254,6 +255,9 @@ const customDataProvider = {
                 break;
             case 'news':
                 url.search = NewsQuery(params);
+                break;
+            case 'universities':
+                url.search = UniversitiesQuery(params);
                 break;
             default:
                 break;

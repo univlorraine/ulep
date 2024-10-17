@@ -1,6 +1,6 @@
 import { Collection, ModeQuery, PrismaService } from '@app/common';
 import { Injectable } from '@nestjs/common';
-import { Profile } from 'src/core/models';
+import { Profile, WithoutTandem } from 'src/core/models';
 import { ProfileWithTandemsProfiles } from 'src/core/models/profileWithTandemsProfiles.model';
 import {
   ProfileQueryOrderBy,
@@ -172,6 +172,38 @@ export class PrismaProfileRepository implements ProfileRepository {
     limit?: number,
     where?: ProfileWithTandemsProfilesQueryWhere,
   ): Promise<Collection<ProfileWithTandemsProfiles>> {
+    const learningLanguageWhere = [];
+    if (where.learningLanguage) {
+      learningLanguageWhere.push({
+        LearningLanguages: {
+          some: {
+            LanguageCode: { id: where.learningLanguage },
+          },
+        },
+      });
+    }
+    if (where.tandemStatus) {
+      if (where.tandemStatus === WithoutTandem.NO_TANDEM) {
+        learningLanguageWhere.push({
+          LearningLanguages: {
+            some: {
+              Tandem: null,
+            },
+          },
+        });
+      } else {
+        learningLanguageWhere.push({
+          LearningLanguages: {
+            some: {
+              Tandem: {
+                status: where.tandemStatus,
+              },
+            },
+          },
+        });
+      }
+    }
+
     const wherePayload: any = where
       ? {
           User: {
@@ -187,12 +219,8 @@ export class PrismaProfileRepository implements ProfileRepository {
               status: 'BANNED',
             },
           },
-          ...(where.learningLanguage && {
-            LearningLanguages: {
-              some: {
-                LanguageCode: { id: where.learningLanguage },
-              },
-            },
+          ...(learningLanguageWhere.length > 0 && {
+            AND: learningLanguageWhere,
           }),
           ...(where.learningType && {
             OR: [

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Collection, PrismaService } from '@app/common';
+import { Collection, PrismaService, SortOrder } from '@app/common';
 import {
+  GetUniversitiesCommand,
   UniversityRepository,
   UpdateUniversityResponse,
 } from 'src/core/ports/university.repository';
@@ -56,10 +57,17 @@ export class PrismaUniversityRepository implements UniversityRepository {
     return university;
   }
 
-  async findAll(): Promise<Collection<University>> {
+  async findAll(
+    params: GetUniversitiesCommand,
+  ): Promise<Collection<University>> {
+    const orderParam = params?.orderBy
+      ? { [params?.orderBy.field]: params?.orderBy.order }
+      : { name: 'asc' as SortOrder };
+
     const count = await this.prisma.organizations.count();
 
     const universities = await this.prisma.organizations.findMany({
+      orderBy: orderParam,
       include: UniversityRelations,
     });
 

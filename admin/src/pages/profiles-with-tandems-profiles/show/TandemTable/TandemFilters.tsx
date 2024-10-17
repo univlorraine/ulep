@@ -29,7 +29,12 @@ const TandemFilters = ({
     setUniversityId,
 }: TandemFiltersParams) => {
     const translate = useTranslate();
-    const { data: universities } = useGetList('universities');
+    const { data: universities } = useGetList('universities', {
+        sort: {
+            field: 'name',
+            order: 'ASC',
+        },
+    });
 
     return (
         <Box sx={{ display: 'flex', gap: '1rem' }}>

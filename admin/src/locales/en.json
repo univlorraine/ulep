@@ -238,7 +238,7 @@
         "genderValues": {
             "male": "Male",
             "female": "Female",
-            "other": "Other"
+            "other": "Non binary"
         }
     },
     "header": {
@@ -519,6 +519,9 @@
             "error": "An error occurred while updating the alert",
             "status": "Update the status of the alert",
             "title": "Report update"
+        },
+        "error": {
+            "unauthorized": "You are not authorized to edit this report"
         }
     },
     "report_categories": {
@@ -691,6 +694,9 @@
                 },
                 "learningType": {
                     "label": "Learning type"
+                },
+                "tandem": {
+                    "label": "Tandem"
                 }
             },
             "globalRoutineModal": {
@@ -825,7 +831,8 @@
             "DRAFT": "Waiting",
             "VALIDATED_BY_ONE_UNIVERSITY": "Validated by one university",
             "PAUSED": "Paused",
-            "ACTIVE": "Paired"
+            "ACTIVE": "Paired",
+            "NO_TANDEM": "Without tandem"
         },
         "types": {
             "BOTH": "E-tandem / Tandem",

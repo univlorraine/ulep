@@ -16,6 +16,7 @@ const EditAdministratorProfile = () => {
         formData.append('lastname', payload.lastname || '');
         formData.append('password', payload.password || '');
         formData.append('universityId', payload.universityId || '');
+        formData.append('languageId', payload.languageId || '');
         formData.append('group[id]', payload.group.id || '');
         formData.append('group[name]', payload.group.name || '');
         formData.append('group[path]', payload.group.path || '');
@@ -53,6 +54,7 @@ const EditAdministratorProfile = () => {
                         group={record.group}
                         handleSubmit={handleSubmit}
                         id={record.id}
+                        languageId={record.languageId}
                         lastname={record.lastname}
                         type="update"
                         universityId={record.universityId || 'central'}

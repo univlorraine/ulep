@@ -29,11 +29,17 @@ const AdministratorPicker: React.FC<AdministratorPickerProps> = ({ onChange, uni
                     value={value ? value.id : ''}
                     disableUnderline
                 >
-                    {dataPicker.map((administrator: Administrator) => (
-                        <MenuItem key={administrator.id} value={administrator.id}>
-                            {administrator.firstname} {administrator.lastname}
-                        </MenuItem>
-                    ))}
+                    {dataPicker.map((administrator: Administrator) => {
+                        const language = administrator.language
+                            ? `(${translate(`languages_code.${administrator.language.code}`)})`
+                            : '';
+
+                        return (
+                            <MenuItem key={administrator.id} value={administrator.id}>
+                                {administrator.firstname} {administrator.lastname} {language}
+                            </MenuItem>
+                        );
+                    })}
                 </Select>
             )}
             {!dataPicker ||

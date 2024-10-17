@@ -26,7 +26,7 @@ import { Role } from '../../../entities/Administrator';
 import { LearningLanguageWithTandemWithPartnerProfile, LearningType } from '../../../entities/LearningLanguage';
 import { getProfileDisplayName } from '../../../entities/Profile';
 import { ProfileWithTandemsProfiles } from '../../../entities/ProfileWithTandemsProfiles';
-import { TandemStatus } from '../../../entities/Tandem';
+import { TandemStatus, WithoutTandem } from '../../../entities/Tandem';
 import { UserStatus } from '../../../entities/User';
 import codeLanguageToFlag from '../../../utils/codeLanguageToFlag';
 import isAgeCriterionMet from '../../../utils/isAgeCriterionMet';
@@ -68,7 +68,12 @@ const LearningLanguageList = () => {
             perPage: 9999,
         },
     });
-    const { data: universities } = useGetList('universities');
+    const { data: universities } = useGetList('universities', {
+        sort: {
+            field: 'name',
+            order: 'ASC',
+        },
+    });
     const [selectedLearningLanguages, setSelectedLearningLanguages] = useState<string[]>([]);
     const [universityDivisions, setUniversityDivisions] = useState<string[]>([]);
 
@@ -88,73 +93,73 @@ const LearningLanguageList = () => {
         }
     }, [identity]);
 
-    const adaptedFilters = identity?.isCentralUniversity
-        ? [
-              <SelectInput
-                  key="universityFilter"
-                  choices={universities}
-                  label={translate('learning_languages.list.filters.university.label')}
-                  source="user.university"
-                  alwaysOn
-              />,
-              <SelectInput
-                  key="learningTypeFilter"
-                  choices={Object.values(LearningType).map((learningType) => ({
-                      id: learningType,
-                      name: translate(`learning_languages.types.${learningType}`),
-                  }))}
-                  label={translate('learning_languages.list.filters.learningType.label')}
-                  source="learningType"
-                  alwaysOn
-              />,
-              <AutocompleteInput
-                  key="division"
-                  choices={universityDivisions?.map((division) => ({
-                      id: division,
-                      name: division,
-                  }))}
-                  label={translate('learning_languages.list.filters.division.label')}
-                  source="user.division"
-                  sx={{ width: '250px' }}
-                  alwaysOn
-              />,
-              <TextInput
-                  key="userLastname"
-                  label={translate('learning_languages.list.filters.user_lastname.label')}
-                  source="user.lastname"
-                  alwaysOn
-              />,
-              <AutocompleteInput
-                  key="learningLanguage"
-                  choices={languages?.map((language) => ({
-                      id: language.id,
-                      name: `${codeLanguageToFlag(language.code)}`,
-                  }))}
-                  label={translate('learning_languages.list.filters.learningLanguage.label')}
-                  source="learningLanguage"
-                  alwaysOn
-              />,
-          ]
-        : [
-              <TextInput
-                  key="userLastname"
-                  label={translate('learning_languages.list.filters.user_lastname.label')}
-                  source="user.lastname"
-                  alwaysOn
-              />,
-              <AutocompleteInput
-                  key="learningLanguage"
-                  choices={languages?.map((language) => ({
-                      id: language.id,
-                      name: `${codeLanguageToFlag(language.code)}`,
-                  }))}
-                  label={translate('learning_languages.list.filters.learningLanguage.label')}
-                  source="learningLanguage"
-                  alwaysOn
-              />,
-          ];
+    const filters = [
+        <TextInput
+            key="userLastname"
+            label={translate('learning_languages.list.filters.user_lastname.label')}
+            source="user.lastname"
+            alwaysOn
+        />,
+        <AutocompleteInput
+            key="learningLanguage"
+            choices={languages?.map((language) => ({
+                id: language.id,
+                name: `${codeLanguageToFlag(language.code)}`,
+            }))}
+            label={translate('learning_languages.list.filters.learningLanguage.label')}
+            source="learningLanguage"
+            alwaysOn
+        />,
+        <SelectInput
+            key="learningTypeFilter"
+            choices={[
+                ...Object.values(TandemStatus).map((tandemStatus) => ({
+                    id: tandemStatus,
+                    name: translate(`learning_languages.status.${tandemStatus}`),
+                })),
+                ...Object.values(WithoutTandem).map((value) => ({
+                    id: value,
+                    name: translate(`learning_languages.status.${value}`),
+                })),
+            ]}
+            label={translate('learning_languages.list.filters.tandem.label')}
+            source="tandemStatus"
+            alwaysOn
+        />,
+    ];
 
-    const filters = universities ? adaptedFilters : [];
+    if (identity?.isCentralUniversity && universities && universityDivisions) {
+        filters.unshift(
+            <SelectInput
+                key="universityFilter"
+                choices={universities}
+                label={translate('learning_languages.list.filters.university.label')}
+                source="user.university"
+                alwaysOn
+            />,
+            <SelectInput
+                key="learningTypeFilter"
+                choices={Object.values(LearningType).map((learningType) => ({
+                    id: learningType,
+                    name: translate(`learning_languages.types.${learningType}`),
+                }))}
+                label={translate('learning_languages.list.filters.learningType.label')}
+                source="learningType"
+                alwaysOn
+            />,
+            <AutocompleteInput
+                key="division"
+                choices={universityDivisions?.map((division) => ({
+                    id: division,
+                    name: division,
+                }))}
+                label={translate('learning_languages.list.filters.division.label')}
+                source="user.division"
+                sx={{ width: '250px' }}
+                alwaysOn
+            />
+        );
+    }
 
     const handleLearningLanguageSelection = (learningLanguageId: string) => {
         if (selectedLearningLanguages.includes(learningLanguageId)) {

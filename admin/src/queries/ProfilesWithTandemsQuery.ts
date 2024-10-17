@@ -1,4 +1,5 @@
 import { LearningType } from '../entities/LearningLanguage';
+import { TandemStatusFilter } from '../entities/Tandem';
 import qsAdapter from '../providers/qsAdapter';
 
 export interface ProfilesParams {
@@ -8,9 +9,10 @@ export interface ProfilesParams {
             university?: string;
             division?: string;
         };
-        university?: string; // Use to force university filter when admin is from partner university
+        university?: string;
         learningLanguage?: string;
         learningType?: LearningType;
+        tandemStatus?: TandemStatusFilter;
     };
     pagination: {
         page: string;
@@ -27,6 +29,7 @@ const ProfilesQuery = (params: ProfilesParams): string => {
         page: params.pagination.page,
         limit: params.pagination.perPage,
         learningType: params.filter.learningType,
+        tandemStatus: params.filter.tandemStatus,
     };
 
     return new URLSearchParams(qsAdapter().stringify(query)).toString();

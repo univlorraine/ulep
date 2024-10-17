@@ -16,6 +16,7 @@ export class CreateAdministratorCommand {
   lastname: string;
   password: string;
   universityId?: string;
+  languageId?: string;
   group: KeycloakGroup;
 }
 
@@ -43,6 +44,7 @@ export class CreateAdministratorUsecase {
         lastname: command.lastname,
         password: command.password,
         universityId: command.universityId,
+        languageId: command.languageId,
         groups: [command.group.name],
       });
 
