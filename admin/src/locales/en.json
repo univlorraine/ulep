@@ -546,6 +546,9 @@
                 },
                 "learningType": {
                     "label": "Learning type"
+                },
+                "tandem": {
+                    "label": "Tandem"
                 }
             },
             "globalRoutineModal": {
@@ -680,7 +683,8 @@
             "DRAFT": "Waiting",
             "VALIDATED_BY_ONE_UNIVERSITY": "Validated by one university",
             "PAUSED": "Paused",
-            "ACTIVE": "Paired"
+            "ACTIVE": "Paired",
+            "NO_TANDEM": "Without tandem"
         },
         "types": {
             "BOTH": "E-tandem / Tandem",
