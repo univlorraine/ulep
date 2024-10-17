@@ -1,7 +1,7 @@
-import { IonButton } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 import { ReportSvg } from '../../../assets';
+import News from '../../../domain/entities/News';
 import Profile from '../../../domain/entities/Profile';
 import Session from '../../../domain/entities/Session';
 import Tandem from '../../../domain/entities/Tandem';
@@ -9,6 +9,7 @@ import Loader from '../../components/Loader';
 import TandemList from '../../components/tandems/TandemList';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../../utils';
+import NewsList from '../news/NewsList';
 import SessionListHome from '../sessions/SessionListHome';
 import styles from './HomeContent.module.css';
 
@@ -19,6 +20,7 @@ interface HomeContentProps {
     onValidatedTandemPressed: (tandem: Tandem) => void;
     tandems: Tandem[];
     sessions: Session[];
+    news: News[];
     onShowSessionPressed: (session: Session, tandem: Tandem, confirmCreation?: boolean) => void;
     onUpdateSessionPressed: (session: Session, tandem: Tandem) => void;
     onCreateSessionPressed: (tandem: Tandem) => void;
@@ -33,6 +35,7 @@ const HomeContent: React.FC<HomeContentProps> = ({
     onValidatedTandemPressed,
     tandems,
     sessions,
+    news,
     onShowSessionPressed,
     onUpdateSessionPressed,
     onCreateSessionPressed,
@@ -86,7 +89,7 @@ const HomeContent: React.FC<HomeContentProps> = ({
                                 )}
                             </Masonry>
                             <Masonry className={styles.masonery} gutter="20px">
-                                <IonButton onClick={onShowNewsPressed}>{t('home_page.news.title')}</IonButton>
+                                <NewsList news={news} />
                             </Masonry>
                         </ResponsiveMasonry>
                     )}

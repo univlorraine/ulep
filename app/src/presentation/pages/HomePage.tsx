@@ -34,7 +34,7 @@ const HomePage: React.FC = () => {
     const [refresh, setRefresh] = useState<boolean>(false);
     const [displaySessionModal, setDisplaySessionModal] = useState<DisplaySessionModal>();
     const [displayNewsContent, setDisplayNewsContent] = useState<boolean>(false);
-    const { tandems, sessions, error, isLoading } = useGetHomeData(refresh);
+    const { tandems, sessions, news, error, isLoading } = useGetHomeData(refresh);
     const location = useLocation<HomePageLocationProps>();
     const [isEndSessionModalOpen, setIsEndSessionModalOpen] = useState<boolean>(location.state?.endSession || false);
 
@@ -122,6 +122,7 @@ const HomePage: React.FC = () => {
                     profile={profile}
                     tandems={tandems}
                     sessions={sessions}
+                    news={news}
                     onShowSessionPressed={onShowSessionPressed}
                     onUpdateSessionPressed={onUpdateSessionPressed}
                     onCreateSessionPressed={onCreateSessionPressed}
@@ -141,6 +142,7 @@ const HomePage: React.FC = () => {
                     onValidatedTandemPressed={onValidatedTandemPressed}
                     tandems={tandems}
                     sessions={sessions}
+                    news={news}
                     onShowSessionPressed={onShowSessionPressed}
                     onUpdateSessionPressed={onUpdateSessionPressed}
                     onCreateSessionPressed={onCreateSessionPressed}
