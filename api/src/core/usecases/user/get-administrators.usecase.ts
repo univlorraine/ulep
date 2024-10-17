@@ -1,14 +1,14 @@
-import {
-  KeycloakClient,
-  KeycloakUser,
-  UserRepresentation,
-} from '@app/keycloak';
+import { KeycloakClient, KeycloakUser } from '@app/keycloak';
 import { Inject, Injectable } from '@nestjs/common';
 import {
   AdministratorsQuery,
   UserRepresentationWithAvatar,
 } from 'src/api/dtos';
 import { AdminRole } from 'src/core/models';
+import {
+  LANGUAGE_REPOSITORY,
+  LanguageRepository,
+} from 'src/core/ports/language.repository';
 import {
   MEDIA_OBJECT_REPOSITORY,
   MediaObjectRepository,
@@ -19,6 +19,8 @@ export class GetAdministratorsUsecase {
   constructor(
     @Inject(MEDIA_OBJECT_REPOSITORY)
     private readonly mediaObjectRepository: MediaObjectRepository,
+    @Inject(LANGUAGE_REPOSITORY)
+    private readonly languageRepository: LanguageRepository,
     private readonly keycloak: KeycloakClient,
   ) {}
 
@@ -28,35 +30,31 @@ export class GetAdministratorsUsecase {
   ): Promise<UserRepresentationWithAvatar[]> {
     const result = await this.keycloak.getAdministrators();
 
-    const administratorsWithGroups = await Promise.all(
+    const administrators = await Promise.all(
       result.map(
         async (administrator) =>
           ({
             ...administrator,
             groups: await this.keycloak.getUserGroups(administrator.id),
-          } as UserRepresentation),
+            image: await this.mediaObjectRepository.findOne(administrator.id),
+            language: administrator.attributes?.languageId?.[0]
+              ? await this.languageRepository.ofId(
+                  administrator.attributes?.languageId?.[0],
+                )
+              : undefined,
+          } as UserRepresentationWithAvatar),
       ),
     );
 
-    const administratorsWithGroupsAndAvatar = await Promise.all(
-      administratorsWithGroups.map(async (administrator) => ({
-        ...administrator,
-        image: await this.mediaObjectRepository.findOne(administrator.id),
-      })),
-    );
-
     if (query) {
-      return this.filterByQuery(administratorsWithGroupsAndAvatar, query);
+      return this.filterByQuery(administrators, query);
     }
 
     if (user.realm_access.roles.includes(AdminRole.SUPER_ADMIN)) {
-      return administratorsWithGroupsAndAvatar;
+      return administrators;
     }
 
-    return this.filterByUniversity(
-      administratorsWithGroupsAndAvatar,
-      user.universityId,
-    );
+    return this.filterByUniversity(administrators, user.universityId);
   }
 
   filterByQuery(

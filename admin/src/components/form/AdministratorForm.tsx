@@ -2,10 +2,12 @@ import { Box, OutlinedInput, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { Button, Loading, useGetIdentity, useNotify, usePermissions, useTranslate } from 'react-admin';
 import { AdminGroup, AdministratorFormPayload, KeycloakGroup, Role } from '../../entities/Administrator';
+import Language from '../../entities/Language';
 import University from '../../entities/University';
 import isPasswordValid from '../../utils/isPasswordValid';
 import AdminGroupPicker from '../adminGroups/AdminGroupPicker';
 import ImageUploader from '../ImageUploader';
+import LanguagePicker from '../LanguagePicker';
 import UniversityPicker from '../UniversityPicker';
 
 interface AdministratorFormProps {
@@ -15,6 +17,7 @@ interface AdministratorFormProps {
     handleSubmit: (payload: AdministratorFormPayload) => void;
     lastname?: string;
     universityId?: string;
+    languageId?: string;
     group?: KeycloakGroup;
     type: string;
     isProfileEdit?: boolean;
@@ -27,6 +30,7 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({
     handleSubmit,
     lastname,
     universityId,
+    languageId,
     group,
     type,
     isProfileEdit = false,
@@ -41,6 +45,7 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({
     const [newLastname, setNewLastname] = useState<string>(lastname || '');
     const [university, setUniversity] = useState<University>();
     const [newGroup, setNewGroup] = useState<KeycloakGroup | undefined>(group);
+    const [newLanguage, setNewLanguage] = useState<Language>();
     const [file, setFile] = useState<File>();
 
     if (isLoadingIdentity || !identity) {
@@ -69,6 +74,7 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({
             universityId: getUniversityId(),
             group: newGroup,
             file,
+            languageId: newLanguage?.id,
         });
     };
 
@@ -135,6 +141,13 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({
                         value={newLastname}
                         required
                     />
+                </Box>
+            </Box>
+
+            <Box>
+                <Typography variant="subtitle1">{translate('global.language')}</Typography>
+                <Box alignItems="center" display="flex" flexDirection="row">
+                    <LanguagePicker initialValue={languageId} onChange={setNewLanguage} value={newLanguage} />
                 </Box>
             </Box>
 
