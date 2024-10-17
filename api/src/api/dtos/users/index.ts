@@ -1,20 +1,21 @@
+import { KeycloakGroup, UserRepresentation } from '@app/keycloak';
 import * as Swagger from '@nestjs/swagger';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose, Transform, Type } from 'class-transformer';
 import {
-  IsString,
-  IsNotEmpty,
-  IsUUID,
+  IsBoolean,
   IsEmail,
   IsInt,
-  Min,
-  Length,
-  IsOptional,
-  IsBoolean,
-  IsObject,
+  IsNotEmpty,
   IsNotEmptyObject,
+  IsObject,
+  IsOptional,
+  IsString,
+  IsUUID,
+  Length,
+  Min,
 } from 'class-validator';
-import { UniversityResponse } from '../universities';
-import { CreateUserCommand } from 'src/core/usecases/user';
+import { MediaObject } from 'src/core/models';
 import {
   AdminGroup,
   Gender,
@@ -22,10 +23,10 @@ import {
   User,
   UserStatus,
 } from 'src/core/models/user.model';
+import { CreateUserCommand } from 'src/core/usecases/user';
+import { LanguageResponse } from '../languages';
 import { MediaObjectResponse } from '../medias';
-import { KeycloakGroup, UserRepresentation } from '@app/keycloak';
-import { MediaObject } from 'src/core/models';
-import { ApiPropertyOptional } from '@nestjs/swagger';
+import { UniversityResponse } from '../universities';
 
 export interface UserRepresentationWithAvatar extends UserRepresentation {
   image?: MediaObject;
@@ -206,6 +207,10 @@ export class AdministratorResponse {
   @Expose({ groups: ['read'] })
   universityId?: string;
 
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @Expose({ groups: ['read'] })
+  languageId?: string;
+
   @Swagger.ApiProperty()
   @Expose({ groups: ['read'] })
   group?: KeycloakGroupResponse;
@@ -213,6 +218,10 @@ export class AdministratorResponse {
   @Swagger.ApiPropertyOptional({ type: MediaObjectResponse })
   @Expose({ groups: ['read'] })
   image?: MediaObjectResponse;
+
+  @Swagger.ApiPropertyOptional({ type: LanguageResponse })
+  @Expose({ groups: ['read'] })
+  language?: LanguageResponse;
 
   constructor(partial: Partial<AdministratorResponse>) {
     Object.assign(this, partial);
@@ -225,6 +234,10 @@ export class AdministratorResponse {
       id: user.id,
       email: user.email,
       universityId: user.attributes?.universityId?.[0],
+      languageId: user.attributes?.languageId?.[0],
+      language: user.language
+        ? LanguageResponse.fromLanguage(user.language)
+        : null,
       firstname: user.firstName,
       lastname: user.lastName,
       image: user.image
@@ -268,8 +281,12 @@ export class CreateAdministratorRequest {
 
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
   @IsUUID()
-  @IsOptional()
   universityId?: string;
+
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @IsOptional()
+  @IsUUID()
+  languageId?: string;
 
   @Swagger.ApiProperty({ type: 'string' })
   @IsString()
@@ -305,6 +322,11 @@ export class UpdateAdministratorRequest {
   @IsUUID()
   @IsOptional()
   universityId?: string;
+
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @IsOptional()
+  @IsUUID()
+  languageId?: string;
 
   @Swagger.ApiPropertyOptional({ type: 'string' })
   @IsString()

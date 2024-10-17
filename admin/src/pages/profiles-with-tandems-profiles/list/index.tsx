@@ -410,36 +410,30 @@ const LearningLanguageList = () => {
                     />
                     <FunctionField
                         label={translate('learning_languages.list.tableColumns.type')}
-                        render={(record: ProfileWithTandemsProfiles) => {
-                            console.log({ record });
-
-                            return (
-                                <>
-                                    <Box className="line" />
-                                    {record.learningLanguages.map(
-                                        (learningLanguage: LearningLanguageWithTandemWithPartnerProfile) => {
-                                            if (learningLanguage.tandem) {
-                                                return (
-                                                    <Box key={learningLanguage.code} className="line tandem">
-                                                        {translate(
-                                                            `learning_languages.types.${learningLanguage.tandem.learningType}`
-                                                        )}
-                                                    </Box>
-                                                );
-                                            }
-
+                        render={(record: ProfileWithTandemsProfiles) => (
+                            <>
+                                <Box className="line" />
+                                {record.learningLanguages.map(
+                                    (learningLanguage: LearningLanguageWithTandemWithPartnerProfile) => {
+                                        if (learningLanguage.tandem) {
                                             return (
                                                 <Box key={learningLanguage.code} className="line tandem">
                                                     {translate(
-                                                        `learning_languages.types.${learningLanguage.learningType}`
+                                                        `learning_languages.types.${learningLanguage.tandem.learningType}`
                                                     )}
                                                 </Box>
                                             );
                                         }
-                                    )}
-                                </>
-                            );
-                        }}
+
+                                        return (
+                                            <Box key={learningLanguage.code} className="line tandem">
+                                                {translate(`learning_languages.types.${learningLanguage.learningType}`)}
+                                            </Box>
+                                        );
+                                    }
+                                )}
+                            </>
+                        )}
                     />
                     <FunctionField
                         label={translate('learning_languages.list.tableColumns.pairing')}
