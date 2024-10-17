@@ -1162,7 +1162,7 @@ describe('GenerateTandem UC', () => {
           a: frenchBoth.learningLanguages[0],
           b: englishEtandem.learningLanguages[0],
         }),
-      ).toBeTruthy();
+      ).toBeFalsy();
 
       tandemsRepository.reset();
       learningLanguageRepository.reset();

@@ -275,6 +275,14 @@ const TandemTable = ({
                     {selectedMatchScore?.status}
                 </Typography>
                 <Typography sx={{ p: 1 }}>
+                    <strong>Meeting Frequency : </strong>
+                    {selectedMatchScore?.meetingFrequency}
+                </Typography>
+                <Typography sx={{ p: 1 }}>
+                    <strong>Certificate Option : </strong>
+                    {selectedMatchScore?.certificateOption}
+                </Typography>
+                <Typography sx={{ p: 1 }}>
                     <strong>Total : </strong>
                     {selectedMatchScore?.total}
                 </Typography>
