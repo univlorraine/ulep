@@ -9,6 +9,12 @@ export enum TandemStatus {
     ACTIVE = 'ACTIVE',
 }
 
+export enum WithoutTandem {
+    NO_TANDEM = 'NO_TANDEM',
+}
+
+export type TandemStatusFilter = TandemStatus | WithoutTandem;
+
 export type Tandem = {
     id: string;
     status: TandemStatus;

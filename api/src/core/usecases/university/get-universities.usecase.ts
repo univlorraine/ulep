@@ -3,6 +3,14 @@ import {
   UNIVERSITY_REPOSITORY,
   UniversityRepository,
 } from '../../ports/university.repository';
+import { SortOrder } from '@app/common';
+
+type GetUniversitiesCommand = {
+  orderBy?: {
+    field: string;
+    order: SortOrder;
+  };
+};
 
 @Injectable()
 export class GetUniversitiesUsecase {
@@ -11,8 +19,8 @@ export class GetUniversitiesUsecase {
     private readonly repository: UniversityRepository,
   ) {}
 
-  async execute() {
-    const universities = await this.repository.findAll();
+  async execute(command: GetUniversitiesCommand) {
+    const universities = await this.repository.findAll(command);
 
     return universities;
   }

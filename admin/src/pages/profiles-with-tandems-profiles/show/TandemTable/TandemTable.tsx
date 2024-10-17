@@ -1,4 +1,14 @@
-import { Box, Table, TableBody, TableCell, TableHead, TablePagination, TableRow } from '@mui/material';
+import {
+    Box,
+    SortDirection,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TablePagination,
+    TableRow,
+    TableSortLabel,
+} from '@mui/material';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 import React, { useState } from 'react';
@@ -29,14 +39,29 @@ export interface TandemPartner {
     tandemLanguage?: Language;
 }
 
-interface TandemTableProps {
+export type TandemTableFieldToSort = 'level' | 'age' | 'score' | 'date';
+
+export interface TandemTableProps {
     rows: TandemPartner[];
     actions?: (partner: TandemPartner) => React.ReactNode;
     displayTandemLanguage?: boolean;
     pagination?: Omit<Pagination<TandemPartner>, 'resetPage' | 'visibleRows'>;
+    sortDirection: SortDirection;
+    fieldToSort?: TandemTableFieldToSort;
+    setSortDirection: (value: SortDirection) => void;
+    setFieldToSort: (value: TandemTableFieldToSort) => void;
 }
 
-const TandemTable = ({ rows, actions, displayTandemLanguage, pagination }: TandemTableProps) => {
+const TandemTable = ({
+    rows,
+    actions,
+    displayTandemLanguage,
+    pagination,
+    sortDirection,
+    fieldToSort,
+    setSortDirection,
+    setFieldToSort,
+}: TandemTableProps) => {
     const translate = useTranslate();
     const record: ProfileWithTandemsProfiles = useRecordContext();
     const { permissions } = usePermissions();
@@ -54,6 +79,14 @@ const TandemTable = ({ rows, actions, displayTandemLanguage, pagination }: Tande
         setAnchorEl(null);
     };
 
+    const handleToggleSortDirection = (field: TandemTableFieldToSort) => () => {
+        setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+        setFieldToSort(field);
+    };
+
+    const getFieldDirection = (field: TandemTableFieldToSort) =>
+        fieldToSort === field && sortDirection ? sortDirection : undefined;
+
     const open = Boolean(anchorEl);
 
     return (
@@ -67,13 +100,45 @@ const TandemTable = ({ rows, actions, displayTandemLanguage, pagination }: Tande
                     )}
                     <TableCell>{translate('learning_languages.show.tandems.tableColumns.profile')}</TableCell>
                     <TableCell>{translate('learning_languages.show.tandems.tableColumns.learnedLanguage')}</TableCell>
-                    <TableCell>{translate('learning_languages.show.tandems.tableColumns.level')}</TableCell>
+                    <TableCell sortDirection="asc">
+                        <TableSortLabel
+                            active={fieldToSort === 'level'}
+                            direction={getFieldDirection('level')}
+                            onClick={handleToggleSortDirection('level')}
+                        >
+                            {translate('learning_languages.show.tandems.tableColumns.level')}
+                        </TableSortLabel>
+                    </TableCell>
                     <TableCell>{translate('learning_languages.show.tandems.tableColumns.role')}</TableCell>
                     <TableCell>{translate('learning_languages.show.tandems.tableColumns.learningType')}</TableCell>
                     <TableCell>{translate('learning_languages.show.tandems.tableColumns.gender')}</TableCell>
-                    <TableCell>{translate('learning_languages.show.tandems.tableColumns.age')}</TableCell>
-                    <TableCell>{translate('learning_languages.show.tandems.tableColumns.score')}</TableCell>
-                    <TableCell>{translate('learning_languages.show.tandems.tableColumns.date')}</TableCell>
+                    <TableCell>
+                        <TableSortLabel
+                            active={fieldToSort === 'age'}
+                            direction={getFieldDirection('age')}
+                            onClick={handleToggleSortDirection('age')}
+                        >
+                            {translate('learning_languages.show.tandems.tableColumns.age')}
+                        </TableSortLabel>
+                    </TableCell>
+                    <TableCell>
+                        <TableSortLabel
+                            active={fieldToSort === 'score'}
+                            direction={getFieldDirection('score')}
+                            onClick={handleToggleSortDirection('score')}
+                        >
+                            {translate('learning_languages.show.tandems.tableColumns.score')}
+                        </TableSortLabel>
+                    </TableCell>
+                    <TableCell>
+                        <TableSortLabel
+                            active={fieldToSort === 'date'}
+                            direction={getFieldDirection('date')}
+                            onClick={handleToggleSortDirection('date')}
+                        >
+                            {translate('learning_languages.show.tandems.tableColumns.date')}
+                        </TableSortLabel>
+                    </TableCell>
                     {actions && hasTandemManagementPermission(permissions) && (
                         <TableCell>{translate('learning_languages.show.tandems.tableColumns.actions')}</TableCell>
                     )}
@@ -159,11 +224,6 @@ const TandemTable = ({ rows, actions, displayTandemLanguage, pagination }: Tande
             </TableBody>
 
             <Popover
-                PaperProps={{
-                    style: {
-                        borderRadius: 10,
-                    },
-                }}
                 anchorEl={anchorEl}
                 anchorOrigin={{
                     vertical: 'bottom',
@@ -172,6 +232,15 @@ const TandemTable = ({ rows, actions, displayTandemLanguage, pagination }: Tande
                 id="mouse-over-popover"
                 onClose={handlePopoverClose}
                 open={open}
+                slotProps={{
+                    paper: {
+                        sx: {
+                            borderRadius: 5,
+                            boxShadow: 2,
+                            padding: 1,
+                        },
+                    },
+                }}
                 sx={{
                     pointerEvents: 'none',
                 }}
@@ -181,15 +250,42 @@ const TandemTable = ({ rows, actions, displayTandemLanguage, pagination }: Tande
                 }}
                 disableRestoreFocus
             >
-                <Typography sx={{ p: 1 }}>{`Age : ${selectedMatchScore?.age}`}</Typography>
-                <Typography sx={{ p: 1 }}>{`Gender : ${selectedMatchScore?.gender}`}</Typography>
-                <Typography sx={{ p: 1 }}>{`Goals : ${selectedMatchScore?.goals}`}</Typography>
-                <Typography sx={{ p: 1 }}>{`Interests : ${selectedMatchScore?.interests}`}</Typography>
-                <Typography sx={{ p: 1 }}>{`Level : ${selectedMatchScore?.level}`}</Typography>
-                <Typography sx={{ p: 1 }}>{`Status : ${selectedMatchScore?.status}`}</Typography>
-                <Typography sx={{ p: 1 }}>{`Meeting Frequency : ${selectedMatchScore?.meetingFrequency}`}</Typography>
-                <Typography sx={{ p: 1 }}>{`Certificate Option : ${selectedMatchScore?.certificateOption}`}</Typography>
-                <Typography sx={{ p: 1 }}>{`Total : ${selectedMatchScore?.total}`}</Typography>
+                <Typography sx={{ p: 1 }}>
+                    <strong>Age : </strong>
+                    {Math.ceil(selectedMatchScore?.age ?? 0)}
+                </Typography>
+                <Typography sx={{ p: 1 }}>
+                    <strong>Gender : </strong>
+                    {Math.round(selectedMatchScore?.gender ?? 0)}
+                </Typography>
+                <Typography sx={{ p: 1 }}>
+                    <strong>Goals : </strong>
+                    {Math.round(selectedMatchScore?.goals ?? 0)}
+                </Typography>
+                <Typography sx={{ p: 1 }}>
+                    <strong>Interests : </strong>
+                    {Math.round(selectedMatchScore?.interests ?? 0)}
+                </Typography>
+                <Typography sx={{ p: 1 }}>
+                    <strong>Level : </strong>
+                    {selectedMatchScore?.level}
+                </Typography>
+                <Typography sx={{ p: 1 }}>
+                    <strong>Status : </strong>
+                    {selectedMatchScore?.status}
+                </Typography>
+                <Typography sx={{ p: 1 }}>
+                    <strong>Meeting Frequency : </strong>
+                    {selectedMatchScore?.meetingFrequency}
+                </Typography>
+                <Typography sx={{ p: 1 }}>
+                    <strong>Certificate Option : </strong>
+                    {selectedMatchScore?.certificateOption}
+                </Typography>
+                <Typography sx={{ p: 1 }}>
+                    <strong>Total : </strong>
+                    {selectedMatchScore?.total}
+                </Typography>
             </Popover>
         </Table>
     );
