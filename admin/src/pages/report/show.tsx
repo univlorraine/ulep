@@ -8,20 +8,23 @@ import {
     SimpleShowLayout,
     TextField,
     TopToolbar,
+    usePermissions,
     useRecordContext,
     useTranslate,
 } from 'react-admin';
 import AudioLine from '../../components/chat/AudioLine';
 import ReportsPagesHeader from '../../components/tabs/ReportsPagesHeader';
+import { Role } from '../../entities/Administrator';
 import { MessageType } from '../../entities/Message';
 import Report from '../../entities/Report';
 import handleDownloadFile from '../../utils/downloadFile';
 
-const ReportShowAction = () => (
-    <TopToolbar>
-        <EditButton />
-    </TopToolbar>
-);
+const ReportShowAction = () => {
+    const { permissions } = usePermissions();
+    const canEdit = permissions.checkRoles([Role.MANAGER, Role.SUPER_ADMIN]);
+
+    return <TopToolbar>{canEdit && <EditButton />}</TopToolbar>;
+};
 
 const ReportMedia = () => {
     const record = useRecordContext();
