@@ -59,7 +59,12 @@ const DeleteAdministratorButton = ({ identity }: DeleteAdministratorButtonProps)
 const AdministratorList = (props: ListProps<Administrator>) => {
     const translate = useTranslate();
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
-    const { data: universities } = useGetList<University>('universities');
+    const { data: universities } = useGetList<University>('universities', {
+        sort: {
+            field: 'name',
+            order: 'ASC',
+        },
+    });
     const adminGroups = useGetAdminGroups();
     const centralUniversity = universities?.find(isCentralUniversity);
 

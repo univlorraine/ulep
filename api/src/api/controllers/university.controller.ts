@@ -8,6 +8,7 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
+  Query,
   SerializeOptions,
   UploadedFile,
   UseGuards,
@@ -38,6 +39,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadUniversityImageUsecase } from 'src/core/usecases';
 import { University } from 'src/core/models';
 import { UniversityKeycloakInterceptor } from 'src/api/interceptors';
+import { GetUniversitiesRequest } from '../dtos/universities/get-universities.request';
 
 @Controller('universities')
 @Swagger.ApiTags('Universities')
@@ -111,8 +113,13 @@ export class UniversityController {
   @SerializeOptions({ groups: ['read', 'university:read'] })
   @Swagger.ApiOperation({ summary: 'Collection of University ressource.' })
   @Swagger.ApiOkResponse({ type: UniversityResponse, isArray: true })
-  async getUniversities() {
-    const universities = await this.getUniversitiesUsecase.execute();
+  async getUniversities(@Query() query: GetUniversitiesRequest) {
+    const universities = await this.getUniversitiesUsecase.execute({
+      orderBy: {
+        field: query.field,
+        order: query.order,
+      },
+    });
 
     return new Collection({
       items: universities.items.map((university) =>

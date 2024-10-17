@@ -10,7 +10,12 @@ interface UniversityPickerProps {
 }
 
 const UniversityPicker: React.FC<UniversityPickerProps> = ({ initialValue, onChange, value }) => {
-    const { data, isLoading } = useGetList('universities');
+    const { data, isLoading } = useGetList('universities', {
+        sort: {
+            field: 'name',
+            order: 'ASC',
+        },
+    });
 
     useEffect(() => {
         if (data) {

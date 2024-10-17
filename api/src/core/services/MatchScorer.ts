@@ -1,7 +1,10 @@
 import { Language, LearningLanguage, LearningType } from 'src/core/models';
 /* eslint-disable prettier/prettier */
 import { Injectable, Logger } from '@nestjs/common';
-import { InvalidCoeficientsError, SameProfilesError } from '../errors/match-exceptions';
+import {
+  InvalidCoeficientsError,
+  SameProfilesError,
+} from '../errors/match-exceptions';
 import { Match, MatchScores, Profile } from '../models';
 
 export type Coeficients = {
@@ -25,20 +28,19 @@ export interface IMatchScorer {
   computeMatchScore(
     learningLanguage1: LearningLanguage,
     learningLanguage2: LearningLanguage,
-    availableLanguages: Language[]
+    availableLanguages: Language[],
   ): Match;
 }
 
-const getMaxValueInNumberMatrix = (matrix: Matrix ) => Object.values(matrix)
-  .reduce<number>((accumulator, value) => {
+const getMaxValueInNumberMatrix = (matrix: Matrix) =>
+  Object.values(matrix).reduce<number>((accumulator, value) => {
     const maxScoreForValue = Math.max(...Object.values(value));
     if (!accumulator || maxScoreForValue > accumulator) {
-      return maxScoreForValue
+      return maxScoreForValue;
     }
 
     return accumulator;
   }, -1);
-
 
 @Injectable()
 export class MatchScorer implements IMatchScorer {
@@ -46,9 +48,9 @@ export class MatchScorer implements IMatchScorer {
 
   // Coeficients used to compute the match score
   #coeficients: Coeficients = {
-    level: 0.60,
-    age: 0.10,
-    status: 0.10,
+    level: 0.6,
+    age: 0.1,
+    status: 0.1,
     goals: 0.05,
     interests: 0.05,
     meetingFrequency: 0.05,
@@ -67,11 +69,41 @@ export class MatchScorer implements IMatchScorer {
 
   // Similarities of meeting frequencies
   #frequencyMatrix: Matrix = {
-    ONCE_A_WEEK: { ONCE_A_WEEK: 1.0, TWICE_A_WEEK: 0.8, THREE_TIMES_A_WEEK: 0.6, TWICE_A_MONTH: 0.4, THREE_TIMES_A_MONTH: 0.3 },
-    TWICE_A_WEEK: { ONCE_A_WEEK: 0.8, TWICE_A_WEEK: 1.0, THREE_TIMES_A_WEEK: 0.8, TWICE_A_MONTH: 0.5, THREE_TIMES_A_MONTH: 0.4 },
-    THREE_TIMES_A_WEEK: { ONCE_A_WEEK: 0.6, TWICE_A_WEEK: 0.8, THREE_TIMES_A_WEEK: 1.0, TWICE_A_MONTH: 0.6, THREE_TIMES_A_MONTH: 0.5 },
-    TWICE_A_MONTH: { ONCE_A_WEEK: 0.4, TWICE_A_WEEK: 0.5, THREE_TIMES_A_WEEK: 0.6, TWICE_A_MONTH: 1.0, THREE_TIMES_A_MONTH: 0.9 },
-    THREE_TIMES_A_MONTH: { ONCE_A_WEEK: 0.3, TWICE_A_WEEK: 0.4, THREE_TIMES_A_WEEK: 0.5, TWICE_A_MONTH: 0.9, THREE_TIMES_A_MONTH: 1.0 }
+    ONCE_A_WEEK: {
+      ONCE_A_WEEK: 1.0,
+      TWICE_A_WEEK: 0.8,
+      THREE_TIMES_A_WEEK: 0.6,
+      TWICE_A_MONTH: 0.4,
+      THREE_TIMES_A_MONTH: 0.3,
+    },
+    TWICE_A_WEEK: {
+      ONCE_A_WEEK: 0.8,
+      TWICE_A_WEEK: 1.0,
+      THREE_TIMES_A_WEEK: 0.8,
+      TWICE_A_MONTH: 0.5,
+      THREE_TIMES_A_MONTH: 0.4,
+    },
+    THREE_TIMES_A_WEEK: {
+      ONCE_A_WEEK: 0.6,
+      TWICE_A_WEEK: 0.8,
+      THREE_TIMES_A_WEEK: 1.0,
+      TWICE_A_MONTH: 0.6,
+      THREE_TIMES_A_MONTH: 0.5,
+    },
+    TWICE_A_MONTH: {
+      ONCE_A_WEEK: 0.4,
+      TWICE_A_WEEK: 0.5,
+      THREE_TIMES_A_WEEK: 0.6,
+      TWICE_A_MONTH: 1.0,
+      THREE_TIMES_A_MONTH: 0.9,
+    },
+    THREE_TIMES_A_MONTH: {
+      ONCE_A_WEEK: 0.3,
+      TWICE_A_WEEK: 0.4,
+      THREE_TIMES_A_WEEK: 0.5,
+      TWICE_A_MONTH: 0.9,
+      THREE_TIMES_A_MONTH: 1.0,
+    },
   };
 
   // Note: A learning language can only match a language spoken by the potential match profile. As all
@@ -87,7 +119,7 @@ export class MatchScorer implements IMatchScorer {
     B2: { A0: 2, A1: 3, A2: 4, B1: 5, B2: 5, C1: 5, C2: 5 },
     C1: { A0: 2, A1: 3, A2: 4, B1: 5, B2: 5, C1: 5, C2: 5 },
     C2: { A0: 2, A1: 3, A2: 4, B1: 5, B2: 5, C1: 5, C2: 5 },
-  }
+  };
   #standardPairingLearningLanguagesCompatibilityMatrixMaxScore: number;
 
   #discoveryPairingLearningLanguagesCompatibilityMatrix: Matrix = {
@@ -101,10 +133,15 @@ export class MatchScorer implements IMatchScorer {
   };
   #discoveryPairingLearningLanguagesCompatibilityMatrixMaxScore: number;
 
-
   constructor() {
-    this.#standardPairingLearningLanguagesCompatibilityMatrixMaxScore = getMaxValueInNumberMatrix(this.#standardPairingLearningLanguagesCompatibilityMatrix);
-    this.#discoveryPairingLearningLanguagesCompatibilityMatrixMaxScore = getMaxValueInNumberMatrix(this.#discoveryPairingLearningLanguagesCompatibilityMatrix);
+    this.#standardPairingLearningLanguagesCompatibilityMatrixMaxScore =
+      getMaxValueInNumberMatrix(
+        this.#standardPairingLearningLanguagesCompatibilityMatrix,
+      );
+    this.#discoveryPairingLearningLanguagesCompatibilityMatrixMaxScore =
+      getMaxValueInNumberMatrix(
+        this.#discoveryPairingLearningLanguagesCompatibilityMatrix,
+      );
     this.#ageThresholds.sort((a, b) => b.age - a.age);
   }
 
@@ -138,7 +175,7 @@ export class MatchScorer implements IMatchScorer {
   public computeMatchScore(
     learningLanguage1: LearningLanguage,
     learningLanguage2: LearningLanguage,
-    availableLanguages: Language[]
+    availableLanguages: Language[],
   ): Match {
     const profile1 = learningLanguage1.profile;
     const profile2 = learningLanguage2.profile;
@@ -147,21 +184,35 @@ export class MatchScorer implements IMatchScorer {
       throw new SameProfilesError();
     }
 
-    if (!this.assertMatchIsNotForbidden(
-      learningLanguage1,
-      learningLanguage2,
-      availableLanguages,
-    )) {
-      return new Match({ owner: learningLanguage1, target: learningLanguage2, scores: MatchScores.empty() });
+    if (
+      !this.assertMatchIsNotForbidden(
+        learningLanguage1,
+        learningLanguage2,
+        availableLanguages,
+      )
+    ) {
+      return new Match({
+        owner: learningLanguage1,
+        target: learningLanguage2,
+        scores: MatchScores.empty(),
+      });
     }
 
-    const languageScore = this.computeLearningCompatibility(learningLanguage1, learningLanguage2);
+    const languageScore = this.computeLearningCompatibility(
+      learningLanguage1,
+      learningLanguage2,
+    );
     if (languageScore === 0) {
-      return new Match({ owner: learningLanguage1, target: learningLanguage2, scores: MatchScores.empty() });
+      return new Match({
+        owner: learningLanguage1,
+        target: learningLanguage2,
+        scores: MatchScores.empty(),
+      });
     }
 
     // Check if age bonus should be applied (i.e. if one of the two profiles is looking for a partner of the same age)
-    const shouldApplyAgeBonus = learningLanguage1.sameAge || learningLanguage2.sameAge;
+    const shouldApplyAgeBonus =
+      learningLanguage1.sameAge || learningLanguage2.sameAge;
 
     const scores: MatchScores = new MatchScores({
       level: languageScore,
@@ -170,7 +221,10 @@ export class MatchScorer implements IMatchScorer {
       goals: this.computeSameGoalsBonus(profile1, profile2),
       interests: this.computeSameInterestBonus(profile1, profile2),
       meetingFrequency: this.computeMeetingFrequencyBonus(profile1, profile2),
-      certificateOption: this.computeCertificateOptionBonus(learningLanguage1, learningLanguage2),
+      certificateOption: this.computeCertificateOptionBonus(
+        learningLanguage1,
+        learningLanguage2,
+      ),
       isExclusive: 0,
     });
 
@@ -187,12 +241,23 @@ export class MatchScorer implements IMatchScorer {
    * @param learningLanguage2
    * @returns
    */
-  private computeLearningCompatibility(learningLanguage1: LearningLanguage, learningLanguage2: LearningLanguage): number {
-    const isDiscovery = learningLanguage1.isDiscovery(learningLanguage2) || learningLanguage2.isDiscovery(learningLanguage1);
+  private computeLearningCompatibility(
+    learningLanguage1: LearningLanguage,
+    learningLanguage2: LearningLanguage,
+  ): number {
+    const isDiscovery =
+      learningLanguage1.isDiscovery(learningLanguage2) ||
+      learningLanguage2.isDiscovery(learningLanguage1);
 
     const score = isDiscovery
-      ? this.#discoveryPairingLearningLanguagesCompatibilityMatrix[learningLanguage1.level][learningLanguage2.level] / this.#discoveryPairingLearningLanguagesCompatibilityMatrixMaxScore
-      : this.#standardPairingLearningLanguagesCompatibilityMatrix[learningLanguage1.level][learningLanguage2.level] / this.#standardPairingLearningLanguagesCompatibilityMatrixMaxScore;
+      ? this.#discoveryPairingLearningLanguagesCompatibilityMatrix[
+          learningLanguage1.level
+        ][learningLanguage2.level] /
+        this.#discoveryPairingLearningLanguagesCompatibilityMatrixMaxScore
+      : this.#standardPairingLearningLanguagesCompatibilityMatrix[
+          learningLanguage1.level
+        ][learningLanguage2.level] /
+        this.#standardPairingLearningLanguagesCompatibilityMatrixMaxScore;
 
     return this.coeficients.level * score;
   }
@@ -204,9 +269,13 @@ export class MatchScorer implements IMatchScorer {
 
     for (const threshold of this.#ageThresholds) {
       // Check if at least one of the profiles is equal to or older than the threshold age
-      if (profile1.user.age >= threshold.age || profile2.user.age >= threshold.age) {
+      if (
+        profile1.user.age >= threshold.age ||
+        profile2.user.age >= threshold.age
+      ) {
         // Calculate the differenceFactorPercent based on ageBonus and maxDifference
-        const differenceFactorPercent = this.#coeficients.age / threshold.maxDifference;
+        const differenceFactorPercent =
+          this.#coeficients.age / threshold.maxDifference;
         // Calculate the differenceFactor
         const differenceFactor = differenceFactorPercent * ageDiff;
         // Calculate the ponderation
@@ -259,13 +328,15 @@ export class MatchScorer implements IMatchScorer {
       new Set(profile2.interests.map((interest) => interest.id)),
     );
 
-    return ((this.coeficients.interests / 2) * categories) + ((this.coeficients.interests / 2) * interests);
+    return (
+      (this.coeficients.interests / 2) * categories +
+      (this.coeficients.interests / 2) * interests
+    );
   }
-
 
   // Compute the similarity between two sets of strings using the Jaccard index
   private computeSimilarity(set1: Set<string>, set2: Set<string>): number {
-    const intersection = new Set([...set1].filter(x => set2.has(x)));
+    const intersection = new Set([...set1].filter((x) => set2.has(x)));
     const union = new Set([...set1, ...set2]);
 
     if (union.size === 0) {
@@ -278,15 +349,20 @@ export class MatchScorer implements IMatchScorer {
   // Apply bonus if profiles share the same meeting frequency
   private computeMeetingFrequencyBonus(
     profile1: Profile,
-    profile2: Profile
+    profile2: Profile,
   ): number {
     if (!profile1.meetingFrequency || !profile2.meetingFrequency) {
-      this.logger.error(`Error computing meeting frequency bonus: meeting frequency is not defined`);
+      this.logger.error(
+        `Error computing meeting frequency bonus: meeting frequency is not defined`,
+      );
       return 0;
     }
 
     try {
-      const ponderation = this.#frequencyMatrix[profile1.meetingFrequency][profile2.meetingFrequency];
+      const ponderation =
+        this.#frequencyMatrix[profile1.meetingFrequency][
+          profile2.meetingFrequency
+        ];
       return this.#coeficients.meetingFrequency * ponderation;
     } catch (error) {
       this.logger.error(`Error computing meeting frequency bonus: ${error}`);
@@ -297,9 +373,12 @@ export class MatchScorer implements IMatchScorer {
   // Apply bonus if profiles share the same certificate option
   private computeCertificateOptionBonus(
     learningLanguage1: LearningLanguage,
-    learningLanguage2: LearningLanguage
+    learningLanguage2: LearningLanguage,
   ): number {
-    if (!!learningLanguage1.certificateOption === !!learningLanguage2.certificateOption) {
+    if (
+      !!learningLanguage1.certificateOption ===
+      !!learningLanguage2.certificateOption
+    ) {
       return this.#coeficients.certificateOption;
     }
 
@@ -309,83 +388,125 @@ export class MatchScorer implements IMatchScorer {
   private assertMatchIsNotForbidden(
     learningLanguage1: LearningLanguage,
     learningLanguage2: LearningLanguage,
-    availableLanguages: Language[]
+    availableLanguages: Language[],
   ): boolean {
     const profile1 = learningLanguage1.profile;
     const profile2 = learningLanguage2.profile;
 
     // Check joker language have a match in available languages spoken by other profile
     if (learningLanguage1.language.isJokerLanguage()) {
-      if (!profile1.canLearnALanguageFromProfile(profile2, availableLanguages)) {
+      if (
+        !profile1.canLearnALanguageFromProfile(profile2, availableLanguages)
+      ) {
         return false;
       }
     }
     if (learningLanguage2.language.isJokerLanguage()) {
-      if (!profile2.canLearnALanguageFromProfile(profile1, availableLanguages)) {
+      if (
+        !profile2.canLearnALanguageFromProfile(profile1, availableLanguages)
+      ) {
         return false;
       }
     }
 
     // Check if language1 is available for learning language
-    if (!learningLanguage1.language.isJokerLanguage() && !availableLanguages.find(lang => lang.id === learningLanguage1.language.id) &&
-       !learningLanguage1.isAvailableInUniversity()) {
-        return  false
+    if (
+      !learningLanguage1.language.isJokerLanguage() &&
+      !availableLanguages.find(
+        (lang) => lang.id === learningLanguage1.language.id,
+      ) &&
+      !learningLanguage1.isAvailableInUniversity()
+    ) {
+      return false;
     }
 
     // Check if language2 is available for learning language
-    if (!learningLanguage2.language.isJokerLanguage() && !availableLanguages.find(lang => lang.id === learningLanguage2.language.id) &&
-        !learningLanguage2.isAvailableInUniversity()) {
-        return false;
+    if (
+      !learningLanguage2.language.isJokerLanguage() &&
+      !availableLanguages.find(
+        (lang) => lang.id === learningLanguage2.language.id,
+      ) &&
+      !learningLanguage2.isAvailableInUniversity()
+    ) {
+      return false;
     }
 
     // Check if a learning language is exclusive and the other is not
-    if(learningLanguage1.isExclusive() !== learningLanguage2.isExclusive()) {
+    if (learningLanguage1.isExclusive() !== learningLanguage2.isExclusive()) {
       return false;
     }
 
     // Check if learning languages are exclusives and doesn't have same tandem email
-    if(learningLanguage1.isExclusive() && !learningLanguage1.isExclusiveWithLearningLanguage(learningLanguage2)){
+    if (
+      learningLanguage1.isExclusive() &&
+      !learningLanguage1.isExclusiveWithLearningLanguage(learningLanguage2)
+    ) {
       return false;
     }
 
-    if (!learningLanguage1.isCompatibleWithLearningLanguage(learningLanguage2) ||
+    if (
+      !learningLanguage1.isCompatibleWithLearningLanguage(learningLanguage2) ||
       !learningLanguage2.isCompatibleWithLearningLanguage(learningLanguage1)
     ) {
       return false;
     }
 
     // Check forbidden case of same gender
-    if ((learningLanguage1.sameGender || learningLanguage2.sameGender)
-      && profile1.user.gender !== profile2.user.gender
+    if (
+      (learningLanguage1.sameGender || learningLanguage2.sameGender) &&
+      profile1.user.gender !== profile2.user.gender
     ) {
       return false;
     }
 
     // Check incompatibilities between learning types
-    if (learningLanguage1.learningType !== learningLanguage2.learningType && (
-      learningLanguage1.learningType !== LearningType.BOTH && learningLanguage2.learningType !== LearningType.BOTH
-    )) {
+    if (
+      learningLanguage1.learningType !== learningLanguage2.learningType &&
+      learningLanguage1.learningType !== LearningType.BOTH &&
+      learningLanguage2.learningType !== LearningType.BOTH
+    ) {
       return false;
     }
 
     // Check if both learning languages are tandems and have the same campus
     // Bug 4017 - L'appariement en mode e-tandem seulement devrait se faire avec les universités partenaires
     if (
-        learningLanguage1.learningType === LearningType.ETANDEM &&
-       (learningLanguage2.learningType === LearningType.ETANDEM || learningLanguage2.learningType === LearningType.BOTH) &&
-        profile1.user.university.id === profile2.user.university.id
-      ) {
-        return false;
-      }
+      learningLanguage1.learningType === LearningType.ETANDEM &&
+      (learningLanguage2.learningType === LearningType.ETANDEM ||
+        learningLanguage2.learningType === LearningType.BOTH) &&
+      profile1.user.university.id === profile2.user.university.id
+    ) {
+      return false;
+    }
+
+    // Symetric case of both learning type from learning language 1 point of view
+    // Bug 4017 - L'appariement en mode e-tandem seulement devrait se faire avec les universités partenaires
+    if (
+      learningLanguage1.learningType === LearningType.BOTH &&
+      learningLanguage2.learningType === LearningType.ETANDEM &&
+      profile1.user.university.id === profile2.user.university.id
+    ) {
+      return false;
+    }
+
+    if (
+      learningLanguage1.learningType === LearningType.BOTH &&
+      (learningLanguage2.learningType === LearningType.BOTH ||
+        learningLanguage2.learningType === LearningType.TANDEM) &&
+      learningLanguage1.campus &&
+      learningLanguage2.campus &&
+      learningLanguage1.campus.id !== learningLanguage2.campus.id
+    ) {
+      return false;
+    }
 
     // Check same campus if tandem
     if (
-      (learningLanguage1.learningType === LearningType.TANDEM
-        || learningLanguage2.learningType === LearningType.TANDEM)
-      && (
-        (!learningLanguage1.campus || !learningLanguage2.campus)
-        || (learningLanguage1.campus.id !== learningLanguage2.campus.id)
-      )
+      (learningLanguage1.learningType === LearningType.TANDEM ||
+        learningLanguage2.learningType === LearningType.TANDEM) &&
+      (!learningLanguage1.campus ||
+        !learningLanguage2.campus ||
+        learningLanguage1.campus.id !== learningLanguage2.campus.id)
     ) {
       return false;
     }
