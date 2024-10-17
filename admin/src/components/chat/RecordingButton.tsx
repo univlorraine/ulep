@@ -6,7 +6,7 @@ import { useNotify, useTranslate } from 'react-admin';
 
 interface RecordingButtonProps {
     mode: 'send' | 'record';
-    onSendPressed: () => void;
+    onSendPressed?: () => void;
     handleStartRecord: () => void;
     handleStopRecord: () => void;
     hasPermission: boolean;
@@ -66,8 +66,25 @@ const RecordingButton = ({
     };
 
     return (
-        <Box>
-            {recording && <div style={{ alignSelf: 'center', textAlign: 'center' }}>{time}s</div>}
+        <Box sx={{ position: 'relative' }}>
+            {recording && (
+                <div
+                    style={{
+                        zIndex: 1000,
+                        position: 'absolute',
+                        top: '-25px',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                        color: 'white',
+                        padding: '2px 5px',
+                        borderRadius: '3px',
+                        fontSize: '12px',
+                    }}
+                >
+                    {time}s
+                </div>
+            )}
             <IconButton
                 onClick={onSendPressed}
                 onMouseDown={startRecording}

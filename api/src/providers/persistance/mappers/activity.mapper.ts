@@ -11,6 +11,8 @@ import {
 import {
   textContentMapper,
   TextContentRelations,
+  universityMapper,
+  UniversityRelations,
 } from 'src/providers/persistance/mappers';
 import { languageMapper } from 'src/providers/persistance/mappers/language.mapper';
 import {
@@ -79,7 +81,9 @@ export const ActivityThemeInclude =
     TextContent: TextContentRelations,
   });
 
-export const ActivityThemeRelations = { include: ActivityThemeInclude };
+export const ActivityThemeRelations = {
+  include: ActivityThemeInclude,
+};
 
 export type ActivityThemeSnapshot = Prisma.ActivityThemesGetPayload<
   typeof ActivityThemeRelations
@@ -123,6 +127,45 @@ export const activityThemeCategoryMapper = (
   });
 };
 
+export const ActivityThemeCategoryOnlyInclude =
+  Prisma.validator<Prisma.ActivityThemeCategoriesInclude>()({
+    TextContent: TextContentRelations,
+  });
+
+export const ActivityThemeCategoryOnlyRelations = {
+  include: ActivityThemeCategoryOnlyInclude,
+};
+
+export type ActivityThemeCategoryOnlySnapshot =
+  Prisma.ActivityThemeCategoriesGetPayload<
+    typeof ActivityThemeCategoryOnlyRelations
+  >;
+
+export const activityThemeCategoryOnlyMapper = (
+  snapshot: ActivityThemeCategoryOnlySnapshot,
+): ActivityThemeCategory => {
+  return new ActivityThemeCategory({
+    id: snapshot.id,
+    content: textContentMapper(snapshot.TextContent),
+    createdAt: snapshot.created_at,
+    updatedAt: snapshot.updated_at,
+  });
+};
+
+export const activityThemeWithCategoryMapper = (
+  snapshot: ActivityThemeSnapshot & {
+    Category: ActivityThemeCategoryOnlySnapshot;
+  },
+): ActivityTheme => {
+  return new ActivityTheme({
+    id: snapshot.id,
+    content: textContentMapper(snapshot.TextContent),
+    category: activityThemeCategoryOnlyMapper(snapshot.Category),
+    createdAt: snapshot.created_at,
+    updatedAt: snapshot.updated_at,
+  });
+};
+
 export const ActivityInclude = Prisma.validator<Prisma.ActivityInclude>()({
   ActivityExercises: true,
   ActivityVocabulary: ActivityVocabularyRelations,
@@ -131,6 +174,7 @@ export const ActivityInclude = Prisma.validator<Prisma.ActivityInclude>()({
   RessourceFile: true,
   ActivityThemes: ActivityThemeRelations,
   Creator: { include: ProfilesRelations },
+  University: { include: UniversityRelations },
 });
 
 export const ActivityRelations = { include: ActivityInclude };
@@ -144,7 +188,8 @@ export const activityMapper = (snapshot: ActivitySnapshot): Activity => {
     id: snapshot.id,
     title: snapshot.title,
     description: snapshot.description,
-    creator: profileMapper(snapshot.Creator),
+    creator: snapshot.Creator && profileMapper(snapshot.Creator),
+    university: universityMapper(snapshot.University),
     image:
       snapshot.Image &&
       new MediaObject({
@@ -171,6 +216,72 @@ export const activityMapper = (snapshot: ActivitySnapshot): Activity => {
     createdAt: snapshot.created_at,
     updatedAt: snapshot.updated_at,
     activityTheme: activityThemeMapper(snapshot.ActivityThemes),
+    activityVocabularies: snapshot.ActivityVocabulary?.map(
+      activityVocabularyMapper,
+    ),
+    activityExercises: snapshot.ActivityExercises?.map(activityExerciseMapper),
+    metadata: snapshot.metadata,
+  });
+};
+
+export const ActivityWithThemeWithCategoryInclude = {
+  ActivityExercises: true,
+  ActivityVocabulary: ActivityVocabularyRelations,
+  Image: true,
+  LanguageCode: true,
+  RessourceFile: true,
+  ActivityThemes: {
+    include: {
+      TextContent: TextContentRelations,
+      Category: { include: { TextContent: TextContentRelations } },
+    },
+  },
+  Creator: { include: ProfilesRelations },
+  University: { include: UniversityRelations },
+};
+
+export const ActivityWithThemeWithCategoryRelations = {
+  include: ActivityWithThemeWithCategoryInclude,
+};
+
+export type ActivityWithThemeWithCategoryRelationsSnapshot =
+  Prisma.ActivityGetPayload<typeof ActivityWithThemeWithCategoryRelations>;
+
+export const activityWithCategoryMapper = (
+  snapshot: ActivityWithThemeWithCategoryRelationsSnapshot,
+): Activity => {
+  return new Activity({
+    id: snapshot.id,
+    title: snapshot.title,
+    description: snapshot.description,
+    creator: snapshot.Creator && profileMapper(snapshot.Creator),
+    university: universityMapper(snapshot.University),
+    image:
+      snapshot.Image &&
+      new MediaObject({
+        id: snapshot.Image.id,
+        name: snapshot.Image.name,
+        bucket: snapshot.Image.bucket,
+        mimetype: snapshot.Image.mime,
+        size: snapshot.Image.size,
+      }),
+    creditImage: snapshot.credit_image,
+    languageLevel: snapshot.language_level as ProficiencyLevel,
+    language: languageMapper(snapshot.LanguageCode),
+    status: snapshot.status as ActivityStatus,
+    ressourceUrl: snapshot.ressource_url,
+    ressourceFile:
+      snapshot.RessourceFile &&
+      new MediaObject({
+        id: snapshot.RessourceFile.id,
+        name: snapshot.RessourceFile.name,
+        bucket: snapshot.RessourceFile.bucket,
+        mimetype: snapshot.RessourceFile.mime,
+        size: snapshot.RessourceFile.size,
+      }),
+    createdAt: snapshot.created_at,
+    updatedAt: snapshot.updated_at,
+    activityTheme: activityThemeWithCategoryMapper(snapshot.ActivityThemes),
     activityVocabularies: snapshot.ActivityVocabulary?.map(
       activityVocabularyMapper,
     ),

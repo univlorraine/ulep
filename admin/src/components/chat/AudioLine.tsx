@@ -5,9 +5,10 @@ import React, { useEffect, useRef, useState } from 'react';
 
 interface AudioLineProps {
     audioFile: File | string;
+    hideProgressBar?: boolean;
 }
 
-const AudioLine = ({ audioFile }: AudioLineProps) => {
+const AudioLine = ({ audioFile, hideProgressBar = false }: AudioLineProps) => {
     const [isPlaying, setIsPlaying] = useState(false);
     const [progress, setProgress] = useState(0);
     const [duration, setDuration] = useState(0);
@@ -75,15 +76,19 @@ const AudioLine = ({ audioFile }: AudioLineProps) => {
 
     return (
         <Box
-            sx={{
-                backgroundColor: 'secondary.main',
-                borderRadius: '5px',
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-                gap: 1,
-                padding: '10px',
-            }}
+            sx={
+                !hideProgressBar
+                    ? {
+                          backgroundColor: 'secondary.main',
+                          borderRadius: '5px',
+                          display: 'flex',
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          gap: 1,
+                          padding: '10px',
+                      }
+                    : {}
+            }
         >
             <IconButton onClick={togglePlayPause} size="large" sx={{ color: 'primary.main', marginRight: '10px' }}>
                 {isPlaying ? (
@@ -92,19 +97,27 @@ const AudioLine = ({ audioFile }: AudioLineProps) => {
                     <PlayCircleOutlineIcon fontSize="inherit" />
                 )}
             </IconButton>
-            <Box
-                sx={{
-                    minWidth: '200px',
-                    width: '100%',
-                    height: '10px',
-                    backgroundColor: 'grey.100',
-                    borderRadius: '5px',
-                }}
-            >
+
+            {!hideProgressBar && (
                 <Box
-                    sx={{ width: `${progress}%`, height: '10px', backgroundColor: 'primary.main', borderRadius: '5px' }}
-                />
-            </Box>
+                    sx={{
+                        minWidth: '200px',
+                        width: '100%',
+                        height: '10px',
+                        backgroundColor: 'grey.100',
+                        borderRadius: '5px',
+                    }}
+                >
+                    <Box
+                        sx={{
+                            width: `${progress}%`,
+                            height: '10px',
+                            backgroundColor: 'primary.main',
+                            borderRadius: '5px',
+                        }}
+                    />
+                </Box>
+            )}
         </Box>
     );
 };

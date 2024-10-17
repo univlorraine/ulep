@@ -1,6 +1,10 @@
 import * as Swagger from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { LanguageResponse, ProfileResponse } from 'src/api/dtos';
+import {
+  LanguageResponse,
+  ProfileResponse,
+  UniversityResponse,
+} from 'src/api/dtos';
 import { OGResponse } from 'src/api/dtos/chat';
 import { MediaObjectResponse } from 'src/api/dtos/medias';
 import {
@@ -75,7 +79,7 @@ export class ActivityThemeCategoryResponse {
 
   @Swagger.ApiProperty({ type: () => ActivityThemeResponse })
   @Expose({ groups: ['read'] })
-  themes: ActivityThemeResponse[];
+  themes?: ActivityThemeResponse[];
 
   constructor(partial: Partial<ActivityThemeCategoryResponse>) {
     Object.assign(this, partial);
@@ -91,9 +95,11 @@ export class ActivityThemeCategoryResponse {
         textContent: activityThemeCategory.content,
         languageCode: languageCode,
       }),
-      themes: activityThemeCategory.themes.map((theme) =>
-        ActivityThemeResponse.from(theme, languageCode),
-      ),
+      themes:
+        activityThemeCategory.themes &&
+        activityThemeCategory.themes.map((theme) =>
+          ActivityThemeResponse.from(theme, languageCode),
+        ),
     });
   }
 }
@@ -189,7 +195,11 @@ export class ActivityResponse {
 
   @Swagger.ApiProperty({ type: () => ProfileResponse })
   @Expose({ groups: ['read'] })
-  creator: ProfileResponse;
+  creator?: ProfileResponse;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @Expose({ groups: ['read'] })
+  university: UniversityResponse;
 
   @Swagger.ApiProperty({ type: () => MediaObjectResponse })
   @Expose({ groups: ['read'] })
@@ -244,7 +254,10 @@ export class ActivityResponse {
       id: activity.id,
       title: activity.title,
       description: activity.description,
-      creator: ProfileResponse.fromDomain(activity.creator),
+      creator: activity.creator
+        ? ProfileResponse.fromDomain(activity.creator)
+        : undefined,
+      university: UniversityResponse.fromUniversity(activity.university),
       status: activity.status,
       language: LanguageResponse.fromLanguage(activity.language),
       languageLevel: activity.languageLevel,

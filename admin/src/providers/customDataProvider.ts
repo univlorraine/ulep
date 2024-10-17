@@ -16,6 +16,7 @@ import { RoutineExecution } from '../entities/RoutineExecution';
 import { TandemStatus } from '../entities/Tandem';
 import User from '../entities/User';
 import ActivitiesCategoriesQuery from '../queries/ActivitiesCategoriesQuery';
+import ActivitiesQuery from '../queries/ActivitiesQuery';
 import AdministratorsQuery from '../queries/AdministratorsQuery';
 import ChatQuery from '../queries/ChatQuery';
 import CountriesQuery from '../queries/CountriesQuery';
@@ -111,7 +112,23 @@ const customDataProvider = {
             body = JSON.stringify(params.data);
         }
 
-        const method = resource === 'users' ? 'POST' : 'PUT';
+        let method = 'PUT';
+
+        switch (resource) {
+            case 'users':
+                method = 'POST';
+                break;
+            case 'activities':
+                method = 'POST';
+                url = `${process.env.REACT_APP_API_URL}/activities/${params.id}/update`;
+                break;
+            case 'activities/status':
+                url = `${process.env.REACT_APP_API_URL}/activities/${params.id}/status`;
+                break;
+            default:
+                break;
+        }
+
         const response = await fetch(new URL(url), httpClientOptions({ method, body }));
 
         if (!response.ok) {
@@ -190,6 +207,10 @@ const customDataProvider = {
         let url = new URL(`${process.env.REACT_APP_API_URL}/${resource}`);
 
         switch (resource) {
+            case 'activities':
+                url = new URL(`${process.env.REACT_APP_API_URL}/activities/admin`);
+                url.search = ActivitiesQuery(params);
+                break;
             case 'activities/categories':
                 url.search = ActivitiesCategoriesQuery(params);
                 break;

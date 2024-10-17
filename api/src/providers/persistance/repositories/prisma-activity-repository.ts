@@ -13,6 +13,7 @@ import {
   CreateActivityProps,
   CreateActivityThemeCategoryProps,
   CreateActivityThemeProps,
+  GetActivitiesForAdminProps,
   GetActivitiesProps,
   GetAllActivityThemesProps,
   UpdateActivityProps,
@@ -28,6 +29,8 @@ import {
   ActivityThemeRelations,
   activityVocabularyMapper,
   ActivityVocabularyRelations,
+  activityWithCategoryMapper,
+  ActivityWithThemeWithCategoryRelations,
 } from 'src/providers/persistance/mappers/activity.mapper';
 
 @Injectable()
@@ -43,16 +46,23 @@ export class PrismaActivityRepository implements ActivityRepository {
         credit_image: props.creditImage,
         metadata: props.metadata,
         ressource_url: props.ressourceUrl,
+        University: {
+          connect: {
+            id: props.universityId,
+          },
+        },
         LanguageCode: {
           connect: {
             code: props.languageCode,
           },
         },
-        Creator: {
-          connect: {
-            id: props.profileId,
+        ...(props.profileId && {
+          Creator: {
+            connect: {
+              id: props.profileId,
+            },
           },
-        },
+        }),
         ActivityThemes: {
           connect: {
             id: props.themeId,
@@ -118,14 +128,6 @@ export class PrismaActivityRepository implements ActivityRepository {
       };
     }
 
-    if (props.themesIds) {
-      where.ActivityThemes = {
-        id: {
-          in: props.themesIds,
-        },
-      };
-    }
-
     if (props.searchTitle) {
       where.title = {
         contains: props.searchTitle,
@@ -164,6 +166,78 @@ export class PrismaActivityRepository implements ActivityRepository {
     };
   }
 
+  async allWithThemeWithCategory(
+    props: GetActivitiesForAdminProps,
+  ): Promise<{ items: Activity[]; totalItems: number }> {
+    const where: Prisma.ActivityWhereInput = {};
+
+    if (props.languageCode) {
+      where.LanguageCode = {
+        id: props.languageCode,
+      };
+    }
+
+    if (props.languageLevel) {
+      where.language_level = {
+        equals: props.languageLevel,
+      };
+    }
+
+    if (props.searchTitle) {
+      where.title = {
+        contains: props.searchTitle,
+        mode: 'insensitive',
+      };
+    }
+
+    if (props.category) {
+      where.ActivityThemes = {
+        Category: {
+          id: props.category,
+        },
+      };
+    }
+
+    if (props.theme) {
+      where.ActivityThemes = {
+        id: props.theme,
+      };
+    }
+
+    if (props.university) {
+      where.University = {
+        id: props.university,
+      };
+    }
+
+    if (props.status) {
+      where.status = {
+        equals: props.status,
+      };
+    }
+
+    const activities = await this.prisma.activity.findMany({
+      where,
+      skip: props.pagination?.page
+        ? (props.pagination.page - 1) * props.pagination.limit
+        : 0,
+      take: props.pagination?.limit,
+      orderBy: {
+        updated_at: 'desc',
+      },
+      ...ActivityWithThemeWithCategoryRelations,
+    });
+
+    const totalActivities = await this.prisma.activity.count({
+      where,
+    });
+
+    return {
+      items: activities.map(activityWithCategoryMapper),
+      totalItems: totalActivities,
+    };
+  }
+
   async allThemes(
     props: GetAllActivityThemesProps,
   ): Promise<{ items: ActivityThemeCategory[]; totalItems: number }> {
@@ -189,14 +263,14 @@ export class PrismaActivityRepository implements ActivityRepository {
       where: {
         id,
       },
-      ...ActivityRelations,
+      ...ActivityWithThemeWithCategoryRelations,
     });
 
     if (!activity) {
       return null;
     }
 
-    return activityMapper(activity);
+    return activityWithCategoryMapper(activity);
   }
 
   async ofThemeId(themeId: string): Promise<ActivityTheme> {

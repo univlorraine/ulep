@@ -1,4 +1,84 @@
 {
+    "activities": {
+        "label": "Activités",
+        "tabLabel": "Activités",
+        "form": {
+            "mainInfos": "Informations principales",
+            "title": "Titre",
+            "image": "Image d'illustration",
+            "imageCredit": "Credit de l'image",
+            "description": "Description",
+            "language": "Langue",
+            "level": "Niveau",
+            "category": "Catégorie",
+            "theme": "Thème",
+            "ressource": "Ressource",
+            "url": "URL",
+            "file": "Fichier",
+            "ressourceURL": "URL",
+            "ressourceFile": "Fichier",
+            "exercices": "Exercices",
+            "exercice": "Exercice",
+            "addExercice": "Ajouter un exercice",
+            "vocabulary": "Vocabulaire",
+            "pronunciation": "Prononciation",
+            "addVocabulary": "Ajouter un vocabulaire",
+            "vocabularyPlaceholder": "Entrez un mot ou une phrase",
+            "deletePronunciation": "Supprimer la prononciation"
+        },
+        "list": {
+            "language": "Langue",
+            "level": "Niveau",
+            "category": "Catégorie",
+            "theme": "Thème",
+            "university": "Université",
+            "creator": "Auteur",
+            "title": "Titre",
+            "status": "Statut",
+            "admin": "Administrateur"
+        },
+        "show": {
+            "mainInfos": {
+                "label": "Informations principales",
+                "title": "Titre",
+                "image": "Image",
+                "credit": "Credit",
+                "description": "Description",
+                "language": "Langue",
+                "level": "Niveau",
+                "category": "Catégorie",
+                "theme": "Thème",
+                "resource": "Ressource (URL ou fichier)",
+                "url": "URL",
+                "admin": "Administrateur"
+            },
+            "exercices": {
+                "label": "Exercices",
+                "content": "Contenu",
+                "order": "Ordre"
+            },
+            "vocabulary": {
+                "label": "Vocabulaire",
+                "pronunciation": "Prononciation"
+            },
+            "actions": {
+                "validate": "Valider",
+                "refuse": "Refuser",
+                "unpublish": "Dépublier",
+                "publish": "Publier"
+            }
+        },
+        "status": {
+            "draft": "Brouillon",
+            "published": "Publié",
+            "in_validation": "En attente de validation",
+            "rejected": "Rejeté"
+        },
+        "error": {
+            "update": "Une erreur est survenue pendant la mise à jour de l'activité",
+            "create": "Une erreur est survenue pendant la création de l'activité"
+        }
+    },
     "activities_categories": {
         "tabLabel": "Catégories d'Activités",
         "name": "Nom",

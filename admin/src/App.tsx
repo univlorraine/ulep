@@ -1,5 +1,6 @@
 import ChatIcon from '@mui/icons-material/Chat';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import EditNoteIcon from '@mui/icons-material/EditNote';
 import HelpIcon from '@mui/icons-material/Help';
 import InterestsIcon from '@mui/icons-material/Interests';
 import LanguageIcon from '@mui/icons-material/Language';
@@ -15,6 +16,7 @@ import { Admin, CustomRoutes, Resource } from 'react-admin';
 import { Route } from 'react-router-dom';
 import CustomLayout from './components/layout/layout';
 import { Role } from './entities/Administrator';
+import activities from './pages/activities';
 import activityCategories from './pages/activity-categories';
 import activityThemes from './pages/activity-themes';
 import EditAdministratorProfile from './pages/admin-profile/edit';
@@ -80,6 +82,12 @@ const App = () => (
                 />
                 <Resource icon={ChatIcon} name="chat" options={{ label: 'chat.label' }} {...chat} />
                 <Resource icon={NewspaperIcon} name="news" options={{ label: 'news.label' }} {...news} />
+                <Resource
+                    icon={EditNoteIcon}
+                    name="activities"
+                    options={{ label: 'activities.label' }}
+                    {...activities}
+                />
                 {permissions.checkRole(Role.MANAGER) && (
                     <Resource
                         edit={universities.manager.edit}
