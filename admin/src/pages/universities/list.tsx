@@ -65,7 +65,7 @@ const UniversityList = (props: any) => {
     return (
         <>
             <UniversitiesPagesHeader />
-            <List exporter={false} {...props} pagination>
+            <List exporter={false} {...props} sort={{ field: 'name', order: 'ASC' }} pagination>
                 <Datagrid
                     bulkActionButtons={<UniversityBulkActionsToolbar />}
                     isRowSelectable={(record: University) => !!record.parent}
@@ -76,6 +76,8 @@ const UniversityList = (props: any) => {
                         render={(record: University) => (
                             <UniversityName isMainUniversity={!record.parent} name={record.name} />
                         )}
+                        source="name"
+                        sortable
                     />
                     <TextField label={translate('universities.country')} sortable={false} source="country.name" />
                     <FunctionField
