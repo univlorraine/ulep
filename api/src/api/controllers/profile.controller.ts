@@ -194,6 +194,7 @@ export class ProfileController {
       learningType,
       page,
       limit,
+      tandemStatus,
     } = query;
 
     const profiles = await this.getProfilesWithTandemsProfilesUsecase.execute({
@@ -207,6 +208,7 @@ export class ProfileController {
         },
         learningLanguage: learningLanguage,
         learningType: learningType,
+        tandemStatus: tandemStatus,
       },
     });
 
