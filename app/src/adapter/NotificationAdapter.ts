@@ -1,6 +1,7 @@
-import { ActionPerformed, PushNotifications, PushNotificationSchema, Token } from '@capacitor/push-notifications';
-import NotificationAdapterInterface from './interfaces/NotificationAdapter.interface';
 import { FCM } from '@capacitor-community/fcm';
+import { App } from '@capacitor/app';
+import { ActionPerformed, PushNotifications, PushNotificationSchema } from '@capacitor/push-notifications';
+import NotificationAdapterInterface from './interfaces/NotificationAdapter.interface';
 
 class NotificationAdapter implements NotificationAdapterInterface {
     errorListener(callback: Function) {
@@ -25,8 +26,14 @@ class NotificationAdapter implements NotificationAdapterInterface {
     }
 
     notificationReceivedListener(callback: Function) {
-        PushNotifications.addListener('pushNotificationReceived', (notification: PushNotificationSchema) => {
-            callback(notification);
+        PushNotifications.addListener('pushNotificationReceived', async (notification: PushNotificationSchema) => {
+            const appState = await App.getState();
+            if (!appState.isActive) {
+                callback(notification);
+            } else {
+                // Delete all notifications if the app is active
+                await PushNotifications.removeAllDeliveredNotifications();
+            }
         });
     }
 

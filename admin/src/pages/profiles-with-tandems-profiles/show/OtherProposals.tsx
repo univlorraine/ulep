@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unstable-nested-components */
-import { Box, CircularProgress, Typography } from '@mui/material';
-import React, { useEffect } from 'react';
+import { Box, CircularProgress, SortDirection, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { useRefresh, useTranslate } from 'react-admin';
 import {
     LearningLanguageWithTandemWithPartnerProfile,
@@ -10,8 +10,9 @@ import { Match } from '../../../entities/Match';
 import { TandemWithPartnerLearningLanguage } from '../../../entities/Tandem';
 import TandemActions from './Actions/TandemActions';
 import TandemFilters from './TandemTable/TandemFilters';
-import TandemTable from './TandemTable/TandemTable';
+import TandemTable, { TandemTableFieldToSort } from './TandemTable/TandemTable';
 import usePagination from './TandemTable/usePagination';
+import useSortedTandemMatches from './TandemTable/useSortedTandemMatches';
 import useTandemMatchesFilters from './TandemTable/useTandemMatchesFilters';
 
 type OtherProposalsProps = {
@@ -33,7 +34,8 @@ const OtherProposals = ({
 }: OtherProposalsProps) => {
     const translate = useTranslate();
     const refresh = useRefresh();
-
+    const [sortDirection, setSortDirection] = useState<SortDirection>(false);
+    const [fieldToSort, setFieldToSort] = useState<TandemTableFieldToSort>('level');
     const {
         filteredMatches,
         firstnameFilter,
@@ -45,7 +47,8 @@ const OtherProposals = ({
         universityIdFilter,
         setUniversityIdFilter,
     } = useTandemMatchesFilters(matches || []);
-    const { resetPage, visibleRows, ...pagination } = usePagination<Match>(filteredMatches);
+    const sortedMatches = useSortedTandemMatches(filteredMatches, sortDirection, fieldToSort);
+    const { resetPage, visibleRows, ...pagination } = usePagination<Match>(sortedMatches);
 
     useEffect(() => {
         resetPage();
@@ -96,6 +99,7 @@ const OtherProposals = ({
                                             />
                                         )}
                                         displayTandemLanguage={isJokerLearningLanguage}
+                                        fieldToSort={fieldToSort}
                                         pagination={pagination}
                                         rows={visibleRows.map((match) => ({
                                             ...match.target,
@@ -106,6 +110,9 @@ const OtherProposals = ({
                                                 match.target
                                             ),
                                         }))}
+                                        setFieldToSort={setFieldToSort}
+                                        setSortDirection={setSortDirection}
+                                        sortDirection={sortDirection}
                                     />
                                 </Box>
                             </>

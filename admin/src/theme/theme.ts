@@ -21,7 +21,7 @@ const theme: RaThemeOptions = {
         },
     } as PaletteOptions,
     typography: {
-        fontFamily: 'Roboto, Arial, sans-serif',
+        fontFamily: 'Twemoji Country Flags, Roboto, Arial, sans-serif',
         body1: {
             fontSize: '0.875rem',
             color: '#212121',

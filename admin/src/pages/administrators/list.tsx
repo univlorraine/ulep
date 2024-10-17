@@ -19,6 +19,7 @@ import {
 import useGetAdminGroups from '../../components/adminGroups/useGetAdminGroups';
 import ConfigPagesHeader from '../../components/tabs/ConfigPagesHeader';
 import Administrator from '../../entities/Administrator';
+import University, { isCentralUniversity } from '../../entities/University';
 
 interface DeleteAdministratorButtonProps {
     identity: UserIdentity;
@@ -58,8 +59,14 @@ const DeleteAdministratorButton = ({ identity }: DeleteAdministratorButtonProps)
 const AdministratorList = (props: ListProps<Administrator>) => {
     const translate = useTranslate();
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
-    const { data: universities } = useGetList('universities');
+    const { data: universities } = useGetList<University>('universities', {
+        sort: {
+            field: 'name',
+            order: 'ASC',
+        },
+    });
     const adminGroups = useGetAdminGroups();
+    const centralUniversity = universities?.find(isCentralUniversity);
 
     if (isLoadingIdentity || !identity) {
         return <Loading />;
@@ -131,7 +138,7 @@ const AdministratorList = (props: ListProps<Administrator>) => {
 
                     {identity.isCentralUniversity && (
                         <ReferenceField
-                            emptyText={translate('administrators.all')}
+                            emptyText={centralUniversity?.name}
                             label={translate('administrators.university')}
                             reference="universities"
                             sortable={false}

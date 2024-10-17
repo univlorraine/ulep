@@ -1,3 +1,5 @@
+import Language from './Language';
+
 export type KeycloakGroup = {
     id: string;
     name: string;
@@ -23,6 +25,8 @@ type Administrator = {
     firstname: string;
     lastname: string;
     universityId: string;
+    languageId: string;
+    language: Language;
     group: KeycloakGroup;
 };
 
@@ -35,6 +39,7 @@ export interface AdministratorFormPayload {
     universityId?: string;
     group: KeycloakGroup;
     file: File | undefined;
+    languageId?: string;
 }
 
 export default Administrator;
