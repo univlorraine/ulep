@@ -60,7 +60,7 @@ const CreateAdministrator = () => {
         <>
             <ConfigPagesHeader />
             <Create title={translate('administrators.create.title')}>
-                <AdministratorForm handleSubmit={handleSubmit} type="create" />
+                <AdministratorForm handleSubmit={handleSubmit} type="create" universityId="central" />
             </Create>
         </>
     );
