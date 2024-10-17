@@ -10,7 +10,7 @@
   "loginTheme": "ulep",
   "emailTheme": "ulep",
   "supportedLocales": ["en", "fr"],
-  "defaultLocale": "fr",
+  "defaultLocale": "en",
   "smtpServer": {
     "starttls": "false",
     "port": "{{ .Values.api.env.smtpPort }}",
