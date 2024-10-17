@@ -13,6 +13,7 @@ export class UpdateAdministratorCommand {
   email?: string;
   password?: string;
   universityId?: string;
+  languageId?: string;
   group?: KeycloakGroup;
   mimetype?: string;
   shouldRemoveAdminRole?: boolean;
@@ -52,6 +53,7 @@ export class UpdateAdministratorUsecase {
         email: command.email || admin.email,
         password: command.password,
         universityId: command.universityId || admin.attributes?.universityId,
+        languageId: command.languageId || admin.attributes?.languageId,
         groups: !command.shouldRemoveAdminRole ? [command.group] : [],
       });
       return keycloakUser;
