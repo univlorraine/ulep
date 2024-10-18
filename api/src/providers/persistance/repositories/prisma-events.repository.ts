@@ -66,8 +66,6 @@ export class PrismaEventRepository implements EventRepository {
       },
     };
 
-    console.dir({ where }, { depth: Infinity });
-
     const { page, limit } = pagination;
     const offset = (page - 1) * limit;
 
@@ -82,6 +80,9 @@ export class PrismaEventRepository implements EventRepository {
       skip: offset,
       take: limit,
       where,
+      orderBy: {
+        start_date: 'desc',
+      },
       include: EventRelations,
     });
 

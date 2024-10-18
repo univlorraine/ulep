@@ -118,8 +118,8 @@ model Organizations {
   DefaultCertificateFile MediaObjects? @relation("UniversitiesDefaultCertificateFile", fields: [default_certificate_file_id], references: [id])
   Activities            Activity[]
   News                  News[]
-  Events                Events[] @relation("ConcernedUniversities")
-  AuthorUniversity      Events[] @relation("AuthorUniversity")
+  EventsConcernedUniversities   Events[] @relation("ConcernedUniversities")
+  EventsAuthorUniversity  Events[] @relation("AuthorUniversity")
 
   @@unique([name])
   @@map("organizations")

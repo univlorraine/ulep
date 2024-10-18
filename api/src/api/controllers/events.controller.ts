@@ -54,7 +54,7 @@ export class EventsController {
   @Get()
   @UseGuards(AuthenticationGuard)
   @SerializeOptions({ groups: ['read'] })
-  @Swagger.ApiOperation({ summary: 'Get events ressources.' })
+  @Swagger.ApiOperation({ summary: 'Get Events resources.' })
   @CollectionResponse(EventResponse)
   async getEvents(@Query() query: GetEventsQuery) {
     const events = await this.getEventsUsecase.execute({
@@ -81,7 +81,7 @@ export class EventsController {
   @Get(':id')
   @UseGuards(AuthenticationGuard)
   @SerializeOptions({ groups: ['read', 'event:enrolledUsers'] })
-  @Swagger.ApiOperation({ summary: 'Get a Event ressource.' })
+  @Swagger.ApiOperation({ summary: 'Get an Event resource.' })
   @Swagger.ApiOkResponse({ type: EventResponse })
   async getEvent(@Param('id', ParseUUIDPipe) id: string) {
     const event = await this.getEventUsecase.execute(id);
@@ -93,7 +93,7 @@ export class EventsController {
   @UseGuards(AuthenticationGuard)
   @SerializeOptions({ groups: ['read', 'event:enrolledUsers'] })
   @Roles(Role.ADMIN)
-  @Swagger.ApiOperation({ summary: 'Create a Event ressource.' })
+  @Swagger.ApiOperation({ summary: 'Create an Event resource.' })
   @Swagger.ApiOkResponse({ type: EventResponse })
   @UseInterceptors(FileInterceptor('file'))
   async createEvent(
@@ -118,7 +118,7 @@ export class EventsController {
   @UseGuards(AuthenticationGuard)
   @SerializeOptions({ groups: ['read', 'event:enrolledUsers'] })
   @Roles(Role.ADMIN)
-  @Swagger.ApiOperation({ summary: 'Update an Event ressource.' })
+  @Swagger.ApiOperation({ summary: 'Update an Event resource.' })
   @Swagger.ApiOkResponse({ type: EventResponse })
   @UseInterceptors(FileInterceptor('file'))
   async updateEvent(
@@ -143,7 +143,7 @@ export class EventsController {
   @Post(':id/subscribe')
   @UseGuards(AuthenticationGuard)
   @SerializeOptions({ groups: ['read', 'event:enrolledUsers'] })
-  @Swagger.ApiOperation({ summary: 'Subscribe users to an Event ressource.' })
+  @Swagger.ApiOperation({ summary: 'Subscribe users to an Event resource.' })
   @Swagger.ApiOkResponse({ type: EventResponse })
   @UseInterceptors(AnyFilesInterceptor())
   async subscribeToEvent(
@@ -161,7 +161,7 @@ export class EventsController {
   @Post(':id/unsubscribe')
   @UseGuards(AuthenticationGuard)
   @SerializeOptions({ groups: ['read', 'event:enrolledUsers'] })
-  @Swagger.ApiOperation({ summary: 'Unsubscribe users to an Event ressource.' })
+  @Swagger.ApiOperation({ summary: 'Unsubscribe users to an Event resource.' })
   @Swagger.ApiOkResponse({ type: EventResponse })
   @UseInterceptors(AnyFilesInterceptor())
   async unsubscribeToEvent(
@@ -179,7 +179,7 @@ export class EventsController {
   @Delete(':id')
   @UseGuards(AuthenticationGuard)
   @Roles(Role.ADMIN)
-  @Swagger.ApiOperation({ summary: 'Delete an Event ressource.' })
+  @Swagger.ApiOperation({ summary: 'Delete an Event resource.' })
   @Swagger.ApiOkResponse({ type: EventResponse })
   async deleteEvent(@Param('id', ParseUUIDPipe) id: string) {
     await this.deleteEventUsecase.execute(id);
