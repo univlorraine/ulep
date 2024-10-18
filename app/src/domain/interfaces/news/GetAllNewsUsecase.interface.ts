@@ -3,9 +3,10 @@ import News from '../../entities/News';
 export const DEFAULT_NEWS_PAGE_SIZE = 10;
 
 export class GetNewsQuery {
-    universityId?: string;
+    universityIds?: string[];
     title?: string;
     languageCode?: string;
+    limit?: number;
     page?: number;
 }
 

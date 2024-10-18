@@ -10,7 +10,7 @@ export type GetNewsCommand = {
   limit: number;
   where: {
     title: string;
-    universityId: string;
+    universityIds: string[];
     status: NewsStatus;
     languageCode: string;
   };

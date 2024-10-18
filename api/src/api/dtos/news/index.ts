@@ -8,9 +8,9 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 import { PaginationDto } from '../pagination';
 
 export class GetNewsQuery extends PaginationDto {
-  @ApiPropertyOptional({ type: 'string' })
+  @ApiPropertyOptional({ type: 'string', isArray: true })
   @IsOptional()
-  universityId?: string;
+  universityIds?: string[];
 
   @ApiPropertyOptional({ type: 'string' })
   @IsOptional()

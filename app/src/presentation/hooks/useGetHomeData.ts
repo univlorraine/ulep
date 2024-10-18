@@ -35,8 +35,9 @@ const useGetHomeData = (refresh?: boolean) => {
             const tandemsResult = await getAllTandems.execute(profile.id);
             const sessionsResult = await getAllSessions.execute(profile.id);
             const newsResult = await getAllNews.execute({
-                universityId: profile.user.university.id,
+                universityIds: [profile.user.university.id],
                 languageCode: profile.nativeLanguage.code,
+                limit: 3,
             });
             if (tandemsResult instanceof Error) {
                 setHomeResult({ ...homeResult, error: tandemsResult, isLoading: false });

@@ -1,0 +1,37 @@
+.container {
+    color: black;
+    background-color: white;
+    flex-direction: column;
+    border-bottom: 1px solid #e7e7e7;
+    text-align: left;
+    text-transform: none;
+}
+
+.tags {
+    display: flex;
+    gap: 8px;
+}
+
+.title {
+    font-family: Maven Pro;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20px;
+    text-align: left;
+}
+
+.image {
+    width: 80px;
+    height: 60px;
+    object-fit: cover;
+    margin-right: 16px;
+}
+
+.date {
+    color: #737272;
+    font-family: Maven Pro;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 16px;
+    text-align: left;
+}

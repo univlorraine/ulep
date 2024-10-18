@@ -2,13 +2,17 @@ import { IonContent, useIonToast } from '@ionic/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory, useLocation } from 'react-router';
+import News from '../../domain/entities/News';
 import Session from '../../domain/entities/Session';
 import Tandem from '../../domain/entities/Tandem';
 import { useStoreState } from '../../store/storeTypes';
 import HomeContent from '../components/contents/HomeContent';
 import OnlineWebLayout from '../components/layout/OnlineWebLayout';
 import EndSessionModal from '../components/modals/EndSessionModal';
-import NewsContentModal from '../components/modals/NewsContentModal';
+import NewsContentModal, {
+    DisplayNewsContentModal,
+    DisplayNewsContentModalEnum,
+} from '../components/modals/NewsContentModal';
 import SessionsContentModal, {
     DisplaySessionModal,
     DisplaySessionModalEnum,
@@ -33,7 +37,7 @@ const HomePage: React.FC = () => {
     const [selectedTandem, setSelectedTandem] = useState<Tandem>();
     const [refresh, setRefresh] = useState<boolean>(false);
     const [displaySessionModal, setDisplaySessionModal] = useState<DisplaySessionModal>();
-    const [displayNewsContent, setDisplayNewsContent] = useState<boolean>(false);
+    const [displayNewsContent, setDisplayNewsContent] = useState<DisplayNewsContentModal>();
     const { tandems, sessions, news, error, isLoading } = useGetHomeData(refresh);
     const location = useLocation<HomePageLocationProps>();
     const [isEndSessionModalOpen, setIsEndSessionModalOpen] = useState<boolean>(location.state?.endSession || false);
@@ -104,11 +108,16 @@ const HomePage: React.FC = () => {
         }
     };
 
-    const onShowNewsPressed = () => {
+    const onShowNewsPressed = (selectedNews?: News) => {
+        console.log('selectedNews', selectedNews);
         if (isHybrid) {
-            history.push('news');
+            history.push('news', { selectedNews });
         } else {
-            setDisplayNewsContent(true);
+            console.log('selectedNews', selectedNews);
+            setDisplayNewsContent({
+                type: selectedNews ? DisplayNewsContentModalEnum.show : DisplayNewsContentModalEnum.list,
+                news: selectedNews,
+            });
         }
     };
 
@@ -188,8 +197,9 @@ const HomePage: React.FC = () => {
                 onCompleteLearningJournalPressed={onCompleteLearningJournalPressed}
             />
             <NewsContentModal
-                isVisible={displayNewsContent}
-                onClose={() => setDisplayNewsContent(false)}
+                isVisible={displayNewsContent !== undefined}
+                onClose={() => setDisplayNewsContent(undefined)}
+                displayNewsContentModal={displayNewsContent}
                 profile={profile}
             />
         </>

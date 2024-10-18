@@ -1,51 +1,43 @@
-import { IonImg } from '@ionic/react';
+import { IonButton, IonImg } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
 import News from '../../../domain/entities/News';
-import University from '../../../domain/entities/University';
-import { codeLanguageToFlag } from '../../utils';
-
-interface NewsLanguageTagProps {
-    languageCode: string;
-}
-
-const NewsLanguageTag: React.FC<NewsLanguageTagProps> = ({ languageCode }) => {
-    const { t } = useTranslation();
-    return (
-        <div>
-            <span>{`${t(`language_codes.news.${languageCode}`)} ${codeLanguageToFlag(languageCode)}`}</span>
-        </div>
-    );
-};
-
-interface NewsUniversityTagProps {
-    university: University;
-}
-
-const NewsUniversityTag: React.FC<NewsUniversityTagProps> = ({ university }) => {
-    return (
-        <div>
-            <span>{university.name}</span>
-        </div>
-    );
-};
+import Profile from '../../../domain/entities/Profile';
+import LanguageTag from '../LanguageTag';
+import UniversityTag from '../UniversityTag';
+import styles from './NewsLine.module.css';
 
 interface NewsLineProps {
     news: News;
+    profile: Profile;
+    onClick: () => void;
 }
 
-const NewsLine: React.FC<NewsLineProps> = ({ news }) => {
+const NewsLine: React.FC<NewsLineProps> = ({ news, profile, onClick }) => {
+    const { t } = useTranslation();
+    const formattedDate = new Intl.DateTimeFormat(profile.nativeLanguage.code, {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
+    }).format(new Date(news.startPublicationDate));
+
     return (
-        <div>
-            <IonImg src={news.imageUrl} />
-            <div>
-                <div>
-                    <NewsLanguageTag languageCode={news.languageCode} />
-                    <NewsUniversityTag university={news.university} />
+        <IonButton
+            aria-label={t('news.open', { title: news.title }) as string}
+            fill="clear"
+            className={styles.container}
+            onClick={onClick}
+        >
+            {news.imageUrl && <IonImg className={styles.image} src={news.imageUrl} />}
+            <div className={styles.content}>
+                <div className={styles.tags}>
+                    <LanguageTag languageCode={news.languageCode} />
+                    <UniversityTag university={news.university} />
                 </div>
-                <span>{news.startPublicationDate.toLocaleDateString()}</span>
-                <span>{news.title}</span>
+                <span className={styles.date}>{formattedDate}</span>
+                <br />
+                <span className={styles.title}>{news.title}</span>
             </div>
-        </div>
+        </IonButton>
     );
 };
 

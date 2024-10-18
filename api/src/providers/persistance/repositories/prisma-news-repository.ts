@@ -13,7 +13,9 @@ export class PrismaNewsRepository implements NewsRepository {
     const wherePayload = where
       ? {
           Organization: {
-            id: where.universityId,
+            id: {
+              in: where.universityIds,
+            },
           },
           TitleTextContent: {
             text: {

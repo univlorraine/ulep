@@ -16,7 +16,7 @@ export interface NewsParams {
 
 const NewsQuery = (params: NewsParams) => {
     const query = {
-        universityId: params.filter.universityId,
+        universityIds: [params.filter.universityId],
         title: params.filter.title,
         status: params.filter.status,
         languageCode: params.filter.languageCode,

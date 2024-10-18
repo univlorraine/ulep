@@ -59,14 +59,14 @@ export class NewsController {
   async getCollection(
     @Query() query: GetNewsQuery,
   ): Promise<Collection<NewsResponse>> {
-    const { page, limit, title, universityId, status, languageCode } = query;
+    const { page, limit, title, universityIds, status, languageCode } = query;
 
     const news = await this.getNewsUsecase.execute({
       page,
       limit,
       where: {
         title,
-        universityId,
+        universityIds,
         status,
         languageCode,
       },

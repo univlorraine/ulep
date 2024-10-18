@@ -89,7 +89,7 @@ const HomeContent: React.FC<HomeContentProps> = ({
                                 )}
                             </Masonry>
                             <Masonry className={styles.masonery} gutter="20px">
-                                <NewsList news={news} />
+                                <NewsList news={news} profile={profile} onNewsPressed={onShowNewsPressed} />
                             </Masonry>
                         </ResponsiveMasonry>
                     )}

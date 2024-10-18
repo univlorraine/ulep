@@ -15,11 +15,13 @@ class GetAllNewsUsecase implements GetAllNewsUsecaseInterface {
         try {
             const queryParams = new URLSearchParams();
             if (filters.languageCode) {
-                queryParams.append('languageCodes', filters.languageCode);
+                queryParams.append('languageCode', filters.languageCode);
             }
 
-            if (filters.universityId) {
-                queryParams.append('universityId', filters.universityId);
+            if (filters.universityIds) {
+                filters.universityIds.forEach((universityId) => {
+                    queryParams.append('universityIds', universityId);
+                });
             }
 
             if (filters.page) {
@@ -30,7 +32,7 @@ class GetAllNewsUsecase implements GetAllNewsUsecaseInterface {
                 queryParams.append('title', filters.title);
             }
 
-            queryParams.append('limit', DEFAULT_NEWS_PAGE_SIZE.toString());
+            queryParams.append('limit', filters.limit ? filters.limit.toString() : DEFAULT_NEWS_PAGE_SIZE.toString());
 
             const httpResponse: HttpResponse<CollectionCommand<NewsCommand>> = await this.domainHttpAdapter.get(
                 `/news?${queryParams.toString()}`

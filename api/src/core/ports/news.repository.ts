@@ -19,7 +19,7 @@ export interface NewsRepository {
 
 export type NewsQueryWhere = {
   title: string;
-  universityId: string;
+  universityIds: string[];
   status: NewsStatus;
   languageCode: string;
 };
