@@ -10,24 +10,26 @@ spec:
     spec:
       containers:
       - name: post-install-weblate-git-job-{{ .Release.Revision }}
-        image: alpine:3.20        
+        image: alpine:3.20
+        imagePullPolicy: Always
         command: [ "/bin/sh", "-c", "/opt/scripts/init_git.sh"]
-        env:
-          - name: WEBLATE_SITE_DOMAIN
-            value: {{ .Values.weblate.env.site }}.{{ .Values.domain }}                    
-          - name: PSQL_USER
-            value: {{ .Values.global.postgresql.auth.username }}
-          - name: PSQL_PASSWORD
-            value: {{ .Values.global.postgresql.auth.password }}
-          - name: PSQL_DATABASE
-            value: {{ .Values.global.postgresql.auth.database }}
-          - name: PSQL_HOST
-            value: {{ .Values.name }}-postgresql.{{ .Release.Namespace }}
+        env:                   
+          - name: MINIO_HOST
+            value: "{{ .Values.git.env.minioHost }}"
+          - name: MINIO_ACCESS_KEY
+            value: "{{ .Values.git.env.minioAccessKey }}"          
+          - name: GIT_HOST
+            value: "{{ .Values.name }}-{{ .Values.git.name }}"
+        envFrom: 
+            - secretRef: 
+                name: "{{ .Values.name }}-secret-{{ .Values.git.name }}"
         volumeMounts:
           - name: weblate-ssh-keys
             mountPath: /tmp/weblate
           - name: git-ssh-keys
             mountPath: /tmp/git
+          - name: "{{ .Values.git.name }}-data"
+            mountPath: /srv/git
 
 
           - name: config-git-volume
@@ -49,6 +51,9 @@ spec:
         - name: "git-ssh-keys"
           persistentVolumeClaim:
             claimName: "pvc-weblate-git-ssh-keys"
+        - name: "{{ .Values.git.name }}-data"
+          persistentVolumeClaim:
+            claimName: "{{ .Values.name }}-pvc-{{ .Values.git.name }}" 
 
 
         - name: config-git-volume

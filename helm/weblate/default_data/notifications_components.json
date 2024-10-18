@@ -4,8 +4,8 @@
   "filemask": "*/notifications.json",
   "name": "notifications",
   "slug": "notifications",
-  "repo": "ssh://git@ulep-weblate-git:2222/srv/git/locales.git",
-  "push": "ssh://git@ulep-weblate-git:2222/srv/git/locales.git",
+  "repo": "ssh://git@%git_host%:2222/srv/git/locales.git",
+  "push": "ssh://git@%git_host%:2222/srv/git/locales.git",
   "template": "en/notifications.json",
   "new_base": "",
   "vcs": "git"

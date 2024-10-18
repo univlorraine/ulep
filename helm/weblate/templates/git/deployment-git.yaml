@@ -34,35 +34,40 @@ spec:
           command: ["/bin/sh", "-c"]
           args:
             - echo starting;
+              apk add sshpass;
               chmod -R 777 /srv;
               mkdir -p /home/git/.ssh;
               touch /home/git/.ssh/authorized_keys;
               chown git:git /home/git/.ssh;
               chown git:git /home/git/.ssh/authorized_keys;
+              wget https://dl.min.io/client/mc/release/linux-amd64/mc;
+              chmod +x mc;
+              mv mc /usr/local/bin/;
+              yes y | ssh-keygen -t rsa -N "" -f /home/git/.ssh/id_rsa > /dev/null;
+              chmod 600 /home/git/.ssh/id_rsa;
+              chmod 600 /home/git/.ssh/id_rsa.pub;
+              chown git:git /home/git/.ssh/id_rsa;
+              chown git:git /home/git/.ssh/id_rsa.pub;
+              cat /home/git/.ssh/id_rsa.pub >> /home/git/.ssh/authorized_keys;
+              echo git:${GIT_PASSWORD} | chpasswd;
               /usr/sbin/sshd -D -e -p 2222;
           imagePullPolicy: {{ .Values.git.image.pullPolicy }}          
           ports:
             - name: http
               containerPort: 2222
               protocol: TCP
-          # livenessProbe:
-          #   httpGet:
-          #     path: /minio/health/live
-          #     port: https
-          #   initialDelaySeconds: 30
-          # readinessProbe:
-          #   httpGet:
-          #     path: /minio/health/live
-          #     port: https
-          #   initialDelaySeconds: 30
-          #   periodSeconds: 60
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
             - name: SSH_AUTH_METHODS
-              value: "publickey password"
-            - name: GIT_PASSWORD
-              value: "12345"
+              value: "publickey password"            
+            - name: MINIO_HOST
+              value: "{{ .Values.git.env.minioHost }}"
+            - name: MINIO_ACCESS_KEY
+              value: "{{ .Values.git.env.minioAccessKey }}"            
+          envFrom: 
+            - secretRef: 
+                name: "{{ .Values.name }}-secret-{{ .Values.git.name }}"
           volumeMounts:
           - name: "{{ .Values.git.name }}-data"
             mountPath: /srv/git  

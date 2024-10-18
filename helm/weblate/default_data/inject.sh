@@ -19,9 +19,16 @@ project=$(cat /opt/scripts/projects.json)
 
 echo $project
 
+sed 's/%git_host%/'$GIT_HOST'/g' /opt/scripts/projects.json > /tmp/projects.json
+sed 's/%git_host%/'$GIT_HOST'/g' /opt/scripts/api_components.json > /tmp/api_components.json
+sed 's/%git_host%/'$GIT_HOST'/g' /opt/scripts/app_components.json > /tmp/app_components.json
+sed 's/%git_host%/'$GIT_HOST'/g' /opt/scripts/emails_components.json > /tmp/emails_components.json
+sed 's/%git_host%/'$GIT_HOST'/g' /opt/scripts/notifications_components.json > /tmp/notifications_components.json
+
+
 PROJECT_RESPONSE=$(curl \
     -s \
-    -d @/opt/scripts/projects.json \
+    -d @/tmp/projects.json \
     -k \
     -X POST \
     -H "Content-Type: application/json" \
@@ -33,7 +40,7 @@ echo $PROJECT_RESPONSE | jq
 API_COMPONENT_RESPONSE=$(curl \
     -s \
     -k \
-    --data-binary @/opt/scripts/api_components.json \
+    --data-binary @/tmp/api_components.json \
     -H "Content-Type: application/json" \
     -H "Authorization: Token $ADMIN_TOKEN" \
     https://$WEBLATE_SITE_DOMAIN/api/projects/ulep/components/)
@@ -41,7 +48,7 @@ API_COMPONENT_RESPONSE=$(curl \
 APP_COMPONENT_RESPONSE=$(curl \
     -s \
     -k \
-    --data-binary @/opt/scripts/app_components.json \
+    --data-binary @/tmp/app_components.json \
     -H "Content-Type: application/json" \
     -H "Authorization: Token $ADMIN_TOKEN" \
     https://$WEBLATE_SITE_DOMAIN/api/projects/ulep/components/)
@@ -49,7 +56,7 @@ APP_COMPONENT_RESPONSE=$(curl \
 EMAILS_COMPONENT_RESPONSE=$(curl \
     -s \
     -k \
-    --data-binary @/opt/scripts/emails_components.json \
+    --data-binary @/tmp/emails_components.json \
     -H "Content-Type: application/json" \
     -H "Authorization: Token $ADMIN_TOKEN" \
     https://$WEBLATE_SITE_DOMAIN/api/projects/ulep/components/)
@@ -57,7 +64,7 @@ EMAILS_COMPONENT_RESPONSE=$(curl \
 NOTIFICATIONS_COMPONENT_RESPONSE=$(curl \
     -s \
     -k \
-    --data-binary @/opt/scripts/notifications_components.json \
+    --data-binary @/tmp/notifications_components.json \
     -H "Content-Type: application/json" \
     -H "Authorization: Token $ADMIN_TOKEN" \
     https://$WEBLATE_SITE_DOMAIN/api/projects/ulep/components/)

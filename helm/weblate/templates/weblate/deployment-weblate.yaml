@@ -88,6 +88,10 @@ spec:
               value: "{{ .Values.name }}-redis-master.{{ .Release.Namespace }}"
             - name: WEBLATE_REGISTRATION_OPEN
               value: "0"
+            - name: MINIO_HOST
+              value: "{{ .Values.git.env.minioHost }}"
+            - name: MINIO_ACCESS_KEY
+              value: "{{ .Values.git.env.minioAccessKey }}"
           envFrom: 
             - secretRef: 
                 name: "{{ .Values.name }}-secret-{{ .Values.weblate.name }}"

@@ -23,6 +23,8 @@ spec:
             value: {{ .Values.global.postgresql.auth.database }}
           - name: PSQL_HOST
             value: {{ .Values.name }}-postgresql.{{ .Release.Namespace }}
+          - name: GIT_HOST
+            value: "{{ .Values.name }}-{{ .Values.git.name }}"
         volumeMounts:
           - name: config-volume
             mountPath: /opt/scripts
