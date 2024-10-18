@@ -1,5 +1,7 @@
+import { Collection } from '@app/common';
 import {
   EventObject,
+  EventStatus,
   EventTranslation,
   EventType,
 } from '../models/event.model';
@@ -9,7 +11,7 @@ export const EVENT_REPOSITORY = 'event.repository';
 export type CreateEventProps = {
   title: string;
   content: string;
-  universityId: string;
+  authorUniversityId: string;
   translations: EventTranslation[];
   languageCode: string;
   status?: string;
@@ -21,12 +23,61 @@ export type CreateEventProps = {
   withSubscription: boolean;
   concernedUniversities: string[];
   diffusionLanguages: string[];
-  enrolledUsers: string[];
   startDate: Date;
   endDate: Date;
 };
 
+export type UpdateEventProps = {
+  id: string;
+  title: string;
+  content: string;
+  authorUniversityId: string;
+  translations: EventTranslation[];
+  languageCode: string;
+  status?: string;
+  type: EventType;
+  eventURL?: string;
+  address?: string;
+  addressName?: string;
+  deepLink?: string;
+  withSubscription: boolean;
+  concernedUniversities: string[];
+  diffusionLanguages: string[];
+  startDate: Date;
+  endDate: Date;
+};
+
+export type FindEventsProps = {
+  pagination: {
+    page: number;
+    limit: number;
+  };
+  filters: {
+    title?: string;
+    authorUniversityId?: string;
+    concernedUniversitiesIds?: string[];
+    status?: EventStatus;
+    types?: EventType[];
+    languageCode: string;
+  };
+};
+
+export type SubscribeToEventProps = {
+  eventId: string;
+  usersIds: string[];
+};
+
+export type UnsubscribeToEventProps = {
+  eventId: string;
+  usersIds: string[];
+};
+
 export interface EventRepository {
   create(props: CreateEventProps): Promise<EventObject>;
-  ofId(id: string): Promise<EventObject | null>;
+  findAll(props: FindEventsProps): Promise<Collection<EventObject>>;
+  ofId(id: string): Promise<EventObject>;
+  update(props: UpdateEventProps): Promise<EventObject>;
+  subscribeToEvent(props: SubscribeToEventProps): Promise<EventObject>;
+  unsubscribeToEvent(props: UnsubscribeToEventProps): Promise<EventObject>;
+  delete(id: string): Promise<void>;
 }

@@ -14,7 +14,8 @@ import {
   UNIVERSITY_REPOSITORY,
 } from 'src/core/ports/university.repository';
 
-export type CreateEventCommand = {
+export type UpdateEventCommand = {
+  id: string;
   title: string;
   content: string;
   authorUniversityId: string;
@@ -33,7 +34,7 @@ export type CreateEventCommand = {
 };
 
 @Injectable()
-export class CreateEventUsecase {
+export class UpdateEventUsecase {
   #googleMapsUrl = 'https://www.google.com/maps/search/?api=1&query='; // TODO: move to config ?
 
   constructor(
@@ -45,7 +46,8 @@ export class CreateEventUsecase {
     private readonly languageRepository: LanguageRepository,
   ) {}
 
-  async execute(command: CreateEventCommand) {
+  async execute(command: UpdateEventCommand) {
+    await this.assertEventExists(command.id);
     await this.assertLanguageExists(command.languageCode);
     await this.assertUniversityExists(command.authorUniversityId);
 
@@ -54,7 +56,8 @@ export class CreateEventUsecase {
       addressUrl = new URL(command.address, this.#googleMapsUrl).toString();
     }
 
-    return this.eventRepository.create({
+    return this.eventRepository.update({
+      id: command.id,
       title: command.title,
       content: command.content,
       languageCode: command.languageCode,
@@ -72,6 +75,16 @@ export class CreateEventUsecase {
       concernedUniversities: command.concernedUniversities,
       diffusionLanguages: command.diffusionLanguages,
     });
+  }
+
+  private async assertEventExists(id: string) {
+    const event = await this.eventRepository.ofId(id);
+
+    if (!event) {
+      throw new RessourceDoesNotExist('Event does not exist');
+    }
+
+    return event;
   }
 
   private async assertUniversityExists(id: string) {

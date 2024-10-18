@@ -25,7 +25,7 @@ export class CreateEventRequest {
 
   @ApiProperty()
   @IsString()
-  universityId: string;
+  authorUniversityId: string;
 
   @ApiProperty()
   @IsString()
@@ -79,11 +79,4 @@ export class CreateEventRequest {
   @IsArray()
   @IsString({ each: true })
   concernedUniversities: string[];
-
-  @ApiProperty()
-  @IsArray()
-  @IsString({ each: true })
-  enrolledUsers: string[];
 }
-
-export class UpdateEventRequest extends CreateEventRequest {}

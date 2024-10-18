@@ -1,21 +1,17 @@
-import { PrismaService } from '@app/common';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import {
+  EventRepository,
+  EVENT_REPOSITORY,
+} from 'src/core/ports/event.repository';
 
 @Injectable()
-export class GetEventUseCase {
-  constructor(private prisma: PrismaService) {}
+export class GetEventUsecase {
+  constructor(
+    @Inject(EVENT_REPOSITORY)
+    private readonly eventRepository: EventRepository,
+  ) {}
 
   async execute(id: string) {
-    return this.prisma.events.findUnique({
-      where: { id },
-      include: {
-        DiffusionLanguages: true,
-        ConcernedUniversities: true,
-        AuthorUniversity: true,
-        Image: true,
-        TitleTextContent: true,
-        ContentTextContent: true,
-      },
-    });
+    return this.eventRepository.ofId(id);
   }
 }

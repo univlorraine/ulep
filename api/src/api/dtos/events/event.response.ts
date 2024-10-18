@@ -113,7 +113,7 @@ export class EventResponse {
   endDate: Date;
 
   @Swagger.ApiProperty({ type: [UserResponse] })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['event:enrolledUsers'] })
   @IsArray()
   enrolledUsers: UserResponse[];
 
