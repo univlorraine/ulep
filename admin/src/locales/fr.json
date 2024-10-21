@@ -248,10 +248,19 @@
             },
             "event_url": "URL de l'évènement",
             "address": "Adresse",
-            "address_name": "Nom du lieu"
+            "address_name": "Nom du lieu",
+            "error": {
+                "required": "Tous les champs sont obligatoires"
+            },
+            "remove_translation": "Supprimer la traduction"
         },
         "create": {
-            "cta": "Créer"
+            "cta": "Créer",
+            "error": "Une erreur est survenue pendant la création de l'évènement"
+        },
+        "update": {
+            "cta": "Mettre à jour",
+            "error": "Une erreur est survenue pendant la mise à jour de l'évènement"
         }
     },
     "global": {

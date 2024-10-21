@@ -115,9 +115,9 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
             startDate,
             endDate,
             image,
-            eventURL,
-            address,
-            addressName,
+            eventURL: type === EventType.ONLINE ? eventURL : undefined,
+            address: type === EventType.PRESENTIAL ? address : undefined,
+            addressName: type === EventType.PRESENTIAL ? addressName : undefined,
             diffusionLanguages,
             concernedUniversities,
         });
@@ -548,7 +548,16 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                 </TabbedForm>
                 <Button
                     color="primary"
-                    disabled={false}
+                    disabled={
+                        !title ||
+                        !content ||
+                        !startDate ||
+                        !endDate ||
+                        diffusionLanguages?.length === 0 ||
+                        concernedUniversities?.length === 0 ||
+                        (type === EventType.ONLINE && !eventURL) ||
+                        (type === EventType.PRESENTIAL && (!address || !addressName))
+                    }
                     onClick={onCreatePressed}
                     sx={{ mt: 4, width: '100%' }}
                     type="button"

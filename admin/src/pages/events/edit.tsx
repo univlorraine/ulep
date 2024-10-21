@@ -1,16 +1,17 @@
-import { Create, useCreate, useNotify, useRedirect, useTranslate } from 'react-admin';
+import { Edit, useNotify, useRedirect, useTranslate, useUpdate } from 'react-admin';
 import EventForm from '../../components/form/EventForm';
 import PageTitle from '../../components/PageTitle';
 import { EventFormPayload, EventType } from '../../entities/Event';
 
-const CreateEvent = () => {
+const EditEvent = () => {
     const translate = useTranslate();
-    const [create] = useCreate();
+    const [update] = useUpdate();
     const redirect = useRedirect();
     const notify = useNotify();
 
     const handleSubmit = async (payload: EventFormPayload) => {
         if (
+            !payload.id ||
             !payload.title ||
             !payload.content ||
             !payload.startDate ||
@@ -57,16 +58,16 @@ const CreateEvent = () => {
         if (payload.image) formData.append('file', payload.image);
 
         try {
-            return await create(
+            return await update(
                 'events',
-                { data: formData },
+                { id: payload.id, data: formData },
                 {
                     onSettled: (_, error: any) => {
                         if (!error) {
                             return redirect('/events');
                         }
 
-                        return notify('events.create.error', {
+                        return notify('events.update.error', {
                             type: 'error',
                         });
                     },
@@ -75,7 +76,7 @@ const CreateEvent = () => {
         } catch (err) {
             console.error(err);
 
-            return notify('events.create.error', {
+            return notify('events.update.error', {
                 type: 'error',
             });
         }
@@ -84,11 +85,11 @@ const CreateEvent = () => {
     return (
         <>
             <PageTitle>{translate('events.title')}</PageTitle>
-            <Create>
+            <Edit>
                 <EventForm handleSubmit={handleSubmit} />
-            </Create>
+            </Edit>
         </>
     );
 };
 
-export default CreateEvent;
+export default EditEvent;
