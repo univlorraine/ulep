@@ -20,6 +20,7 @@ import ActivitiesQuery from '../queries/ActivitiesQuery';
 import AdministratorsQuery from '../queries/AdministratorsQuery';
 import ChatQuery from '../queries/ChatQuery';
 import CountriesQuery from '../queries/CountriesQuery';
+import EventsQuery from '../queries/EventsQuery';
 import InterestsQuery from '../queries/InterestsQuery';
 import LanguagesQuery from '../queries/LanguagesQuery';
 import { LearningLanguageMatchesQuery, LearningLanguagesQuery } from '../queries/LearningLanguagesQuery';
@@ -227,6 +228,9 @@ const customDataProvider = {
                 break;
             case 'countries':
                 url.search = CountriesQuery(params);
+                break;
+            case 'events':
+                url.search = EventsQuery(params);
                 break;
             case 'profiles':
                 url.search = ProfilesQuery(params);

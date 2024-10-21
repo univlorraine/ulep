@@ -199,6 +199,61 @@
         "saturday": "Samedi",
         "sunday": "Dimanche"
     },
+    "events": {
+        "label": "Evènements",
+        "title": "Evènements",
+        "list": {
+            "title": "Titre",
+            "university": "Université auteure",
+            "defaultLanguage": "Langue par défaut",
+            "translations": "Traductions",
+            "status": "Statut",
+            "startDate": "Date de début",
+            "endDate": "Date de fin",
+            "filters": {
+                "title": "Titre",
+                "language": "Langue",
+                "status": "Statut",
+                "university": "Université"
+            }
+        },
+        "status": {
+            "DRAFT": "Brouillon",
+            "READY": "Publié"
+        },
+        "form": {
+            "add_translation": "Ajouter une traduction",
+            "change_language": "Changer la langue par défaut",
+            "type": {
+                "label": "Type d'évènement",
+                "online": "En ligne",
+                "presential": "Présentiel"
+            },
+            "author": "Auteur",
+            "status": "Statut",
+            "start_date": "Date de début",
+            "end_date": "Date de fin",
+            "illustration": "Illustration",
+            "title": "Titre",
+            "content": "Contenu",
+            "subscriptions": "Inscriptions",
+            "with_subscriptions": "Avec inscriptions",
+            "concerned_universities": {
+                "label": "Universités concernées",
+                "button": "Ajouter"
+            },
+            "diffusion_languages": {
+                "label": "Langues diffusées",
+                "button": "Ajouter"
+            },
+            "event_url": "URL de l'évènement",
+            "address": "Adresse",
+            "address_name": "Nom du lieu"
+        },
+        "create": {
+            "cta": "Créer"
+        }
+    },
     "global": {
         "all": "Tout",
         "age": "Age",

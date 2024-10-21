@@ -1,0 +1,85 @@
+import { Create, useCreate, useNotify, useRedirect, useTranslate } from 'react-admin';
+import EventForm from '../../components/form/EventForm';
+import PageTitle from '../../components/PageTitle';
+import { EventFormPayload } from '../../entities/Event';
+
+const CreateEvent = () => {
+    const translate = useTranslate();
+    const [create] = useCreate();
+    const redirect = useRedirect();
+    const notify = useNotify();
+
+    const handleSubmit = async (payload: EventFormPayload) => {
+        if (!payload.title || !payload.content || !payload.startDate || !payload.endDate) {
+            return notify('news.form.error.required', {
+                type: 'error',
+            });
+        }
+
+        const formData = new FormData();
+
+        formData.append('title', payload.title);
+        formData.append('content', payload.content);
+        formData.append('languageCode', payload.languageCode);
+        formData.append('authorUniversityId', payload.authorUniversityId);
+        formData.append('withSubscription', payload.withSubscription.toString());
+        formData.append('status', payload.status);
+        formData.append('type', payload.type);
+        formData.append('startDate', payload.startDate.toISOString());
+        formData.append('endDate', payload.endDate.toISOString());
+
+        payload.translations.forEach((translation, index) => {
+            formData.append(`translations[${index}][title]`, translation.title);
+            formData.append(`translations[${index}][content]`, translation.content);
+            formData.append(`translations[${index}][languageCode]`, translation.languageCode);
+        });
+
+        payload.diffusionLanguages?.forEach((language, index) => {
+            formData.append(`diffusionLanguages[${index}]`, language);
+        });
+
+        payload.concernedUniversities?.forEach((university, index) => {
+            formData.append(`concernedUniversities[${index}]`, university.id);
+        });
+
+        if (payload.eventURL) formData.append('eventURL', payload.eventURL);
+        if (payload.address) formData.append('address', payload.address);
+        if (payload.addressName) formData.append('addressName', payload.addressName);
+        if (payload.image) formData.append('file', payload.image);
+
+        try {
+            return await create(
+                'events',
+                { data: formData },
+                {
+                    onSettled: (_, error: any) => {
+                        if (!error) {
+                            return redirect('/events');
+                        }
+
+                        return notify('events.create.error', {
+                            type: 'error',
+                        });
+                    },
+                }
+            );
+        } catch (err) {
+            console.error(err);
+
+            return notify('events.create.error', {
+                type: 'error',
+            });
+        }
+    };
+
+    return (
+        <>
+            <PageTitle>{translate('events.title')}</PageTitle>
+            <Create>
+                <EventForm handleSubmit={handleSubmit} />
+            </Create>
+        </>
+    );
+};
+
+export default CreateEvent;

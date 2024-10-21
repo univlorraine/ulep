@@ -1,6 +1,7 @@
 import ChatIcon from '@mui/icons-material/Chat';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import EditNoteIcon from '@mui/icons-material/EditNote';
+import FeedIcon from '@mui/icons-material/Feed';
 import HelpIcon from '@mui/icons-material/Help';
 import InterestsIcon from '@mui/icons-material/Interests';
 import LanguageIcon from '@mui/icons-material/Language';
@@ -28,6 +29,7 @@ import categoryInterest from './pages/category-interest';
 import chat from './pages/chat';
 import countSuggestedLanguages from './pages/count-suggested-languages';
 import countries from './pages/countries';
+import events from './pages/events';
 import instance from './pages/instance';
 import interests from './pages/interests';
 import JitsiPage from './pages/jitsi/JitsiPage';
@@ -79,6 +81,7 @@ const App = () => (
                 />
                 <Resource icon={ChatIcon} name="chat" options={{ label: 'chat.label' }} {...chat} />
                 <Resource icon={NewspaperIcon} name="news" options={{ label: 'news.label' }} {...news} />
+                <Resource icon={FeedIcon} name="events" options={{ label: 'events.label' }} {...events} />
                 <Resource
                     icon={EditNoteIcon}
                     name="activities"

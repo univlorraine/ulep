@@ -199,6 +199,29 @@
         "saturday": "Saturday",
         "sunday": "Sunday"
     },
+    "events": {
+        "label": "Events",
+        "title": "Events",
+        "list": {
+            "title": "Title",
+            "university": "Author university",
+            "defaultLanguage": "Default language",
+            "translations": "Translations",
+            "status": "Status",
+            "startDate": "Start date",
+            "endDate": "End date",
+            "filters": {
+                "title": "Title",
+                "language": "Language",
+                "status": "Status",
+                "university": "University"
+            }
+        },
+        "status": {
+            "DRAFT": "Draft",
+            "READY": "Ready"
+        }
+    },
     "global": {
         "all": "All",
         "age": "Age",
