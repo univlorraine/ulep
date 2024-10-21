@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Collection, PrismaService } from '@app/common';
+import { Collection, ModeQuery, PrismaService } from '@app/common';
 import { NewsRepository } from 'src/core/ports/news.repository';
 import { newsMapper, NewsRelations } from '../mappers/news.mapper';
 import { News } from 'src/core/models';
@@ -20,18 +20,21 @@ export class PrismaNewsRepository implements NewsRepository {
           TitleTextContent: {
             text: {
               contains: where.title,
+              mode: ModeQuery.INSENSITIVE,
             },
-            ...(where.languageCode && {
+            ...(where.languageCodes && {
               OR: [
                 {
                   LanguageCode: {
-                    code: where.languageCode,
+                    code: {
+                      in: where.languageCodes,
+                    },
                   },
                 },
                 {
                   Translations: {
                     some: {
-                      LanguageCode: { code: where.languageCode },
+                      LanguageCode: { code: { in: where.languageCodes } },
                     },
                   },
                 },

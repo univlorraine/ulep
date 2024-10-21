@@ -1,15 +1,19 @@
 .container {
     color: black;
+    display: flex;
+    justify-content: center;
     background-color: white;
     flex-direction: column;
     border-bottom: 1px solid #e7e7e7;
     text-align: left;
     text-transform: none;
+    min-height: 100px;
 }
 
 .tags {
     display: flex;
     gap: 8px;
+    margin-bottom: 8px;
 }
 
 .title {

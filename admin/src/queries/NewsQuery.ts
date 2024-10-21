@@ -19,7 +19,7 @@ const NewsQuery = (params: NewsParams) => {
         universityIds: [params.filter.universityId],
         title: params.filter.title,
         status: params.filter.status,
-        languageCode: params.filter.languageCode,
+        languageCodes: [params.filter.languageCode],
         page: params.pagination.page,
         limit: params.pagination.perPage,
     };

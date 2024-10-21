@@ -1,4 +1,4 @@
-import { IonButton, IonImg } from '@ionic/react';
+import { IonImg } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
 import News from '../../../domain/entities/News';
 import Profile from '../../../domain/entities/Profile';
@@ -21,9 +21,8 @@ const NewsLine: React.FC<NewsLineProps> = ({ news, profile, onClick }) => {
     }).format(new Date(news.startPublicationDate));
 
     return (
-        <IonButton
+        <button
             aria-label={t('news.open', { title: news.title }) as string}
-            fill="clear"
             className={styles.container}
             onClick={onClick}
         >
@@ -37,7 +36,7 @@ const NewsLine: React.FC<NewsLineProps> = ({ news, profile, onClick }) => {
                 <br />
                 <span className={styles.title}>{news.title}</span>
             </div>
-        </IonButton>
+        </button>
     );
 };
 

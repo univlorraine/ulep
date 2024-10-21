@@ -59,7 +59,7 @@ export class NewsController {
   async getCollection(
     @Query() query: GetNewsQuery,
   ): Promise<Collection<NewsResponse>> {
-    const { page, limit, title, universityIds, status, languageCode } = query;
+    const { page, limit, title, universityIds, status, languageCodes } = query;
 
     const news = await this.getNewsUsecase.execute({
       page,
@@ -68,7 +68,8 @@ export class NewsController {
         title,
         universityIds,
         status,
-        languageCode,
+        languageCodes:
+          typeof languageCodes === 'string' ? [languageCodes] : languageCodes,
       },
     });
 

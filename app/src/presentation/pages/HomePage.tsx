@@ -109,11 +109,9 @@ const HomePage: React.FC = () => {
     };
 
     const onShowNewsPressed = (selectedNews?: News) => {
-        console.log('selectedNews', selectedNews);
         if (isHybrid) {
             history.push('news', { selectedNews });
         } else {
-            console.log('selectedNews', selectedNews);
             setDisplayNewsContent({
                 type: selectedNews ? DisplayNewsContentModalEnum.show : DisplayNewsContentModalEnum.list,
                 news: selectedNews,
@@ -199,6 +197,7 @@ const HomePage: React.FC = () => {
             <NewsContentModal
                 isVisible={displayNewsContent !== undefined}
                 onClose={() => setDisplayNewsContent(undefined)}
+                onNewsPressed={onShowNewsPressed}
                 displayNewsContentModal={displayNewsContent}
                 profile={profile}
             />

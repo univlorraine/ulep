@@ -12,7 +12,7 @@ export type GetNewsCommand = {
     title: string;
     universityIds: string[];
     status: NewsStatus;
-    languageCode: string;
+    languageCodes: string[];
   };
 };
 

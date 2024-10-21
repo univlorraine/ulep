@@ -21,5 +21,5 @@ export type NewsQueryWhere = {
   title: string;
   universityIds: string[];
   status: NewsStatus;
-  languageCode: string;
+  languageCodes: string[];
 };

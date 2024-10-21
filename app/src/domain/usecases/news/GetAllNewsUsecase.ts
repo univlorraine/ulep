@@ -14,8 +14,10 @@ class GetAllNewsUsecase implements GetAllNewsUsecaseInterface {
     async execute(filters: GetNewsQuery): Promise<News[] | Error> {
         try {
             const queryParams = new URLSearchParams();
-            if (filters.languageCode) {
-                queryParams.append('languageCode', filters.languageCode);
+            if (filters.languageCodes) {
+                filters.languageCodes.forEach((languageCode) => {
+                    queryParams.append('languageCodes', languageCode);
+                });
             }
 
             if (filters.universityIds) {

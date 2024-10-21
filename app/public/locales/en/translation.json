@@ -40,6 +40,19 @@
             "unexpected": "Unexpected error"
         }
     },
+    "filter": {
+        "languages": "Languages",
+        "levels": "Levels",
+        "themes": "Themes",
+        "apply": "Apply",
+        "cancel": "Cancel",
+        "is_mine": "My sheets"
+    },
+    "news": {
+        "list": {
+            "filter_title": "Select news filters"
+        }
+    },
     "activity": {
         "title": "Activity sheet",
         "status": {
@@ -54,16 +67,7 @@
             "language": "Language",
             "level": "Level",
             "theme": "Theme",
-            "search": "Search activity",
-            "filter": {
-                "title": "Filter activity sheets",
-                "languages": "Languages",
-                "levels": "Levels",
-                "themes": "Themes",
-                "apply": "Apply",
-                "cancel": "Cancel",
-                "is_mine": "My sheets"
-            }
+            "search": "Search activity"
         },
         "show": {
             "activity_shared": "Your sheet has been shared to your animator",

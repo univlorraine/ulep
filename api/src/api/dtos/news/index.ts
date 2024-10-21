@@ -22,7 +22,7 @@ export class GetNewsQuery extends PaginationDto {
 
   @ApiPropertyOptional({ type: 'string' })
   @IsOptional()
-  languageCode?: string;
+  languageCodes?: string[];
 }
 
 export class CreateNewsRequest {

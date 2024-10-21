@@ -5,7 +5,7 @@ export const DEFAULT_NEWS_PAGE_SIZE = 10;
 export class GetNewsQuery {
     universityIds?: string[];
     title?: string;
-    languageCode?: string;
+    languageCodes?: string[];
     limit?: number;
     page?: number;
 }

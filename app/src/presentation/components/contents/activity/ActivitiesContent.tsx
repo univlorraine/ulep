@@ -9,7 +9,7 @@ import useGetActivities from '../../../hooks/useGetActivities';
 import ActivityCard from '../../card/ActivityCard';
 import HeaderSubContent from '../../HeaderSubContent';
 import Loader from '../../Loader';
-import ActivityFilterModal from '../../modals/ActivityFilterModal';
+import FilterModal, { FiltersToDisplay } from '../../modals/FilterModal';
 import SearchAndFilter, { Filter, FilterType } from '../../SearchAndFilter';
 import styles from './ActivitiesContent.module.css';
 
@@ -68,15 +68,15 @@ export const ActivitiesContent: React.FC<ActivitiesContentProps> = ({
     }, [handleOnEndReached]);
 
     const onFilterApplied = (filters: {
-        languages: Language[];
-        levels: CEFR[];
-        themes: ActivityTheme[];
-        shouldTakeAllMine: boolean;
+        languages?: Language[];
+        levels?: CEFR[];
+        themes?: ActivityTheme[];
+        shouldTakeAllMine?: boolean;
     }) => {
-        setLanguageFilter(filters.languages);
-        setProficiencyFilter(filters.levels);
-        setActivityThemeFilter(filters.themes);
-        setShouldTakeAllMineFilter(filters.shouldTakeAllMine);
+        setLanguageFilter(filters.languages ?? []);
+        setProficiencyFilter(filters.levels ?? []);
+        setActivityThemeFilter(filters.themes ?? []);
+        setShouldTakeAllMineFilter(filters.shouldTakeAllMine ?? false);
         setShowFiltersModal(false);
     };
 
@@ -158,7 +158,13 @@ export const ActivitiesContent: React.FC<ActivitiesContentProps> = ({
             <IonButton fill="clear" className="add-button" onClick={() => onAddActivity()}>
                 <IonImg aria-hidden className="add-button-icon" src={AddSvg} />
             </IonButton>
-            <ActivityFilterModal
+            <FilterModal
+                filterToDisplay={[
+                    FiltersToDisplay.IS_MINE,
+                    FiltersToDisplay.LANGUAGES,
+                    FiltersToDisplay.LEVELS,
+                    FiltersToDisplay.THEMES,
+                ]}
                 isVisible={showFiltersModal}
                 onClose={() => setShowFiltersModal(false)}
                 onFilterApplied={onFilterApplied}
@@ -168,6 +174,7 @@ export const ActivitiesContent: React.FC<ActivitiesContentProps> = ({
                 currentLanguagesFilter={languageFilter}
                 currentLevelsFilter={proficiencyFilter}
                 currentThemesFilter={activityThemeFilter}
+                title="activity.list.filter.title"
             />
         </div>
     );

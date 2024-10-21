@@ -40,6 +40,20 @@
             "unexpected": "Erreur inconnue"
         }
     },
+    "news": {
+        "list": {
+            "title": "Actualités",
+            "filter_title": "Sélectionner les filtres pour les news"
+        }
+    },
+    "filter": {
+        "languages": "Langues",
+        "levels": "Niveaux",
+        "themes": "Thèmes",
+        "apply": "Appliquer",
+        "cancel": "Annuler",
+        "is_mine": "Mes fiches"
+    },
     "activity": {
         "title": "Fiche d'activité",
         "status": {
@@ -54,16 +68,7 @@
             "language": "Langue",
             "level": "Niveau",
             "theme": "Thème",
-            "search": "Rechercher une activité",
-            "filter": {
-                "title": "Filtrer les fiches d’activité",
-                "languages": "Langues",
-                "levels": "Niveaux",
-                "themes": "Thèmes",
-                "apply": "Appliquer",
-                "cancel": "Annuler",
-                "is_mine": "Mes fiches"
-            }
+            "search": "Rechercher une activité"
         },
         "show": {
             "activity_shared": "Votre fiche a été partagée à votre animateur",
