@@ -31,7 +31,6 @@ export const ActivityContent: React.FC<ActivityContentProps> = ({
     const { browserAdapter, fileAdapter, updateActivityStatus } = useConfig();
     const [showToast] = useIonToast();
     const [refreshActivity, setRefreshActivity] = useState(false);
-    const [showMenu, setShowMenu] = useState(false);
     const [isModalShareVisible, setIsModalShareVisible] = useState(false);
     const [isModalRejectedVisible, setIsModalRejectedVisible] = useState(false);
     const { activity, error, isLoading } = useGetActivity(activityId, refreshActivity);

@@ -119,6 +119,14 @@ const HomePage: React.FC = () => {
         }
     };
 
+    const onShowCloseNewsPressed = () => {
+        if (displayNewsContent?.type === DisplayNewsContentModalEnum.show) {
+            setDisplayNewsContent({ type: DisplayNewsContentModalEnum.list });
+        } else {
+            setDisplayNewsContent(undefined);
+        }
+    };
+
     if (isHybrid) {
         return (
             <IonContent>
@@ -196,7 +204,7 @@ const HomePage: React.FC = () => {
             />
             <NewsContentModal
                 isVisible={displayNewsContent !== undefined}
-                onClose={() => setDisplayNewsContent(undefined)}
+                onClose={onShowCloseNewsPressed}
                 onNewsPressed={onShowNewsPressed}
                 displayNewsContentModal={displayNewsContent}
                 profile={profile}

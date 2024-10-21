@@ -1,9 +1,10 @@
 .container {
+    align-items: center;
     color: black;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     background-color: white;
-    flex-direction: column;
+    flex-direction: row;
     border-bottom: 1px solid #e7e7e7;
     text-align: left;
     text-transform: none;
@@ -27,7 +28,7 @@
 .image {
     width: 80px;
     height: 60px;
-    object-fit: cover;
+    object-fit: contain;
     margin-right: 16px;
 }
 

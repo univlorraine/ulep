@@ -35,7 +35,7 @@ export class News {
   readonly translations: NewsTranslation[];
   readonly languageCode: string;
   readonly image?: MediaObject;
-  readonly imageURL?: string;
+ imageURL?: string;
   readonly university: University;
   readonly startPublicationDate: Date;
   readonly endPublicationDate: Date;

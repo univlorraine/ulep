@@ -43,7 +43,17 @@
     "news": {
         "list": {
             "title": "Actualités",
-            "filter_title": "Sélectionner les filtres pour les news"
+            "filter_title": "Sélectionner les filtres pour les news",
+            "load_more": "Voir plus"
+        },
+        "show": {
+            "change_language": "Changer",
+            "language": "Langue",
+            "author": "Auteur",
+            "change_language_modal": {
+                "title": "Choisir la langue",
+                "current": "Sélectionnée"
+            }
         }
     },
     "filter": {
@@ -450,6 +460,10 @@
             "complete_learning_journal_button": "Compléter mon journal d'apprentissage",
             "time_past": "Le temps que vous avez passé ensemble a été comptabilisé.",
             "complete_learning_journal": "Tu pourras le retrouver plus tard dans ton journal d'apprentissage."
+        },
+        "news": {
+            "title": "Actualités",
+            "see_all": "Voir toutes les actualités"
         }
     },
     "session": {

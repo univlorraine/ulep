@@ -50,7 +50,18 @@
     },
     "news": {
         "list": {
-            "filter_title": "Select news filters"
+            "filter_title": "Select news filters",
+            "title": "News",
+            "load_more": "See more"
+        },
+        "show": {
+            "change_language": "Change",
+            "language": "Language",
+            "author": "Author",
+            "change_language_modal": {
+                "title": "Choisir la langue",
+                "current": "Sélectionnée"
+            }
         }
     },
     "activity": {
@@ -422,6 +433,10 @@
             "tandem_unavailable": "Tandem unavailable",
             "tandem_paused": "Tandem paused",
             "title": "My pending requests"
+        },
+        "news": {
+            "title": "News",
+            "see_all": "See all news"
         }
     },
     "learning": {

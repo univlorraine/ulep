@@ -1,5 +1,6 @@
 import News from '../../../domain/entities/News';
 import Profile from '../../../domain/entities/Profile';
+import NewsContent from '../contents/news/NewsContent';
 import NewsListContent from '../contents/news/NewsListContent';
 import Modal from './Modal';
 
@@ -33,6 +34,9 @@ const NewsContentModal: React.FC<NewsContentModalProps> = ({
             <>
                 {displayNewsContentModal?.type === DisplayNewsContentModalEnum.list && (
                     <NewsListContent profile={profile} onBackPressed={onClose} onNewsPressed={onNewsPressed} />
+                )}
+                {displayNewsContentModal?.type === DisplayNewsContentModalEnum.show && displayNewsContentModal.news && (
+                    <NewsContent news={displayNewsContentModal.news} onBackPressed={onClose} profile={profile} />
                 )}
             </>
         </Modal>
