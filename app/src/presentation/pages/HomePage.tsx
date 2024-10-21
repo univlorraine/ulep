@@ -110,7 +110,7 @@ const HomePage: React.FC = () => {
 
     const onShowNewsPressed = (selectedNews?: News) => {
         if (isHybrid) {
-            history.push('news', { selectedNews });
+            history.push(selectedNews ? 'show-news' : 'news', { news: selectedNews });
         } else {
             setDisplayNewsContent({
                 type: selectedNews ? DisplayNewsContentModalEnum.show : DisplayNewsContentModalEnum.list,

@@ -3,6 +3,9 @@
     background-color: black;
     padding: 4px 5px;
     border-radius: 30px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .text {

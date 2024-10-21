@@ -6,7 +6,6 @@
     padding: 20px;
     border-radius: 10px;
     max-height: 80%;
-    max-width: 50%;
     min-width: 20%;
     color: black;
 }
@@ -26,4 +25,10 @@
 
 .selected {
     background-color: var(--primary-color);
+}
+
+@media (min-width: 768px) {
+    .container {
+        max-width: 50%;
+    }
 }

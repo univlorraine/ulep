@@ -26,8 +26,10 @@
 }
 
 .image {
-    width: 80px;
-    height: 60px;
+    min-width: 80px;
+    max-width: 80px;
+    max-height: 60px;
+    min-height: 60px;
     object-fit: contain;
     margin-right: 16px;
 }

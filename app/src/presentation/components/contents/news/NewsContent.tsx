@@ -8,6 +8,7 @@ import LanguageTag from '../../LanguageTag';
 import ChangeLanguageModal from '../../modals/ChangeLanguageModal';
 import UniversityTag from '../../UniversityTag';
 import styles from './NewsContent.module.css';
+
 interface NewsContentProps {
     profile: Profile;
     news: News;
