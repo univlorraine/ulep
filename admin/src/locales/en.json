@@ -293,7 +293,8 @@
                 "notFound": "News not found"
             },
             "start_publication_date": "Start publication date",
-            "end_publication_date": "End publication date"
+            "end_publication_date": "End publication date",
+            "credit_image": "Author of the image"
         },
         "status": {
             "label": "Status",

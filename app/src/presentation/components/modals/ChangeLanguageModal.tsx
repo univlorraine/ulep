@@ -1,9 +1,8 @@
-import { IonButton } from '@ionic/react';
+import { IonButton, IonModal } from '@ionic/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { codeLanguageToFlag } from '../../utils';
 import styles from './ChangeLanguageModal.module.css';
-import Modal from './Modal';
 
 interface ChangeLanguageModalProps {
     isVisible: boolean;
@@ -24,7 +23,7 @@ const ChangeLanguageModal: React.FC<ChangeLanguageModalProps> = ({
     const [currentLanguageCodeSelected, setCurrentLanguageCodeSelected] = useState(currentLanguageCode);
 
     return (
-        <Modal isVisible={isVisible} onClose={onClose} hideWhiteBackground>
+        <IonModal animated isOpen={isVisible} onDidDismiss={onClose} className={styles.modal}>
             <div className={styles.container}>
                 <div className={styles.filterContainer}>
                     <h1>{t('news.show.change_language_modal.title')}</h1>
@@ -52,7 +51,7 @@ const ChangeLanguageModal: React.FC<ChangeLanguageModalProps> = ({
                     {t('filter.cancel')}
                 </IonButton>
             </div>
-        </Modal>
+        </IonModal>
     );
 };
 

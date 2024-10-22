@@ -64,6 +64,9 @@
         "cancel": "Annuler",
         "is_mine": "Mes fiches"
     },
+    "credit": {
+        "title": "Auteur du fichier"
+    },
     "activity": {
         "title": "Fiche d'activité",
         "status": {

@@ -12,6 +12,7 @@ export interface NewsCommand {
     startPublicationDate: Date;
     endPublicationDate: Date;
     imageURL?: string;
+    creditImage?: string;
 }
 
 export const newsCommandToDomain = (command: NewsCommand) => {
@@ -27,6 +28,7 @@ export const newsCommandToDomain = (command: NewsCommand) => {
         command.status as NewsStatus,
         command.startPublicationDate,
         command.endPublicationDate,
-        command.imageURL
+        command.imageURL,
+        command.creditImage
     );
 };

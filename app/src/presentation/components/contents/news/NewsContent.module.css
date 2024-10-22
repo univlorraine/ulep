@@ -7,6 +7,24 @@
     position: absolute;
 }
 
+.credit-view {
+    background: white;
+    width: 32px;
+    height: 32px;
+    opacity: 0.75;
+    position: absolute;
+    right: 0;
+}
+
+.credit {
+    color: black;
+    font-family: Roboto;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 32px;
+    text-align: center;
+}
+
 .container {
     overflow-y: auto;
 }

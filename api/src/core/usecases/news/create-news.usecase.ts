@@ -23,6 +23,7 @@ export type CreateNewsCommand = {
   status: NewsStatus;
   startPublicationDate: Date;
   endPublicationDate: Date;
+  creditImage?: string;
 };
 
 @Injectable()

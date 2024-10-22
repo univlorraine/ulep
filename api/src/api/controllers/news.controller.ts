@@ -72,8 +72,7 @@ export class NewsController {
       limit: Number(limit),
       where: {
         title,
-        languageCodes:
-          typeof languageCodes === 'string' ? [languageCodes] : languageCodes,
+        languageCodes
       },
     });
 

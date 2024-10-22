@@ -1,4 +1,4 @@
-import { IonImg } from '@ionic/react';
+import { IonButton, IonImg } from '@ionic/react';
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import News from '../../../../domain/entities/News';
@@ -6,6 +6,7 @@ import Profile from '../../../../domain/entities/Profile';
 import HeaderSubContent from '../../HeaderSubContent';
 import LanguageTag from '../../LanguageTag';
 import ChangeLanguageModal from '../../modals/ChangeLanguageModal';
+import CreditModal from '../../modals/CreditModal';
 import UniversityTag from '../../UniversityTag';
 import styles from './NewsContent.module.css';
 
@@ -21,6 +22,7 @@ export const NewsContent: React.FC<NewsContentProps> = ({ news, profile, onBackP
     const [currentTitle, setCurrentTitle] = useState(news.title);
     const [currentContent, setCurrentContent] = useState(news.content);
     const [showChangeLanguage, setShowChangeLanguage] = useState(false);
+    const [showCreditModal, setShowCreditModal] = useState(false);
 
     const contentRef = useRef<HTMLDivElement>(null);
     const formattedDate = new Intl.DateTimeFormat(profile.nativeLanguage.code, {
@@ -52,7 +54,12 @@ export const NewsContent: React.FC<NewsContentProps> = ({ news, profile, onBackP
         <div className="subcontent-container content-wrapper" style={{ padding: 0 }} ref={contentRef}>
             <HeaderSubContent title={t('news.list.title')} onBackPressed={onBackPressed} />
             <div className={styles.container}>
-                {news.imageUrl && <IonImg className={styles.image} src={news.imageUrl} />}
+                {news.imageUrl && <IonImg className={styles.image} src={news.imageUrl}></IonImg>}
+                {news.creditImage && (
+                    <IonButton fill="clear" className={styles['credit-view']} onClick={() => setShowCreditModal(true)}>
+                        <span className={styles.credit}>©</span>
+                    </IonButton>
+                )}
                 <div className={styles['primary-container']} style={{ marginTop: news.imageUrl ? 200 : 0 }}>
                     <h1 className={styles.title}>{currentTitle}</h1>
                     <span className={styles.date}>{formattedDate}</span>
@@ -90,6 +97,13 @@ export const NewsContent: React.FC<NewsContentProps> = ({ news, profile, onBackP
                     ...news.translations.map((translation) => translation.languageCode),
                 ]}
             />
+            {news.creditImage && (
+                <CreditModal
+                    isVisible={showCreditModal}
+                    onClose={() => setShowCreditModal(false)}
+                    credit={news.creditImage}
+                />
+            )}
         </div>
     );
 };

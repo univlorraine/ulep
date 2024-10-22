@@ -41,6 +41,7 @@ const EditNews = () => {
         });
 
         if (payload.image) formData.append('file', payload.image);
+        if (payload.creditImage) formData.append('creditImage', payload.creditImage);
 
         try {
             return await update(

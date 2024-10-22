@@ -24,7 +24,8 @@ class News {
         public readonly status: NewsStatus,
         public readonly startPublicationDate: Date,
         public readonly endPublicationDate: Date,
-        public readonly imageUrl?: string
+        public readonly imageUrl?: string,
+        public readonly creditImage?: string
     ) {}
 }
 

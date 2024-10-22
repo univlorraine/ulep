@@ -64,6 +64,9 @@
             }
         }
     },
+    "credit": {
+        "title": "Credit of the file"
+    },
     "activity": {
         "title": "Activity sheet",
         "status": {
