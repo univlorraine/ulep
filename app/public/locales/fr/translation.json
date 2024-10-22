@@ -41,6 +41,7 @@
         }
     },
     "activity": {
+        "title": "Fiche d'activité",
         "status": {
             "in_validation": "Etude en cours",
             "rejected": "Refusée",
@@ -68,7 +69,6 @@
             "activity_shared": "Votre fiche a été partagée à votre animateur",
             "status_rejected": "Afficher la raison du rejet",
             "back_button": "Retour",
-            "kebab_button": "Ouvrir le menu contextuel",
             "creator": "Créé par {{name}}",
             "title": "Fiche d'activité",
             "update": "Mettre à jour ma fiche",
@@ -113,7 +113,6 @@
             "delete_image_button": "Supprimer l'image",
             "close_ressource_url": "Fermer la ressource url",
             "close_ressource_file": "Supprimer le document PDF",
-            "title": "Créer une fiche d’activité",
             "title_informations": "Informations principales",
             "title_vocabulary": "Vocabulaire & expression",
             "subtitle_vocabulary": "Tu peux lister ici les éléments de vocabulaire liés au sujet de ta fiche",
@@ -222,7 +221,8 @@
         "required_fields_mention_part2": "sont obligatoires",
         "close_profile": "Fermer le profil",
         "download": "Télécharger",
-        "years_old": "ans"
+        "years_old": "ans",
+        "kebab_button": "Ouvrir le menu contextuel"
     },
     "vocabulary": {
         "list": {
@@ -382,12 +382,12 @@
     },
     "flashcards": {
         "flipcards": {
-            "title": "Vrai ou Faux",
+            "title": "Flash Cards",
             "term": {
                 "term": "Terme",
                 "of": "sur"
             },
-            "buttons":{
+            "buttons": {
                 "showResponse": "Montrer la réponse",
                 "rightAnswer": "Oui",
                 "wrongAnswer": "Non",

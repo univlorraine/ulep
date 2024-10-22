@@ -1,22 +1,24 @@
-import { IonButton, IonIcon, useIonToast } from '@ionic/react';
+import { useIonToast } from '@ionic/react';
 import { useState } from 'react';
-import { Redirect, useHistory } from 'react-router';
-import { BACKGROUND_HYBRID_STYLE_INLINE } from '../../utils';
-import useGetVocabularyFromListsId from '../../hooks/useGetVocabularyFromListsId';
-import { BackgroundPurplePng, CloseBlackSvg } from '../../../assets';
+import { useTranslation } from 'react-i18next';
+import { Redirect } from 'react-router';
+import { BackgroundPurplePng } from '../../../assets';
+import Profile from '../../../domain/entities/Profile';
 import FlipcardsFinished from '../../components/flashcards/flipcards/FlipcardsFinished';
 import FlipcardsQuiz from '../../components/flashcards/flipcards/FlipcardsQuiz';
-import Profile from '../../../domain/entities/Profile';
+import useGetVocabularyFromListsId from '../../hooks/useGetVocabularyFromListsId';
+import { BACKGROUND_HYBRID_STYLE_INLINE } from '../../utils';
+import HeaderSubContent from '../HeaderSubContent';
 import styles from './FlipcardsContent.module.css';
-import { t } from 'i18next';
 
 type FlipcardsContentProps = {
     profile: Profile;
     selectedListsId: string[];
+    onBackPressed: () => void;
 };
 
-const FlipcardsContent = ({ profile, selectedListsId }: FlipcardsContentProps) => {
-    const history = useHistory();
+const FlipcardsContent = ({ profile, selectedListsId, onBackPressed }: FlipcardsContentProps) => {
+    const { t } = useTranslation();
     const [refresh, setRefresh] = useState<boolean>(false);
     const { vocabularies, error, isLoading } = useGetVocabularyFromListsId(selectedListsId, refresh);
     const [numberRightAnswers, setNumberRightAnswers] = useState<number>(0);
@@ -24,10 +26,10 @@ const FlipcardsContent = ({ profile, selectedListsId }: FlipcardsContentProps) =
     const [showToast] = useIonToast();
 
     const onRestartedQuiz = () => {
-        setIsQuizFinished(false)
-        setNumberRightAnswers(0)
-    }
-    
+        setIsQuizFinished(false);
+        setNumberRightAnswers(0);
+    };
+
     if (!profile) {
         return <Redirect to={'/'} />;
     }
@@ -43,36 +45,28 @@ const FlipcardsContent = ({ profile, selectedListsId }: FlipcardsContentProps) =
     };
 
     return (
-        <div style={backgroundStyle} className={styles.container}>
-            <IonButton 
-                size="small"
-                fill="clear" 
-                className={`tertiary-button ${styles.closeButton}`} 
-                onClick={() => history.goBack()}
-            >
-                <IonIcon
-                    icon={CloseBlackSvg}
-                    slot="icon-only"
-                />
-            </IonButton>
-            
-            {!isQuizFinished &&
-                <FlipcardsQuiz
-                    isLoading={isLoading}
-                    vocabularies={vocabularies}
-                    setNumberRightAnswers={setNumberRightAnswers}
-                    numberRightAnswers={numberRightAnswers}
-                    setIsQuizFinished={setIsQuizFinished}
-                />
-            }
+        <div className={`subcontent-container content-wrapper`} style={{ padding: 0 }}>
+            <HeaderSubContent title={t('vocabulary.list.flashcard.title')} onBackPressed={onBackPressed} />
+            <div className={styles.container} style={backgroundStyle}>
+                {!isQuizFinished && (
+                    <FlipcardsQuiz
+                        isLoading={isLoading}
+                        vocabularies={vocabularies}
+                        setNumberRightAnswers={setNumberRightAnswers}
+                        numberRightAnswers={numberRightAnswers}
+                        setIsQuizFinished={setIsQuizFinished}
+                    />
+                )}
 
-            {isQuizFinished &&
-                <FlipcardsFinished
-                    totalVocabulariesCount={vocabularies.length}
-                    note={numberRightAnswers}
-                    onRestartedQuiz={() => onRestartedQuiz()}
-                />
-            }
+                {isQuizFinished && (
+                    <FlipcardsFinished
+                        totalVocabulariesCount={vocabularies.length}
+                        note={numberRightAnswers}
+                        onRestartedQuiz={() => onRestartedQuiz()}
+                        onBackToVocabularyList={onBackPressed}
+                    />
+                )}
+            </div>
         </div>
     );
 };

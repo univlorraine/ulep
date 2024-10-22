@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Vocabulary from '../../../../domain/entities/Vocabulary';
 import Loader from '../../Loader';
-import ProgressBar from '../../ProgressBar';
 import FlipcardsButtons from './FlipcardsButtons';
 import FlipcardsCards from './FlipcardsCards';
 import styles from './FlipcardsQuiz.module.css';
@@ -34,8 +33,6 @@ const FlipcardsQuiz: React.FC<FlipcardsQuizProps> = ({
 
     const { t } = useTranslation();
 
-    const progressBarPercentage = ((vocabulariesCount - 1) / vocabularies.length) * 100;
-
     useEffect(() => {
         if (vocabularies.length > 0 && !currentVocabulary.word && !isLoading) {
             setCurrentVocabulary(vocabularies[0]);
@@ -45,7 +42,6 @@ const FlipcardsQuiz: React.FC<FlipcardsQuizProps> = ({
     return (
         <div className={`${styles.container} content-wrapper`}>
             <div className={styles.progressBar}>
-                <ProgressBar color={'#EDDF5E'} percentage={progressBarPercentage} />
                 <p className={styles.title}>{t('flashcards.flipcards.title')}</p>
                 <p className={styles.text}>
                     {t('flashcards.flipcards.term.term')} {vocabulariesCount} {t('flashcards.flipcards.term.of')}{' '}

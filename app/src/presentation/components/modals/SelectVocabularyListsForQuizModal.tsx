@@ -1,18 +1,17 @@
-import { IonButton, IonIcon } from '@ionic/react';
+import { IonButton, IonIcon, IonModal } from '@ionic/react';
 import { closeCircle } from 'ionicons/icons';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router';
 import Profile from '../../../domain/entities/Profile';
 import VocabularyList from '../../../domain/entities/VocabularyList';
 import Checkbox from '../Checkbox';
 import VocabularyListLineCheckbox from '../vocabulary/VocabularyListLineCheckbox';
-import Modal from './Modal';
-import styles from './SelectVocabularyListsForQuizModale.module.css';
+import styles from './SelectVocabularyListsForQuizModal.module.css';
 
 interface SelectVocabularyListsForQuizModaleProps {
     isVisible: boolean;
     onClose: () => void;
+    onValidate: (selectedLists: VocabularyList[]) => void;
     vocabularyLists: VocabularyList[];
     profile: Profile;
     isHybrid?: boolean;
@@ -21,19 +20,13 @@ interface SelectVocabularyListsForQuizModaleProps {
 const SelectVocabularyListsForQuizModale: React.FC<SelectVocabularyListsForQuizModaleProps> = ({
     isVisible,
     onClose,
+    onValidate,
     vocabularyLists,
     profile,
     isHybrid,
 }) => {
     const { t } = useTranslation();
-    const history = useHistory();
     const [selectedLists, setSelectedLists] = useState<VocabularyList[]>([]);
-
-    const onValidate = () => {
-        onClose();
-        const selectedListsId = selectedLists.map((selectedList) => selectedList.id);
-        history.push('/flipcards', { selectedListsId });
-    };
 
     const onSelectVocabularyList = (vocabularyList: VocabularyList) => {
         if (selectedLists.includes(vocabularyList)) {
@@ -56,7 +49,7 @@ const SelectVocabularyListsForQuizModale: React.FC<SelectVocabularyListsForQuizM
     }, [isVisible]);
 
     return (
-        <Modal isVisible={isVisible} onClose={onClose} hideWhiteBackground>
+        <IonModal animated isOpen={isVisible} onDidDismiss={onClose} className={styles.modal}>
             <div className={`${styles.container} ${isHybrid && styles.mobileContainer}`}>
                 <IonButton size="small" fill="clear" color="dark" className={styles.close} onClick={onClose}>
                     <IonIcon
@@ -87,21 +80,27 @@ const SelectVocabularyListsForQuizModale: React.FC<SelectVocabularyListsForQuizM
                             </div>
                         </div>
                     </IonButton>
-                    {vocabularyLists.map((vocabularyList) => (
-                        <VocabularyListLineCheckbox
-                            key={vocabularyList.id}
-                            profile={profile}
-                            vocabularyList={vocabularyList}
-                            onSelectVocabularyList={() => onSelectVocabularyList(vocabularyList)}
-                            isSelected={selectedLists.includes(vocabularyList)}
-                        />
-                    ))}
+                    {vocabularyLists
+                        .filter((vocabularyList) => vocabularyList.numberOfVocabularies > 0)
+                        .map((vocabularyList) => (
+                            <VocabularyListLineCheckbox
+                                key={vocabularyList.id}
+                                profile={profile}
+                                vocabularyList={vocabularyList}
+                                onSelectVocabularyList={() => onSelectVocabularyList(vocabularyList)}
+                                isSelected={selectedLists.includes(vocabularyList)}
+                            />
+                        ))}
                 </div>
-                <IonButton className={`secondary-button ${styles.button}`} fill="clear" onClick={onValidate}>
+                <IonButton
+                    className={`secondary-button ${styles.button}`}
+                    fill="clear"
+                    onClick={() => onValidate(selectedLists)}
+                >
                     {t('vocabulary.list.start_quiz.create')}
                 </IonButton>
             </div>
-        </Modal>
+        </IonModal>
     );
 };
 

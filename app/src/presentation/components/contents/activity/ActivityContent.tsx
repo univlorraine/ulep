@@ -1,14 +1,15 @@
-import { IonButton, IonContent, IonIcon, IonItem, IonLabel, IonList, IonPopover, useIonToast } from '@ionic/react';
-import { arrowBackOutline, downloadOutline, hammerOutline, helpOutline } from 'ionicons/icons';
+import { IonButton, IonIcon, IonItem, IonLabel, IonList, useIonToast } from '@ionic/react';
+import { downloadOutline, hammerOutline, helpOutline } from 'ionicons/icons';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ArrowRightSvg, KebabSvg } from '../../../../assets';
+import { ArrowRightSvg } from '../../../../assets';
 import { useConfig } from '../../../../context/ConfigurationContext';
 import { Activity, ActivityStatus } from '../../../../domain/entities/Activity';
 import Profile from '../../../../domain/entities/Profile';
 import useGetActivity from '../../../hooks/useGetActivity';
 import AudioLine from '../../AudioLine';
 import ActivityStatusCard from '../../card/ActivityStatusCard';
+import HeaderSubContent from '../../HeaderSubContent';
 import Loader from '../../Loader';
 import Modal from '../../modals/Modal';
 import styles from './ActivityContent.module.css';
@@ -82,32 +83,27 @@ export const ActivityContent: React.FC<ActivityContentProps> = ({
 
     return (
         <div className="subcontent-container content-wrapper" style={{ padding: 0 }}>
-            <div className="subcontent-header">
-                <IonButton fill="clear" onClick={onBackPressed} aria-label={t('activity.show.back_button') as string}>
-                    <IonIcon icon={arrowBackOutline} color="dark" />
-                </IonButton>
-                <p className="subcontent-title">{t('activity.show.title')}</p>
-                <IonButton
-                    fill="clear"
-                    id="click-trigger"
-                    onClick={() => setShowMenu(!showMenu)}
-                    aria-label={t('activity.show.kebab_button') as string}
-                >
-                    <IonIcon icon={KebabSvg} color="dark" />
-                </IonButton>
-                <IonPopover trigger="click-trigger" triggerAction="click" isOpen={showMenu} showBackdrop={false}>
-                    <IonContent>
-                        <IonList lines="none">
-                            {activity.status !== ActivityStatus.PUBLISHED && activity.creator.id === profile.id && (
-                                <IonItem button={true} detail={false} onClick={() => onUpdateActivityPressed(activity)}>
-                                    <IonIcon icon={hammerOutline} aria-hidden="true" />
-                                    <IonLabel className={styles['popover-label']}>{t('activity.show.update')}</IonLabel>
-                                </IonItem>
-                            )}
-                        </IonList>
-                    </IonContent>
-                </IonPopover>
-            </div>
+            <HeaderSubContent
+                title={t('activity.show.title')}
+                onBackPressed={onBackPressed}
+                kebabContent={(closeMenu) => (
+                    <IonList lines="none">
+                        {activity.status !== ActivityStatus.PUBLISHED && activity.creator.id === profile.id && (
+                            <IonItem
+                                button={true}
+                                detail={false}
+                                onClick={() => {
+                                    onUpdateActivityPressed(activity);
+                                    closeMenu();
+                                }}
+                            >
+                                <IonIcon icon={hammerOutline} aria-hidden="true" />
+                                <IonLabel className={styles['popover-label']}>{t('activity.show.update')}</IonLabel>
+                            </IonItem>
+                        )}
+                    </IonList>
+                )}
+            />
             {isLoading ? (
                 <div className={styles.loader}>
                     <Loader />

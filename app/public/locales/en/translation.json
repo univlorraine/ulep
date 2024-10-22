@@ -41,6 +41,7 @@
         }
     },
     "activity": {
+        "title": "Activity sheet",
         "status": {
             "in_validation": "In validation",
             "rejected": "Rejected",
@@ -69,7 +70,6 @@
             "status_rejected": "Show the reason for rejection",
             "update": "Update my sheet",
             "back_button": "Back",
-            "kebab_button": "Open the context menu",
             "creator": "Created by {{name}}",
             "title": "Activity sheet",
             "language": "Language",
@@ -107,7 +107,6 @@
             "add_excercise_button": "Add an excercise",
             "add_vocabulary_button": "Add a vocabulary term",
             "ressource_url_placeholder": "Enter the url",
-            "title": "Create an activity sheet",
             "title_informations": "Informations",
             "title_vocabulary": "Vocabulary & expression",
             "subtitle_vocabulary": "You can list here the vocabulary elements related to the subject of your sheet",
@@ -368,7 +367,7 @@
     },
     "flashcards": {
         "flipcards": {
-            "title": "Right or Wrong",
+            "title": "Flash Cards",
             "term": {
                 "term": "Term",
                 "of": "of"
