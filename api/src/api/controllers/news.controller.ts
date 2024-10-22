@@ -15,10 +15,10 @@ import {
 import { AuthenticationGuard } from '../guards';
 import * as Swagger from '@nestjs/swagger';
 import { Role, Roles } from '../decorators/roles.decorator';
-import { GetNewsUsecase } from 'src/core/usecases/news/get-news.usecase';
 import { CreateNewsUsecase } from 'src/core/usecases/news/create-news.usecase';
 import {
   CreateNewsRequest,
+  GetNewsAdminQuery,
   GetNewsQuery,
   NewsResponse,
   UpdateNewsRequest,
@@ -27,20 +27,24 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { ImagesFilePipe } from '../validators';
 import { News } from 'src/core/models';
 import { Collection } from '@app/common';
-import { CollectionResponse } from '../decorators';
+import { CollectionResponse, CurrentUser } from '../decorators';
 import {
   DeleteNewsImageUsecase,
   DeleteNewsUsecase,
+  GetNewsAdminUsecase,
+  GetNewsUsecase,
   GetOneNewsUsecase,
   UpdateNewsUsecase,
   UploadNewsImageUsecase,
 } from 'src/core/usecases';
+import { KeycloakUser } from '@app/keycloak';
 
 @Controller('news')
 @Swagger.ApiTags('News')
 export class NewsController {
   constructor(
     private readonly getNewsUsecase: GetNewsUsecase,
+    private readonly getNewsAdminUsecase: GetNewsAdminUsecase,
     private readonly getOneNewsUsecase: GetOneNewsUsecase,
     private readonly createNewsUsecase: CreateNewsUsecase,
     private readonly updateNewsUsecase: UpdateNewsUsecase,
@@ -57,11 +61,41 @@ export class NewsController {
   @Swagger.ApiOkResponse({ type: NewsResponse })
   @CollectionResponse(NewsResponse)
   async getCollection(
+    @CurrentUser() user: KeycloakUser,
     @Query() query: GetNewsQuery,
+  ): Promise<Collection<NewsResponse>> {
+    const { page, limit, title, languageCodes } = query;
+
+    const news = await this.getNewsUsecase.execute({
+      user,
+      page: Number(page),
+      limit: Number(limit),
+      where: {
+        title,
+        languageCodes:
+          typeof languageCodes === 'string' ? [languageCodes] : languageCodes,
+      },
+    });
+
+    return new Collection<NewsResponse>({
+      items: news.items.map(NewsResponse.fromDomain),
+      totalItems: news.totalItems,
+    });
+  }
+
+  @Get('admin')
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({
+    summary: 'Retrieve the collection of News ressource for back-office.',
+  })
+  @Swagger.ApiOkResponse({ type: NewsResponse })
+  @CollectionResponse(NewsResponse)
+  async getCollectionForUser(
+    @Query() query: GetNewsAdminQuery,
   ): Promise<Collection<NewsResponse>> {
     const { page, limit, title, universityIds, status, languageCodes } = query;
 
-    const news = await this.getNewsUsecase.execute({
+    const news = await this.getNewsAdminUsecase.execute({
       page,
       limit,
       where: {

@@ -43,7 +43,6 @@ const useGetNewsList = (languageFilter: Language[]) => {
             });
             const result = await getAllNews.execute({
                 title: searchTitle,
-                universityIds: [profile.user.university.id],
                 page,
                 languageCodes: languageFilter.map((language) => language.code),
             });
@@ -81,7 +80,6 @@ const useGetNewsList = (languageFilter: Language[]) => {
             });
             const result = await getAllNews.execute({
                 title: searchTitle,
-                universityIds: [profile.user.university.id],
                 page: 1,
                 languageCodes: languageFilter.map((language) => language.code),
             });

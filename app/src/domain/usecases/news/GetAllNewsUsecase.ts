@@ -20,12 +20,6 @@ class GetAllNewsUsecase implements GetAllNewsUsecaseInterface {
                 });
             }
 
-            if (filters.universityIds) {
-                filters.universityIds.forEach((universityId) => {
-                    queryParams.append('universityIds', universityId);
-                });
-            }
-
             if (filters.page) {
                 queryParams.append('page', filters.page.toString());
             }

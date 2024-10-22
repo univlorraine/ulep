@@ -7,7 +7,17 @@ import { MediaObjectResponse } from '../medias';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { PaginationDto } from '../pagination';
 
+
 export class GetNewsQuery extends PaginationDto {
+  @ApiPropertyOptional({ type: 'string' })
+  @IsOptional()
+  title?: string;
+
+  @ApiPropertyOptional({ type: 'string' })
+  @IsOptional()
+  languageCodes?: string[];
+}
+export class GetNewsAdminQuery extends PaginationDto {
   @ApiPropertyOptional({ type: 'string', isArray: true })
   @IsOptional()
   universityIds?: string[];

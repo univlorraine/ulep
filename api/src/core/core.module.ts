@@ -94,6 +94,7 @@ import {
   GetLevelsUsecase,
   GetMediaObjectUsecase,
   GetMessagesFromConversationUsecase,
+  GetNewsAdminUsecase,
   GetNewsUsecase,
   GetOneNewsUsecase,
   GetOtherUserEmailInTandemUsecase,
@@ -227,6 +228,7 @@ const usecases: Provider[] = [
   UploadInstanceDefaultCertificateUsecase,
   UploadUniversityDefaultCertificateUsecase,
   // News
+  GetNewsAdminUsecase,
   GetNewsUsecase,
   GetOneNewsUsecase,
   CreateNewsUsecase,
