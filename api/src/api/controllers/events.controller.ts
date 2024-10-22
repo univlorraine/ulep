@@ -14,7 +14,7 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { AnyFilesInterceptor, FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor } from '@nestjs/platform-express';
 import * as Swagger from '@nestjs/swagger';
 import { ApiTags } from '@nestjs/swagger';
 import { EventObject } from 'src/core/models/event.model';
@@ -80,7 +80,7 @@ export class EventsController {
 
   @Get(':id')
   @UseGuards(AuthenticationGuard)
-  @SerializeOptions({ groups: ['read', 'event:enrolledUsers'] })
+  @SerializeOptions({ groups: ['read'] })
   @Swagger.ApiOperation({ summary: 'Get an Event resource.' })
   @Swagger.ApiOkResponse({ type: EventResponse })
   async getEvent(@Param('id', ParseUUIDPipe) id: string) {
@@ -145,7 +145,6 @@ export class EventsController {
   @SerializeOptions({ groups: ['read', 'event:enrolledUsers'] })
   @Swagger.ApiOperation({ summary: 'Subscribe users to an Event resource.' })
   @Swagger.ApiOkResponse({ type: EventResponse })
-  @UseInterceptors(AnyFilesInterceptor())
   async subscribeToEvent(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() body: SubscribeToEventRequest,
@@ -163,7 +162,6 @@ export class EventsController {
   @SerializeOptions({ groups: ['read', 'event:enrolledUsers'] })
   @Swagger.ApiOperation({ summary: 'Unsubscribe users to an Event resource.' })
   @Swagger.ApiOkResponse({ type: EventResponse })
-  @UseInterceptors(AnyFilesInterceptor())
   async unsubscribeToEvent(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() body: SubscribeToEventRequest,

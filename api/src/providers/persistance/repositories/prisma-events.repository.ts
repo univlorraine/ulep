@@ -20,7 +20,6 @@ export class PrismaEventRepository implements EventRepository {
     pagination,
     filters,
   }: FindEventsProps): Promise<Collection<EventObject>> {
-    console.log({ filters });
     const where: Prisma.EventsWhereInput = {
       TitleTextContent: {
         text: {
