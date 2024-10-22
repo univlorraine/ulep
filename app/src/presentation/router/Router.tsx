@@ -63,6 +63,7 @@ import MobileRoute from './MobileRoute';
 import PrivateRoute from './PrivateRoute';
 import UpdateSessionPage from '../pages/mobile/UpdateSessionPage';
 import ShowSessionPage from '../pages/mobile/ShowSessionPage';
+import FlipcardsPage from '../pages/FlipcardsPage';
 
 const OfflineRouter: React.FC = () => {
     const { width } = useWindowDimensions();
@@ -225,6 +226,11 @@ const OfflineRouter: React.FC = () => {
                 <PrivateRoute exact path="/vocabulary">
                     <VocabularyPage />
                 </PrivateRoute>
+                {/* Flashcards route */}
+                <PrivateRoute exact path="/flipcards">
+                    <FlipcardsPage />
+                </PrivateRoute>
+
                 {/* Quizz route */}
                 <PrivateRoute exact path="/cefr/languages">
                     <CEFRQuizzLanguagePage />

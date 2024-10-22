@@ -12,6 +12,7 @@ import AddVocabularyListModal from '../components/modals/AddVocabularyListModal'
 import useGetVocabularyList from '../hooks/useGetVocabularyList';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../utils';
+import SelectVocabularyListsForQuizModale from '../components/modals/SelectVocabularyListsForQuizModale';
 
 const VocabularyListPage = () => {
     const { t } = useTranslation();
@@ -22,6 +23,7 @@ const VocabularyListPage = () => {
     const isHybrid = width < HYBRID_MAX_WIDTH;
     const profile = useStoreState((state) => state.profile);
     const [showAddVocabularyListModal, setShowAddVocabularyListModal] = useState(false);
+    const [showSelectVocabularyListsForQuizModal, setShowSelectVocabularyListsForQuizModal] = useState(false);
     const [refreshVocabularyLists, setRefreshVocabularyLists] = useState(false);
 
     const { vocabularyLists, error, isLoading } = useGetVocabularyList(refreshVocabularyLists);
@@ -59,6 +61,7 @@ const VocabularyListPage = () => {
                         profile={profile}
                         vocabularyLists={vocabularyLists}
                         isLoading={isLoading}
+                        onStartQuiz={() => setShowSelectVocabularyListsForQuizModal(true)}
                     />
                 </IonContent>
                 <AddVocabularyListModal
@@ -66,6 +69,13 @@ const VocabularyListPage = () => {
                     onClose={() => setShowAddVocabularyListModal(false)}
                     onCreateVocabularyList={onCreateVocabularyList}
                     profile={profile}
+                />
+                <SelectVocabularyListsForQuizModale
+                    isVisible={showSelectVocabularyListsForQuizModal}
+                    onClose={() => setShowSelectVocabularyListsForQuizModal(false)}
+                    vocabularyLists={vocabularyLists}
+                    profile={profile}
+                    isHybrid={isHybrid}
                 />
             </>
         );
@@ -80,12 +90,19 @@ const VocabularyListPage = () => {
                     onSelectVocabularyList={onSelectVocabularyList}
                     profile={profile}
                     isLoading={isLoading}
+                    onStartQuiz={() => setShowSelectVocabularyListsForQuizModal(true)}
                 />
             </OnlineWebLayout>
             <AddVocabularyListModal
                 isVisible={showAddVocabularyListModal}
                 onClose={() => setShowAddVocabularyListModal(false)}
                 onCreateVocabularyList={onCreateVocabularyList}
+                profile={profile}
+            />
+            <SelectVocabularyListsForQuizModale
+                isVisible={showSelectVocabularyListsForQuizModal}
+                onClose={() => setShowSelectVocabularyListsForQuizModal(false)}
+                vocabularyLists={vocabularyLists}
                 profile={profile}
             />
         </>

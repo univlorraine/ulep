@@ -24,6 +24,7 @@ import {
   DeleteVocabularyListUsecase,
   DeleteVocabularyUsecase,
   FindAllVocabularyFromListIdUsecase,
+  FindAllVocabularyFromSelectedListsIdUsecase,
   FindAllVocabularyListUsecase,
   GetVocabularyListPdfUsecase,
   UpdateVocabularyListUsecase,
@@ -34,6 +35,7 @@ import {
   CreateVocabularyListRequest,
   CreateVocabularyRequest,
   GetVocabulariesFromListQuery,
+  GetVocabulariesFromSelectedListsQuery,
   PaginationDto,
   UpdateVocabularyListRequest,
   UpdateVocabularyRequest,
@@ -51,6 +53,7 @@ export class VocabularyController {
     private readonly deleteVocabularyListUsecase: DeleteVocabularyListUsecase,
     private readonly findAllVocabularyListUsecase: FindAllVocabularyListUsecase,
     private readonly findAllVocabularyFromListIdUsecase: FindAllVocabularyFromListIdUsecase,
+    private readonly findAllVocabularyFromSelectedListsIdUsecase: FindAllVocabularyFromSelectedListsIdUsecase,
     private readonly updateVocabularyUsecase: UpdateVocabularyUsecase,
     private readonly deleteVocabularyUsecase: DeleteVocabularyUsecase,
     private readonly uploadAudioVocabularyUsecase: UploadAudioVocabularyUsecase,
@@ -151,6 +154,30 @@ export class VocabularyController {
 
     return new Collection<VocabularyListResponse>({
       items: vocabularyLists.map(VocabularyListResponse.from),
+      totalItems: vocabularyLists.length,
+    });
+  }
+
+  @Get('random')
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({
+    summary: 'Get Vocabularies ressource in random order.',
+  })
+  @Swagger.ApiOkResponse({ type: () => VocabularyListResponse })
+  async getVocabulariesInRandomOrder(
+    @Query() query: GetVocabulariesFromSelectedListsQuery,
+  ): Promise<Collection<VocabularyResponse>> {
+    const vocabularyLists =
+      await this.findAllVocabularyFromSelectedListsIdUsecase.execute({
+        vocabularySelectedListsId: query.vocabularySelectedListsId,
+        pagination: {
+          page: query.page,
+          limit: query.limit,
+        },
+      });
+
+    return new Collection<VocabularyResponse>({
+      items: vocabularyLists.map(VocabularyResponse.from),
       totalItems: vocabularyLists.length,
     });
   }

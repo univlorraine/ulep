@@ -6,9 +6,10 @@ interface AudioLineProps {
     audioFile: File | string;
     hideProgressBar?: boolean;
     small?: boolean;
+    icon?: string;
 }
 
-const AudioLine: React.FC<AudioLineProps> = ({ audioFile, hideProgressBar = false, small = false }) => {
+const AudioLine: React.FC<AudioLineProps> = ({ audioFile, hideProgressBar = false, small = false, icon }) => {
     const [isPlaying, setIsPlaying] = useState(false);
     const [progress, setProgress] = useState(0);
     const [duration, setDuration] = useState(0);
@@ -73,7 +74,7 @@ const AudioLine: React.FC<AudioLineProps> = ({ audioFile, hideProgressBar = fals
     return (
         <div className={styles.audioLine}>
             <button className={`${styles.button} ${small ? styles.smallButton : ''}`} onClick={togglePlayPause}>
-                {isPlaying ? <img src={PauseSvg} alt="Pause" /> : <img src={PlaySvg} alt="Play" />}
+                {isPlaying ? <img src={icon || PauseSvg} alt="Pause" /> : <img src={icon || PlaySvg} alt="Play" />}
             </button>
             {!hideProgressBar && (
                 <div className={styles.progressBar}>

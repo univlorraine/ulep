@@ -1,0 +1,25 @@
+.buttonsContainer {
+    width: 100%;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.buttonsContainer ion-button {
+    border: none !important;
+}
+
+.description {
+    margin-block: 10px;
+}
+
+.buttons {
+    display: flex;
+    gap: 15px;
+    width: 100%;
+}
+
+.buttons ion-button{
+    flex: 1;
+}

@@ -11,10 +11,15 @@
     padding: 10px 10px;
     text-transform: uppercase;
     width: 100%;
+    gap: 10px;
 }
 .primary-button {
     background-color: #000;
     color: white;
+}
+
+.tertiary-button .button-inner{
+    gap: 10px;
 }
 
 .center-button {

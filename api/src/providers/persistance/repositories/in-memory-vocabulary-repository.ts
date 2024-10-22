@@ -89,6 +89,24 @@ export class InMemoryVocabularyRepository implements VocabularyRepository {
     return filteredVocabularies.slice(start, end);
   }
 
+  async findAllVocabularyFromSelectedListsId(
+    vocabularySelectedListsId: string[],
+    pagination?: VocabularyPagination,
+  ): Promise<Vocabulary[]> {
+    let filteredVocabularies: Vocabulary[] = [];
+
+    vocabularySelectedListsId.forEach((id) => {
+      const vocabularies = this.#vocabularyRelations.get(id) || [];
+      filteredVocabularies = filteredVocabularies.concat(vocabularies);
+    });
+
+    const start = pagination?.page
+      ? (pagination.page - 1) * pagination.limit
+      : 0;
+    const end = pagination?.limit ? start + pagination.limit : undefined;
+    return filteredVocabularies.slice(start, end);
+  }
+
   async findVocabularyListById(id: string): Promise<VocabularyList> {
     return this.#vocabularyLists.find((vl) => vl.id === id);
   }
