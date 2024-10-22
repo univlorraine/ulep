@@ -42,8 +42,12 @@ export class CreateActivityRequest {
   creditImage?: string;
 
   @ApiProperty({ type: 'string' })
-  @IsNotEmpty()
-  profileId: string;
+  @IsOptional()
+  profileId?: string;
+
+  @ApiProperty({ type: 'string' })
+  @IsOptional()
+  universityId?: string;
 
   @ApiProperty({ type: 'string', isArray: true })
   @IsNotEmpty()

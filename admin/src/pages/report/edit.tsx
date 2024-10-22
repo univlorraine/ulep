@@ -1,11 +1,19 @@
 import React from 'react';
-import { useTranslate, useNotify, useRedirect, useUpdate, WithRecord, Edit } from 'react-admin';
+import { useTranslate, useNotify, useRedirect, useUpdate, WithRecord, Edit, usePermissions } from 'react-admin';
 import ReportForm from '../../components/form/ReportForm';
 import ReportsPagesHeader from '../../components/tabs/ReportsPagesHeader';
+import { Role } from '../../entities/Administrator';
 import Report, { ReportStatus } from '../../entities/Report';
 
 const EditReport = () => {
     const translate = useTranslate();
+
+    const { permissions } = usePermissions();
+    const canEdit = permissions.checkRoles([Role.MANAGER, Role.SUPER_ADMIN]);
+    if (!canEdit) {
+        return <div>{translate('reports.error.unauthorized')}</div>;
+    }
+
     const [update] = useUpdate();
     const redirect = useRedirect();
     const notify = useNotify();

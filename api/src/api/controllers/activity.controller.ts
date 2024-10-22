@@ -48,14 +48,17 @@ import {
   GetActivityThemeCategoryUsecase,
   GetActivityThemeUsecase,
   GetActivityUsecase,
+  GetAllActivitiesByAdminUsecase,
   GetAllActivityThemesUsecase,
-  UpdateActivityStatusUsecase,
   UpdateActivityThemeCategoryUsecase,
   UpdateActivityThemeUsecase,
   UpdateActivityUsecase,
   UploadImageActivityUsecase,
   UploadMediaActivityUsecase,
 } from 'src/core/usecases';
+import { UpdateActivityStatusUsecase } from 'src/core/usecases/activity/update-activity-status.usecase';
+import { ActivityWithThemeCategoryResponse } from '../dtos/activity/activity-with-theme-category.response';
+import { GetActivitiesByAdminRequest } from '../dtos/activity/get-activities-by-admin.request';
 import { GetActivitiesCategoriesRequest } from '../dtos/activity/get-activity-categories.request';
 
 @Controller('activities')
@@ -83,9 +86,75 @@ export class ActivityController {
     private readonly uploadMediaActivityUsecase: UploadMediaActivityUsecase,
     private readonly updateActivityUsecase: UpdateActivityUsecase,
     private readonly updateActivityStatusUsecase: UpdateActivityStatusUsecase,
+    private readonly getActivitiesByAdminUsecase: GetAllActivitiesByAdminUsecase,
     private readonly env: ConfigService<Env, true>,
   ) {
     this.defaultLanguageCode = env.get<string>('DEFAULT_TRANSLATION_LANGUAGE');
+  }
+
+  @Get()
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Get all public Activity ressources.' })
+  async getPublicActivities(
+    @Query() query: GetActivitiesRequest,
+    @CurrentUser() user: KeycloakUser,
+    @Headers('Language-code') languageCode?: string,
+  ) {
+    const status = !query.shouldTakeOnlyMine
+      ? [ActivityStatus.PUBLISHED]
+      : [
+          ActivityStatus.PUBLISHED,
+          ActivityStatus.IN_VALIDATION,
+          ActivityStatus.DRAFT,
+        ];
+
+    const activities = await this.getActivitiesUsecase.execute({
+      status,
+      pagination: {
+        page: query.page,
+        limit: query.limit,
+      },
+      searchTitle: query.searchTitle,
+      themesIds: query.themesIds,
+      languageLevels: query.languageLevels,
+      languagesCodes: query.languagesCodes,
+      userId: query.shouldTakeOnlyMine ? user.sub : undefined,
+    });
+
+    return new Collection<ActivityResponse>({
+      items: activities.items.map((activity) =>
+        ActivityResponse.from(activity, languageCode),
+      ),
+      totalItems: activities.totalItems,
+    });
+  }
+
+  @Get('admin')
+  @Roles(Role.ADMIN)
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Get all Activity ressources for admin.' })
+  @Swagger.ApiOkResponse({ type: () => ActivityWithThemeCategoryResponse })
+  async getAllActivitiesByAdmin(@Query() query: GetActivitiesByAdminRequest) {
+    const activities = await this.getActivitiesByAdminUsecase.execute({
+      pagination: {
+        page: query.page,
+        limit: query.limit,
+      },
+      searchTitle: query.searchTitle,
+      languageCode: query.languageCode,
+      languageLevel: query.languageLevel,
+      category: query.category,
+      theme: query.theme,
+      status: query.status,
+      university: query.university,
+    });
+
+    return new Collection<ActivityWithThemeCategoryResponse>({
+      items: activities.items.map((activity) =>
+        ActivityWithThemeCategoryResponse.from(activity),
+      ),
+      totalItems: activities.totalItems,
+    });
   }
 
   @Post()
@@ -254,8 +323,8 @@ export class ActivityController {
   ) {
     const activityThemes = await this.getAllActivityThemesUsecase.execute({
       pagination: {
-        page: query.page,
-        limit: query.limit,
+        page: query?.page,
+        limit: query?.limit,
       },
     });
 
@@ -270,57 +339,11 @@ export class ActivityController {
   @Get(':id')
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Get a Activity ressource.' })
-  @Swagger.ApiOkResponse({ type: () => ActivityResponse })
+  @Swagger.ApiOkResponse({ type: () => ActivityWithThemeCategoryResponse })
   async getActivity(@Param('id') id: string) {
     const activity = await this.getActivityUsecase.execute(id);
 
-    return ActivityResponse.from(activity);
-  }
-
-  @Get()
-  @UseGuards(AuthenticationGuard)
-  @Swagger.ApiOperation({ summary: 'Get all public Activity ressources.' })
-  async getPublicActivities(
-    @Query() query: GetActivitiesRequest,
-    @CurrentUser() user: KeycloakUser,
-    @Headers('Language-code') languageCode?: string,
-  ) {
-    const status = !query.shouldTakeOnlyMine
-      ? [ActivityStatus.PUBLISHED]
-      : [
-          ActivityStatus.PUBLISHED,
-          ActivityStatus.IN_VALIDATION,
-          ActivityStatus.DRAFT,
-        ];
-
-    const activities = await this.getActivitiesUsecase.execute({
-      status,
-      pagination: {
-        page: query.page,
-        limit: query.limit,
-      },
-      searchTitle: query.searchTitle,
-      themesIds: query.themesIds,
-      languageLevels: query.languageLevels,
-      languagesCodes: query.languagesCodes,
-      userId: query.shouldTakeOnlyMine ? user.sub : undefined,
-    });
-
-    return new Collection<ActivityResponse>({
-      items: activities.items.map((activity) =>
-        ActivityResponse.from(activity, languageCode),
-      ),
-      totalItems: activities.totalItems,
-    });
-  }
-
-  @Get('admin')
-  @Roles(Role.ADMIN)
-  @UseGuards(AuthenticationGuard)
-  @Swagger.ApiOperation({ summary: 'Get all Activity ressources.' })
-  @Swagger.ApiOkResponse({ type: () => ActivityResponse })
-  async getAllSharedActivitiesToAdmin() {
-    this.logger.log('getAllSharedActivitiesToAdmin');
+    return ActivityWithThemeCategoryResponse.from(activity);
   }
 
   @Delete(':id')
@@ -332,18 +355,21 @@ export class ActivityController {
     await this.deleteActivityUsecase.execute(id);
   }
 
-  @Put(':id/update')
+  @Put(':id/status')
   @UseGuards(AuthenticationGuard)
   @UseInterceptors(AnyFilesInterceptor())
   @Swagger.ApiOperation({ summary: 'Update a Activity status ressource.' })
+  @Swagger.ApiOkResponse({ type: () => ActivityResponse })
   async updateActivityStatus(
     @Param('id') id: string,
     @Body() body: UpdateActivityStatusRequest,
   ) {
-    await this.updateActivityStatusUsecase.execute({
+    const activity = await this.updateActivityStatusUsecase.execute({
       id,
       ...body,
     });
+
+    return ActivityResponse.from(activity);
   }
 
   @Post(':id/update')

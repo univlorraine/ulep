@@ -3,15 +3,18 @@ import { useConfig } from '../../../context/ConfigurationContext';
 import Profile from '../../../domain/entities/Profile';
 import Tandem from '../../../domain/entities/Tandem';
 import Vocabulary from '../../../domain/entities/Vocabulary';
+import VocabularyList from '../../../domain/entities/VocabularyList';
 import { CreateVocabularyListCommand } from '../../../domain/interfaces/vocabulary/CreateVocabularyListUsecase.interface';
 import useVocabulary from '../../hooks/useVocabulary';
 import ErrorPage from '../../pages/ErrorPage';
 import CreateOrUpdateVocabularyContent from '../contents/CreateOrUpdateVocabularyContent';
+import FlipcardsContent from '../contents/FlipcardsContent';
 import VocabularyContent from '../contents/VocabularyContent';
 import VocabularyListContent from '../contents/VocabularyListContent';
 import AddVocabularyListModal from './AddVocabularyListModal';
 import Modal from './Modal';
 import SelectTandemModal from './SelectTandemModal';
+import SelectVocabularyListsForQuizModale from './SelectVocabularyListsForQuizModal';
 
 interface VocabularyContentModalProps {
     isVisible: boolean;
@@ -24,8 +27,10 @@ const VocabularyContentModal: React.FC<VocabularyContentModalProps> = ({ isVisib
     const [vocabularySelected, setVocabularySelected] = useState<Vocabulary>();
     const [showAddVocabularyListModal, setShowAddVocabularyListModal] = useState(false);
     const [showShareVocabularyListModal, setShowShareVocabularyListModal] = useState(false);
+    const [showSelectVocabularyListsForQuizModal, setShowSelectVocabularyListsForQuizModal] = useState(false);
     const [tandems, setTandems] = useState<Tandem[]>([]);
     const [addContentMode, setAddContentMode] = useState(false);
+    const [quizzSelectedListIds, setQuizzSelectedListIds] = useState<string[]>([]);
 
     const {
         vocabularies,
@@ -101,6 +106,12 @@ const VocabularyContentModal: React.FC<VocabularyContentModalProps> = ({ isVisib
         setTandems(tandems);
     };
 
+    const onValidateQuizz = (selectedLists: VocabularyList[]) => {
+        setShowSelectVocabularyListsForQuizModal(false);
+        const selectedListsId = selectedLists.map((selectedList) => selectedList.id);
+        setQuizzSelectedListIds(selectedListsId);
+    };
+
     useEffect(() => {
         getProfilesTandems();
     }, [profile]);
@@ -112,17 +123,18 @@ const VocabularyContentModal: React.FC<VocabularyContentModalProps> = ({ isVisib
     return (
         <Modal isVisible={isVisible} onClose={onClose} position="flex-end" hideWhiteBackground>
             <>
-                {!vocabularyListSelected && (
+                {!vocabularyListSelected && quizzSelectedListIds.length === 0 && (
                     <VocabularyListContent
                         goBack={() => onClose()}
                         onAddVocabularyList={() => setShowAddVocabularyListModal(true)}
                         onSelectVocabularyList={(vocabularyList) => setVocabularyListSelected(vocabularyList)}
                         profile={profile}
                         vocabularyLists={vocabularyLists}
+                        onStartQuiz={() => setShowSelectVocabularyListsForQuizModal(true)}
                         isLoading={isLoading}
                     />
                 )}
-                {vocabularyListSelected && !addContentMode && (
+                {vocabularyListSelected && !addContentMode && quizzSelectedListIds.length === 0 && (
                     <VocabularyContent
                         profile={profile}
                         vocabularyList={vocabularyListSelected}
@@ -134,13 +146,20 @@ const VocabularyContentModal: React.FC<VocabularyContentModalProps> = ({ isVisib
                         onShareVocabularyList={() => setShowShareVocabularyListModal(true)}
                     />
                 )}
-                {vocabularyListSelected && addContentMode && (
+                {vocabularyListSelected && addContentMode && quizzSelectedListIds.length === 0 && (
                     <CreateOrUpdateVocabularyContent
                         vocabularyList={vocabularyListSelected}
                         vocabulary={vocabularySelected}
                         goBack={() => setAddContentMode(false)}
                         onSubmit={handleCreateOrUpdateVocabulary}
                         onDelete={handleDeleteVocabulary}
+                    />
+                )}
+                {quizzSelectedListIds.length > 0 && (
+                    <FlipcardsContent
+                        profile={profile}
+                        selectedListsId={quizzSelectedListIds}
+                        onBackPressed={() => setQuizzSelectedListIds([])}
                     />
                 )}
                 <AddVocabularyListModal
@@ -157,6 +176,13 @@ const VocabularyContentModal: React.FC<VocabularyContentModalProps> = ({ isVisib
                     tandems={tandems}
                     title="vocabulary.list.share.title"
                     multiple
+                />
+                <SelectVocabularyListsForQuizModale
+                    isVisible={showSelectVocabularyListsForQuizModal}
+                    onClose={() => setShowSelectVocabularyListsForQuizModal(false)}
+                    vocabularyLists={vocabularyLists}
+                    onValidate={onValidateQuizz}
+                    profile={profile}
                 />
             </>
         </Modal>

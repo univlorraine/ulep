@@ -1,0 +1,83 @@
+.modal {
+    --border-radius: 20px;
+    --width: auto;
+}
+
+.container {
+    background: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.close {
+    align-self: flex-end;
+}
+
+.close_icon {
+    width: 24px;
+    height: 24px;
+}
+
+.title {
+    color: black;
+    font-family: Roboto;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 32px;
+    text-align: left;
+    margin-bottom: 24px;
+    text-transform: none;
+}
+
+.list {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.item_all_lists {
+    width: 100%;
+    padding-block: 20px;
+    border-top: 1px solid #e0e0e0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.all_lists {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    .title {
+        font-size: 20px;
+    }
+    .checkbox {
+        margin-bottom: 0;
+    }
+}
+
+.button {
+    border-radius: 5px;
+    border: 1px solid black;
+    display: flex;
+    margin-top: auto;
+    width: 100%;
+    text-decoration-line: none !important;
+}
+
+.mobileContainer {
+    max-width: 100%;
+    width: 100%;
+    align-self: end;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    max-height: 80%;
+}
+
+.mobileContainer .list {
+    overflow-y: scroll;
+}

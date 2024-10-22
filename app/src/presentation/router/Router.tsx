@@ -21,6 +21,7 @@ import ActivitiesPage from '../pages/mobile/ActivitiesPage';
 import ChatPage from '../pages/mobile/ChatPage';
 import CreateSessionPage from '../pages/mobile/CreateSessionPage';
 import EndSessionPage from '../pages/mobile/EndSessionPage';
+import FlipcardsPage from '../pages/mobile/FlipcardsPage';
 import MediaPage from '../pages/mobile/MediaPage';
 import NewsListPage from '../pages/mobile/NewsListPage';
 import NewsShowPage from '../pages/mobile/NewsShowPage';
@@ -228,6 +229,14 @@ const OfflineRouter: React.FC = () => {
                 <Route exact path="/edit/informations">
                     <EditInformationsPage />
                 </Route>
+                {/* Vocabulary route */}
+                <PrivateRoute exact path="/vocabularies">
+                    <VocabulariesPage />
+                </PrivateRoute>
+                {/* Flashcards route */}
+                <PrivateRoute exact path="/flipcards">
+                    <FlipcardsPage />
+                </PrivateRoute>
                 {/* Quizz route */}
                 <PrivateRoute exact path="/cefr/languages">
                     <CEFRQuizzLanguagePage />

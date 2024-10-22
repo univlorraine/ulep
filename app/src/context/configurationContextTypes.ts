@@ -60,6 +60,7 @@ import CreateVocabularyListUsecaseInterface from '../domain/interfaces/vocabular
 import CreateVocabularyUsecaseInterface from '../domain/interfaces/vocabulary/CreateVocabularyUsecase.interface';
 import DeleteVocabularyListUsecaseInterface from '../domain/interfaces/vocabulary/DeleteVocabularyListUsecase.interface';
 import DeleteVocabularyUsecaseInterface from '../domain/interfaces/vocabulary/DeleteVocabularyUsecase.interface';
+import GetVocabulariesFromListsIdUsecaseInterface from '../domain/interfaces/vocabulary/GetVocabulariesFromListsIdUsecase.interface';
 import GetVocabulariesUsecaseInterface from '../domain/interfaces/vocabulary/GetVocabulariesUsecase.interface';
 import GetVocabularyListPdfUsecaseInterface from '../domain/interfaces/vocabulary/GetVocabularyListPdfUsecase.interface';
 import GetVocabularyListsUsecaseInterface from '../domain/interfaces/vocabulary/GetVocabularyListsUsecase.interface';
@@ -128,6 +129,7 @@ export interface ConfigContextValueType {
     updateVocabulary: UpdateVocabularyUsecaseInterface;
     deleteVocabulary: DeleteVocabularyUsecaseInterface;
     getVocabularies: GetVocabulariesUsecaseInterface;
+    getVocabulariesFromListsIdUsecase: GetVocabulariesFromListsIdUsecaseInterface;
     getVocabularyListPdf: GetVocabularyListPdfUsecaseInterface;
     createVocabularyList: CreateVocabularyListUsecaseInterface;
     updateVocabularyList: UpdateVocabularyListUsecaseInterface;

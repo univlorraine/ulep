@@ -1,4 +1,84 @@
 {
+    "activities": {
+        "label": "Activities",
+        "tabLabel": "Activities",
+        "form": {
+            "mainInfos": "Main informations",
+            "title": "Title",
+            "image": "Illustration image",
+            "imageCredit": "Image credit",
+            "description": "Description",
+            "language": "Language",
+            "level": "Level",
+            "category": "Category",
+            "theme": "Theme",
+            "ressource": "Resource",
+            "url": "URL",
+            "file": "File",
+            "ressourceURL": "URL",
+            "ressourceFile": "File",
+            "exercices": "Exercices",
+            "exercice": "Exercice",
+            "addExercice": "Add an exercice",
+            "vocabulary": "Vocabulary",
+            "pronunciation": "Pronunciation",
+            "addVocabulary": "Add a vocabulary",
+            "vocabularyPlaceholder": "Enter a word or a sentence",
+            "deletePronunciation": "Delete the pronunciation"
+        },
+        "list": {
+            "language": "Language",
+            "level": "Level",
+            "category": "Category",
+            "theme": "Theme",
+            "university": "University",
+            "creator": "Author",
+            "title": "Title",
+            "status": "Status",
+            "admin": "Administrator"
+        },
+        "show": {
+            "mainInfos": {
+                "label": "Main informations",
+                "title": "Title",
+                "image": "Image",
+                "credit": "Credit",
+                "description": "Description",
+                "language": "Language",
+                "level": "Level",
+                "category": "Category",
+                "theme": "Theme",
+                "resource": "Resource (URL or file)",
+                "url": "URL",
+                "admin": "Administrator"
+            },
+            "exercices": {
+                "label": "Exercices",
+                "content": "Content",
+                "order": "Order"
+            },
+            "vocabulary": {
+                "label": "Vocabulary",
+                "pronunciation": "Pronunciation"
+            },
+            "actions": {
+                "validate": "Validate",
+                "refuse": "Refuse",
+                "unpublish": "Unpublish",
+                "publish": "Publish"
+            }
+        },
+        "status": {
+            "draft": "Draft",
+            "published": "Published",
+            "in_validation": "In validation",
+            "rejected": "Rejected"
+        },
+        "error": {
+            "update": "An error occurred while updating the activity",
+            "create": "An error occurred while creating the activity"
+        }
+    },
     "activities_categories": {
         "tabLabel": "Activities categories",
         "name": "Name",
@@ -158,7 +238,7 @@
         "genderValues": {
             "male": "Male",
             "female": "Female",
-            "other": "Other"
+            "other": "Non binary"
         }
     },
     "header": {
@@ -440,6 +520,9 @@
             "error": "An error occurred while updating the alert",
             "status": "Update the status of the alert",
             "title": "Report update"
+        },
+        "error": {
+            "unauthorized": "You are not authorized to edit this report"
         }
     },
     "report_categories": {
@@ -571,7 +654,13 @@
     "uploader": {
         "drag_drop": "Drag and drop your image or",
         "drop_image": "Drop iamge here",
-        "select_image": "Select an image"
+        "select_image": "Select an image",
+        "drag_drop_file": "Drag and drop a %{fileType} or",
+        "drop_file": "Drop file here",
+        "select_file": "Choose a %{fileType}",
+        "file": "file",
+        "maxSize": "Maximum size of %{maxSize} MB",
+        "maxSizeError": "The maximum size of the image is %{maxSize} MB"
     },
     "users": {
         "searchEmail": "Search email",
@@ -606,6 +695,9 @@
                 },
                 "learningType": {
                     "label": "Learning type"
+                },
+                "tandem": {
+                    "label": "Tandem"
                 }
             },
             "globalRoutineModal": {
@@ -740,7 +832,8 @@
             "DRAFT": "Waiting",
             "VALIDATED_BY_ONE_UNIVERSITY": "Validated by one university",
             "PAUSED": "Paused",
-            "ACTIVE": "Paired"
+            "ACTIVE": "Paired",
+            "NO_TANDEM": "Without tandem"
         },
         "types": {
             "BOTH": "E-tandem / Tandem",
@@ -750,10 +843,19 @@
         "roles": {
             "STAFF": "Staff",
             "STUDENT": "Student"
+        },
+        "certificateDialog": {
+            "title": "Certificate generation",
+            "editCertificateBtn": "Edit certificate",
+            "generateCertificateBtn": "Generate certificate"
         }
     },
     "universitiesPicker": {
         "error": "An error occured while fetching universities"
+    },
+    "certificates": {
+        "error": "An error occured while generating the certificate",
+        "success": "The certificate has been generated successfully"
     },
     "languages_code": {
         "aa": "Afar",

@@ -1,5 +1,6 @@
 import { Activity } from 'src/core/models/activity.model';
 import {
+  LearningLanguage,
   LearningObjective,
   MediaObject,
   News,
@@ -69,6 +70,11 @@ export interface MediaObjectRepository {
 
   saveUniversityDefaultCertificate: (
     university: University,
+    object: MediaObject,
+  ) => Promise<void>;
+
+  saveLearningLanguageCertificate: (
+    learningLanguage: LearningLanguage,
     object: MediaObject,
   ) => Promise<void>;
 

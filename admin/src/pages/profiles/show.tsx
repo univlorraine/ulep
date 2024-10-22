@@ -1,22 +1,21 @@
-import React from 'react';
 import {
-    TabbedShowLayout,
-    FunctionField,
-    useTranslate,
     ArrayField,
-    SingleFieldList,
-    ChipField,
-    TextField,
-    Show,
-    useRecordContext,
-    Datagrid,
-    Identifier,
-    EditButton,
-    TopToolbar,
     BooleanField,
     usePermissions,
     useGetIdentity,
+    ChipField,
+    Datagrid,
+    EditButton,
+    FunctionField,
+    Show,
+    SingleFieldList,
+    TabbedShowLayout,
+    TextField,
+    TopToolbar,
+    useRecordContext,
+    useTranslate,
 } from 'react-admin';
+import ReferenceUploadFileField from '../../components/field/ReferenceUploadFileField';
 import PageTitle from '../../components/PageTitle';
 import { Role } from '../../entities/Administrator';
 import Availabilites from '../../entities/Availabilities';
@@ -24,6 +23,7 @@ import Language from '../../entities/Language';
 import { LearningLanguage } from '../../entities/LearningLanguage';
 import { Profile } from '../../entities/Profile';
 import User from '../../entities/User';
+import CertificateModal from './CertificateModal';
 import ProfileExportButton from './Export/ProfileExportButton';
 
 const Title = () => {
@@ -84,7 +84,10 @@ const ProfileTab = () => {
                 <TextField label={translate('global.firstname')} source="user.firstname" />
                 <TextField label={translate('global.lastname')} source="user.lastname" />
                 <TextField label={translate('global.age')} source="user.age" />
-                <TextField label={translate('global.gender')} source="user.gender" />
+                <FunctionField
+                    label={translate('global.gender')}
+                    render={(record: Profile) => translate(`global.genderValues.${record.user.gender.toLowerCase()}`)}
+                />
                 <TextField label={translate('global.university')} source="user.university.name" />
                 <FunctionField
                     label={translate('profiles.contact')}
@@ -156,16 +159,45 @@ const ProfileTab = () => {
                     </SingleFieldList>
                 </ArrayField>
                 <ArrayField source="learningLanguages">
-                    <Datagrid bulkActionButtons={false} rowClick={(id: Identifier) => `/learning-languages/${id}/show`}>
+                    <Datagrid
+                        bulkActionButtons={false}
+                        rowClick={() => `/profiles/with-tandems-profiles/${recordContext?.id}/show`}
+                    >
                         <FunctionField
-                            render={(record: LearningLanguage) => translate(`languages_code.${record.code}`)}
+                            render={(record: Pick<LearningLanguage, 'name' | 'code'>) =>
+                                translate(`languages_code.${record.code}`)
+                            }
+                            sortable={false}
                             source="name"
                         />
-                        <TextField source="level" />
+                        <TextField sortable={false} source="level" />
                         <BooleanField
                             label={translate('learning_languages.show.fields.hasPriority')}
+                            sortable={false}
                             source="hasPriority"
                         />
+                        <BooleanField
+                            label={translate('learning_languages.show.fields.learningJournal')}
+                            sortable={false}
+                            source="learningJournal"
+                        />
+                        <BooleanField
+                            label={translate('learning_languages.show.fields.consultingInterview')}
+                            sortable={false}
+                            source="consultingInterview"
+                        />
+                        <BooleanField
+                            label={translate('learning_languages.show.fields.sharedCertificate')}
+                            sortable={false}
+                            source="sharedCertificate"
+                        />
+                        <ReferenceUploadFileField
+                            label={translate('learning_languages.show.fields.certificateFile')}
+                            sortable={false}
+                            source="certificateFile.id"
+                        />
+
+                        <CertificateModal profile={recordContext as Profile} />
                     </Datagrid>
                 </ArrayField>
             </TabbedShowLayout.Tab>

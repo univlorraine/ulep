@@ -60,6 +60,7 @@ import CreateVocabularyListUsecase from '../domain/usecases/vocabulary/CreateVoc
 import CreateVocabularyUsecase from '../domain/usecases/vocabulary/CreateVocabularyUsecase';
 import DeleteVocabularyListUsecase from '../domain/usecases/vocabulary/DeleteVocabularyListUsecase';
 import DeleteVocabularyUsecase from '../domain/usecases/vocabulary/DeleteVocabularyUsecase';
+import GetVocabulariesFromListsIdUsecase from '../domain/usecases/vocabulary/GetVocabulariesFromListsIdUsecase';
 import GetVocabulariesUsecase from '../domain/usecases/vocabulary/GetVocabulariesUsecase';
 import GetVocabularyListPdfUsecase from '../domain/usecases/vocabulary/GetVocabularyListPdfUsecase';
 import GetVocabularyListsUsecase from '../domain/usecases/vocabulary/GetVocabularyListsUsecase';
@@ -167,6 +168,7 @@ const getConfigContextValue = ({
     const updateVocabulary = new UpdateVocabularyUsecase(domainHttpAdapter);
     const deleteVocabulary = new DeleteVocabularyUsecase(domainHttpAdapter);
     const getVocabularies = new GetVocabulariesUsecase(domainHttpAdapter);
+    const getVocabulariesFromListsIdUsecase = new GetVocabulariesFromListsIdUsecase(domainHttpAdapter);
     const getVocabularyLists = new GetVocabularyListsUsecase(domainHttpAdapter);
     const getVocabularyListPdf = new GetVocabularyListPdfUsecase(domainHttpAdapter, fileAdapter);
     const createVocabularyList = new CreateVocabularyListUsecase(domainHttpAdapter);
@@ -247,6 +249,7 @@ const getConfigContextValue = ({
         updateVocabulary,
         deleteVocabulary,
         getVocabularies,
+        getVocabulariesFromListsIdUsecase,
         getVocabularyLists,
         getVocabularyListPdf,
         createVocabularyList,

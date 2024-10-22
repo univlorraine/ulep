@@ -96,6 +96,9 @@ export class PrismaLearningLanguageRepository
         same_age: item.sameAge,
         has_priority: item.hasPriority,
         certificate_option: item.certificateOption,
+        learning_journal: item.learningJournal,
+        consulting_interview: item.consultingInterview,
+        shared_certificate: item.sharedCertificate,
         specific_program: item.specificProgram,
       },
     });

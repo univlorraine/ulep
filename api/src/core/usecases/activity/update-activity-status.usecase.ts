@@ -34,7 +34,10 @@ export class UpdateActivityStatusUsecase {
       throw new RessourceDoesNotExist('Activity does not exist');
     }
 
-    if (activity.status === ActivityStatus.PUBLISHED) {
+    if (
+      command.status === ActivityStatus.PUBLISHED &&
+      activity.status === ActivityStatus.PUBLISHED
+    ) {
       throw new ForbiddenException('Activity is already published');
     }
 
@@ -43,7 +46,11 @@ export class UpdateActivityStatusUsecase {
       command.status,
     );
 
-    await this.sendNotifications(updatedActivity, activity);
+    if (updatedActivity.creator) {
+      await this.sendNotifications(updatedActivity, activity);
+    }
+
+    return updatedActivity;
   }
 
   private async sendNotifications(activity: Activity, oldActivity: Activity) {

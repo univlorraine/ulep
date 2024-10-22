@@ -8,6 +8,7 @@ import BackgroundSvg from './background.svg';
 import BackgroundBluePng from './backgrounds/background-blue.png';
 import BackgroundRedPng from './backgrounds/background-red.png';
 import BackgroundYellowPng from './backgrounds/background-yellow.png';
+import BackgroundPurplePng from './backgrounds/background-purple.png';
 import BonjourBubbleSvg from './bonjour-bubble.svg';
 import ConversationsSvg from './bottom-bar/conversations.svg';
 import HomeSvg from './bottom-bar/home.svg';
@@ -21,6 +22,7 @@ import ClockPng from './clock.png';
 import CloseSvg from './close.svg';
 import CloseBlackSvg from './close_black.svg';
 import CloseWhiteSvg from './close_white.svg';
+import CloseBlackPlainSvg from './close_black_plain.svg';
 import CreateAccountPng from './create-account-logo.png';
 import DicePng from './dice.png';
 import DicesPng from './dices.png';
@@ -30,6 +32,7 @@ import EditPng from './edit.png';
 import EyeSvg from './eye.svg';
 import FAQPng from './FAQ.png';
 import FicheSvg from './fiche.svg';
+import FlashcardPng from './flashcard.png';
 import HiBubbleSvg from './hi-bubble.svg';
 import InfoSvg from './info.svg';
 import JournalSvg from './journal.svg';
@@ -73,6 +76,7 @@ export {
     BackgroundRedPng,
     BackgroundSvg,
     BackgroundYellowPng,
+    BackgroundPurplePng,
     BonjourBubbleSvg,
     CalendarSvg,
     CancelledPng,
@@ -84,6 +88,7 @@ export {
     CloseBlackSvg,
     CloseWhiteSvg,
     CloseSvg,
+    CloseBlackPlainSvg,
     ConversationsSvg,
     CreateAccountPng,
     DicePng,
@@ -94,6 +99,7 @@ export {
     EyeSvg,
     FAQPng,
     FicheSvg,
+    FlashcardPng,
     HiBubbleSvg,
     HomeSvg,
     InfoSvg,

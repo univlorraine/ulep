@@ -28,10 +28,22 @@ export type GetAllActivityThemesProps = {
   pagination?: ActivityPagination;
 };
 
+export type GetActivitiesForAdminProps = {
+  languageCode?: string;
+  languageLevel?: string;
+  searchTitle?: string;
+  status?: ActivityStatus;
+  category?: string;
+  theme?: string;
+  university?: string;
+  pagination: ActivityPagination;
+};
+
 export type CreateActivityProps = {
   title: string;
   description: string;
-  profileId: string;
+  profileId?: string;
+  universityId: string;
   themeId: string;
   exercises: { content: string; order: number }[];
   languageLevel: ProficiencyLevel;
@@ -93,6 +105,9 @@ export type UpdateActivityVocabularyProps = {
 export interface ActivityRepository {
   all(
     props: GetActivitiesProps,
+  ): Promise<{ items: Activity[]; totalItems: number }>;
+  allWithThemeWithCategory(
+    props: GetActivitiesForAdminProps,
   ): Promise<{ items: Activity[]; totalItems: number }>;
   allThemes(
     props: GetAllActivityThemesProps,

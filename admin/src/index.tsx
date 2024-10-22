@@ -1,12 +1,9 @@
 import * as Sentry from '@sentry/react';
-import { polyfillCountryFlagEmojis } from 'country-flag-emoji-polyfill';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-
-polyfillCountryFlagEmojis();
 
 const element = document.getElementById('root');
 

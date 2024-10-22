@@ -1,13 +1,13 @@
 import {
-    KeycloakClient,
-    KeycloakGroup,
-    KeycloakRealmRoles,
+  KeycloakClient,
+  KeycloakGroup,
+  KeycloakRealmRoles,
 } from '@app/keycloak';
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import {
-    UNIVERSITY_REPOSITORY,
-    UniversityRepository,
+  UNIVERSITY_REPOSITORY,
+  UniversityRepository,
 } from 'src/core/ports/university.repository';
 
 export class CreateAdministratorCommand {
@@ -16,6 +16,7 @@ export class CreateAdministratorCommand {
   lastname: string;
   password: string;
   universityId?: string;
+  languageId?: string;
   group: KeycloakGroup;
 }
 
@@ -43,6 +44,7 @@ export class CreateAdministratorUsecase {
         lastname: command.lastname,
         password: command.password,
         universityId: command.universityId,
+        languageId: command.languageId,
         groups: [command.group.name],
       });
 

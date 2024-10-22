@@ -275,10 +275,7 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
 
                         <Box>
                             <Typography variant="subtitle1">{translate(`universities.${tradKey}.language`)}</Typography>
-                            <Typography>
-                                {newNativeLanguage && translate(`languages_code.${newNativeLanguage.code}`)}
-                            </Typography>
-                            <LanguagePicker onChange={setNewNativeLanguage} />
+                            <LanguagePicker onChange={setNewNativeLanguage} value={newNativeLanguage} />
                         </Box>
 
                         {tradKey === 'update' && (

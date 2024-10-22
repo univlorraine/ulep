@@ -1,6 +1,7 @@
 import { PrismaService } from '@app/common';
 import { Injectable } from '@nestjs/common';
 import {
+  LearningLanguage,
   LearningObjective,
   MediaObject,
   News,
@@ -317,6 +318,26 @@ export class PrismaMediaObjectRepository implements MediaObjectRepository {
         News: {
           connect: {
             id: news.id,
+          },
+        },
+      },
+    });
+  }
+
+  async saveLearningLanguageCertificate(
+    learningLanguage: LearningLanguage,
+    object: MediaObject,
+  ): Promise<void> {
+    await this.prisma.mediaObjects.create({
+      data: {
+        id: object.id,
+        name: object.name,
+        bucket: object.bucket,
+        mime: object.mimetype,
+        size: object.size,
+        LearningLanguageCertificateFile: {
+          connect: {
+            id: learningLanguage.id,
           },
         },
       },

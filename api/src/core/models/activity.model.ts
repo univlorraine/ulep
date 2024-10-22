@@ -1,4 +1,4 @@
-import { TextContent } from 'src/core/models';
+import { TextContent, University } from 'src/core/models';
 import { Language } from 'src/core/models/language.model';
 import { MediaObject } from 'src/core/models/media.model';
 import { ProficiencyLevel } from 'src/core/models/proficiency.model';
@@ -15,7 +15,8 @@ interface ActivityProps {
   id: string;
   title: string;
   description: string;
-  creator: Profile;
+  creator?: Profile;
+  university: University;
   status: ActivityStatus;
   creditImage?: string;
   image: MediaObject;
@@ -37,7 +38,8 @@ export class Activity {
   readonly id: string;
   readonly title: string;
   readonly description: string;
-  readonly creator: Profile;
+  readonly creator?: Profile;
+  readonly university: University;
   readonly status: ActivityStatus;
   readonly creditImage?: string;
   readonly image: MediaObject;
@@ -58,6 +60,7 @@ export class Activity {
     id,
     title,
     description,
+    university,
     creator,
     status,
     creditImage,
@@ -79,6 +82,7 @@ export class Activity {
     this.title = title;
     this.description = description;
     this.creator = creator;
+    this.university = university;
     this.status = status;
     this.creditImage = creditImage;
     this.image = image;
@@ -100,6 +104,7 @@ export class Activity {
 interface ActivityThemeProps {
   id: string;
   content: TextContent;
+  category?: ActivityThemeCategory;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -107,12 +112,20 @@ interface ActivityThemeProps {
 export class ActivityTheme {
   readonly id: string;
   readonly content: TextContent;
+  readonly category?: ActivityThemeCategory;
   readonly createdAt: Date;
   readonly updatedAt: Date;
 
-  constructor({ id, content, createdAt, updatedAt }: ActivityThemeProps) {
+  constructor({
+    id,
+    content,
+    category,
+    createdAt,
+    updatedAt,
+  }: ActivityThemeProps) {
     this.id = id;
     this.content = content;
+    this.category = category;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
@@ -121,7 +134,7 @@ export class ActivityTheme {
 interface ActivityThemeCategoryProps {
   id: string;
   content: TextContent;
-  themes: ActivityTheme[];
+  themes?: ActivityTheme[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -129,7 +142,7 @@ interface ActivityThemeCategoryProps {
 export class ActivityThemeCategory {
   readonly id: string;
   readonly content: TextContent;
-  readonly themes: ActivityTheme[];
+  readonly themes?: ActivityTheme[];
   readonly createdAt: Date;
   readonly updatedAt: Date;
 
