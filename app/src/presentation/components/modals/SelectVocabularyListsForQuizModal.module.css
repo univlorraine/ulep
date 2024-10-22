@@ -1,3 +1,7 @@
+.modal {
+    --border-radius: 20px;
+    --width: auto;
+}
 
 .container {
     background: white;
@@ -6,15 +10,13 @@
     justify-content: center;
     padding: 20px;
     border-radius: 10px;
-    max-width: 50%;
-    min-width: 20%;
 }
 
-.close{
+.close {
     align-self: flex-end;
 }
 
-.close_icon{
+.close_icon {
     width: 24px;
     height: 24px;
 }
@@ -50,15 +52,15 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    .title{
+    .title {
         font-size: 20px;
     }
-    .checkbox{
+    .checkbox {
         margin-bottom: 0;
     }
 }
 
-.button{
+.button {
     border-radius: 5px;
     border: 1px solid black;
     display: flex;
@@ -79,4 +81,3 @@
 .mobileContainer .list {
     overflow-y: scroll;
 }
-

@@ -5,6 +5,7 @@ import { useConfig } from '../../../context/ConfigurationContext';
 import Profile from '../../../domain/entities/Profile';
 import Tandem from '../../../domain/entities/Tandem';
 import Vocabulary from '../../../domain/entities/Vocabulary';
+import VocabularyList from '../../../domain/entities/VocabularyList';
 import { CreateVocabularyListCommand } from '../../../domain/interfaces/vocabulary/CreateVocabularyListUsecase.interface';
 import { useStoreState } from '../../../store/storeTypes';
 import CreateOrUpdateVocabularyContent from '../../components/contents/CreateOrUpdateVocabularyContent';
@@ -12,6 +13,7 @@ import VocabularyContent from '../../components/contents/VocabularyContent';
 import VocabularyListContent from '../../components/contents/VocabularyListContent';
 import AddVocabularyListModal from '../../components/modals/AddVocabularyListModal';
 import SelectTandemModal from '../../components/modals/SelectTandemModal';
+import SelectVocabularyListsForQuizModale from '../../components/modals/SelectVocabularyListsForQuizModal';
 import useVocabulary from '../../hooks/useVocabulary';
 
 const VocabulariesPage = () => {
@@ -21,6 +23,7 @@ const VocabulariesPage = () => {
     const [vocabularySelected, setVocabularySelected] = useState<Vocabulary>();
     const [showAddVocabularyListModal, setShowAddVocabularyListModal] = useState(false);
     const [showShareVocabularyListModal, setShowShareVocabularyListModal] = useState(false);
+    const [showSelectVocabularyListsForQuizModal, setShowSelectVocabularyListsForQuizModal] = useState(false);
     const [tandems, setTandems] = useState<Tandem[]>([]);
     const [addContentMode, setAddContentMode] = useState(false);
 
@@ -85,6 +88,12 @@ const VocabulariesPage = () => {
         setShowShareVocabularyListModal(false);
     };
 
+    const onValidateQuizz = (selectedLists: VocabularyList[]) => {
+        setShowSelectVocabularyListsForQuizModal(false);
+        const selectedListsId = selectedLists.map((selectedList) => selectedList.id);
+        history.push('/flipcards', { selectedListsId });
+    };
+
     const getProfilesTandems = async () => {
         if (!profile) {
             return [];
@@ -121,6 +130,7 @@ const VocabulariesPage = () => {
                         profile={profile}
                         vocabularyLists={vocabularyLists}
                         isLoading={isLoading}
+                        onStartQuiz={() => setShowSelectVocabularyListsForQuizModal(true)}
                     />
                 )}
                 {vocabularyListSelected && !addContentMode && (
@@ -158,6 +168,13 @@ const VocabulariesPage = () => {
                     tandems={tandems}
                     title="vocabulary.list.share.title"
                     multiple
+                />
+                <SelectVocabularyListsForQuizModale
+                    isVisible={showSelectVocabularyListsForQuizModal}
+                    onClose={() => setShowSelectVocabularyListsForQuizModal(false)}
+                    onValidate={onValidateQuizz}
+                    vocabularyLists={vocabularyLists}
+                    profile={profile}
                 />
             </>
         </IonContent>

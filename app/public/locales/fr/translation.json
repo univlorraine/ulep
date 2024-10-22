@@ -382,12 +382,12 @@
     },
     "flashcards": {
         "flipcards": {
-            "title": "Vrai ou Faux",
+            "title": "Flash Cards",
             "term": {
                 "term": "Terme",
                 "of": "sur"
             },
-            "buttons":{
+            "buttons": {
                 "showResponse": "Montrer la réponse",
                 "rightAnswer": "Oui",
                 "wrongAnswer": "Non",

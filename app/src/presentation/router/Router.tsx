@@ -11,7 +11,6 @@ import CEFRQuizzOtherLanguagesPage from '../pages/cefr-quizz/CEFRQuizzOtherLangu
 import ConnectPage from '../pages/ConnectPage';
 import ConversationsPage from '../pages/ConversationsPage';
 import EditInformationsPage from '../pages/EditInformationsPage';
-import FlipcardsPage from '../pages/FlipcardsPage';
 import ForgotPasswordPage from '../pages/ForgotPasswordPage';
 import ForgotPasswordSentPage from '../pages/ForgotPasswordSentPage';
 import HomePage from '../pages/HomePage';
@@ -22,6 +21,7 @@ import ActivitiesPage from '../pages/mobile/ActivitiesPage';
 import ChatPage from '../pages/mobile/ChatPage';
 import CreateSessionPage from '../pages/mobile/CreateSessionPage';
 import EndSessionPage from '../pages/mobile/EndSessionPage';
+import FlipcardsPage from '../pages/mobile/FlipcardsPage';
 import MediaPage from '../pages/mobile/MediaPage';
 import ProfilePage from '../pages/mobile/ProfilePage';
 import ReportPage from '../pages/mobile/ReportPage';

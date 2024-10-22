@@ -53,16 +53,22 @@ const VocabularyListContent: React.FC<VocabularyListContentProps> = ({
                         />
                     ))}
 
-                {vocabularyLists.length > 0 && (
-                    <div className={styles.flashcard}>
-                        <IonImg aria-hidden className={styles.flashcardImage} src={FlashcardPng} />
-                        <p className={styles.title}>{t('vocabulary.list.flashcard.title')}</p>
-                        <p className={styles.text}>{t('vocabulary.list.flashcard.paragraph')}</p>
-                        <IonButton className="primary-button" fill="clear" size="small" onClick={() => onStartQuiz()}>
-                            {t('vocabulary.list.flashcard.button')}
-                        </IonButton>
-                    </div>
-                )}
+                {vocabularyLists.length > 0 &&
+                    vocabularyLists.filter((vocabularyList) => vocabularyList.numberOfVocabularies > 0).length > 0 && (
+                        <div className={styles.flashcard}>
+                            <IonImg aria-hidden className={styles.flashcardImage} src={FlashcardPng} />
+                            <p className={styles.title}>{t('vocabulary.list.flashcard.title')}</p>
+                            <p className={styles.text}>{t('vocabulary.list.flashcard.paragraph')}</p>
+                            <IonButton
+                                className="primary-button"
+                                fill="clear"
+                                size="small"
+                                onClick={() => onStartQuiz()}
+                            >
+                                {t('vocabulary.list.flashcard.button')}
+                            </IonButton>
+                        </div>
+                    )}
             </div>
 
             <IonButton fill="clear" className={styles.addButton} onClick={onAddVocabularyList}>
