@@ -8,9 +8,11 @@ import {
     useNotify,
     useGetIdentity,
     Loading,
+    usePermissions,
 } from 'react-admin';
 import ProfileForm from '../../components/form/ProfileForm';
 import PageTitle from '../../components/PageTitle';
+import { Role } from '../../entities/Administrator';
 import { Profile, ProfileFormPayload } from '../../entities/Profile';
 
 const ProfileEdit = () => {
@@ -19,6 +21,7 @@ const ProfileEdit = () => {
     const redirect = useRedirect();
     const notify = useNotify();
     const identity = useGetIdentity();
+    const { permissions } = usePermissions();
 
     const handleSubmit = async (id: string, payload: ProfileFormPayload) => {
         try {
@@ -62,7 +65,10 @@ const ProfileEdit = () => {
                         const adminUniversityId = identity?.identity?.universityId;
                         const profileUniversityId = record.user.university.id;
 
-                        if (!isCentralUniversity && adminUniversityId !== profileUniversityId) {
+                        if (
+                            !permissions.checkRoles([Role.MANAGER, Role.SUPER_ADMIN]) ||
+                            (!isCentralUniversity && adminUniversityId !== profileUniversityId)
+                        ) {
                             return <div>{translate('profiles.update.unauthorized')}</div>;
                         }
 

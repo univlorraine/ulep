@@ -56,6 +56,11 @@ export interface VocabularyRepository {
     pagination?: VocabularyPagination,
   ): Promise<Vocabulary[]>;
 
+  findAllVocabularyFromSelectedListsId(
+    vocabularySelectedListsId: string[],
+    pagination?: VocabularyPagination,
+  ): Promise<Vocabulary[]>;
+
   findVocabularyListById(id: string): Promise<VocabularyList | null>;
 
   findVocabularyById(id: string): Promise<Vocabulary | null>;

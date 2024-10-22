@@ -1,6 +1,7 @@
+import { KeycloakClient, UserRepresentation } from '@app/keycloak';
 import { Inject, Injectable } from '@nestjs/common';
 import { DomainErrorCode, RessourceDoesNotExist } from 'src/core/errors';
-import { User } from 'src/core/models';
+import { University, User } from 'src/core/models';
 import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
 import {
   UUID_PROVIDER,
@@ -36,6 +37,7 @@ export class CreateReportMessageUsecase {
     private readonly uuidProvider: UuidProviderInterface,
     @Inject(EMAIL_GATEWAY)
     private readonly emailGateway: EmailGateway,
+    private readonly keycloakClient: KeycloakClient,
   ) {}
 
   async execute(command: CreateReportMessageCommand): Promise<Report> {
@@ -54,9 +56,17 @@ export class CreateReportMessageUsecase {
       throw new RessourceDoesNotExist(`User does not exist`);
     }
 
-    const reportedUser = await this.userRepository.ofId(command.reportedUserId);
+    let reportedAdministrator: UserRepresentation;
+    const reportedUser: User = await this.userRepository.ofId(
+      command.reportedUserId,
+    );
     if (!reportedUser) {
-      throw new RessourceDoesNotExist(`Reported user does not exist`);
+      reportedAdministrator = await this.keycloakClient.getUserById(
+        command.reportedUserId,
+      );
+      if (!reportedAdministrator) {
+        throw new RessourceDoesNotExist(`Reported user does not exist`);
+      }
     }
 
     const report = await this.reportRepository.createReport(
@@ -73,12 +83,22 @@ export class CreateReportMessageUsecase {
       }),
     );
 
-    await this.sendEmails(report, reportedUser);
+    await this.sendEmails(
+      report,
+      reportedUser?.firstname || reportedAdministrator.firstName,
+      reportedUser?.lastname || reportedAdministrator.lastName,
+      reportedUser?.university,
+    );
 
     return report;
   }
 
-  private async sendEmails(report: Report, reportedUser: User) {
+  private async sendEmails(
+    report: Report,
+    reportedUserFirstname: string,
+    reportedUserLastname: string,
+    reportedUserUniversity?: University,
+  ) {
     if (report.user.university.notificationEmail) {
       await this.emailGateway.sendNewReportMessageEmail({
         to: report.user.university.notificationEmail,
@@ -89,27 +109,28 @@ export class CreateReportMessageUsecase {
           lastname: report.user.lastname,
         },
         reportedUser: {
-          firstname: reportedUser.firstname,
-          lastname: reportedUser.lastname,
+          firstname: reportedUserFirstname,
+          lastname: reportedUserLastname,
         },
       });
     }
 
     if (
-      reportedUser.university.id !== report.user.university.id &&
-      reportedUser.university.notificationEmail
+      reportedUserUniversity &&
+      reportedUserUniversity.id !== report.user.university.id &&
+      reportedUserUniversity.notificationEmail
     ) {
       await this.emailGateway.sendNewReportMessageEmail({
-        to: reportedUser.university.notificationEmail,
-        language: reportedUser.university.nativeLanguage.code,
+        to: reportedUserUniversity.notificationEmail,
+        language: reportedUserUniversity.nativeLanguage.code,
         reportType: report.category.name.content,
         user: {
           firstname: report.user.firstname,
           lastname: report.user.lastname,
         },
         reportedUser: {
-          firstname: reportedUser.firstname,
-          lastname: reportedUser.lastname,
+          firstname: reportedUserFirstname,
+          lastname: reportedUserLastname,
         },
       });
     }

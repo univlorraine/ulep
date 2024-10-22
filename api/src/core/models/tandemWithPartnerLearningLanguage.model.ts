@@ -4,14 +4,7 @@ import {
 } from 'src/providers/persistance/mappers/learningLanguage.mapper';
 import { LearningLanguage } from './learning-language.model';
 import { LearningType } from './profile.model';
-
-export enum TandemStatus {
-  INACTIVE = 'INACTIVE',
-  DRAFT = 'DRAFT',
-  VALIDATED_BY_ONE_UNIVERSITY = 'VALIDATED_BY_ONE_UNIVERSITY',
-  PAUSED = 'PAUSED',
-  ACTIVE = 'ACTIVE',
-}
+import { TandemStatus } from './tandem.model';
 
 export type CreateTandemWithPartnerLearningLanguageProps = {
   id: string;

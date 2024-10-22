@@ -47,6 +47,9 @@ importers:
       '@testing-library/user-event':
         specifier: ^12.8.3
         version: 12.8.3(@testing-library/dom@7.31.2)
+      country-flag-emoji-polyfill:
+        specifier: ^0.1.8
+        version: 0.1.8
       date-fns:
         specifier: ^3.6.0
         version: 3.6.0
@@ -2790,6 +2793,9 @@ packages:
   cosmiconfig@7.1.0:
     resolution: {integrity: sha512-AdmX6xUzdNASswsFtmwSt7Vj8po9IuqXm0UXz7QKPuEUmPB4XyjGfaAr2PSuELMwkRMVH1EpIkX5bTZGRB3eCA==}
     engines: {node: '>=10'}
+
+  country-flag-emoji-polyfill@0.1.8:
+    resolution: {integrity: sha512-Mbah52sADS3gshUYhK5142gtUuJpHYOXlXtLFI3Ly4RqgkmPMvhX9kMZSTqDM8P7UqtSW99eHKFphhQSGXA3Cg==}
 
   crelt@1.0.6:
     resolution: {integrity: sha512-VQ2MBenTq1fWZUH9DJNGti7kKv6EeAuYr3cLwxUWhIu1baTaXh4Ib5W2CqHVqib4/MqbYGJqiL3Zb8GJZr3l4g==}
@@ -10270,6 +10276,8 @@ snapshots:
       parse-json: 5.2.0
       path-type: 4.0.0
       yaml: 1.10.2
+
+  country-flag-emoji-polyfill@0.1.8: {}
 
   crelt@1.0.6: {}
 

@@ -11,6 +11,7 @@ import CEFRQuizzOtherLanguagesPage from '../pages/cefr-quizz/CEFRQuizzOtherLangu
 import ConnectPage from '../pages/ConnectPage';
 import ConversationsPage from '../pages/ConversationsPage';
 import EditInformationsPage from '../pages/EditInformationsPage';
+import FlipcardsPage from '../pages/FlipcardsPage';
 import ForgotPasswordPage from '../pages/ForgotPasswordPage';
 import ForgotPasswordSentPage from '../pages/ForgotPasswordSentPage';
 import HomePage from '../pages/HomePage';
@@ -220,6 +221,14 @@ const OfflineRouter: React.FC = () => {
                 <Route exact path="/edit/informations">
                     <EditInformationsPage />
                 </Route>
+                {/* Vocabulary route */}
+                <PrivateRoute exact path="/vocabularies">
+                    <VocabulariesPage />
+                </PrivateRoute>
+                {/* Flashcards route */}
+                <PrivateRoute exact path="/flipcards">
+                    <FlipcardsPage />
+                </PrivateRoute>
                 {/* Quizz route */}
                 <PrivateRoute exact path="/cefr/languages">
                     <CEFRQuizzLanguagePage />

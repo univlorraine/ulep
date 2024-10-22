@@ -2,6 +2,7 @@ import { IonButton, IonIcon, IonImg, IonItem, IonLabel, IonList, IonSearchbar, u
 import { arrowRedoOutline, downloadOutline } from 'ionicons/icons';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useHistory } from 'react-router-dom';
 import { AddSvg, VocabularyPng } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
 import Profile from '../../../domain/entities/Profile';
@@ -36,6 +37,7 @@ const VocabularyContent: React.FC<VocabularyContentProps> = ({
     const [showToast] = useIonToast();
     const { getVocabularyListPdf } = useConfig();
     const [search, setSearch] = useState('');
+    const history = useHistory();
 
     const exportToPdf = async () => {
         const result = await getVocabularyListPdf.execute(vocabularyList.id);
@@ -55,6 +57,11 @@ const VocabularyContent: React.FC<VocabularyContentProps> = ({
 
     const onShareVocabularyListPressed = () => {
         onShareVocabularyList();
+    };
+
+    const onStartQuizzPressed = () => {
+        const selectedListsId = [vocabularyList.id];
+        history.push('/flipcards', { selectedListsId });
     };
 
     let vocabulariesWithoutPronunciation;
@@ -104,6 +111,19 @@ const VocabularyContent: React.FC<VocabularyContentProps> = ({
                         >
                             <IonIcon icon={downloadOutline} aria-hidden="true" />
                             <IonLabel className={styles['popover-label']}>{t('vocabulary.pair.export')}</IonLabel>
+                        </IonItem>
+                        <IonItem
+                            button={true}
+                            detail={false}
+                            onClick={() => {
+                                onStartQuizzPressed();
+                                closeMenu();
+                            }}
+                        >
+                            <IonIcon icon={arrowRedoOutline} aria-hidden="true" />
+                            <IonLabel className={styles['popover-label']}>
+                                {t('vocabulary.list.start_quiz_menu')}
+                            </IonLabel>
                         </IonItem>
                     </IonList>
                 )}

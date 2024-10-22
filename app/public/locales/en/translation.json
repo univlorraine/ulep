@@ -214,6 +214,8 @@
             "create": "Create a new list",
             "empty": "You haven't created any vocabulary list for this language yet.",
             "go_back": "Go back",
+            "menu": "Menu",
+            "start_quiz_menu": "Start a quiz",
             "title": "Vocabulary lists",
             "creator": "Created by {{name}}",
             "missing_pronunciation": "{{count}} pronunciation to record",
@@ -236,6 +238,17 @@
                 "cancel": "Cancel",
                 "create": "Validate",
                 "title": "With whom do you want to share?"
+            },
+            "start_quiz": {
+                "title": "Select the lists to practice on",
+                "create": "Let's go!",
+                "close": "Close",
+                "all_lists": "All lists"
+            },
+            "flashcard": {
+                "title": "Review your vocabulary with flashcards!",
+                "paragraph": "Find the equivalent translation of the word displayed and try to reach a 100% score",
+                "button": "Start the flashcards"
             }
         },
         "pair": {
@@ -351,6 +364,15 @@
     "university_card": {
         "button": "See the fiche",
         "period": "Opening period"
+    },
+    "flashcards": {
+        "flipcards": {
+            "title": "Right or Wrong",
+            "term": {
+                "term": "Term",
+                "of": "of"
+            }
+        }
     },
     "home_page": {
         "profile": {

@@ -63,13 +63,16 @@ import {
   DeleteTestUsecase,
   DeleteUniversityUsecase,
   DeleteUserUsecase,
+  DeleteVocabularyActivityUsecase,
   DeleteVocabularyListUsecase,
   DeleteVocabularyUsecase,
   FindAllLanguageCodeUsecase,
   FindAllObjectiveUsecase,
   FindAllVocabularyFromListIdUsecase,
+  FindAllVocabularyFromSelectedListsIdUsecase,
   FindAllVocabularyListUsecase,
   FindOneObjectiveUsecase,
+  GenerateCertificateUsecase,
   GenerateConversationsUsecase,
   GenerateTandemsUsecase,
   GetActivitiesUsecase,
@@ -78,6 +81,7 @@ import {
   GetActivityUsecase,
   GetAdministratorsUsecase,
   GetAdministratorUsecase,
+  GetAllActivitiesByAdminUsecase,
   GetAllActivityThemesUsecase,
   GetAllConversationsFromUserIdUsecase,
   GetCategoriesUsecase,
@@ -121,7 +125,6 @@ import {
   GetUsersUsecase,
   GetUserUsecase,
   RefuseTandemUsecase,
-  UpdateActivityStatusUsecase,
   UpdateActivityThemeCategoryUsecase,
   UpdateActivityThemeUsecase,
   UpdateActivityUsecase,
@@ -131,6 +134,7 @@ import {
   UpdateInterestCategoryUsecase,
   UpdateInterestUsecase,
   UpdateLanguageCodeUsecase,
+  UpdateLearningLanguageUsecase,
   UpdateNewsUsecase,
   UpdateProfileUsecase,
   UpdateQuestionUsecase,
@@ -146,10 +150,12 @@ import {
   UploadAudioVocabularyUsecase,
   UploadAvatarUsecase,
   UploadImageActivityUsecase,
+  UploadLearningLanguageCertificateUsecase,
   UploadMediaActivityUsecase,
   UploadNewsImageUsecase,
   UploadUniversityImageUsecase,
 } from './usecases';
+import { UpdateActivityStatusUsecase } from './usecases/activity/update-activity-status.usecase';
 import { GetJitsiTokenUsecase } from './usecases/jitsi/get-jitsi-token.usecase';
 import { DeleteLearningLanguageUsecase } from './usecases/learningLanguage/delete-learning-langugage.usecase';
 import { GetLearningLanguageTandemUsecase } from './usecases/learningLanguage/getLearningLanguageTandem.usecase';
@@ -179,10 +185,12 @@ const usecases: Provider[] = [
   DeleteActivityUsecase,
   DeleteActivityThemeCategoryUsecase,
   DeleteActivityThemeUsecase,
+  DeleteVocabularyActivityUsecase,
   UpdateActivityThemeCategoryUsecase,
   UpdateActivityThemeUsecase,
   UpdateActivityUsecase,
   UpdateActivityStatusUsecase,
+  GetAllActivitiesByAdminUsecase,
   //Campus
   CreateCampusUsecase,
   DeleteCampusUsecase,
@@ -226,6 +234,7 @@ const usecases: Provider[] = [
   UploadMediaActivityUsecase,
   UploadInstanceDefaultCertificateUsecase,
   UploadUniversityDefaultCertificateUsecase,
+  UploadLearningLanguageCertificateUsecase,
   // News
   GetNewsUsecase,
   GetOneNewsUsecase,
@@ -284,6 +293,8 @@ const usecases: Provider[] = [
   GetLearningLanguageOfProfileUsecase,
   GetLearningLanguageTandemUsecase,
   DeleteLearningLanguageUsecase,
+  UpdateLearningLanguageUsecase,
+  GenerateCertificateUsecase,
   // History Tandem
   GetOtherUserEmailInTandemUsecase,
   // Tandems
@@ -340,6 +351,7 @@ const usecases: Provider[] = [
   DeleteVocabularyListUsecase,
   FindAllVocabularyFromListIdUsecase,
   FindAllVocabularyListUsecase,
+  FindAllVocabularyFromSelectedListsIdUsecase,
   UpdateVocabularyUsecase,
   UpdateVocabularyListUsecase,
   GetVocabularyListPdfUsecase,

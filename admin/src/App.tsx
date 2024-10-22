@@ -1,5 +1,6 @@
 import ChatIcon from '@mui/icons-material/Chat';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import EditNoteIcon from '@mui/icons-material/EditNote';
 import HelpIcon from '@mui/icons-material/Help';
 import InterestsIcon from '@mui/icons-material/Interests';
 import LanguageIcon from '@mui/icons-material/Language';
@@ -11,10 +12,12 @@ import PublicIcon from '@mui/icons-material/Public';
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 import SettingsIcon from '@mui/icons-material/Settings';
 import WarningAmberOutlinedIcon from '@mui/icons-material/WarningAmberOutlined';
+import { polyfillCountryFlagEmojis } from 'country-flag-emoji-polyfill';
 import { Admin, CustomRoutes, Resource } from 'react-admin';
 import { Route } from 'react-router-dom';
 import CustomLayout from './components/layout/layout';
 import { Role } from './entities/Administrator';
+import activities from './pages/activities';
 import activityCategories from './pages/activity-categories';
 import activityThemes from './pages/activity-themes';
 import EditAdministratorProfile from './pages/admin-profile/edit';
@@ -44,6 +47,8 @@ import i18nProvider from './providers/i18nProvider';
 import queryClient from './queryClient';
 import theme from './theme/theme';
 
+polyfillCountryFlagEmojis();
+
 const App = () => (
     <Admin
         authProvider={authProvider}
@@ -58,13 +63,7 @@ const App = () => (
         {(permissions: GetPermissionsInterface) => (
             <>
                 <Resource edit={EditAdministratorProfile} name="admin-profile" />
-                <Resource
-                    icon={PersonAddIcon}
-                    list={profiles.list}
-                    name="profiles"
-                    options={{ label: 'profiles.label' }}
-                    show={profiles.show}
-                />
+                <Resource icon={PersonAddIcon} name="profiles" options={{ label: 'profiles.label' }} {...profiles} />
                 <Resource
                     icon={PeopleIcon}
                     name="profiles/with-tandems-profiles"
@@ -80,6 +79,12 @@ const App = () => (
                 />
                 <Resource icon={ChatIcon} name="chat" options={{ label: 'chat.label' }} {...chat} />
                 <Resource icon={NewspaperIcon} name="news" options={{ label: 'news.label' }} {...news} />
+                <Resource
+                    icon={EditNoteIcon}
+                    name="activities"
+                    options={{ label: 'activities.label' }}
+                    {...activities}
+                />
                 {permissions.checkRole(Role.MANAGER) && (
                     <Resource
                         edit={universities.manager.edit}
@@ -90,20 +95,12 @@ const App = () => (
                     />
                 )}
                 {permissions.checkRoles([Role.MANAGER, Role.SUPER_ADMIN]) && (
-                    <>
-                        <Resource
-                            icon={PersonIcon}
-                            name="users/administrators"
-                            options={{ label: 'administrators.label' }}
-                            {...administrators}
-                        />
-                        <Resource
-                            icon={PersonAddIcon}
-                            name="profiles"
-                            options={{ label: 'profiles.label' }}
-                            {...profiles}
-                        />
-                    </>
+                    <Resource
+                        icon={PersonIcon}
+                        name="users/administrators"
+                        options={{ label: 'administrators.label' }}
+                        {...administrators}
+                    />
                 )}
                 {permissions.checkRole(Role.SUPER_ADMIN) && (
                     <>

@@ -20,7 +20,8 @@ import { UploadAudioVocabularyActivityUsecase } from 'src/core/usecases/media';
 export class CreateActivityCommand {
   title: string;
   description: string;
-  profileId: string;
+  profileId?: string;
+  universityId?: string;
   themeId: string;
   exercises: { content: string; order: number }[];
   vocabularies: { content: string; pronunciation?: Express.Multer.File }[];
@@ -47,7 +48,11 @@ export class CreateActivityUsecase {
 
   async execute(command: CreateActivityCommand) {
     await this.assertLanguageExist(command.languageCode);
-    await this.assertProfileExist(command.profileId);
+
+    if (command.profileId) {
+      await this.assertProfileExist(command.profileId);
+    }
+
     await this.assertThemeExist(command.themeId);
 
     let openGraphResult: any;
@@ -65,10 +70,16 @@ export class CreateActivityUsecase {
       }
     }
 
+    if (!command.universityId && command.profileId) {
+      const userProfile = await this.profileRepository.ofId(command.profileId);
+      command.universityId = userProfile.user.university.id;
+    }
+
     const activity = await this.activityRepository.createActivity({
       title: command.title,
       description: command.description,
       profileId: command.profileId,
+      universityId: command.universityId,
       themeId: command.themeId,
       exercises: command.exercises,
       languageLevel: command.languageLevel,

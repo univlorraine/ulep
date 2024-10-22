@@ -1,3 +1,5 @@
+import { Language } from 'src/core/models/language.model';
+
 // TODO: add attributes mappers in keycloak addministration
 export class KeycloakUser {
   sub: string;
@@ -35,6 +37,7 @@ export interface UserRepresentation {
   userProfileMetadata: UserProfileMetadata;
   attributes: { [index: string]: string };
   groups?: KeycloakGroup[];
+  language?: Language;
 }
 
 interface UserProfileMetadata {
@@ -110,6 +113,7 @@ export interface CreateAdministratorProps {
   lastname: string;
   password: string;
   universityId?: string;
+  languageId?: string;
   groups: string[];
 }
 
@@ -120,6 +124,7 @@ export interface UpdateAdministratorProps {
   email?: string;
   password?: string;
   universityId?: string;
+  languageId?: string;
   universityLogin?: string;
   groups?: KeycloakGroup[];
   mimetype?: string;
@@ -137,6 +142,7 @@ export interface UpdateAdministratorPayload {
   attributes?: {
     universityId: string;
     universityLogin: string;
+    languageId: string;
     mimetype?: string;
   };
 }

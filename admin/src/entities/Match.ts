@@ -9,6 +9,8 @@ export type MatchScore = {
     interests: number;
     gender: number;
     university: number;
+    meetingFrequency: number;
+    certificateOption: number;
     total: number;
 };
 

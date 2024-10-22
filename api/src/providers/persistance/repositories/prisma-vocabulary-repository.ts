@@ -127,6 +127,24 @@ export class PrismaVocabularyRepository implements VocabularyRepository {
     return vocabulary.map(vocabularyMapper);
   }
 
+  async findAllVocabularyFromSelectedListsId(
+    vocabularySelectedListsId: string[],
+    pagination?: VocabularyPagination,
+  ): Promise<Vocabulary[]> {
+    const vocabulary = await this.prisma.vocabulary.findMany({
+      where: {
+        vocabulary_list_id: {
+          in: vocabularySelectedListsId,
+        },
+      },
+      skip: pagination?.page ? (pagination.page - 1) * pagination.limit : 0,
+      take: pagination?.limit,
+      ...VocabularyRelations,
+    });
+
+    return vocabulary.map(vocabularyMapper);
+  }
+
   async findVocabularyListById(id: string): Promise<VocabularyList> {
     const vocabularyList = await this.prisma.vocabularyList.findUnique({
       where: {

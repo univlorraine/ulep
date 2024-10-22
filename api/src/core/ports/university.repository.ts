@@ -1,4 +1,4 @@
-import { Collection } from '@app/common';
+import { Collection, SortOrder } from '@app/common';
 import { University } from '../models';
 
 export const UNIVERSITY_REPOSITORY = 'university.repository';
@@ -8,10 +8,17 @@ export interface UpdateUniversityResponse {
   usersId: string[];
 }
 
+export interface GetUniversitiesCommand {
+  orderBy?: {
+    field: string;
+    order: SortOrder;
+  };
+}
+
 export interface UniversityRepository {
   create(university: University): Promise<University>;
 
-  findAll(): Promise<Collection<University>>;
+  findAll(params?: GetUniversitiesCommand): Promise<Collection<University>>;
 
   findUniversityCentral(): Promise<University>;
 

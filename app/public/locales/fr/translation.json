@@ -229,6 +229,8 @@
             "create": "Créer une nouvelle liste",
             "empty": "Tu n’as pas encore créé de liste de vocabulaire pour cette langue.",
             "go_back": "Retour",
+            "menu": "Menu",
+            "start_quiz_menu": "Lancer un quiz",
             "title": "Listes de vocabulaire",
             "creator": "Créé par {{name}}",
             "missing_pronunciation": "{{count}} prononciation à enregistrer",
@@ -251,6 +253,17 @@
                 "cancel": "Annuler",
                 "create": "Valider",
                 "title": "À qui souhaitez-vous partager ?"
+            },
+            "start_quiz": {
+                "title": "Sélectionne les listes sur lesquelles t’entrainer",
+                "create": "C'est parti !",
+                "close": "Fermer",
+                "all_lists": "Toutes les listes"
+            },
+            "flashcard": {
+                "title": "Révise ton vocabulaire grâce au flash cards !",
+                "paragraph": "Trouve la traduction équivalente au mot affiché et tente d’atteindre un score de 100%",
+                "button": "Lancer les flash cards"
             }
         },
         "pair": {
@@ -366,6 +379,30 @@
     "university_card": {
         "button": "Voir la fiche",
         "period": "Période d'ouverture"
+    },
+    "flashcards": {
+        "flipcards": {
+            "title": "Vrai ou Faux",
+            "term": {
+                "term": "Terme",
+                "of": "sur"
+            },
+            "buttons":{
+                "showResponse": "Montrer la réponse",
+                "rightAnswer": "Oui",
+                "wrongAnswer": "Non",
+                "restart": "Relancer",
+                "close": "Fermer"
+            },
+            "rightAnswerQuestion": "Avais-tu la bonne réponse ?",
+            "finish": {
+                "title": "Ta note",
+                "paragraph1": "Bien joué !",
+                "paragraph2": "Révise encore un peu pour obtenir un score parfait",
+                "perfect_score": "Tu as obtenu un score parfait"
+            },
+            "altClose": "Fermer"
+        }
     },
     "home_page": {
         "profile": {

@@ -2,6 +2,7 @@ import * as Prisma from '@prisma/client';
 import {
   LearningLanguage,
   LearningType,
+  MediaObject,
   MeetingFrequency,
   ProficiencyLevel,
   Profile,
@@ -41,6 +42,7 @@ export const ProfilesRelations = {
       LanguageCode: true,
       Tandem: true,
       Campus: true,
+      CertificateFile: true,
     },
   },
 };
@@ -59,6 +61,7 @@ export type ProfileSnapshot = Prisma.Profiles & {
     LanguageCode: Prisma.LanguageCodes;
     Campus: Prisma.Places;
     Tandem: Prisma.Tandems;
+    CertificateFile?: Prisma.MediaObjects;
   })[];
   MasteredLanguages: (Prisma.MasteredLanguages & {
     LanguageCode: Prisma.LanguageCodes;
@@ -94,6 +97,18 @@ export const profileMapper = (instance: ProfileSnapshot): Profile => {
           campus:
             learningLanguage.Campus && campusMapper(learningLanguage.Campus),
           certificateOption: learningLanguage.certificate_option,
+          learningJournal: learningLanguage.learning_journal ?? false,
+          consultingInterview: learningLanguage.consulting_interview ?? false,
+          sharedCertificate: learningLanguage.shared_certificate ?? false,
+          certificateFile:
+            learningLanguage.CertificateFile &&
+            new MediaObject({
+              id: learningLanguage.CertificateFile.id,
+              name: learningLanguage.CertificateFile.name,
+              bucket: learningLanguage.CertificateFile.bucket,
+              mimetype: learningLanguage.CertificateFile.mime,
+              size: learningLanguage.CertificateFile.size,
+            }),
           specificProgram: learningLanguage.specific_program,
         }),
     ),
