@@ -16,6 +16,7 @@ export type CreateEventProps = {
   languageCode: string;
   status?: string;
   type: EventType;
+  imageCredit?: string;
   eventURL?: string;
   address?: string;
   addressName?: string;
@@ -36,6 +37,7 @@ export type UpdateEventProps = {
   languageCode: string;
   status?: string;
   type: EventType;
+  imageCredit?: string;
   eventURL?: string;
   address?: string;
   addressName?: string;

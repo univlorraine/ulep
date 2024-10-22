@@ -51,6 +51,7 @@ export const eventMapper = (snapshot: EventSnapshot): EventObject => {
         mimetype: snapshot.Image.mime,
         size: snapshot.Image.size,
       }),
+    imageCredit: snapshot.image_credit,
     title: snapshot.TitleTextContent.text,
     content: snapshot.ContentTextContent.text,
     languageCode: snapshot.TitleTextContent.LanguageCode.code,

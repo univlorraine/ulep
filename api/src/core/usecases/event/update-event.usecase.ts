@@ -23,6 +23,7 @@ export type UpdateEventCommand = {
   languageCode: string;
   status?: string;
   type: EventType;
+  imageCredit?: string;
   eventUrl?: string;
   address?: string;
   addressName?: string;
@@ -67,6 +68,7 @@ export class UpdateEventUsecase {
       startDate: command.startDate,
       endDate: command.endDate,
       type: command.type,
+      imageCredit: command.imageCredit,
       eventURL: command.eventUrl,
       address: command.address,
       addressName: command.addressName,

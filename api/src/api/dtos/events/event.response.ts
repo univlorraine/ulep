@@ -104,6 +104,10 @@ export class EventResponse {
   @Expose({ groups: ['read'] })
   imageURL?: string;
 
+  @Swagger.ApiProperty({ type: 'string' })
+  @Expose({ groups: ['read'] })
+  imageCredit?: string;
+
   @Swagger.ApiProperty({ type: 'Date' })
   @Expose({ groups: ['read'] })
   startDate: Date;
@@ -148,6 +152,7 @@ export class EventResponse {
         UniversityResponse.fromUniversity(university),
       ),
       imageURL: instance.imageURL,
+      imageCredit: instance.imageCredit,
       languageCode: instance.languageCode,
       translations: instance.translations.map(
         EventTranslationResponse.fromDomain,

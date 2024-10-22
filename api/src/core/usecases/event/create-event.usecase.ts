@@ -23,6 +23,7 @@ export type CreateEventCommand = {
   status?: string;
   type: EventType;
   eventUrl?: string;
+  imageCredit?: string;
   address?: string;
   addressName?: string;
   withSubscription: boolean;
@@ -65,6 +66,7 @@ export class CreateEventUsecase {
       endDate: command.endDate,
       type: command.type,
       eventURL: command.eventUrl,
+      imageCredit: command.imageCredit,
       address: command.address,
       addressName: command.addressName,
       deepLink: addressUrl,

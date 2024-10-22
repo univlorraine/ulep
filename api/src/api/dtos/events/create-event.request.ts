@@ -71,6 +71,11 @@ export class CreateEventRequest {
   withSubscription: boolean;
 
   @ApiProperty()
+  @IsString()
+  @IsOptional()
+  imageCredit?: string;
+
+  @ApiProperty()
   @IsArray()
   @IsString({ each: true })
   diffusionLanguages: string[];

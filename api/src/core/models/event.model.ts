@@ -27,6 +27,7 @@ export interface EventObjectProps {
   translations: EventTranslation[];
   authorUniversity: University;
   imageURL?: string;
+  imageCredit?: string;
   image?: MediaObject;
   status: EventStatus;
   startDate: Date;
@@ -52,6 +53,7 @@ export class EventObject {
   translations: EventTranslation[];
   authorUniversity: University;
   imageURL?: string;
+  imageCredit?: string;
   image?: MediaObject;
   status: EventStatus;
   startDate: Date;
@@ -76,6 +78,7 @@ export class EventObject {
     translations,
     authorUniversity,
     imageURL,
+    imageCredit,
     image,
     status,
     startDate,
@@ -99,6 +102,7 @@ export class EventObject {
     this.translations = translations;
     this.authorUniversity = authorUniversity;
     this.imageURL = imageURL;
+    this.imageCredit = imageCredit;
     this.image = image;
     this.status = status;
     this.startDate = startDate;

@@ -66,6 +66,11 @@ export class UpdateEventRequest {
   addressName?: string;
 
   @ApiProperty()
+  @IsString()
+  @IsOptional()
+  imageCredit?: string;
+
+  @ApiProperty()
   @Transform(({ value }) => (value ? value === 'true' : undefined))
   @IsBoolean()
   withSubscription: boolean;
