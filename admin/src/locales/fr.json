@@ -234,6 +234,7 @@
             "start_date": "Date de début",
             "end_date": "Date de fin",
             "illustration": "Illustration",
+            "image_credit": "Credit de l'image",
             "title": "Titre",
             "content": "Contenu",
             "subscriptions": "Inscriptions",
@@ -261,6 +262,16 @@
         "update": {
             "cta": "Mettre à jour",
             "error": "Une erreur est survenue pendant la mise à jour de l'évènement"
+        },
+        "subscriptions": {
+            "title": "Inscrits à l'évènement : %{eventTitle}",
+            "author": "Auteur : %{universityName}",
+            "list": {
+                "firstname": "Prénom",
+                "lastname": "Nom",
+                "university": "Université",
+                "email": "Email"
+            }
         }
     },
     "global": {

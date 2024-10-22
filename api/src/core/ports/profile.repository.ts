@@ -78,4 +78,8 @@ export interface ProfileRepository {
   ) => Promise<Collection<ProfileWithTandemsProfiles>>;
 
   delete: (profile: Profile) => Promise<void>;
+
+  getProfilesSubscribedToEvent: (
+    eventId: string,
+  ) => Promise<Collection<Profile>>;
 }

@@ -104,6 +104,7 @@ import {
   GetOtherUserEmailInTandemUsecase,
   GetPartnersToUniversityUsecase,
   GetProfileByUserIdUsecase,
+  GetProfilesSubscribedToEventUsecase,
   GetProfilesUsecase,
   GetProfilesWithTandemsProfilesUsecase,
   GetProfileUsecase,
@@ -305,6 +306,7 @@ const usecases: Provider[] = [
   DeleteProfileUsecase,
   CreateLearningLanguageUseCase,
   UpdateProfileUsecase,
+  GetProfilesSubscribedToEventUsecase,
   // LearningLanguages
   GetLearningLanguagesUsecase,
   GetLearningLanguageOfIdUsecase,

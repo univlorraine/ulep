@@ -232,6 +232,9 @@ const customDataProvider = {
             case 'events':
                 url.search = EventsQuery(params);
                 break;
+            case 'events/subscriptions':
+                url = new URL(`${process.env.REACT_APP_API_URL}/profiles/events/${params.filter.eventId}`);
+                break;
             case 'profiles':
                 url.search = ProfilesQuery(params);
                 break;
@@ -527,6 +530,20 @@ const customDataProvider = {
         }
 
         return response.json();
+    },
+    unsubscribeToEvent: async (eventId: string, usersIds: string[]): Promise<void> => {
+        const url = `${process.env.REACT_APP_API_URL}/events/${eventId}/unsubscribe`;
+
+        const body = new FormData();
+        usersIds.forEach((userId, index) => {
+            body.append(`usersIds[${index}]`, userId);
+        });
+
+        const response = await fetch(url, httpClientOptions({ method: 'POST', body }));
+
+        if (!response.ok) {
+            await throwError(response);
+        }
     },
 } as unknown as DataProvider;
 

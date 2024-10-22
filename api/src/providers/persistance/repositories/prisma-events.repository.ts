@@ -1,6 +1,7 @@
 import { Collection, PrismaService } from '@app/common';
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
+import { User } from 'src/core/models';
 import { EventObject } from 'src/core/models/event.model';
 import {
   CreateEventProps,
@@ -15,6 +16,9 @@ import { eventMapper, EventRelations } from '../mappers/events.mapper';
 @Injectable()
 export class PrismaEventRepository implements EventRepository {
   constructor(private readonly prisma: PrismaService) {}
+  subscribedUsersOfId(id: string): Promise<User[]> {
+    throw new Error('Method not implemented.');
+  }
 
   async findAll({
     pagination,

@@ -55,6 +55,7 @@ const CreateEvent = () => {
         if (payload.address) formData.append('address', payload.address);
         if (payload.addressName) formData.append('addressName', payload.addressName);
         if (payload.image) formData.append('file', payload.image);
+        if (payload.imageCredit) formData.append('imageCredit', payload.imageCredit);
 
         try {
             return await create(

@@ -20,12 +20,12 @@ import daysjs from 'dayjs';
 import { RichTextInput } from 'ra-input-rich-text';
 import React, { useEffect, useState } from 'react';
 import { Button, Loading, TabbedForm, useGetIdentity, useGetList, useRecordContext, useTranslate } from 'react-admin';
-import { EventFormPayload, EventObject, EventStatus, EventTranslation, EventType } from '../../entities/Event';
-import University from '../../entities/University';
-import customDataProvider from '../../providers/customDataProvider';
-import i18nProvider from '../../providers/i18nProvider';
-import ImageUploader from '../ImageUploader';
-import useGetUniversitiesLanguages from './useGetUniversitiesLanguages';
+import { EventFormPayload, EventObject, EventStatus, EventTranslation, EventType } from '../../../entities/Event';
+import University from '../../../entities/University';
+import customDataProvider from '../../../providers/customDataProvider';
+import i18nProvider from '../../../providers/i18nProvider';
+import ImageUploader from '../../ImageUploader';
+import useGetUniversitiesLanguages from '../useGetUniversitiesLanguages';
 
 interface EventFormProps {
     handleSubmit: (payload: EventFormPayload) => void;
@@ -44,7 +44,6 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
     const [title, setTitle] = useState<string>(record?.title || '');
     const [content, setContent] = useState<string>(record?.content || '');
     const [image, setImage] = useState<File | undefined>(undefined);
-    const [imageCredit, setImageCredit] = useState<string>(record?.imageCredit || '');
     const [status, setStatus] = useState<EventStatus>(record?.status || EventStatus.DRAFT);
     const [type, setType] = useState<EventType>(record?.type || EventType.ONLINE);
     const [withSubscription, setWithSubscription] = useState<boolean>(record?.withSubscription || false);
@@ -116,7 +115,6 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
             startDate,
             endDate,
             image,
-            imageCredit,
             eventURL: type === EventType.ONLINE ? eventURL : undefined,
             address: type === EventType.PRESENTIAL ? address : undefined,
             addressName: type === EventType.PRESENTIAL ? addressName : undefined,
@@ -462,22 +460,11 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                         </Box>
 
                         <Box sx={{ width: '100%' }}>
-                            <Typography variant="subtitle1">{translate('events.form.image_credit')}</Typography>
-                            <OutlinedInput
-                                name="imageCredit"
-                                onChange={(e: any) => setImageCredit(e.target.value)}
-                                type="text"
-                                value={imageCredit}
-                                fullWidth
-                                required
-                            />
-                        </Box>
-
-                        <Box sx={{ width: '100%' }}>
                             <Typography variant="subtitle1">{translate('events.form.title')}</Typography>
                             <OutlinedInput
                                 name="Title"
                                 onChange={(e: any) => setTitle(e.target.value)}
+                                placeholder="Title"
                                 type="text"
                                 value={title}
                                 fullWidth

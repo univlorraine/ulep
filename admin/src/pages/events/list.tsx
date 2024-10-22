@@ -11,6 +11,7 @@ import {
     TextInput,
     SelectInput,
     useGetList,
+    Link,
 } from 'react-admin';
 import ColoredChips, { ChipsColors } from '../../components/ColoredChips';
 import useGetUniversitiesLanguages from '../../components/form/useGetUniversitiesLanguages';
@@ -89,7 +90,7 @@ const EventsList = () => {
                 filter={!identity?.isCentralUniversity ? { universityId: identity?.universityId } : undefined}
                 filters={filters}
             >
-                <Datagrid rowClick="edit">
+                <Datagrid>
                     <TextField label="events.list.title" source="title" />
                     {identity?.isCentralUniversity && (
                         <TextField label="events.list.university" source="authorUniversity.name" />
@@ -108,6 +109,20 @@ const EventsList = () => {
                     />
                     <DateField label="events.list.startDate" source="startDate" />
                     <DateField label="events.list.endDate" source="endDate" />
+                    <FunctionField
+                        label="events.list.subscriptions"
+                        render={(record: EventObject) => {
+                            if (record.withSubscription) {
+                                return (
+                                    <Link to={`/events/subscriptions/${record.id}`}>
+                                        {record.enrolledUsers?.length} inscrits
+                                    </Link>
+                                );
+                            }
+
+                            return null;
+                        }}
+                    />
                     <FunctionField
                         label="news.list.status"
                         render={(record: any) => <StatusChips status={record.status} />}

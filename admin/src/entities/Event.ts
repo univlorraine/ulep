@@ -10,6 +10,7 @@ export interface EventFormPayload {
     content: string;
     languageCode: string;
     image: File | undefined;
+    imageCredit?: string;
     status: EventStatus;
     startDate: Date;
     endDate: Date;
@@ -53,6 +54,7 @@ export type EventObject = {
     authorUniversity: University;
     imageURL?: string;
     image?: MediaObject;
+    imageCredit?: string;
     status: EventStatus;
     startDate: Date;
     endDate: Date;

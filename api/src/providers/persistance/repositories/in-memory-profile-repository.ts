@@ -1,6 +1,6 @@
 import { Collection } from '@app/common';
-import { ProfileRepository } from '../../../core/ports/profile.repository';
 import { Profile } from '../../../core/models/profile.model';
+import { ProfileRepository } from '../../../core/ports/profile.repository';
 
 export class InMemoryProfileRepository implements ProfileRepository {
   #profiles: Map<string, Profile> = new Map();
@@ -64,5 +64,14 @@ export class InMemoryProfileRepository implements ProfileRepository {
 
   async delete(profile: Profile): Promise<void> {
     this.#profiles.delete(profile.id);
+  }
+
+  async getProfilesSubscribedToEvent(
+    eventId: string,
+  ): Promise<Collection<Profile>> {
+    return {
+      items: [],
+      totalItems: 0,
+    };
   }
 }

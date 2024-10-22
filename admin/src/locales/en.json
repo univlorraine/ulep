@@ -219,7 +219,49 @@
         },
         "status": {
             "DRAFT": "Draft",
-            "READY": "Ready"
+            "READY": "Published"
+        },
+        "form": {
+            "add_translation": "Add a translation",
+            "change_language": "Change the default language",
+            "type": {
+                "label": "Event type",
+                "online": "Online",
+                "presential": "Presential"
+            },
+            "author": "Author",
+            "status": "Status",
+            "start_date": "Start date",
+            "end_date": "End date",
+            "illustration": "Illustration",
+            "image_credit": "Image credit",
+            "title": "Title",
+            "content": "Content",
+            "subscriptions": "Subscriptions",
+            "with_subscriptions": "With subscriptions",
+            "concerned_universities": {
+                "label": "Concerned universities",
+                "button": "Add"
+            },
+            "diffusion_languages": {
+                "label": "Diffused languages",
+                "button": "Add"
+            },
+            "event_url": "Event URL",
+            "address": "Address",
+            "address_name": "Place name",
+            "error": {
+                "required": "All fields are required"
+            },
+            "remove_translation": "Remove translation"
+        },
+        "create": {
+            "cta": "Create",
+            "error": "An error occurred while creating the event"
+        },
+        "update": {
+            "cta": "Update",
+            "error": "An error occurred while updating the event"
         }
     },
     "global": {

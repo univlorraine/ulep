@@ -28,6 +28,7 @@ import {
   GetAdministratorUsecase,
   GetLearningLanguageOfProfileUsecase,
   GetProfileByUserIdUsecase,
+  GetProfilesSubscribedToEventUsecase,
   GetProfilesUsecase,
   GetProfilesWithTandemsProfilesUsecase,
   GetProfileUsecase,
@@ -73,6 +74,7 @@ export class ProfileController {
     private readonly createOrUpdateTestedLanguageUsecase: CreateOrUpdateTestedLanguageUsecase,
     private readonly getAdminUsecase: GetAdministratorUsecase,
     private readonly getSessionsForProfileUsecase: GetSessionsForProfileUsecase,
+    private readonly getProfilesSubscribedToEventUsecase: GetProfilesSubscribedToEventUsecase,
   ) {}
 
   @Post()
@@ -403,5 +405,25 @@ export class ProfileController {
     });
 
     return ProfileResponse.fromDomain(profile);
+  }
+
+  @Get('events/:id')
+  @UseGuards(AuthenticationGuard)
+  @SerializeOptions({ groups: ['read'] })
+  @Swagger.ApiOperation({
+    summary: 'Retrieve the collection of Profiles subscribed to an event',
+  })
+  @CollectionResponse(Collection<ProfileResponse>)
+  async getEvents(@Param('id', ParseUUIDPipe) id: string) {
+    const profiles = await this.getProfilesSubscribedToEventUsecase.execute({
+      eventId: id,
+    });
+
+    return new Collection<ProfileResponse>({
+      items: profiles.items.map((profile) =>
+        ProfileResponse.fromDomain(profile),
+      ),
+      totalItems: profiles.totalItems,
+    });
   }
 }

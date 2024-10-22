@@ -1,14 +1,14 @@
 import * as Prisma from '@prisma/client';
-import {
-  UniversityRelations,
-  UniversitySnapshot,
-  universityMapper,
-} from './university.mapper';
 import { Gender, MediaObject, Role, User, UserStatus } from 'src/core/models';
 import {
-  DeviceSnapshot,
   deviceMapper,
+  DeviceSnapshot,
 } from 'src/providers/persistance/mappers/device.mapper';
+import {
+  universityMapper,
+  UniversityRelations,
+  UniversitySnapshot,
+} from './university.mapper';
 
 export const UserRelations = {
   Contact: true,
@@ -16,6 +16,7 @@ export const UserRelations = {
   Nationality: true,
   Avatar: true,
   Devices: true,
+  Events: true,
 };
 
 export type UserSnapshot = Prisma.Users & {

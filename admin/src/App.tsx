@@ -30,6 +30,7 @@ import chat from './pages/chat';
 import countSuggestedLanguages from './pages/count-suggested-languages';
 import countries from './pages/countries';
 import events from './pages/events';
+import eventsSubscriptions from './pages/events/subscriptions';
 import instance from './pages/instance';
 import interests from './pages/interests';
 import JitsiPage from './pages/jitsi/JitsiPage';
@@ -82,6 +83,7 @@ const App = () => (
                 <Resource icon={ChatIcon} name="chat" options={{ label: 'chat.label' }} {...chat} />
                 <Resource icon={NewspaperIcon} name="news" options={{ label: 'news.label' }} {...news} />
                 <Resource icon={FeedIcon} name="events" options={{ label: 'events.label' }} {...events} />
+                <Resource name="events/subscriptions" {...eventsSubscriptions} />
                 <Resource
                     icon={EditNoteIcon}
                     name="activities"
