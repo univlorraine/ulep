@@ -30,7 +30,6 @@ import GetAllCountriesUsecase from '../domain/usecases/GetAllCountriesUsecase';
 import GetAllGoalsUsecase from '../domain/usecases/GetAllGoalsUsecase';
 import GetAllInterestCategoriesUsecase from '../domain/usecases/GetAllInterestCategoriesUsecase';
 import GetAllLanguagesUsecase from '../domain/usecases/GetAllLanguagesUsecase';
-import GetAllReportCategoriesUsecase from '../domain/usecases/GetAllReportCategoriesUsecase';
 import GetAllSessionsUsecase from '../domain/usecases/GetAllSessionsUsecase';
 import GetAllTandemsUsecase from '../domain/usecases/GetAllTandemsUsecase';
 import GetAllUniversitiesUsecase from '../domain/usecases/GetAllUniversitiesUsecase';
@@ -48,6 +47,10 @@ import GetUserUsecase from '../domain/usecases/GetUserUsecase';
 import LoginUsecase from '../domain/usecases/LoginUsecase';
 import GetAllNewsUsecase from '../domain/usecases/news/GetAllNewsUsecase';
 import RefreshTokensUsecase from '../domain/usecases/RefreshTokensUsecase';
+import GetAllReportCategoriesUsecase from '../domain/usecases/reports/GetAllReportCategoriesUsecase';
+import GetAllReportsUsecase from '../domain/usecases/reports/GetAllReportsUsecase';
+import GetReportUsecase from '../domain/usecases/reports/GetReportUsecase';
+import UpdateReportStatusUsecase from '../domain/usecases/reports/UpdateReportStatusUsecase';
 import ResetPasswordUsecase from '../domain/usecases/ResetPasswordUsecase';
 import RetrievePersonInfoUsecase from '../domain/usecases/RetrievePersonInfoUsecase';
 import RevokeSessionsUsecase from '../domain/usecases/RevokeSessionsUsecase';
@@ -128,7 +131,6 @@ const getConfigContextValue = ({
     const getAllCountries = new GetAllCountriesUsecase(domainHttpAdapter);
     const getAllGoals = new GetAllGoalsUsecase(domainHttpAdapter);
     const getAllLanguages = new GetAllLanguagesUsecase(domainHttpAdapter);
-    const getAllReportCategories = new GetAllReportCategoriesUsecase(domainHttpAdapter);
     const getAllTandems = new GetAllTandemsUsecase(domainHttpAdapter);
     const getAllSessions = new GetAllSessionsUsecase(domainHttpAdapter);
     const getAllUniversities = new GetAllUniversitiesUsecase(domainHttpAdapter);
@@ -191,6 +193,12 @@ const getConfigContextValue = ({
     //News
     const getAllNews = new GetAllNewsUsecase(domainHttpAdapter);
 
+    // Report
+    const updateReportStatus = new UpdateReportStatusUsecase(domainHttpAdapter);
+    const getAllReportCategories = new GetAllReportCategoriesUsecase(domainHttpAdapter);
+    const getAllReports = new GetAllReportsUsecase(domainHttpAdapter);
+    const getReport = new GetReportUsecase(domainHttpAdapter);
+
     return {
         accessToken,
         addDevice,
@@ -218,6 +226,7 @@ const getConfigContextValue = ({
         getAllGoals,
         getAllLanguages,
         getAllReportCategories,
+        getAllReports,
         getAllTandems,
         getAllSessions,
         getAllUniversities,
@@ -261,6 +270,8 @@ const getConfigContextValue = ({
         updateSession,
         cancelSession,
         getAllNews,
+        updateReportStatus,
+        getReport,
     };
 };
 

@@ -13,8 +13,8 @@ import BonjourBubbleSvg from './bonjour-bubble.svg';
 import ConversationsSvg from './bottom-bar/conversations.svg';
 import HomeSvg from './bottom-bar/home.svg';
 import CalendarSvg from './calendar.svg';
-import CancelledPng from './cancelled.png';
 import CameraSvg from './camera.svg';
+import CancelledPng from './cancelled.png';
 import ChatSvg from './chat.svg';
 import CheckSvg from './check.svg';
 import ChineseBubble from './china-bubble.svg';
@@ -43,6 +43,7 @@ import LeftChevronSvg from './left-chevron.svg';
 import LogoTextSvg from './logo-text.svg';
 import LogoSvg from './logo.svg';
 import MailBoxPng from './mailbox.png';
+import MessagesPng from './messages.png';
 import PaperclipSvg from './paperclip.svg';
 import ParameterPng from './parameter.png';
 import PauseSvg from './pause.svg';
@@ -55,6 +56,7 @@ import RecordSvg from './record.svg';
 import ReportSvg from './report.svg';
 import SenderSvg from './sender.svg';
 import SettingsPng from './settings.png';
+import SignalerPng from './signaler.png';
 import SmallAvatarPng from './small-avatar.png';
 import StarPng from './star.png';
 import TandemPng from './tandem.png';
@@ -110,6 +112,7 @@ export {
     LogoSvg,
     LogoTextSvg,
     MailBoxPng,
+    MessagesPng,
     PaperclipSvg,
     ParameterPng,
     PauseSvg,
@@ -122,6 +125,7 @@ export {
     ReportSvg,
     SenderSvg,
     SettingsPng,
+    SignalerPng,
     SmallAvatarPng,
     StarPng,
     TandemNotFoundPng,

@@ -10,10 +10,9 @@ interface SidebarProps {
     onDisconnect: () => void;
     onDisplaySettings: () => void;
     onDisplayReport: () => void;
-    onDisplayProfile: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ onDisconnect, onDisplaySettings, onDisplayReport, onDisplayProfile }) => {
+const Sidebar: React.FC<SidebarProps> = ({ onDisconnect, onDisplaySettings, onDisplayReport }) => {
     const history = useHistory();
     const { t } = useTranslation();
     const location = useLocation();
@@ -28,6 +27,10 @@ const Sidebar: React.FC<SidebarProps> = ({ onDisconnect, onDisplaySettings, onDi
 
     const navigateToLearning = () => {
         history.push('/learning');
+    };
+
+    const navigateToProfile = () => {
+        history.push('/profile');
     };
 
     return (
@@ -59,7 +62,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onDisconnect, onDisplaySettings, onDi
                 <img alt="" src={ConversationsSvg} aria-hidden={true} className={styles.image} />
                 <span className={styles.title}>{t('navigation.sidebar.conversations')}</span>
             </IonItem>
-            <IonItem button={true} className={styles.line} onClick={onDisplayProfile}>
+            <IonItem button={true} className={styles.line} onClick={navigateToProfile}>
                 <img alt="" src={ProfileSvg} aria-hidden={true} className={styles.image} />
                 <span className={styles.title}>{t('navigation.sidebar.profile')}</span>
             </IonItem>

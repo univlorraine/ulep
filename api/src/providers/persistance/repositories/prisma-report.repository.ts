@@ -12,7 +12,6 @@ import {
   ReportRelations,
 } from '../mappers/report.mapper';
 import { TextContentRelations } from '../mappers/translation.mapper';
-import { UserRelations } from '../mappers/user.mapper';
 
 @Injectable()
 export class PrismaReportRepository implements ReportRepository {
@@ -148,16 +147,7 @@ export class PrismaReportRepository implements ReportRepository {
           id: userId,
         },
       },
-      include: {
-        Category: {
-          include: {
-            TextContent: TextContentRelations,
-          },
-        },
-        User: {
-          include: UserRelations,
-        },
-      },
+      include: ReportRelations,
       orderBy: {
         createdAt: 'desc',
       },

@@ -427,7 +427,8 @@
             "disconnect": "Se déconnecter",
             "edit": "Modifier mon avatar",
             "parameters": "Paramètres",
-            "title": "Profile"
+            "title": "Mon profil",
+            "reports": "Mes signalements"
         },
         "report": {
             "category_title": "Dis-nous ce qu'il s'est passé ?",
@@ -886,6 +887,55 @@
         "title": "Compte suspendu",
         "title_canceled": "Compte annulé",
         "validate_button": "Nous contacter"
+    },
+    "reports_page": {
+        "title": "Mes signalements",
+        "list": {
+            "date": "Le",
+            "application": "Application",
+            "report_message": "Message signalé",
+            "tandem": "Tandem",
+            "tandem_missing": "Tandem inconnu"
+        },
+        "no_reports": "Aucun signalement",
+        "error_get_reports": "Une erreur est survenue lors de la récupération des signalements",
+        "aria_label": "Liste des signalements",
+        "item": {
+            "aria_label": "Signalement du tandem {{name}}"
+        }
+    },
+    "reports_status": {
+        "open": "Enregistré",
+        "close": "Traité",
+        "canceled": "Annulé",
+        "in_progress": "En cours"
+    },
+    "report_item_page": {
+        "title": "Signalement",
+        "application": {
+            "title": "J'ai un problème avec l'application",
+            "date": "Date",
+            "details": "Détails"
+        },
+        "conversation": {
+            "title": "Signaler un message",
+            "message": "Message signalé le"
+        },
+        "comment": "Commentaire de l'administration",
+        "no_comment": "Aucun commentaire de l'administration",
+        "button_cancel": "Annuler mon signalement",
+        "cancel_modal": {
+            "title": "Annuler le signalement",
+            "text": "Etes-vous certain de vouloir annuler le signalement ?",
+            "validate_button": "Annuler le signalement",
+            "cancel_button": "Ne rien faire"
+        },
+        "modal": {
+            "validate": "Annuler le signalement",
+            "cancel": "Ne rien faire"
+        },
+        "error_update": "Une erreur est survenue lors de la mise à jour du signalement",
+        "go_back": "Retour"
     },
     "languages_code": {
         "aa": "Afar",

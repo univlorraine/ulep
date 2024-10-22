@@ -34,7 +34,6 @@ import GetAllCountriesUsecaseInterface from '../domain/interfaces/GetAllCountrie
 import GetAllGoalsUsecaseInterface from '../domain/interfaces/GetAllGoalsUsecase.interface';
 import GetAllInterestCategoriessUsecase from '../domain/interfaces/GetAllInterestCategoriesUsecase.interface';
 import GetAllLanguagesUsecaseInterface from '../domain/interfaces/GetAllLanguagesUsecase.interface';
-import GetAllReportCategoriesUsecaseInterface from '../domain/interfaces/GetAlllReportCategoriesUsecase.interface';
 import GetAllSessionsUsecaseInterface from '../domain/interfaces/GetAllSessionsUsecase.interface';
 import GetAllTandemsUsecaseInterface from '../domain/interfaces/GetAllTandemsUsecase.interface';
 import GetAllUniversitiesUsecaseInterface from '../domain/interfaces/GetAllUniversitiesUsecase.interface';
@@ -50,6 +49,10 @@ import GetUserUsecaseInterface from '../domain/interfaces/GetUserUsecase.interfa
 import LoginUsecaseInterface from '../domain/interfaces/LoginUsecase.interface';
 import GetAllNewsUsecaseInterface from '../domain/interfaces/news/GetAllNewsUsecase.interface';
 import RefreshTokensUsecaseInterface from '../domain/interfaces/RefreshTokensUsecase.interface';
+import GetAllReportCategoriesUsecaseInterface from '../domain/interfaces/reports/GetAllReportCategoriesUsecase.interface';
+import GetAllReportsUsecaseInterface from '../domain/interfaces/reports/GetAllReportsUsecase.interface';
+import GetReportUsecaseInterface from '../domain/interfaces/reports/GetReportUsecase.interface';
+import UpdateReportStatusUsecaseInterface from '../domain/interfaces/reports/UpdateReportStatusUsecase.interface';
 import ResetPasswordUsecaseInterface from '../domain/interfaces/ResetPasswordUsecase.interface';
 import RetrievePersonInfoUsecaseInterface from '../domain/interfaces/RetrievePersonInfoUsecase.interface';
 import RevokeSessionsUsecaseInterface from '../domain/interfaces/RevokeSessionsUsecase.interface';
@@ -90,7 +93,6 @@ export interface ConfigContextValueType {
     getAllGoals: GetAllGoalsUsecaseInterface;
     getAllInterestCategories: GetAllInterestCategoriessUsecase;
     getAllLanguages: GetAllLanguagesUsecaseInterface;
-    getAllReportCategories: GetAllReportCategoriesUsecaseInterface;
     getAllTandems: GetAllTandemsUsecaseInterface;
     getAllSessions: GetAllSessionsUsecaseInterface;
     getAllUniversities: GetAllUniversitiesUsecaseInterface;
@@ -141,4 +143,9 @@ export interface ConfigContextValueType {
     cancelSession: CancelSessionUsecaseInterface;
     // News
     getAllNews: GetAllNewsUsecaseInterface;
+    // Report
+    updateReportStatus: UpdateReportStatusUsecaseInterface;
+    getAllReportCategories: GetAllReportCategoriesUsecaseInterface;
+    getAllReports: GetAllReportsUsecaseInterface;
+    getReport: GetReportUsecaseInterface;
 }

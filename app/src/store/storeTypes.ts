@@ -87,6 +87,8 @@ interface StoreInterface {
     language: string;
     logout: Action<StoreInterface>;
     refreshToken: string;
+    refreshReports: boolean;
+    setRefreshReports: Action<StoreInterface>;
     setApiUrl: Action<StoreInterface, ApiUrlPayload>;
     setLanguage: Action<StoreInterface, LanguagePayload>;
     setProfile: Action<StoreInterface, ProfileStorePayload>;
