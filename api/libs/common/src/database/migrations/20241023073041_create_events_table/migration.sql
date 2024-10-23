@@ -22,7 +22,7 @@ CREATE TABLE "events" (
 );
 
 -- CreateTable
-CREATE TABLE "_EventsToUsers" (
+CREATE TABLE "_EventsToProfiles" (
     "A" TEXT NOT NULL,
     "B" TEXT NOT NULL
 );
@@ -43,10 +43,10 @@ CREATE TABLE "_ConcernedUniversities" (
 CREATE UNIQUE INDEX "events_image_id_key" ON "events"("image_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "_EventsToUsers_AB_unique" ON "_EventsToUsers"("A", "B");
+CREATE UNIQUE INDEX "_EventsToProfiles_AB_unique" ON "_EventsToProfiles"("A", "B");
 
 -- CreateIndex
-CREATE INDEX "_EventsToUsers_B_index" ON "_EventsToUsers"("B");
+CREATE INDEX "_EventsToProfiles_B_index" ON "_EventsToProfiles"("B");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_DiffusionLanguages_AB_unique" ON "_DiffusionLanguages"("A", "B");
@@ -73,10 +73,10 @@ ALTER TABLE "events" ADD CONSTRAINT "events_title_text_content_id_fkey" FOREIGN 
 ALTER TABLE "events" ADD CONSTRAINT "events_content_text_content_id_fkey" FOREIGN KEY ("content_text_content_id") REFERENCES "text_content"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_EventsToUsers" ADD CONSTRAINT "_EventsToUsers_A_fkey" FOREIGN KEY ("A") REFERENCES "events"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_EventsToProfiles" ADD CONSTRAINT "_EventsToProfiles_A_fkey" FOREIGN KEY ("A") REFERENCES "events"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_EventsToUsers" ADD CONSTRAINT "_EventsToUsers_B_fkey" FOREIGN KEY ("B") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_EventsToProfiles" ADD CONSTRAINT "_EventsToProfiles_B_fkey" FOREIGN KEY ("B") REFERENCES "profiles"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_DiffusionLanguages" ADD CONSTRAINT "_DiffusionLanguages_A_fkey" FOREIGN KEY ("A") REFERENCES "events"("id") ON DELETE CASCADE ON UPDATE CASCADE;

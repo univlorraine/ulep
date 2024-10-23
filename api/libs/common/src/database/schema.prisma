@@ -193,7 +193,6 @@ model Users {
   SuggestedLanguages SuggestedLanguages[]
   Devices            Device[]
   Contact            Contacts?            @relation(fields: [contact_id], references: [id])
-  Events             Events[]
 
   @@unique([email])
   @@map("users")
@@ -364,7 +363,9 @@ model Profiles {
   Interests         Interests[]
   CreatorVocabularyList    VocabularyList[] @relation("Creator")
   EditorVocabularyList    VocabularyList[]  @relation("Editor")
-  Activities Activity[]
+  Activities        Activity[]
+  Events            Events[]
+
   @@unique([user_id])
   @@index([native_language_code_id], name: "native_language_code")
   @@map("profiles")
@@ -746,7 +747,7 @@ model Events {
   created_at              DateTime @default(now())
   updated_at              DateTime @updatedAt
   
-  EnrolledUsers           Users[]
+  SubscribedProfiles      Profiles[]
   DiffusionLanguages      LanguageCodes[] @relation("DiffusionLanguages")
   ConcernedUniversities   Organizations[] @relation("ConcernedUniversities")
   AuthorUniversity        Organizations @relation("AuthorUniversity", fields: [university_id], references: [id], onDelete: Cascade)

@@ -6,13 +6,13 @@ import {
   EVENT_REPOSITORY,
 } from 'src/core/ports/event.repository';
 import {
-  UserRepository,
-  USER_REPOSITORY,
-} from 'src/core/ports/user.repository';
+  ProfileRepository,
+  PROFILE_REPOSITORY,
+} from 'src/core/ports/profile.repository';
 
 export type SubscribeToEventCommand = {
   eventId: string;
-  usersIds: string[];
+  profilesIds: string[];
 };
 
 @Injectable()
@@ -20,22 +20,22 @@ export class SubscribeToEventUsecase {
   constructor(
     @Inject(EVENT_REPOSITORY)
     private readonly eventRepository: EventRepository,
-    @Inject(USER_REPOSITORY)
-    private readonly userRepository: UserRepository,
+    @Inject(PROFILE_REPOSITORY)
+    private readonly profileRepository: ProfileRepository,
   ) {}
 
   async execute(command: SubscribeToEventCommand) {
     const event = await this.assertEventExists(command.eventId);
     await this.assertEventAcceptsSubscriptions(event);
 
-    command.usersIds.forEach(async (userId) => {
-      await this.assertUserExists(userId);
-      await this.assertUserIsNotAlreadySubscribedToEvent(event, userId);
+    command.profilesIds.forEach(async (profileId) => {
+      await this.assertProfileExists(profileId);
+      await this.assertProfileIsNotAlreadySubscribedToEvent(event, profileId);
     });
 
     return this.eventRepository.subscribeToEvent({
       eventId: command.eventId,
-      usersIds: command.usersIds,
+      profilesIds: command.profilesIds,
     });
   }
 
@@ -57,22 +57,22 @@ export class SubscribeToEventUsecase {
     return event;
   }
 
-  private async assertUserExists(id: string) {
-    const user = await this.userRepository.ofId(id);
+  private async assertProfileExists(id: string) {
+    const profile = await this.profileRepository.ofId(id);
 
-    if (!user) {
-      throw new RessourceDoesNotExist('User does not exist');
+    if (!profile) {
+      throw new RessourceDoesNotExist('Profile does not exist');
     }
 
-    return user;
+    return profile;
   }
 
-  private async assertUserIsNotAlreadySubscribedToEvent(
+  private async assertProfileIsNotAlreadySubscribedToEvent(
     event: EventObject,
-    userId: string,
+    profileId: string,
   ) {
-    if (event.enrolledUsers.some((user) => user.id === userId)) {
-      throw new Error('User is already subscribed to event');
+    if (event.subscribedProfiles.some((profile) => profile.id === profileId)) {
+      throw new Error('Profile is already subscribed to event');
     }
   }
 }

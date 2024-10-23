@@ -7,6 +7,7 @@ import {
   EventType,
 } from 'src/core/models/event.model';
 import { LanguageResponse } from '../languages';
+import { ProfileResponse } from '../profiles';
 import { UniversityResponse } from '../universities';
 import { UserResponse } from '../users';
 
@@ -117,9 +118,9 @@ export class EventResponse {
   endDate: Date;
 
   @Swagger.ApiProperty({ type: [UserResponse] })
-  @Expose({ groups: ['event:enrolledUsers'] })
+  @Expose({ groups: ['event:subscribedProfiles'] })
   @IsArray()
-  enrolledUsers: UserResponse[];
+  subscribedProfiles: ProfileResponse[];
 
   @Swagger.ApiProperty({ type: 'Date' })
   @Expose({ groups: ['read'] })
@@ -162,7 +163,9 @@ export class EventResponse {
       ),
       startDate: instance.startDate,
       endDate: instance.endDate,
-      enrolledUsers: instance.enrolledUsers?.map(UserResponse.fromDomain),
+      subscribedProfiles: instance.subscribedProfiles?.map((profile) =>
+        ProfileResponse.fromDomain(profile),
+      ),
       createdAt: instance.createdAt,
       updatedAt: instance.updatedAt,
     });

@@ -224,12 +224,12 @@ export class PrismaEventRepository implements EventRepository {
   }
 
   async subscribeToEvent(props: SubscribeToEventProps): Promise<EventObject> {
-    const { eventId, usersIds } = props;
+    const { eventId, profilesIds } = props;
     const event = await this.prisma.events.update({
       where: { id: eventId },
       data: {
-        EnrolledUsers: {
-          connect: usersIds.map((user) => ({ id: user })),
+        SubscribedProfiles: {
+          connect: profilesIds.map((profile) => ({ id: profile })),
         },
       },
       include: EventRelations,
@@ -241,12 +241,12 @@ export class PrismaEventRepository implements EventRepository {
   async unsubscribeToEvent(
     props: UnsubscribeToEventProps,
   ): Promise<EventObject> {
-    const { eventId, usersIds } = props;
+    const { eventId, profilesIds } = props;
     const event = await this.prisma.events.update({
       where: { id: eventId },
       data: {
-        EnrolledUsers: {
-          disconnect: usersIds.map((user) => ({ id: user })),
+        SubscribedProfiles: {
+          disconnect: profilesIds.map((profile) => ({ id: profile })),
         },
       },
       include: EventRelations,

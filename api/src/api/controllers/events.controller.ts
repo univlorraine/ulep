@@ -34,6 +34,7 @@ import { EventResponse, UpdateEventRequest } from '../dtos/events';
 import { CreateEventRequest } from '../dtos/events/create-event.request';
 import { GetEventsQuery } from '../dtos/events/get-events.request';
 import { SubscribeToEventRequest } from '../dtos/events/subscribe-to-event.request';
+import { UnsubscribeToEventRequest } from '../dtos/events/unsubscribe-to-event.request';
 import { AuthenticationGuard } from '../guards';
 import { ImagesFilePipe } from '../validators';
 
@@ -91,7 +92,7 @@ export class EventsController {
 
   @Post()
   @UseGuards(AuthenticationGuard)
-  @SerializeOptions({ groups: ['read', 'event:enrolledUsers'] })
+  @SerializeOptions({ groups: ['read'] })
   @Roles(Role.ADMIN)
   @Swagger.ApiOperation({ summary: 'Create an Event resource.' })
   @Swagger.ApiOkResponse({ type: EventResponse })
@@ -116,7 +117,7 @@ export class EventsController {
 
   @Put(':id')
   @UseGuards(AuthenticationGuard)
-  @SerializeOptions({ groups: ['read', 'event:enrolledUsers'] })
+  @SerializeOptions({ groups: ['read'] })
   @Roles(Role.ADMIN)
   @Swagger.ApiOperation({ summary: 'Update an Event resource.' })
   @Swagger.ApiOkResponse({ type: EventResponse })
@@ -142,7 +143,7 @@ export class EventsController {
 
   @Post(':id/subscribe')
   @UseGuards(AuthenticationGuard)
-  @SerializeOptions({ groups: ['read', 'event:enrolledUsers'] })
+  @SerializeOptions({ groups: ['read'] })
   @Swagger.ApiOperation({ summary: 'Subscribe users to an Event resource.' })
   @Swagger.ApiOkResponse({ type: EventResponse })
   async subscribeToEvent(
@@ -151,7 +152,7 @@ export class EventsController {
   ) {
     const event = await this.subscribeToEventUsecase.execute({
       eventId: id,
-      usersIds: body.usersIds,
+      profilesIds: body.profilesIds,
     });
 
     return EventResponse.fromDomain(event);
@@ -159,16 +160,16 @@ export class EventsController {
 
   @Post(':id/unsubscribe')
   @UseGuards(AuthenticationGuard)
-  @SerializeOptions({ groups: ['read', 'event:enrolledUsers'] })
+  @SerializeOptions({ groups: ['read'] })
   @Swagger.ApiOperation({ summary: 'Unsubscribe users to an Event resource.' })
   @Swagger.ApiOkResponse({ type: EventResponse })
   async unsubscribeToEvent(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() body: SubscribeToEventRequest,
+    @Body() body: UnsubscribeToEventRequest,
   ) {
     const event = await this.unsubscribeToEventUsecase.execute({
       eventId: id,
-      usersIds: body.usersIds,
+      profilesIds: body.profilesIds,
     });
 
     return EventResponse.fromDomain(event);

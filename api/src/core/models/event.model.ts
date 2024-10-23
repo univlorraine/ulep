@@ -1,7 +1,7 @@
 import { Language } from './language.model';
 import { MediaObject } from './media.model';
+import { Profile } from './profile.model';
 import { University } from './university.model';
-import { User } from './user.model';
 
 export enum EventStatus {
   DRAFT = 'DRAFT',
@@ -40,7 +40,7 @@ export interface EventObjectProps {
   withSubscription: boolean;
   diffusionLanguages?: Language[];
   concernedUniversities?: University[];
-  enrolledUsers?: User[];
+  subscribedProfiles?: Profile[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -66,7 +66,7 @@ export class EventObject {
   withSubscription: boolean;
   diffusionLanguages?: Language[];
   concernedUniversities?: University[];
-  enrolledUsers?: User[];
+  subscribedProfiles?: Profile[];
   createdAt: Date;
   updatedAt: Date;
 
@@ -91,7 +91,7 @@ export class EventObject {
     withSubscription,
     diffusionLanguages,
     concernedUniversities,
-    enrolledUsers,
+    subscribedProfiles,
     createdAt,
     updatedAt,
   }: EventObjectProps) {
@@ -115,7 +115,7 @@ export class EventObject {
     this.withSubscription = withSubscription;
     this.diffusionLanguages = diffusionLanguages;
     this.concernedUniversities = concernedUniversities;
-    this.enrolledUsers = enrolledUsers;
+    this.subscribedProfiles = subscribedProfiles;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }

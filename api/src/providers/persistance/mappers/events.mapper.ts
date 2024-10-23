@@ -8,6 +8,11 @@ import {
 } from 'src/core/models/event.model';
 import { languageMapper, LanguageSnapshot } from './language.mapper';
 import {
+  profileMapper,
+  ProfileSnapshot,
+  ProfilesRelations,
+} from './profile.mapper';
+import {
   TextContentRelations,
   TextContentSnapshot,
 } from './translation.mapper';
@@ -16,13 +21,12 @@ import {
   UniversityRelations,
   UniversitySnapshot,
 } from './university.mapper';
-import { userMapper, UserRelations, UserSnapshot } from './user.mapper';
 
 export const EventRelations = {
   AuthorUniversity: { include: UniversityRelations },
   ConcernedUniversities: { include: UniversityRelations },
   DiffusionLanguages: true,
-  EnrolledUsers: { include: UserRelations },
+  SubscribedProfiles: { include: ProfilesRelations },
   Image: true,
   TitleTextContent: TextContentRelations,
   ContentTextContent: TextContentRelations,
@@ -32,7 +36,7 @@ export type EventSnapshot = Prisma.Events & {
   AuthorUniversity: UniversitySnapshot;
   ConcernedUniversities: UniversitySnapshot[];
   DiffusionLanguages: LanguageSnapshot[];
-  EnrolledUsers: UserSnapshot[];
+  SubscribedProfiles: ProfileSnapshot[];
   Image: Prisma.MediaObjects;
   TitleTextContent: TextContentSnapshot;
   ContentTextContent: TextContentSnapshot;
@@ -65,7 +69,7 @@ export const eventMapper = (snapshot: EventSnapshot): EventObject => {
     addressName: snapshot.address_name,
     deepLink: snapshot.deep_link,
     withSubscription: snapshot.with_subscription,
-    enrolledUsers: snapshot.EnrolledUsers.map(userMapper),
+    subscribedProfiles: snapshot.SubscribedProfiles.map(profileMapper),
     diffusionLanguages: snapshot.DiffusionLanguages.map(languageMapper),
     concernedUniversities: snapshot.ConcernedUniversities.map(universityMapper),
     createdAt: snapshot.created_at,

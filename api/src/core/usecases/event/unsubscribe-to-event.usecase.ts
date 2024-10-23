@@ -6,13 +6,13 @@ import {
   EVENT_REPOSITORY,
 } from 'src/core/ports/event.repository';
 import {
-  UserRepository,
-  USER_REPOSITORY,
-} from 'src/core/ports/user.repository';
+  ProfileRepository,
+  PROFILE_REPOSITORY,
+} from 'src/core/ports/profile.repository';
 
 export type UnsubscribeToEventCommand = {
   eventId: string;
-  usersIds: string[];
+  profilesIds: string[];
 };
 
 @Injectable()
@@ -20,21 +20,21 @@ export class UnsubscribeToEventUsecase {
   constructor(
     @Inject(EVENT_REPOSITORY)
     private readonly eventRepository: EventRepository,
-    @Inject(USER_REPOSITORY)
-    private readonly userRepository: UserRepository,
+    @Inject(PROFILE_REPOSITORY)
+    private readonly profileRepository: ProfileRepository,
   ) {}
 
   async execute(command: UnsubscribeToEventCommand) {
     const event = await this.assertEventExists(command.eventId);
 
-    command.usersIds.forEach(async (userId) => {
-      await this.assertUserExists(userId);
-      await this.assertUserIsSubscribedToEvent(event, userId);
+    command.profilesIds.forEach(async (profileId) => {
+      await this.assertProfileExists(profileId);
+      await this.assertProfileIsSubscribedToEvent(event, profileId);
     });
 
     return this.eventRepository.unsubscribeToEvent({
       eventId: command.eventId,
-      usersIds: command.usersIds,
+      profilesIds: command.profilesIds,
     });
   }
 
@@ -48,22 +48,22 @@ export class UnsubscribeToEventUsecase {
     return event;
   }
 
-  private async assertUserExists(id: string) {
-    const user = await this.userRepository.ofId(id);
+  private async assertProfileExists(id: string) {
+    const profile = await this.profileRepository.ofId(id);
 
-    if (!user) {
-      throw new RessourceDoesNotExist('User does not exist');
+    if (!profile) {
+      throw new RessourceDoesNotExist('Profile does not exist');
     }
 
-    return user;
+    return profile;
   }
 
-  private async assertUserIsSubscribedToEvent(
+  private async assertProfileIsSubscribedToEvent(
     event: EventObject,
-    userId: string,
+    profileId: string,
   ) {
-    if (!event.enrolledUsers.some((user) => user.id === userId)) {
-      throw new Error('User is not subscribed to event');
+    if (!event.subscribedProfiles.some((profile) => profile.id === profileId)) {
+      throw new Error('Profile is not subscribed to event');
     }
   }
 }

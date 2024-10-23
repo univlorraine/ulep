@@ -66,12 +66,12 @@ export type FindEventsProps = {
 
 export type SubscribeToEventProps = {
   eventId: string;
-  usersIds: string[];
+  profilesIds: string[];
 };
 
 export type UnsubscribeToEventProps = {
   eventId: string;
-  usersIds: string[];
+  profilesIds: string[];
 };
 
 export interface EventRepository {
