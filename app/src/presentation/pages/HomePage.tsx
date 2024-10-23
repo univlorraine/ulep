@@ -187,7 +187,7 @@ const HomePage: React.FC = () => {
                 profile={selectedTandem?.partner}
             />
             <SessionsContentModal
-                isVisible={displaySessionModal !== undefined}
+                isVisible={Boolean(displaySessionModal)}
                 onClose={() => setDisplaySessionModal(undefined)}
                 profile={profile}
                 tandems={tandems}

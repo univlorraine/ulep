@@ -22,6 +22,8 @@ export interface CustomLearningGoalRepository {
 
   update: (props: UpdateCustomLearningGoalProps) => Promise<CustomLearningGoal>;
 
+  delete: (id: string) => Promise<void>;
+
   findAllByLearningLanguageId: (
     learningLanguageId: string,
   ) => Promise<CustomLearningGoal[]>;

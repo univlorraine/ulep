@@ -945,11 +945,39 @@
         "vocabulary_title": "Vocabulaire",
         "activities_title": "Fiches d’activité",
         "ask_for_certificate_button": "Demander mon certificat",
+        "download_certificate_button": "Voir mon certificat",
+        "certificate_file_name": "Certificat",
         "how_to_get_certificate_button": "Comment obtenir mon certificat ?"
     },
     "learning_goal": {
         "title": "Mes objectifs ({{count}})",
         "button": "Voir tous mes objectifs"
+    },
+    "goals": {
+        "list": {
+            "title": "Mes objectifs"
+        },
+        "form": {
+            "create_title": "Nouvel objectif",
+            "update_title": "Modifier mon objectif",
+            "title": "Titre",
+            "description": "Description",
+            "update_button": "Modifier",
+            "submit_button": "Valider",
+            "cancel_button": "Annuler"
+        },
+        "show": {
+            "title": "Mon objectif",
+            "title_label": "Titre",
+            "description_label": "Description",
+            "update_button": "Modifier",
+            "delete_button": "Supprimer"
+        },
+        "confirm_delete": "Êtes-vous sûr de vouloir supprimer cet objectif ?"
+    },
+    "certificate": {
+        "boolean_no_value": "Non",
+        "boolean_yes_value": "Oui"
     },
     "languages_code": {
         "aa": "Afar",

@@ -6,18 +6,25 @@ import Profile from '../../../domain/entities/Profile';
 import Goal from '../../../domain/entities/Goal';
 import { WritingSkillPng } from '../../../assets';
 import NetworkImage from '../NetworkImage';
-import { IonButton } from '@ionic/react';
+import { IonButton, IonIcon } from '@ionic/react';
+import CustomLearningGoal from '../../../domain/entities/CustomLearningGoal';
 
 interface LearningGoalCardProps {
     profile: Profile;
+    customLearningGoals?: CustomLearningGoal[];
     onShowAllGoalsPressed: () => void;
 }
 
-const LearningGoalCard: React.FC<LearningGoalCardProps> = ({ profile, onShowAllGoalsPressed }) => {
+const LearningGoalCard: React.FC<LearningGoalCardProps> = ({
+    profile,
+    customLearningGoals,
+    onShowAllGoalsPressed,
+}) => {
     const { t } = useTranslation();
+    const goalsCount = profile.goals.length + (customLearningGoals?.length ?? 0);
 
     return (
-        <LearningCard title={t('learning_goal.title', { count: profile.goals.length })}>
+        <LearningCard title={t('learning_goal.title', { count: goalsCount })}>
             <div className={styles.container}>
                 <ul className={styles.content}>
                     {profile.goals.map((goal: Goal) => (
@@ -32,6 +39,14 @@ const LearningGoalCard: React.FC<LearningGoalCardProps> = ({ profile, onShowAllG
                                 />
                             </div>
                             <p className={styles.goalName}>{goal.name}</p>
+                        </li>
+                    ))}
+                    {customLearningGoals?.map((customLearningGoal: CustomLearningGoal) => (
+                        <li key={customLearningGoal.id} role="listitem" className={styles.goalItem}>
+                            <div className={styles.customLearningGoalContainer}>
+                                <h3 className={styles.goalTitle}>{customLearningGoal.title}</h3>
+                                <p className={styles.goalDescription}>{customLearningGoal.description}</p>
+                            </div>
                         </li>
                     ))}
                 </ul>

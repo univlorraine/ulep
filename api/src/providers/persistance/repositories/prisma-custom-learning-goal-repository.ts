@@ -1,4 +1,5 @@
 import { PrismaService } from '@app/common';
+import { Injectable } from '@nestjs/common';
 import { CustomLearningGoal } from 'src/core/models';
 import {
   CreateCustomLearningGoalProps,
@@ -7,6 +8,7 @@ import {
 } from 'src/core/ports/custom-learning-goal.repository';
 import { customLearningGoalMapper } from '../mappers/customLearningGoal.mapper';
 
+@Injectable()
 export class PrismaCustomLearningGoalRepository
   implements CustomLearningGoalRepository
 {
@@ -28,7 +30,8 @@ export class PrismaCustomLearningGoalRepository
   ): Promise<CustomLearningGoal> {
     const customLearningGoal = await this.prisma.customLearningGoals.create({
       data: {
-        ...props,
+        title: props.title,
+        description: props.description,
         LearningLanguage: {
           connect: { id: props.learningLanguageId },
         },
@@ -47,12 +50,17 @@ export class PrismaCustomLearningGoalRepository
     return customLearningGoalMapper(customLearningGoal);
   }
 
+  async delete(id: string): Promise<void> {
+    await this.prisma.customLearningGoals.delete({ where: { id } });
+  }
+
   async findAllByLearningLanguageId(
     learningLanguageId: string,
   ): Promise<CustomLearningGoal[]> {
     const customLearningGoals = await this.prisma.customLearningGoals.findMany({
       where: { learning_language_id: learningLanguageId },
     });
+
     return customLearningGoals.map(customLearningGoalMapper);
   }
 }

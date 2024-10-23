@@ -17,11 +17,13 @@ import PendingTandemCard from '../tandems/PendingTandemCard';
 import styles from './LearningContent.module.css';
 import LearningJournalCard from '../tandems/LearningJournalCard';
 import LearningGoalCard from '../tandems/LearningGoalCard';
+import { useStoreActions } from '../../../store/storeTypes';
 
 interface LearningContentProps {
     isLoading: boolean;
     profile: Profile;
     tandems: Tandem[];
+    currentTandem?: Tandem;
     onTandemPressed: (tandem: Tandem) => void;
     onValidatedTandemPressed: (tandem: Tandem) => void;
     onVocabularyListPressed: () => void;
@@ -33,6 +35,7 @@ const LearningContent: React.FC<LearningContentProps> = ({
     isLoading,
     profile,
     tandems,
+    currentTandem,
     onTandemPressed,
     onValidatedTandemPressed,
     onVocabularyListPressed,
@@ -41,7 +44,7 @@ const LearningContent: React.FC<LearningContentProps> = ({
 }) => {
     const { t } = useTranslation();
     const history = useHistory();
-    const [currentTandem, setCurrentTandem] = useState<Tandem>(tandems[0]);
+    const setCurrentTandem = useStoreActions((actions) => actions.setCurrentTandem);
 
     const openAddLearningLanguagePressed = () => {
         history.push('pairing/languages');
@@ -51,12 +54,9 @@ const LearningContent: React.FC<LearningContentProps> = ({
         console.log('openUniversityInfos');
     };
 
-    // WARNING: this useEffect is a workaround to avoid currentLearningLanguage being undefined sometimes
-    useEffect(() => {
-        if (tandems.length > 0) {
-            setCurrentTandem(tandems[0]);
-        }
-    }, [tandems]);
+    if (!currentTandem) {
+        return <Loader />;
+    }
 
     return (
         <div className={`${styles.content} content-wrapper`}>
@@ -69,9 +69,9 @@ const LearningContent: React.FC<LearningContentProps> = ({
                             key={tandem.id}
                             fill="clear"
                             className={`${styles.learningLanguage} ${
-                                tandem.id === currentTandem?.id ? styles.selectedLearningLanguage : ''
+                                tandem.id === currentTandem.id ? styles.selectedLearningLanguage : ''
                             }`}
-                            onClick={() => setCurrentTandem(tandem)}
+                            onClick={() => setCurrentTandem({ tandem })}
                         >
                             <p>{t(`languages_code.${tandem.learningLanguage.code}`)}</p>
                         </IonButton>
@@ -94,7 +94,7 @@ const LearningContent: React.FC<LearningContentProps> = ({
             ) : (
                 <ResponsiveMasonry columnsCountBreakPoints={{ 300: 1, 1024: 2 }}>
                     <Masonry className={styles.masonery} gutter="20px">
-                        {currentTandem && currentTandem.status === 'ACTIVE' && (
+                        {currentTandem.status === 'ACTIVE' && (
                             <>
                                 <ActiveTandemCard
                                     tandem={currentTandem}
@@ -108,10 +108,10 @@ const LearningContent: React.FC<LearningContentProps> = ({
                                     <>
                                         <LearningJournalCard
                                             tandem={currentTandem}
-                                            onTandemPressed={() => onValidatedTandemPressed(currentTandem)}
                                         />
                                         <LearningGoalCard
                                             profile={profile}
+                                            customLearningGoals={currentTandem.learningLanguage?.customLearningGoals}
                                             onShowAllGoalsPressed={() => onShowAllGoalsPressed()}
                                         />
                                     </>
@@ -134,8 +134,8 @@ const LearningContent: React.FC<LearningContentProps> = ({
                             <ProficiencyTestCard
                                 testedLanguages={learningLanguagesToTestedLanguages(
                                     profile.learningLanguages,
-                                profile.testedLanguages,
-                                currentTandem?.learningLanguage.code
+                                    profile.testedLanguages,
+                                    currentTandem?.learningLanguage.code
                                 )}
                             />
                         )}

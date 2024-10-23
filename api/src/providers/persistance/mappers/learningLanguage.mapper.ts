@@ -9,7 +9,7 @@ import {
   TandemStatus,
 } from 'src/core/models';
 import { campusMapper } from './campus.mapper';
-import { CustomLearningGoalSnapshot } from './customLearningGoal.mapper';
+import { customLearningGoalMapper } from './customLearningGoal.mapper';
 import { languageMapper } from './language.mapper';
 import { profileMapper, ProfileSnapshot } from './profile.mapper';
 import { TextContentRelations } from './translation.mapper';
@@ -61,7 +61,7 @@ export type LearningLanguageSnapshot = Prisma.LearningLanguages & {
   Campus: Prisma.Places;
   TandemLanguage?: Prisma.LanguageCodes;
   CertificateFile?: Prisma.MediaObjects;
-  CustomLearningGoals: CustomLearningGoalSnapshot[];
+  CustomLearningGoals: Prisma.CustomLearningGoals[];
 };
 
 export const learningLanguageMapper = (
@@ -96,6 +96,9 @@ export const learningLanguageMapper = (
       }),
     tandemLanguage:
       instance.TandemLanguage && languageMapper(instance.TandemLanguage),
+    customLearningGoals:
+      instance.CustomLearningGoals &&
+      instance.CustomLearningGoals.map(customLearningGoalMapper),
   });
 };
 

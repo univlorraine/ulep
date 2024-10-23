@@ -168,18 +168,78 @@ export class GenerateCertificateUsecase {
       contactNameField.setText(`${contact.firstName} ${contact.lastName}`);
     }
 
+    const goalName1Field = form.getTextField('GoalName1');
+    goalName1Field.setText(
+      learningLanguage.customLearningGoals[0]
+        ? learningLanguage.customLearningGoals[0].title
+        : '',
+    );
+
+    const goalName2Field = form.getTextField('GoalName2');
+    goalName2Field.setText(
+      learningLanguage.customLearningGoals[1]
+        ? learningLanguage.customLearningGoals[1].title
+        : '',
+    );
+
+    const goalName3Field = form.getTextField('GoalName3');
+    goalName3Field.setText(
+      learningLanguage.customLearningGoals[2]
+        ? learningLanguage.customLearningGoals[2].title
+        : '',
+    );
+
+    const goalComment1Field = form.getTextField('GoalComment1');
+    goalComment1Field.setText(
+      learningLanguage.customLearningGoals[0]
+        ? learningLanguage.customLearningGoals[0].description
+        : '',
+    );
+
+    const goalComment2Field = form.getTextField('GoalComment2');
+    goalComment2Field.setText(
+      learningLanguage.customLearningGoals[1]
+        ? learningLanguage.customLearningGoals[1].description
+        : '',
+    );
+
+    const goalComment3Field = form.getTextField('GoalComment3');
+    goalComment3Field.setText(
+      learningLanguage.customLearningGoals[2]
+        ? learningLanguage.customLearningGoals[2].description
+        : '',
+    );
+
+    const checkboxYesValue: string = this.i18n.translate(
+      'certificate.boolean_no_value',
+      {
+        lng: learningLanguage.profile.user.university.nativeLanguage.code,
+        ns: this.translationNamespace,
+      },
+    ) as string;
+
+    const checkboxNoValue: string = this.i18n.translate(
+      'certificate.boolean_no_value',
+      {
+        lng: learningLanguage.profile.user.university.nativeLanguage.code,
+        ns: this.translationNamespace,
+      },
+    ) as string;
+
     const learningJournalBooleanField = form.getTextField(
       'LearningJournalBoolean',
     );
-    // TODO: translate 'Oui' and 'Non' with i18n
-    learningJournalBooleanField.setText(learningJournal ? 'Oui' : 'Non');
+
+    learningJournalBooleanField.setText(
+      learningJournal ? checkboxYesValue : checkboxNoValue,
+    );
 
     const consultingInterviewBooleanField = form.getTextField(
       'ConsultingInterviewBoolean',
     );
-    // TODO: translate 'Oui' and 'Non' with i18n
+
     consultingInterviewBooleanField.setText(
-      consultingInterview ? 'Oui' : 'Non',
+      consultingInterview ? checkboxYesValue : checkboxNoValue,
     );
 
     // TODO: Add visio time from learningLanguage.visioTime with learningJournal

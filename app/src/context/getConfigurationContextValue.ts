@@ -18,12 +18,14 @@ import AskForLanguageUsecase from '../domain/usecases/AskForLanguageUsecase';
 import AskForLearningLanguageUsecase from '../domain/usecases/AskForLearningLanguageUsecase';
 import { GetInitialUrlUsecase, GetTokenFromCodeUsecase } from '../domain/usecases/AuthStandardFlow';
 import CancelSessionUsecase from '../domain/usecases/CancelSessionUsecase';
+import CreateCustomLearningGoalUsecase from '../domain/usecases/CreateCustomLearningGoalUsecase';
 import CreateOrUpdateTestedLanguageUsecase from '../domain/usecases/CreateOrUpdateTestedLanguageUsecase';
 import CreateProfileUsecase from '../domain/usecases/CreateProfileUsecase';
 import CreateReportMessageUsecase from '../domain/usecases/CreateReportMessageUsecase';
 import CreateReportUsecase from '../domain/usecases/CreateReportUsecase';
 import CreateSessionUsecase from '../domain/usecases/CreateSessionUsecase';
 import CreateUserUsecase from '../domain/usecases/CreateUserUsecase';
+import DeleteCustomLearningGoalUsecase from '../domain/usecases/DeleteCustomLearningGoalUsecase';
 import EditProfileUsecase from '../domain/usecases/EditProfileUsecase';
 import EditUserUsecase from '../domain/usecases/EditUserUsecase';
 import GetAllCountriesUsecase from '../domain/usecases/GetAllCountriesUsecase';
@@ -57,6 +59,7 @@ import RevokeSessionsUsecase from '../domain/usecases/RevokeSessionsUsecase';
 import SearchMessagesIdsFromConversationUsecase from '../domain/usecases/SearchMessagesIdsFromConversationUsecase';
 import SendMessageUsecase from '../domain/usecases/SendMessageUsecase';
 import UpdateAvatarUsecase from '../domain/usecases/UpdateAvatarUsecase';
+import UpdateCustomLearningGoalUsecase from '../domain/usecases/UpdateCustomLearningGoalUsecase';
 import UpdateNotificationPermissionUsecase from '../domain/usecases/UpdateNotificationPermissionUsecase';
 import UpdateSessionUsecase from '../domain/usecases/UpdateSessionUsecase';
 import CreateVocabularyListUsecase from '../domain/usecases/vocabulary/CreateVocabularyListUsecase';
@@ -198,6 +201,10 @@ const getConfigContextValue = ({
     const getAllReportCategories = new GetAllReportCategoriesUsecase(domainHttpAdapter);
     const getAllReports = new GetAllReportsUsecase(domainHttpAdapter);
     const getReport = new GetReportUsecase(domainHttpAdapter);
+    // Custom Learning Goal
+    const createCustomLearningGoal = new CreateCustomLearningGoalUsecase(domainHttpAdapter);
+    const updateCustomLearningGoal = new UpdateCustomLearningGoalUsecase(domainHttpAdapter);
+    const deleteCustomLearningGoal = new DeleteCustomLearningGoalUsecase(domainHttpAdapter);
 
     return {
         accessToken,
@@ -272,6 +279,9 @@ const getConfigContextValue = ({
         getAllNews,
         updateReportStatus,
         getReport,
+        createCustomLearningGoal,
+        updateCustomLearningGoal,
+        deleteCustomLearningGoal,
     };
 };
 

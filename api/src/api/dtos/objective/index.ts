@@ -142,11 +142,6 @@ export class CreateCustomLearningGoalRequest {
 }
 
 export class UpdateCustomLearningGoalRequest {
-  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
-  @IsString()
-  @IsNotEmpty()
-  id: string;
-
   @Swagger.ApiProperty({ type: 'string' })
   @IsString()
   @IsNotEmpty()

@@ -22,12 +22,14 @@ import GetConversationsUsecaseInterface from '../domain/interfaces/chat/GetConve
 import GetMessagesFromConversationUsecaseInterface from '../domain/interfaces/chat/GetMessagesFromConversationUsecase.interface';
 import SearchMessagesIdsFromConversationUsecaseInterface from '../domain/interfaces/chat/SearchMessagesIdsFromConversationUsecase.interface';
 import SendMessageUsecaseInterface from '../domain/interfaces/chat/SendMessageUsecase.interface';
+import CreateCustomLearningGoalUsecaseInterface from '../domain/interfaces/CreateCustomLearningGoal.interface';
 import CreateOrUpdateTestedLanguageUsecaseInterface from '../domain/interfaces/CreateOrUpdateTestedLanguageUsecase.interface';
 import CreateProfileUsecaseInterface from '../domain/interfaces/CreateProfileUsecase.interface';
 import CreateReportMessageUsecaseInterface from '../domain/interfaces/CreateReportMessageUsecase.interface';
 import CreateReportUsecaseInterface from '../domain/interfaces/CreateReportUsecase.interface';
 import CreateSessionUsecaseInterface from '../domain/interfaces/CreateSessionUsecase.interface';
 import CreateUserUsecaseInterface from '../domain/interfaces/CreateUserUsecase.interface';
+import DeleteCustomLearningGoalUsecaseInterface from '../domain/interfaces/DeleteCustomLearningGoalUsecae.interface';
 import EditProfileUsecaseInterface from '../domain/interfaces/EditProfileUsecase.interface';
 import EditUserUsecaseInterface from '../domain/interfaces/EditUserUsecase.interface';
 import GetAllCountriesUsecaseInterface from '../domain/interfaces/GetAllCountriesUsecase.interface';
@@ -57,6 +59,7 @@ import ResetPasswordUsecaseInterface from '../domain/interfaces/ResetPasswordUse
 import RetrievePersonInfoUsecaseInterface from '../domain/interfaces/RetrievePersonInfoUsecase.interface';
 import RevokeSessionsUsecaseInterface from '../domain/interfaces/RevokeSessionsUsecase.interface';
 import UpdateAvatarUsecaseInterface from '../domain/interfaces/UpdateAvatarUsecase.interface';
+import UpdateCustomLearningGoalUsecaseInterface from '../domain/interfaces/UpdateCustomLearningGoal.interface';
 import UpdateNotificationPermissionUsecaseInterface from '../domain/interfaces/UpdateNotificationPermissionUsecase.interface';
 import UpdateSessionUsecaseInterface from '../domain/interfaces/UpdateSessionUsecase.interface';
 import CreateVocabularyListUsecaseInterface from '../domain/interfaces/vocabulary/CreateVocabularyListUsecase.interface';
@@ -148,4 +151,8 @@ export interface ConfigContextValueType {
     getAllReportCategories: GetAllReportCategoriesUsecaseInterface;
     getAllReports: GetAllReportsUsecaseInterface;
     getReport: GetReportUsecaseInterface;
+    // Custom goal
+    createCustomLearningGoal: CreateCustomLearningGoalUsecaseInterface;
+    updateCustomLearningGoal: UpdateCustomLearningGoalUsecaseInterface;
+    deleteCustomLearningGoal: DeleteCustomLearningGoalUsecaseInterface;
 }

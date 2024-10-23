@@ -22,20 +22,24 @@ import {
   DeleteObjectiveImageUsecase,
   UploadObjectiveImageUsecase,
 } from 'src/core/usecases/media';
+import { CreateCustomLearningGoalUsecase } from 'src/core/usecases/objective/create-custom-learning-goals.usecase';
+import { DeleteCustomLearningGoalUsecase } from 'src/core/usecases/objective/delete-custom-learning-goal.usecase';
+import { UpdateCustomLearningGoalUsecase } from 'src/core/usecases/objective/update-custom-learning-goal.usecase';
 import {
   CreateObjectiveUsecase,
   DeleteObjectiveUsecase,
   FindAllObjectiveUsecase,
-  FindCustomLearningGoalsUsecase,
   FindOneObjectiveUsecase,
   UpdateObjectiveUsecase,
 } from '../../core/usecases/objective';
 import { Role, Roles } from '../decorators/roles.decorator';
 import {
+  CreateCustomLearningGoalRequest,
   CreateObjectiveRequest,
   CustomLearningGoalResponse,
   GetObjectiveResponse,
   ObjectiveResponse,
+  UpdateCustomLearningGoalRequest,
   UpdateObjectiveRequest,
 } from '../dtos/objective';
 import { AuthenticationGuard } from '../guards';
@@ -53,7 +57,9 @@ export class ObjectiveController {
     private readonly deleteObjectiveUsecase: DeleteObjectiveUsecase,
     private readonly updateObjectiveUsecase: UpdateObjectiveUsecase,
     private readonly uploadObjectiveImageUsecase: UploadObjectiveImageUsecase,
-    private readonly findCustomLearningGoalsUsecase: FindCustomLearningGoalsUsecase,
+    private readonly createCustomLearningGoalUsecase: CreateCustomLearningGoalUsecase,
+    private readonly updateCustomLearningGoalUsecase: UpdateCustomLearningGoalUsecase,
+    private readonly deleteCustomLearningGoalUsecase: DeleteCustomLearningGoalUsecase,
     env: ConfigService<Env, true>,
   ) {
     this.#defaultLanguageCode = env.get<string>('DEFAULT_TRANSLATION_LANGUAGE');
@@ -153,17 +159,38 @@ export class ObjectiveController {
     return ObjectiveResponse.fromDomain(objective);
   }
 
-  @Get('custom-learning-goals/:learningLanguageId')
+  @Post('custom-learning-goals')
+  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
-  @Swagger.ApiOperation({
-    summary: 'Custom learning goals for a specific learning language.',
-  })
-  @Swagger.ApiOkResponse({ type: CustomLearningGoalResponse, isArray: true })
-  async findCustomLearningGoals(
-    @Param('learningLanguageId', ParseUUIDPipe) learningLanguageId: string,
+  async createCustomLearningGoal(
+    @Body() body: CreateCustomLearningGoalRequest,
   ) {
-    const learningGoals =
-      await this.findCustomLearningGoalsUsecase.execute(learningLanguageId);
-    return learningGoals.map(CustomLearningGoalResponse.fromDomain);
+    const customLearningGoals =
+      await this.createCustomLearningGoalUsecase.execute(body);
+
+    return customLearningGoals.map(CustomLearningGoalResponse.fromDomain);
+  }
+
+  @Put('custom-learning-goals/:id')
+  @Roles(Role.ADMIN)
+  @UseGuards(AuthenticationGuard)
+  async updateCustomLearningGoal(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() body: UpdateCustomLearningGoalRequest,
+  ) {
+    const customLearningGoals =
+      await this.updateCustomLearningGoalUsecase.execute(id, body);
+
+    return customLearningGoals.map(CustomLearningGoalResponse.fromDomain);
+  }
+
+  @Delete('custom-learning-goals/:id')
+  @Roles(Role.ADMIN)
+  @UseGuards(AuthenticationGuard)
+  async deleteCustomLearningGoal(@Param('id', ParseUUIDPipe) id: string) {
+    const customLearningGoals =
+      await this.deleteCustomLearningGoalUsecase.execute(id);
+
+    return customLearningGoals.map(CustomLearningGoalResponse.fromDomain);
   }
 }

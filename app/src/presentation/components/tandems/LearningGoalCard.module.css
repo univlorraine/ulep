@@ -25,6 +25,24 @@
     width: 100%;
 }
 
+.customLearningGoalContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    width: 100%;
+    padding: 20px;
+}
+
+.goalTitle {
+    font-size: 17px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.goalDescription {
+    margin: 5px 0;
+}
+
 .image {
     height: 50px;
     width: 50px;

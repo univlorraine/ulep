@@ -44,6 +44,7 @@ export const ProfilesRelations = {
       Tandem: true,
       Campus: true,
       CertificateFile: true,
+      CustomLearningGoals: true,
     },
   },
 };

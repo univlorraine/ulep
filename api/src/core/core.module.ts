@@ -71,7 +71,6 @@ import {
   FindAllVocabularyFromListIdUsecase,
   FindAllVocabularyFromSelectedListsIdUsecase,
   FindAllVocabularyListUsecase,
-  FindCustomLearningGoalsUsecase,
   FindOneObjectiveUsecase,
   GenerateCertificateUsecase,
   GenerateConversationsUsecase,
@@ -173,6 +172,9 @@ import { DeleteLearningLanguageUsecase } from './usecases/learningLanguage/delet
 import { GetLearningLanguageTandemUsecase } from './usecases/learningLanguage/getLearningLanguageTandem.usecase';
 import { UploadInstanceDefaultCertificateUsecase } from './usecases/media/upload-instance-default-certificate.usecase';
 import { UploadUniversityDefaultCertificateUsecase } from './usecases/media/upload-university-default-certificate.usecase';
+import { CreateCustomLearningGoalUsecase } from './usecases/objective/create-custom-learning-goals.usecase';
+import { DeleteCustomLearningGoalUsecase } from './usecases/objective/delete-custom-learning-goal.usecase';
+import { UpdateCustomLearningGoalUsecase } from './usecases/objective/update-custom-learning-goal.usecase';
 import { ArchiveTandemsAndDeleteUsersUsecase } from './usecases/purges/archive-tandems.usecase';
 import { GetReportsByUserUsecase } from './usecases/report/get-reports-by-user.usecase';
 import { LogoutAllSessionsUsecase } from './usecases/security/logout-all-sessions.usecase';
@@ -385,7 +387,9 @@ const usecases: Provider[] = [
   SubscribeToEventUsecase,
   UnsubscribeToEventUsecase,
   // Custom Learning Goals
-  FindCustomLearningGoalsUsecase,
+  CreateCustomLearningGoalUsecase,
+  UpdateCustomLearningGoalUsecase,
+  DeleteCustomLearningGoalUsecase,
 ];
 
 const services: Provider[] = [MatchScorer, CronService];
