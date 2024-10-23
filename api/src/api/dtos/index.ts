@@ -1,5 +1,6 @@
 export * from './activity';
 export * from './countries';
+export * from './events';
 export * from './interests';
 export * from './language-code';
 export * from './languages';
