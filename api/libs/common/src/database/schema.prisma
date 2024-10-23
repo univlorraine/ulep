@@ -696,6 +696,7 @@ model News {
   content_text_content_id String
   university_id           String
   image_id                String? @unique
+  credit_image            String?
   status                  String  @default("DRAFT")
   start_publication_date  DateTime
   end_publication_date    DateTime
