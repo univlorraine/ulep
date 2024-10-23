@@ -148,6 +148,7 @@ import {
   UploadAudioVocabularyActivityUsecase,
   UploadAudioVocabularyUsecase,
   UploadAvatarUsecase,
+  UploadEventImageUsecase,
   UploadImageActivityUsecase,
   UploadLearningLanguageCertificateUsecase,
   UploadMediaActivityUsecase,
@@ -155,6 +156,15 @@ import {
   UploadUniversityImageUsecase,
 } from './usecases';
 import { UpdateActivityStatusUsecase } from './usecases/activity/update-activity-status.usecase';
+import {
+  CreateEventUsecase,
+  DeleteEventUsecase,
+  GetEventsUsecase,
+  GetEventUsecase,
+  SubscribeToEventUsecase,
+  UnsubscribeToEventUsecase,
+  UpdateEventUsecase,
+} from './usecases/event';
 import { GetJitsiTokenUsecase } from './usecases/jitsi/get-jitsi-token.usecase';
 import { DeleteLearningLanguageUsecase } from './usecases/learningLanguage/delete-learning-langugage.usecase';
 import { GetLearningLanguageTandemUsecase } from './usecases/learningLanguage/getLearningLanguageTandem.usecase';
@@ -234,6 +244,7 @@ const usecases: Provider[] = [
   UploadInstanceDefaultCertificateUsecase,
   UploadUniversityDefaultCertificateUsecase,
   UploadLearningLanguageCertificateUsecase,
+  UploadEventImageUsecase,
   // News
   GetNewsUsecase,
   GetOneNewsUsecase,
@@ -358,6 +369,14 @@ const usecases: Provider[] = [
   CreateSessionUsecase,
   GetSessionsForProfileUsecase,
   UpdateSessionUsecase,
+  // Event
+  CreateEventUsecase,
+  DeleteEventUsecase,
+  GetEventsUsecase,
+  GetEventUsecase,
+  UpdateEventUsecase,
+  SubscribeToEventUsecase,
+  UnsubscribeToEventUsecase,
 ];
 
 const services: Provider[] = [MatchScorer, CronService];

@@ -38,6 +38,7 @@ import { VocabularyController } from 'src/api/controllers/vocabulary.controller'
 import { NewsController } from './controllers/news.controller';
 import { ActivityController } from 'src/api/controllers/activity.controller';
 import { SessionController } from './controllers/session.controller';
+import { EventsController } from './controllers/events.controller';
 
 @Module({
   imports: [CoreModule, TerminusModule, HttpModule, ConfigModule],
@@ -68,6 +69,7 @@ import { SessionController } from './controllers/session.controller';
     UniversityConnectorController,
     VocabularyController,
     SessionController,
+    EventsController,
   ],
   providers: [
     PrismaService,

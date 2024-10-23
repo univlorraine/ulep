@@ -7,11 +7,13 @@ import { CHAT_SERVICE } from 'src/core/ports/chat.service';
 import { CONTACT_REPOSITORY } from 'src/core/ports/contact.repository';
 import { COUNTRY_REPOSITORY } from 'src/core/ports/country.repository';
 import { EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
+import { EVENT_REPOSITORY } from 'src/core/ports/event.repository';
 import { INSTANCE_REPOSITORY } from 'src/core/ports/instance.repository';
 import { INTEREST_REPOSITORY } from 'src/core/ports/interest.repository';
 import { LANGUAGE_REPOSITORY } from 'src/core/ports/language.repository';
 import { LEARNING_LANGUAGE_REPOSITORY } from 'src/core/ports/learning-language.repository';
 import { MEDIA_OBJECT_REPOSITORY } from 'src/core/ports/media-object.repository';
+import { NEWS_REPOSITORY } from 'src/core/ports/news.repository';
 import { NOTIFICATION_GATEWAY } from 'src/core/ports/notification.gateway';
 import { OBJECTIVE_REPOSITORY } from 'src/core/ports/objective.repository';
 import { PDF_SERVICE } from 'src/core/ports/pdf.service';
@@ -42,10 +44,12 @@ import { ChatService } from 'src/providers/services/chat.service';
 import { PdfService } from 'src/providers/services/pdf.service';
 import { SmtpEmailGateway } from './gateway/smtp-email.gateway';
 import { PrismaCountryCodeRepository } from './persistance/repositories/prisma-country.repository';
+import { PrismaEventRepository } from './persistance/repositories/prisma-events.repository';
 import { PrismaInterestRepository } from './persistance/repositories/prisma-interest.repository';
 import { PrismaLanguageRepository } from './persistance/repositories/prisma-language.repository';
 import { PrismaLearningLanguageRepository } from './persistance/repositories/prisma-learning-language-repository';
 import { PrismaMediaObjectRepository } from './persistance/repositories/prisma-media-object-repository';
+import { PrismaNewsRepository } from './persistance/repositories/prisma-news-repository';
 import { PrismaObjectiveRepository } from './persistance/repositories/prisma-objective.repository';
 import { PrismaProficiencyRepository } from './persistance/repositories/prisma-proficiency.repository';
 import { PrismaProfileRepository } from './persistance/repositories/prisma-profile-repository';
@@ -59,8 +63,6 @@ import { PrismaUniversityRepository } from './persistance/repositories/prisma-un
 import { PrismaUserRepository } from './persistance/repositories/prisma-user.repository';
 import { UuidProvider } from './services/uuid.provider';
 import { MinioStorage } from './storage/minio.storage';
-import { NEWS_REPOSITORY } from 'src/core/ports/news.repository';
-import { PrismaNewsRepository } from './persistance/repositories/prisma-news-repository';
 
 const providers: Provider[] = [
   { provide: INSTANCE_REPOSITORY, useClass: PrismaInstanceRepository },
@@ -179,6 +181,10 @@ const providers: Provider[] = [
   {
     provide: SESSION_REPOSITORY,
     useClass: PrismaSessionRepository,
+  },
+  {
+    provide: EVENT_REPOSITORY,
+    useClass: PrismaEventRepository,
   },
 ];
 

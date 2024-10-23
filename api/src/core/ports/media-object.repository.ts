@@ -7,6 +7,7 @@ import {
   University,
   User,
 } from '../models';
+import { EventObject } from '../models/event.model';
 import { Instance } from '../models/Instance.model';
 
 export const MEDIA_OBJECT_REPOSITORY = 'media-object.repository';
@@ -60,6 +61,8 @@ export interface MediaObjectRepository {
   ) => Promise<void>;
 
   saveNewsImage: (news: News, object: MediaObject) => Promise<void>;
+
+  saveEventImage: (event: EventObject, object: MediaObject) => Promise<void>;
 
   findOne(id: string): Promise<MediaObject | null>;
 
