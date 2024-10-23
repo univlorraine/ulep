@@ -357,7 +357,6 @@ export class ActivityController {
 
   @Put(':id/status')
   @UseGuards(AuthenticationGuard)
-  @UseInterceptors(AnyFilesInterceptor())
   @Swagger.ApiOperation({ summary: 'Update a Activity status ressource.' })
   @Swagger.ApiOkResponse({ type: () => ActivityResponse })
   async updateActivityStatus(

@@ -9,6 +9,7 @@ import {
   User,
 } from 'src/core/models';
 import { Activity } from 'src/core/models/activity.model';
+import { EventObject } from 'src/core/models/event.model';
 import { Instance } from 'src/core/models/Instance.model';
 import { MediaObjectRepository } from 'src/core/ports/media-object.repository';
 
@@ -338,6 +339,23 @@ export class PrismaMediaObjectRepository implements MediaObjectRepository {
         LearningLanguageCertificateFile: {
           connect: {
             id: learningLanguage.id,
+          },
+        },
+      },
+    });
+  }
+
+  async saveEventImage(event: EventObject, object: MediaObject): Promise<void> {
+    await this.prisma.mediaObjects.create({
+      data: {
+        id: object.id,
+        name: object.name,
+        bucket: object.bucket,
+        mime: object.mimetype,
+        size: object.size,
+        Event: {
+          connect: {
+            id: event.id,
           },
         },
       },

@@ -69,7 +69,8 @@ model LanguageCodes {
   NativeLanguageOrganizations          Organizations[]    @relation("NativeLanguageOrganizations")
   OriginalVocabularyList VocabularyList[] @relation("OriginalLanguage")
   TranslationVocabularyList VocabularyList[] @relation("TranslationLanguage")
-  Activities Activity[]
+  Activities             Activity[]
+  Events                 Events[] @relation("DiffusionLanguages")
 
   @@unique([name])
   @@unique([code])
@@ -116,7 +117,9 @@ model Organizations {
   Contact               Contacts?      @relation(fields: [default_contact_id], references: [id])
   DefaultCertificateFile MediaObjects? @relation("UniversitiesDefaultCertificateFile", fields: [default_certificate_file_id], references: [id])
   Activities            Activity[]
-  News                       News[]
+  News                  News[]
+  EventsConcernedUniversities   Events[] @relation("ConcernedUniversities")
+  EventsAuthorUniversity  Events[] @relation("AuthorUniversity")
 
   @@unique([name])
   @@map("organizations")
@@ -221,14 +224,15 @@ model MediaObjects {
   University Organizations? @relation("UniversitiesImage")
   PronunciationWord Vocabulary? @relation("PronunciationWord")
   PronunciationTranslation Vocabulary? @relation("PronunciationTranslation")
-  Activity Activity? @relation("Image")
+  Activity   Activity? @relation("Image")
   ActivityRessourceFile Activity? @relation("RessourceFile")
   ActivityVocabulary ActivityVocabulary?
   InstanceDefaultCertificateFile Instance?
   UniversitiesDefaultCertificateFile Organizations? @relation("UniversitiesDefaultCertificateFile")
   News       News?
   LearningLanguageCertificateFile LearningLanguages? @relation("LearningLanguageCertificateFile")
-  
+  Event      Events?
+
   @@unique([name, bucket])
   @@map("media_objects")
 }
@@ -251,6 +255,8 @@ model TextContent {
   Translations         Translations[]
   NewsTitle            News[] @relation("NewsTitleTextContent")
   NewsContent          News[] @relation("NewsContentTextContent")
+  EventTitle           Events[] @relation("EventTitleTextContent")
+  EventContent         Events[] @relation("EventContentTextContent")
   ActivityThemes       ActivityThemes?
   ActivityThemesCategories ActivityThemeCategories?
 
@@ -357,7 +363,9 @@ model Profiles {
   Interests         Interests[]
   CreatorVocabularyList    VocabularyList[] @relation("Creator")
   EditorVocabularyList    VocabularyList[]  @relation("Editor")
-  Activities Activity[]
+  Activities        Activity[]
+  Events            Events[]
+
   @@unique([user_id])
   @@index([native_language_code_id], name: "native_language_code")
   @@map("profiles")
@@ -683,21 +691,20 @@ model ActivityExercises {
 //  * ****************************************************
 
 model News {
-  id         String   @id @default(uuid())
-  title_text_content_id String
+  id                      String   @id @default(uuid())
+  title_text_content_id   String
   content_text_content_id String
-  university_id String
-  image_id String? @unique
-  credit_image String?
-  status String @default("DRAFT")
-  start_publication_date DateTime
-  end_publication_date DateTime
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  Organization Organizations @relation(fields: [university_id], references: [id], onDelete: Cascade)
-  Image MediaObjects? @relation(fields: [image_id], references: [id])
-  TitleTextContent     TextContent   @relation("NewsTitleTextContent", fields: [title_text_content_id], references: [id], onDelete: Cascade)
-  ContentTextContent     TextContent   @relation("NewsContentTextContent", fields: [content_text_content_id], references: [id], onDelete: Cascade)
+  university_id           String
+  image_id                String? @unique
+  status                  String  @default("DRAFT")
+  start_publication_date  DateTime
+  end_publication_date    DateTime
+  created_at              DateTime @default(now())
+  updated_at              DateTime @updatedAt
+  Organization            Organizations @relation(fields: [university_id], references: [id], onDelete: Cascade)
+  Image                   MediaObjects? @relation(fields: [image_id], references: [id])
+  TitleTextContent        TextContent   @relation("NewsTitleTextContent", fields: [title_text_content_id], references: [id], onDelete: Cascade)
+  ContentTextContent      TextContent   @relation("NewsContentTextContent", fields: [content_text_content_id], references: [id], onDelete: Cascade)
 }
 
 //  * ****************************************************
@@ -715,4 +722,38 @@ model Sessions {
   Tandem       Tandems   @relation(fields: [tandem_id], references: [id], onDelete: Cascade)
 
   @@map("sessions")
+}
+
+//  * ****************************************************
+//  * EVENTS
+//  * ****************************************************
+
+model Events {
+  id                      String   @id @default(uuid())
+  title_text_content_id   String
+  content_text_content_id String
+  university_id           String
+  image_id                String? @unique
+  image_credit            String?
+  status                  String  @default("DRAFT")
+  start_date              DateTime
+  end_date                DateTime
+  type                    String
+  event_url               String?
+  address                 String?
+  address_name            String?
+  deep_link               String?
+  with_subscription       Boolean @default(false)
+  created_at              DateTime @default(now())
+  updated_at              DateTime @updatedAt
+
+  SubscribedProfiles      Profiles[]
+  DiffusionLanguages      LanguageCodes[] @relation("DiffusionLanguages")
+  ConcernedUniversities   Organizations[] @relation("ConcernedUniversities")
+  AuthorUniversity        Organizations @relation("AuthorUniversity", fields: [university_id], references: [id], onDelete: Cascade)
+  Image                   MediaObjects? @relation(fields: [image_id], references: [id])
+  TitleTextContent        TextContent   @relation("EventTitleTextContent", fields: [title_text_content_id], references: [id], onDelete: Cascade)
+  ContentTextContent      TextContent   @relation("EventContentTextContent", fields: [content_text_content_id], references: [id], onDelete: Cascade)
+
+  @@map("events")
 }
