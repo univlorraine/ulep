@@ -46,6 +46,10 @@ export class ProfileQueryFilter extends PaginationDto {
   @IsOptional()
   notSubscribedToEvent?: string;
 
+  @ApiPropertyOptional({ type: 'string' })
+  @IsOptional()
+  subscribedToEvent?: string;
+
   @ApiPropertyOptional({
     type: 'string',
     enum: ['email', 'firstname', 'lastname', 'role', 'university'],

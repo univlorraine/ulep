@@ -233,7 +233,8 @@ const customDataProvider = {
                 url.search = EventsQuery(params);
                 break;
             case 'events/subscriptions':
-                url = new URL(`${process.env.REACT_APP_API_URL}/profiles/events/${params.filter.eventId}`);
+                url = new URL(`${process.env.REACT_APP_API_URL}/profiles`);
+                url.search = ProfilesQuery(params);
                 break;
             case 'profiles':
                 url.search = ProfilesQuery(params);

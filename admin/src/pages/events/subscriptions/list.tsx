@@ -10,10 +10,16 @@ import {
     useDataProvider,
     useRefresh,
     useUnselectAll,
+    SelectInput,
+    TextInput,
+    ReferenceInput,
+    FunctionField,
 } from 'react-admin';
 import { useNavigate } from 'react-router-dom';
 import PageTitle from '../../../components/PageTitle';
 import { EventObject } from '../../../entities/Event';
+import { Profile } from '../../../entities/Profile';
+import { UserRole } from '../../../entities/User';
 import SearchProfile from './SearchProfile';
 
 interface BulkActionButtonProps {
@@ -45,6 +51,37 @@ const EventsSubscriptionsList = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const eventId = window.location.hash.split('/').slice(-1)[0].split('?')[0];
+
+    const filters = [
+        <SelectInput
+            key="role"
+            choices={Object.values(UserRole).map((role) => ({
+                id: role,
+                name: translate(`global.${role.toLowerCase()}`),
+            }))}
+            label={translate('global.role')}
+            source="user.role"
+            alwaysOn
+        />,
+        <TextInput key="firstname" label={translate('global.firstname')} source="user.firstname" alwaysOn />,
+        <TextInput key="lastname" label={translate('global.lastname')} source="user.lastname" alwaysOn />,
+        <TextInput key="email" label={translate('global.email')} source="user.email" alwaysOn />,
+    ];
+
+    if (identity?.isCentralUniversity) {
+        filters.push(
+            <ReferenceInput
+                key="university"
+                label={translate('global.university')}
+                reference="universities"
+                sort={{ field: 'name', order: 'ASC' }}
+                source="user.university"
+                alwaysOn
+            >
+                <SelectInput label={translate('global.university')} optionText="name" optionValue="id" />
+            </ReferenceInput>
+        );
+    }
 
     useEffect(() => {
         const fetchEvent = async () => {
@@ -83,8 +120,9 @@ const EventsSubscriptionsList = () => {
                 <List
                     exporter={false}
                     filter={{
-                        eventId,
+                        subscribedToEvent: eventId,
                     }}
+                    filters={filters}
                 >
                     <Datagrid
                         bulkActionButtons={<BulkActionButton eventId={eventId} />}
@@ -95,6 +133,11 @@ const EventsSubscriptionsList = () => {
                             return false;
                         }}
                     >
+                        <FunctionField
+                            label={translate('global.role')}
+                            render={(record: Profile) => translate(`global.${record.user.role.toLowerCase()}`)}
+                            source="user.role"
+                        />
                         <TextField label="events.subscriptions.list.firstname" source="user.firstname" />
                         <TextField label="events.subscriptions.list.lastname" source="user.lastname" />
                         <TextField label="events.subscriptions.list.university" source="user.university.name" />

@@ -34,6 +34,7 @@ export interface ProfileQueryWhere {
   masteredLanguageCode?: string;
   nativeLanguageCode?: string;
   notSubscribedToEvent?: string;
+  subscribedToEvent?: string;
 }
 
 export interface ProfileWithTandemsProfilesQueryWhere {
@@ -79,8 +80,4 @@ export interface ProfileRepository {
   ) => Promise<Collection<ProfileWithTandemsProfiles>>;
 
   delete: (profile: Profile) => Promise<void>;
-
-  getProfilesSubscribedToEvent: (
-    eventId: string,
-  ) => Promise<Collection<Profile>>;
 }

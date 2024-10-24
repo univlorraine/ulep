@@ -16,6 +16,7 @@ export interface ProfilesParams {
         nativeLanguageCode?: string;
         university?: string;
         notSubscribedToEvent?: string;
+        subscribedToEvent?: string;
     };
     pagination: {
         page: string;
@@ -56,6 +57,7 @@ const ProfilesQuery = (params: ProfilesParams): string => {
         masteredLanguageCode: params.filter.masteredLanguageCode,
         nativeLanguageCode: params.filter.nativeLanguageCode,
         notSubscribedToEvent: params.filter.notSubscribedToEvent,
+        subscribedToEvent: params.filter.subscribedToEvent,
         page: params.pagination.page,
         limit: params.pagination.perPage,
         field: handleOrderField(params.sort.field),

@@ -69,16 +69,22 @@ const SearchProfile = ({ eventId, setIsModalOpen }: SearchProfileProps) => {
         <TextInput key="firstname" label={translate('global.firstname')} source="user.firstname" alwaysOn />,
         <TextInput key="lastname" label={translate('global.lastname')} source="user.lastname" alwaysOn />,
         <TextInput key="email" label={translate('global.email')} source="user.email" alwaysOn />,
-        <ReferenceInput
-            key="university"
-            label={translate('global.university')}
-            reference="universities"
-            source="user.university"
-            alwaysOn
-        >
-            <SelectInput label={translate('global.university')} optionText="name" optionValue="id" />
-        </ReferenceInput>,
     ];
+
+    if (identity?.isCentralUniversity) {
+        filters.push(
+            <ReferenceInput
+                key="university"
+                label={translate('global.university')}
+                reference="universities"
+                sort={{ field: 'name', order: 'ASC' }}
+                source="user.university"
+                alwaysOn
+            >
+                <SelectInput label={translate('global.university')} optionText="name" optionValue="id" />
+            </ReferenceInput>
+        );
+    }
 
     return (
         <Box sx={{ backgroundColor: 'white', padding: 5, margin: 10, borderRadius: 2 }}>
@@ -101,11 +107,11 @@ const SearchProfile = ({ eventId, setIsModalOpen }: SearchProfileProps) => {
                 >
                     <Datagrid
                         bulkActionButtons={<BulkActionButton eventId={eventId} setIsModalOpen={setIsModalOpen} />}
-                        /*                         rowClick={(_, __, record) => {
-                            window.open(`/profiles/${record.id}/show`, '_blank');
+                        rowClick={(_, __, record) => {
+                            window.open(`/#/profiles/${record.id}/show`, '_blank');
 
                             return false;
-                        }} */
+                        }}
                     >
                         <FunctionField
                             label={translate('global.role')}

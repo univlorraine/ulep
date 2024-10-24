@@ -5,7 +5,6 @@ export * from './delete-profile.usecase';
 export * from './get-profile-by-user-id.usecase';
 export * from './get-profile-with-tandems-profiles.usecase';
 export * from './get-profile.usecase';
-export * from './get-profiles-subscribed-to-event.usecase';
 export * from './get-profiles-with-tandems-profiles.usecase';
 export * from './get-profiles.usecase';
 export * from './update-profile.usecase';

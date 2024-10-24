@@ -65,13 +65,4 @@ export class InMemoryProfileRepository implements ProfileRepository {
   async delete(profile: Profile): Promise<void> {
     this.#profiles.delete(profile.id);
   }
-
-  async getProfilesSubscribedToEvent(
-    eventId: string,
-  ): Promise<Collection<Profile>> {
-    return {
-      items: [],
-      totalItems: 0,
-    };
-  }
 }

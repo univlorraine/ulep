@@ -61,6 +61,8 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
         record?.endDate ? new Date(record.endDate) : new Date(new Date().setHours(23, 59, 0, 0))
     );
 
+    const authorUniversityId = record?.authorUniversity?.id ?? identity?.universityId;
+
     // Diffusion languages
     const [diffusionLanguages, setDiffusionLanguages] = useState<string[]>(
         record?.diffusionLanguages?.map((language) => language.code) || []
@@ -79,19 +81,16 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
         const centralUniversity = universities.filter((university: University) => university.parent === null)[0];
         forcedConcernedUniversities.push(centralUniversity);
 
-        if (identity?.universityId !== centralUniversity.id) {
+        if (authorUniversityId !== centralUniversity.id) {
             forcedConcernedUniversities.push(
-                universities.filter((university: University) => university.id === identity?.universityId)[0]
+                universities.filter((university: University) => university.id === authorUniversityId)[0]
             );
         }
     }
-
     const [concernedUniversities, setConcernedUniversities] = useState<University[]>(
-        record?.concernedUniversities || forcedConcernedUniversities
+        record?.concernedUniversities ?? forcedConcernedUniversities
     );
     const [newConcernedUniversity, setNewConcernedUniversity] = useState<University>();
-
-    console.log({ concernedUniversities });
 
     useEffect(() => {
         async function fetchUniversityData(universityId: string) {
@@ -128,7 +127,7 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
             status,
             type,
             withSubscription,
-            authorUniversityId: record?.authorUniversity?.id ?? identity?.universityId,
+            authorUniversityId,
             startDate,
             endDate,
             image,

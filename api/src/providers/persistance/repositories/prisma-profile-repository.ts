@@ -140,6 +140,11 @@ export class PrismaProfileRepository implements ProfileRepository {
               none: { id: where.notSubscribedToEvent },
             },
           }),
+          ...(where.subscribedToEvent && {
+            Events: {
+              some: { id: where.subscribedToEvent },
+            },
+          }),
         }
       : {};
 
@@ -322,19 +327,5 @@ export class PrismaProfileRepository implements ProfileRepository {
 
   async delete(profile: Profile): Promise<void> {
     await this.prisma.profiles.delete({ where: { id: profile.id } });
-  }
-
-  async getProfilesSubscribedToEvent(
-    eventId: string,
-  ): Promise<Collection<Profile>> {
-    const profiles = await this.prisma.profiles.findMany({
-      where: {
-        Events: {
-          some: { id: eventId },
-        },
-      },
-      include: ProfilesRelations,
-    });
-    return { items: profiles.map(profileMapper), totalItems: profiles.length };
   }
 }
