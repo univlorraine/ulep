@@ -48,6 +48,9 @@
         "cancel": "Cancel",
         "is_mine": "My sheets"
     },
+    "events": {
+        "online": "Online"
+    },
     "news": {
         "list": {
             "filter_title": "Select news filters",
@@ -462,6 +465,10 @@
         "news": {
             "title": "News",
             "see_all": "See all news"
+        },
+        "events": {
+            "title": "Events",
+            "see_all": "See all events"
         }
     },
     "learning": {

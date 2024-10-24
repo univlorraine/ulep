@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 import { ReportSvg } from '../../../assets';
+import EventObject from '../../../domain/entities/Event';
 import News from '../../../domain/entities/News';
 import Profile from '../../../domain/entities/Profile';
 import Session from '../../../domain/entities/Session';
@@ -9,6 +10,7 @@ import Loader from '../../components/Loader';
 import TandemList from '../../components/tandems/TandemList';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../../utils';
+import EventsList from '../events/EventsList';
 import NewsList from '../news/NewsList';
 import SessionListHome from '../sessions/SessionListHome';
 import styles from './HomeContent.module.css';
@@ -21,11 +23,13 @@ interface HomeContentProps {
     tandems: Tandem[];
     sessions: Session[];
     news: News[];
+    events: EventObject[];
     onShowSessionPressed: (session: Session, tandem: Tandem, confirmCreation?: boolean) => void;
     onUpdateSessionPressed: (session: Session, tandem: Tandem) => void;
     onCreateSessionPressed: (tandem: Tandem) => void;
     onShowSessionListPressed: () => void;
-    onShowNewsPressed: () => void;
+    onShowNewsPressed: (news?: News) => void;
+    onShowEventPressed: (event?: EventObject) => void;
 }
 
 const HomeContent: React.FC<HomeContentProps> = ({
@@ -36,11 +40,13 @@ const HomeContent: React.FC<HomeContentProps> = ({
     tandems,
     sessions,
     news,
+    events,
     onShowSessionPressed,
     onUpdateSessionPressed,
     onCreateSessionPressed,
     onShowSessionListPressed,
     onShowNewsPressed,
+    onShowEventPressed,
 }) => {
     const { t } = useTranslation();
     const currentDate = new Date();
@@ -89,7 +95,12 @@ const HomeContent: React.FC<HomeContentProps> = ({
                                 )}
                             </Masonry>
                             <Masonry className={styles.masonery} gutter="20px">
-                                <NewsList news={news} profile={profile} onNewsPressed={onShowNewsPressed} />
+                                {news.length > 0 && (
+                                    <NewsList news={news} profile={profile} onNewsPressed={onShowNewsPressed} />
+                                )}
+                                {events.length > 0 && (
+                                    <EventsList events={events} profile={profile} onEventPressed={onShowEventPressed} />
+                                )}
                             </Masonry>
                         </ResponsiveMasonry>
                     )}

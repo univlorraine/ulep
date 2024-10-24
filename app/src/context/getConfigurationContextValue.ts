@@ -26,6 +26,7 @@ import CreateSessionUsecase from '../domain/usecases/CreateSessionUsecase';
 import CreateUserUsecase from '../domain/usecases/CreateUserUsecase';
 import EditProfileUsecase from '../domain/usecases/EditProfileUsecase';
 import EditUserUsecase from '../domain/usecases/EditUserUsecase';
+import GetAllEventsUsecase from '../domain/usecases/event/GetAllEventsUsecase';
 import GetAllCountriesUsecase from '../domain/usecases/GetAllCountriesUsecase';
 import GetAllGoalsUsecase from '../domain/usecases/GetAllGoalsUsecase';
 import GetAllInterestCategoriesUsecase from '../domain/usecases/GetAllInterestCategoriesUsecase';
@@ -190,6 +191,7 @@ const getConfigContextValue = ({
 
     //News
     const getAllNews = new GetAllNewsUsecase(domainHttpAdapter);
+    const getAllEvents = new GetAllEventsUsecase(domainHttpAdapter);
 
     return {
         accessToken,
@@ -261,6 +263,7 @@ const getConfigContextValue = ({
         updateSession,
         cancelSession,
         getAllNews,
+        getAllEvents,
     };
 };
 

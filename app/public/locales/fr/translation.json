@@ -40,6 +40,9 @@
             "unexpected": "Erreur inconnue"
         }
     },
+    "events": {
+        "online": "En ligne"
+    },
     "news": {
         "list": {
             "title": "Actualités",
@@ -504,6 +507,10 @@
         "news": {
             "title": "Actualités",
             "see_all": "Voir toutes les actualités"
+        },
+        "events": {
+            "title": "Événements",
+            "see_all": "Voir tous les événements"
         }
     },
     "session": {

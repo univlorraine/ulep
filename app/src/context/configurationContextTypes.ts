@@ -30,6 +30,7 @@ import CreateSessionUsecaseInterface from '../domain/interfaces/CreateSessionUse
 import CreateUserUsecaseInterface from '../domain/interfaces/CreateUserUsecase.interface';
 import EditProfileUsecaseInterface from '../domain/interfaces/EditProfileUsecase.interface';
 import EditUserUsecaseInterface from '../domain/interfaces/EditUserUsecase.interface';
+import GetAllEventsUsecaseInterface from '../domain/interfaces/event/GetAllEventsUsecase.interface';
 import GetAllCountriesUsecaseInterface from '../domain/interfaces/GetAllCountriesUsecase.interface';
 import GetAllGoalsUsecaseInterface from '../domain/interfaces/GetAllGoalsUsecase.interface';
 import GetAllInterestCategoriessUsecase from '../domain/interfaces/GetAllInterestCategoriesUsecase.interface';
@@ -141,4 +142,6 @@ export interface ConfigContextValueType {
     cancelSession: CancelSessionUsecaseInterface;
     // News
     getAllNews: GetAllNewsUsecaseInterface;
+    // Events
+    getAllEvents: GetAllEventsUsecaseInterface;
 }
