@@ -1,26 +1,26 @@
 import { KeycloakClient } from '@app/keycloak';
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { utcToZonedTime } from 'date-fns-tz';
 import {
-  RessourceAlreadyExists,
-  RessourceDoesNotExist,
-  UnauthorizedOperation,
+    RessourceAlreadyExists,
+    RessourceDoesNotExist,
+    UnauthorizedOperation,
 } from 'src/core/errors';
 import { Gender, Role, User } from 'src/core/models';
+import { CHAT_SERVICE } from 'src/core/ports/chat.service';
 import {
-  COUNTRY_REPOSITORY,
-  CountryRepository,
+    COUNTRY_REPOSITORY,
+    CountryRepository,
 } from 'src/core/ports/country.repository';
 import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
 import {
-  UNIVERSITY_REPOSITORY,
-  UniversityRepository,
+    UNIVERSITY_REPOSITORY,
+    UniversityRepository,
 } from 'src/core/ports/university.repository';
 import {
-  USER_REPOSITORY,
-  UserRepository,
+    USER_REPOSITORY,
+    UserRepository,
 } from 'src/core/ports/user.repository';
-import { utcToZonedTime } from 'date-fns-tz';
-import { CHAT_SERVICE } from 'src/core/ports/chat.service';
 import { ChatService } from 'src/providers/services/chat.service';
 
 export class CreateUserCommand {
@@ -74,17 +74,12 @@ export class CreateUserUsecase {
     }
 
     if (
-      university.codes.length > 0 &&
-      !university.codes.some((codeToCheck) => codeToCheck === command.code)
+      (university.domains.length > 0 &&
+      !university.domains.some((domain) => command.email.includes(domain))) &&
+      (university.codes.length > 0 &&
+      !university.codes.some((codeToCheck) => codeToCheck === command.code))
     ) {
-      throw new BadRequestException('Code is invalid');
-    }
-
-    if (
-      university.domains.length > 0 &&
-      !university.domains.some((domain) => command.email.includes(domain))
-    ) {
-      throw new BadRequestException('Domain is invalid');
+      throw new BadRequestException('Conditions are invalid');
     }
 
     const now = utcToZonedTime(new Date(), university.timezone);
