@@ -57,7 +57,7 @@ const ViewReportPage: React.FC = () => {
     }
 
     return (
-        <OnlineWebLayout profile={profile}>
+        <OnlineWebLayout>
             {!isLoading && report && (
                 <>
                     <ViewReportContent goBack={history.goBack} report={report} setIsModalOpen={setIsModalOpen} />
