@@ -1,9 +1,9 @@
+import { SortOrder } from '@app/common';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsOptional } from 'class-validator';
-import { PaginationDto } from '../pagination';
-import { SortOrder } from '@app/common';
-import { ProfileQuerySortKey } from 'src/core/ports/profile.repository';
 import { UserStatus } from 'src/core/models';
+import { ProfileQuerySortKey } from 'src/core/ports/profile.repository';
+import { PaginationDto } from '../pagination';
 
 export class ProfileQueryFilter extends PaginationDto {
   @ApiPropertyOptional({ type: 'string' })
@@ -41,6 +41,10 @@ export class ProfileQueryFilter extends PaginationDto {
   @ApiPropertyOptional({ type: 'string' })
   @IsOptional()
   nativeLanguageCode?: string;
+
+  @ApiPropertyOptional({ type: 'string' })
+  @IsOptional()
+  notSubscribedToEvent?: string;
 
   @ApiPropertyOptional({
     type: 'string',

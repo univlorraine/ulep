@@ -16,7 +16,6 @@ export const UserRelations = {
   Nationality: true,
   Avatar: true,
   Devices: true,
-  Events: true,
 };
 
 export type UserSnapshot = Prisma.Users & {

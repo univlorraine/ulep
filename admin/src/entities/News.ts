@@ -43,3 +43,8 @@ export enum NewsStatus {
     DRAFT = 'DRAFT',
     READY = 'READY',
 }
+
+export enum NewsType {
+    ONLINE = 'ONLINE',
+    PRESENTIAL = 'PRESENTIAL',
+}

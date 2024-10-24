@@ -1,11 +1,12 @@
-import { NewsStatus } from '../entities/News';
+import { EventStatus, EventType } from '../entities/Event';
 import qsAdapter from '../providers/qsAdapter';
 
 export interface EventsParams {
     filter: {
         authorUniversityId?: string;
         title?: string;
-        status?: NewsStatus;
+        status?: EventStatus;
+        type?: EventType;
         languageCode?: string;
     };
     pagination: {
@@ -20,6 +21,7 @@ const EventsQuery = (params: EventsParams) => {
         title: params.filter.title,
         status: params.filter.status,
         languageCode: params.filter.languageCode,
+        types: [params.filter.type],
         page: params.pagination.page,
         limit: params.pagination.perPage,
     };

@@ -14,7 +14,8 @@ export interface ProfilesParams {
         };
         masteredLanguageCode?: string;
         nativeLanguageCode?: string;
-        university?: string; // Use to force university filter when admin is from partner university
+        university?: string;
+        notSubscribedToEvent?: string;
     };
     pagination: {
         page: string;
@@ -54,6 +55,7 @@ const ProfilesQuery = (params: ProfilesParams): string => {
         university: params.filter.university || params.filter.user?.university,
         masteredLanguageCode: params.filter.masteredLanguageCode,
         nativeLanguageCode: params.filter.nativeLanguageCode,
+        notSubscribedToEvent: params.filter.notSubscribedToEvent,
         page: params.pagination.page,
         limit: params.pagination.perPage,
         field: handleOrderField(params.sort.field),

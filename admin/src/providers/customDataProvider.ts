@@ -531,12 +531,24 @@ const customDataProvider = {
 
         return response.json();
     },
-    unsubscribeToEvent: async (eventId: string, usersIds: string[]): Promise<void> => {
+    unsubscribeToEvent: async (eventId: string, profilesIds: string[]): Promise<void> => {
         const url = `${process.env.REACT_APP_API_URL}/events/${eventId}/unsubscribe`;
 
-        const body = new FormData();
-        usersIds.forEach((userId, index) => {
-            body.append(`usersIds[${index}]`, userId);
+        const body = JSON.stringify({
+            profilesIds,
+        });
+
+        const response = await fetch(url, httpClientOptions({ method: 'POST', body }));
+
+        if (!response.ok) {
+            await throwError(response);
+        }
+    },
+    subscribeToEvent: async (eventId: string, profilesIds: string[]): Promise<void> => {
+        const url = `${process.env.REACT_APP_API_URL}/events/${eventId}/subscribe`;
+
+        const body = JSON.stringify({
+            profilesIds,
         });
 
         const response = await fetch(url, httpClientOptions({ method: 'POST', body }));

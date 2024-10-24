@@ -131,6 +131,7 @@ export class ProfileController {
       status,
       masteredLanguageCode,
       nativeLanguageCode,
+      notSubscribedToEvent,
       field,
       order,
       page,
@@ -161,6 +162,7 @@ export class ProfileController {
         },
         masteredLanguageCode: masteredLanguageCode,
         nativeLanguageCode: nativeLanguageCode,
+        notSubscribedToEvent: notSubscribedToEvent,
       },
     });
 

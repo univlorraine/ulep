@@ -204,22 +204,28 @@
         "title": "Evènements",
         "list": {
             "title": "Titre",
-            "university": "Université auteure",
+            "university": "Auteur",
             "defaultLanguage": "Langue par défaut",
             "translations": "Traductions",
             "status": "Statut",
             "startDate": "Date de début",
             "endDate": "Date de fin",
+            "type": "Type",
             "filters": {
                 "title": "Titre",
                 "language": "Langue",
                 "status": "Statut",
-                "university": "Université"
+                "university": "Université",
+                "type": "Type"
             }
         },
         "status": {
             "DRAFT": "Brouillon",
             "READY": "Publié"
+        },
+        "type": {
+            "ONLINE": "En ligne",
+            "PRESENTIAL": "Présentiel"
         },
         "form": {
             "add_translation": "Ajouter une traduction",
@@ -270,7 +276,13 @@
                 "firstname": "Prénom",
                 "lastname": "Nom",
                 "university": "Université",
-                "email": "Email"
+                "email": "Email",
+                "cta": "Actions"
+            },
+            "searchProfile": "Rechercher un profil",
+            "search": {
+                "button": "Inscrire des utilisateurs",
+                "subscribe": "Inscrire"
             }
         }
     },

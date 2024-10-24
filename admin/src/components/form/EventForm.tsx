@@ -35,7 +35,9 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
     const dataProvider = customDataProvider;
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
     const translate = useTranslate();
-    const { data: universities, isLoading: isLoadingUniversities } = useGetList('universities');
+    const { data: universities, isLoading: isLoadingUniversities } = useGetList('universities', {
+        sort: { field: 'name', order: 'ASC' },
+    });
     const universitiesLanguages = useGetUniversitiesLanguages();
 
     const record: EventObject = useRecordContext();
@@ -59,12 +61,6 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
         record?.endDate ? new Date(record.endDate) : new Date(new Date().setHours(23, 59, 0, 0))
     );
 
-    // Concerned universities
-    const [concernedUniversities, setConcernedUniversities] = useState<University[]>(
-        record?.concernedUniversities || []
-    );
-    const [newConcernedUniversity, setNewConcernedUniversity] = useState<University>();
-
     // Diffusion languages
     const [diffusionLanguages, setDiffusionLanguages] = useState<string[]>(
         record?.diffusionLanguages?.map((language) => language.code) || []
@@ -76,6 +72,26 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
     const [defaultLanguage, setDefaultLanguage] = useState<string>(record?.languageCode || 'en');
     const [newTranslationLanguage, setNewTranslationLanguage] = useState<string>('');
     const [translations, setTranslations] = useState<EventTranslation[]>(record?.translations || []);
+
+    // Concerned universities
+    const forcedConcernedUniversities: University[] = [];
+    if (universities) {
+        const centralUniversity = universities.filter((university: University) => university.parent === null)[0];
+        forcedConcernedUniversities.push(centralUniversity);
+
+        if (identity?.universityId !== centralUniversity.id) {
+            forcedConcernedUniversities.push(
+                universities.filter((university: University) => university.id === identity?.universityId)[0]
+            );
+        }
+    }
+
+    const [concernedUniversities, setConcernedUniversities] = useState<University[]>(
+        record?.concernedUniversities || forcedConcernedUniversities
+    );
+    const [newConcernedUniversity, setNewConcernedUniversity] = useState<University>();
+
+    console.log({ concernedUniversities });
 
     useEffect(() => {
         async function fetchUniversityData(universityId: string) {
@@ -112,7 +128,7 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
             status,
             type,
             withSubscription,
-            authorUniversityId: identity?.universityId,
+            authorUniversityId: record?.authorUniversity?.id ?? identity?.universityId,
             startDate,
             endDate,
             image,
@@ -226,19 +242,24 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                                     <TableBody>
                                         {concernedUniversities.map((university) => (
                                             <TableRow key={university.id}>
-                                                <TableCell sx={{ width: 10, padding: '0' }}>
-                                                    <Button
-                                                        onClick={() =>
-                                                            setConcernedUniversities(
-                                                                concernedUniversities.filter(
-                                                                    (concernedUniversity) =>
-                                                                        university.id !== concernedUniversity.id
+                                                <TableCell sx={{ width: '60px', padding: '0' }}>
+                                                    {!forcedConcernedUniversities.some(
+                                                        (forcedUniversity) => university.id === forcedUniversity.id
+                                                    ) && (
+                                                        <Button
+                                                            onClick={() =>
+                                                                setConcernedUniversities(
+                                                                    concernedUniversities.filter(
+                                                                        (concernedUniversity) =>
+                                                                            university.id !== concernedUniversity.id
+                                                                    )
                                                                 )
-                                                            )
-                                                        }
-                                                    >
-                                                        <DeleteIcon />
-                                                    </Button>
+                                                            }
+                                                            sx={{ '& span': { margin: 0 } }}
+                                                        >
+                                                            <DeleteIcon />
+                                                        </Button>
+                                                    )}
                                                 </TableCell>
                                                 <TableCell sx={{ padding: '10px' }}>{university.name}</TableCell>
                                             </TableRow>
@@ -260,7 +281,13 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                                         value={newConcernedUniversity}
                                     >
                                         {universities
-                                            ?.filter((university) => !concernedUniversities.includes(university))
+                                            ?.filter(
+                                                (university) =>
+                                                    !concernedUniversities.some(
+                                                        (concernedUniversity) =>
+                                                            university.id === concernedUniversity.id
+                                                    )
+                                            )
                                             .map((university) => (
                                                 <MenuItem key={university.id} value={university}>
                                                     {university.name}
@@ -276,6 +303,7 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                                                     ...concernedUniversities,
                                                     newConcernedUniversity,
                                                 ]);
+                                                setNewConcernedUniversity(undefined);
                                             }
                                         }}
                                         sx={{ padding: '8px 30px' }}
@@ -341,6 +369,7 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                                         onClick={() => {
                                             if (newDiffusionLanguage) {
                                                 setDiffusionLanguages([...diffusionLanguages, newDiffusionLanguage]);
+                                                setNewDiffusionLanguage(undefined);
                                             }
                                         }}
                                         sx={{ padding: '8px 30px' }}
@@ -435,7 +464,6 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                                         }
                                     }}
                                     sx={{ my: 2, width: '100%' }}
-                                    views={['year', 'month', 'day']}
                                 />
                             </Box>
 
@@ -451,7 +479,6 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                                         }
                                     }}
                                     sx={{ my: 2, width: '100%' }}
-                                    views={['year', 'month', 'day']}
                                 />
                             </Box>
                         </Box>
@@ -567,7 +594,6 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                         !startDate ||
                         !endDate ||
                         diffusionLanguages?.length === 0 ||
-                        concernedUniversities?.length === 0 ||
                         (type === EventType.ONLINE && !eventURL) ||
                         (type === EventType.PRESENTIAL && (!address || !addressName))
                     }

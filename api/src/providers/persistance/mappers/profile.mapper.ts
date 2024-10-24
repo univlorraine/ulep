@@ -47,6 +47,7 @@ export const ProfilesRelations = {
       CustomLearningGoals: true,
     },
   },
+  Events: true,
 };
 
 export type ProfileSnapshot = Prisma.Profiles & {

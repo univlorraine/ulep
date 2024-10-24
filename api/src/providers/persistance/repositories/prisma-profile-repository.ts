@@ -135,6 +135,11 @@ export class PrismaProfileRepository implements ProfileRepository {
             },
           }),
           NativeLanguage: { code: where.nativeLanguageCode },
+          ...(where.notSubscribedToEvent && {
+            Events: {
+              none: { id: where.notSubscribedToEvent },
+            },
+          }),
         }
       : {};
 
@@ -324,10 +329,8 @@ export class PrismaProfileRepository implements ProfileRepository {
   ): Promise<Collection<Profile>> {
     const profiles = await this.prisma.profiles.findMany({
       where: {
-        User: {
-          Events: {
-            some: { id: eventId },
-          },
+        Events: {
+          some: { id: eventId },
         },
       },
       include: ProfilesRelations,
