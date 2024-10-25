@@ -260,6 +260,7 @@
     },
     "login": {
         "connect": "Connect",
+        "domainError": "Central administrators must use SSO to login.",
         "loginError": "Wrong email / password",
         "password": "Password"
     },

@@ -12,6 +12,7 @@ import { DeleteObjectiveImageUsecase } from 'src/core/usecases/media/delete-obje
 import { UploadObjectiveImageUsecase } from 'src/core/usecases/media/upload-objective-image.usecase';
 import { SendMessageNotificationUsecase } from 'src/core/usecases/notifications';
 import { UpdateObjectiveUsecase } from 'src/core/usecases/objective/update-objective.usecase';
+import { TokenForAdminUsecase } from 'src/core/usecases/security/token-for-admin.usecase';
 import { ProvidersModule } from 'src/providers/providers.module';
 import { MatchScorer } from './services/MatchScorer';
 import {
@@ -73,9 +74,9 @@ import {
   GetPartnersToUniversityUsecase,
   GetProfileByUserIdUsecase,
   GetProfileUsecase,
+  GetProfileWithTandemsProfilesUsecase,
   GetProfilesUsecase,
   GetProfilesWithTandemsProfilesUsecase,
-  GetProfileWithTandemsProfilesUsecase,
   GetQuestionUsecase,
   GetQuestionsByLevelUsecase,
   GetQuestionsUsecase,
@@ -88,6 +89,7 @@ import {
   GetTestUsecase,
   GetTestsUsecase,
   GetUniversitiesUsecase,
+  GetUniversityDivisionsUsecase,
   GetUniversityUsecase,
   GetUserPersonalData,
   GetUserUsecase,
@@ -109,7 +111,6 @@ import {
   UploadAdminAvatarUsecase,
   UploadAvatarUsecase,
   UploadUniversityImageUsecase,
-  GetUniversityDivisionsUsecase,
 } from './usecases';
 import { GetJitsiTokenUsecase } from './usecases/jitsi/get-jitsi-token.usecase';
 import { DeleteLearningLanguageUsecase } from './usecases/learningLanguage/delete-learning-langugage.usecase';
@@ -248,6 +249,7 @@ const usecases: Provider[] = [
   ResetPasswordUsecase,
   GetJitsiTokenUsecase,
   LogoutAllSessionsUsecase,
+  TokenForAdminUsecase,
   // Notifications
   SendMessageNotificationUsecase,
   // Chat
