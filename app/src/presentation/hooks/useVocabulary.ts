@@ -141,9 +141,10 @@ const useVocabulary = () => {
                 isLoading: true,
             });
             const vocabularyListsResult = await getVocabularyLists.execute(profile.id);
+
             if (vocabularyListsResult instanceof Error) {
                 return setVocabularyResult({
-                    vocabularies: [],
+                    ...vocabularyResult,
                     vocabularyLists: [],
                     error: vocabularyListsResult,
                     isLoading: false,
@@ -151,7 +152,7 @@ const useVocabulary = () => {
             }
 
             setVocabularyResult({
-                vocabularies: [],
+                ...vocabularyResult,
                 vocabularyLists: vocabularyListsResult,
                 error: undefined,
                 isLoading: false,
