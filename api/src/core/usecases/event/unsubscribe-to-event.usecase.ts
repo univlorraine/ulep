@@ -46,9 +46,10 @@ export class UnsubscribeToEventUsecase {
 
     profiles.forEach((profile) => {
       this.emailGateway.sendUnsubscribedFromEventEmail({
-        language: profile.user.language,
+        language: profile.nativeLanguage.code,
         event: {
           title: event.title,
+          authorUniversity: event.authorUniversity.name,
           date: event.startDate.toLocaleDateString(),
         },
         to: profile.user.email,

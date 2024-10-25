@@ -3,6 +3,7 @@ import {
   AccountBlockedEmailProps,
   ActivityStatusChangeEmailProps,
   EmailGateway,
+  EventDeletedEmailProps,
   NewMessageEmailProps,
   NewPartnerEmail,
   NewReportEmailProps,
@@ -151,6 +152,10 @@ export default class InMemoryEmailGateway implements EmailGateway {
   sendUnsubscribedFromEventEmail(
     props: UnsubscribedFromEventEmailProps,
   ): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendEventDeletedEmail(props: EventDeletedEmailProps): Promise<void> {
     return Promise.resolve();
   }
 }

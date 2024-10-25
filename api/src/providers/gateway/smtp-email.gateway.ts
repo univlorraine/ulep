@@ -7,6 +7,7 @@ import {
   AccountBlockedEmailProps,
   ActivityStatusChangeEmailProps,
   EmailGateway,
+  EventDeletedEmailProps,
   NewMessageEmailProps,
   NewPartnerEmail,
   NewReportEmailProps,
@@ -595,6 +596,23 @@ export class SmtpEmailGateway implements EmailGateway {
         ...props,
       },
     );
+
+    await this.mailer.sendMail({
+      to: props.to,
+      subject: translations.title,
+      template: 'user',
+      variables: {
+        links: this.links,
+        images: this.images,
+        ...translations,
+      },
+    });
+  }
+
+  async sendEventDeletedEmail(props: EventDeletedEmailProps): Promise<void> {
+    const translations = this.translate('deletedEvent', props.language, {
+      ...props,
+    });
 
     await this.mailer.sendMail({
       to: props.to,

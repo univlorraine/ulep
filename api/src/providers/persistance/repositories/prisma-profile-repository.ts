@@ -119,13 +119,13 @@ export class PrismaProfileRepository implements ProfileRepository {
     const wherePayload = where
       ? {
           User: {
-            Nationality: { code: where.user.country },
-            Organization: { id: where.user.university },
-            email: where.user.email,
-            firstname: where.user.firstname,
-            lastname: where.user.lastname,
-            role: where.user.role,
-            status: where.user.status,
+            Nationality: { code: where.user?.country },
+            Organization: { id: where.user?.university },
+            email: where.user?.email,
+            firstname: where.user?.firstname,
+            lastname: where.user?.lastname,
+            role: where.user?.role,
+            status: where.user?.status,
           },
           ...(where.masteredLanguageCode && {
             MasteredLanguages: {

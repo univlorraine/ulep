@@ -155,6 +155,7 @@ export interface SubscribedToEventEmailProps {
   user: UserParams;
   event: {
     title: string;
+    authorUniversity: string;
     date: string;
   };
 }
@@ -165,6 +166,18 @@ export interface UnsubscribedFromEventEmailProps {
   user: UserParams;
   event: {
     title: string;
+    authorUniversity: string;
+    date: string;
+  };
+}
+
+export interface EventDeletedEmailProps {
+  to: string;
+  language: string;
+  user: UserParams;
+  event: {
+    title: string;
+    authorUniversity: string;
     date: string;
   };
 }
@@ -264,4 +277,10 @@ export interface EmailGateway {
   sendUnsubscribedFromEventEmail(
     props: UnsubscribedFromEventEmailProps,
   ): Promise<void>;
+
+  // Notifies users about an event deletion
+  sendEventDeletedEmail(props: EventDeletedEmailProps): Promise<void>;
+
+  // Notifies users about an event deletion
+  sendEventDeletedEmail(props: EventDeletedEmailProps): Promise<void>;
 }

@@ -46,10 +46,12 @@ export class SubscribeToEventUsecase {
     });
 
     profiles.forEach((profile) => {
+      console.log({ language: profile.nativeLanguage });
       this.emailGateway.sendSubscribedToEventEmail({
-        language: profile.user.language,
+        language: profile.nativeLanguage.code,
         event: {
           title: event.title,
+          authorUniversity: event.authorUniversity.name,
           date: event.startDate.toLocaleDateString(),
         },
         to: profile.user.email,
