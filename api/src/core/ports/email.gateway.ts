@@ -149,6 +149,26 @@ export interface ActivityStatusChangeEmailProps {
   activity: { title: string };
 }
 
+export interface SubscribedToEventEmailProps {
+  to: string;
+  language: string;
+  user: UserParams;
+  event: {
+    title: string;
+    date: string;
+  };
+}
+
+export interface UnsubscribedFromEventEmailProps {
+  to: string;
+  language: string;
+  user: UserParams;
+  event: {
+    title: string;
+    date: string;
+  };
+}
+
 export interface EmailGateway {
   // Notifies a user with a welcome email.
   sendWelcomeMail(props: SendWelcomeMailProps): Promise<void>;
@@ -236,4 +256,12 @@ export interface EmailGateway {
 
   // Notifies users about a session creation
   sendSessionCreatedEmail(props: SessionCreatedEmailProps): Promise<void>;
+
+  // Notifies users about being subscribed to an event
+  sendSubscribedToEventEmail(props: SubscribedToEventEmailProps): Promise<void>;
+
+  // Notifies users about being unsubscribed from an event
+  sendUnsubscribedFromEventEmail(
+    props: UnsubscribedFromEventEmailProps,
+  ): Promise<void>;
 }

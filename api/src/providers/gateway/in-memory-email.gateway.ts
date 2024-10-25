@@ -15,11 +15,13 @@ import {
   SessionCreatedEmailProps,
   SessionStartEmailProps,
   SessionUpdatedEmailProps,
+  SubscribedToEventEmailProps,
   TandemCanceledEmailProps,
   TandemCanceledNoticeEmailProps,
   TandemClosureNoticeEmailProps,
   TandemPausedUnpausedEmailProps,
   TandemValidationNoticeEmailProps,
+  UnsubscribedFromEventEmailProps,
 } from 'src/core/ports/email.gateway';
 
 export default class InMemoryEmailGateway implements EmailGateway {
@@ -137,6 +139,18 @@ export default class InMemoryEmailGateway implements EmailGateway {
   }
 
   sendSessionCreatedEmail(props: SessionCreatedEmailProps): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendSubscribedToEventEmail(
+    props: SubscribedToEventEmailProps,
+  ): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendUnsubscribedFromEventEmail(
+    props: UnsubscribedFromEventEmailProps,
+  ): Promise<void> {
     return Promise.resolve();
   }
 }
