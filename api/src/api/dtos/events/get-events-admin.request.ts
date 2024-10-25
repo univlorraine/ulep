@@ -3,7 +3,7 @@ import { IsArray, IsEnum, IsOptional, IsString } from 'class-validator';
 import { EventStatus, EventType } from 'src/core/models/event.model';
 import { PaginationDto } from '../pagination';
 
-export class GetEventsQuery extends PaginationDto {
+export class GetEventsAdminQuery extends PaginationDto {
   @ApiProperty()
   @IsOptional()
   @IsString()

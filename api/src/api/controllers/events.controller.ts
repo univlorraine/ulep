@@ -22,7 +22,7 @@ import { UploadEventImageUsecase } from 'src/core/usecases';
 import {
   CreateEventUsecase,
   DeleteEventUsecase,
-  GetEventsUsecase,
+  GetEventsAdminUsecase,
   GetEventUsecase,
   SubscribeToEventUsecase,
   UnsubscribeToEventUsecase,
@@ -30,9 +30,12 @@ import {
 } from 'src/core/usecases/event';
 import { CollectionResponse } from '../decorators';
 import { Role, Roles } from '../decorators/roles.decorator';
-import { EventResponse, UpdateEventRequest } from '../dtos/events';
+import {
+  EventResponse,
+  GetEventsAdminQuery,
+  UpdateEventRequest,
+} from '../dtos/events';
 import { CreateEventRequest } from '../dtos/events/create-event.request';
-import { GetEventsQuery } from '../dtos/events/get-events.request';
 import { SubscribeToEventRequest } from '../dtos/events/subscribe-to-event.request';
 import { UnsubscribeToEventRequest } from '../dtos/events/unsubscribe-to-event.request';
 import { AuthenticationGuard } from '../guards';
@@ -44,7 +47,7 @@ export class EventsController {
   constructor(
     private readonly createEventUsecase: CreateEventUsecase,
     private readonly uploadEventImageUsecase: UploadEventImageUsecase,
-    private readonly getEventsUsecase: GetEventsUsecase,
+    private readonly getEventsAdminUsecase: GetEventsAdminUsecase,
     private readonly getEventUsecase: GetEventUsecase,
     private readonly updateEventUsecase: UpdateEventUsecase,
     private readonly subscribeToEventUsecase: SubscribeToEventUsecase,
@@ -52,13 +55,13 @@ export class EventsController {
     private readonly deleteEventUsecase: DeleteEventUsecase,
   ) {}
 
-  @Get()
+  @Get('admin')
   @UseGuards(AuthenticationGuard)
   @SerializeOptions({ groups: ['read'] })
   @Swagger.ApiOperation({ summary: 'Get Events resources.' })
   @CollectionResponse(EventResponse)
-  async getEvents(@Query() query: GetEventsQuery) {
-    const events = await this.getEventsUsecase.execute({
+  async getEvents(@Query() query: GetEventsAdminQuery) {
+    const events = await this.getEventsAdminUsecase.execute({
       pagination: {
         page: query.page,
         limit: query.limit,

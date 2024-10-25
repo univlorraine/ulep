@@ -46,8 +46,8 @@ import {
   UniversityResponse,
   UpdateUniversityRequest,
 } from '../dtos';
-import { AuthenticationGuard } from '../guards';
 import { GetUniversitiesRequest } from '../dtos/universities/get-universities.request';
+import { AuthenticationGuard } from '../guards';
 
 @Controller('universities')
 @Swagger.ApiTags('Universities')
@@ -78,9 +78,8 @@ export class UniversityController {
     @Body() body: CreateUniversityRequest,
     @UploadedFile(new ImagesFilePipe()) file?: Express.Multer.File,
   ) {
-    let university: University = await this.createUniversityUsecase.execute(
-      body,
-    );
+    let university: University =
+      await this.createUniversityUsecase.execute(body);
 
     if (file) {
       const upload = await this.uploadUniversityImageUsecase.execute({
@@ -149,6 +148,10 @@ export class UniversityController {
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
     const university = await this.getUniversityUsecase.execute(id);
     const instance = await this.getInstanceUsecase.execute();
+
+    console.log({
+      response: UniversityResponse.fromUniversity(university, instance),
+    });
 
     return UniversityResponse.fromUniversity(university, instance);
   }

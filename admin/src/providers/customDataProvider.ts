@@ -230,6 +230,7 @@ const customDataProvider = {
                 url.search = CountriesQuery(params);
                 break;
             case 'events':
+                url = new URL(`${process.env.REACT_APP_API_URL}/events/admin`);
                 url.search = EventsQuery(params);
                 break;
             case 'events/subscriptions':
