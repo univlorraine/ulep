@@ -174,7 +174,7 @@ export interface UnsubscribedFromEventEmailProps {
 export interface EventDeletedEmailProps {
   to: string;
   language: string;
-  user: UserParams;
+  user?: UserParams;
   event: {
     title: string;
     authorUniversity: string;
