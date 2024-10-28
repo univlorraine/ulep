@@ -18,8 +18,10 @@ class GetAllEventsUsecase implements GetAllEventsUsecaseInterface {
                 });
             }
 
-            if (filters.type) {
-                queryParams.append('type', filters.type);
+            if (filters.types) {
+                filters.types.forEach((type) => {
+                    queryParams.append('types', type);
+                });
             }
 
             if (filters.page) {

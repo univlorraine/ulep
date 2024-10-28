@@ -5,7 +5,7 @@ export const DEFAULT_EVENTS_PAGE_SIZE = 10;
 export class GetEventsQuery {
     title?: string;
     languageCodes?: string[];
-    type?: EventType;
+    types?: EventType[];
     limit?: number;
     page?: number;
 }

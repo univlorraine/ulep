@@ -43,6 +43,7 @@ export class GetEventsUsecase {
     const profile = await this.getProfileFromUser(command.userId);
     const allowedLanguages = await this.generateAllowedLanguages(
       profile.learningLanguages,
+      command.filters.languageCodes,
     );
 
     return this.eventRepository.findAllForAnUser({
@@ -52,7 +53,6 @@ export class GetEventsUsecase {
         status: EventStatus.READY,
         universityId: profile.user.university.id,
         allowedLanguages,
-        languageCodes: command.filters.languageCodes,
       },
     });
   }
@@ -69,6 +69,7 @@ export class GetEventsUsecase {
 
   private async generateAllowedLanguages(
     learningLanguages: LearningLanguage[],
+    filteredLanguages: string[],
   ) {
     let allowedLanguages: string[][] = [];
 
@@ -81,7 +82,17 @@ export class GetEventsUsecase {
         ? tandem.learningLanguages[1]?.language.code
         : undefined;
 
+      const isFirstLanguageFiltered =
+        !filteredLanguages ||
+        filteredLanguages?.length === 0 ||
+        filteredLanguages?.includes(firstLanguage);
+      const isSecondLanguageFiltered =
+        !filteredLanguages ||
+        filteredLanguages?.length === 0 ||
+        filteredLanguages?.includes(secondLanguage);
+
       if (
+        isFirstLanguageFiltered &&
         !allowedLanguages.some((language) => language.includes(firstLanguage))
       ) {
         allowedLanguages.push([firstLanguage]);
@@ -89,12 +100,14 @@ export class GetEventsUsecase {
 
       if (
         secondLanguage &&
+        isSecondLanguageFiltered &&
         !allowedLanguages.some((language) => language.includes(secondLanguage))
       ) {
         allowedLanguages.push([secondLanguage]);
       }
 
       if (
+        (isFirstLanguageFiltered || isSecondLanguageFiltered) &&
         firstLanguage &&
         secondLanguage &&
         !allowedLanguages.some(
@@ -108,7 +121,7 @@ export class GetEventsUsecase {
         allowedLanguages.push([firstLanguage, secondLanguage]);
       }
     }
-    this.logger.log(allowedLanguages);
+
     return allowedLanguages;
   }
 

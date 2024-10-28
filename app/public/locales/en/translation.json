@@ -44,6 +44,11 @@
         "languages": "Languages",
         "levels": "Levels",
         "themes": "Themes",
+        "event_type": {
+            "title": "Format",
+            "online": "Online",
+            "presential": "Presential"
+        },
         "apply": "Apply",
         "cancel": "Cancel",
         "is_mine": "My sheets"

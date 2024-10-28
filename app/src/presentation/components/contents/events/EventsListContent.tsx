@@ -1,10 +1,11 @@
+import { IonButton } from '@ionic/react';
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import EventObject from '../../../../domain/entities/Event';
+import EventObject, { EventType } from '../../../../domain/entities/Event';
 import Language from '../../../../domain/entities/Language';
 import Profile from '../../../../domain/entities/Profile';
 import useGetEventsList from '../../../hooks/useGetEventsList';
-import EventsList from '../../events/EventsList';
+import EventLine from '../../events/EventLine';
 import HeaderSubContent from '../../HeaderSubContent';
 import FilterModal, { FiltersToDisplay } from '../../modals/FilterModal';
 import SearchAndFilter, { Filter, FilterType } from '../../SearchAndFilter';
@@ -19,7 +20,11 @@ export const EventsListContent: React.FC<EventsListContentProps> = ({ profile, o
     const { t } = useTranslation();
     const [showFiltersModal, setShowFiltersModal] = useState<boolean>(false);
     const [languageFilter, setLanguageFilter] = useState<Language[]>([]);
-    const { events, searchTitle, setSearchTitle, onLoadMoreEvents } = useGetEventsList(languageFilter);
+    const [eventTypeFilter, setEventTypeFilter] = useState<EventType[]>([]);
+    const { events, searchTitle, setSearchTitle, isEventsListEnded, onLoadMoreEvents } = useGetEventsList(
+        languageFilter,
+        eventTypeFilter
+    );
 
     const contentRef = useRef<HTMLDivElement>(null);
 
@@ -35,8 +40,10 @@ export const EventsListContent: React.FC<EventsListContentProps> = ({ profile, o
         onEventPressed(event);
     };
 
-    const onFilterApplied = (filters: { languages?: Language[] }) => {
+    const onFilterApplied = (filters: { languages?: Language[]; eventType?: EventType[] }) => {
+        console.log(filters);
         setLanguageFilter(filters.languages ?? []);
+        setEventTypeFilter(filters.eventType ?? []);
         setShowFiltersModal(false);
     };
 
@@ -55,14 +62,28 @@ export const EventsListContent: React.FC<EventsListContentProps> = ({ profile, o
                 setSearchTitle={setSearchTitle}
                 setShowFiltersModal={setShowFiltersModal}
             />
-            <EventsList events={events} onEventPressed={handleEventPressed} profile={profile} />
+            {events.length > 0 &&
+                events.map((event) => (
+                    <EventLine
+                        key={event.id}
+                        event={event}
+                        onClick={() => handleEventPressed(event)}
+                        profile={profile}
+                    />
+                ))}
+            {!isEventsListEnded && (
+                <IonButton fill="clear" className="secondary-button" onClick={onLoadMoreEvents}>
+                    {t('events.list.load_more')}
+                </IonButton>
+            )}
             <FilterModal
-                filterToDisplay={[FiltersToDisplay.LANGUAGES]}
+                filterToDisplay={[FiltersToDisplay.LANGUAGES, FiltersToDisplay.EVENT_TYPE]}
                 isVisible={showFiltersModal}
                 onClose={() => setShowFiltersModal(false)}
                 onFilterApplied={onFilterApplied}
                 profile={profile}
                 currentLanguagesFilter={languageFilter}
+                currentEventTypeFilter={eventTypeFilter}
                 title="news.list.filter_title"
             />
         </div>

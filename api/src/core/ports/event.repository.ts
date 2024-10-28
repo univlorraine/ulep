@@ -74,7 +74,6 @@ export type FindEventsForAnUserProps = {
     universityId?: string;
     status?: EventStatus;
     types?: EventType[];
-    languageCodes?: string[];
     allowedLanguages: string[][];
   };
 };

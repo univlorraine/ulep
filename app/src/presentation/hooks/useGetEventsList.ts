@@ -5,7 +5,7 @@ import Language from '../../domain/entities/Language';
 import { DEFAULT_NEWS_PAGE_SIZE } from '../../domain/interfaces/news/GetAllNewsUsecase.interface';
 import { useStoreState } from '../../store/storeTypes';
 
-const useGetEventsList = (languageFilter: Language[], typeFilter?: EventType) => {
+const useGetEventsList = (languageFilter: Language[], typeFilter: EventType[]) => {
     const { getAllEvents } = useConfig();
     const profile = useStoreState((state) => state.profile);
     const [searchTitle, setSearchTitle] = useState<string>('');
@@ -44,7 +44,7 @@ const useGetEventsList = (languageFilter: Language[], typeFilter?: EventType) =>
             const result = await getAllEvents.execute({
                 title: searchTitle,
                 page,
-                type: typeFilter,
+                types: typeFilter,
                 languageCodes: languageFilter.map((language) => language.code),
             });
             if (result instanceof Error) {
@@ -82,6 +82,7 @@ const useGetEventsList = (languageFilter: Language[], typeFilter?: EventType) =>
             const result = await getAllEvents.execute({
                 title: searchTitle,
                 page: 1,
+                types: typeFilter,
                 languageCodes: languageFilter.map((language) => language.code),
             });
             if (result instanceof Error) {
@@ -108,7 +109,7 @@ const useGetEventsList = (languageFilter: Language[], typeFilter?: EventType) =>
         };
 
         fetchData();
-    }, [searchTitle, languageFilter]);
+    }, [searchTitle, languageFilter, typeFilter]);
 
     return { ...eventsResult, searchTitle, setSearchTitle, isEventsListEnded, onLoadMoreEvents };
 };

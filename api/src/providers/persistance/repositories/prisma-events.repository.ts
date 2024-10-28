@@ -130,26 +130,6 @@ export class PrismaEventRepository implements EventRepository {
           },
         })),
       }),
-      ...(filters.languageCodes && {
-        TitleTextContent: {
-          OR: [
-            {
-              LanguageCode: {
-                code: {
-                  in: filters.languageCodes,
-                },
-              },
-            },
-            {
-              Translations: {
-                some: {
-                  LanguageCode: { code: { in: filters.languageCodes } },
-                },
-              },
-            },
-          ],
-        },
-      }),
       status: filters.status,
       type: {
         in: filters.types,

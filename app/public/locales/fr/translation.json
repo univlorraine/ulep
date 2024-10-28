@@ -63,6 +63,11 @@
         "languages": "Langues",
         "levels": "Niveaux",
         "themes": "Thèmes",
+        "event_type": {
+            "title": "Format",
+            "online": "En ligne",
+            "presential": "En présentiel"
+        },
         "apply": "Appliquer",
         "cancel": "Annuler",
         "is_mine": "Mes fiches"
