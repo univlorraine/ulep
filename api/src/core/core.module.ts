@@ -163,6 +163,7 @@ import {
   DeleteEventUsecase,
   GetEventsAdminUsecase,
   GetEventUsecase,
+  SendEmailToSubscribedUsersUsecase,
   SubscribeToEventUsecase,
   UnsubscribeToEventUsecase,
   UpdateEventUsecase,
@@ -386,6 +387,7 @@ const usecases: Provider[] = [
   UpdateEventUsecase,
   SubscribeToEventUsecase,
   UnsubscribeToEventUsecase,
+  SendEmailToSubscribedUsersUsecase,
   // Custom Learning Goals
   CreateCustomLearningGoalUsecase,
   UpdateCustomLearningGoalUsecase,

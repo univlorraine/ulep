@@ -24,6 +24,7 @@ import {
   DeleteEventUsecase,
   GetEventsAdminUsecase,
   GetEventUsecase,
+  SendEmailToSubscribedUsersUsecase,
   SubscribeToEventUsecase,
   UnsubscribeToEventUsecase,
   UpdateEventUsecase,
@@ -36,6 +37,7 @@ import {
   UpdateEventRequest,
 } from '../dtos/events';
 import { CreateEventRequest } from '../dtos/events/create-event.request';
+import { SendEmailToSubscribedUsersRequest } from '../dtos/events/send-email-to-subscribed-users.request';
 import { SubscribeToEventRequest } from '../dtos/events/subscribe-to-event.request';
 import { UnsubscribeToEventRequest } from '../dtos/events/unsubscribe-to-event.request';
 import { AuthenticationGuard } from '../guards';
@@ -53,6 +55,7 @@ export class EventsController {
     private readonly subscribeToEventUsecase: SubscribeToEventUsecase,
     private readonly unsubscribeToEventUsecase: UnsubscribeToEventUsecase,
     private readonly deleteEventUsecase: DeleteEventUsecase,
+    private readonly sendEmailToSubscribedUsersUsecase: SendEmailToSubscribedUsersUsecase,
   ) {}
 
   @Get('admin')
@@ -185,5 +188,19 @@ export class EventsController {
   @Swagger.ApiOkResponse({ type: EventResponse })
   async deleteEvent(@Param('id', ParseUUIDPipe) id: string) {
     await this.deleteEventUsecase.execute(id);
+  }
+
+  @Post(':id/send-email')
+  @UseGuards(AuthenticationGuard)
+  @Roles(Role.ADMIN)
+  async sendEmailToSubscribedUsers(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() body: SendEmailToSubscribedUsersRequest,
+  ) {
+    await this.sendEmailToSubscribedUsersUsecase.execute({
+      eventId: id,
+      title: body.title,
+      content: body.content,
+    });
   }
 }

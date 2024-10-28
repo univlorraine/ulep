@@ -15,6 +15,7 @@ import {
   NewTandemNoticeEmailProps,
   NewUserRegistrationNoticeEmailProps,
   PasswordChangeDeniedEmailProps,
+  SendEmailToSubscribedToEventUserProps,
   SendWelcomeMailProps,
   SessionCanceledEmailProps,
   SessionCreatedEmailProps,
@@ -622,6 +623,21 @@ export class SmtpEmailGateway implements EmailGateway {
         links: this.links,
         images: this.images,
         ...translations,
+      },
+    });
+  }
+
+  async sendEmailToSubscribedToEventUser(
+    props: SendEmailToSubscribedToEventUserProps,
+  ): Promise<void> {
+    this.mailer.sendMail({
+      to: props.to,
+      subject: props.title,
+      template: 'user',
+      variables: {
+        links: this.links,
+        images: this.images,
+        bodyHtml: props.content,
       },
     });
   }

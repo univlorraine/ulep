@@ -559,6 +559,15 @@ const customDataProvider = {
             await throwError(response);
         }
     },
+    sendEventUsersEmail: async (eventId: string, title: string, content: string): Promise<void> => {
+        const url = `${process.env.REACT_APP_API_URL}/events/${eventId}/send-email`;
+        const body = JSON.stringify({ title, content });
+        const response = await fetch(url, httpClientOptions({ method: 'POST', body }));
+
+        if (!response.ok) {
+            await throwError(response);
+        }
+    },
 } as unknown as DataProvider;
 
 export default addRefreshAuthToDataProvider(customDataProvider, refreshAuth);

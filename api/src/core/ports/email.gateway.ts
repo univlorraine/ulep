@@ -182,6 +182,12 @@ export interface EventDeletedEmailProps {
   };
 }
 
+export interface SendEmailToSubscribedToEventUserProps {
+  to: string;
+  title: string;
+  content: string;
+}
+
 export interface EmailGateway {
   // Notifies a user with a welcome email.
   sendWelcomeMail(props: SendWelcomeMailProps): Promise<void>;
@@ -279,8 +285,14 @@ export interface EmailGateway {
   ): Promise<void>;
 
   // Notifies users about an event deletion
+
   sendEventDeletedEmail(props: EventDeletedEmailProps): Promise<void>;
 
   // Notifies users about an event deletion
   sendEventDeletedEmail(props: EventDeletedEmailProps): Promise<void>;
+
+  // Notifies users about an event email
+  sendEmailToSubscribedToEventUser(
+    props: SendEmailToSubscribedToEventUserProps,
+  ): Promise<void>;
 }

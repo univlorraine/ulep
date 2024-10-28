@@ -21,6 +21,7 @@ import { EventObject } from '../../../entities/Event';
 import { Profile } from '../../../entities/Profile';
 import { UserRole } from '../../../entities/User';
 import SearchProfile from './SearchProfile';
+import SendEmail from './SendEmail';
 
 interface BulkActionButtonProps {
     eventId: string;
@@ -48,7 +49,8 @@ const EventsSubscriptionsList = () => {
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
     const { getOne } = useDataProvider();
     const [currentEvent, setCurrentEvent] = useState<EventObject>();
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isSubscriptionsModalOpen, setIsSubscriptionsModalOpen] = useState<boolean>(false);
+    const [isEmailModalOpen, setIsEmailModalOpen] = useState<boolean>(false);
 
     const eventId = window.location.hash.split('/').slice(-1)[0].split('?')[0];
 
@@ -103,13 +105,22 @@ const EventsSubscriptionsList = () => {
                 <Typography variant="h3">
                     {translate('events.subscriptions.title', { eventTitle: currentEvent?.title })}
                 </Typography>
-                <Button
-                    onClick={() => setIsModalOpen(true)}
-                    sx={{ width: 'fit-content', alignSelf: 'center' }}
-                    variant="contained"
-                >
-                    {translate('events.subscriptions.search.button')}
-                </Button>
+                <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
+                    <Button
+                        onClick={() => setIsSubscriptionsModalOpen(true)}
+                        sx={{ width: 'fit-content', alignSelf: 'center' }}
+                        variant="contained"
+                    >
+                        {translate('events.subscriptions.search.button')}
+                    </Button>
+                    <Button
+                        onClick={() => setIsEmailModalOpen(true)}
+                        sx={{ width: 'fit-content', alignSelf: 'center' }}
+                        variant="contained"
+                    >
+                        {translate('events.subscriptions.email.button')}
+                    </Button>
+                </Box>
             </Box>
             <Typography variant="h4">
                 {translate('events.subscriptions.author', {
@@ -146,8 +157,12 @@ const EventsSubscriptionsList = () => {
                 </List>
             )}
 
-            <Modal onClose={() => setIsModalOpen(false)} open={isModalOpen}>
-                <SearchProfile eventId={eventId} setIsModalOpen={setIsModalOpen} />
+            <Modal onClose={() => setIsSubscriptionsModalOpen(false)} open={isSubscriptionsModalOpen}>
+                <SearchProfile eventId={eventId} setIsModalOpen={setIsSubscriptionsModalOpen} />
+            </Modal>
+
+            <Modal onClose={() => setIsEmailModalOpen(false)} open={isEmailModalOpen}>
+                <SendEmail eventId={eventId} setIsModalOpen={setIsEmailModalOpen} />
             </Modal>
         </>
     );

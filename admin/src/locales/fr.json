@@ -283,6 +283,17 @@
             "search": {
                 "button": "Inscrire des utilisateurs",
                 "subscribe": "Inscrire"
+            },
+            "email": {
+                "button": "Envoyer un email",
+                "title": "Envoyer un email aux inscrits",
+                "form": {
+                    "title": "Titre",
+                    "content": "Contenu"
+                },
+                "send": "Envoyer",
+                "success": "L'email a bien été envoyé aux inscrits",
+                "error": "Une erreur est survenue lors de l'envoi de l'email"
             }
         }
     },

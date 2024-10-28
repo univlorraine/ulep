@@ -11,6 +11,7 @@ import {
   NewTandemNoticeEmailProps,
   NewUserRegistrationNoticeEmailProps,
   PasswordChangeDeniedEmailProps,
+  SendEmailToSubscribedToEventUserProps,
   SendWelcomeMailProps,
   SessionCanceledEmailProps,
   SessionCreatedEmailProps,
@@ -156,6 +157,12 @@ export default class InMemoryEmailGateway implements EmailGateway {
   }
 
   sendEventDeletedEmail(props: EventDeletedEmailProps): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendEmailToSubscribedToEventUser(
+    props: SendEmailToSubscribedToEventUserProps,
+  ): Promise<void> {
     return Promise.resolve();
   }
 }
