@@ -11,7 +11,7 @@ import styles from './SelectVocabularyListsForQuizModal.module.css';
 interface SelectVocabularyListsForQuizModaleProps {
     isVisible: boolean;
     onClose: () => void;
-    onValidate: (selectedLists: VocabularyList[]) => void;
+    onValidate: (selectedListsIds: string[]) => void;
     vocabularyLists: VocabularyList[];
     profile: Profile;
     isHybrid?: boolean;
@@ -27,6 +27,7 @@ const SelectVocabularyListsForQuizModale: React.FC<SelectVocabularyListsForQuizM
 }) => {
     const { t } = useTranslation();
     const [selectedLists, setSelectedLists] = useState<VocabularyList[]>([]);
+    const [selectedListsIds, setSelectedListsIds] = useState<string[]>([]);
 
     const onSelectVocabularyList = (vocabularyList: VocabularyList) => {
         if (selectedLists.includes(vocabularyList)) {
@@ -47,6 +48,10 @@ const SelectVocabularyListsForQuizModale: React.FC<SelectVocabularyListsForQuizM
     useEffect(() => {
         setSelectedLists([]);
     }, [isVisible]);
+
+    useEffect(() => {
+        setSelectedListsIds(selectedLists.map((selectedList) => selectedList.id));
+    }, [selectedLists]);
 
     return (
         <IonModal animated isOpen={isVisible} onDidDismiss={onClose} className={styles.modal}>
@@ -95,7 +100,7 @@ const SelectVocabularyListsForQuizModale: React.FC<SelectVocabularyListsForQuizM
                 <IonButton
                     className={`secondary-button ${styles.button}`}
                     fill="clear"
-                    onClick={() => onValidate(selectedLists)}
+                    onClick={() => onValidate(selectedListsIds)}
                 >
                     {t('vocabulary.list.start_quiz.create')}
                 </IonButton>

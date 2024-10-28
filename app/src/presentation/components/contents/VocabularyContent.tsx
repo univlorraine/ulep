@@ -21,6 +21,7 @@ interface VocabularyContentProps {
     onAddVocabulary: (vocabulary?: Vocabulary) => void;
     onSearch: (search: string) => void;
     onShareVocabularyList: () => void;
+    setQuizzSelectedListIds: (selectedListsId: string[]) => void;
 }
 
 const VocabularyContent: React.FC<VocabularyContentProps> = ({
@@ -32,6 +33,7 @@ const VocabularyContent: React.FC<VocabularyContentProps> = ({
     onAddVocabulary,
     onSearch,
     onShareVocabularyList,
+    setQuizzSelectedListIds,
 }) => {
     const { t } = useTranslation();
     const [showToast] = useIonToast();
@@ -61,7 +63,7 @@ const VocabularyContent: React.FC<VocabularyContentProps> = ({
 
     const onStartQuizzPressed = () => {
         const selectedListsId = [vocabularyList.id];
-        history.push('/flipcards', { selectedListsId });
+        setQuizzSelectedListIds(selectedListsId);
     };
 
     let vocabulariesWithoutPronunciation;

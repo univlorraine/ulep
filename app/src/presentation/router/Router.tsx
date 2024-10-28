@@ -156,6 +156,9 @@ const OfflineRouter: React.FC = () => {
                 <MobileRoute exact path={'/end-session'}>
                     <EndSessionPage />
                 </MobileRoute>
+                <MobileRoute exact path={'/flipcards'}>
+                    <FlipcardsPage />
+                </MobileRoute>
                 <PrivateRoute exact path="/jitsi">
                     <JitsiPage />
                 </PrivateRoute>
@@ -235,10 +238,6 @@ const OfflineRouter: React.FC = () => {
                 <PrivateRoute exact path="/vocabularies">
                     <VocabulariesPage />
                 </PrivateRoute>
-                {/* Flashcards route */}
-                <PrivateRoute exact path="/flipcards">
-                    <FlipcardsPage />
-                </PrivateRoute>
                 {/* Quizz route */}
                 <PrivateRoute exact path="/cefr/languages">
                     <CEFRQuizzLanguagePage />
@@ -259,7 +258,6 @@ const OfflineRouter: React.FC = () => {
                 <PrivateRoute exact path="/report-item">
                     <ViewReportPage />
                 </PrivateRoute>
-
                 {isHybrid ? (
                     <BottomBar />
                 ) : (

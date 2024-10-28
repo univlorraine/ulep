@@ -5,7 +5,6 @@ import { useConfig } from '../../../context/ConfigurationContext';
 import Profile from '../../../domain/entities/Profile';
 import Tandem from '../../../domain/entities/Tandem';
 import Vocabulary from '../../../domain/entities/Vocabulary';
-import VocabularyList from '../../../domain/entities/VocabularyList';
 import { CreateVocabularyListCommand } from '../../../domain/interfaces/vocabulary/CreateVocabularyListUsecase.interface';
 import { useStoreState } from '../../../store/storeTypes';
 import CreateOrUpdateVocabularyContent from '../../components/contents/CreateOrUpdateVocabularyContent';
@@ -88,9 +87,7 @@ const VocabulariesPage = () => {
         setShowShareVocabularyListModal(false);
     };
 
-    const onValidateQuizz = (selectedLists: VocabularyList[]) => {
-        setShowSelectVocabularyListsForQuizModal(false);
-        const selectedListsId = selectedLists.map((selectedList) => selectedList.id);
+    const onSelectedVocabularyListsIdsForQuiz = (selectedListsId: string[]) => {
         history.push('/flipcards', { selectedListsId });
     };
 
@@ -143,6 +140,7 @@ const VocabulariesPage = () => {
                         onAddVocabulary={onAddOrUpdateVocabulary}
                         onSearch={setSearchVocabularies}
                         onShareVocabularyList={() => setShowShareVocabularyListModal(true)}
+                        setQuizzSelectedListIds={onSelectedVocabularyListsIdsForQuiz}
                     />
                 )}
                 {vocabularyListSelected && addContentMode && (
@@ -172,7 +170,7 @@ const VocabulariesPage = () => {
                 <SelectVocabularyListsForQuizModale
                     isVisible={showSelectVocabularyListsForQuizModal}
                     onClose={() => setShowSelectVocabularyListsForQuizModal(false)}
-                    onValidate={onValidateQuizz}
+                    onValidate={onSelectedVocabularyListsIdsForQuiz}
                     vocabularyLists={vocabularyLists}
                     profile={profile}
                 />
