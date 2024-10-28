@@ -18,7 +18,7 @@ interface NewsContentModalProps {
     isVisible: boolean;
     displayEventsContentModal?: DisplayEventsContentModal;
     onClose: () => void;
-    onEventPressed: (event: EventObject) => void;
+    onEventPressed: (event?: EventObject) => void;
     profile: Profile;
 }
 

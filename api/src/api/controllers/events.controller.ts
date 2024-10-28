@@ -1,4 +1,5 @@
 import { Collection } from '@app/common';
+import { KeycloakUser } from '@app/keycloak';
 import {
   Body,
   Controller,
@@ -17,22 +18,27 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as Swagger from '@nestjs/swagger';
 import { ApiTags } from '@nestjs/swagger';
+import { GetEventsQuery } from 'src/api/dtos/events/get-events.request';
 import { EventObject } from 'src/core/models/event.model';
 import { UploadEventImageUsecase } from 'src/core/usecases';
 import {
   CreateEventUsecase,
   DeleteEventUsecase,
+  GetEventsAdminUsecase,
   GetEventsUsecase,
   GetEventUsecase,
   SubscribeToEventUsecase,
   UnsubscribeToEventUsecase,
   UpdateEventUsecase,
 } from 'src/core/usecases/event';
-import { CollectionResponse } from '../decorators';
+import { CollectionResponse, CurrentUser } from '../decorators';
 import { Role, Roles } from '../decorators/roles.decorator';
-import { EventResponse, UpdateEventRequest } from '../dtos/events';
+import {
+  EventResponse,
+  GetEventsAdminQuery,
+  UpdateEventRequest,
+} from '../dtos/events';
 import { CreateEventRequest } from '../dtos/events/create-event.request';
-import { GetEventsQuery } from '../dtos/events/get-events.request';
 import { SubscribeToEventRequest } from '../dtos/events/subscribe-to-event.request';
 import { UnsubscribeToEventRequest } from '../dtos/events/unsubscribe-to-event.request';
 import { AuthenticationGuard } from '../guards';
@@ -45,6 +51,7 @@ export class EventsController {
     private readonly createEventUsecase: CreateEventUsecase,
     private readonly uploadEventImageUsecase: UploadEventImageUsecase,
     private readonly getEventsUsecase: GetEventsUsecase,
+    private readonly getEventsAdminUsecase: GetEventsAdminUsecase,
     private readonly getEventUsecase: GetEventUsecase,
     private readonly updateEventUsecase: UpdateEventUsecase,
     private readonly subscribeToEventUsecase: SubscribeToEventUsecase,
@@ -52,13 +59,13 @@ export class EventsController {
     private readonly deleteEventUsecase: DeleteEventUsecase,
   ) {}
 
-  @Get()
+  @Get('admin')
   @UseGuards(AuthenticationGuard)
   @SerializeOptions({ groups: ['read'] })
-  @Swagger.ApiOperation({ summary: 'Get Events resources.' })
+  @Swagger.ApiOperation({ summary: 'Get Events Admin resources.' })
   @CollectionResponse(EventResponse)
-  async getEvents(@Query() query: GetEventsQuery) {
-    const events = await this.getEventsUsecase.execute({
+  async getAdminEvents(@Query() query: GetEventsAdminQuery) {
+    const events = await this.getEventsAdminUsecase.execute({
       pagination: {
         page: query.page,
         limit: query.limit,
@@ -70,6 +77,34 @@ export class EventsController {
         status: query.status,
         types: query.types,
         languageCode: query.languageCode,
+      },
+    });
+
+    return new Collection<EventResponse>({
+      items: events.items.map(EventResponse.fromDomain),
+      totalItems: events.totalItems,
+    });
+  }
+
+  @Get()
+  @UseGuards(AuthenticationGuard)
+  @SerializeOptions({ groups: ['read'] })
+  @Swagger.ApiOperation({ summary: 'Get Events resources.' })
+  @CollectionResponse(EventResponse)
+  async getEvents(
+    @CurrentUser() user: KeycloakUser,
+    @Query() query: GetEventsQuery,
+  ) {
+    const events = await this.getEventsUsecase.execute({
+      userId: user.sub,
+      pagination: {
+        page: query.page,
+        limit: query.limit,
+      },
+      filters: {
+        title: query.title,
+        types: query.types,
+        languageCodes: query.languageCodes,
       },
     });
 

@@ -48,7 +48,9 @@ const EventLine: React.FC<EventLineProps> = ({ event, profile, onClick }) => {
             {event.imageUrl && <IonImg className={styles.image} src={event.imageUrl} />}
             <div className={styles.content}>
                 <div className={styles.tags}>
-                    <LanguageTag languageCode={event.languageCode} />
+                    {event.diffusionLanguages.map((language) => (
+                        <LanguageTag key={language.code} languageCode={language.code} />
+                    ))}
                     <UniversityTag university={event.authorUniversity} />
                 </div>
                 <span className={styles.date}>{formattedDate}</span>

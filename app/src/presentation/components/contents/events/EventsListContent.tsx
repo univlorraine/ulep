@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 import EventObject from '../../../../domain/entities/Event';
 import Language from '../../../../domain/entities/Language';
 import Profile from '../../../../domain/entities/Profile';
+import useGetEventsList from '../../../hooks/useGetEventsList';
+import EventsList from '../../events/EventsList';
 import HeaderSubContent from '../../HeaderSubContent';
 import FilterModal, { FiltersToDisplay } from '../../modals/FilterModal';
 import SearchAndFilter, { Filter, FilterType } from '../../SearchAndFilter';
@@ -10,14 +12,14 @@ import SearchAndFilter, { Filter, FilterType } from '../../SearchAndFilter';
 interface EventsListContentProps {
     profile: Profile;
     onBackPressed: () => void;
-    onEventPressed: (event: EventObject) => void;
+    onEventPressed: (event?: EventObject) => void;
 }
 
 export const EventsListContent: React.FC<EventsListContentProps> = ({ profile, onBackPressed, onEventPressed }) => {
     const { t } = useTranslation();
     const [showFiltersModal, setShowFiltersModal] = useState<boolean>(false);
     const [languageFilter, setLanguageFilter] = useState<Language[]>([]);
-    const [searchTitle, setSearchTitle] = useState<string>('');
+    const { events, searchTitle, setSearchTitle, onLoadMoreEvents } = useGetEventsList(languageFilter);
 
     const contentRef = useRef<HTMLDivElement>(null);
 
@@ -29,7 +31,7 @@ export const EventsListContent: React.FC<EventsListContentProps> = ({ profile, o
         setLanguageFilter([]);
     };
 
-    const handleEventPressed = (event: EventObject) => {
+    const handleEventPressed = (event?: EventObject) => {
         onEventPressed(event);
     };
 
@@ -53,6 +55,7 @@ export const EventsListContent: React.FC<EventsListContentProps> = ({ profile, o
                 setSearchTitle={setSearchTitle}
                 setShowFiltersModal={setShowFiltersModal}
             />
+            <EventsList events={events} onEventPressed={handleEventPressed} profile={profile} />
             <FilterModal
                 filterToDisplay={[FiltersToDisplay.LANGUAGES]}
                 isVisible={showFiltersModal}

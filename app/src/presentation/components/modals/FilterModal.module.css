@@ -1,3 +1,9 @@
+.modal {
+    --border-radius: 20px;
+    --height: auto;
+    --width: auto;
+}
+
 .container {
     background: white;
     display: flex;
@@ -5,8 +11,6 @@
     justify-content: center;
     padding: 20px;
     border-radius: 10px;
-    max-height: 80%;
-    min-width: 20%;
     color: black;
 }
 
@@ -49,10 +53,4 @@
     font-weight: 700;
     line-height: 20px;
     text-align: left;
-}
-
-@media (min-width: 768px) {
-    .container {
-        max-width: 50%;
-    }
 }

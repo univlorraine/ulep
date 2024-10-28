@@ -161,6 +161,7 @@ import { UpdateActivityStatusUsecase } from './usecases/activity/update-activity
 import {
   CreateEventUsecase,
   DeleteEventUsecase,
+  GetEventsAdminUsecase,
   GetEventsUsecase,
   GetEventUsecase,
   SubscribeToEventUsecase,
@@ -377,6 +378,7 @@ const usecases: Provider[] = [
   CreateEventUsecase,
   DeleteEventUsecase,
   GetEventsUsecase,
+  GetEventsAdminUsecase,
   GetEventUsecase,
   UpdateEventUsecase,
   SubscribeToEventUsecase,

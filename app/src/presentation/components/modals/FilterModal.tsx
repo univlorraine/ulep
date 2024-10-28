@@ -1,4 +1,4 @@
-import { IonButton } from '@ionic/react';
+import { IonButton, IonModal } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityTheme, ActivityThemeCategory } from '../../../domain/entities/Activity';
@@ -7,7 +7,6 @@ import Profile from '../../../domain/entities/Profile';
 import { CEFR_LEVELS } from '../../utils';
 import Checkbox from '../Checkbox';
 import styles from './FilterModal.module.css';
-import Modal from './Modal';
 
 export enum FiltersToDisplay {
     IS_MINE = 'is_mine',
@@ -92,7 +91,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
 
     const languages = [profile.nativeLanguage, ...profile.masteredLanguages, ...profile.learningLanguages];
     return (
-        <Modal isVisible={isVisible} onClose={onClose} hideWhiteBackground>
+        <IonModal animated isOpen={isVisible} onDidDismiss={onClose} className={styles.modal}>
             <div className={styles.container}>
                 <div className={styles.filterContainer}>
                     <h1>{t(title)}</h1>
@@ -188,7 +187,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
                     {t('filter.cancel')}
                 </IonButton>
             </div>
-        </Modal>
+        </IonModal>
     );
 };
 
