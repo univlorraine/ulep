@@ -8,11 +8,13 @@ interface ModalProps {
     isVisible: boolean;
     onClose: () => void;
     position?: 'center' | 'flex-end' | 'flex-start';
+    classNameModal?: string;
 }
 
 const Modal: React.FC<ModalProps> = ({
     children,
     className,
+    classNameModal,
     hideWhiteBackground,
     isVisible,
     onClose,
@@ -84,7 +86,7 @@ const Modal: React.FC<ModalProps> = ({
 
     return (
         <div
-            className={styles.modal}
+            className={`${styles.modal} ${classNameModal}`}
             style={{ justifyContent: position }}
             ref={modalRef}
             role="alertdialog"

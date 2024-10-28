@@ -8,7 +8,7 @@ import Vocabulary from '../../../domain/entities/Vocabulary';
 import { CreateVocabularyListCommand } from '../../../domain/interfaces/vocabulary/CreateVocabularyListUsecase.interface';
 import { useStoreState } from '../../../store/storeTypes';
 import CreateOrUpdateVocabularyContent from '../../components/contents/CreateOrUpdateVocabularyContent';
-import VocabularyContent from '../../components/contents/VocabularyContent';
+import VocabularyItemContent from '../../components/contents/VocabularyItemContent';
 import VocabularyListContent from '../../components/contents/VocabularyListContent';
 import AddVocabularyListModal from '../../components/modals/AddVocabularyListModal';
 import SelectTandemModal from '../../components/modals/SelectTandemModal';
@@ -131,7 +131,7 @@ const VocabulariesPage = () => {
                     />
                 )}
                 {vocabularyListSelected && !addContentMode && (
-                    <VocabularyContent
+                    <VocabularyItemContent
                         profile={profile}
                         vocabularyList={vocabularyListSelected}
                         vocabularyPairs={vocabularies}

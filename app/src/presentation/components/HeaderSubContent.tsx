@@ -8,17 +8,27 @@ interface HeaderSubContentProps {
     title: string;
     onBackPressed: () => void;
     kebabContent?: (closeMenu: () => void) => React.ReactNode;
+    isBackButton?: boolean;
 }
 
-const HeaderSubContent: React.FC<HeaderSubContentProps> = ({ title, onBackPressed, kebabContent }) => {
+const HeaderSubContent: React.FC<HeaderSubContentProps> = ({
+    title,
+    onBackPressed,
+    kebabContent,
+    isBackButton = true,
+}) => {
     const { t } = useTranslation();
     const [showMenu, setShowMenu] = useState(false);
     return (
         <div className="subcontent-header">
-            <IonButton fill="clear" onClick={onBackPressed}>
-                <IonIcon icon={chevronBack} color="dark" />
-            </IonButton>
-            <p className="subcontent-title">{title}</p>
+            {isBackButton && (
+                <IonButton fill="clear" onClick={onBackPressed}>
+                    <IonIcon icon={chevronBack} color="dark" />
+                </IonButton>
+            )}
+            <p className="subcontent-title" style={{ paddingLeft: isBackButton ? 0 : 20 }}>
+                {title}
+            </p>
             {kebabContent ? (
                 <>
                     <IonButton

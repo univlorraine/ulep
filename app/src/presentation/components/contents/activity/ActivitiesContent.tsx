@@ -19,6 +19,7 @@ interface ActivitiesContentProps {
     onBackPressed: () => void;
     onActivityClick: (activity: Activity) => void;
     profile: Profile;
+    isModal?: boolean;
 }
 
 export const ActivitiesContent: React.FC<ActivitiesContentProps> = ({
@@ -27,6 +28,7 @@ export const ActivitiesContent: React.FC<ActivitiesContentProps> = ({
     onActivityClick,
     profile,
     themes,
+    isModal,
 }) => {
     const { t } = useTranslation();
     const [searchTitle, setSearchTitle] = useState<string>('');
@@ -136,9 +138,9 @@ export const ActivitiesContent: React.FC<ActivitiesContentProps> = ({
 
     const allFilters = setAllFilters();
     return (
-        <div className="subcontent-container content-wrapper" style={{ paddingTop: 0 }} ref={contentRef}>
-            <HeaderSubContent title={t('activity.list.title')} onBackPressed={onBackPressed} />
-            <div className="activity-list">
+        <div style={{ paddingTop: 0 }} ref={contentRef}>
+            <HeaderSubContent title={t('activity.list.title')} onBackPressed={onBackPressed} isBackButton={isModal} />
+            <div className={styles['activity-list']}>
                 <SearchAndFilter
                     allFilters={allFilters}
                     searchTitle={searchTitle}

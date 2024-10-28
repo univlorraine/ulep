@@ -979,6 +979,24 @@
         "boolean_no_value": "Non",
         "boolean_yes_value": "Oui"
     },
+    "visio": {
+        "menu": {
+            "home": "Accueil",
+            "vocabulary": "Vocabulaire",
+            "activity": "Activités",
+            "profile": "Profil de {{name}}"
+        },
+        "hello": "Bonjour !",
+        "welcome": "Bienvenue dans ta session d’appel visio.",
+        "sections": {
+            "intro": "Tout au long de l’appel, tu peux accéder aux sections suivantes :",
+            "vocabulary": "Dans la section <linkOnClick>Vocabulaire</linkOnClick>, tu peux retrouver toutes tes listes de vocabulaire créées avec ton tandem, ou en créer de nouvelles !",
+            "activity": "La section <linkOnClick>Activités</linkOnClick> te permet de rechercher des fiches d’activités à réaliser à deux.",
+            "profile": "Enfin, tu peux retrouver le <linkOnClick>Profil de ton tandem</linkOnClick> pour retrouver les informations le ou la concernant !"
+        },
+        "stay_polite": "Reste poli et courtois pendant ton échange avec ton tandem.",
+        "contact_animator": "Si un problème survient, tu peux contacter ton animateur !"
+    },
     "languages_code": {
         "aa": "Afar",
         "ab": "Abkhaze",
