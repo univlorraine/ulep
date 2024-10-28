@@ -40,6 +40,33 @@
             "unexpected": "Erreur inconnue"
         }
     },
+    "news": {
+        "list": {
+            "title": "Actualités",
+            "filter_title": "Sélectionner les filtres pour les news",
+            "load_more": "Voir plus"
+        },
+        "show": {
+            "change_language": "Changer",
+            "language": "Langue",
+            "author": "Auteur",
+            "change_language_modal": {
+                "title": "Choisir la langue",
+                "current": "Sélectionnée"
+            }
+        }
+    },
+    "filter": {
+        "languages": "Langues",
+        "levels": "Niveaux",
+        "themes": "Thèmes",
+        "apply": "Appliquer",
+        "cancel": "Annuler",
+        "is_mine": "Mes fiches"
+    },
+    "credit": {
+        "title": "Auteur du fichier"
+    },
     "activity": {
         "title": "Fiche d'activité",
         "status": {
@@ -54,16 +81,7 @@
             "language": "Langue",
             "level": "Niveau",
             "theme": "Thème",
-            "search": "Rechercher une activité",
-            "filter": {
-                "title": "Filtrer les fiches d’activité",
-                "languages": "Langues",
-                "levels": "Niveaux",
-                "themes": "Thèmes",
-                "apply": "Appliquer",
-                "cancel": "Annuler",
-                "is_mine": "Mes fiches"
-            }
+            "search": "Rechercher une activité"
         },
         "show": {
             "activity_shared": "Votre fiche a été partagée à votre animateur",
@@ -482,6 +500,10 @@
             "complete_learning_journal_button": "Compléter mon journal d'apprentissage",
             "time_past": "Le temps que vous avez passé ensemble a été comptabilisé.",
             "complete_learning_journal": "Tu pourras le retrouver plus tard dans ton journal d'apprentissage."
+        },
+        "news": {
+            "title": "Actualités",
+            "see_all": "Voir toutes les actualités"
         }
     },
     "session": {

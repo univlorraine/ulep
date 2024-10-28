@@ -254,6 +254,7 @@ const customDataProvider = {
                 url.search = LearningLanguageMatchesQuery(params);
                 break;
             case 'news':
+                url = new URL(`${process.env.REACT_APP_API_URL}/news/admin`);
                 url.search = NewsQuery(params);
                 break;
             case 'universities':

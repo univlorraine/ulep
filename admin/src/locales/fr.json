@@ -375,7 +375,8 @@
                 "required": "Les dates de publication, le titre et le contenu sont obligatoires"
             },
             "start_publication_date": "Date de début de publication",
-            "end_publication_date": "Date de fin de publication"
+            "end_publication_date": "Date de fin de publication",
+            "credit_image": "Auteur de l'image"
         },
         "status": {
             "label": "Statut",

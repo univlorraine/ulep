@@ -19,6 +19,7 @@ export interface NewsProps {
   university: University;
   image?: MediaObject;
   imageURL?: string;
+  creditImage?: string;
   translations: NewsTranslation[];
   languageCode: string;
   startPublicationDate: Date;
@@ -35,7 +36,8 @@ export class News {
   readonly translations: NewsTranslation[];
   readonly languageCode: string;
   readonly image?: MediaObject;
-  readonly imageURL?: string;
+  imageURL?: string;
+  readonly creditImage?: string;
   readonly university: University;
   readonly startPublicationDate: Date;
   readonly endPublicationDate: Date;
@@ -57,6 +59,7 @@ export class News {
     createdAt,
     updatedAt,
     status,
+    creditImage,
   }: NewsProps) {
     this.id = id;
     this.title = title;
@@ -71,5 +74,6 @@ export class News {
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
     this.status = status;
+    this.creditImage = creditImage;
   }
 }

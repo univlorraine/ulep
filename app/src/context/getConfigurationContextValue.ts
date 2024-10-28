@@ -46,6 +46,7 @@ import GetUniversityLanguagesUsecase from '../domain/usecases/GetUniversityLangu
 import GetUniversityUsecase from '../domain/usecases/GetUniversityUsecase';
 import GetUserUsecase from '../domain/usecases/GetUserUsecase';
 import LoginUsecase from '../domain/usecases/LoginUsecase';
+import GetAllNewsUsecase from '../domain/usecases/news/GetAllNewsUsecase';
 import RefreshTokensUsecase from '../domain/usecases/RefreshTokensUsecase';
 import ResetPasswordUsecase from '../domain/usecases/ResetPasswordUsecase';
 import RetrievePersonInfoUsecase from '../domain/usecases/RetrievePersonInfoUsecase';
@@ -187,6 +188,9 @@ const getConfigContextValue = ({
     const updateSession = new UpdateSessionUsecase(domainHttpAdapter);
     const cancelSession = new CancelSessionUsecase(domainHttpAdapter);
 
+    //News
+    const getAllNews = new GetAllNewsUsecase(domainHttpAdapter);
+
     return {
         accessToken,
         addDevice,
@@ -256,6 +260,7 @@ const getConfigContextValue = ({
         createSession,
         updateSession,
         cancelSession,
+        getAllNews,
     };
 };
 

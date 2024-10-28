@@ -1,16 +1,28 @@
 import * as Swagger from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
-import { Expose } from 'class-transformer';
+import { IsArray, IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
+import { Expose, Transform } from 'class-transformer';
 import { UniversityResponse } from '../universities';
 import { News, NewsStatus, NewsTranslation } from 'src/core/models';
 import { MediaObjectResponse } from '../medias';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { PaginationDto } from '../pagination';
 
+
 export class GetNewsQuery extends PaginationDto {
   @ApiPropertyOptional({ type: 'string' })
   @IsOptional()
-  universityId?: string;
+  title?: string;
+
+  @ApiPropertyOptional({ type: 'string' })
+  @IsOptional()
+  languageCodes?: string[];
+}
+export class GetNewsAdminQuery extends PaginationDto {
+  @ApiPropertyOptional({ type: 'string', isArray: true })
+  @IsOptional()
+  @IsArray()
+  @Transform(({ value }) => (Array.isArray(value) ? value : [value]))
+  universityIds?: string[];
 
   @ApiPropertyOptional({ type: 'string' })
   @IsOptional()
@@ -22,7 +34,7 @@ export class GetNewsQuery extends PaginationDto {
 
   @ApiPropertyOptional({ type: 'string' })
   @IsOptional()
-  languageCode?: string;
+  languageCodes?: string[];
 }
 
 export class CreateNewsRequest {
@@ -64,6 +76,11 @@ export class CreateNewsRequest {
   @IsNotEmpty()
   @IsString()
   endPublicationDate: string;
+
+  @Swagger.ApiPropertyOptional({ type: 'string' })
+  @IsOptional()
+  @IsString()
+  creditImage?: string;
 }
 
 export class UpdateNewsRequest {
@@ -110,6 +127,11 @@ export class UpdateNewsRequest {
   @IsNotEmpty()
   @IsString()
   endPublicationDate: string;
+
+  @Swagger.ApiPropertyOptional({ type: 'string' })
+  @IsOptional()
+  @IsString()
+  creditImage?: string;
 }
 
 export class NewsResponse {
@@ -144,6 +166,10 @@ export class NewsResponse {
   @Swagger.ApiProperty({ type: MediaObjectResponse })
   @Expose({ groups: ['read'] })
   imageURL?: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @Expose({ groups: ['read'] })
+  creditImage?: string;
 
   @Swagger.ApiProperty({ type: 'Date' })
   @Expose({ groups: ['read'] })
@@ -181,6 +207,7 @@ export class NewsResponse {
       endPublicationDate: instance.endPublicationDate,
       createdAt: instance.createdAt,
       updatedAt: instance.updatedAt,
+      creditImage: instance.creditImage,
     });
   }
 }

@@ -15,6 +15,7 @@ export interface NewsFormPayload {
         content: string;
         languageCode: string;
     }[];
+    creditImage?: string;
 }
 
 export type NewsTranslation = {
@@ -34,6 +35,8 @@ export type News = {
     startPublicationDate: Date;
     endPublicationDate: Date;
     translations: NewsTranslation[];
+    creditImage?: string;
+    imageURL?: string;
 };
 
 export enum NewsStatus {

@@ -29,6 +29,7 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
     const [title, setTitle] = useState<string>(record?.title || '');
     const [content, setContent] = useState<string>(record?.content || '');
     const [image, setImage] = useState<File | undefined>(undefined);
+    const [creditImage, setCreditImage] = useState<string>(record?.creditImage || '');
     const [status, setStatus] = useState<NewsStatus>(record?.status || NewsStatus.DRAFT);
 
     const [startPublicationDate, setStartPublicationDate] = useState<Date>(
@@ -80,6 +81,7 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
             startPublicationDate,
             endPublicationDate,
             image,
+            creditImage,
         });
 
     if (isLoadingIdentity || !identity) {
@@ -215,6 +217,20 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                             <Typography variant="subtitle1">{translate('news.form.illustration')}</Typography>
                             <ImageUploader onImageSelect={setImage} />
                         </Box>
+
+                        {(image || record?.imageURL) && (
+                            <Box sx={{ width: '100%' }}>
+                                <Typography variant="subtitle1">{translate('news.form.credit_image')}</Typography>
+                                <OutlinedInput
+                                    name="creditImage"
+                                    onChange={(e: any) => setCreditImage(e.target.value)}
+                                    placeholder="Credit image"
+                                    type="text"
+                                    value={creditImage}
+                                    fullWidth
+                                />
+                            </Box>
+                        )}
 
                         <Box sx={{ width: '100%' }}>
                             <Typography variant="subtitle1">{translate('news.form.title')}</Typography>

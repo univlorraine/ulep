@@ -482,7 +482,7 @@ model Tandems {
   // We store compatibilityScore as an Int in order to avoid float approximation
   // This means the score between 0-1 (float) should be converted to 0-100 (int)
   compatibilityScore    Int                 @default(0)
-  learning_type         String              
+  learning_type         String
   created_at            DateTime            @default(now())
   updated_at            DateTime            @updatedAt
   LearningLanguages     LearningLanguages[]
@@ -696,6 +696,7 @@ model News {
   content_text_content_id String
   university_id           String
   image_id                String? @unique
+  credit_image            String?
   status                  String  @default("DRAFT")
   start_publication_date  DateTime
   end_publication_date    DateTime
@@ -746,7 +747,7 @@ model Events {
   with_subscription       Boolean @default(false)
   created_at              DateTime @default(now())
   updated_at              DateTime @updatedAt
-  
+
   SubscribedProfiles      Profiles[]
   DiffusionLanguages      LanguageCodes[] @relation("DiffusionLanguages")
   ConcernedUniversities   Organizations[] @relation("ConcernedUniversities")

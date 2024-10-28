@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Collection, PrismaService } from '@app/common';
+import { Collection, ModeQuery, PrismaService } from '@app/common';
 import { NewsRepository } from 'src/core/ports/news.repository';
 import { newsMapper, NewsRelations } from '../mappers/news.mapper';
 import { News } from 'src/core/models';
@@ -13,23 +13,28 @@ export class PrismaNewsRepository implements NewsRepository {
     const wherePayload = where
       ? {
           Organization: {
-            id: where.universityId,
+            id: {
+              in: where.universityIds,
+            },
           },
           TitleTextContent: {
             text: {
               contains: where.title,
+              mode: ModeQuery.INSENSITIVE,
             },
-            ...(where.languageCode && {
+            ...(where.languageCodes && {
               OR: [
                 {
                   LanguageCode: {
-                    code: where.languageCode,
+                    code: {
+                      in: where.languageCodes,
+                    },
                   },
                 },
                 {
                   Translations: {
                     some: {
-                      LanguageCode: { code: where.languageCode },
+                      LanguageCode: { code: { in: where.languageCodes } },
                     },
                   },
                 },
@@ -110,6 +115,7 @@ export class PrismaNewsRepository implements NewsRepository {
             },
           },
         },
+        credit_image: command.creditImage,
         status: command.status,
         start_publication_date: command.startPublicationDate,
         end_publication_date: command.endPublicationDate,
@@ -157,6 +163,7 @@ export class PrismaNewsRepository implements NewsRepository {
             },
           },
         },
+        credit_image: command.creditImage,
         status: command.status,
         start_publication_date: command.startPublicationDate,
         end_publication_date: command.endPublicationDate,

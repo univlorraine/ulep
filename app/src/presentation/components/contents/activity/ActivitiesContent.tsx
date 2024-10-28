@@ -1,5 +1,4 @@
-import { IonButton, IonIcon, IonImg, IonSearchbar } from '@ionic/react';
-import { arrowBackOutline, closeOutline, filterOutline } from 'ionicons/icons';
+import { IonButton, IonImg } from '@ionic/react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AddSvg } from '../../../../assets';
@@ -8,10 +7,11 @@ import Language from '../../../../domain/entities/Language';
 import Profile from '../../../../domain/entities/Profile';
 import useGetActivities from '../../../hooks/useGetActivities';
 import ActivityCard from '../../card/ActivityCard';
-import Loader from '../../Loader';
-import ActivityFilterModal from '../../modals/ActivityFilterModal';
-import styles from './ActivitiesContent.module.css';
 import HeaderSubContent from '../../HeaderSubContent';
+import Loader from '../../Loader';
+import FilterModal, { FiltersToDisplay } from '../../modals/FilterModal';
+import SearchAndFilter, { Filter, FilterType } from '../../SearchAndFilter';
+import styles from './ActivitiesContent.module.css';
 
 interface ActivitiesContentProps {
     themes: ActivityThemeCategory[];
@@ -20,19 +20,6 @@ interface ActivitiesContentProps {
     onActivityClick: (activity: Activity) => void;
     profile: Profile;
 }
-
-enum FilterType {
-    LANGUAGE = 'language',
-    PROFICIENCY = 'proficiency',
-    ACTIVITY_THEME = 'activity_theme',
-    SHOULD_TAKE_ALL_MINE = 'should_take_all_mine',
-}
-
-type Filter = {
-    id: string;
-    name: string;
-    type: FilterType;
-};
 
 export const ActivitiesContent: React.FC<ActivitiesContentProps> = ({
     onBackPressed,
@@ -81,19 +68,19 @@ export const ActivitiesContent: React.FC<ActivitiesContentProps> = ({
     }, [handleOnEndReached]);
 
     const onFilterApplied = (filters: {
-        languages: Language[];
-        levels: CEFR[];
-        themes: ActivityTheme[];
-        shouldTakeAllMine: boolean;
+        languages?: Language[];
+        levels?: CEFR[];
+        themes?: ActivityTheme[];
+        shouldTakeAllMine?: boolean;
     }) => {
-        setLanguageFilter(filters.languages);
-        setProficiencyFilter(filters.levels);
-        setActivityThemeFilter(filters.themes);
-        setShouldTakeAllMineFilter(filters.shouldTakeAllMine);
+        setLanguageFilter(filters.languages ?? []);
+        setProficiencyFilter(filters.levels ?? []);
+        setActivityThemeFilter(filters.themes ?? []);
+        setShouldTakeAllMineFilter(filters.shouldTakeAllMine ?? false);
         setShowFiltersModal(false);
     };
 
-    const allFiltersName = () => {
+    const setAllFilters = () => {
         const filters: Filter[] = [];
         if (languageFilter.length > 0) {
             languageFilter.forEach((lang) => {
@@ -147,62 +134,37 @@ export const ActivitiesContent: React.FC<ActivitiesContentProps> = ({
         setShouldTakeAllMineFilter(false);
     };
 
-    const allFilters = allFiltersName();
+    const allFilters = setAllFilters();
     return (
         <div className="subcontent-container content-wrapper" style={{ paddingTop: 0 }} ref={contentRef}>
-            <HeaderSubContent
-                title={t('activity.list.title')}
-                onBackPressed={onBackPressed}
-            />
+            <HeaderSubContent title={t('activity.list.title')} onBackPressed={onBackPressed} />
             <div className="activity-list">
-                <IonSearchbar
-                    placeholder={t('activity.list.search') as string}
-                    value={searchTitle}
-                    onIonChange={(e) => setSearchTitle(e.detail.value as string)}
+                <SearchAndFilter
+                    allFilters={allFilters}
+                    searchTitle={searchTitle}
+                    setSearchTitle={setSearchTitle}
+                    setShowFiltersModal={setShowFiltersModal}
+                    onFilterRemove={onFilterRemove}
+                    onFilterClear={onFilterClear}
                 />
-                <div className={styles['filter-container']}>
-                    <div>
-                        <IonButton
-                            className={styles['filter-button']}
-                            fill="clear"
-                            onClick={() => setShowFiltersModal(true)}
-                        >
-                            <IonIcon icon={filterOutline} className={styles['filter-icon']} aria-hidden />
-                            {t('activity.list.filter_title')}
-                        </IonButton>
-                    </div>
-                    <div>
-                        {allFilters.map((filter) => (
-                            <IonButton
-                                fill="clear"
-                                key={filter.id}
-                                className={styles['active-filter-button']}
-                                aria-label={t('activity.list.filter_remove', { filter }) as string}
-                                onClick={() => onFilterRemove(filter)}
-                            >
-                                {filter.name}
-                                <IonIcon icon={closeOutline} aria-hidden />
-                            </IonButton>
-                        ))}
-                        {allFilters.length > 0 && (
-                            <IonButton className={styles['filter-button']} fill="clear" onClick={() => onFilterClear()}>
-                                {t('activity.list.filter_clear')}
-                            </IonButton>
-                        )}
-                    </div>
-                    <div className={styles['activity-list-container']}>
-                        {activities.map((activity) => (
-                            <ActivityCard key={activity.id} activity={activity} onClick={onActivityClick} />
-                        ))}
-                    </div>
-                    {isLoading && <Loader />}
+                <div className={styles['activity-list-container']}>
+                    {activities.map((activity) => (
+                        <ActivityCard key={activity.id} activity={activity} onClick={onActivityClick} />
+                    ))}
                 </div>
+                {isLoading && <Loader />}
             </div>
 
             <IonButton fill="clear" className="add-button" onClick={() => onAddActivity()}>
                 <IonImg aria-hidden className="add-button-icon" src={AddSvg} />
             </IonButton>
-            <ActivityFilterModal
+            <FilterModal
+                filterToDisplay={[
+                    FiltersToDisplay.IS_MINE,
+                    FiltersToDisplay.LANGUAGES,
+                    FiltersToDisplay.LEVELS,
+                    FiltersToDisplay.THEMES,
+                ]}
                 isVisible={showFiltersModal}
                 onClose={() => setShowFiltersModal(false)}
                 onFilterApplied={onFilterApplied}
@@ -212,6 +174,7 @@ export const ActivitiesContent: React.FC<ActivitiesContentProps> = ({
                 currentLanguagesFilter={languageFilter}
                 currentLevelsFilter={proficiencyFilter}
                 currentThemesFilter={activityThemeFilter}
+                title="activity.list.filter.title"
             />
         </div>
     );

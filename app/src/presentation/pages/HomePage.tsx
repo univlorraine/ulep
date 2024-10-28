@@ -2,21 +2,26 @@ import { IonContent, useIonToast } from '@ionic/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory, useLocation } from 'react-router';
+import News from '../../domain/entities/News';
+import Session from '../../domain/entities/Session';
 import Tandem from '../../domain/entities/Tandem';
 import { useStoreState } from '../../store/storeTypes';
 import HomeContent from '../components/contents/HomeContent';
 import OnlineWebLayout from '../components/layout/OnlineWebLayout';
 import EndSessionModal from '../components/modals/EndSessionModal';
+import NewsContentModal, {
+    DisplayNewsContentModal,
+    DisplayNewsContentModalEnum,
+} from '../components/modals/NewsContentModal';
+import SessionsContentModal, {
+    DisplaySessionModal,
+    DisplaySessionModalEnum,
+} from '../components/modals/SessionsContentModal';
 import TandemProfileModal from '../components/modals/TandemProfileModal';
 import TandemStatusModal from '../components/modals/TandemStatusModal';
 import useGetHomeData from '../hooks/useGetHomeData';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../utils';
-import Session from '../../domain/entities/Session';
-import SessionsContentModal, {
-    DisplaySessionModalEnum,
-    DisplaySessionModal,
-} from '../components/modals/SessionsContentModal';
 
 interface HomePageLocationProps {
     endSession: boolean;
@@ -32,7 +37,8 @@ const HomePage: React.FC = () => {
     const [selectedTandem, setSelectedTandem] = useState<Tandem>();
     const [refresh, setRefresh] = useState<boolean>(false);
     const [displaySessionModal, setDisplaySessionModal] = useState<DisplaySessionModal>();
-    const { tandems, sessions, error, isLoading } = useGetHomeData(refresh);
+    const [displayNewsContent, setDisplayNewsContent] = useState<DisplayNewsContentModal>();
+    const { tandems, sessions, news, error, isLoading } = useGetHomeData(refresh);
     const location = useLocation<HomePageLocationProps>();
     const [isEndSessionModalOpen, setIsEndSessionModalOpen] = useState<boolean>(location.state?.endSession || false);
 
@@ -52,7 +58,7 @@ const HomePage: React.FC = () => {
     }
 
     const handleRefresh = () => {
-        setRefresh(!refresh)
+        setRefresh(!refresh);
     };
 
     const onShowSessionListPressed = () => {
@@ -74,7 +80,7 @@ const HomePage: React.FC = () => {
                 type: DisplaySessionModalEnum.show,
                 tandem,
                 session,
-                confirmCreation
+                confirmCreation,
             });
         }
     };
@@ -86,7 +92,7 @@ const HomePage: React.FC = () => {
             setDisplaySessionModal({
                 type: DisplaySessionModalEnum.form,
                 tandem,
-                session
+                session,
             });
         }
     };
@@ -97,8 +103,27 @@ const HomePage: React.FC = () => {
         } else {
             setDisplaySessionModal({
                 type: DisplaySessionModalEnum.form,
-                tandem
+                tandem,
             });
+        }
+    };
+
+    const onShowNewsPressed = (selectedNews?: News) => {
+        if (isHybrid) {
+            history.push(selectedNews ? 'show-news' : 'news', { news: selectedNews });
+        } else {
+            setDisplayNewsContent({
+                type: selectedNews ? DisplayNewsContentModalEnum.show : DisplayNewsContentModalEnum.list,
+                news: selectedNews,
+            });
+        }
+    };
+
+    const onShowCloseNewsPressed = () => {
+        if (displayNewsContent?.type === DisplayNewsContentModalEnum.show) {
+            setDisplayNewsContent({ type: DisplayNewsContentModalEnum.list });
+        } else {
+            setDisplayNewsContent(undefined);
         }
     };
 
@@ -112,10 +137,12 @@ const HomePage: React.FC = () => {
                     profile={profile}
                     tandems={tandems}
                     sessions={sessions}
+                    news={news}
                     onShowSessionPressed={onShowSessionPressed}
                     onUpdateSessionPressed={onUpdateSessionPressed}
                     onCreateSessionPressed={onCreateSessionPressed}
                     onShowSessionListPressed={onShowSessionListPressed}
+                    onShowNewsPressed={onShowNewsPressed}
                 />
             </IonContent>
         );
@@ -130,10 +157,12 @@ const HomePage: React.FC = () => {
                     onValidatedTandemPressed={onValidatedTandemPressed}
                     tandems={tandems}
                     sessions={sessions}
+                    news={news}
                     onShowSessionPressed={onShowSessionPressed}
                     onUpdateSessionPressed={onUpdateSessionPressed}
                     onCreateSessionPressed={onCreateSessionPressed}
                     onShowSessionListPressed={onShowSessionListPressed}
+                    onShowNewsPressed={onShowNewsPressed}
                 />
             </OnlineWebLayout>
             <TandemStatusModal
@@ -172,6 +201,13 @@ const HomePage: React.FC = () => {
                 isOpen={isEndSessionModalOpen}
                 onClose={() => setIsEndSessionModalOpen(false)}
                 onCompleteLearningJournalPressed={onCompleteLearningJournalPressed}
+            />
+            <NewsContentModal
+                isVisible={displayNewsContent !== undefined}
+                onClose={onShowCloseNewsPressed}
+                onNewsPressed={onShowNewsPressed}
+                displayNewsContentModal={displayNewsContent}
+                profile={profile}
             />
         </>
     );

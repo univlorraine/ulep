@@ -23,6 +23,8 @@ import CreateSessionPage from '../pages/mobile/CreateSessionPage';
 import EndSessionPage from '../pages/mobile/EndSessionPage';
 import FlipcardsPage from '../pages/mobile/FlipcardsPage';
 import MediaPage from '../pages/mobile/MediaPage';
+import NewsListPage from '../pages/mobile/NewsListPage';
+import NewsShowPage from '../pages/mobile/NewsShowPage';
 import ProfilePage from '../pages/mobile/ProfilePage';
 import ReportPage from '../pages/mobile/ReportPage';
 import SessionListPage from '../pages/mobile/SessionListPage';
@@ -130,6 +132,12 @@ const OfflineRouter: React.FC = () => {
                 </MobileRoute>
                 <MobileRoute exact path={'/media'}>
                     <MediaPage />
+                </MobileRoute>
+                <MobileRoute exact path={'/news'}>
+                    <NewsListPage />
+                </MobileRoute>
+                <MobileRoute exact path={'/show-news'}>
+                    <NewsShowPage />
                 </MobileRoute>
                 <MobileRoute exact path={'/sessions'}>
                     <SessionListPage />

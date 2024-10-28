@@ -115,18 +115,9 @@ export class ActivityController {
         limit: query.limit,
       },
       searchTitle: query.searchTitle,
-      themesIds:
-        typeof query.themesIds === 'string' //Because its query params, we need to convert it to an array if its a string when we have only one element on url
-          ? [query.themesIds]
-          : query.themesIds,
-      languageLevels:
-        typeof query.languageLevels === 'string' //Because its query params, we need to convert it to an array if its a string when we have only one element on url
-          ? [query.languageLevels]
-          : query.languageLevels,
-      languagesCodes:
-        typeof query.languagesCodes === 'string' //Because its query params, we need to convert it to an array if its a string when we have only one element on url
-          ? [query.languagesCodes]
-          : query.languagesCodes,
+      themesIds: query.themesIds,
+      languageLevels: query.languageLevels,
+      languagesCodes: query.languagesCodes,
       userId: query.shouldTakeOnlyMine ? user.sub : undefined,
     });
 

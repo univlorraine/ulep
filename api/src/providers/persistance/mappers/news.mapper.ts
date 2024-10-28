@@ -51,6 +51,7 @@ export const newsMapper = (snapshot: NewsSnapshot): News => {
     endPublicationDate: snapshot.end_publication_date,
     createdAt: snapshot.created_at,
     updatedAt: snapshot.updated_at,
+    creditImage: snapshot.credit_image,
   };
 };
 

@@ -1,0 +1,30 @@
+.modal {
+    --border-radius: 20px;
+    --height: auto;
+}
+
+.container {
+    padding: 20px;
+}
+
+.close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 25px;
+    height: 25px;
+    background: black;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 4px;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 32px;
+}
+
+.credit {
+    font-size: 20px;
+}
