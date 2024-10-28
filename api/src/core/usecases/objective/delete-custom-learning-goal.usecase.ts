@@ -19,7 +19,7 @@ export class DeleteCustomLearningGoalUsecase {
       throw new RessourceDoesNotExist();
     }
 
-    this.customLearningGoalRepository.delete(id);
+    await this.customLearningGoalRepository.delete(id);
 
     const customLearningGoals =
       await this.customLearningGoalRepository.findAllByLearningLanguageId(

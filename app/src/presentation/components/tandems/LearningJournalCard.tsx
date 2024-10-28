@@ -6,7 +6,7 @@ import { TrophiePng } from '../../../assets';
 import { IonButton } from '@ionic/react';
 import useOnOpenChat from '../../hooks/useOnOpenChat';
 import useGetMediaObject from '../../hooks/useGetMediaObject';
-import { handleDownloadFile } from '../../utils';
+import { useConfig } from '../../../context/ConfigurationContext';
 
 interface LearningJournalCardProps {
     tandem: Tandem;
@@ -14,6 +14,7 @@ interface LearningJournalCardProps {
 
 const LearningJournalCard: React.FC<LearningJournalCardProps> = ({ tandem }) => {
     const { t } = useTranslation();
+    const { fileAdapter } = useConfig();
     const onOpenChat = useOnOpenChat({ tandemId: tandem.id, withAdministrator: true });
     const {
         loading: loadingCertificate,
@@ -33,7 +34,7 @@ const LearningJournalCard: React.FC<LearningJournalCardProps> = ({ tandem }) => 
                 t(`languages_code.${tandem.learningLanguage.code}`),
                 `${tandem.learningLanguage.profile?.user.firstname} ${tandem.learningLanguage.profile?.user.lastname}`
             ].join(' - ');
-            handleDownloadFile(certificateFile, certificateFileName);
+            fileAdapter.saveFile(certificateFile, certificateFileName);
         }
     };
 

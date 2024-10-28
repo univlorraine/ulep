@@ -160,7 +160,6 @@ export class ObjectiveController {
   }
 
   @Post('custom-learning-goals')
-  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   async createCustomLearningGoal(
     @Body() body: CreateCustomLearningGoalRequest,
@@ -172,7 +171,6 @@ export class ObjectiveController {
   }
 
   @Put('custom-learning-goals/:id')
-  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   async updateCustomLearningGoal(
     @Param('id', ParseUUIDPipe) id: string,
@@ -185,7 +183,6 @@ export class ObjectiveController {
   }
 
   @Delete('custom-learning-goals/:id')
-  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   async deleteCustomLearningGoal(@Param('id', ParseUUIDPipe) id: string) {
     const customLearningGoals =
