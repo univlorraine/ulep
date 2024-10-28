@@ -1,0 +1,101 @@
+{
+    "export": {
+        "headers": {
+            "learning_request_id": "ID de requête",
+            "email": "Email",
+            "firstname": "Prénom",
+            "lastname": "Nom",
+            "age": "Âge",
+            "gender": "Genre",
+            "role": "Rôle",
+            "status": "Statut",
+            "user_deactivated": "Est désactivé",
+            "deactivated_reason": "Raison désactivation",
+            "accepts_email": "Accepte les emails",
+            "division": "Division",
+            "diploma": "Diplôme",
+            "staff_function": "Fonction",
+            "user_created_at": "Date de création utilisateur",
+            "user_last_update": "Dernière mise à jour utilisateur",
+            "university": "Université",
+            "country": "Pays",
+            "native_language": "Langue native",
+            "mastered_languages": "Langues maitrisées",
+            "learning_request_created_at": "Date de création requête",
+            "learning_request_last_update": "Dernière mise à jour requête",
+            "learning_request_language": "Langue demandée",
+            "learning_request_level": "Niveau langue demandée",
+            "learning_request_type": "Type d'apprentissage",
+            "learning_request_campus": "Campus",
+            "learning_request_same_gender": "Requête même genre",
+            "learning_request_same_age": "Requête même âge",
+            "learning_request_certificate_option": "Requête option certificat",
+            "learning_request_specific_program": "Requête programme spécifique",
+            "has_associated_tandem": "A un tandem actif",
+            "associated_tandem_creation_date": "Date de création du tandem",
+            "goals": "Objectifs",
+            "interests": "Intérêts",
+            "meeting_frequency": "Fréquence de RDV",
+            "bio_superpower": "Bio super-pouvoir",
+            "bio_favorite_place": "Bio lieu préféré",
+            "bio_experience": "Bio expérience",
+            "bio_anecdote": "Bio anecdote",
+            "monday_availabilities": "Disponibilité lundi",
+            "tuesday_availabilities": "Disponibilité mardi",
+            "wednesday_availabilities": "Disponibilité mercredi",
+            "thursday_availabilities": "Disponibilité jeudi",
+            "friday_availabilities": "Disponibilité vendredi",
+            "saturday_availabilities": "Disponibilité samedi",
+            "sunday_availabilities": "Disponibilité dimanche",
+            "availabilities_note": "Note de disponibilité",
+            "availabilities_note_is_private": "Note de disponibilité est privée",
+            "profile_created_at": "Date de création profil",
+            "profile_last_update": "Dernière mise à jour profil",
+            "is_blacklisted": "Est sur liste noire",
+            "suggested_languages": "Langues suggérées",
+            "historized_tandems": "Anciens tandems",
+            "avatar": "Avatar",
+            "arrayKeys": {
+                "language": "Langue",
+                "suggestion_date": "Date suggestion",
+                "historization_date": "Date historisation"
+            }
+        },
+        "values": {
+            "true": "Oui",
+            "false": "Non",
+            "gender": {
+                "MALE": "Masculin",
+                "FEMALE": "Féminin",
+                "OTHER": "Non binaire"
+            },
+            "role": {
+                "STUDENT": "Étudiant•e",
+                "STAFF": "Personnel de l'université"
+            },
+            "status": {
+                "ACTIVE": "Actif",
+                "BANNED": "Banni",
+                "REPORTED": "Signalé",
+                "CANCELED": "Annulé"
+            },
+            "learningType": {
+                "ETANDEM": "Etandem",
+                "TANDEM": "Tandem",
+                "BOTH": "Les deux"
+            },
+            "meeting_frequency": {
+                "ONCE_A_WEEK": "Une fois par semaine",
+                "TWICE_A_WEEK": "Deux fois par semaine",
+                "THREE_TIMES_A_WEEK": "Trois fois par semaine",
+                "TWICE_A_MONTH": "Deux fois par mois",
+                "THREE_TIMES_A_MONTH": "trois fois par mois"
+            },
+            "availabilities": {
+                "UNAVAILABLE": "Non disponible",
+                "AVAILABLE": "Disponible",
+                "VERY_AVAILABLE": "Très disponible"
+            }
+        }
+    }
+}
