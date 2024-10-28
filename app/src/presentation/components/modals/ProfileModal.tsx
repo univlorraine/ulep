@@ -1,8 +1,8 @@
 import { useState } from 'react';
+import Profile from '../../../domain/entities/Profile';
 import ProfileContent from '../contents/ProfileContent';
 import SettingsContent from '../contents/SettingsContent';
 import Modal from './Modal';
-import Profile from '../../../domain/entities/Profile';
 
 interface ProfileModalProps {
     isVisible: boolean;
@@ -18,11 +18,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ isVisible, onClose, onDisco
     return (
         <Modal isVisible={isVisible} onClose={onClose} position="flex-end" hideWhiteBackground>
             {!displaySettings ? (
-                <ProfileContent
-                    onClose={onClose}
-                    onParameterPressed={() => setDisplaySettings(true)}
-                    profile={profile}
-                />
+                <ProfileContent onParameterPressed={() => setDisplaySettings(true)} profile={profile} />
             ) : (
                 <SettingsContent
                     onBackPressed={() => setDisplaySettings(false)}

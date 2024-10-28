@@ -1,0 +1,110 @@
+.container {
+    background-color: white !important;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    .header {
+        display: flex;
+        align-items: center;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #ebebeb;
+        width: 100%;
+        padding-bottom: 0;
+
+        .back_button {
+            width: 46px;
+            height: 46px;
+        }
+
+        .title {
+            color: #000;
+            font-family: 'Roboto';
+            font-size: 17px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: 21px;
+            margin: 0 46px 0 0;
+            display: flex;
+            flex: 1;
+            justify-content: center;
+        }
+    }
+    .content_container {
+        background-color: #f2f4f7;
+        flex: 1;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        justify-content: space-between;
+        .content {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .status_container {
+            /* align-self: flex-start; */
+            @media (max-width: 768px) {
+                align-self: center;
+            }
+        }
+
+        .details_container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            p {
+                margin: 0;
+            }
+            .details_bloc {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+                justify-content: space-between;
+            }
+            .item {
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+                .item_title {
+                    color: #000;
+                    font-family: 'Maven Pro';
+                    font-size: 16px;
+                    font-style: normal;
+                    font-weight: 400;
+                    line-height: 20px;
+                }
+                .item_content {
+                    color: #737272;
+                    font-family: 'Maven Pro';
+                    font-size: 16px;
+                    font-style: normal;
+                    font-weight: 500;
+                    line-height: 20px;
+                    padding: 12px 16px;
+                    background-color: #fff;
+                    border-radius: 5px;
+                }
+                .item_content_media {
+                    padding: 0;
+                    background-color: #fff;
+                    border-radius: 5px;
+                    width: fit-content;
+                }
+                .item_strong {
+                    color: #000;
+                }
+            }
+        }
+        .cancel_button {
+            background-color: #f2f4f7;
+        }
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    .container {
+        padding: 20px 5px;
+    }
+}

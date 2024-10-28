@@ -1,3 +1,18 @@
+.container {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 20px;
+    overflow-y: auto;
+
+    .content {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+    }
+}
+
 .back-button {
     background: none;
 }
@@ -23,21 +38,11 @@
     font-style: normal;
     font-weight: 500;
     line-height: 20px;
-}
-
-.container {
-    background-color: white;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    padding: 20px;
-    overflow-y: auto;
-}
-
-.content {
-    align-items: center;
-    display: flex;
-    flex-direction: column;
+    .icon {
+        height: 40px;
+        width: 40px;
+        padding: 8px;
+    }
 }
 
 .image {
@@ -69,11 +74,4 @@
     line-height: 20px;
     margin-bottom: 40px;
     text-align: center;
-}
-
-@media (min-width: 768px) {
-    .container {
-        padding: 20px 60px;
-        width: 40%;
-    }
 }

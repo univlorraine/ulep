@@ -1,7 +1,8 @@
-import { useIonToast } from '@ionic/react';
+import { IonImg, useIonToast } from '@ionic/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeftSvg, ArrowRightSvg, EditPng, ParameterPng, SmallAvatarPng } from '../../../assets';
+import { useHistory } from 'react-router';
+import { ArrowRightSvg, EditPng, ParameterPng, SignalerPng, SmallAvatarPng } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
 import Profile from '../../../domain/entities/Profile';
 import { AvatarMaxSizeError } from '../../../domain/usecases/UpdateAvatarUsecase';
@@ -12,18 +13,17 @@ import Loader from '../Loader';
 import styles from './ProfileContent.module.css';
 
 interface ProfileContentProps {
-    onClose: () => void;
     onParameterPressed: () => void;
     profile: Profile;
 }
 
-const ProfileContent: React.FC<ProfileContentProps> = ({ onClose, onParameterPressed, profile }) => {
-    const { configuration } = useConfig();
+const ProfileContent: React.FC<ProfileContentProps> = ({ onParameterPressed, profile }) => {
     const { t } = useTranslation();
     const [showToast] = useIonToast();
     const [loading, setLoading] = useState<boolean>(false);
     const { updateProfile } = useStoreActions((store) => store);
     const { cameraAdapter, updateAvatar } = useConfig();
+    const history = useHistory();
 
     const { handleLogout } = useLogout();
 
@@ -48,17 +48,12 @@ const ProfileContent: React.FC<ProfileContentProps> = ({ onClose, onParameterPre
         }
     };
 
+    const navigateToReports = (): void => {
+        history.push('/reports');
+    };
+
     return (
         <div className={`content-wrapper ${styles.container}`}>
-            <div>
-                <button
-                    aria-label={t('global.close_profile') as string}
-                    className={styles['back-button']}
-                    onClick={onClose}
-                >
-                    <img alt="" src={ArrowLeftSvg} aria-hidden={true} />
-                </button>
-            </div>
             <div className={styles.content}>
                 <h1 className="title">{t('home_page.profile.title')}</h1>
                 {loading ? (
@@ -69,6 +64,17 @@ const ProfileContent: React.FC<ProfileContentProps> = ({ onClose, onParameterPre
                 <span className={styles.name}>{`${profile.user.firstname} ${profile.user.lastname}`}</span>
                 <span className={styles.university}>{profile.user.university.name}</span>
 
+                <button
+                    aria-label={t('home_page.profile.reports') as string}
+                    className={`${styles.button} margin-bottom`}
+                    onClick={navigateToReports}
+                >
+                    <div className={styles['button-container']}>
+                        <IonImg className={styles.icon} alt="" src={SignalerPng} aria-hidden={true} />
+                        <span className="margin-left">{t('home_page.profile.reports')}</span>
+                    </div>
+                    <img alt="" src={ArrowRightSvg} aria-hidden={true} />
+                </button>
                 <button
                     aria-label={t('home_page.profile.edit') as string}
                     className={`${styles.button} margin-bottom`}

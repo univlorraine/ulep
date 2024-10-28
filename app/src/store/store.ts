@@ -12,6 +12,10 @@ const Store = createStore<TokenStoreTypes>(
             jitsiUrl: import.meta.env.VITE_JITSI_URL,
             language: '',
             refreshToken: '',
+            refreshReports: false,
+            setRefreshReports: action((state) => {
+                state.refreshReports = !state.refreshReports;
+            }),
             setApiUrl: action((state, payload) => {
                 state.apiUrl = payload.apiUrl;
                 state.chatUrl = payload.chatUrl;

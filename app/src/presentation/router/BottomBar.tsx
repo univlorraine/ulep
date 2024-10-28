@@ -5,7 +5,7 @@ import { ConversationsSvg, HomeSvg, LearningSvg, ProfileSvg } from '../../assets
 import ConversationsPage from '../pages/ConversationsPage';
 import HomePage from '../pages/HomePage';
 import LearningPage from '../pages/LearningPage';
-import ProfilePage from '../pages/mobile/ProfilePage';
+import ProfilePage from '../pages/ProfilePage';
 import PrivateRoute from './PrivateRoute';
 
 const BottomBar: React.FC = () => {

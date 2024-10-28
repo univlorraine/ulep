@@ -25,7 +25,6 @@ import FlipcardsPage from '../pages/mobile/FlipcardsPage';
 import MediaPage from '../pages/mobile/MediaPage';
 import NewsListPage from '../pages/mobile/NewsListPage';
 import NewsShowPage from '../pages/mobile/NewsShowPage';
-import ProfilePage from '../pages/mobile/ProfilePage';
 import ReportPage from '../pages/mobile/ReportPage';
 import SessionListPage from '../pages/mobile/SessionListPage';
 import SettingsPage from '../pages/mobile/SettingsPage';
@@ -48,7 +47,9 @@ import PairingQuizzEndPage from '../pages/PairingQuizzEndPage';
 import PairingQuizzIntroductionPage from '../pages/PairingQuizzIntroductionPage';
 import PairingSelectCEFRPage from '../pages/PairingSelectCEFRPage';
 import PairingUnavailableLanguagePage from '../pages/PairingUnavailableLanguagePage';
+import ProfilePage from '../pages/ProfilePage';
 import QuizzPage from '../pages/QuizzPage';
+import ReportsPage from '../pages/ReportsPage';
 import ServiceClosePage from '../pages/ServiceClosePage';
 import SignUpAvailabilitiesPage from '../pages/SignUpAvailabilitiesPage';
 import SignUpBiographyPage from '../pages/SignUpBiographyPage';
@@ -60,6 +61,7 @@ import SignUpInterestsPage from '../pages/SignUpInterestsPage';
 import SignUpLanguagesPage from '../pages/SignUpLanguagesPage';
 import SignUpPage from '../pages/SignUpPage';
 import SuspendedPage from '../pages/SuspendedPage';
+import ViewReportPage from '../pages/ViewReportPage';
 import WelcomePage from '../pages/WelcomePage';
 import { HYBRID_MAX_WIDTH } from '../utils';
 import BottomBar from './BottomBar';
@@ -250,6 +252,14 @@ const OfflineRouter: React.FC = () => {
                 <PrivateRoute exact path="/cefr/quizz/end">
                     <CEFRQuizzEndPage />
                 </PrivateRoute>
+                {/* Reports route */}
+                <PrivateRoute exact path="/reports">
+                    <ReportsPage />
+                </PrivateRoute>
+                <PrivateRoute exact path="/report-item">
+                    <ViewReportPage />
+                </PrivateRoute>
+
                 {isHybrid ? (
                     <BottomBar />
                 ) : (
@@ -262,6 +272,9 @@ const OfflineRouter: React.FC = () => {
                         </PrivateRoute>
                         <PrivateRoute exact path="/conversations">
                             <ConversationsPage />
+                        </PrivateRoute>
+                        <PrivateRoute exact path="/profile">
+                            <ProfilePage />
                         </PrivateRoute>
                     </>
                 )}

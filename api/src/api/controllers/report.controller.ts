@@ -19,6 +19,7 @@ import * as Swagger from '@nestjs/swagger';
 import { GetReportsQueryParams } from 'src/api/dtos/reports/reports-filters';
 import { Env } from 'src/configuration';
 import { ReportStatus } from 'src/core/models';
+import { GetReportsByUserUsecase } from 'src/core/usecases/report/get-reports-by-user.usecase';
 import {
   CreateReportCategoryUsecase,
   CreateReportMessageUsecase,
@@ -28,8 +29,8 @@ import {
   DeleteReportUsecase,
   GetCategoriesUsecase,
   GetReportCategoryByIdUsecase,
-  GetReportUsecase,
   GetReportsByStatusUsecase,
+  GetReportUsecase,
   UpdateReportCategoryUsecase,
   UpdateReportStatusUsecase,
 } from '../../core/usecases/report';
@@ -62,6 +63,7 @@ export class ReportController {
     private readonly findReportCategoriesUsecase: GetCategoriesUsecase,
     private readonly findReportCategoryByIdUsecase: GetReportCategoryByIdUsecase,
     private readonly getReportsByStatusUsecase: GetReportsByStatusUsecase,
+    private readonly getReportsByUserUsecase: GetReportsByUserUsecase,
     private readonly getReportUsecase: GetReportUsecase,
     private readonly updateReportStatusUsecase: UpdateReportStatusUsecase,
     private readonly updateReportCategoryUsecase: UpdateReportCategoryUsecase,
@@ -207,9 +209,23 @@ export class ReportController {
     });
   }
 
+  @Get('profile/:id')
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Get reports ressource by user.' })
+  @Swagger.ApiOkResponse({ type: () => ReportResponse })
+  async findReportsByUser(
+    @Param('id') id: string,
+  ): Promise<Collection<ReportResponse>> {
+    const reports = await this.getReportsByUserUsecase.execute(id);
+
+    return new Collection<ReportResponse>({
+      items: reports.map((report) => ReportResponse.fromDomain(report)),
+      totalItems: reports.length,
+    });
+  }
+
   // TODO: only admin or owner can get report
   @Get(':id')
-  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Report ressource.' })
   @Swagger.ApiOkResponse({ type: ReportResponse })
@@ -220,7 +236,6 @@ export class ReportController {
   }
 
   @Put(':id')
-  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Updates a Report ressource.' })
   @Swagger.ApiOkResponse()

@@ -31,6 +31,8 @@ export interface ReportRepository {
     where?: ReportQueryWhere,
   ): Promise<Collection<Report>>;
 
+  findReportsByUser(userId: string): Promise<Report[]>;
+
   createReport(report: Report): Promise<Report>;
 
   createCategory(category: ReportCategory): Promise<ReportCategory>;

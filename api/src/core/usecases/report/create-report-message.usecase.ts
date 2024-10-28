@@ -2,10 +2,14 @@ import { KeycloakClient, UserRepresentation } from '@app/keycloak';
 import { Inject, Injectable } from '@nestjs/common';
 import { DomainErrorCode, RessourceDoesNotExist } from 'src/core/errors';
 import { University, User } from 'src/core/models';
-import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
+import { EmailGateway, EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
 import {
-  UUID_PROVIDER,
+  TandemRepository,
+  TANDEM_REPOSITORY,
+} from 'src/core/ports/tandem.repository';
+import {
   UuidProviderInterface,
+  UUID_PROVIDER,
 } from 'src/core/ports/uuid.provider';
 import {
   CONVERSATION_CATEGORY,
@@ -13,16 +17,17 @@ import {
   ReportStatus,
 } from '../../models/report.model';
 import {
-  REPORT_REPOSITORY,
   ReportRepository,
+  REPORT_REPOSITORY,
 } from '../../ports/report.repository';
-import { USER_REPOSITORY, UserRepository } from '../../ports/user.repository';
+import { UserRepository, USER_REPOSITORY } from '../../ports/user.repository';
 
 export class CreateReportMessageCommand {
   ownerId: string;
   content: string;
   filePath?: string;
   mediaType?: string;
+  tandemId?: string;
   reportedUserId: string;
 }
 
@@ -38,6 +43,8 @@ export class CreateReportMessageUsecase {
     @Inject(EMAIL_GATEWAY)
     private readonly emailGateway: EmailGateway,
     private readonly keycloakClient: KeycloakClient,
+    @Inject(TANDEM_REPOSITORY)
+    private readonly tandemRepository: TandemRepository,
   ) {}
 
   async execute(command: CreateReportMessageCommand): Promise<Report> {
@@ -69,6 +76,8 @@ export class CreateReportMessageUsecase {
       }
     }
 
+    const tandem = await this.tandemRepository.ofId(command.tandemId);
+
     const report = await this.reportRepository.createReport(
       Report.create({
         id: this.uuidProvider.generate(),
@@ -79,6 +88,8 @@ export class CreateReportMessageUsecase {
         metadata: {
           filePath: command.filePath,
           mediaType: command.mediaType,
+          tandemUserName: `${reportedUser.firstname} ${reportedUser.lastname}`,
+          tandemLanguage: tandem?.learningLanguages[0].language.code,
         },
       }),
     );

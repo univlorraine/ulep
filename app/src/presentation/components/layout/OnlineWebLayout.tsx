@@ -29,7 +29,6 @@ const OnlineWebLayout: React.FC<OnlineLayoutProps> = ({ children, profile, onRef
                     onDisconnect={handleLogout}
                     onDisplaySettings={() => setDisplaySettings(true)}
                     onDisplayReport={() => setDisplayReport(true)}
-                    onDisplayProfile={() => setDisplayProfile(true)}
                 />
                 <IonContent className={styles.content}>{children}</IonContent>
             </div>

@@ -1,0 +1,56 @@
+.container {
+    background-color: white !important;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+
+.content {
+    background-color: white;
+    flex: 1;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ebebeb;
+    width: 100%;
+    padding-bottom: 0;
+
+    .back_button {
+        width: 46px;
+        height: 46px;
+    }
+
+    .title {
+        color: #000;
+        font-family: 'Roboto';
+        font-size: 17px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 21px;
+        margin: 0 46px 0 0;
+        display: flex;
+        flex: 1;
+        justify-content: center;
+    }
+}
+
+@media (min-width: 768px) {
+    .container {
+        background-color: #f4f5fe;
+    }
+
+    .content {
+        background-color: #f4f5fe;
+        --ion-background-color: #f4f5fe;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    .container {
+        padding: 20px 5px;
+    }
+}
