@@ -151,6 +151,8 @@ const useVocabulary = () => {
                 });
             }
 
+            setRefreshVocabularies(!refreshVocabularies);
+
             setVocabularyResult({
                 ...vocabularyResult,
                 vocabularyLists: vocabularyListsResult,

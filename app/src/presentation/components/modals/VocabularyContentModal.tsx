@@ -3,7 +3,6 @@ import { useConfig } from '../../../context/ConfigurationContext';
 import Profile from '../../../domain/entities/Profile';
 import Tandem from '../../../domain/entities/Tandem';
 import Vocabulary from '../../../domain/entities/Vocabulary';
-import VocabularyList from '../../../domain/entities/VocabularyList';
 import { CreateVocabularyListCommand } from '../../../domain/interfaces/vocabulary/CreateVocabularyListUsecase.interface';
 import useVocabulary from '../../hooks/useVocabulary';
 import ErrorPage from '../../pages/ErrorPage';
@@ -106,10 +105,9 @@ const VocabularyContentModal: React.FC<VocabularyContentModalProps> = ({ isVisib
         setTandems(tandems);
     };
 
-    const onValidateQuizz = (selectedLists: VocabularyList[]) => {
+    const onSelectedVocabularyListsIdsForQuiz = (selectedListsIds: string[]) => {
         setShowSelectVocabularyListsForQuizModal(false);
-        const selectedListsId = selectedLists.map((selectedList) => selectedList.id);
-        setQuizzSelectedListIds(selectedListsId);
+        setQuizzSelectedListIds(selectedListsIds);
     };
 
     useEffect(() => {
@@ -144,6 +142,7 @@ const VocabularyContentModal: React.FC<VocabularyContentModalProps> = ({ isVisib
                         onAddVocabulary={onAddOrUpdateVocabulary}
                         onSearch={setSearchVocabularies}
                         onShareVocabularyList={() => setShowShareVocabularyListModal(true)}
+                        setQuizzSelectedListIds={setQuizzSelectedListIds}
                     />
                 )}
                 {vocabularyListSelected && addContentMode && quizzSelectedListIds.length === 0 && (
@@ -181,7 +180,7 @@ const VocabularyContentModal: React.FC<VocabularyContentModalProps> = ({ isVisib
                     isVisible={showSelectVocabularyListsForQuizModal}
                     onClose={() => setShowSelectVocabularyListsForQuizModal(false)}
                     vocabularyLists={vocabularyLists}
-                    onValidate={onValidateQuizz}
+                    onValidate={onSelectedVocabularyListsIdsForQuiz}
                     profile={profile}
                 />
             </>
