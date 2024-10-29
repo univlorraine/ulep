@@ -324,8 +324,9 @@ export class UpdateAdministratorRequest {
   universityId?: string;
 
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
-  @IsOptional()
+  @Transform(({ value }) => value || undefined)
   @IsUUID()
+  @IsOptional()
   languageId?: string;
 
   @Swagger.ApiPropertyOptional({ type: 'string' })

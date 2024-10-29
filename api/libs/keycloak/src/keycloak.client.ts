@@ -9,8 +9,8 @@ import * as jwt from 'jsonwebtoken';
 import { Client, Issuer, TokenSet } from 'openid-client';
 import * as qs from 'querystring';
 import {
-  KEYCLOAK_CONFIGURATION,
   KeycloakConfiguration,
+  KEYCLOAK_CONFIGURATION,
 } from './keycloak.configuration';
 import {
   InvalidCredentialsException,

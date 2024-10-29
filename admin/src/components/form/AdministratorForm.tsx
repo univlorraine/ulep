@@ -1,5 +1,5 @@
 import { Box, OutlinedInput, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Loading, useGetIdentity, useGetList, useNotify, usePermissions, useTranslate } from 'react-admin';
 import { AdminGroup, AdministratorFormPayload, KeycloakGroup, Role } from '../../entities/Administrator';
 import Language from '../../entities/Language';
@@ -39,7 +39,7 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({
     const notify = useNotify();
     const { permissions } = usePermissions();
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
-    const { data: universities } = useGetList<University>('universities');
+    const { data: universities, isLoading: isLoadingUniversities } = useGetList<University>('universities');
     const [newEmail, setNewEmail] = useState<string>(email || '');
     const [password, setPassword] = useState<string>('');
     const [newFirstname, setNewFirstname] = useState<string>(firstname || '');
@@ -49,7 +49,13 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({
     const [newLanguage, setNewLanguage] = useState<Language>();
     const [file, setFile] = useState<File>();
 
-    if (isLoadingIdentity || !identity) {
+    useEffect(() => {
+        if (universities) {
+            setUniversity(universities?.find(isCentralUniversity));
+        }
+    }, [universities]);
+
+    if (isLoadingIdentity || !identity || isLoadingUniversities || !universities) {
         return <Loading />;
     }
 
@@ -75,7 +81,7 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({
             universityId: getUniversityId(),
             group: newGroup,
             file,
-            languageId: newLanguage?.id,
+            languageId: newLanguage?.id !== 'none' ? newLanguage?.id : null,
         });
     };
 
