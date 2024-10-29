@@ -210,16 +210,22 @@
             "status": "Status",
             "startDate": "Start date",
             "endDate": "End date",
+            "type": "Type",
             "filters": {
                 "title": "Title",
                 "language": "Language",
                 "status": "Status",
-                "university": "University"
+                "university": "University",
+                "type": "Type"
             }
         },
         "status": {
             "DRAFT": "Draft",
             "READY": "Published"
+        },
+        "type": {
+            "ONLINE": "Online",
+            "PRESENTIAL": "Presential"
         },
         "form": {
             "add_translation": "Add a translation",
@@ -262,6 +268,33 @@
         "update": {
             "cta": "Update",
             "error": "An error occurred while updating the event"
+        },
+        "subscriptions": {
+            "title": "Subscriptions to the event : %{eventTitle}",
+            "author": "Author : %{universityName}",
+            "list": {
+                "firstname": "Firstname",
+                "lastname": "Lastname",
+                "university": "University",
+                "email": "Email",
+                "cta": "Actions"
+            },
+            "searchProfile": "Search a profile",
+            "search": {
+                "button": "Subscribe users",
+                "subscribe": "Subscribe"
+            },
+            "email": {
+                "button": "Send an email",
+                "title": "Send an email to the subscribers",
+                "form": {
+                    "title": "Title",
+                    "content": "Content"
+                },
+                "send": "Send",
+                "success": "The email has been sent to the subscribers",
+                "error": "An error occurred while sending the email"
+            }
         }
     },
     "global": {

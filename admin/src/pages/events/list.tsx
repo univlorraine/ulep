@@ -15,6 +15,7 @@ import {
     SelectInput,
     useGetList,
     Button,
+    BulkDeleteButton,
 } from 'react-admin';
 import { useNavigate } from 'react-router-dom';
 import ColoredChips, { ChipsColors } from '../../components/ColoredChips';
@@ -105,7 +106,7 @@ const EventsList = () => {
                 filters={filters}
                 disableSyncWithLocation
             >
-                <Datagrid>
+                <Datagrid bulkActionButtons={<BulkDeleteButton mutationMode="pessimistic" />}>
                     <TextField label="events.list.title" source="title" />
                     {identity?.isCentralUniversity && (
                         <TextField label="events.list.university" source="authorUniversity.name" />
