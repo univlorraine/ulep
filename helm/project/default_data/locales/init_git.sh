@@ -3,10 +3,11 @@ apk add git openssh sshpass bash
 
 echo '- Wait for ssh daemon pod'
 
-until sshpass -p $GIT_PASSWORD ssh -o StrictHostKeyChecking=no git@$GIT_HOST -p 2222 2> /dev/null
-  do
-    sleep 5
-  done
+#NOT NECESSARY IF LAUNCH FROM POD
+#until sshpass -p $GIT_PASSWORD ssh -o StrictHostKeyChecking=no git@$GIT_HOST -p 2222 2> /dev/null
+#  do
+#    sleep 5
+#  done
 
 echo '- Init depo'
 sshpass -p $GIT_PASSWORD ssh -o StrictHostKeyChecking=no git@$GIT_HOST -p 2222 "mkdir /srv/git/locales.git"

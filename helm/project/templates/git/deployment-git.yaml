@@ -49,9 +49,12 @@ spec:
               chown git:git /home/git/.ssh/id_rsa;
               chown git:git /home/git/.ssh/id_rsa.pub;
               cat /home/git/.ssh/id_rsa.pub >> /home/git/.ssh/authorized_keys;
-              echo git:${GIT_PASSWORD} | chpasswd;              
-              /usr/sbin/sshd -D -e -p 2222;
+              echo git:${GIT_PASSWORD} | chpasswd;                            
+              /usr/sbin/sshd -e -p 2222;
               sh /opt/scripts/init_git.sh;
+              sleep infinity;
+
+              
           imagePullPolicy: {{ .Values.git.image.pullPolicy }}          
           ports:
             - name: http
@@ -78,6 +81,7 @@ spec:
             mountPath: /home/git/.ssh/
           - name: weblate-ssh-keys
             mountPath: /tmp/weblate
+            readOnly: true
           - name: git-ssh-keys
             mountPath: /tmp/git
 

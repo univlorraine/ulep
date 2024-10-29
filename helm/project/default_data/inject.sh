@@ -45,6 +45,8 @@ API_COMPONENT_RESPONSE=$(curl \
     -H "Authorization: Token $ADMIN_TOKEN" \
     https://$WEBLATE_SITE_DOMAIN/api/projects/ulep/components/)
 
+echo $API_COMPONENT_RESPONSE | jq
+
 APP_COMPONENT_RESPONSE=$(curl \
     -s \
     -k \
@@ -52,6 +54,8 @@ APP_COMPONENT_RESPONSE=$(curl \
     -H "Content-Type: application/json" \
     -H "Authorization: Token $ADMIN_TOKEN" \
     https://$WEBLATE_SITE_DOMAIN/api/projects/ulep/components/)
+
+echo $APP_COMPONENT_RESPONSE | jq
 
 EMAILS_COMPONENT_RESPONSE=$(curl \
     -s \
@@ -61,6 +65,8 @@ EMAILS_COMPONENT_RESPONSE=$(curl \
     -H "Authorization: Token $ADMIN_TOKEN" \
     https://$WEBLATE_SITE_DOMAIN/api/projects/ulep/components/)
 
+echo $EMAILS_COMPONENT_RESPONSE | jq
+
 NOTIFICATIONS_COMPONENT_RESPONSE=$(curl \
     -s \
     -k \
@@ -68,6 +74,9 @@ NOTIFICATIONS_COMPONENT_RESPONSE=$(curl \
     -H "Content-Type: application/json" \
     -H "Authorization: Token $ADMIN_TOKEN" \
     https://$WEBLATE_SITE_DOMAIN/api/projects/ulep/components/)
+    
+echo $NOTIFICATIONS_COMPONENT_RESPONSE | jq
+
 
 
 echo "weblate OK"
