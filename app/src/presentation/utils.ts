@@ -265,3 +265,4 @@ export const compareCEFR = (levelA: CEFR, levelB: CEFR) => {
 
     return CEFRlevels[levelB] - CEFRlevels[levelA];
 };
+

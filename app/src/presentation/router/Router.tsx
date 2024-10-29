@@ -19,18 +19,22 @@ import LearningPage from '../pages/LearningPage';
 import LoginPage from '../pages/LoginPage';
 import ActivitiesPage from '../pages/mobile/ActivitiesPage';
 import ChatPage from '../pages/mobile/ChatPage';
+import CreateCustomGoalPage from '../pages/mobile/CreateCustomGoalPage';
 import CreateSessionPage from '../pages/mobile/CreateSessionPage';
 import EndSessionPage from '../pages/mobile/EndSessionPage';
 import FlipcardsPage from '../pages/mobile/FlipcardsPage';
+import GoalsListPage from '../pages/mobile/GoalsListPage';
 import MediaPage from '../pages/mobile/MediaPage';
 import NewsListPage from '../pages/mobile/NewsListPage';
 import NewsShowPage from '../pages/mobile/NewsShowPage';
 import ReportPage from '../pages/mobile/ReportPage';
 import SessionListPage from '../pages/mobile/SessionListPage';
 import SettingsPage from '../pages/mobile/SettingsPage';
+import ShowCustomGoalPage from '../pages/mobile/ShowCustomGoal';
 import ShowSessionPage from '../pages/mobile/ShowSessionPage';
 import TandemProfilePage from '../pages/mobile/TandemProfilePage';
 import TandemStatusPage from '../pages/mobile/TandemStatusPage';
+import UpdateCustomGoalPage from '../pages/mobile/UpdateCustomGoalPage';
 import UpdateSessionPage from '../pages/mobile/UpdateSessionPage';
 import VocabulariesPage from '../pages/mobile/VocabulariesPage';
 import PairingConfirmLanguagePage from '../pages/PairingConfirmLanguagePage';
@@ -158,6 +162,18 @@ const OfflineRouter: React.FC = () => {
                 </MobileRoute>
                 <MobileRoute exact path={'/flipcards'}>
                     <FlipcardsPage />
+                </MobileRoute>
+                <MobileRoute exact path={'/goals'}>
+                    <GoalsListPage />
+                </MobileRoute>
+                <MobileRoute exact path={'/create-custom-goal'}>
+                    <CreateCustomGoalPage />
+                </MobileRoute>
+                <MobileRoute exact path={'/update-custom-goal'}>
+                    <UpdateCustomGoalPage />
+                </MobileRoute>
+                <MobileRoute exact path={'/show-custom-goal'}>
+                    <ShowCustomGoalPage />
                 </MobileRoute>
                 <PrivateRoute exact path="/jitsi">
                     <JitsiPage />

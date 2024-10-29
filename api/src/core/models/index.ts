@@ -1,4 +1,5 @@
 export * from './country-code.model';
+export * from './custom-learning-goal.model';
 export * from './device.model';
 export * from './interest.model';
 export * from './language.model';

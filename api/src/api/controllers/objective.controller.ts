@@ -1,24 +1,30 @@
+import { Collection } from '@app/common';
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Param,
+  Controller,
   Delete,
-  UseGuards,
-  UploadedFile,
-  UseInterceptors,
+  Get,
   Headers,
-  Put,
+  Param,
   ParseUUIDPipe,
+  Post,
+  Put,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { FileInterceptor } from '@nestjs/platform-express';
 import * as Swagger from '@nestjs/swagger';
+import { ImagesFilePipe } from 'src/api/validators';
+import { Env } from 'src/configuration';
 import {
-  ObjectiveResponse,
-  CreateObjectiveRequest,
-  GetObjectiveResponse,
-  UpdateObjectiveRequest,
-} from '../dtos/objective';
+  DeleteObjectiveImageUsecase,
+  UploadObjectiveImageUsecase,
+} from 'src/core/usecases/media';
+import { CreateCustomLearningGoalUsecase } from 'src/core/usecases/objective/create-custom-learning-goals.usecase';
+import { DeleteCustomLearningGoalUsecase } from 'src/core/usecases/objective/delete-custom-learning-goal.usecase';
+import { UpdateCustomLearningGoalUsecase } from 'src/core/usecases/objective/update-custom-learning-goal.usecase';
 import {
   CreateObjectiveUsecase,
   DeleteObjectiveUsecase,
@@ -26,17 +32,17 @@ import {
   FindOneObjectiveUsecase,
   UpdateObjectiveUsecase,
 } from '../../core/usecases/objective';
-import { AuthenticationGuard } from '../guards';
 import { Role, Roles } from '../decorators/roles.decorator';
-import { ImagesFilePipe } from 'src/api/validators';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { Collection } from '@app/common';
 import {
-  DeleteObjectiveImageUsecase,
-  UploadObjectiveImageUsecase,
-} from 'src/core/usecases/media';
-import { ConfigService } from '@nestjs/config';
-import { Env } from 'src/configuration';
+  CreateCustomLearningGoalRequest,
+  CreateObjectiveRequest,
+  CustomLearningGoalResponse,
+  GetObjectiveResponse,
+  ObjectiveResponse,
+  UpdateCustomLearningGoalRequest,
+  UpdateObjectiveRequest,
+} from '../dtos/objective';
+import { AuthenticationGuard } from '../guards';
 
 @Controller('objectives')
 @Swagger.ApiTags('Objectives')
@@ -51,6 +57,9 @@ export class ObjectiveController {
     private readonly deleteObjectiveUsecase: DeleteObjectiveUsecase,
     private readonly updateObjectiveUsecase: UpdateObjectiveUsecase,
     private readonly uploadObjectiveImageUsecase: UploadObjectiveImageUsecase,
+    private readonly createCustomLearningGoalUsecase: CreateCustomLearningGoalUsecase,
+    private readonly updateCustomLearningGoalUsecase: UpdateCustomLearningGoalUsecase,
+    private readonly deleteCustomLearningGoalUsecase: DeleteCustomLearningGoalUsecase,
     env: ConfigService<Env, true>,
   ) {
     this.#defaultLanguageCode = env.get<string>('DEFAULT_TRANSLATION_LANGUAGE');
@@ -148,5 +157,37 @@ export class ObjectiveController {
     }
 
     return ObjectiveResponse.fromDomain(objective);
+  }
+
+  @Post('custom-learning-goals')
+  @UseGuards(AuthenticationGuard)
+  async createCustomLearningGoal(
+    @Body() body: CreateCustomLearningGoalRequest,
+  ) {
+    const customLearningGoals =
+      await this.createCustomLearningGoalUsecase.execute(body);
+
+    return customLearningGoals.map(CustomLearningGoalResponse.fromDomain);
+  }
+
+  @Put('custom-learning-goals/:id')
+  @UseGuards(AuthenticationGuard)
+  async updateCustomLearningGoal(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() body: UpdateCustomLearningGoalRequest,
+  ) {
+    const customLearningGoals =
+      await this.updateCustomLearningGoalUsecase.execute(id, body);
+
+    return customLearningGoals.map(CustomLearningGoalResponse.fromDomain);
+  }
+
+  @Delete('custom-learning-goals/:id')
+  @UseGuards(AuthenticationGuard)
+  async deleteCustomLearningGoal(@Param('id', ParseUUIDPipe) id: string) {
+    const customLearningGoals =
+      await this.deleteCustomLearningGoalUsecase.execute(id);
+
+    return customLearningGoals.map(CustomLearningGoalResponse.fromDomain);
   }
 }

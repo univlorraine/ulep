@@ -1,0 +1,80 @@
+.container {
+    border-left: 1px solid #00000020;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    position: relative;
+    padding: 0 !important;
+}
+
+.header {
+    background-color: white;
+    height: 50px;
+    text-align: center;
+    border-bottom: 1px solid #00000020;
+}
+
+.title {
+    color: #000;
+    font-family: 'Roboto', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    margin: 0;
+    line-height: 30px;
+}
+
+.back_button {
+    position: absolute;
+    left: 10px;
+    top: 3px;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    margin: 16px 0;
+}
+
+.label {
+    margin-bottom: 0;
+    font-family: 'Maven Pro', sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+}
+
+.show_title {
+    background-color: #F2F4F7;
+    margin: 0;
+    border-radius: 5px;
+    padding: 10px 20px;
+}
+
+.show_description {
+    background-color: #F2F4F7;
+    margin: 0;
+    border-radius: 5px;
+    padding: 10px 20px;
+    min-height: 100px;
+}
+
+.content {
+    padding: 0 16px;
+}
+
+.buttons {
+    position: absolute;
+    bottom: 0;
+    text-align: center;
+    width: 100%;
+    padding: 20px;
+}
+
+@media (min-width: 768px) {
+    .header {
+        padding: 12px;
+    }
+}

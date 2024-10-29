@@ -9,6 +9,7 @@ import {
 } from 'src/core/models';
 import { CampusResponse } from '../campus';
 import { MediaObjectResponse } from '../medias';
+import { CustomLearningGoalResponse } from '../objective';
 import { ProfileResponse } from '../profiles';
 import { TandemResponse } from '../tandems';
 import { TandemWithPartnerLearningLanguageResponse } from '../tandems/tandem-with-patner-learning-language.response';
@@ -92,6 +93,10 @@ export class LearningLanguageResponse {
   @Expose({ groups: ['read'] })
   tandemLanguage?: LanguageResponse;
 
+  @ApiProperty({ type: () => CustomLearningGoalResponse })
+  @Expose({ groups: ['read'] })
+  customLearningGoals?: CustomLearningGoalResponse[];
+
   constructor(partial: Partial<LearningLanguageResponse>) {
     Object.assign(this, partial);
   }
@@ -128,6 +133,11 @@ export class LearningLanguageResponse {
       profile:
         learningLanguage.profile &&
         ProfileResponse.fromDomain(learningLanguage.profile, languageCode),
+      customLearningGoals:
+        learningLanguage.customLearningGoals &&
+        learningLanguage.customLearningGoals.map((customLearningGoal) =>
+          CustomLearningGoalResponse.fromDomain(customLearningGoal),
+        ),
     });
 
     return response;

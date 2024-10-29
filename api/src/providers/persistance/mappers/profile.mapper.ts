@@ -9,13 +9,14 @@ import {
 } from 'src/core/models';
 import { testedLanguageMapper } from 'src/providers/persistance/mappers/testedLanguage.mapper';
 import { campusMapper } from './campus.mapper';
+import { customLearningGoalMapper } from './customLearningGoal.mapper';
 import { languageMapper } from './language.mapper';
 import {
+  textContentMapper,
   TextContentRelations,
   TextContentSnapshot,
-  textContentMapper,
 } from './translation.mapper';
-import { UserRelations, UserSnapshot, userMapper } from './user.mapper';
+import { userMapper, UserRelations, UserSnapshot } from './user.mapper';
 
 export const ProfilesRelations = {
   User: {
@@ -43,6 +44,7 @@ export const ProfilesRelations = {
       Tandem: true,
       Campus: true,
       CertificateFile: true,
+      CustomLearningGoals: true,
     },
   },
 };
@@ -62,6 +64,7 @@ export type ProfileSnapshot = Prisma.Profiles & {
     Campus: Prisma.Places;
     Tandem: Prisma.Tandems;
     CertificateFile?: Prisma.MediaObjects;
+    CustomLearningGoals: Prisma.CustomLearningGoals[];
   })[];
   MasteredLanguages: (Prisma.MasteredLanguages & {
     LanguageCode: Prisma.LanguageCodes;
@@ -110,6 +113,9 @@ export const profileMapper = (instance: ProfileSnapshot): Profile => {
               size: learningLanguage.CertificateFile.size,
             }),
           specificProgram: learningLanguage.specific_program,
+          customLearningGoals:
+            learningLanguage.CustomLearningGoals &&
+            learningLanguage.CustomLearningGoals.map(customLearningGoalMapper),
         }),
     ),
     meetingFrequency: MeetingFrequency[instance.meeting_frequency],

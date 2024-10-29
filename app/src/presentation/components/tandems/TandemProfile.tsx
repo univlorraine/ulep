@@ -13,6 +13,7 @@ import { HYBRID_MAX_WIDTH, codeLanguageToFlag } from '../../utils';
 import AvailabilityLine from '../AvailabilityLine';
 import TandemCard from './TandemCard';
 import styles from './TandemProfile.module.css';
+import useOnOpenChat from '../../hooks/useOnOpenChat';
 
 interface TandemProfileProps {
     id: string;
@@ -39,6 +40,7 @@ const TandemProfile: React.FC<TandemProfileProps> = ({
     const isHybrid = width < HYBRID_MAX_WIDTH;
     const meProfile = useStoreState((state) => state.profile);
     const history = useHistory();
+    const onOpenChat = useOnOpenChat({ tandemId: id });
 
     if (!meProfile) {
         return null;
@@ -49,10 +51,6 @@ const TandemProfile: React.FC<TandemProfileProps> = ({
             pathname: '/jitsi',
             search: `?roomName=${id}`,
         });
-    };
-
-    const onOpenChat = () => {
-        history.push('/conversations', { tandemId: id });
     };
 
     return (

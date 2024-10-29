@@ -1,4 +1,5 @@
 import { Campus } from './campus.model';
+import { CustomLearningGoal } from './custom-learning-goal.model';
 import { Language } from './language.model';
 import { MediaObject } from './media.model';
 import { ProficiencyLevel } from './proficiency.model';
@@ -26,6 +27,7 @@ interface LearningLanguageProps {
   specificProgram?: boolean;
   campus?: Campus;
   tandemLanguage?: Language;
+  customLearningGoals?: CustomLearningGoal[];
 }
 
 export class LearningLanguage {
@@ -48,6 +50,7 @@ export class LearningLanguage {
   readonly campus?: Campus;
   tandemLanguage?: Language;
   readonly sameTandemEmail?: string;
+  readonly customLearningGoals?: CustomLearningGoal[];
 
   constructor({
     id,
@@ -69,6 +72,7 @@ export class LearningLanguage {
     tandemLanguage,
     hasPriority,
     sameTandemEmail,
+    customLearningGoals,
   }: LearningLanguageProps) {
     this.id = id;
     this.language = language;
@@ -89,6 +93,7 @@ export class LearningLanguage {
     this.tandemLanguage = tandemLanguage;
     this.hasPriority = hasPriority;
     this.sameTandemEmail = sameTandemEmail;
+    this.customLearningGoals = customLearningGoals;
   }
 
   public isExclusive() {
