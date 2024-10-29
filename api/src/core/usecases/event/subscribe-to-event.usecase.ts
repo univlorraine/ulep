@@ -46,7 +46,6 @@ export class SubscribeToEventUsecase {
     });
 
     profiles.forEach((profile) => {
-      console.log({ language: profile.nativeLanguage });
       this.emailGateway.sendSubscribedToEventEmail({
         language: profile.nativeLanguage.code,
         event: {

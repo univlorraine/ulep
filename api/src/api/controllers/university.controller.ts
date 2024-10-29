@@ -149,10 +149,6 @@ export class UniversityController {
     const university = await this.getUniversityUsecase.execute(id);
     const instance = await this.getInstanceUsecase.execute();
 
-    console.log({
-      response: UniversityResponse.fromUniversity(university, instance),
-    });
-
     return UniversityResponse.fromUniversity(university, instance);
   }
 
