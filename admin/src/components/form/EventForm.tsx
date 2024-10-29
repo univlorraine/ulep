@@ -1,6 +1,7 @@
 import DeleteIcon from '@mui/icons-material/Delete';
 import {
     Box,
+    Divider,
     FormControlLabel,
     FormGroup,
     MenuItem,
@@ -162,10 +163,304 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                         display: 'flex',
                         flexDirection: 'column',
                         '& .MuiToolbar-root': { display: 'none' },
-                        '& .MuiDivider-root': { display: 'none' },
                     }}
                 >
-                    <Box sx={{ display: 'flex', gap: 1, marginBottom: '20px' }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                        <Box>
+                            <Typography variant="subtitle1">{translate('events.form.status')}</Typography>
+                            <FormGroup>
+                                <FormControlLabel
+                                    checked={status === EventStatus.READY}
+                                    control={
+                                        <Switch
+                                            onChange={(event: any) =>
+                                                setStatus(event.target.checked ? EventStatus.READY : EventStatus.DRAFT)
+                                            }
+                                        />
+                                    }
+                                    label={translate(`events.status.${EventStatus.READY}`)}
+                                />
+                            </FormGroup>
+                        </Box>
+
+                        <Box>
+                            <Typography variant="subtitle1">{translate('events.form.author')}</Typography>
+                            <Typography>{universityData?.name}</Typography>
+                        </Box>
+
+                        <Box sx={{ display: 'flex', flexDirection: 'row', gap: '50px' }}>
+                            <Box>
+                                <Typography variant="subtitle1">
+                                    {translate(`events.form.concerned_universities.label`)}
+                                </Typography>
+                                <Table>
+                                    <TableBody>
+                                        {concernedUniversities.map((university) => (
+                                            <TableRow key={university.id}>
+                                                <TableCell sx={{ width: '60px', padding: '0' }}>
+                                                    {!forcedConcernedUniversities.some(
+                                                        (forcedUniversity) => university.id === forcedUniversity.id
+                                                    ) && (
+                                                        <Button
+                                                            onClick={() =>
+                                                                setConcernedUniversities(
+                                                                    concernedUniversities.filter(
+                                                                        (concernedUniversity) =>
+                                                                            university.id !== concernedUniversity.id
+                                                                    )
+                                                                )
+                                                            }
+                                                            sx={{ '& span': { margin: 0 } }}
+                                                        >
+                                                            <DeleteIcon />
+                                                        </Button>
+                                                    )}
+                                                </TableCell>
+                                                <TableCell sx={{ padding: '10px' }}>{university.name}</TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        gap: '10px',
+                                        marginTop: '5px',
+                                    }}
+                                >
+                                    <Select
+                                        onChange={(e: any) => setNewConcernedUniversity(e.target.value as University)}
+                                        sx={{ width: '300px' }}
+                                        value={newConcernedUniversity}
+                                    >
+                                        {universities
+                                            ?.filter(
+                                                (university) =>
+                                                    !concernedUniversities.some(
+                                                        (concernedUniversity) =>
+                                                            university.id === concernedUniversity.id
+                                                    )
+                                            )
+                                            .map((university) => (
+                                                <MenuItem key={university.id} value={university}>
+                                                    {university.name}
+                                                </MenuItem>
+                                            ))}
+                                    </Select>
+                                    <Button
+                                        color="primary"
+                                        disabled={!newConcernedUniversity}
+                                        onClick={() => {
+                                            if (newConcernedUniversity) {
+                                                setConcernedUniversities([
+                                                    ...concernedUniversities,
+                                                    newConcernedUniversity,
+                                                ]);
+                                                setNewConcernedUniversity(undefined);
+                                            }
+                                        }}
+                                        sx={{ padding: '8px 30px' }}
+                                        variant="contained"
+                                    >
+                                        <span> {translate('events.form.concerned_universities.button')}</span>
+                                    </Button>
+                                </Box>
+                            </Box>
+
+                            <Box>
+                                <Typography variant="subtitle1">
+                                    {translate(`events.form.diffusion_languages.label`)}
+                                </Typography>
+                                <Table>
+                                    <TableBody>
+                                        {diffusionLanguages.map((language) => (
+                                            <TableRow key={language}>
+                                                <TableCell sx={{ width: 10, padding: '0' }}>
+                                                    <Button
+                                                        onClick={() =>
+                                                            setDiffusionLanguages(
+                                                                diffusionLanguages.filter(
+                                                                    (diffusionLanguage) =>
+                                                                        language !== diffusionLanguage
+                                                                )
+                                                            )
+                                                        }
+                                                    >
+                                                        <DeleteIcon />
+                                                    </Button>
+                                                </TableCell>
+                                                <TableCell sx={{ padding: '10px' }}>{language}</TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        gap: '10px',
+                                        marginTop: '5px',
+                                    }}
+                                >
+                                    <Select
+                                        onChange={(e: any) => setNewDiffusionLanguage(e.target.value as string)}
+                                        sx={{ width: '300px' }}
+                                        value={newDiffusionLanguage}
+                                    >
+                                        {universitiesLanguages
+                                            ?.filter((language) => !diffusionLanguages.includes(language))
+                                            .map((language) => (
+                                                <MenuItem key={language} value={language}>
+                                                    {language}
+                                                </MenuItem>
+                                            ))}
+                                    </Select>
+                                    <Button
+                                        color="primary"
+                                        disabled={!newDiffusionLanguage}
+                                        onClick={() => {
+                                            if (newDiffusionLanguage) {
+                                                setDiffusionLanguages([...diffusionLanguages, newDiffusionLanguage]);
+                                                setNewDiffusionLanguage(undefined);
+                                            }
+                                        }}
+                                        sx={{ padding: '8px 30px' }}
+                                        variant="contained"
+                                    >
+                                        <span> {translate('events.form.diffusion_languages.button')}</span>
+                                    </Button>
+                                </Box>
+                            </Box>
+                        </Box>
+
+                        <Box display="flex" flexDirection="row" gap="50px">
+                            <Box>
+                                <Typography variant="subtitle1">{translate('events.form.type.label')}</Typography>
+                                <Select onChange={(e: any) => setType(e.target.value as EventType)} value={type}>
+                                    <MenuItem value={EventType.ONLINE}>{translate('events.form.type.online')}</MenuItem>
+                                    <MenuItem value={EventType.PRESENTIAL}>
+                                        {translate('events.form.type.presential')}
+                                    </MenuItem>
+                                </Select>
+                            </Box>
+
+                            <Box>
+                                <Typography variant="subtitle1">{translate('events.form.subscriptions')}</Typography>
+                                <FormGroup>
+                                    <FormControlLabel
+                                        checked={withSubscription}
+                                        color="secondary"
+                                        control={
+                                            <Switch
+                                                onChange={(event: any) => setWithSubscription(event.target.checked)}
+                                            />
+                                        }
+                                        label={translate(`events.form.with_subscriptions`)}
+                                    />
+                                </FormGroup>
+                            </Box>
+                        </Box>
+
+                        {type === EventType.ONLINE && (
+                            <Box sx={{ width: '100%' }}>
+                                <Typography variant="subtitle1">{translate('events.form.event_url')}</Typography>
+                                <OutlinedInput
+                                    name="eventURL"
+                                    onChange={(e: any) => setEventURL(e.target.value)}
+                                    type="text"
+                                    value={eventURL}
+                                    fullWidth
+                                    required
+                                />
+                            </Box>
+                        )}
+
+                        {type === EventType.PRESENTIAL && (
+                            <>
+                                <Box sx={{ width: '100%' }}>
+                                    <Typography variant="subtitle1">{translate('events.form.address_name')}</Typography>
+                                    <OutlinedInput
+                                        name="addressName"
+                                        onChange={(e: any) => setAddressName(e.target.value)}
+                                        type="text"
+                                        value={addressName}
+                                        fullWidth
+                                        required
+                                    />
+                                </Box>
+
+                                <Box sx={{ width: '100%' }}>
+                                    <Typography variant="subtitle1">{translate('events.form.address')}</Typography>
+                                    <OutlinedInput
+                                        name="address"
+                                        onChange={(e: any) => setAddress(e.target.value)}
+                                        type="text"
+                                        value={address}
+                                        fullWidth
+                                        required
+                                    />
+                                </Box>
+                            </>
+                        )}
+
+                        <Box display="flex" flexDirection="row" gap="50px">
+                            <Box>
+                                <Typography variant="subtitle1">{translate('events.form.start_date')}</Typography>
+                                <DateTimePicker
+                                    ampm={false}
+                                    // @ts-ignore
+                                    defaultValue={daysjs(startDate)}
+                                    onChange={(value: Date | null) => {
+                                        if (value) {
+                                            setStartDate(value);
+                                        }
+                                    }}
+                                    sx={{ my: 2, width: '100%' }}
+                                />
+                            </Box>
+
+                            <Box>
+                                <Typography variant="subtitle1">{translate('events.form.end_date')}</Typography>
+                                <DateTimePicker
+                                    ampm={false}
+                                    // @ts-ignore
+                                    defaultValue={daysjs(endDate)}
+                                    onChange={(value: Date | null) => {
+                                        if (value) {
+                                            setEndDate(value);
+                                        }
+                                    }}
+                                    sx={{ my: 2, width: '100%' }}
+                                />
+                            </Box>
+                        </Box>
+
+                        <Box>
+                            <Typography variant="subtitle1">{translate('events.form.illustration')}</Typography>
+                            <ImageUploader onImageSelect={setImage} />
+                        </Box>
+
+                        {(image || record?.imageURL) && (
+                            <Box sx={{ width: '100%' }}>
+                                <Typography variant="subtitle1">{translate('events.form.image_credit')}</Typography>
+                                <OutlinedInput
+                                    name="imageCredit"
+                                    onChange={(e: any) => setImageCredit(e.target.value)}
+                                    type="text"
+                                    value={imageCredit}
+                                    fullWidth
+                                    required
+                                />
+                            </Box>
+                        )}
+                    </Box>
+
+                    <Divider sx={{ margin: '40px 0' }} />
+
+                    <Box sx={{ display: 'flex', gap: 1, marginBottom: '20px', marginLeft: 'auto' }}>
                         <Select
                             onChange={(e: any) => setNewTranslationLanguage(e.target.value as string)}
                             sx={{ width: '200px' }}
@@ -192,424 +487,125 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                             variant="contained"
                         />
                     </Box>
-                    <TabbedForm>
-                        <TabbedForm.Tab
-                            label={defaultLanguage}
-                            sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}
-                        >
-                            {availableLanguages.length > 0 && (
-                                <Box>
-                                    <Typography variant="subtitle1">
-                                        {translate('events.form.change_language')}
-                                    </Typography>
-                                    <Select
-                                        onChange={(e: any) => {
-                                            setDefaultLanguage(e.target.value as string);
-                                        }}
-                                        sx={{ width: '200px' }}
-                                        value={defaultLanguage}
-                                    >
-                                        {availableLanguages.map((language) => (
-                                            <MenuItem key={language} value={language}>
-                                                {language}
-                                            </MenuItem>
-                                        ))}
-                                        <MenuItem key={defaultLanguage} value={defaultLanguage}>
-                                            {defaultLanguage}
-                                        </MenuItem>
-                                    </Select>
-                                </Box>
-                            )}
 
-                            <Box>
-                                <Typography variant="subtitle1">{translate('events.form.status')}</Typography>
-                                <FormGroup>
-                                    <FormControlLabel
-                                        checked={status === EventStatus.READY}
-                                        color="secondary"
-                                        control={
-                                            <Switch
-                                                onChange={(event: any) =>
-                                                    setStatus(
-                                                        event.target.checked ? EventStatus.READY : EventStatus.DRAFT
-                                                    )
-                                                }
-                                            />
-                                        }
-                                        label={translate(`events.status.${EventStatus.READY}`)}
-                                    />
-                                </FormGroup>
-                            </Box>
-
-                            <Box>
-                                <Typography variant="subtitle1">{translate('events.form.author')}</Typography>
-                                <Typography>{universityData?.name}</Typography>
-                            </Box>
-
-                            <Box sx={{ display: 'flex', flexDirection: 'row', gap: '50px' }}>
-                                <Box>
-                                    <Typography variant="subtitle1">
-                                        {translate(`events.form.concerned_universities.label`)}
-                                    </Typography>
-                                    <Table>
-                                        <TableBody>
-                                            {concernedUniversities.map((university) => (
-                                                <TableRow key={university.id}>
-                                                    <TableCell sx={{ width: '60px', padding: '0' }}>
-                                                        {!forcedConcernedUniversities.some(
-                                                            (forcedUniversity) => university.id === forcedUniversity.id
-                                                        ) && (
-                                                            <Button
-                                                                onClick={() =>
-                                                                    setConcernedUniversities(
-                                                                        concernedUniversities.filter(
-                                                                            (concernedUniversity) =>
-                                                                                university.id !== concernedUniversity.id
-                                                                        )
-                                                                    )
-                                                                }
-                                                                sx={{ '& span': { margin: 0 } }}
-                                                            >
-                                                                <DeleteIcon />
-                                                            </Button>
-                                                        )}
-                                                    </TableCell>
-                                                    <TableCell sx={{ padding: '10px' }}>{university.name}</TableCell>
-                                                </TableRow>
-                                            ))}
-                                        </TableBody>
-                                    </Table>
-                                    <Box
-                                        sx={{
-                                            display: 'flex',
-                                            flexDirection: 'row',
-                                            alignItems: 'center',
-                                            gap: '10px',
-                                            marginTop: '5px',
-                                        }}
-                                    >
-                                        <Select
-                                            onChange={(e: any) =>
-                                                setNewConcernedUniversity(e.target.value as University)
-                                            }
-                                            sx={{ width: '300px' }}
-                                            value={newConcernedUniversity}
-                                        >
-                                            {universities
-                                                ?.filter(
-                                                    (university) =>
-                                                        !concernedUniversities.some(
-                                                            (concernedUniversity) =>
-                                                                university.id === concernedUniversity.id
-                                                        )
-                                                )
-                                                .map((university) => (
-                                                    <MenuItem key={university.id} value={university}>
-                                                        {university.name}
-                                                    </MenuItem>
-                                                ))}
-                                        </Select>
-                                        <Button
-                                            color="primary"
-                                            disabled={!newConcernedUniversity}
-                                            onClick={() => {
-                                                if (newConcernedUniversity) {
-                                                    setConcernedUniversities([
-                                                        ...concernedUniversities,
-                                                        newConcernedUniversity,
-                                                    ]);
-                                                    setNewConcernedUniversity(undefined);
-                                                }
-                                            }}
-                                            sx={{ padding: '8px 30px' }}
-                                            variant="contained"
-                                        >
-                                            <span> {translate('events.form.concerned_universities.button')}</span>
-                                        </Button>
-                                    </Box>
-                                </Box>
-
-                                <Box>
-                                    <Typography variant="subtitle1">
-                                        {translate(`events.form.diffusion_languages.label`)}
-                                    </Typography>
-                                    <Table>
-                                        <TableBody>
-                                            {diffusionLanguages.map((language) => (
-                                                <TableRow key={language}>
-                                                    <TableCell sx={{ width: 10, padding: '0' }}>
-                                                        <Button
-                                                            onClick={() =>
-                                                                setDiffusionLanguages(
-                                                                    diffusionLanguages.filter(
-                                                                        (diffusionLanguage) =>
-                                                                            language !== diffusionLanguage
-                                                                    )
-                                                                )
-                                                            }
-                                                        >
-                                                            <DeleteIcon />
-                                                        </Button>
-                                                    </TableCell>
-                                                    <TableCell sx={{ padding: '10px' }}>{language}</TableCell>
-                                                </TableRow>
-                                            ))}
-                                        </TableBody>
-                                    </Table>
-                                    <Box
-                                        sx={{
-                                            display: 'flex',
-                                            flexDirection: 'row',
-                                            alignItems: 'center',
-                                            gap: '10px',
-                                            marginTop: '5px',
-                                        }}
-                                    >
-                                        <Select
-                                            onChange={(e: any) => setNewDiffusionLanguage(e.target.value as string)}
-                                            sx={{ width: '300px' }}
-                                            value={newDiffusionLanguage}
-                                        >
-                                            {universitiesLanguages
-                                                ?.filter((language) => !diffusionLanguages.includes(language))
-                                                .map((language) => (
-                                                    <MenuItem key={language} value={language}>
-                                                        {language}
-                                                    </MenuItem>
-                                                ))}
-                                        </Select>
-                                        <Button
-                                            color="primary"
-                                            disabled={!newDiffusionLanguage}
-                                            onClick={() => {
-                                                if (newDiffusionLanguage) {
-                                                    setDiffusionLanguages([
-                                                        ...diffusionLanguages,
-                                                        newDiffusionLanguage,
-                                                    ]);
-                                                    setNewDiffusionLanguage(undefined);
-                                                }
-                                            }}
-                                            sx={{ padding: '8px 30px' }}
-                                            variant="contained"
-                                        >
-                                            <span> {translate('events.form.diffusion_languages.button')}</span>
-                                        </Button>
-                                    </Box>
-                                </Box>
-                            </Box>
-
-                            <Box display="flex" flexDirection="row" gap="50px">
-                                <Box>
-                                    <Typography variant="subtitle1">{translate('events.form.type.label')}</Typography>
-                                    <Select onChange={(e: any) => setType(e.target.value as EventType)} value={type}>
-                                        <MenuItem value={EventType.ONLINE}>
-                                            {translate('events.form.type.online')}
-                                        </MenuItem>
-                                        <MenuItem value={EventType.PRESENTIAL}>
-                                            {translate('events.form.type.presential')}
-                                        </MenuItem>
-                                    </Select>
-                                </Box>
-
-                                <Box>
-                                    <Typography variant="subtitle1">
-                                        {translate('events.form.subscriptions')}
-                                    </Typography>
-                                    <FormGroup>
-                                        <FormControlLabel
-                                            checked={withSubscription}
-                                            color="secondary"
-                                            control={
-                                                <Switch
-                                                    onChange={(event: any) => setWithSubscription(event.target.checked)}
-                                                />
-                                            }
-                                            label={translate(`events.form.with_subscriptions`)}
-                                        />
-                                    </FormGroup>
-                                </Box>
-                            </Box>
-
-                            {type === EventType.ONLINE && (
-                                <Box sx={{ width: '100%' }}>
-                                    <Typography variant="subtitle1">{translate('events.form.event_url')}</Typography>
-                                    <OutlinedInput
-                                        name="eventURL"
-                                        onChange={(e: any) => setEventURL(e.target.value)}
-                                        type="text"
-                                        value={eventURL}
-                                        fullWidth
-                                        required
-                                    />
-                                </Box>
-                            )}
-
-                            {type === EventType.PRESENTIAL && (
-                                <>
-                                    <Box sx={{ width: '100%' }}>
-                                        <Typography variant="subtitle1">
-                                            {translate('events.form.address_name')}
-                                        </Typography>
-                                        <OutlinedInput
-                                            name="addressName"
-                                            onChange={(e: any) => setAddressName(e.target.value)}
-                                            type="text"
-                                            value={addressName}
-                                            fullWidth
-                                            required
-                                        />
-                                    </Box>
-
-                                    <Box sx={{ width: '100%' }}>
-                                        <Typography variant="subtitle1">{translate('events.form.address')}</Typography>
-                                        <OutlinedInput
-                                            name="address"
-                                            onChange={(e: any) => setAddress(e.target.value)}
-                                            type="text"
-                                            value={address}
-                                            fullWidth
-                                            required
-                                        />
-                                    </Box>
-                                </>
-                            )}
-
-                            <Box display="flex" flexDirection="row" gap="50px">
-                                <Box>
-                                    <Typography variant="subtitle1">{translate('events.form.start_date')}</Typography>
-                                    <DateTimePicker
-                                        ampm={false}
-                                        // @ts-ignore
-                                        defaultValue={daysjs(startDate)}
-                                        onChange={(value: Date | null) => {
-                                            if (value) {
-                                                setStartDate(value);
-                                            }
-                                        }}
-                                        sx={{ my: 2, width: '100%' }}
-                                    />
-                                </Box>
-
-                                <Box>
-                                    <Typography variant="subtitle1">{translate('events.form.end_date')}</Typography>
-                                    <DateTimePicker
-                                        ampm={false}
-                                        // @ts-ignore
-                                        defaultValue={daysjs(endDate)}
-                                        onChange={(value: Date | null) => {
-                                            if (value) {
-                                                setEndDate(value);
-                                            }
-                                        }}
-                                        sx={{ my: 2, width: '100%' }}
-                                    />
-                                </Box>
-                            </Box>
-
-                            <Box>
-                                <Typography variant="subtitle1">{translate('events.form.illustration')}</Typography>
-                                <ImageUploader onImageSelect={setImage} />
-                            </Box>
-
-                            <Box sx={{ width: '100%' }}>
-                                <Typography variant="subtitle1">{translate('events.form.image_credit')}</Typography>
-                                <OutlinedInput
-                                    name="imageCredit"
-                                    onChange={(e: any) => setImageCredit(e.target.value)}
-                                    type="text"
-                                    value={imageCredit}
-                                    fullWidth
-                                    required
-                                />
-                            </Box>
-
-                            <Box sx={{ width: '100%' }}>
-                                <Typography variant="subtitle1">{translate('events.form.title')}</Typography>
-                                <OutlinedInput
-                                    name="Title"
-                                    onChange={(e: any) => setTitle(e.target.value)}
-                                    type="text"
-                                    value={title}
-                                    fullWidth
-                                    required
-                                />
-                            </Box>
-
-                            <Box sx={{ width: '100%', '& .RaLabeled-label': { display: 'none' } }}>
-                                <Typography variant="subtitle1">{translate('events.form.content')}</Typography>
-                                <RichTextInput
-                                    defaultValue={content}
-                                    onChange={(e: any) => setContent(e)}
-                                    source=""
-                                    fullWidth
-                                />
-                            </Box>
-                        </TabbedForm.Tab>
-
-                        {translations?.map((translation, index) => (
+                    <Box sx={{ '& .MuiDivider-root': { display: 'none' } }}>
+                        <TabbedForm>
                             <TabbedForm.Tab
-                                key={translation.languageCode}
-                                label={translation.languageCode}
-                                sx={{ display: 'flex', flexDirection: 'column', gap: '30px' }}
+                                label={defaultLanguage}
+                                sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}
                             >
-                                <Box sx={{ display: 'flex', width: '100%', justifyContent: 'flex-end' }}>
-                                    <Button
-                                        onClick={() => {
-                                            const filteredTranslations = translations?.filter(
-                                                (originalTranslation) =>
-                                                    translation.languageCode !== originalTranslation.languageCode
-                                            );
-                                            setTranslations(filteredTranslations);
-                                        }}
-                                        variant="outlined"
-                                    >
-                                        <span style={{ fontSize: '0.9rem' }}>
-                                            {translate('events.form.remove_translation')}
-                                        </span>
-                                    </Button>
-                                </Box>
+                                {availableLanguages.length > 0 && (
+                                    <Box>
+                                        <Typography variant="subtitle1">
+                                            {translate('events.form.change_language')}
+                                        </Typography>
+                                        <Select
+                                            onChange={(e: any) => {
+                                                setDefaultLanguage(e.target.value as string);
+                                            }}
+                                            sx={{ width: '200px' }}
+                                            value={defaultLanguage}
+                                        >
+                                            {availableLanguages.map((language) => (
+                                                <MenuItem key={language} value={language}>
+                                                    {language}
+                                                </MenuItem>
+                                            ))}
+                                            <MenuItem key={defaultLanguage} value={defaultLanguage}>
+                                                {defaultLanguage}
+                                            </MenuItem>
+                                        </Select>
+                                    </Box>
+                                )}
 
                                 <Box sx={{ width: '100%' }}>
                                     <Typography variant="subtitle1">{translate('events.form.title')}</Typography>
-                                    <Box alignItems="center" display="flex" flexDirection="row">
-                                        <OutlinedInput
-                                            name="Title"
-                                            onChange={(e: any) => {
-                                                const newTranslations = [...translations];
-                                                newTranslations[index].title = e.target.value;
-                                                setTranslations(newTranslations);
-                                            }}
-                                            placeholder="Title"
-                                            type="text"
-                                            value={translation.title}
-                                            required
-                                        />
-                                    </Box>
+                                    <OutlinedInput
+                                        name="Title"
+                                        onChange={(e: any) => setTitle(e.target.value)}
+                                        type="text"
+                                        value={title}
+                                        fullWidth
+                                        required
+                                    />
                                 </Box>
 
                                 <Box sx={{ width: '100%', '& .RaLabeled-label': { display: 'none' } }}>
                                     <Typography variant="subtitle1">{translate('events.form.content')}</Typography>
                                     <RichTextInput
-                                        defaultValue={translation.content || ''}
-                                        onChange={(e: any) => {
-                                            const newTranslations = [...translations];
-                                            const newTranslation = {
-                                                languageCode: translation.languageCode,
-                                                title: translation.title,
-                                                content: e,
-                                            };
-                                            newTranslations[index] = newTranslation;
-
-                                            setTranslations(newTranslations);
-                                        }}
+                                        defaultValue={content}
+                                        onChange={(e: any) => setContent(e)}
                                         source=""
                                         fullWidth
                                     />
                                 </Box>
                             </TabbedForm.Tab>
-                        ))}
-                    </TabbedForm>
+
+                            {translations?.map((translation, index) => (
+                                <TabbedForm.Tab
+                                    key={translation.languageCode}
+                                    label={translation.languageCode}
+                                    sx={{ display: 'flex', flexDirection: 'column', gap: '30px' }}
+                                >
+                                    <Box sx={{ display: 'flex', width: '100%', justifyContent: 'flex-end' }}>
+                                        <Button
+                                            onClick={() => {
+                                                const filteredTranslations = translations?.filter(
+                                                    (originalTranslation) =>
+                                                        translation.languageCode !== originalTranslation.languageCode
+                                                );
+                                                setTranslations(filteredTranslations);
+                                            }}
+                                            variant="outlined"
+                                        >
+                                            <span style={{ fontSize: '0.9rem' }}>
+                                                {translate('events.form.remove_translation')}
+                                            </span>
+                                        </Button>
+                                    </Box>
+
+                                    <Box sx={{ width: '100%' }}>
+                                        <Typography variant="subtitle1">{translate('events.form.title')}</Typography>
+                                        <Box alignItems="center" display="flex" flexDirection="row">
+                                            <OutlinedInput
+                                                name="Title"
+                                                onChange={(e: any) => {
+                                                    const newTranslations = [...translations];
+                                                    newTranslations[index].title = e.target.value;
+                                                    setTranslations(newTranslations);
+                                                }}
+                                                placeholder="Title"
+                                                type="text"
+                                                value={translation.title}
+                                                required
+                                            />
+                                        </Box>
+                                    </Box>
+
+                                    <Box sx={{ width: '100%', '& .RaLabeled-label': { display: 'none' } }}>
+                                        <Typography variant="subtitle1">{translate('events.form.content')}</Typography>
+                                        <RichTextInput
+                                            defaultValue={translation.content || ''}
+                                            onChange={(e: any) => {
+                                                const newTranslations = [...translations];
+                                                const newTranslation = {
+                                                    languageCode: translation.languageCode,
+                                                    title: translation.title,
+                                                    content: e,
+                                                };
+                                                newTranslations[index] = newTranslation;
+
+                                                setTranslations(newTranslations);
+                                            }}
+                                            source=""
+                                            fullWidth
+                                        />
+                                    </Box>
+                                </TabbedForm.Tab>
+                            ))}
+                        </TabbedForm>
+                    </Box>
+
                     <Button
                         color="primary"
                         disabled={

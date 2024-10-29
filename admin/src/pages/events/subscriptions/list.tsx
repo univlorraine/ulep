@@ -15,7 +15,6 @@ import {
     ReferenceInput,
     FunctionField,
 } from 'react-admin';
-import { useNavigate } from 'react-router-dom';
 import PageTitle from '../../../components/PageTitle';
 import { EventObject } from '../../../entities/Event';
 import { Profile } from '../../../entities/Profile';
@@ -30,6 +29,7 @@ interface BulkActionButtonProps {
 }
 
 const BulkActionButton = ({ eventId, resource, selectedIds }: BulkActionButtonProps) => {
+    const translate = useTranslate();
     const { unsubscribeToEvent } = useDataProvider();
     const refresh = useRefresh();
     const unselectAll = useUnselectAll(resource ?? 'events/subscriptions');
@@ -40,12 +40,11 @@ const BulkActionButton = ({ eventId, resource, selectedIds }: BulkActionButtonPr
         refresh();
     };
 
-    return <Button onClick={unsubscribe}>Unsubscribe</Button>;
+    return <Button onClick={unsubscribe}>{translate('events.subscriptions.unsubscribe')}</Button>;
 };
 
 const EventsSubscriptionsList = () => {
     const translate = useTranslate();
-    const navigate = useNavigate();
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
     const { getOne } = useDataProvider();
     const [currentEvent, setCurrentEvent] = useState<EventObject>();
@@ -138,7 +137,7 @@ const EventsSubscriptionsList = () => {
                     <Datagrid
                         bulkActionButtons={<BulkActionButton eventId={eventId} />}
                         rowClick={(_, __, record) => {
-                            navigate(`/profiles/${record.id}/show`);
+                            window.open(`/#/profiles/${record.id}/show`, '_blank');
 
                             // Disable the default rowClick behavior
                             return false;

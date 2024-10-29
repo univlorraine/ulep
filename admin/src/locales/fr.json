@@ -294,7 +294,8 @@
                 "send": "Envoyer",
                 "success": "L'email a bien été envoyé aux inscrits",
                 "error": "Une erreur est survenue lors de l'envoi de l'email"
-            }
+            },
+            "unsubscribe": "Désinscrire"
         }
     },
     "global": {

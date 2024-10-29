@@ -294,7 +294,8 @@
                 "send": "Send",
                 "success": "The email has been sent to the subscribers",
                 "error": "An error occurred while sending the email"
-            }
+            },
+            "unsubscribe": "Unsubscribe"
         }
     },
     "global": {
