@@ -32,6 +32,7 @@ class EventObject {
         public readonly endDate: Date,
         public readonly type: EventType,
         public readonly withSubscription: boolean,
+        public readonly isUserSubscribed: boolean,
         public readonly diffusionLanguages: Language[],
         public readonly imageUrl?: string,
         public readonly creditImage?: string,

@@ -3,6 +3,8 @@ import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import EventObject from '../../../../domain/entities/Event';
 import Profile from '../../../../domain/entities/Profile';
+import EventAdress from '../../events/EventAdress';
+import EventDate from '../../events/EventDate';
 import HeaderSubContent from '../../HeaderSubContent';
 import LanguageTag from '../../LanguageTag';
 import ChangeLanguageModal from '../../modals/ChangeLanguageModal';
@@ -25,13 +27,6 @@ export const EventsContent: React.FC<EventsContentProps> = ({ event, profile, on
     const [showCreditModal, setShowCreditModal] = useState(false);
 
     const contentRef = useRef<HTMLDivElement>(null);
-    const formattedDate = new Intl.DateTimeFormat(profile.nativeLanguage.code, {
-        day: '2-digit',
-        month: 'long',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-    }).format(new Date(event.startDate));
 
     const changeLanguage = (languageCode: string) => {
         if (languageCode === event.languageCode) {
@@ -62,7 +57,8 @@ export const EventsContent: React.FC<EventsContentProps> = ({ event, profile, on
                 )}
                 <div className={styles['primary-container']} style={{ marginTop: event.imageUrl ? 200 : 0 }}>
                     <h1 className={styles.title}>{currentTitle}</h1>
-                    <span className={styles.date}>{formattedDate}</span>
+                    <EventDate event={event} profile={profile} />
+                    <EventAdress event={event} showMap />
                     <div className={styles.informations}>
                         <div className={styles['information-item']}>
                             <span className={styles.label}>{t('news.show.language')}</span>

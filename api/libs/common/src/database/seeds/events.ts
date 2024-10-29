@@ -27,9 +27,9 @@ export const createEvents = async (
       if (type === 'PRESENTIAL') {
         address = faker.location.streetAddress();
         address_name = faker.location.streetAddress();
+        deepLink = `https://www.google.com/maps?api=1&q=${faker.location.latitude()},${faker.location.longitude()}`;
       } else {
-        event_url = `https://www.google.com/maps?q=${faker.location.latitude()},${faker.location.longitude()}`;
-        deepLink = `https://www.google.com/maps?q=${faker.location.latitude()},${faker.location.longitude()}`;
+        event_url = `https://www.google.com/maps?api=1&q=${faker.location.latitude()},${faker.location.longitude()}`;
       }
 
       const translations = [

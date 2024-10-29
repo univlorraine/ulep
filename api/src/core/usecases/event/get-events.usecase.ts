@@ -46,7 +46,7 @@ export class GetEventsUsecase {
       command.filters.languageCodes,
     );
 
-    return this.eventRepository.findAllForAnUser({
+    const events = await this.eventRepository.findAllForAnUser({
       ...command,
       filters: {
         ...command.filters,
@@ -55,6 +55,8 @@ export class GetEventsUsecase {
         allowedLanguages,
       },
     });
+
+    return { profile, events };
   }
 
   private async getProfileFromUser(userId: string) {

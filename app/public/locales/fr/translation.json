@@ -41,7 +41,8 @@
         }
     },
     "events": {
-        "online": "En ligne"
+        "online": "En ligne",
+        "open_maps": "S'y rendre"
     },
     "news": {
         "list": {

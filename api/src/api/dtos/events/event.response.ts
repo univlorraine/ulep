@@ -117,6 +117,10 @@ export class EventResponse {
   @Expose({ groups: ['read'] })
   endDate: Date;
 
+  @Swagger.ApiProperty({ type: 'boolean' })
+  @Expose({ groups: ['event:isUserSubscribed'] })
+  isUserSubscribed: boolean;
+
   @Swagger.ApiProperty({ type: [UserResponse] })
   @Expose({ groups: ['event:subscribedProfiles'] })
   @IsArray()
@@ -134,7 +138,7 @@ export class EventResponse {
     Object.assign(this, partial);
   }
 
-  static fromDomain(instance: EventObject) {
+  static fromDomain(instance: EventObject, profileId?: string) {
     return new EventResponse({
       id: instance.id,
       title: instance.title,
@@ -166,6 +170,7 @@ export class EventResponse {
       subscribedProfiles: instance.subscribedProfiles?.map((profile) =>
         ProfileResponse.fromDomain(profile),
       ),
+      isUserSubscribed: instance.isUserSubscribed(profileId),
       createdAt: instance.createdAt,
       updatedAt: instance.updatedAt,
     });

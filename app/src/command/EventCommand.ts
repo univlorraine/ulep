@@ -15,6 +15,7 @@ export interface EventCommand {
     endDate: Date;
     type: string;
     withSubscription: boolean;
+    isUserSubscribed: boolean;
     diffusionLanguages: LanguageCommand[];
     imageUrl?: string;
     creditImage?: string;
@@ -39,6 +40,7 @@ export const eventCommandToDomain = (command: EventCommand) => {
         command.endDate,
         command.type as EventType,
         command.withSubscription,
+        command.isUserSubscribed,
         command.diffusionLanguages.map(languageCommandToDomain),
         command.imageUrl,
         command.creditImage,

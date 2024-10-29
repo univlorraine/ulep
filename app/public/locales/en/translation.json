@@ -54,7 +54,8 @@
         "is_mine": "My sheets"
     },
     "events": {
-        "online": "Online"
+        "online": "Online",
+        "open_maps": "Open maps"
     },
     "news": {
         "list": {

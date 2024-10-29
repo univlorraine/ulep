@@ -81,21 +81,21 @@ export class EventsController {
     });
 
     return new Collection<EventResponse>({
-      items: events.items.map(EventResponse.fromDomain),
+      items: events.items.map((event) => EventResponse.fromDomain(event)),
       totalItems: events.totalItems,
     });
   }
 
   @Get()
   @UseGuards(AuthenticationGuard)
-  @SerializeOptions({ groups: ['read'] })
+  @SerializeOptions({ groups: ['read', 'event:isUserSubscribed'] })
   @Swagger.ApiOperation({ summary: 'Get Events resources.' })
   @CollectionResponse(EventResponse)
   async getEvents(
     @CurrentUser() user: KeycloakUser,
     @Query() query: GetEventsQuery,
   ) {
-    const events = await this.getEventsUsecase.execute({
+    const { events, profile } = await this.getEventsUsecase.execute({
       userId: user.sub,
       pagination: {
         page: query.page,
@@ -109,7 +109,9 @@ export class EventsController {
     });
 
     return new Collection<EventResponse>({
-      items: events.items.map(EventResponse.fromDomain),
+      items: events.items.map((event) =>
+        EventResponse.fromDomain(event, profile.id),
+      ),
       totalItems: events.totalItems,
     });
   }

@@ -1,0 +1,20 @@
+.date-container {
+    display: flex;
+    align-items: center;
+    margin-top: 2px;
+    font-family: Maven Pro;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 16px;
+    text-align: left;
+    gap: 4px;
+}
+
+.date {
+    color: #737272;
+    font-family: Maven Pro;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 16px;
+    text-align: left;
+}

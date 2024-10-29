@@ -1,10 +1,10 @@
-import { IonIcon, IonImg } from '@ionic/react';
-import { locationOutline } from 'ionicons/icons';
+import { IonImg } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
-import EventObject, { EventType } from '../../../domain/entities/Event';
+import EventObject from '../../../domain/entities/Event';
 import Profile from '../../../domain/entities/Profile';
 import LanguageTag from '../LanguageTag';
 import UniversityTag from '../UniversityTag';
+import EventAdress from './EventAdress';
 import styles from './EventLine.module.css';
 
 interface EventLineProps {
@@ -12,24 +12,6 @@ interface EventLineProps {
     profile: Profile;
     onClick: () => void;
 }
-
-interface EventAdressProps {
-    event: EventObject;
-}
-
-const EventAdress: React.FC<EventAdressProps> = ({ event }) => {
-    const { t } = useTranslation();
-    return (
-        <div className={styles['adress-container']}>
-            <IonIcon icon={locationOutline} />
-            {event.type === EventType.ONLINE ? (
-                <span className={styles.adress}>{t('events.online')}</span>
-            ) : (
-                <span className={styles.adress}>{event.addressName}</span>
-            )}
-        </div>
-    );
-};
 
 const EventLine: React.FC<EventLineProps> = ({ event, profile, onClick }) => {
     const { t } = useTranslation();
