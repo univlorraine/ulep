@@ -17,17 +17,6 @@ type GenericEmailContact = {
   language: string;
 };
 
-const isPropValuesEqual = (subject, target, propNames) =>
-  propNames.every((propName) => subject[propName] === target[propName]);
-
-const getUniqueItemsByProperties = (items, propNames) =>
-  items.filter(
-    (item, index, array) =>
-      index ===
-      array.findIndex((foundItem) =>
-        isPropValuesEqual(foundItem, item, propNames),
-      ),
-  );
 @Injectable()
 export class DeleteEventUsecase {
   constructor(
