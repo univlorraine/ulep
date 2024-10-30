@@ -2,30 +2,37 @@ import { IonImg, useIonToast } from '@ionic/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
-import { ArrowRightSvg, EditPng, ParameterPng, SignalerPng, SmallAvatarPng } from '../../../assets';
+import { ArrowRightSvg, AvatarPng, BackgroundPurpleProfilePng, SettingsPng, SignalerPng } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
 import Profile from '../../../domain/entities/Profile';
 import { AvatarMaxSizeError } from '../../../domain/usecases/UpdateAvatarUsecase';
-import { useStoreActions } from '../../../store/storeTypes';
+import { useStoreActions, useStoreState } from '../../../store/storeTypes';
 import useLogout from '../../hooks/useLogout';
-import Avatar from '../Avatar';
-import Loader from '../Loader';
+import useWindowDimensions from '../../hooks/useWindowDimensions';
+import { BACKGROUND_PROFILE_STYLE_INLINE, HYBRID_MAX_WIDTH } from '../../utils';
+import ProfileDetailsCard from '../profile/ProfileDetailsCard';
 import styles from './ProfileContent.module.css';
 
 interface ProfileContentProps {
-    onParameterPressed: () => void;
+    onDisplaySettings: () => void;
     profile: Profile;
+    onProfileChange: () => void;
 }
 
-const ProfileContent: React.FC<ProfileContentProps> = ({ onParameterPressed, profile }) => {
+const ProfileContent: React.FC<ProfileContentProps> = ({ onDisplaySettings, profile, onProfileChange }) => {
     const { t } = useTranslation();
     const [showToast] = useIonToast();
     const [loading, setLoading] = useState<boolean>(false);
     const { updateProfile } = useStoreActions((store) => store);
+    const { language } = useStoreState((store) => store);
     const { cameraAdapter, updateAvatar } = useConfig();
+    const { width } = useWindowDimensions();
+    const isHybrid = width < HYBRID_MAX_WIDTH;
     const history = useHistory();
 
     const { handleLogout } = useLogout();
+
+    const { user } = profile;
 
     const changeAvatar = async () => {
         const avatarFile = await cameraAdapter.getPictureFromGallery();
@@ -43,7 +50,6 @@ const ProfileContent: React.FC<ProfileContentProps> = ({ onParameterPressed, pro
                 return await showToast({ message, duration: 5000 });
             }
             updateProfile({ avatar: result });
-
             return setLoading(false);
         }
     };
@@ -52,64 +58,83 @@ const ProfileContent: React.FC<ProfileContentProps> = ({ onParameterPressed, pro
         history.push('/reports');
     };
 
+    const formattedDate = (date: Date): string => {
+        return new Intl.DateTimeFormat(language, {
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric',
+        }).format(new Date(date));
+    };
+
+    const buttonsProfile = [
+        {
+            label: t('profile_page.buttons.reports'),
+            icon: SignalerPng,
+            onClick: navigateToReports,
+        },
+        {
+            label: t('profile_page.buttons.parameters'),
+            icon: SettingsPng,
+            onClick: onDisplaySettings,
+        },
+        {
+            label: t('profile_page.buttons.disconnect'),
+            icon: AvatarPng,
+            onClick: handleLogout,
+        },
+    ];
+
+    const backgroundStyle = {
+        backgroundImage: `url('${BackgroundPurpleProfilePng}')`,
+        backgroundColor: 'rgba(196, 186, 214, 1)',
+        ...BACKGROUND_PROFILE_STYLE_INLINE,
+    };
+
     return (
-        <div className={`content-wrapper ${styles.container}`}>
+        <div className={`content-wrapper ${styles.container} ${isHybrid ? styles.hybrid : ''}`}>
             <div className={styles.content}>
-                <h1 className="title">{t('home_page.profile.title')}</h1>
-                {loading ? (
-                    <Loader height="150" width="150" wrapperStyle={{}} wrapperClass="" />
-                ) : (
-                    <Avatar user={profile.user} className={styles.image} />
-                )}
-                <span className={styles.name}>{`${profile.user.firstname} ${profile.user.lastname}`}</span>
-                <span className={styles.university}>{profile.user.university.name}</span>
+                <div className={styles.titleContainer} style={isHybrid ? backgroundStyle : {}}>
+                    <h1 className={`title ${styles.title}`}>{t('profile_page.title')}</h1>
+                </div>
+                <div className={styles.cards}>
+                    <ProfileDetailsCard
+                        user={user}
+                        title={t('profile_page.profile_card.title')}
+                        onPress={changeAvatar}
+                        textButton={
+                            isHybrid
+                                ? t('profile_page.profile_card.button_mobile')
+                                : t('profile_page.profile_card.button')
+                        }
+                        subtitle={`${user.firstname} ${user.lastname}`}
+                        firstInfo={`${user.age} ${t('profile_page.profile_card.years_old')}`}
+                        secondInfo={user.division}
+                        isProfileCard={true}
+                        isLoading={loading}
+                    />
+                    <ProfileDetailsCard
+                        user={user}
+                        title={t('profile_page.university_card.title')}
+                        onPress={() => {}}
+                        textButton={t('profile_page.university_card.button')}
+                        subtitle={user.university.name}
+                        firstInfo={t('profile_page.university_card.semester_date') || ''}
+                        secondInfo={formattedDate(user.university.admissionStart)}
+                        thirdInfo={`${t('profile_page.university_card.end_date')} ${formattedDate(user.university.admissionEnd)}`}
+                    />
+                </div>
 
-                <button
-                    aria-label={t('home_page.profile.reports') as string}
-                    className={`${styles.button} margin-bottom`}
-                    onClick={navigateToReports}
-                >
-                    <div className={styles['button-container']}>
-                        <IonImg className={styles.icon} alt="" src={SignalerPng} aria-hidden={true} />
-                        <span className="margin-left">{t('home_page.profile.reports')}</span>
-                    </div>
-                    <img alt="" src={ArrowRightSvg} aria-hidden={true} />
-                </button>
-                <button
-                    aria-label={t('home_page.profile.edit') as string}
-                    className={`${styles.button} margin-bottom`}
-                    onClick={changeAvatar}
-                >
-                    <div className={styles['button-container']}>
-                        <img alt="" src={EditPng} aria-hidden={true} />
-                        <span className="margin-left">{t('home_page.profile.edit')}</span>
-                    </div>
-                    <img alt="" src={ArrowRightSvg} aria-hidden={true} />
-                </button>
-
-                <button
-                    aria-label={t('home_page.profile.parameters') as string}
-                    className={`${styles.button} margin-bottom`}
-                    onClick={onParameterPressed}
-                >
-                    <div className={styles['button-container']}>
-                        <img alt="" src={ParameterPng} aria-hidden={true} />
-                        <span className="margin-left">{t('home_page.profile.parameters')}</span>
-                    </div>
-                    <img alt="" src={ArrowRightSvg} aria-hidden={true} />
-                </button>
-
-                <button
-                    aria-label={t('home_page.profile.disconnect') as string}
-                    className={styles.button}
-                    onClick={handleLogout}
-                >
-                    <div className={styles['button-container']}>
-                        <img alt="" src={SmallAvatarPng} aria-hidden={true} />
-                        <span className="margin-left">{t('home_page.profile.disconnect')}</span>
-                    </div>
-                    <img alt="" src={ArrowRightSvg} />
-                </button>
+                <div className={styles.buttons}>
+                    {buttonsProfile.map((button) => (
+                        <button aria-label={button.label as string} className={styles.button} onClick={button.onClick}>
+                            <div className={styles['button-container']}>
+                                <IonImg className={styles.icon} src={button.icon} aria-hidden={true} />
+                                <span className="margin-left">{button.label}</span>
+                            </div>
+                            <img alt="" src={ArrowRightSvg} aria-hidden={true} />
+                        </button>
+                    ))}
+                </div>
             </div>
         </div>
     );

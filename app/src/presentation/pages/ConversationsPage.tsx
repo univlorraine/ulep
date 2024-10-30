@@ -68,7 +68,7 @@ const ConversationsPage: React.FC = () => {
 
     return (
         <>
-            <OnlineWebLayout profile={profile}>
+            <OnlineWebLayout>
                 <div className={styles.container}>
                     <div className={styles.conversationContent}>
                         <ConversationsContent

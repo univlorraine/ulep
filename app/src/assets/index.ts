@@ -6,9 +6,10 @@ import ArrowUpSvg from './arrow-up.svg';
 import AvatarPng from './avatar.png';
 import BackgroundSvg from './background.svg';
 import BackgroundBluePng from './backgrounds/background-blue.png';
+import BackgroundPurpleProfilePng from './backgrounds/background-purple-profile.png';
+import BackgroundPurplePng from './backgrounds/background-purple.png';
 import BackgroundRedPng from './backgrounds/background-red.png';
 import BackgroundYellowPng from './backgrounds/background-yellow.png';
-import BackgroundPurplePng from './backgrounds/background-purple.png';
 import BonjourBubbleSvg from './bonjour-bubble.svg';
 import ConversationsSvg from './bottom-bar/conversations.svg';
 import HomeSvg from './bottom-bar/home.svg';
@@ -21,8 +22,8 @@ import ChineseBubble from './china-bubble.svg';
 import ClockPng from './clock.png';
 import CloseSvg from './close.svg';
 import CloseBlackSvg from './close_black.svg';
-import CloseWhiteSvg from './close_white.svg';
 import CloseBlackPlainSvg from './close_black_plain.svg';
+import CloseWhiteSvg from './close_white.svg';
 import CreateAccountPng from './create-account-logo.png';
 import DicePng from './dice.png';
 import DicesPng from './dices.png';
@@ -93,6 +94,7 @@ export {
     CloseBlackPlainSvg,
     ConversationsSvg,
     CreateAccountPng,
+    BackgroundPurpleProfilePng,
     DicePng,
     DicesPng,
     DisconnectSvg,

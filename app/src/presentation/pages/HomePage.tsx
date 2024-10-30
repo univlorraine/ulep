@@ -150,7 +150,7 @@ const HomePage: React.FC = () => {
 
     return (
         <>
-            <OnlineWebLayout profile={profile} onRefresh={handleRefresh}>
+            <OnlineWebLayout onRefresh={handleRefresh}>
                 <HomeContent
                     isLoading={isLoading}
                     profile={profile}

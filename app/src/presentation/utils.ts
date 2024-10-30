@@ -161,6 +161,12 @@ export const BACKGROUND_WEB_STYLE_INLINE = {
     backgroundSize: '100%',
 };
 
+export const BACKGROUND_PROFILE_STYLE_INLINE = {
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'contain',
+};
+
 export const isEmailCorrect = (email: string) => {
     const regex = /^[\w-\.+]+@([\w-]+\.)+[\w-]{2,4}$/;
 
