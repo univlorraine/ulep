@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import { useState } from 'react';
 import { Form, required, TextInput, useLogin, useNotify, useTranslate } from 'react-admin';
 import { ssoLogin } from '../../providers/authProvider';
+import ForgotPassword from './ForgotPassword';
 
 const LoginPage = () => {
     const [loading, setLoading] = useState(false);
@@ -75,11 +76,14 @@ const LoginPage = () => {
                             />
                         </Box>
                     </Box>
-                    <CardActions sx={{ padding: '0 1em 1em 1em' }}>
+                    <CardActions
+                        sx={{ padding: '0 1em 1em 1em', display: 'flex', flexDirection: 'column', gap: '1em' }}
+                    >
                         <Button color="primary" disabled={loading} type="submit" variant="contained" fullWidth>
                             {loading && <CircularProgress size={25} thickness={2} />}
                             {translate('ra.auth.sign_in')}
                         </Button>
+                        <ForgotPassword />
                     </CardActions>
                 </Card>
                 <Card sx={{ minWidth: 300, marginTop: '2em' }}>

@@ -71,12 +71,20 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({
             email: newEmail,
             firstname: newFirstname,
             lastname: newLastname,
-            password,
+            password: password ?? undefined,
             universityId: getUniversityId(),
             group: newGroup,
             file,
             languageId: newLanguage?.id !== 'none' ? newLanguage?.id : null,
         });
+    };
+
+    const isEmailValid = (): boolean => {
+        if (university && isCentralUniversity(university)) {
+            return university.domains.some((domain) => newEmail.endsWith(domain));
+        }
+
+        return Boolean(newEmail);
     };
 
     return (
@@ -95,6 +103,9 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({
                         required
                     />
                 </Box>
+                {newEmail && !isEmailValid() && (
+                    <Typography color="error">{translate('administrators.errors.email')}</Typography>
+                )}
             </Box>
 
             {!isProfileEdit && (
@@ -152,26 +163,25 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({
                 </Box>
             </Box>
 
-            <Box>
-                <Typography variant="subtitle1">{translate(`administrators.${type}.password`)}</Typography>
-                <Box alignItems="center" display="flex" flexDirection="row">
-                    <OutlinedInput
-                        name="Password"
-                        onChange={(e) => setPassword(e.target.value)}
-                        placeholder={translate('global.password')}
-                        value={password}
-                        required
-                    />
+            {!identity.isCentralUniversity && identity.id === id && (
+                <Box>
+                    <Typography variant="subtitle1">{translate(`administrators.${type}.password`)}</Typography>
+                    <Box alignItems="center" display="flex" flexDirection="row">
+                        <OutlinedInput
+                            name="Password"
+                            onChange={(e) => setPassword(e.target.value)}
+                            placeholder={translate('global.password')}
+                            value={password}
+                            required
+                        />
+                    </Box>
                 </Box>
-            </Box>
+            )}
 
             <Button
                 color="primary"
                 disabled={
-                    (email && !password ? false : !password || !isPasswordValid(password)) ||
-                    !newFirstname ||
-                    !newLastname ||
-                    !newEmail
+                    (password ? !isPasswordValid(password) : false) || !newFirstname || !newLastname || !isEmailValid()
                 }
                 onClick={onCreatePressed}
                 sx={{ mt: 4, width: '100%' }}
