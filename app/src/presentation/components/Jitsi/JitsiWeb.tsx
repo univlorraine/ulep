@@ -32,7 +32,7 @@ const JitsiWeb = ({ jitsiUrl, language, roomName, jitsiToken }: JitsiProps) => {
 
     return (
         <div className={styles.container}>
-            <HomeHeader />
+            {!isHybrid && <HomeHeader />}
             <div className={styles.content}>
                 <JitsiMeeting
                     domain={jitsiUrl}
