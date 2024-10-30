@@ -1,5 +1,5 @@
 import { Box, OutlinedInput, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Loading, useGetIdentity, useGetList, useNotify, usePermissions, useTranslate } from 'react-admin';
 import { AdminGroup, AdministratorFormPayload, KeycloakGroup, Role } from '../../entities/Administrator';
 import Language from '../../entities/Language';
@@ -48,12 +48,6 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({
     const [newGroup, setNewGroup] = useState<KeycloakGroup | undefined>(group);
     const [newLanguage, setNewLanguage] = useState<Language>();
     const [file, setFile] = useState<File>();
-
-    useEffect(() => {
-        if (universities) {
-            setUniversity(universities?.find(isCentralUniversity));
-        }
-    }, [universities]);
 
     if (isLoadingIdentity || !identity || isLoadingUniversities || !universities) {
         return <Loading />;

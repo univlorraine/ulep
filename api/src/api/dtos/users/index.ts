@@ -284,6 +284,7 @@ export class CreateAdministratorRequest {
   universityId?: string;
 
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @Transform(({ value }) => value || undefined)
   @IsOptional()
   @IsUUID()
   languageId?: string;

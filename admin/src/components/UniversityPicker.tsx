@@ -23,7 +23,7 @@ const UniversityPicker: React.FC<UniversityPickerProps> = ({ initialValue, onCha
                 (university: University) =>
                     university.id === initialValue || (initialValue === 'central' && isCentralUniversity(university))
             );
-            onChange(initialUniverisity || data[0]);
+            onChange(initialUniverisity || data?.find(isCentralUniversity));
         }
     }, [data]);
 
