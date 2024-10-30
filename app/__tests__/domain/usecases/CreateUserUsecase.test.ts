@@ -18,7 +18,7 @@ const university = new University(
     new Date('2023-12-31T00:00:00.000Z'),
     new Date('2023-01-01T00:00:00.000Z'),
     new Date('2023-01-01T00:00:00.000Z'),
-    3,
+    3
 );
 const file = new File(['Bits'], 'name');
 describe('createUserUsecase', () => {
@@ -194,9 +194,9 @@ describe('createUserUsecase', () => {
         expect(result).toStrictEqual(new Error('errors.global'));
     });
 
-    it('execute must return an error if adapter has code 400 with code error message', async () => {
+    it('execute must return an error if adapter has code 400 with code or domain error message', async () => {
         expect.assertions(1);
-        adapter.mockError({ error: { statusCode: 400, message: 'Code is invalid' } });
+        adapter.mockError({ error: { statusCode: 400, message: 'Conditions are invalid' } });
         const result = await usecase.execute(
             'email',
             'password',
@@ -213,7 +213,7 @@ describe('createUserUsecase', () => {
             '',
             file
         );
-        expect(result).toStrictEqual(new Error('signup_informations_page.error_code'));
+        expect(result).toStrictEqual(new Error('signup_informations_page.error_domain'));
     });
 
     it('execute must return an error if adapter has code 400 with image weight error message', async () => {
@@ -258,28 +258,6 @@ describe('createUserUsecase', () => {
             file
         );
         expect(result).toStrictEqual(new Error('signup_informations_page.error_picture_format'));
-    });
-
-    it('execute must return an error if adapter has code 400 with domain error message', async () => {
-        expect.assertions(1);
-        adapter.mockError({ error: { statusCode: 400, message: 'Domain is invalid' } });
-        const result = await usecase.execute(
-            'email',
-            'password',
-            'firstname',
-            'lastname',
-            'MALE',
-            'CODE',
-            22,
-            university,
-            'STUDENT',
-            'FR',
-            '',
-            '',
-            '',
-            file
-        );
-        expect(result).toStrictEqual(new Error('signup_informations_page.error_domain'));
     });
 
     it('execute must return an error if adapter has code 409 with domain error message', async () => {
