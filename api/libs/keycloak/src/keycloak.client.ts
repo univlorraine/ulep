@@ -379,13 +379,6 @@ export class KeycloakClient {
           firstName: props.firstname,
           lastName: props.lastname,
           enabled: true,
-          credentials: [
-            {
-              type: 'password',
-              value: props.password,
-              temporary: false,
-            },
-          ],
           attributes: {
             universityId: props.universityId,
             languageId: props.languageId,

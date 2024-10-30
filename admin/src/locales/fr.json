@@ -21,13 +21,16 @@
                 "user_email": "Email"
             }
         },
+        "errors": {
+            "email": "L'email n'est pas valide, vous devez utiliser l'adresse email de l'université"
+        },
         "tabLabel": "Administrateurs",
         "university": "Gestionnaire de",
         "update": {
             "email": "Mettez à jour l'email de l'utilisateur",
             "error": "Une erreur est survenue lors de la mise à jour d'un administrateur",
             "error_mail": "Cet email est utilisé par un autre utilisateur",
-            "password": "Veuillez saisir un mot de passe pour l'administrateur ( 1 majuscule, 1 minuscule et 1 chiffre ) si vous voulez le mettre à jour",
+            "password": "Veuillez saisir un mot de passe ( 1 majuscule, 1 minuscule et 1 chiffre ) si vous voulez le mettre à jour",
             "title": "Mise à jour d'un administrateur",
             "university": "Mettez à jour l'université à administrer",
             "group": "Mettez à jour le(s) rôle(s) de l'administrateur"
@@ -133,6 +136,12 @@
         "both": "Les deux",
         "deleted_user": "Utilisateur supprimé",
         "sso_login": "M'authentifier",
+        "forgot_password": "Mot de passe oublié",
+        "forgot_password_modal": {
+            "title": "Demande de réinitialisation de mot de passe",
+            "description": "Afin de réinitialiser votre mot de passe, veuillez renseigner votre email ci-dessous.",
+            "send_button": "Envoyer"
+        },
         "userStatus": {
             "active": "Actif",
             "banned": "Bloqué",
