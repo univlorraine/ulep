@@ -26,7 +26,7 @@ import PageTitle from '../../components/PageTitle';
 import { Role } from '../../entities/Administrator';
 import Language from '../../entities/Language';
 import { Profile } from '../../entities/Profile';
-import User, { UserStatus } from '../../entities/User';
+import User, { UserRole, UserStatus } from '../../entities/User';
 
 export interface ProfileFilterProps {
     displayAllUniversities: boolean;
@@ -97,10 +97,11 @@ const ProfileFilter = ({ displayAllUniversities, ...props }: ProfileFilterProps)
                 source="user.status"
             />
             <SelectInput
-                choices={[
-                    { id: 'STUDENT', name: translate('global.student') },
-                    { id: 'STAFF', name: translate('global.staff') },
-                ]}
+                key="role"
+                choices={Object.values(UserRole).map((role) => ({
+                    id: role,
+                    name: translate(`global.${role.toLowerCase()}`),
+                }))}
                 label={translate('global.role')}
                 source="user.role"
             />

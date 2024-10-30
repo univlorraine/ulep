@@ -22,17 +22,22 @@ import { UploadEventImageUsecase } from 'src/core/usecases';
 import {
   CreateEventUsecase,
   DeleteEventUsecase,
-  GetEventsUsecase,
+  GetEventsAdminUsecase,
   GetEventUsecase,
+  SendEmailToSubscribedUsersUsecase,
   SubscribeToEventUsecase,
   UnsubscribeToEventUsecase,
   UpdateEventUsecase,
 } from 'src/core/usecases/event';
 import { CollectionResponse } from '../decorators';
 import { Role, Roles } from '../decorators/roles.decorator';
-import { EventResponse, UpdateEventRequest } from '../dtos/events';
+import {
+  EventResponse,
+  GetEventsAdminQuery,
+  UpdateEventRequest,
+} from '../dtos/events';
 import { CreateEventRequest } from '../dtos/events/create-event.request';
-import { GetEventsQuery } from '../dtos/events/get-events.request';
+import { SendEmailToSubscribedUsersRequest } from '../dtos/events/send-email-to-subscribed-users.request';
 import { SubscribeToEventRequest } from '../dtos/events/subscribe-to-event.request';
 import { UnsubscribeToEventRequest } from '../dtos/events/unsubscribe-to-event.request';
 import { AuthenticationGuard } from '../guards';
@@ -44,21 +49,22 @@ export class EventsController {
   constructor(
     private readonly createEventUsecase: CreateEventUsecase,
     private readonly uploadEventImageUsecase: UploadEventImageUsecase,
-    private readonly getEventsUsecase: GetEventsUsecase,
+    private readonly getEventsAdminUsecase: GetEventsAdminUsecase,
     private readonly getEventUsecase: GetEventUsecase,
     private readonly updateEventUsecase: UpdateEventUsecase,
     private readonly subscribeToEventUsecase: SubscribeToEventUsecase,
     private readonly unsubscribeToEventUsecase: UnsubscribeToEventUsecase,
     private readonly deleteEventUsecase: DeleteEventUsecase,
+    private readonly sendEmailToSubscribedUsersUsecase: SendEmailToSubscribedUsersUsecase,
   ) {}
 
-  @Get()
+  @Get('admin')
   @UseGuards(AuthenticationGuard)
   @SerializeOptions({ groups: ['read'] })
   @Swagger.ApiOperation({ summary: 'Get Events resources.' })
   @CollectionResponse(EventResponse)
-  async getEvents(@Query() query: GetEventsQuery) {
-    const events = await this.getEventsUsecase.execute({
+  async getEvents(@Query() query: GetEventsAdminQuery) {
+    const events = await this.getEventsAdminUsecase.execute({
       pagination: {
         page: query.page,
         limit: query.limit,
@@ -182,5 +188,19 @@ export class EventsController {
   @Swagger.ApiOkResponse({ type: EventResponse })
   async deleteEvent(@Param('id', ParseUUIDPipe) id: string) {
     await this.deleteEventUsecase.execute(id);
+  }
+
+  @Post(':id/send-email')
+  @UseGuards(AuthenticationGuard)
+  @Roles(Role.ADMIN)
+  async sendEmailToSubscribedUsers(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() body: SendEmailToSubscribedUsersRequest,
+  ) {
+    await this.sendEmailToSubscribedUsersUsecase.execute({
+      eventId: id,
+      title: body.title,
+      content: body.content,
+    });
   }
 }

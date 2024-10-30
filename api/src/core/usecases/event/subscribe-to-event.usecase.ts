@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import { EventObject } from 'src/core/models/event.model';
+import { EmailGateway, EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
 import {
   EventRepository,
   EVENT_REPOSITORY,
@@ -22,21 +23,42 @@ export class SubscribeToEventUsecase {
     private readonly eventRepository: EventRepository,
     @Inject(PROFILE_REPOSITORY)
     private readonly profileRepository: ProfileRepository,
+    @Inject(EMAIL_GATEWAY)
+    private readonly emailGateway: EmailGateway,
   ) {}
 
   async execute(command: SubscribeToEventCommand) {
     const event = await this.assertEventExists(command.eventId);
     await this.assertEventAcceptsSubscriptions(event);
 
-    command.profilesIds.forEach(async (profileId) => {
-      await this.assertProfileExists(profileId);
-      await this.assertProfileIsNotAlreadySubscribedToEvent(event, profileId);
-    });
+    const profiles = [];
+    await Promise.all(
+      command.profilesIds.map(async (profileId) => {
+        const profile = await this.assertProfileExists(profileId);
+        await this.assertProfileIsNotAlreadySubscribedToEvent(event, profileId);
+        profiles.push(profile);
+      }),
+    );
 
-    return this.eventRepository.subscribeToEvent({
+    const result = await this.eventRepository.subscribeToEvent({
       eventId: command.eventId,
       profilesIds: command.profilesIds,
     });
+
+    profiles.forEach((profile) => {
+      this.emailGateway.sendSubscribedToEventEmail({
+        language: profile.nativeLanguage.code,
+        event: {
+          title: event.title,
+          authorUniversity: event.authorUniversity.name,
+          date: event.startDate.toLocaleDateString(),
+        },
+        to: profile.user.email,
+        user: profile.user,
+      });
+    });
+
+    return result;
   }
 
   private async assertEventExists(id: string) {

@@ -3,6 +3,7 @@ import {
   AccountBlockedEmailProps,
   ActivityStatusChangeEmailProps,
   EmailGateway,
+  EventDeletedEmailProps,
   NewMessageEmailProps,
   NewPartnerEmail,
   NewReportEmailProps,
@@ -10,16 +11,19 @@ import {
   NewTandemNoticeEmailProps,
   NewUserRegistrationNoticeEmailProps,
   PasswordChangeDeniedEmailProps,
+  SendEmailToSubscribedToEventUserProps,
   SendWelcomeMailProps,
   SessionCanceledEmailProps,
   SessionCreatedEmailProps,
   SessionStartEmailProps,
   SessionUpdatedEmailProps,
+  SubscribedToEventEmailProps,
   TandemCanceledEmailProps,
   TandemCanceledNoticeEmailProps,
   TandemClosureNoticeEmailProps,
   TandemPausedUnpausedEmailProps,
   TandemValidationNoticeEmailProps,
+  UnsubscribedFromEventEmailProps,
 } from 'src/core/ports/email.gateway';
 
 export default class InMemoryEmailGateway implements EmailGateway {
@@ -137,6 +141,28 @@ export default class InMemoryEmailGateway implements EmailGateway {
   }
 
   sendSessionCreatedEmail(props: SessionCreatedEmailProps): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendSubscribedToEventEmail(
+    props: SubscribedToEventEmailProps,
+  ): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendUnsubscribedFromEventEmail(
+    props: UnsubscribedFromEventEmailProps,
+  ): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendEventDeletedEmail(props: EventDeletedEmailProps): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendEmailToSubscribedToEventUser(
+    props: SendEmailToSubscribedToEventUserProps,
+  ): Promise<void> {
     return Promise.resolve();
   }
 }

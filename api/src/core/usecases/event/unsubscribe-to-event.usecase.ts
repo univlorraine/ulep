@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import { EventObject } from 'src/core/models/event.model';
+import { EmailGateway, EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
 import {
   EventRepository,
   EVENT_REPOSITORY,
@@ -22,20 +23,41 @@ export class UnsubscribeToEventUsecase {
     private readonly eventRepository: EventRepository,
     @Inject(PROFILE_REPOSITORY)
     private readonly profileRepository: ProfileRepository,
+    @Inject(EMAIL_GATEWAY)
+    private readonly emailGateway: EmailGateway,
   ) {}
 
   async execute(command: UnsubscribeToEventCommand) {
     const event = await this.assertEventExists(command.eventId);
 
-    command.profilesIds.forEach(async (profileId) => {
-      await this.assertProfileExists(profileId);
-      await this.assertProfileIsSubscribedToEvent(event, profileId);
-    });
+    const profiles = [];
+    await Promise.all(
+      command.profilesIds.map(async (profileId) => {
+        const profile = await this.assertProfileExists(profileId);
+        await this.assertProfileIsSubscribedToEvent(event, profileId);
+        profiles.push(profile);
+      }),
+    );
 
-    return this.eventRepository.unsubscribeToEvent({
+    const result = await this.eventRepository.unsubscribeToEvent({
       eventId: command.eventId,
       profilesIds: command.profilesIds,
     });
+
+    profiles.forEach((profile) => {
+      this.emailGateway.sendUnsubscribedFromEventEmail({
+        language: profile.nativeLanguage.code,
+        event: {
+          title: event.title,
+          authorUniversity: event.authorUniversity.name,
+          date: event.startDate.toLocaleDateString(),
+        },
+        to: profile.user.email,
+        user: profile.user,
+      });
+    });
+
+    return result;
   }
 
   private async assertEventExists(id: string) {

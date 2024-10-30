@@ -21,7 +21,7 @@ export type GetEventsCommand = {
 };
 
 @Injectable()
-export class GetEventsUsecase {
+export class GetEventsAdminUsecase {
   constructor(
     @Inject(EVENT_REPOSITORY)
     private readonly eventRepository: EventRepository,

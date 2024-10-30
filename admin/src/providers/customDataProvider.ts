@@ -20,6 +20,7 @@ import ActivitiesQuery from '../queries/ActivitiesQuery';
 import AdministratorsQuery from '../queries/AdministratorsQuery';
 import ChatQuery from '../queries/ChatQuery';
 import CountriesQuery from '../queries/CountriesQuery';
+import EventsQuery from '../queries/EventsQuery';
 import InterestsQuery from '../queries/InterestsQuery';
 import LanguagesQuery from '../queries/LanguagesQuery';
 import { LearningLanguageMatchesQuery, LearningLanguagesQuery } from '../queries/LearningLanguagesQuery';
@@ -227,6 +228,14 @@ const customDataProvider = {
                 break;
             case 'countries':
                 url.search = CountriesQuery(params);
+                break;
+            case 'events':
+                url = new URL(`${process.env.REACT_APP_API_URL}/events/admin`);
+                url.search = EventsQuery(params);
+                break;
+            case 'events/subscriptions':
+                url = new URL(`${process.env.REACT_APP_API_URL}/profiles`);
+                url.search = ProfilesQuery(params);
                 break;
             case 'profiles':
                 url.search = ProfilesQuery(params);
@@ -523,6 +532,41 @@ const customDataProvider = {
         }
 
         return response.json();
+    },
+    unsubscribeToEvent: async (eventId: string, profilesIds: string[]): Promise<void> => {
+        const url = `${process.env.REACT_APP_API_URL}/events/${eventId}/unsubscribe`;
+
+        const body = JSON.stringify({
+            profilesIds,
+        });
+
+        const response = await fetch(url, httpClientOptions({ method: 'POST', body }));
+
+        if (!response.ok) {
+            await throwError(response);
+        }
+    },
+    subscribeToEvent: async (eventId: string, profilesIds: string[]): Promise<void> => {
+        const url = `${process.env.REACT_APP_API_URL}/events/${eventId}/subscribe`;
+
+        const body = JSON.stringify({
+            profilesIds,
+        });
+
+        const response = await fetch(url, httpClientOptions({ method: 'POST', body }));
+
+        if (!response.ok) {
+            await throwError(response);
+        }
+    },
+    sendEventUsersEmail: async (eventId: string, title: string, content: string): Promise<void> => {
+        const url = `${process.env.REACT_APP_API_URL}/events/${eventId}/send-email`;
+        const body = JSON.stringify({ title, content });
+        const response = await fetch(url, httpClientOptions({ method: 'POST', body }));
+
+        if (!response.ok) {
+            await throwError(response);
+        }
     },
 } as unknown as DataProvider;
 
