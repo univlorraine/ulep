@@ -117,7 +117,7 @@
         "title": "Messages avec {{name}}",
         "video_call_aria_label": "Appeler {{name}}",
         "send_button": {
-            "record_aria_label": "Restez appuyé pour enregister un audio ou écrivez votre message pour passer en mode envoie",
+            "record_aria_label": "Restez appuyé pour enregister un audio",
             "send_aria_label": "Envoyer le message"
         },
         "input": {
