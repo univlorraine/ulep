@@ -55,7 +55,11 @@
     },
     "events": {
         "online": "Online",
-        "open_maps": "Open maps"
+        "open_maps": "Open maps",
+        "subscribe": "Subscribe",
+        "unsubscribe": "Unsubscribe",
+        "join": "Join",
+        "join_online": "Join online"
     },
     "news": {
         "list": {

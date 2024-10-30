@@ -1,10 +1,12 @@
 import { IonButton, IonImg } from '@ionic/react';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import EventObject from '../../../../domain/entities/Event';
+import { Redirect } from 'react-router';
 import Profile from '../../../../domain/entities/Profile';
+import useGetEvent from '../../../hooks/useGetEvent';
 import EventAdress from '../../events/EventAdress';
 import EventDate from '../../events/EventDate';
+import EventSubscribeButton from '../../events/EventSubscribeButton';
 import HeaderSubContent from '../../HeaderSubContent';
 import LanguageTag from '../../LanguageTag';
 import ChangeLanguageModal from '../../modals/ChangeLanguageModal';
@@ -14,19 +16,33 @@ import styles from './EventsContent.module.css';
 
 interface EventsContentProps {
     profile: Profile;
-    event: EventObject;
     onBackPressed: () => void;
+    eventId: string;
 }
 
-export const EventsContent: React.FC<EventsContentProps> = ({ event, profile, onBackPressed }) => {
+export const EventsContent: React.FC<EventsContentProps> = ({ eventId, profile, onBackPressed }) => {
     const { t } = useTranslation();
-    const [currentLanguage, setCurrentLanguage] = useState(event.languageCode);
-    const [currentTitle, setCurrentTitle] = useState(event.title);
-    const [currentContent, setCurrentContent] = useState(event.content);
+    const [refresh, setRefresh] = useState(false);
+    const { event, error } = useGetEvent(eventId, refresh);
+    const [currentLanguage, setCurrentLanguage] = useState(event?.languageCode ?? '');
+    const [currentTitle, setCurrentTitle] = useState(event?.title ?? '');
+    const [currentContent, setCurrentContent] = useState(event?.content ?? '');
     const [showChangeLanguage, setShowChangeLanguage] = useState(false);
     const [showCreditModal, setShowCreditModal] = useState(false);
 
     const contentRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (event) {
+            setCurrentLanguage(event.languageCode);
+            setCurrentTitle(event.title);
+            setCurrentContent(event.content);
+        }
+    }, [event]);
+
+    if (!event || error) {
+        return <Redirect to="/home" />;
+    }
 
     const changeLanguage = (languageCode: string) => {
         if (languageCode === event.languageCode) {
@@ -57,7 +73,7 @@ export const EventsContent: React.FC<EventsContentProps> = ({ event, profile, on
                 )}
                 <div className={styles['primary-container']} style={{ marginTop: event.imageUrl ? 200 : 0 }}>
                     <h1 className={styles.title}>{currentTitle}</h1>
-                    <EventDate event={event} profile={profile} />
+                    <EventDate event={event} profile={profile} showAddToCalendar />
                     <EventAdress event={event} showMap />
                     <div className={styles.informations}>
                         <div className={styles['information-item']}>
@@ -80,6 +96,11 @@ export const EventsContent: React.FC<EventsContentProps> = ({ event, profile, on
                             <UniversityTag university={event.authorUniversity} />
                         </div>
                     </div>
+                    <EventSubscribeButton
+                        event={event}
+                        profile={profile}
+                        onEventSubscribed={() => setRefresh(!refresh)}
+                    />
                     <p className={styles.content} dangerouslySetInnerHTML={{ __html: currentContent }} />
                 </div>
             </div>

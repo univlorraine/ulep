@@ -170,7 +170,9 @@ export class EventResponse {
       subscribedProfiles: instance.subscribedProfiles?.map((profile) =>
         ProfileResponse.fromDomain(profile),
       ),
-      isUserSubscribed: instance.isUserSubscribed(profileId),
+      isUserSubscribed: profileId
+        ? instance.isUserSubscribed(profileId)
+        : undefined,
       createdAt: instance.createdAt,
       updatedAt: instance.updatedAt,
     });

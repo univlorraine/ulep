@@ -20,7 +20,10 @@ import * as Swagger from '@nestjs/swagger';
 import { ApiTags } from '@nestjs/swagger';
 import { GetEventsQuery } from 'src/api/dtos/events/get-events.request';
 import { EventObject } from 'src/core/models/event.model';
-import { UploadEventImageUsecase } from 'src/core/usecases';
+import {
+  GetProfileByUserIdUsecase,
+  UploadEventImageUsecase,
+} from 'src/core/usecases';
 import {
   CreateEventUsecase,
   DeleteEventUsecase,
@@ -57,6 +60,7 @@ export class EventsController {
     private readonly subscribeToEventUsecase: SubscribeToEventUsecase,
     private readonly unsubscribeToEventUsecase: UnsubscribeToEventUsecase,
     private readonly deleteEventUsecase: DeleteEventUsecase,
+    private readonly getProfileFromUser: GetProfileByUserIdUsecase,
   ) {}
 
   @Get('admin')
@@ -121,10 +125,15 @@ export class EventsController {
   @SerializeOptions({ groups: ['read'] })
   @Swagger.ApiOperation({ summary: 'Get an Event resource.' })
   @Swagger.ApiOkResponse({ type: EventResponse })
-  async getEvent(@Param('id', ParseUUIDPipe) id: string) {
+  async getEvent(
+    @CurrentUser() user: KeycloakUser,
+    @Param('id', ParseUUIDPipe) id: string,
+  ) {
     const event = await this.getEventUsecase.execute(id);
 
-    return EventResponse.fromDomain(event);
+    const profile = await this.getProfileFromUser.execute({ id: user.sub });
+
+    return EventResponse.fromDomain(event, profile?.id);
   }
 
   @Post()

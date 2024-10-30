@@ -38,7 +38,7 @@ const NewsContentModal: React.FC<NewsContentModalProps> = ({
                 {displayEventsContentModal?.type === DisplayEventsContentModalEnum.show &&
                     displayEventsContentModal.event && (
                         <EventsContent
-                            event={displayEventsContentModal.event}
+                            eventId={displayEventsContentModal.event.id}
                             onBackPressed={onClose}
                             profile={profile}
                         />

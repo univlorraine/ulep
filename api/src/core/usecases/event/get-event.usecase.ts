@@ -1,6 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
-import { EventObject } from 'src/core/models/event.model';
 import {
   EventRepository,
   EVENT_REPOSITORY,
@@ -39,6 +38,8 @@ export class GetEventUsecase {
         )
       : undefined;
 
-    return { ...instance, imageURL } as EventObject;
+    instance.imageURL = imageURL;
+
+    return instance;
   }
 }

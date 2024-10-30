@@ -31,6 +31,9 @@ import CreateUserUsecaseInterface from '../domain/interfaces/CreateUserUsecase.i
 import EditProfileUsecaseInterface from '../domain/interfaces/EditProfileUsecase.interface';
 import EditUserUsecaseInterface from '../domain/interfaces/EditUserUsecase.interface';
 import GetAllEventsUsecaseInterface from '../domain/interfaces/event/GetAllEventsUsecase.interface';
+import GetEventUsecaseInterface from '../domain/interfaces/event/GetEventUsecase.interface';
+import SubscribeToEventUsecaseInterface from '../domain/interfaces/event/SubscribeToEventUsecase.interface';
+import UnsubscribeToEventUsecaseInterface from '../domain/interfaces/event/UnsubscribeToEventUsecase.interface';
 import GetAllCountriesUsecaseInterface from '../domain/interfaces/GetAllCountriesUsecase.interface';
 import GetAllGoalsUsecaseInterface from '../domain/interfaces/GetAllGoalsUsecase.interface';
 import GetAllInterestCategoriessUsecase from '../domain/interfaces/GetAllInterestCategoriesUsecase.interface';
@@ -144,4 +147,7 @@ export interface ConfigContextValueType {
     getAllNews: GetAllNewsUsecaseInterface;
     // Events
     getAllEvents: GetAllEventsUsecaseInterface;
+    getEvent: GetEventUsecaseInterface;
+    subscribeToEvent: SubscribeToEventUsecaseInterface;
+    unsubscribeToEvent: UnsubscribeToEventUsecaseInterface;
 }
