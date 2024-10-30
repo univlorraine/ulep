@@ -59,7 +59,8 @@
         "subscribe": "Subscribe",
         "unsubscribe": "Unsubscribe",
         "join": "Join",
-        "join_online": "Join online"
+        "join_online": "Join online",
+        "add_to_calendar": "Add to calendar"
     },
     "news": {
         "list": {

@@ -43,6 +43,7 @@
     "events": {
         "online": "En ligne",
         "open_maps": "S'y rendre",
+        "add_to_calendar": "Ajouter au calendrier",
         "subscribe": "S'abonner",
         "unsubscribe": "Se désabonner",
         "join": "M'y rendre",
