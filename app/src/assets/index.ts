@@ -6,23 +6,24 @@ import ArrowUpSvg from './arrow-up.svg';
 import AvatarPng from './avatar.png';
 import BackgroundSvg from './background.svg';
 import BackgroundBluePng from './backgrounds/background-blue.png';
+import BackgroundPurpleProfilePng from './backgrounds/background-purple-profile.png';
+import BackgroundPurplePng from './backgrounds/background-purple.png';
 import BackgroundRedPng from './backgrounds/background-red.png';
 import BackgroundYellowPng from './backgrounds/background-yellow.png';
-import BackgroundPurplePng from './backgrounds/background-purple.png';
 import BonjourBubbleSvg from './bonjour-bubble.svg';
 import ConversationsSvg from './bottom-bar/conversations.svg';
 import HomeSvg from './bottom-bar/home.svg';
 import CalendarSvg from './calendar.svg';
-import CancelledPng from './cancelled.png';
 import CameraSvg from './camera.svg';
+import CancelledPng from './cancelled.png';
 import ChatSvg from './chat.svg';
 import CheckSvg from './check.svg';
 import ChineseBubble from './china-bubble.svg';
 import ClockPng from './clock.png';
 import CloseSvg from './close.svg';
 import CloseBlackSvg from './close_black.svg';
-import CloseWhiteSvg from './close_white.svg';
 import CloseBlackPlainSvg from './close_black_plain.svg';
+import CloseWhiteSvg from './close_white.svg';
 import CreateAccountPng from './create-account-logo.png';
 import DicePng from './dice.png';
 import DicesPng from './dices.png';
@@ -34,6 +35,8 @@ import FAQPng from './FAQ.png';
 import FicheSvg from './fiche.svg';
 import FlashcardPng from './flashcard.png';
 import HiBubbleSvg from './hi-bubble.svg';
+import HomeDarkPng from './home-dark.png';
+import HomeLightPng from './home-white.png';
 import InfoSvg from './info.svg';
 import JournalSvg from './journal.svg';
 import KebabSvg from './kebab.svg';
@@ -43,6 +46,7 @@ import LeftChevronSvg from './left-chevron.svg';
 import LogoTextSvg from './logo-text.svg';
 import LogoSvg from './logo.svg';
 import MailBoxPng from './mailbox.png';
+import MessagesPng from './messages.png';
 import PaperclipSvg from './paperclip.svg';
 import ParameterPng from './parameter.png';
 import PauseSvg from './pause.svg';
@@ -55,8 +59,10 @@ import RecordSvg from './record.svg';
 import ReportSvg from './report.svg';
 import SenderSvg from './sender.svg';
 import SettingsPng from './settings.png';
+import SignalerPng from './signaler.png';
 import SmallAvatarPng from './small-avatar.png';
 import StarPng from './star.png';
+import Star2Png from './star2.png';
 import TandemPng from './tandem.png';
 import TandemNotFoundPng from './tandem_not_found.png';
 import TrophiePng from './trophie.png';
@@ -91,6 +97,7 @@ export {
     CloseBlackPlainSvg,
     ConversationsSvg,
     CreateAccountPng,
+    BackgroundPurpleProfilePng,
     DicePng,
     DicesPng,
     DisconnectSvg,
@@ -101,6 +108,8 @@ export {
     FicheSvg,
     FlashcardPng,
     HiBubbleSvg,
+    HomeDarkPng,
+    HomeLightPng,
     HomeSvg,
     InfoSvg,
     JournalSvg,
@@ -110,6 +119,7 @@ export {
     LogoSvg,
     LogoTextSvg,
     MailBoxPng,
+    MessagesPng,
     PaperclipSvg,
     ParameterPng,
     PauseSvg,
@@ -122,8 +132,10 @@ export {
     ReportSvg,
     SenderSvg,
     SettingsPng,
+    SignalerPng,
     SmallAvatarPng,
     StarPng,
+    Star2Png,
     TandemNotFoundPng,
     TandemPng,
     TrophiePng,

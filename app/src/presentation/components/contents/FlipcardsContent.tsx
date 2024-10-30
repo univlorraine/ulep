@@ -45,9 +45,9 @@ const FlipcardsContent = ({ profile, selectedListsId, onBackPressed }: Flipcards
     };
 
     return (
-        <div className={`subcontent-container content-wrapper`} style={{ padding: 0 }}>
+        <div className={styles.container}>
             <HeaderSubContent title={t('vocabulary.list.flashcard.title')} onBackPressed={onBackPressed} />
-            <div className={styles.container} style={backgroundStyle}>
+            <div className={styles.content} style={backgroundStyle}>
                 {!isQuizFinished && (
                     <FlipcardsQuiz
                         isLoading={isLoading}

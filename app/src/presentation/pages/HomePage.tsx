@@ -177,7 +177,7 @@ const HomePage: React.FC = () => {
 
     return (
         <>
-            <OnlineWebLayout profile={profile} onRefresh={handleRefresh}>
+            <OnlineWebLayout onRefresh={handleRefresh}>
                 <HomeContent
                     isLoading={isLoading}
                     profile={profile}
@@ -216,7 +216,7 @@ const HomePage: React.FC = () => {
                 profile={selectedTandem?.partner}
             />
             <SessionsContentModal
-                isVisible={displaySessionModal !== undefined}
+                isVisible={Boolean(displaySessionModal)}
                 onClose={() => setDisplaySessionModal(undefined)}
                 profile={profile}
                 tandems={tandems}

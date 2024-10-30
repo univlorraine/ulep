@@ -4,7 +4,7 @@ import Tandem from '../../domain/entities/Tandem';
 import { useStoreState } from '../../store/storeTypes';
 import { LearningType } from '../pages/PairingPedagogyPage';
 
-const useGetLearningData = () => {
+const useGetLearningData = (refresh: boolean) => {
     const { getAllTandems } = useConfig();
     const profile = useStoreState((state) => state.profile);
 
@@ -55,7 +55,7 @@ const useGetLearningData = () => {
         };
 
         fetchData();
-    }, [profile]);
+    }, [profile, refresh]);
 
     return learningResult;
 };

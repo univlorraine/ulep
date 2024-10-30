@@ -1,9 +1,9 @@
 import { IonContent, useIonToast } from '@ionic/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
 import Tandem from '../../domain/entities/Tandem';
-import { useStoreState } from '../../store/storeTypes';
+import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import LearningContent from '../components/contents/LearningContent';
 import OnlineWebLayout from '../components/layout/OnlineWebLayout';
 import ActivitiesContentModal from '../components/modals/ActivitiesContentModal';
@@ -13,6 +13,8 @@ import VocabularyContentModal from '../components/modals/VocabularyContentModal'
 import useGetLearningData from '../hooks/useGetLearningData';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../utils';
+import GoalsContentModal, { DisplayCustomGoalModal, DisplayCustomGoalModalEnum } from '../components/modals/GoalsContentModal';
+import CustomLearningGoal from '../../domain/entities/CustomLearningGoal';
 
 const LearningPage = () => {
     const { t } = useTranslation();
@@ -20,24 +22,55 @@ const LearningPage = () => {
     const [showToast] = useIonToast();
     const { width } = useWindowDimensions();
     const isHybrid = width < HYBRID_MAX_WIDTH;
-    const [selectedTandem, setSelectedTandem] = useState<Tandem>();
+    const [refresh, setRefresh] = useState<boolean>(false);
+    const setCurrentTandem = useStoreActions((actions) => actions.setCurrentTandem);
+    const currentTandem = useStoreState((state) => state.currentTandem);
+    const [displaySelectedTandem, setDisplaySelectedTandem] = useState<Tandem>();
     const [displayActivitiesContent, setDisplayActivitiesContent] = useState<boolean>(false);
     const [displayVocabularyContent, setDisplayVocabularyContent] = useState<boolean>(false);
+    const [displayCustomGoalModal, setDisplayCustomGoalModal] = useState<DisplayCustomGoalModal>();
     const profile = useStoreState((state) => state.profile);
+    const { tandems, error, isLoading } = useGetLearningData(refresh);
 
-    const { tandems, error, isLoading } = useGetLearningData();
+    useEffect(() => {
+        if (tandems.length > 0) {
+            const refreshedCurrentTandem = currentTandem && tandems.find((tandem) => tandem.id === currentTandem.id);
+            const tandem = refreshedCurrentTandem ?? tandems[0];
+            setCurrentTandem({ tandem });
+        }
+    }, [tandems, currentTandem]);
 
     const onTandemPressed = (tandem: Tandem) =>
-        !isHybrid ? setSelectedTandem(tandem) : history.push('/tandem-status', { tandem });
+        !isHybrid ? setDisplaySelectedTandem(tandem) : history.push('/tandem-status', { tandem });
 
     const onValidatedTandemPressed = (tandem: Tandem) =>
-        !isHybrid ? setSelectedTandem(tandem) : history.push('/tandem-profil', { tandem });
+        !isHybrid ? setDisplaySelectedTandem(tandem) : history.push('/tandem-profil', { tandem });
 
     const onVocabularyContentPressed = () =>
         !isHybrid ? setDisplayVocabularyContent(true) : history.push('/vocabularies');
 
     const onActivitiesContentPressed = () =>
         !isHybrid ? setDisplayActivitiesContent(true) : history.push('/activities');
+
+    const onShowAllGoalsPressed = (customLearningGoals?: CustomLearningGoal[]) => {
+        setRefresh(!refresh);
+        !isHybrid ? setDisplayCustomGoalModal({ type: DisplayCustomGoalModalEnum.list }) : history.push('/goals', { customLearningGoals });
+    };
+
+    const onAddCustomGoalPressed = () => {
+        setDisplayCustomGoalModal({
+            type: DisplayCustomGoalModalEnum.form
+        });
+    };
+
+    const onShowCustomGoalPressed = (customLearningGoal: CustomLearningGoal) => {
+        setRefresh(!refresh);
+        setDisplayCustomGoalModal({ type: DisplayCustomGoalModalEnum.show, customLearningGoal });
+    };
+
+    const onUpdateCustomGoalPressed = (customLearningGoal: CustomLearningGoal) => {
+        setDisplayCustomGoalModal({ type: DisplayCustomGoalModalEnum.form, customLearningGoal });
+    };
 
     if (error) {
         showToast({ message: t(error.message), duration: 5000 });
@@ -54,10 +87,12 @@ const LearningPage = () => {
                     isLoading={isLoading}
                     profile={profile}
                     tandems={tandems}
+                    currentTandem={currentTandem}
                     onTandemPressed={onTandemPressed}
                     onValidatedTandemPressed={onValidatedTandemPressed}
                     onVocabularyListPressed={onVocabularyContentPressed}
                     onActivitiesContentPressed={onActivitiesContentPressed}
+                    onShowAllGoalsPressed={onShowAllGoalsPressed}
                 />
             </IonContent>
         );
@@ -65,37 +100,39 @@ const LearningPage = () => {
 
     return (
         <>
-            <OnlineWebLayout profile={profile}>
+            <OnlineWebLayout>
                 <LearningContent
                     isLoading={isLoading}
                     profile={profile}
                     tandems={tandems}
+                    currentTandem={currentTandem}
                     onTandemPressed={onTandemPressed}
                     onValidatedTandemPressed={onValidatedTandemPressed}
                     onVocabularyListPressed={onVocabularyContentPressed}
                     onActivitiesContentPressed={onActivitiesContentPressed}
+                    onShowAllGoalsPressed={onShowAllGoalsPressed}
                 />
             </OnlineWebLayout>
             <TandemStatusModal
                 isVisible={
-                    !!selectedTandem &&
-                    (selectedTandem.status === 'DRAFT' ||
-                        selectedTandem.status === 'INACTIVE' ||
-                        selectedTandem.status === 'VALIDATED_BY_ONE_UNIVERSITY')
+                    !!displaySelectedTandem &&
+                    (displaySelectedTandem.status === 'DRAFT' ||
+                        displaySelectedTandem.status === 'INACTIVE' ||
+                        displaySelectedTandem.status === 'VALIDATED_BY_ONE_UNIVERSITY')
                 }
-                onClose={() => setSelectedTandem(undefined)}
+                onClose={() => setDisplaySelectedTandem(undefined)}
                 onFindNewTandem={() => history.push('pairing/languages')}
-                status={selectedTandem?.status}
+                status={displaySelectedTandem?.status}
             />
             <TandemProfileModal
-                isVisible={!!selectedTandem && selectedTandem.status === 'ACTIVE'}
-                id={selectedTandem?.id}
-                language={selectedTandem?.learningLanguage}
-                level={selectedTandem?.level}
-                onClose={() => setSelectedTandem(undefined)}
-                partnerLearningLanguage={selectedTandem?.partnerLearningLanguage}
-                pedagogy={selectedTandem?.pedagogy}
-                profile={selectedTandem?.partner}
+                isVisible={!!displaySelectedTandem && displaySelectedTandem.status === 'ACTIVE'}
+                id={displaySelectedTandem?.id}
+                language={displaySelectedTandem?.learningLanguage}
+                level={displaySelectedTandem?.level}
+                onClose={() => setDisplaySelectedTandem(undefined)}
+                partnerLearningLanguage={displaySelectedTandem?.partnerLearningLanguage}
+                pedagogy={displaySelectedTandem?.pedagogy}
+                profile={displaySelectedTandem?.partner}
             />
             <ActivitiesContentModal
                 isVisible={displayActivitiesContent}
@@ -107,6 +144,19 @@ const LearningPage = () => {
                 onClose={() => setDisplayVocabularyContent(false)}
                 profile={profile}
             />
+            {tandems.length > 0 && (
+                <GoalsContentModal
+                    isVisible={Boolean(displayCustomGoalModal)}
+                    onClose={() => setDisplayCustomGoalModal(undefined)}
+                    displayCustomGoalModal={displayCustomGoalModal}
+                    profile={profile}
+                    learningLanguage={currentTandem?.learningLanguage || tandems[0].learningLanguage}
+                    onAddCustomGoalPressed={onAddCustomGoalPressed}
+                    onShowCustomGoalPressed={onShowCustomGoalPressed}
+                    onUpdateCustomGoalPressed={onUpdateCustomGoalPressed}
+                    onShowAllGoalsPressed={onShowAllGoalsPressed}
+                />
+            )}
         </>
     );
 };

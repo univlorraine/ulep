@@ -1,0 +1,25 @@
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px 5px;
+    border-radius: 10px;
+    gap: 5px;
+    border: 1px solid;
+    width: fit-content;
+}
+
+.text {
+    font-family: 'Maven Pro';
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 16px;
+    color: #000;
+    margin: 0;
+}
+
+.icon {
+    width: 10px;
+    height: 10px;
+    border-radius: 90px;
+}

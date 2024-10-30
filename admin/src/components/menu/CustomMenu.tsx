@@ -180,6 +180,7 @@ const CustomMenu = () => {
             <Menu.ResourceItem name="profiles/with-tandems-profiles" />
             <Menu.ResourceItem name="chat" />
             <Menu.ResourceItem name="news" />
+            <Menu.ResourceItem name="events" />
             <Box ref={(newRef: HTMLDivElement) => setActivitiesRef(newRef)} sx={{ marginTop: 0 }}>
                 <Menu.ResourceItem name="activities" />
             </Box>

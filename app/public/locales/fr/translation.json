@@ -436,13 +436,28 @@
             "altClose": "Fermer"
         }
     },
-    "home_page": {
-        "profile": {
+    "profile_page": {
+        "buttons": {
             "disconnect": "Se déconnecter",
             "edit": "Modifier mon avatar",
             "parameters": "Paramètres",
-            "title": "Profile"
+            "reports": "Mes signalements"
         },
+        "title": "Mon profil",
+        "profile_card": {
+            "title": "Mes informations personnelles",
+            "years_old": "ans",
+            "button": "Modifier",
+            "button_mobile": "Modifier mes informations"
+        },
+        "university_card": {
+            "title": "Mon université",
+            "button": "Voir la fiche",
+            "semester_date": "Dates du semestre :",
+            "end_date": "Au"
+        }
+    },
+    "home_page": {
         "report": {
             "category_title": "Dis-nous ce qu'il s'est passé ?",
             "note": "Note",
@@ -904,6 +919,115 @@
         "title": "Compte suspendu",
         "title_canceled": "Compte annulé",
         "validate_button": "Nous contacter"
+    },
+    "reports_page": {
+        "title": "Mes signalements",
+        "list": {
+            "date": "Le",
+            "application": "Application",
+            "report_message": "Message signalé",
+            "tandem": "Tandem",
+            "tandem_missing": "Tandem inconnu"
+        },
+        "no_reports": "Aucun signalement",
+        "error_get_reports": "Une erreur est survenue lors de la récupération des signalements",
+        "aria_label": "Liste des signalements",
+        "item": {
+            "aria_label": "Signalement du tandem {{name}}"
+        }
+    },
+    "reports_status": {
+        "open": "Enregistré",
+        "close": "Traité",
+        "canceled": "Annulé",
+        "in_progress": "En cours"
+    },
+    "report_item_page": {
+        "title": "Signalement",
+        "application": {
+            "title": "J'ai un problème avec l'application",
+            "date": "Date",
+            "details": "Détails"
+        },
+        "conversation": {
+            "title": "Signaler un message",
+            "message": "Message signalé le"
+        },
+        "comment": "Commentaire de l'administration",
+        "no_comment": "Aucun commentaire de l'administration",
+        "button_cancel": "Annuler mon signalement",
+        "cancel_modal": {
+            "title": "Annuler le signalement",
+            "text": "Etes-vous certain de vouloir annuler le signalement ?",
+            "validate_button": "Annuler le signalement",
+            "cancel_button": "Ne rien faire"
+        },
+        "modal": {
+            "validate": "Annuler le signalement",
+            "cancel": "Ne rien faire"
+        },
+        "error_update": "Une erreur est survenue lors de la mise à jour du signalement",
+        "go_back": "Retour"
+    },
+    "learning_journal": {
+        "title": "Mon activité",
+        "certificate_title": "Road to certificat",
+        "certificate_text": "Complète tous les objectifs listés afin d’obtenir ton certificat !",
+        "sessions_duration_title": "Heures d’échange en visio",
+        "vocabulary_title": "Vocabulaire",
+        "activities_title": "Fiches d’activité",
+        "ask_for_certificate_button": "Demander mon certificat",
+        "download_certificate_button": "Voir mon certificat",
+        "certificate_file_name": "Certificat",
+        "how_to_get_certificate_button": "Comment obtenir mon certificat ?"
+    },
+    "learning_goal": {
+        "title": "Mes objectifs ({{count}})",
+        "button": "Voir tous mes objectifs"
+    },
+    "goals": {
+        "list": {
+            "title": "Mes objectifs"
+        },
+        "form": {
+            "create_title": "Nouvel objectif",
+            "update_title": "Modifier mon objectif",
+            "title": "Titre",
+            "description": "Description",
+            "update_button": "Modifier",
+            "submit_button": "Valider",
+            "cancel_button": "Annuler"
+        },
+        "show": {
+            "title": "Mon objectif",
+            "title_label": "Titre",
+            "description_label": "Description",
+            "update_button": "Modifier",
+            "delete_button": "Supprimer"
+        },
+        "confirm_delete": "Êtes-vous sûr de vouloir supprimer cet objectif ?"
+    },
+    "certificate": {
+        "boolean_no_value": "Non",
+        "boolean_yes_value": "Oui"
+    },
+    "visio": {
+        "menu": {
+            "home": "Accueil",
+            "vocabulary": "Vocabulaire",
+            "activity": "Activités",
+            "profile": "Profil de {{name}}"
+        },
+        "hello": "Bonjour !",
+        "welcome": "Bienvenue dans ta session d’appel visio.",
+        "sections": {
+            "intro": "Tout au long de l’appel, tu peux accéder aux sections suivantes :",
+            "vocabulary": "Dans la section <linkOnClick>Vocabulaire</linkOnClick>, tu peux retrouver toutes tes listes de vocabulaire créées avec ton tandem, ou en créer de nouvelles !",
+            "activity": "La section <linkOnClick>Activités</linkOnClick> te permet de rechercher des fiches d’activités à réaliser à deux.",
+            "profile": "Enfin, tu peux retrouver le <linkOnClick>Profil de ton tandem</linkOnClick> pour retrouver les informations le ou la concernant !"
+        },
+        "stay_polite": "Reste poli et courtois pendant ton échange avec ton tandem.",
+        "contact_animator": "Si un problème survient, tu peux contacter ton animateur !"
     },
     "languages_code": {
         "aa": "Afar",

@@ -84,6 +84,11 @@ export class CreateReportMessageRequest
   @IsString()
   @IsNotEmpty()
   reportedUserId: string;
+
+  @Swagger.ApiPropertyOptional({ type: 'string' })
+  @IsOptional()
+  @IsUUID()
+  tandemId?: string;
 }
 
 export class UpdateReportStatusRequest
@@ -157,6 +162,14 @@ class ReportMetadataResponse {
   @Expose({ groups: ['read'] })
   mediaType: string;
 
+  @Swagger.ApiProperty({ type: 'string' })
+  @Expose({ groups: ['read'] })
+  tandemUserName: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @Expose({ groups: ['read'] })
+  tandemLanguage: string;
+
   constructor(partial: Partial<ReportMetadataResponse>) {
     Object.assign(this, partial);
   }
@@ -165,6 +178,8 @@ class ReportMetadataResponse {
     return new ReportMetadataResponse({
       filePath: instance.filePath,
       mediaType: instance.mediaType,
+      tandemUserName: instance.tandemUserName,
+      tandemLanguage: instance.tandemLanguage,
     });
   }
 }

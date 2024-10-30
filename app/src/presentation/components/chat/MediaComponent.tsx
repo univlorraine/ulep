@@ -4,15 +4,16 @@ import { useTranslation } from 'react-i18next';
 import { DownloadSvg } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
 import { Message, MessageType } from '../../../domain/entities/chat/Message';
+import MessageReport from '../../../domain/entities/MessageReport';
 import AudioLine from '../AudioLine';
 import styles from './MediaComponent.module.css';
 
-interface MessageProps {
-    message: Message;
+interface MessageProps<T extends Message | MessageReport> {
+    message: T;
     setImageToDisplay?: (image: string) => void;
 }
 
-const MediaComponent: React.FC<MessageProps> = ({ message, setImageToDisplay }) => {
+const MediaComponent = <T extends Message | MessageReport>({ message, setImageToDisplay }: MessageProps<T>) => {
     const renderMessageContent = () => {
         switch (message.type) {
             case MessageType.Image:
@@ -38,7 +39,7 @@ const MediaComponent: React.FC<MessageProps> = ({ message, setImageToDisplay }) 
     );
 };
 
-const MessageImage: React.FC<MessageProps> = ({ message, setImageToDisplay }) => {
+const MessageImage: React.FC<MessageProps<Message | MessageReport>> = ({ message, setImageToDisplay }) => {
     const { t } = useTranslation();
 
     const showModal = () => {
@@ -53,7 +54,7 @@ const MessageImage: React.FC<MessageProps> = ({ message, setImageToDisplay }) =>
     );
 };
 
-const MessageAudio: React.FC<MessageProps> = ({ message }) => {
+const MessageAudio: React.FC<MessageProps<Message | MessageReport>> = ({ message }) => {
     return (
         <div className={styles.messageAudio}>
             <IonIcon icon={musicalNoteOutline} size="large" />
@@ -62,7 +63,7 @@ const MessageAudio: React.FC<MessageProps> = ({ message }) => {
     );
 };
 
-const MessageLink: React.FC<MessageProps> = ({ message }) => {
+const MessageLink: React.FC<MessageProps<Message | MessageReport>> = ({ message }) => {
     const { browserAdapter } = useConfig();
     const og = message.metadata?.openGraphResult;
 
@@ -96,7 +97,7 @@ const MessageLink: React.FC<MessageProps> = ({ message }) => {
     );
 };
 
-const MessageFile: React.FC<MessageProps> = ({ message }) => {
+const MessageFile: React.FC<MessageProps<Message | MessageReport>> = ({ message }) => {
     const { fileAdapter } = useConfig();
     const { t } = useTranslation();
     const [showToast] = useIonToast();

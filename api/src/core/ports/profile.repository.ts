@@ -22,7 +22,7 @@ export type GetProfilesUsableForTandemsGenerationProps = {
 };
 
 export interface ProfileQueryWhere {
-  user: {
+  user?: {
     country?: StringFilter;
     email?: StringFilter;
     firstname?: StringFilter;
@@ -33,6 +33,8 @@ export interface ProfileQueryWhere {
   };
   masteredLanguageCode?: string;
   nativeLanguageCode?: string;
+  notSubscribedToEvent?: string;
+  subscribedToEvent?: string;
 }
 
 export interface ProfileWithTandemsProfilesQueryWhere {

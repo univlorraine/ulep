@@ -149,6 +149,45 @@ export interface ActivityStatusChangeEmailProps {
   activity: { title: string };
 }
 
+export interface SubscribedToEventEmailProps {
+  to: string;
+  language: string;
+  user: UserParams;
+  event: {
+    title: string;
+    authorUniversity: string;
+    date: string;
+  };
+}
+
+export interface UnsubscribedFromEventEmailProps {
+  to: string;
+  language: string;
+  user: UserParams;
+  event: {
+    title: string;
+    authorUniversity: string;
+    date: string;
+  };
+}
+
+export interface EventDeletedEmailProps {
+  to: string;
+  language: string;
+  user?: UserParams;
+  event: {
+    title: string;
+    authorUniversity: string;
+    date: string;
+  };
+}
+
+export interface SendEmailToSubscribedToEventUserProps {
+  to: string;
+  title: string;
+  content: string;
+}
+
 export interface EmailGateway {
   // Notifies a user with a welcome email.
   sendWelcomeMail(props: SendWelcomeMailProps): Promise<void>;
@@ -236,4 +275,24 @@ export interface EmailGateway {
 
   // Notifies users about a session creation
   sendSessionCreatedEmail(props: SessionCreatedEmailProps): Promise<void>;
+
+  // Notifies users about being subscribed to an event
+  sendSubscribedToEventEmail(props: SubscribedToEventEmailProps): Promise<void>;
+
+  // Notifies users about being unsubscribed from an event
+  sendUnsubscribedFromEventEmail(
+    props: UnsubscribedFromEventEmailProps,
+  ): Promise<void>;
+
+  // Notifies users about an event deletion
+
+  sendEventDeletedEmail(props: EventDeletedEmailProps): Promise<void>;
+
+  // Notifies users about an event deletion
+  sendEventDeletedEmail(props: EventDeletedEmailProps): Promise<void>;
+
+  // Notifies users about an event email
+  sendEmailToSubscribedToEventUser(
+    props: SendEmailToSubscribedToEventUserProps,
+  ): Promise<void>;
 }

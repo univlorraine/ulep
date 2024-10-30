@@ -13,6 +13,7 @@ import CreateActivityExcerciseContent from './CreateActivityExcerciseContent';
 import CreateActivityInformationsContent from './CreateActivityInformationsContent';
 import CreateActivitySuccessContent from './CreateActivitySuccessContent';
 import CreateActivityVocabularyContent from './CreateActivityVocabularyContent';
+import styles from './CreateOrUpdateActivityContent.module.css';
 
 enum CreateActivityMode {
     INFORMATIONS = 'INFORMATIONS',
@@ -170,41 +171,43 @@ export const CreateActivityContent: React.FC<CreateActivityContentProps> = ({
     };
 
     return (
-        <div className="subcontent-container content-wrapper">
+        <div style={{ paddingTop: 0 }}>
             <HeaderSubContent title={t('activity.title') as string} onBackPressed={handleBackPressed} />
-            {mode === CreateActivityMode.SUCCESS && (
-                <CreateActivitySuccessContent
-                    onBackPressed={handleBackPressed}
-                    activity={activity!}
-                    onNavigatePressed={onNavigatePressed}
-                />
-            )}
-            {mode === CreateActivityMode.VOCABULARY && (
-                <CreateActivityVocabularyContent
-                    onBackPressed={handleBackPressed}
-                    onSubmit={handleVocabularySubmit}
-                    activityToUpdate={activityToUpdate}
-                />
-            )}
+            <div className={styles.content}>
+                {mode === CreateActivityMode.SUCCESS && (
+                    <CreateActivitySuccessContent
+                        onBackPressed={handleBackPressed}
+                        activity={activity!}
+                        onNavigatePressed={onNavigatePressed}
+                    />
+                )}
+                {mode === CreateActivityMode.VOCABULARY && (
+                    <CreateActivityVocabularyContent
+                        onBackPressed={handleBackPressed}
+                        onSubmit={handleVocabularySubmit}
+                        activityToUpdate={activityToUpdate}
+                    />
+                )}
 
-            {mode === CreateActivityMode.EXERCICES && (
-                <CreateActivityExcerciseContent
-                    onSubmit={handleExcerciseSubmit}
-                    onBackPressed={handleBackPressed}
-                    activityToUpdate={activityToUpdate}
-                />
-            )}
+                {mode === CreateActivityMode.EXERCICES && (
+                    <CreateActivityExcerciseContent
+                        onSubmit={handleExcerciseSubmit}
+                        onBackPressed={handleBackPressed}
+                        activityToUpdate={activityToUpdate}
+                    />
+                )}
 
-            {mode === CreateActivityMode.INFORMATIONS && (
-                <CreateActivityInformationsContent
-                    activityThemesCategoryDropDown={activityThemesCategoryDropDown}
-                    cefrLevelsDropDown={cefrLevelsDropDown}
-                    languagesDropDown={languagesDropDown}
-                    onBackPressed={handleBackPressed}
-                    onSubmit={handleInformationsSubmit}
-                    activityToUpdate={activityToUpdate}
-                />
-            )}
+                {mode === CreateActivityMode.INFORMATIONS && (
+                    <CreateActivityInformationsContent
+                        activityThemesCategoryDropDown={activityThemesCategoryDropDown}
+                        cefrLevelsDropDown={cefrLevelsDropDown}
+                        languagesDropDown={languagesDropDown}
+                        onBackPressed={handleBackPressed}
+                        onSubmit={handleInformationsSubmit}
+                        activityToUpdate={activityToUpdate}
+                    />
+                )}
+            </div>
         </div>
     );
 };

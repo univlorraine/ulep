@@ -1,3 +1,7 @@
+.activity-list {
+    padding: 20px;
+}
+
 .active-filter-button {
     border-radius: 30px;
     font-size: 13px;

@@ -19,19 +19,22 @@ import LearningPage from '../pages/LearningPage';
 import LoginPage from '../pages/LoginPage';
 import ActivitiesPage from '../pages/mobile/ActivitiesPage';
 import ChatPage from '../pages/mobile/ChatPage';
+import CreateCustomGoalPage from '../pages/mobile/CreateCustomGoalPage';
 import CreateSessionPage from '../pages/mobile/CreateSessionPage';
 import EndSessionPage from '../pages/mobile/EndSessionPage';
 import FlipcardsPage from '../pages/mobile/FlipcardsPage';
+import GoalsListPage from '../pages/mobile/GoalsListPage';
 import MediaPage from '../pages/mobile/MediaPage';
 import NewsListPage from '../pages/mobile/NewsListPage';
 import NewsShowPage from '../pages/mobile/NewsShowPage';
-import ProfilePage from '../pages/mobile/ProfilePage';
 import ReportPage from '../pages/mobile/ReportPage';
 import SessionListPage from '../pages/mobile/SessionListPage';
 import SettingsPage from '../pages/mobile/SettingsPage';
+import ShowCustomGoalPage from '../pages/mobile/ShowCustomGoal';
 import ShowSessionPage from '../pages/mobile/ShowSessionPage';
 import TandemProfilePage from '../pages/mobile/TandemProfilePage';
 import TandemStatusPage from '../pages/mobile/TandemStatusPage';
+import UpdateCustomGoalPage from '../pages/mobile/UpdateCustomGoalPage';
 import UpdateSessionPage from '../pages/mobile/UpdateSessionPage';
 import VocabulariesPage from '../pages/mobile/VocabulariesPage';
 import PairingConfirmLanguagePage from '../pages/PairingConfirmLanguagePage';
@@ -48,7 +51,9 @@ import PairingQuizzEndPage from '../pages/PairingQuizzEndPage';
 import PairingQuizzIntroductionPage from '../pages/PairingQuizzIntroductionPage';
 import PairingSelectCEFRPage from '../pages/PairingSelectCEFRPage';
 import PairingUnavailableLanguagePage from '../pages/PairingUnavailableLanguagePage';
+import ProfilePage from '../pages/ProfilePage';
 import QuizzPage from '../pages/QuizzPage';
+import ReportsPage from '../pages/ReportsPage';
 import ServiceClosePage from '../pages/ServiceClosePage';
 import SignUpAvailabilitiesPage from '../pages/SignUpAvailabilitiesPage';
 import SignUpBiographyPage from '../pages/SignUpBiographyPage';
@@ -60,6 +65,7 @@ import SignUpInterestsPage from '../pages/SignUpInterestsPage';
 import SignUpLanguagesPage from '../pages/SignUpLanguagesPage';
 import SignUpPage from '../pages/SignUpPage';
 import SuspendedPage from '../pages/SuspendedPage';
+import ViewReportPage from '../pages/ViewReportPage';
 import WelcomePage from '../pages/WelcomePage';
 import { HYBRID_MAX_WIDTH } from '../utils';
 import BottomBar from './BottomBar';
@@ -154,6 +160,21 @@ const OfflineRouter: React.FC = () => {
                 <MobileRoute exact path={'/end-session'}>
                     <EndSessionPage />
                 </MobileRoute>
+                <MobileRoute exact path={'/flipcards'}>
+                    <FlipcardsPage />
+                </MobileRoute>
+                <MobileRoute exact path={'/goals'}>
+                    <GoalsListPage />
+                </MobileRoute>
+                <MobileRoute exact path={'/create-custom-goal'}>
+                    <CreateCustomGoalPage />
+                </MobileRoute>
+                <MobileRoute exact path={'/update-custom-goal'}>
+                    <UpdateCustomGoalPage />
+                </MobileRoute>
+                <MobileRoute exact path={'/show-custom-goal'}>
+                    <ShowCustomGoalPage />
+                </MobileRoute>
                 <PrivateRoute exact path="/jitsi">
                     <JitsiPage />
                 </PrivateRoute>
@@ -233,10 +254,6 @@ const OfflineRouter: React.FC = () => {
                 <PrivateRoute exact path="/vocabularies">
                     <VocabulariesPage />
                 </PrivateRoute>
-                {/* Flashcards route */}
-                <PrivateRoute exact path="/flipcards">
-                    <FlipcardsPage />
-                </PrivateRoute>
                 {/* Quizz route */}
                 <PrivateRoute exact path="/cefr/languages">
                     <CEFRQuizzLanguagePage />
@@ -250,6 +267,13 @@ const OfflineRouter: React.FC = () => {
                 <PrivateRoute exact path="/cefr/quizz/end">
                     <CEFRQuizzEndPage />
                 </PrivateRoute>
+                {/* Reports route */}
+                <PrivateRoute exact path="/reports">
+                    <ReportsPage />
+                </PrivateRoute>
+                <PrivateRoute exact path="/report-item">
+                    <ViewReportPage />
+                </PrivateRoute>
                 {isHybrid ? (
                     <BottomBar />
                 ) : (
@@ -262,6 +286,9 @@ const OfflineRouter: React.FC = () => {
                         </PrivateRoute>
                         <PrivateRoute exact path="/conversations">
                             <ConversationsPage />
+                        </PrivateRoute>
+                        <PrivateRoute exact path="/profile">
+                            <ProfilePage />
                         </PrivateRoute>
                     </>
                 )}

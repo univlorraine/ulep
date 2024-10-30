@@ -27,7 +27,7 @@
 }
 
 .card:nth-child(2) {
-    background-color: #C4BAD6;
+    background-color: #c4bad6;
 }
 
 .word {
@@ -37,6 +37,7 @@
     font-weight: 700;
     line-height: 40px;
     text-align: center;
+    color: #000;
 }
 
 .card > div {
@@ -51,4 +52,3 @@
 .card > div button {
     margin-right: 0;
 }
-

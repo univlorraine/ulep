@@ -116,133 +116,138 @@ const CreateOrUpdateVocabularyContent: React.FC<CreateOrUpdateVocabularyContentP
     }, []);
 
     return (
-        <div className={`subcontent-container content-wrapper`}>
+        <div>
             <HeaderSubContent
                 title={`${vocabularyList.symbol} ${vocabularyList.name}`}
                 onBackPressed={() => goBack?.()}
             />
-            <h1 className={styles.language}>{vocabularyList.translationLanguage.name}</h1>
-            <div className={styles.content}>
-                <TextInput
-                    beforeInput={
-                        <span className={styles.flag}>
-                            {codeLanguageToFlag(vocabularyList.translationLanguage.code)}
-                        </span>
-                    }
-                    value={translation}
-                    onChange={(value) => setTranslation(value)}
-                    placeholder={vocabulary?.translation ?? t('vocabulary.pair.add.default_translation')}
-                />
-                <div className={styles.pronunciationContainer}>
-                    <div className={styles.playerContainer}>
-                        <span className={styles.pronunciation}>{t('vocabulary.pair.add.pronunciation')}</span>
-                        {(displayTranslationPronunciation || translationPronunciation) && (
-                            <AudioLine
-                                audioFile={translationPronunciation || vocabulary?.pronunciationTranslationUrl || ''}
-                                hideProgressBar
-                            />
-                        )}
-                    </div>
-                    {translationPronunciation || displayTranslationPronunciation ? (
-                        <IonButton
-                            className={styles.addPronunciation}
-                            fill="clear"
-                            onClick={onHideUploadedTranslationPronunciation}
-                        >
-                            {t('vocabulary.pair.add.delete_prounonciation')}
-                        </IonButton>
-                    ) : (
-                        <RecordingButton
-                            mode="record"
-                            handleStartRecord={onRecordTranslation}
-                            handleStopRecord={onStopRecordTranslation}
-                            isBlocked={false}
-                        />
-                    )}
-                </div>
-            </div>
-
-            <h1 className={styles.language}>{vocabularyList.wordLanguage.name}</h1>
-            <div className={styles.content}>
-                <TextInput
-                    beforeInput={
-                        <span className={styles.flag}>{codeLanguageToFlag(vocabularyList.wordLanguage.code)}</span>
-                    }
-                    value={word}
-                    onChange={(value) => setWord(value)}
-                    placeholder={vocabulary?.word ?? t('vocabulary.pair.add.default_word')}
-                />
-                <div className={styles.pronunciationContainer}>
+            <div className={styles.container}>
+                <h1 className={styles.language}>{vocabularyList.translationLanguage.name}</h1>
+                <div className={styles.content}>
+                    <TextInput
+                        beforeInput={
+                            <span className={styles.flag}>
+                                {codeLanguageToFlag(vocabularyList.translationLanguage.code)}
+                            </span>
+                        }
+                        value={translation}
+                        onChange={(value) => setTranslation(value)}
+                        placeholder={vocabulary?.translation ?? t('vocabulary.pair.add.default_translation')}
+                    />
                     <div className={styles.pronunciationContainer}>
-                        <span className={styles.pronunciation}>{t('vocabulary.pair.add.pronunciation')}</span>
-                        {(displayWordPronunciation || wordPronunciation) && (
-                            <AudioLine
-                                audioFile={wordPronunciation || vocabulary?.pronunciationWordUrl || ''}
-                                hideProgressBar
+                        <div className={styles.playerContainer}>
+                            <span className={styles.pronunciation}>{t('vocabulary.pair.add.pronunciation')}</span>
+                            {(displayTranslationPronunciation || translationPronunciation) && (
+                                <AudioLine
+                                    audioFile={
+                                        translationPronunciation || vocabulary?.pronunciationTranslationUrl || ''
+                                    }
+                                    hideProgressBar
+                                />
+                            )}
+                        </div>
+                        {translationPronunciation || displayTranslationPronunciation ? (
+                            <IonButton
+                                className={styles.addPronunciation}
+                                fill="clear"
+                                onClick={onHideUploadedTranslationPronunciation}
+                            >
+                                {t('vocabulary.pair.add.delete_prounonciation')}
+                            </IonButton>
+                        ) : (
+                            <RecordingButton
+                                mode="record"
+                                handleStartRecord={onRecordTranslation}
+                                handleStopRecord={onStopRecordTranslation}
+                                isBlocked={false}
                             />
                         )}
                     </div>
-                    {wordPronunciation || displayWordPronunciation ? (
-                        <IonButton
-                            className={styles.addPronunciation}
-                            fill="clear"
-                            onClick={onHideUploadedWordPronunciation}
-                        >
-                            {t('vocabulary.pair.add.delete_prounonciation')}
+                </div>
+
+                <h1 className={styles.language}>{vocabularyList.wordLanguage.name}</h1>
+                <div className={styles.content}>
+                    <TextInput
+                        beforeInput={
+                            <span className={styles.flag}>{codeLanguageToFlag(vocabularyList.wordLanguage.code)}</span>
+                        }
+                        value={word}
+                        onChange={(value) => setWord(value)}
+                        placeholder={vocabulary?.word ?? t('vocabulary.pair.add.default_word')}
+                    />
+                    <div className={styles.pronunciationContainer}>
+                        <div className={styles.pronunciationContainer}>
+                            <span className={styles.pronunciation}>{t('vocabulary.pair.add.pronunciation')}</span>
+                            {(displayWordPronunciation || wordPronunciation) && (
+                                <AudioLine
+                                    audioFile={wordPronunciation || vocabulary?.pronunciationWordUrl || ''}
+                                    hideProgressBar
+                                />
+                            )}
+                        </div>
+                        {wordPronunciation || displayWordPronunciation ? (
+                            <IonButton
+                                className={styles.addPronunciation}
+                                fill="clear"
+                                onClick={onHideUploadedWordPronunciation}
+                            >
+                                {t('vocabulary.pair.add.delete_prounonciation')}
+                            </IonButton>
+                        ) : (
+                            <RecordingButton
+                                mode="record"
+                                handleStartRecord={onRecordWord}
+                                handleStopRecord={onStopRecordWord}
+                                isBlocked={false}
+                            />
+                        )}
+                    </div>
+                </div>
+                {!vocabulary ? (
+                    <div className={`${styles.buttonContainer} ${styles.buttonCreateContainer}`}>
+                        <IonButton fill="clear" className="tertiary-button no-padding" onClick={goBack}>
+                            {t('vocabulary.pair.add.cancel')}
                         </IonButton>
-                    ) : (
-                        <RecordingButton
-                            mode="record"
-                            handleStartRecord={onRecordWord}
-                            handleStopRecord={onStopRecordWord}
-                            isBlocked={false}
-                        />
-                    )}
-                </div>
+                        <IonButton
+                            fill="clear"
+                            className={`primary-button no-padding ${!word && !translation ? 'disabled' : ''}`}
+                            onClick={() =>
+                                onSubmit(word, translation, undefined, wordPronunciation, translationPronunciation)
+                            }
+                        >
+                            {t('vocabulary.pair.add.save')}
+                        </IonButton>
+                    </div>
+                ) : (
+                    <div className={styles.buttonContainer}>
+                        <IonButton
+                            fill="clear"
+                            className="primary-button no-padding"
+                            onClick={() =>
+                                onSubmit(
+                                    word,
+                                    translation,
+                                    vocabulary.id,
+                                    wordPronunciation,
+                                    translationPronunciation,
+                                    Boolean(vocabulary.pronunciationTranslationUrl) &&
+                                        hideUploadedTranslationPronunciation,
+                                    Boolean(vocabulary.pronunciationWordUrl) && hideUploadedWordPronunciation
+                                )
+                            }
+                        >
+                            {t('vocabulary.pair.update.save')}
+                        </IonButton>
+                        <IonButton
+                            fill="clear"
+                            className="secondary-button no-padding"
+                            onClick={() => onDelete(vocabulary.id)}
+                        >
+                            {t('vocabulary.pair.update.delete')}
+                        </IonButton>
+                    </div>
+                )}
             </div>
-            {!vocabulary ? (
-                <div className={`${styles.buttonContainer} ${styles.buttonCreateContainer}`}>
-                    <IonButton fill="clear" className="tertiary-button no-padding" onClick={goBack}>
-                        {t('vocabulary.pair.add.cancel')}
-                    </IonButton>
-                    <IonButton
-                        fill="clear"
-                        className={`primary-button no-padding ${!word && !translation ? 'disabled' : ''}`}
-                        onClick={() =>
-                            onSubmit(word, translation, undefined, wordPronunciation, translationPronunciation)
-                        }
-                    >
-                        {t('vocabulary.pair.add.save')}
-                    </IonButton>
-                </div>
-            ) : (
-                <div className={styles.buttonContainer}>
-                    <IonButton
-                        fill="clear"
-                        className="primary-button no-padding"
-                        onClick={() =>
-                            onSubmit(
-                                word,
-                                translation,
-                                vocabulary.id,
-                                wordPronunciation,
-                                translationPronunciation,
-                                Boolean(vocabulary.pronunciationTranslationUrl) && hideUploadedTranslationPronunciation,
-                                Boolean(vocabulary.pronunciationWordUrl) && hideUploadedWordPronunciation
-                            )
-                        }
-                    >
-                        {t('vocabulary.pair.update.save')}
-                    </IonButton>
-                    <IonButton
-                        fill="clear"
-                        className="secondary-button no-padding"
-                        onClick={() => onDelete(vocabulary.id)}
-                    >
-                        {t('vocabulary.pair.update.delete')}
-                    </IonButton>
-                </div>
-            )}
         </div>
     );
 };

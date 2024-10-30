@@ -22,12 +22,14 @@ import GetConversationsUsecaseInterface from '../domain/interfaces/chat/GetConve
 import GetMessagesFromConversationUsecaseInterface from '../domain/interfaces/chat/GetMessagesFromConversationUsecase.interface';
 import SearchMessagesIdsFromConversationUsecaseInterface from '../domain/interfaces/chat/SearchMessagesIdsFromConversationUsecase.interface';
 import SendMessageUsecaseInterface from '../domain/interfaces/chat/SendMessageUsecase.interface';
+import CreateCustomLearningGoalUsecaseInterface from '../domain/interfaces/CreateCustomLearningGoal.interface';
 import CreateOrUpdateTestedLanguageUsecaseInterface from '../domain/interfaces/CreateOrUpdateTestedLanguageUsecase.interface';
 import CreateProfileUsecaseInterface from '../domain/interfaces/CreateProfileUsecase.interface';
 import CreateReportMessageUsecaseInterface from '../domain/interfaces/CreateReportMessageUsecase.interface';
 import CreateReportUsecaseInterface from '../domain/interfaces/CreateReportUsecase.interface';
 import CreateSessionUsecaseInterface from '../domain/interfaces/CreateSessionUsecase.interface';
 import CreateUserUsecaseInterface from '../domain/interfaces/CreateUserUsecase.interface';
+import DeleteCustomLearningGoalUsecaseInterface from '../domain/interfaces/DeleteCustomLearningGoalUsecae.interface';
 import EditProfileUsecaseInterface from '../domain/interfaces/EditProfileUsecase.interface';
 import EditUserUsecaseInterface from '../domain/interfaces/EditUserUsecase.interface';
 import GetAllEventsUsecaseInterface from '../domain/interfaces/event/GetAllEventsUsecase.interface';
@@ -38,7 +40,6 @@ import GetAllCountriesUsecaseInterface from '../domain/interfaces/GetAllCountrie
 import GetAllGoalsUsecaseInterface from '../domain/interfaces/GetAllGoalsUsecase.interface';
 import GetAllInterestCategoriessUsecase from '../domain/interfaces/GetAllInterestCategoriesUsecase.interface';
 import GetAllLanguagesUsecaseInterface from '../domain/interfaces/GetAllLanguagesUsecase.interface';
-import GetAllReportCategoriesUsecaseInterface from '../domain/interfaces/GetAlllReportCategoriesUsecase.interface';
 import GetAllSessionsUsecaseInterface from '../domain/interfaces/GetAllSessionsUsecase.interface';
 import GetAllTandemsUsecaseInterface from '../domain/interfaces/GetAllTandemsUsecase.interface';
 import GetAllUniversitiesUsecaseInterface from '../domain/interfaces/GetAllUniversitiesUsecase.interface';
@@ -54,10 +55,15 @@ import GetUserUsecaseInterface from '../domain/interfaces/GetUserUsecase.interfa
 import LoginUsecaseInterface from '../domain/interfaces/LoginUsecase.interface';
 import GetAllNewsUsecaseInterface from '../domain/interfaces/news/GetAllNewsUsecase.interface';
 import RefreshTokensUsecaseInterface from '../domain/interfaces/RefreshTokensUsecase.interface';
+import GetAllReportCategoriesUsecaseInterface from '../domain/interfaces/reports/GetAllReportCategoriesUsecase.interface';
+import GetAllReportsUsecaseInterface from '../domain/interfaces/reports/GetAllReportsUsecase.interface';
+import GetReportUsecaseInterface from '../domain/interfaces/reports/GetReportUsecase.interface';
+import UpdateReportStatusUsecaseInterface from '../domain/interfaces/reports/UpdateReportStatusUsecase.interface';
 import ResetPasswordUsecaseInterface from '../domain/interfaces/ResetPasswordUsecase.interface';
 import RetrievePersonInfoUsecaseInterface from '../domain/interfaces/RetrievePersonInfoUsecase.interface';
 import RevokeSessionsUsecaseInterface from '../domain/interfaces/RevokeSessionsUsecase.interface';
 import UpdateAvatarUsecaseInterface from '../domain/interfaces/UpdateAvatarUsecase.interface';
+import UpdateCustomLearningGoalUsecaseInterface from '../domain/interfaces/UpdateCustomLearningGoal.interface';
 import UpdateNotificationPermissionUsecaseInterface from '../domain/interfaces/UpdateNotificationPermissionUsecase.interface';
 import UpdateSessionUsecaseInterface from '../domain/interfaces/UpdateSessionUsecase.interface';
 import CreateVocabularyListUsecaseInterface from '../domain/interfaces/vocabulary/CreateVocabularyListUsecase.interface';
@@ -94,7 +100,6 @@ export interface ConfigContextValueType {
     getAllGoals: GetAllGoalsUsecaseInterface;
     getAllInterestCategories: GetAllInterestCategoriessUsecase;
     getAllLanguages: GetAllLanguagesUsecaseInterface;
-    getAllReportCategories: GetAllReportCategoriesUsecaseInterface;
     getAllTandems: GetAllTandemsUsecaseInterface;
     getAllSessions: GetAllSessionsUsecaseInterface;
     getAllUniversities: GetAllUniversitiesUsecaseInterface;
@@ -150,4 +155,13 @@ export interface ConfigContextValueType {
     getEvent: GetEventUsecaseInterface;
     subscribeToEvent: SubscribeToEventUsecaseInterface;
     unsubscribeToEvent: UnsubscribeToEventUsecaseInterface;
+    // Report
+    updateReportStatus: UpdateReportStatusUsecaseInterface;
+    getAllReportCategories: GetAllReportCategoriesUsecaseInterface;
+    getAllReports: GetAllReportsUsecaseInterface;
+    getReport: GetReportUsecaseInterface;
+    // Custom goal
+    createCustomLearningGoal: CreateCustomLearningGoalUsecaseInterface;
+    updateCustomLearningGoal: UpdateCustomLearningGoalUsecaseInterface;
+    deleteCustomLearningGoal: DeleteCustomLearningGoalUsecaseInterface;
 }

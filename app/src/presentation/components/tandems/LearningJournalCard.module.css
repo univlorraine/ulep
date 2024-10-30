@@ -1,0 +1,90 @@
+.container {
+    background-color: var(--secondary-color);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.content {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+}
+
+.image {
+    height: 80px;
+    width: 80px;
+}
+
+.imageContainer {
+    display: flex;
+    justify-content: center;
+    margin: 20px 10px;
+    min-width: 80px;
+}
+
+.textContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 10px;
+}
+
+.title {
+    margin: 0;
+    font-size: 20px;
+    line-height: 25px;
+    font-weight: 700;
+    font-family: 'Roboto', sans-serif;
+}
+
+.text {
+    margin: 0;
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: 400;
+    font-family: 'Maven Pro', sans-serif;
+}
+
+.activities {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0 10px;
+    gap: 20px;
+}
+
+.activity {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+    
+}
+
+.activityTitle {
+    margin: 0;
+    font-size: 16px;
+}
+
+.activityValue {
+    font-size: 16px;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0 10px;
+}
+
+.link {
+    text-transform: none !important;
+    font-size: 16px !important;
+    font-weight: 400 !important;
+    font-family: 'Maven Pro', sans-serif !important;
+}
+

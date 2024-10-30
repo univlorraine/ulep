@@ -18,7 +18,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as Swagger from '@nestjs/swagger';
 import { ApiTags } from '@nestjs/swagger';
-import { GetEventsQuery } from 'src/api/dtos/events/get-events.request';
+import { SendEmailToSubscribedUsersRequest } from 'src/api/dtos/events/send-email-to-subscribed-users.request';
 import { EventObject } from 'src/core/models/event.model';
 import {
   GetProfileByUserIdUsecase,
@@ -30,6 +30,7 @@ import {
   GetEventsAdminUsecase,
   GetEventsUsecase,
   GetEventUsecase,
+  SendEmailToSubscribedUsersUsecase,
   SubscribeToEventUsecase,
   UnsubscribeToEventUsecase,
   UpdateEventUsecase,
@@ -39,6 +40,7 @@ import { Role, Roles } from '../decorators/roles.decorator';
 import {
   EventResponse,
   GetEventsAdminQuery,
+  GetEventsQuery,
   UpdateEventRequest,
 } from '../dtos/events';
 import { CreateEventRequest } from '../dtos/events/create-event.request';
@@ -61,6 +63,7 @@ export class EventsController {
     private readonly unsubscribeToEventUsecase: UnsubscribeToEventUsecase,
     private readonly deleteEventUsecase: DeleteEventUsecase,
     private readonly getProfileFromUser: GetProfileByUserIdUsecase,
+    private readonly sendEmailToSubscribedUsersUsecase: SendEmailToSubscribedUsersUsecase,
   ) {}
 
   @Get('admin')
@@ -228,5 +231,19 @@ export class EventsController {
   @Swagger.ApiOkResponse({ type: EventResponse })
   async deleteEvent(@Param('id', ParseUUIDPipe) id: string) {
     await this.deleteEventUsecase.execute(id);
+  }
+
+  @Post(':id/send-email')
+  @UseGuards(AuthenticationGuard)
+  @Roles(Role.ADMIN)
+  async sendEmailToSubscribedUsers(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() body: SendEmailToSubscribedUsersRequest,
+  ) {
+    await this.sendEmailToSubscribedUsersUsecase.execute({
+      eventId: id,
+      title: body.title,
+      content: body.content,
+    });
   }
 }

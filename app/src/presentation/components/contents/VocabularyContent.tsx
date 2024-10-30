@@ -1,188 +1,188 @@
-import { IonButton, IonIcon, IonImg, IonItem, IonLabel, IonList, IonSearchbar, useIonToast } from '@ionic/react';
-import { arrowRedoOutline, downloadOutline } from 'ionicons/icons';
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router-dom';
-import { AddSvg, VocabularyPng } from '../../../assets';
+import { useEffect, useState } from 'react';
 import { useConfig } from '../../../context/ConfigurationContext';
 import Profile from '../../../domain/entities/Profile';
+import Tandem from '../../../domain/entities/Tandem';
 import Vocabulary from '../../../domain/entities/Vocabulary';
-import VocabularyList from '../../../domain/entities/VocabularyList';
-import HeaderSubContent from '../HeaderSubContent';
-import VocabularyLine from '../vocabulary/VocabularyLine';
-import styles from './VocabularyListContent.module.css';
+import { CreateVocabularyListCommand } from '../../../domain/interfaces/vocabulary/CreateVocabularyListUsecase.interface';
+import useVocabulary from '../../hooks/useVocabulary';
+import ErrorPage from '../../pages/ErrorPage';
+import CreateOrUpdateVocabularyContent from '../contents/CreateOrUpdateVocabularyContent';
+import FlipcardsContent from '../contents/FlipcardsContent';
+import VocabularyItemContent from '../contents/VocabularyItemContent';
+import VocabularyListContent from '../contents/VocabularyListContent';
+import AddVocabularyListModal from '../modals/AddVocabularyListModal';
+import SelectTandemModal from '../modals/SelectTandemModal';
+import SelectVocabularyListsForQuizModale from '../modals/SelectVocabularyListsForQuizModal';
 
 interface VocabularyContentProps {
-    goBack?: () => void;
     profile: Profile;
-    vocabularyList: VocabularyList;
-    vocabularyPairs: Vocabulary[];
-    isLoading: boolean;
-    onAddVocabulary: (vocabulary?: Vocabulary) => void;
-    onSearch: (search: string) => void;
-    onShareVocabularyList: () => void;
+    onClose: () => void;
+    isModal?: boolean;
 }
 
-const VocabularyContent: React.FC<VocabularyContentProps> = ({
-    profile,
-    vocabularyList,
-    vocabularyPairs,
-    goBack,
-    isLoading,
-    onAddVocabulary,
-    onSearch,
-    onShareVocabularyList,
-}) => {
-    const { t } = useTranslation();
-    const [showToast] = useIonToast();
-    const { getVocabularyListPdf } = useConfig();
-    const [search, setSearch] = useState('');
-    const history = useHistory();
+const VocabularyContent: React.FC<VocabularyContentProps> = ({ profile, onClose, isModal }) => {
+    const { getAllTandems } = useConfig();
+    const [vocabularySelected, setVocabularySelected] = useState<Vocabulary>();
+    const [showAddVocabularyListModal, setShowAddVocabularyListModal] = useState(false);
+    const [showShareVocabularyListModal, setShowShareVocabularyListModal] = useState(false);
+    const [showSelectVocabularyListsForQuizModal, setShowSelectVocabularyListsForQuizModal] = useState(false);
+    const [tandems, setTandems] = useState<Tandem[]>([]);
+    const [addContentMode, setAddContentMode] = useState(false);
+    const [quizzSelectedListIds, setQuizzSelectedListIds] = useState<string[]>([]);
 
-    const exportToPdf = async () => {
-        const result = await getVocabularyListPdf.execute(vocabularyList.id);
+    const {
+        vocabularies,
+        vocabularyLists,
+        vocabularyListSelected,
+        error,
+        isLoading,
+        onCreateVocabularyList,
+        onShareVocabularyList,
+        onUpdateVocabulary,
+        onCreateVocabulary,
+        onDeleteVocabulary,
+        setVocabularyListSelected,
+        setSearchVocabularies,
+    } = useVocabulary();
 
-        if (result instanceof Error) {
-            return showToast({
-                message: t(result.message),
-                duration: 3000,
-            });
+    const handleCreateVocabularyList = async (vocabularyList: CreateVocabularyListCommand) => {
+        await onCreateVocabularyList(vocabularyList);
+        setShowAddVocabularyListModal(false);
+    };
+
+    const handleDeleteVocabulary = async (id: string) => {
+        await onDeleteVocabulary(id);
+        setAddContentMode(false);
+    };
+
+    const onAddOrUpdateVocabulary = (vocabulary?: Vocabulary) => {
+        setVocabularySelected(vocabulary);
+        setAddContentMode(true);
+    };
+
+    const handleCreateOrUpdateVocabulary = (
+        word: string,
+        translation: string,
+        id?: string,
+        wordPronunciation?: File,
+        translationPronunciation?: File,
+        deletePronunciationWord?: boolean,
+        deletePronunciationTranslation?: boolean
+    ) => {
+        if (id) {
+            onUpdateVocabulary(
+                word,
+                translation,
+                id,
+                wordPronunciation,
+                translationPronunciation,
+                deletePronunciationWord,
+                deletePronunciationTranslation
+            );
+        } else {
+            onCreateVocabulary(word, translation, wordPronunciation, translationPronunciation);
         }
+        setAddContentMode(false);
     };
 
-    const onSearchChange = (search: string) => {
-        setSearch(search);
-        onSearch(search);
+    const handleShareVocabularyList = async (tandems: Tandem[]) => {
+        const tandemsWithProfile = tandems.filter((tandem) => tandem.partner !== undefined);
+        await onShareVocabularyList(tandemsWithProfile.map((tandem) => tandem.partner) as Profile[]);
+        setShowShareVocabularyListModal(false);
     };
 
-    const onShareVocabularyListPressed = () => {
-        onShareVocabularyList();
+    const getProfilesTandems = async () => {
+        if (!profile) {
+            return [];
+        }
+        const tandems = await getAllTandems.execute(profile.id);
+
+        if (tandems instanceof Error) {
+            return [];
+        }
+
+        setTandems(tandems);
     };
 
-    const onStartQuizzPressed = () => {
-        const selectedListsId = [vocabularyList.id];
-        history.push('/flipcards', { selectedListsId });
+    const onSelectedVocabularyListsIdsForQuiz = (selectedListsIds: string[]) => {
+        setShowSelectVocabularyListsForQuizModal(false);
+        setQuizzSelectedListIds(selectedListsIds);
     };
 
-    let vocabulariesWithoutPronunciation;
-    if (
-        [profile.nativeLanguage, ...profile.masteredLanguages].filter(
-            (language) => language.code === vocabularyList.wordLanguage.code
-        ).length > 0
-    ) {
-        vocabulariesWithoutPronunciation = vocabularyPairs.filter((vocabulary) => {
-            return !vocabulary.pronunciationWordUrl;
-        });
-    } else if (
-        [profile.nativeLanguage, ...profile.masteredLanguages].filter(
-            (language) => language.code === vocabularyList.translationLanguage.code
-        ).length > 0
-    ) {
-        vocabulariesWithoutPronunciation = vocabularyPairs.filter((vocabulary) => {
-            return !vocabulary.pronunciationTranslationUrl;
-        });
+    useEffect(() => {
+        getProfilesTandems();
+    }, [profile]);
+
+    if (error) {
+        return <ErrorPage />;
     }
 
     return (
-        <div className={`subcontent-container content-wrapper`}>
-            <HeaderSubContent
-                title={`${vocabularyList.symbol} ${vocabularyList.name}`}
-                onBackPressed={() => goBack?.()}
-                kebabContent={(closeMenu) => (
-                    <IonList lines="none">
-                        <IonItem
-                            button={true}
-                            detail={false}
-                            onClick={() => {
-                                onShareVocabularyListPressed();
-                                closeMenu();
-                            }}
-                        >
-                            <IonIcon icon={arrowRedoOutline} aria-hidden="true" />
-                            <IonLabel className={styles['popover-label']}>{t('vocabulary.pair.share_button')}</IonLabel>
-                        </IonItem>
-                        <IonItem
-                            button={true}
-                            detail={false}
-                            onClick={() => {
-                                exportToPdf();
-                                closeMenu();
-                            }}
-                        >
-                            <IonIcon icon={downloadOutline} aria-hidden="true" />
-                            <IonLabel className={styles['popover-label']}>{t('vocabulary.pair.export')}</IonLabel>
-                        </IonItem>
-                        <IonItem
-                            button={true}
-                            detail={false}
-                            onClick={() => {
-                                onStartQuizzPressed();
-                                closeMenu();
-                            }}
-                        >
-                            <IonIcon icon={arrowRedoOutline} aria-hidden="true" />
-                            <IonLabel className={styles['popover-label']}>
-                                {t('vocabulary.list.start_quiz_menu')}
-                            </IonLabel>
-                        </IonItem>
-                    </IonList>
-                )}
+        <>
+            {!vocabularyListSelected && quizzSelectedListIds.length === 0 && (
+                <VocabularyListContent
+                    goBack={() => onClose()}
+                    onAddVocabularyList={() => setShowAddVocabularyListModal(true)}
+                    onSelectVocabularyList={(vocabularyList) => setVocabularyListSelected(vocabularyList)}
+                    profile={profile}
+                    vocabularyLists={vocabularyLists}
+                    onStartQuiz={() => setShowSelectVocabularyListsForQuizModal(true)}
+                    isLoading={isLoading}
+                    isModal={isModal}
+                />
+            )}
+            {vocabularyListSelected && !addContentMode && quizzSelectedListIds.length === 0 && (
+                <VocabularyItemContent
+                    profile={profile}
+                    vocabularyList={vocabularyListSelected}
+                    vocabularyPairs={vocabularies}
+                    isLoading={isLoading}
+                    goBack={() => setVocabularyListSelected(undefined)}
+                    onAddVocabulary={onAddOrUpdateVocabulary}
+                    onSearch={setSearchVocabularies}
+                    onShareVocabularyList={() => setShowShareVocabularyListModal(true)}
+                    setQuizzSelectedListIds={setQuizzSelectedListIds}
+                />
+            )}
+            {vocabularyListSelected && addContentMode && quizzSelectedListIds.length === 0 && (
+                <CreateOrUpdateVocabularyContent
+                    vocabularyList={vocabularyListSelected}
+                    vocabulary={vocabularySelected}
+                    goBack={() => setAddContentMode(false)}
+                    onSubmit={handleCreateOrUpdateVocabulary}
+                    onDelete={handleDeleteVocabulary}
+                />
+            )}
+            {quizzSelectedListIds.length > 0 && (
+                <FlipcardsContent
+                    profile={profile}
+                    selectedListsId={quizzSelectedListIds}
+                    onBackPressed={() => setQuizzSelectedListIds([])}
+                />
+            )}
+            <AddVocabularyListModal
+                isVisible={showAddVocabularyListModal}
+                onClose={() => setShowAddVocabularyListModal(false)}
+                onCreateVocabularyList={handleCreateVocabularyList}
+                profile={profile}
             />
-            <div className={styles.content}>
-                {!isLoading && !search && vocabularyPairs.length === 0 && (
-                    <div className={styles.emptyContainer}>
-                        <IonImg alt="" aria-hidden className={styles.emptyImage} src={VocabularyPng} />
-                        <p className={styles.emptyText}>{t('vocabulary.pair.empty')}</p>
-                        <IonButton
-                            className="tertiary-button no-padding"
-                            fill="clear"
-                            onClick={() => onAddVocabulary()}
-                        >
-                            <IonIcon aria-hidden slot="start" name="add-outline" />
-                            {t('vocabulary.pair.create')}
-                        </IonButton>
-                    </div>
-                )}
-                {!isLoading && (vocabularyPairs.length > 0 || search) && (
-                    <IonSearchbar
-                        placeholder={t('vocabulary.pair.search') as string}
-                        onIonChange={(e) => onSearchChange(e.detail.value as string)}
-                        value={search}
-                    />
-                )}
-
-                {!isLoading && vocabulariesWithoutPronunciation && vocabulariesWithoutPronunciation.length > 0 && (
-                    <>
-                        <div className={styles.pronunciationTitle}>
-                            <span>{t('vocabulary.pair.without_pronunciation')}</span>
-                        </div>
-                        {vocabulariesWithoutPronunciation.map((vocabulary) => (
-                            <VocabularyLine
-                                key={vocabulary.id}
-                                onVocabularyClick={onAddVocabulary}
-                                vocabulary={vocabulary}
-                            />
-                        ))}
-                        <div className={styles.pronunciationTitle}>
-                            <span>{t('vocabulary.pair.every_pronunciation')}</span>
-                        </div>
-                    </>
-                )}
-                {!isLoading &&
-                    vocabularyPairs.length > 0 &&
-                    vocabularyPairs.map((vocabulary) => (
-                        <VocabularyLine
-                            key={vocabulary.id}
-                            onVocabularyClick={onAddVocabulary}
-                            vocabulary={vocabulary}
-                        />
-                    ))}
-            </div>
-
-            <IonButton fill="clear" className={styles.addButton} onClick={() => onAddVocabulary()}>
-                <IonImg aria-hidden className={styles.addIcon} src={AddSvg} />
-            </IonButton>
-        </div>
+            <SelectTandemModal
+                isVisible={showShareVocabularyListModal}
+                onClose={() => setShowShareVocabularyListModal(false)}
+                onSelectTandem={handleShareVocabularyList}
+                selectedProfilesIds={vocabularyListSelected?.editorsIds}
+                tandems={tandems}
+                title="vocabulary.list.share.title"
+                multiple
+            />
+            <SelectVocabularyListsForQuizModale
+                isVisible={showSelectVocabularyListsForQuizModal}
+                onClose={() => setShowSelectVocabularyListsForQuizModal(false)}
+                vocabularyLists={vocabularyLists}
+                onValidate={onSelectedVocabularyListsIdsForQuiz}
+                profile={profile}
+            />
+        </>
     );
 };
 

@@ -1,9 +1,9 @@
-import { HttpResponse } from '../../adapter/BaseHttpAdapter';
-import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
-import { CollectionCommand } from '../../command/CollectionCommand';
-import ReportCategoryCommand, { reportCategoriesCommandToDomain } from '../../command/ReportCategoryCommand';
-import ReportCategory from '../entities/ReportCategory';
-import GetAllReportCategoriesUsecaseInterface from '../interfaces/GetAlllReportCategoriesUsecase.interface';
+import { HttpResponse } from '../../../adapter/BaseHttpAdapter';
+import { HttpAdapterInterface } from '../../../adapter/DomainHttpAdapter';
+import { CollectionCommand } from '../../../command/CollectionCommand';
+import ReportCategoryCommand, { reportCategoriesCommandToDomain } from '../../../command/ReportCategoryCommand';
+import ReportCategory from '../../entities/ReportCategory';
+import GetAllReportCategoriesUsecaseInterface from '../../interfaces/reports/GetAllReportCategoriesUsecase.interface';
 
 class GetAllReportCategoriesUsecase implements GetAllReportCategoriesUsecaseInterface {
     constructor(private readonly domainHttpAdapter: HttpAdapterInterface) {}

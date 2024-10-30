@@ -440,6 +440,7 @@ model LearningLanguages {
   RefusedTandems RefusedTandems[]
   Campus         Places?          @relation(fields: [campus_id], references: [id])
   CertificateFile MediaObjects?   @relation("LearningLanguageCertificateFile", fields: [certificate_file_id], references: [id])
+  CustomLearningGoals CustomLearningGoals[]
 
   @@map("learning_languages")
 }
@@ -757,4 +758,20 @@ model Events {
   ContentTextContent      TextContent   @relation("EventContentTextContent", fields: [content_text_content_id], references: [id], onDelete: Cascade)
 
   @@map("events")
+}
+
+//  * ****************************************************
+//  * CustomLearningGoals
+//  * ****************************************************
+
+model CustomLearningGoals {
+  id           String    @id @default(uuid())
+  learning_language_id    String
+  title String
+  description String
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @updatedAt
+  LearningLanguage LearningLanguages @relation(fields: [learning_language_id], references: [id], onDelete: Cascade)
+
+  @@map("learning_goals")
 }

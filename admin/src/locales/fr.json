@@ -199,6 +199,105 @@
         "saturday": "Samedi",
         "sunday": "Dimanche"
     },
+    "events": {
+        "label": "Evènements",
+        "title": "Evènements",
+        "list": {
+            "title": "Titre",
+            "university": "Auteur",
+            "defaultLanguage": "Langue par défaut",
+            "translations": "Traductions",
+            "status": "Statut",
+            "startDate": "Date de début",
+            "endDate": "Date de fin",
+            "type": "Type",
+            "filters": {
+                "title": "Titre",
+                "language": "Langue",
+                "status": "Statut",
+                "university": "Université",
+                "type": "Type"
+            }
+        },
+        "status": {
+            "DRAFT": "Brouillon",
+            "READY": "Publié"
+        },
+        "type": {
+            "ONLINE": "En ligne",
+            "PRESENTIAL": "Présentiel"
+        },
+        "form": {
+            "add_translation": "Ajouter une traduction",
+            "change_language": "Changer la langue par défaut",
+            "type": {
+                "label": "Type d'évènement",
+                "online": "En ligne",
+                "presential": "Présentiel"
+            },
+            "author": "Auteur",
+            "status": "Statut",
+            "start_date": "Date de début",
+            "end_date": "Date de fin",
+            "illustration": "Illustration",
+            "image_credit": "Credit de l'image",
+            "title": "Titre",
+            "content": "Contenu",
+            "subscriptions": "Inscriptions",
+            "with_subscriptions": "Avec inscriptions",
+            "concerned_universities": {
+                "label": "Universités concernées",
+                "button": "Ajouter"
+            },
+            "diffusion_languages": {
+                "label": "Langues diffusées",
+                "button": "Ajouter"
+            },
+            "event_url": "URL de l'évènement",
+            "address": "Adresse",
+            "address_name": "Nom du lieu",
+            "error": {
+                "required": "Tous les champs sont obligatoires"
+            },
+            "remove_translation": "Supprimer la traduction"
+        },
+        "create": {
+            "cta": "Créer",
+            "error": "Une erreur est survenue pendant la création de l'évènement"
+        },
+        "update": {
+            "cta": "Mettre à jour",
+            "error": "Une erreur est survenue pendant la mise à jour de l'évènement"
+        },
+        "subscriptions": {
+            "title": "Inscrits à l'évènement : %{eventTitle}",
+            "author": "Auteur : %{universityName}",
+            "list": {
+                "firstname": "Prénom",
+                "lastname": "Nom",
+                "university": "Université",
+                "email": "Email",
+                "cta": "Actions"
+            },
+            "searchProfile": "Rechercher un profil",
+            "search": {
+                "button": "Inscrire des utilisateurs",
+                "subscribe": "Inscrire"
+            },
+            "email": {
+                "button": "Envoyer un email",
+                "title": "Envoyer un email aux inscrits",
+                "form": {
+                    "title": "Titre",
+                    "content": "Contenu"
+                },
+                "send": "Envoyer",
+                "success": "L'email a bien été envoyé aux inscrits",
+                "error": "Une erreur est survenue lors de l'envoi de l'email"
+            },
+            "unsubscribe": "Désinscrire"
+        }
+    },
     "global": {
         "all": "Tout",
         "age": "Age",

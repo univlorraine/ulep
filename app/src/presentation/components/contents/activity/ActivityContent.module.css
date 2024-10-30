@@ -4,6 +4,7 @@
 
 .content {
     overflow-y: auto;
+    position: relative;
 }
 
 .creator {

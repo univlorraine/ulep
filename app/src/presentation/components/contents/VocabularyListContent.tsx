@@ -15,6 +15,7 @@ interface VocabularyListContentProps {
     onSelectVocabularyList: (vocabularyList: VocabularyList) => void;
     isLoading: boolean;
     onStartQuiz: () => void;
+    isModal?: boolean;
 }
 
 const VocabularyListContent: React.FC<VocabularyListContentProps> = ({
@@ -25,12 +26,17 @@ const VocabularyListContent: React.FC<VocabularyListContentProps> = ({
     onSelectVocabularyList,
     isLoading,
     onStartQuiz,
+    isModal,
 }) => {
     const { t } = useTranslation();
 
     return (
-        <div className={`subcontent-container content-wrapper`}>
-            <HeaderSubContent title={t('vocabulary.list.title')} onBackPressed={() => goBack?.()} />
+        <div>
+            <HeaderSubContent
+                isBackButton={isModal}
+                title={t('vocabulary.list.title')}
+                onBackPressed={() => goBack?.()}
+            />
             <div className={styles.content}>
                 {!isLoading && vocabularyLists.length === 0 && (
                     <div className={styles.emptyContainer}>

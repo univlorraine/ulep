@@ -48,4 +48,7 @@
         --ion-background-color: #f4f5fe;
         height: 100%;
     }
+    .learningLanguageContainer {
+        overflow-x: inherit;
+    }
 }
