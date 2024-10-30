@@ -8,9 +8,6 @@
 }
 
 .container {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
     padding: 20px;
 }
 
@@ -29,6 +26,7 @@
     font-weight: 700;
     line-height: 25px;
     text-align: left;
+    color: #000;
 }
 
 .pronunciationContainer {

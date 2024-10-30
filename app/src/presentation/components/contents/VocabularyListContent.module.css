@@ -1,4 +1,4 @@
-.container {
+.content {
     padding: 20px;
 }
 
@@ -64,6 +64,7 @@
     line-height: 25px;
     text-align: left;
     margin: 24px;
+    color: #000;
 }
 
 .flashcard {
@@ -72,7 +73,7 @@
     align-items: center;
     justify-content: center;
     padding: 20px;
-    background-color: #FDEE66;
+    background-color: #fdee66;
     border-radius: 5px;
     margin-top: 40px;
     margin-bottom: 20px;
@@ -87,6 +88,7 @@
         text-align: center;
         margin-bottom: 4px;
         max-width: 250px;
+        color: #000;
     }
     .text {
         font-size: 16px;
@@ -96,9 +98,9 @@
         font-family: Maven Pro;
         margin-top: 0;
         max-width: 400px;
+        color: #000;
     }
     .button {
         margin-top: 4px;
     }
 }
-

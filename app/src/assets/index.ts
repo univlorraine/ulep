@@ -35,6 +35,8 @@ import FAQPng from './FAQ.png';
 import FicheSvg from './fiche.svg';
 import FlashcardPng from './flashcard.png';
 import HiBubbleSvg from './hi-bubble.svg';
+import HomeDarkPng from './home-dark.png';
+import HomeLightPng from './home-white.png';
 import InfoSvg from './info.svg';
 import JournalSvg from './journal.svg';
 import KebabSvg from './kebab.svg';
@@ -60,6 +62,7 @@ import SettingsPng from './settings.png';
 import SignalerPng from './signaler.png';
 import SmallAvatarPng from './small-avatar.png';
 import StarPng from './star.png';
+import Star2Png from './star2.png';
 import TandemPng from './tandem.png';
 import TandemNotFoundPng from './tandem_not_found.png';
 import TrophiePng from './trophie.png';
@@ -105,6 +108,8 @@ export {
     FicheSvg,
     FlashcardPng,
     HiBubbleSvg,
+    HomeDarkPng,
+    HomeLightPng,
     HomeSvg,
     InfoSvg,
     JournalSvg,
@@ -130,6 +135,7 @@ export {
     SignalerPng,
     SmallAvatarPng,
     StarPng,
+    Star2Png,
     TandemNotFoundPng,
     TandemPng,
     TrophiePng,

@@ -81,7 +81,7 @@ export const ActivityContent: React.FC<ActivityContentProps> = ({
     };
 
     return (
-        <div className="subcontent-container content-wrapper" style={{ padding: 0 }}>
+        <div style={{ padding: 0 }}>
             <HeaderSubContent
                 title={t('activity.show.title')}
                 onBackPressed={onBackPressed}
