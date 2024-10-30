@@ -13,6 +13,7 @@ class Configuration {
         public readonly secondaryDarkColor: string,
         public readonly secondaryBackgroundImageColor: string,
         public readonly isInMaintenance: boolean,
+        public readonly logoURL: string
     ) {}
 }
 

@@ -59,6 +59,10 @@ export class InstanceResponse {
   @Expose({ groups: ['read'] })
   daysBeforeClosureNotification: number;
 
+  @ApiProperty({ type: 'string', format: 'url' })
+  @Expose({ groups: ['read'] })
+  logoURL: string;
+
   constructor(partial: Partial<InstanceResponse>) {
     Object.assign(this, partial);
   }
@@ -78,6 +82,7 @@ export class InstanceResponse {
       secondaryDarkColor: instance.secondaryDarkColor,
       isInMaintenance: instance.isInMaintenance,
       daysBeforeClosureNotification: instance.daysBeforeClosureNotification,
+      logoURL: instance.logoURL,
     });
   }
 }
