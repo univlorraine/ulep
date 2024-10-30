@@ -25,7 +25,7 @@ const ReportsPage: React.FC = () => {
     }
 
     return (
-        <OnlineWebLayout profile={profile}>
+        <OnlineWebLayout>
             <ReportsContent goBack={history.goBack} />
         </OnlineWebLayout>
     );

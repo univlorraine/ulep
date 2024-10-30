@@ -100,7 +100,7 @@ const LearningPage = () => {
 
     return (
         <>
-            <OnlineWebLayout profile={profile}>
+            <OnlineWebLayout>
                 <LearningContent
                     isLoading={isLoading}
                     profile={profile}

@@ -422,14 +422,28 @@
             "altClose": "Fermer"
         }
     },
-    "home_page": {
-        "profile": {
+    "profile_page": {
+        "buttons": {
             "disconnect": "Se déconnecter",
             "edit": "Modifier mon avatar",
             "parameters": "Paramètres",
-            "title": "Mon profil",
             "reports": "Mes signalements"
         },
+        "title": "Mon profil",
+        "profile_card": {
+            "title": "Mes informations personnelles",
+            "years_old": "ans",
+            "button": "Modifier",
+            "button_mobile": "Modifier mes informations"
+        },
+        "university_card": {
+            "title": "Mon université",
+            "button": "Voir la fiche",
+            "semester_date": "Dates du semestre :",
+            "end_date": "Au"
+        }
+    },
+    "home_page": {
         "report": {
             "category_title": "Dis-nous ce qu'il s'est passé ?",
             "note": "Note",

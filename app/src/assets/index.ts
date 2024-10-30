@@ -6,6 +6,7 @@ import ArrowUpSvg from './arrow-up.svg';
 import AvatarPng from './avatar.png';
 import BackgroundSvg from './background.svg';
 import BackgroundBluePng from './backgrounds/background-blue.png';
+import BackgroundPurpleProfilePng from './backgrounds/background-purple-profile.png';
 import BackgroundPurplePng from './backgrounds/background-purple.png';
 import BackgroundRedPng from './backgrounds/background-red.png';
 import BackgroundYellowPng from './backgrounds/background-yellow.png';
@@ -96,6 +97,7 @@ export {
     CloseBlackPlainSvg,
     ConversationsSvg,
     CreateAccountPng,
+    BackgroundPurpleProfilePng,
     DicePng,
     DicesPng,
     DisconnectSvg,
