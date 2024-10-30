@@ -30,6 +30,7 @@ export class Instance {
   readonly secondaryDarkColor: string;
   readonly isInMaintenance: boolean;
   readonly daysBeforeClosureNotification: number;
+  logoURL: string;
 
   constructor(instance: InstanceProps) {
     this.id = instance.id;
