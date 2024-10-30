@@ -16,19 +16,19 @@ const EventDate: React.FC<EventDateProps> = ({ event, profile, showAddToCalendar
     const language = useStoreState((state) => state.language);
 
     const handleAddToCalendar = (event: EventObject) => {
-        const adress = event.address || event.deepLink;
+        const address = event.address || event.deepLink || ''; // Utilise une chaîne vide si l'adresse est nulle
         const icsContent = `
 BEGIN:VCALENDAR
 VERSION:2.0
 BEGIN:VEVENT
+UID:${event.id}
 SUMMARY:${event.title}
-DESCRIPTION:${event.content}
+DTSTAMP:${formatDateToICS(new Date())}
 DTSTART:${formatDateToICS(new Date(event.startDate))}
 DTEND:${formatDateToICS(new Date(event.endDate))}
-LOCATION:${adress}
+LOCATION:${address}
 END:VEVENT
-END:VCALENDAR
-    `;
+END:VCALENDAR`;
         const blob = new Blob([icsContent], { type: 'text/calendar' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -40,7 +40,10 @@ END:VCALENDAR
 
     const formatDateToICS = (date: Date) => {
         const dateObject = new Date(date);
-        return dateObject.toISOString().replace(/-/g, '').replace('T', '').replace(/:\d+$/, '');
+        return dateObject
+            .toISOString()
+            .replace(/[-:]/g, '')
+            .replace(/\.\d+Z$/, 'Z');
     };
 
     const formattedDate = new Intl.DateTimeFormat(language || profile.nativeLanguage.code, {

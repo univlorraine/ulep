@@ -122,7 +122,7 @@ export class EventsController {
 
   @Get(':id')
   @UseGuards(AuthenticationGuard)
-  @SerializeOptions({ groups: ['read'] })
+  @SerializeOptions({ groups: ['read', 'event:isUserSubscribed'] })
   @Swagger.ApiOperation({ summary: 'Get an Event resource.' })
   @Swagger.ApiOkResponse({ type: EventResponse })
   async getEvent(
