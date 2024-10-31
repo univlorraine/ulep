@@ -1,7 +1,8 @@
 import { IonContent } from '@ionic/react';
 import { useEffect, useState } from 'react';
-import { Redirect, useHistory } from 'react-router';
+import { Redirect, useHistory, useLocation } from 'react-router';
 import { useConfig } from '../../../context/ConfigurationContext';
+import Language from '../../../domain/entities/Language';
 import Profile from '../../../domain/entities/Profile';
 import Tandem from '../../../domain/entities/Tandem';
 import Vocabulary from '../../../domain/entities/Vocabulary';
@@ -25,6 +26,8 @@ const VocabulariesPage = () => {
     const [showSelectVocabularyListsForQuizModal, setShowSelectVocabularyListsForQuizModal] = useState(false);
     const [tandems, setTandems] = useState<Tandem[]>([]);
     const [addContentMode, setAddContentMode] = useState(false);
+    const location = useLocation<{ language: Language }>();
+    const { language } = location.state;
 
     const {
         vocabularies,
@@ -39,7 +42,7 @@ const VocabulariesPage = () => {
         onDeleteVocabulary,
         setVocabularyListSelected,
         setSearchVocabularies,
-    } = useVocabulary();
+    } = useVocabulary(language);
 
     const handleCreateVocabularyList = async (vocabularyList: CreateVocabularyListCommand) => {
         await onCreateVocabularyList(vocabularyList);

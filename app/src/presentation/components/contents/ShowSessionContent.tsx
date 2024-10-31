@@ -57,7 +57,7 @@ const Content: React.FC<ShowSessionContentProps> = ({
     const isSessionCancelled = session.cancelledAt !== null;
 
     return (
-        <div className={`${styles.container} subcontent-container content-wrapper`}>
+        <div className={styles.container}>
             {confirmCreation ? (
                 <div className={styles.confirm_header}>
                     <h1 className={styles.confirm_title}>{t('session.confirm_creation_title')}</h1>

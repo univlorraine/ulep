@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useConfig } from '../../../context/ConfigurationContext';
+import Language from '../../../domain/entities/Language';
 import Profile from '../../../domain/entities/Profile';
 import Tandem from '../../../domain/entities/Tandem';
 import Vocabulary from '../../../domain/entities/Vocabulary';
@@ -18,9 +19,10 @@ interface VocabularyContentProps {
     profile: Profile;
     onClose: () => void;
     isModal?: boolean;
+    selectedLanguage?: Language;
 }
 
-const VocabularyContent: React.FC<VocabularyContentProps> = ({ profile, onClose, isModal }) => {
+const VocabularyContent: React.FC<VocabularyContentProps> = ({ profile, onClose, isModal, selectedLanguage }) => {
     const { getAllTandems } = useConfig();
     const [vocabularySelected, setVocabularySelected] = useState<Vocabulary>();
     const [showAddVocabularyListModal, setShowAddVocabularyListModal] = useState(false);
@@ -43,7 +45,7 @@ const VocabularyContent: React.FC<VocabularyContentProps> = ({ profile, onClose,
         onDeleteVocabulary,
         setVocabularyListSelected,
         setSearchVocabularies,
-    } = useVocabulary();
+    } = useVocabulary(selectedLanguage);
 
     const handleCreateVocabularyList = async (vocabularyList: CreateVocabularyListCommand) => {
         await onCreateVocabularyList(vocabularyList);

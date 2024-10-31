@@ -171,7 +171,7 @@ export const CreateActivityContent: React.FC<CreateActivityContentProps> = ({
     };
 
     return (
-        <div style={{ paddingTop: 0 }}>
+        <div className={styles.container}>
             <HeaderSubContent title={t('activity.title') as string} onBackPressed={handleBackPressed} />
             <div className={styles.content}>
                 {mode === CreateActivityMode.SUCCESS && (

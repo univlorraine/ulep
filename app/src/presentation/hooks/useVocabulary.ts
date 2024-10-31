@@ -2,13 +2,14 @@ import { useIonToast } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useConfig } from '../../context/ConfigurationContext';
+import Language from '../../domain/entities/Language';
 import Profile from '../../domain/entities/Profile';
 import Vocabulary from '../../domain/entities/Vocabulary';
 import VocabularyList from '../../domain/entities/VocabularyList';
 import { CreateVocabularyListCommand } from '../../domain/interfaces/vocabulary/CreateVocabularyListUsecase.interface';
 import { useStoreState } from '../../store/storeTypes';
 
-const useVocabulary = () => {
+const useVocabulary = (selectedLanguage?: Language) => {
     const { t } = useTranslation();
     const [showToast] = useIonToast();
     const {
@@ -140,7 +141,12 @@ const useVocabulary = () => {
                 ...vocabularyResult,
                 isLoading: true,
             });
-            const vocabularyListsResult = await getVocabularyLists.execute(profile.id);
+            let vocabularyListsResult = await getVocabularyLists.execute(profile.id);
+            if (selectedLanguage) {
+                vocabularyListsResult = (vocabularyListsResult as VocabularyList[]).filter(
+                    (vocabularyList) => vocabularyList.translationLanguage.code === selectedLanguage.code
+                );
+            }
 
             if (vocabularyListsResult instanceof Error) {
                 return setVocabularyResult({
