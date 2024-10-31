@@ -1,20 +1,23 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { File, StorageInterface } from 'src/core/ports/storage.interface';
-import { Readable } from 'stream';
-import { Env } from 'src/configuration';
 import {
   CreateBucketCommand,
   DeleteObjectCommand,
   GetObjectCommand,
   HeadBucketCommand,
   HeadObjectCommand,
+  PutBucketPolicyCommand,
   PutObjectCommand,
   S3Client,
   S3ServiceException,
-  PutBucketPolicyCommand,
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { Env } from 'src/configuration';
+import { File, StorageInterface } from 'src/core/ports/storage.interface';
+import { Readable } from 'stream';
+
+export const ASSETS_BUCKET = 'assets';
+export const LOGO_FILENAME = 'logo.png';
 
 @Injectable()
 export class MinioStorage implements StorageInterface {
@@ -78,7 +81,11 @@ export class MinioStorage implements StorageInterface {
   }
 
   // eslint-disable-next-line prettier/prettier
-  async temporaryUrl(bucket: string, name: string, expiry: number): Promise<string> {
+  async temporaryUrl(
+    bucket: string,
+    name: string,
+    expiry: number,
+  ): Promise<string> {
     const command = new GetObjectCommand({ Bucket: bucket, Key: name });
 
     return getSignedUrl(this.#client, command, { expiresIn: expiry });
@@ -92,7 +99,10 @@ export class MinioStorage implements StorageInterface {
       return true;
     } catch (e) {
       // eslint-disable-next-line prettier/prettier
-      if (e instanceof S3ServiceException && e.$metadata.httpStatusCode === 404) {
+      if (
+        e instanceof S3ServiceException &&
+        e.$metadata.httpStatusCode === 404
+      ) {
         return false;
       }
 

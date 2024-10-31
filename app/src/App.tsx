@@ -122,6 +122,7 @@ const AppContext = () => {
                 setUser,
                 configuration,
                 logout,
+                logoUrl: configuration.logoURL,
             })}
         >
             <AppCore />

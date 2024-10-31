@@ -281,16 +281,13 @@ export class CreateAdministratorRequest {
 
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
   @IsUUID()
-  universityId?: string;
+  universityId: string;
 
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @Transform(({ value }) => value || undefined)
   @IsOptional()
   @IsUUID()
   languageId?: string;
-
-  @Swagger.ApiProperty({ type: 'string' })
-  @IsString()
-  password: string;
 
   @Swagger.ApiProperty({ type: 'string' })
   @IsObject()
@@ -324,8 +321,9 @@ export class UpdateAdministratorRequest {
   universityId?: string;
 
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
-  @IsOptional()
+  @Transform(({ value }) => value || undefined)
   @IsUUID()
+  @IsOptional()
   languageId?: string;
 
   @Swagger.ApiPropertyOptional({ type: 'string' })

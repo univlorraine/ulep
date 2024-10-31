@@ -9,8 +9,8 @@ import * as jwt from 'jsonwebtoken';
 import { Client, Issuer, TokenSet } from 'openid-client';
 import * as qs from 'querystring';
 import {
-  KEYCLOAK_CONFIGURATION,
   KeycloakConfiguration,
+  KEYCLOAK_CONFIGURATION,
 } from './keycloak.configuration';
 import {
   InvalidCredentialsException,
@@ -379,13 +379,6 @@ export class KeycloakClient {
           firstName: props.firstname,
           lastName: props.lastname,
           enabled: true,
-          credentials: [
-            {
-              type: 'password',
-              value: props.password,
-              temporary: false,
-            },
-          ],
           attributes: {
             universityId: props.universityId,
             languageId: props.languageId,
