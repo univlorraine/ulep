@@ -85,6 +85,7 @@ interface GetConfigContextValueProps {
     setUser: Function;
     configuration: Configuration;
     logout: Function;
+    logoUrl: string;
 }
 
 const getConfigContextValue = ({
@@ -98,6 +99,7 @@ const getConfigContextValue = ({
     setUser,
     configuration,
     logout,
+    logoUrl,
 }: GetConfigContextValueProps): ConfigContextValueType => {
     const browserAdapter = new BrowserAdapter();
     const cameraAdapter = new CameraAdapter();
@@ -249,6 +251,7 @@ const getConfigContextValue = ({
         getUniversity,
         getUniversityLanguages,
         login,
+        logoUrl,
         notificationAdapter,
         resetPassword,
         searchMessagesIdsFromConversation,

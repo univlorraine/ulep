@@ -74,17 +74,12 @@ export class CreateUserUsecase {
     }
 
     if (
+      university.domains.length > 0 &&
+      !university.domains.some((domain) => command.email.includes(domain)) &&
       university.codes.length > 0 &&
       !university.codes.some((codeToCheck) => codeToCheck === command.code)
     ) {
-      throw new BadRequestException('Code is invalid');
-    }
-
-    if (
-      university.domains.length > 0 &&
-      !university.domains.some((domain) => command.email.includes(domain))
-    ) {
-      throw new BadRequestException('Domain is invalid');
+      throw new BadRequestException('Conditions are invalid');
     }
 
     const now = toZonedTime(new Date(), university.timezone);

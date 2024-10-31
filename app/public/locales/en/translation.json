@@ -308,7 +308,7 @@
         "title": "Messages with {{name}}",
         "video_call_aria_label": "Call {{name}}",
         "send_button": {
-            "record_aria_label": "Stay pressed to record an audio or write your message to switch to send mode",
+            "record_aria_label": "Stay pressed to record an audio",
             "send_aria_label": "Send message"
         },
         "search": {

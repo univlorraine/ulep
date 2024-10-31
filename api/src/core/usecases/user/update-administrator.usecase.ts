@@ -2,8 +2,8 @@ import { KeycloakClient, KeycloakGroup } from '@app/keycloak';
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import {
-  UNIVERSITY_REPOSITORY,
   UniversityRepository,
+  UNIVERSITY_REPOSITORY,
 } from 'src/core/ports/university.repository';
 
 export class UpdateAdministratorCommand {
@@ -52,8 +52,8 @@ export class UpdateAdministratorUsecase {
         lastname: command.lastname || admin.lastName,
         email: command.email || admin.email,
         password: command.password,
-        universityId: command.universityId || admin.attributes?.universityId,
-        languageId: command.languageId || admin.attributes?.languageId,
+        universityId: command.universityId || '',
+        languageId: command.languageId || '',
         groups: !command.shouldRemoveAdminRole ? [command.group] : [],
       });
       return keycloakUser;

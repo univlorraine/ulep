@@ -2,10 +2,10 @@ import KeyIcon from '@mui/icons-material/Key';
 import LockIcon from '@mui/icons-material/Lock';
 import { Avatar, Button, Card, CardActions, CircularProgress } from '@mui/material';
 import Box from '@mui/material/Box';
-import * as React from 'react';
 import { useState } from 'react';
-import { Form, required, TextInput, useTranslate, useLogin, useNotify } from 'react-admin';
+import { Form, required, TextInput, useLogin, useNotify, useTranslate } from 'react-admin';
 import { ssoLogin } from '../../providers/authProvider';
+import ForgotPassword from './ForgotPassword';
 
 const LoginPage = () => {
     const [loading, setLoading] = useState(false);
@@ -16,8 +16,12 @@ const LoginPage = () => {
 
     const handleSubmit = (auth: any) => {
         setLoading(true);
-        login(auth).catch(() => {
-            notify(translate('login.loginError'));
+        login(auth).catch((error) => {
+            if (error.message === 'Forbidden') {
+                notify(translate('login.domainError'));
+            } else {
+                notify(translate('login.loginError'));
+            }
             setLoading(false);
         });
     };
@@ -72,11 +76,14 @@ const LoginPage = () => {
                             />
                         </Box>
                     </Box>
-                    <CardActions sx={{ padding: '0 1em 1em 1em' }}>
+                    <CardActions
+                        sx={{ padding: '0 1em 1em 1em', display: 'flex', flexDirection: 'column', gap: '1em' }}
+                    >
                         <Button color="primary" disabled={loading} type="submit" variant="contained" fullWidth>
                             {loading && <CircularProgress size={25} thickness={2} />}
                             {translate('ra.auth.sign_in')}
                         </Button>
+                        <ForgotPassword />
                     </CardActions>
                 </Card>
                 <Card sx={{ minWidth: 300, marginTop: '2em' }}>

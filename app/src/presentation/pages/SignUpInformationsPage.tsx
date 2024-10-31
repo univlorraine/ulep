@@ -167,11 +167,7 @@ const SignUpInformationsPage: React.FC = () => {
 
         if (result instanceof Error) {
             if (result.message === 'signup_informations_page.error_domain') {
-                return setErrorMessage({ type: 'email', message: t(result.message) });
-            }
-
-            if (result.message === 'signup_informations_page.error_code') {
-                return setErrorMessage({ type: 'code', message: t(result.message) });
+                return setErrorMessage({ type: 'conditions', message: t(result.message) });
             }
 
             if (result.message === 'signup_informations_page.error_password') {
@@ -303,7 +299,11 @@ const SignUpInformationsPage: React.FC = () => {
 
                 <TextInput
                     autocomplete="email"
-                    errorMessage={errorMessage?.type === 'email' ? errorMessage.message : undefined}
+                    errorMessage={
+                        errorMessage?.type === 'email' || errorMessage?.type === 'conditions'
+                            ? errorMessage.message
+                            : undefined
+                    }
                     disabled={fromIdp}
                     onChange={setEmail}
                     placeholder={t('signup_informations_page.placeholder_email')}
@@ -315,7 +315,9 @@ const SignUpInformationsPage: React.FC = () => {
 
                 {profileSignUp.university?.hasCode && (
                     <TextInput
-                        errorMessage={errorMessage?.type === 'code' ? errorMessage.message : undefined}
+                        errorMessage={
+                            errorMessage?.type === 'conditions' ? t('signup_informations_page.error_code') : undefined
+                        }
                         onChange={setCode}
                         placeholder={t('signup_informations_page.placeholder_code')}
                         title={t('signup_informations_page.code') as string}

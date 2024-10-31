@@ -3,6 +3,12 @@
     min-width: 20px;
 }
 
+.record-container {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
 .recorder {
     min-height: 20px;
     min-width: 20px;
@@ -23,6 +29,8 @@
 }
 .container {
     position: relative;
+    display: flex;
+    flex-direction: row;
 }
 
 .timer {

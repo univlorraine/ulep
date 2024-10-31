@@ -39,7 +39,7 @@ export interface AdministratorFormPayload {
     universityId?: string;
     group: KeycloakGroup;
     file: File | undefined;
-    languageId?: string;
+    languageId?: string | null;
 }
 
 export default Administrator;

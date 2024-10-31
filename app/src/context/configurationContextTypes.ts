@@ -111,6 +111,7 @@ export interface ConfigContextValueType {
     getUniversity: GetUniversityInterface;
     getUniversityLanguages: GetUniversityLanguagesUsecaseInterface;
     login: LoginUsecaseInterface;
+    logoUrl: string;
     notificationAdapter: NotificationAdapterInterface;
     resetPassword: ResetPasswordUsecaseInterface;
     sendMessage: SendMessageUsecaseInterface;

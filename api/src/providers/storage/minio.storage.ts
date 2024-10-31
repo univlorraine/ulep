@@ -16,6 +16,9 @@ import { Env } from 'src/configuration';
 import { File, StorageInterface } from 'src/core/ports/storage.interface';
 import { Readable } from 'stream';
 
+export const ASSETS_BUCKET = 'assets';
+export const LOGO_FILENAME = 'logo.png';
+
 @Injectable()
 export class MinioStorage implements StorageInterface {
   #logger = new Logger(MinioStorage.name);
@@ -79,6 +82,7 @@ export class MinioStorage implements StorageInterface {
     await this.#client.send(command);
   }
 
+  // eslint-disable-next-line prettier/prettier
   async temporaryUrl(
     bucket: string,
     name: string,
@@ -96,6 +100,7 @@ export class MinioStorage implements StorageInterface {
 
       return true;
     } catch (e) {
+      // eslint-disable-next-line prettier/prettier
       if (
         e instanceof S3ServiceException &&
         e.$metadata.httpStatusCode === 404

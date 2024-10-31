@@ -18,6 +18,7 @@ import { Env } from 'src/configuration';
 import { GetJitsiTokenUsecase } from 'src/core/usecases/jitsi/get-jitsi-token.usecase';
 import { LogoutAllSessionsUsecase } from 'src/core/usecases/security/logout-all-sessions.usecase';
 import { ResetPasswordUsecase } from 'src/core/usecases/security/reset-password.usecase';
+import { TokenForAdminUsecase } from 'src/core/usecases/security/token-for-admin.usecase';
 import { CurrentUser } from '../decorators';
 import {
   BearerTokensFromCodeRequest,
@@ -41,10 +42,25 @@ export class SecurityController {
     private readonly keycloakClient: KeycloakClient,
     private readonly resetPasswordUsecase: ResetPasswordUsecase,
     private readonly logoutAllSessionsUsecase: LogoutAllSessionsUsecase,
+    private readonly tokenForAdminUsecase: TokenForAdminUsecase,
     private readonly getJitsiTokenUsecase: GetJitsiTokenUsecase,
     env: ConfigService<Env, true>,
   ) {
     this.#appUrl = env.get('APP_URL');
+  }
+
+  @Post('token/admin')
+  @Swagger.ApiOperation({ summary: 'Request a JWT token for admin.' })
+  @Swagger.ApiOkResponse({ type: BearerTokensResponse })
+  async loginAdmin(
+    @Body() { email, password }: BearerTokensRequest,
+  ): Promise<BearerTokensResponse> {
+    const credentials = await this.tokenForAdminUsecase.execute({
+      email,
+      password,
+    });
+
+    return new BearerTokensResponse(credentials);
   }
 
   @Post('token')

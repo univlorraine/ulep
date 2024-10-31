@@ -115,6 +115,9 @@
                 "user_email": "Email"
             }
         },
+        "errors": {
+            "email": "The email is not valid, you must use the university email address"
+        },
         "tabLabel": "Administrators",
         "university": "Manager",
         "update": {
@@ -328,6 +331,12 @@
         "both": "Both",
         "deleted_user": "Deleted user",
         "sso_login": "Authenticate",
+        "forgot_password": "Forgot password",
+        "forgot_password_modal": {
+            "title": "Password reset request",
+            "description": "To reset your password, please enter your email below.",
+            "send_button": "Send"
+        },  
         "userStatus": {
             "active": "Active",
             "banned": "Banned",
@@ -453,6 +462,7 @@
     },
     "login": {
         "connect": "Connect",
+        "domainError": "Central administrators must use SSO to login.",
         "loginError": "Wrong email / password",
         "password": "Password"
     },

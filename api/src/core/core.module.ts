@@ -12,6 +12,7 @@ import { DeleteObjectiveImageUsecase } from 'src/core/usecases/media/delete-obje
 import { UploadObjectiveImageUsecase } from 'src/core/usecases/media/upload-objective-image.usecase';
 import { SendMessageNotificationUsecase } from 'src/core/usecases/notifications';
 import { UpdateObjectiveUsecase } from 'src/core/usecases/objective/update-objective.usecase';
+import { TokenForAdminUsecase } from 'src/core/usecases/security/token-for-admin.usecase';
 import { GetVocabularyListPdfUsecase } from 'src/core/usecases/vocabulary/get-vocabulary-list-pdf.usecase';
 import { ProvidersModule } from 'src/providers/providers.module';
 import { MatchScorer } from './services/MatchScorer';
@@ -357,6 +358,7 @@ const usecases: Provider[] = [
   ResetPasswordUsecase,
   GetJitsiTokenUsecase,
   LogoutAllSessionsUsecase,
+  TokenForAdminUsecase,
   // Notifications
   SendMessageNotificationUsecase,
   // Chat

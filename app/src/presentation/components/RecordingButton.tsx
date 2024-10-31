@@ -59,39 +59,37 @@ const RecordingButton = ({
 
     return (
         <div className={styles['container']}>
-            {recording && <div className={styles['timer']}>{time}s</div>}
-            {mode === 'send' ? (
-                <>
-                    {/* Fix Accessibility: Use fragmernt to rerender natively the button */}
+            {mode !== 'send' && (
+                <div className={styles['record-container']}>
+                    {recording && <div className={styles['timer']}>{time}s</div>}
                     <IonButton
-                        id="send-button"
-                        title={t('chat.send_button.send_aria_label') as string}
-                        aria-label={t('chat.send_button.send_aria_label') as string}
+                        id="record-button"
+                        title={t('chat.send_button.record_aria_label') as string}
+                        aria-label={t('chat.send_button.record_aria_label') as string}
                         fill="clear"
                         className={styles['sender-button']}
                         disabled={isBlocked}
                         onClick={onSendPressed}
+                        onMouseDown={startRecording}
+                        onMouseUp={stopRecording}
+                        onTouchStart={startRecording}
+                        onTouchEnd={stopRecording}
                     >
-                        <IonIcon className={styles['sender']} icon={SenderSvg} />
+                        <IonIcon className={styles['recorder']} icon={RecordSvg} />
                     </IonButton>
-                </>
-            ) : (
-                <IonButton
-                    id="record-button"
-                    title={t('chat.send_button.record_aria_label') as string}
-                    aria-label={t('chat.send_button.record_aria_label') as string}
-                    fill="clear"
-                    className={styles['sender-button']}
-                    disabled={isBlocked}
-                    onClick={onSendPressed}
-                    onMouseDown={startRecording}
-                    onMouseUp={stopRecording}
-                    onTouchStart={startRecording}
-                    onTouchEnd={stopRecording}
-                >
-                    <IonIcon className={styles['recorder']} icon={RecordSvg} />
-                </IonButton>
+                </div>
             )}
+            <IonButton
+                id="send-button"
+                title={t('chat.send_button.send_aria_label') as string}
+                aria-label={t('chat.send_button.send_aria_label') as string}
+                fill="clear"
+                className={styles['sender-button']}
+                disabled={isBlocked}
+                onClick={onSendPressed}
+            >
+                <IonIcon className={styles['sender']} icon={SenderSvg} />
+            </IonButton>
         </div>
     );
 };

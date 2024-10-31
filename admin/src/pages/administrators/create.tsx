@@ -15,7 +15,6 @@ const CreateAdministrator = () => {
         formData.append('email', payload.email || '');
         formData.append('firstname', payload.firstname || '');
         formData.append('lastname', payload.lastname || '');
-        formData.append('password', payload.password || '');
         formData.append('universityId', payload.universityId || '');
         formData.append('languageId', payload.languageId || '');
         formData.append('group[id]', payload.group.id || '');

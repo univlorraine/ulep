@@ -111,7 +111,6 @@ export interface CreateAdministratorProps {
   email: string;
   firstname: string;
   lastname: string;
-  password: string;
   universityId?: string;
   languageId?: string;
   groups: string[];
