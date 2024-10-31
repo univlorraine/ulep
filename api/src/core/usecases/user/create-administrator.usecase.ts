@@ -76,11 +76,11 @@ export class CreateAdministratorUsecase {
 
     const hasCredentials = await this.hasCredentials(user.id);
 
-    if (!hasCredentials) {
+    if (university.parent && !hasCredentials) {
       await this.keycloakClient.executeActionEmail(
         ['UPDATE_PASSWORD'],
         user.id,
-        university.nativeLanguage.code,
+        university.nativeLanguage.code === 'fr' ? 'fr' : 'en',
         this.env.get('ADMIN_URL'),
       );
     }
