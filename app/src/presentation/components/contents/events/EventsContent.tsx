@@ -40,8 +40,12 @@ export const EventsContent: React.FC<EventsContentProps> = ({ eventId, profile, 
         }
     }, [event]);
 
-    if (!event || error) {
+    if (error) {
         return <Redirect to="/home" />;
+    }
+
+    if (!event) {
+        return <div />;
     }
 
     const changeLanguage = (languageCode: string) => {

@@ -73,7 +73,7 @@ export const EventsListContent: React.FC<EventsListContentProps> = ({ profile, o
                 ))}
             {!isEventsListEnded && (
                 <IonButton fill="clear" className="secondary-button" onClick={onLoadMoreEvents}>
-                    {t('events.list.load_more')}
+                    {t('events.load_more')}
                 </IonButton>
             )}
             <FilterModal

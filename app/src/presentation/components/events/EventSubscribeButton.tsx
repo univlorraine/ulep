@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useConfig } from '../../../context/ConfigurationContext';
 import EventObject, { EventType } from '../../../domain/entities/Event';
 import Profile from '../../../domain/entities/Profile';
+import styles from './EventSubscribeButton.module.css';
 
 interface EventSubscribeButtonProps {
     event: EventObject;
@@ -16,9 +17,11 @@ export const EventSubscribeButton: React.FC<EventSubscribeButtonProps> = ({ even
     const { subscribeToEvent, unsubscribeToEvent, browserAdapter } = useConfig();
 
     const handleButtonName = () => {
-        if (!event.withSubscription && event.type === EventType.PRESENTIAL) {
+        const hasUserSubscribed = !event.withSubscription || event.isUserSubscribed;
+
+        if (hasUserSubscribed && event.type === EventType.PRESENTIAL) {
             return t('events.join');
-        } else if (!event.withSubscription && event.type === EventType.ONLINE) {
+        } else if (hasUserSubscribed && event.type === EventType.ONLINE) {
             return t('events.join_online');
         } else if (event.withSubscription && event.isUserSubscribed) {
             return t('events.unsubscribe');
@@ -27,20 +30,17 @@ export const EventSubscribeButton: React.FC<EventSubscribeButtonProps> = ({ even
     };
 
     const handleButtonClick = async () => {
-        if (event.withSubscription && event.isUserSubscribed) {
-            await onUnsubscribeToEvent();
-        } else if (event.withSubscription && !event.isUserSubscribed) {
+        if (event.withSubscription && !event.isUserSubscribed) {
             await onSubscribeToEvent();
-            onEventSubscribed();
-        } else if (!event.withSubscription && event.type === EventType.PRESENTIAL && event.address) {
-            browserAdapter.open(event.address);
-        } else if (!event.withSubscription && event.type === EventType.ONLINE && event.eventURL) {
+        } else if (event.type === EventType.PRESENTIAL && event.address && event.deepLink) {
+            browserAdapter.open(event.deepLink);
+        } else if (event.type === EventType.ONLINE && event.eventURL) {
             browserAdapter.open(event.eventURL);
         }
     };
 
     const handleButtonStyle = () => {
-        if (event.withSubscription && event.isUserSubscribed) {
+        if (event.withSubscription && event.isUserSubscribed && !event.isUserSubscribed) {
             return 'tertiary-button';
         }
         return 'primary-button';
@@ -67,9 +67,16 @@ export const EventSubscribeButton: React.FC<EventSubscribeButtonProps> = ({ even
     };
 
     return (
-        <IonButton fill="clear" className={`${handleButtonStyle()} no-padding`} onClick={handleButtonClick}>
-            {handleButtonName()}
-        </IonButton>
+        <div className={styles['button-container']}>
+            <IonButton fill="clear" className={`${handleButtonStyle()} no-padding`} onClick={handleButtonClick}>
+                {handleButtonName()}
+            </IonButton>
+            {event.withSubscription && event.isUserSubscribed && (
+                <IonButton fill="clear" className={`tertiary-button no-padding`} onClick={onUnsubscribeToEvent}>
+                    {t('events.unsubscribe')}
+                </IonButton>
+            )}
+        </div>
     );
 };
 

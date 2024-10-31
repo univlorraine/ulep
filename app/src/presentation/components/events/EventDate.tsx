@@ -1,6 +1,7 @@
-import { IonIcon } from '@ionic/react';
+import { IonIcon, useIonToast } from '@ionic/react';
 import { calendarOutline } from 'ionicons/icons';
 import { useTranslation } from 'react-i18next';
+import { useConfig } from '../../../context/ConfigurationContext';
 import EventObject from '../../../domain/entities/Event';
 import Profile from '../../../domain/entities/Profile';
 import { useStoreState } from '../../../store/storeTypes';
@@ -13,9 +14,11 @@ interface EventDateProps {
 
 const EventDate: React.FC<EventDateProps> = ({ event, profile, showAddToCalendar = false }) => {
     const { t } = useTranslation();
+    const [showToast] = useIonToast();
+    const { fileAdapter } = useConfig();
     const language = useStoreState((state) => state.language);
 
-    const handleAddToCalendar = (event: EventObject) => {
+    const handleAddToCalendar = async (event: EventObject) => {
         const address = event.address || event.deepLink || ''; // Utilise une chaîne vide si l'adresse est nulle
         const icsContent = `
 BEGIN:VCALENDAR
@@ -30,12 +33,11 @@ LOCATION:${address}
 END:VEVENT
 END:VCALENDAR`;
         const blob = new Blob([icsContent], { type: 'text/calendar' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `${event.title}.ics`;
-        a.click();
-        URL.revokeObjectURL(url);
+        await fileAdapter.saveBlob(blob, `${event.title.replace(/ /g, '_')}.ics`);
+        await showToast({
+            message: t('events.add_to_calendar_success'),
+            duration: 3000,
+        });
     };
 
     const formatDateToICS = (date: Date) => {

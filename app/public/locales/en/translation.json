@@ -60,7 +60,9 @@
         "unsubscribe": "Unsubscribe",
         "join": "Join",
         "join_online": "Join online",
-        "add_to_calendar": "Add to calendar"
+        "add_to_calendar": "Add to calendar",
+        "load_more": "See more",
+        "add_to_calendar_success": "ICS file downloaded"
     },
     "news": {
         "list": {
