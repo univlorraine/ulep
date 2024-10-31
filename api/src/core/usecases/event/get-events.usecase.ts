@@ -10,6 +10,10 @@ import {
   PROFILE_REPOSITORY,
 } from 'src/core/ports/profile.repository';
 import {
+  StorageInterface,
+  STORAGE_INTERFACE,
+} from 'src/core/ports/storage.interface';
+import {
   TandemRepository,
   TANDEM_REPOSITORY,
 } from 'src/core/ports/tandem.repository';
@@ -37,6 +41,8 @@ export class GetEventsUsecase {
     private readonly profileRepository: ProfileRepository,
     @Inject(EVENT_REPOSITORY)
     private readonly eventRepository: EventRepository,
+    @Inject(STORAGE_INTERFACE)
+    private readonly storageAdapter: StorageInterface,
   ) {}
 
   async execute(command: GetEventsCommand) {
@@ -55,6 +61,17 @@ export class GetEventsUsecase {
         allowedLanguages,
       },
     });
+
+    for (const event of events.items) {
+      if (event.image) {
+        const imageUrl = await this.storageAdapter.temporaryUrl(
+          event.image.bucket,
+          event.image.name,
+          3600,
+        );
+        event.imageURL = imageUrl;
+      }
+    }
 
     return { profile, events };
   }

@@ -68,7 +68,7 @@ export class EventsController {
 
   @Get('admin')
   @UseGuards(AuthenticationGuard)
-  @SerializeOptions({ groups: ['read'] })
+  @SerializeOptions({ groups: ['read', 'event:admin'] })
   @Swagger.ApiOperation({ summary: 'Get Events Admin resources.' })
   @CollectionResponse(EventResponse)
   async getAdminEvents(@Query() query: GetEventsAdminQuery) {
@@ -95,7 +95,7 @@ export class EventsController {
 
   @Get()
   @UseGuards(AuthenticationGuard)
-  @SerializeOptions({ groups: ['read', 'event:isUserSubscribed'] })
+  @SerializeOptions({ groups: ['read', 'event:front'] })
   @Swagger.ApiOperation({ summary: 'Get Events resources.' })
   @CollectionResponse(EventResponse)
   async getEvents(
@@ -125,7 +125,7 @@ export class EventsController {
 
   @Get(':id')
   @UseGuards(AuthenticationGuard)
-  @SerializeOptions({ groups: ['read', 'event:isUserSubscribed'] })
+  @SerializeOptions({ groups: ['read', 'event:admin', 'event:front'] })
   @Swagger.ApiOperation({ summary: 'Get an Event resource.' })
   @Swagger.ApiOkResponse({ type: EventResponse })
   async getEvent(

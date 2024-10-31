@@ -27,7 +27,6 @@ class EventObject {
         public readonly translations: EventTranslation[],
         public readonly authorUniversity: University,
         public readonly languageCode: string,
-        public readonly status: EventStatus,
         public readonly startDate: Date,
         public readonly endDate: Date,
         public readonly type: EventType,

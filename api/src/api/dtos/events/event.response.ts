@@ -10,7 +10,6 @@ import { LanguageResponse } from '../languages';
 import { ProfileResponse } from '../profiles';
 import { UniversityResponse } from '../universities';
 import { UserResponse } from '../users';
-
 export class EventTranslationResponse {
   @Swagger.ApiProperty({ type: 'string' })
   @Expose({ groups: ['read'] })
@@ -93,7 +92,7 @@ export class EventResponse {
   diffusionLanguages?: LanguageResponse[];
 
   @Swagger.ApiProperty({ type: [UniversityResponse] })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['event:admin'] })
   @IsArray()
   concernedUniversities?: UniversityResponse[];
 
@@ -118,7 +117,7 @@ export class EventResponse {
   endDate: Date;
 
   @Swagger.ApiProperty({ type: 'boolean' })
-  @Expose({ groups: ['event:isUserSubscribed'] })
+  @Expose({ groups: ['event:front'] })
   isUserSubscribed: boolean;
 
   @Swagger.ApiProperty({ type: [UserResponse] })
