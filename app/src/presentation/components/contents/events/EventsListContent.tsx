@@ -41,7 +41,6 @@ export const EventsListContent: React.FC<EventsListContentProps> = ({ profile, o
     };
 
     const onFilterApplied = (filters: { languages?: Language[]; eventType?: EventType[] }) => {
-        console.log(filters);
         setLanguageFilter(filters.languages ?? []);
         setEventTypeFilter(filters.eventType ?? []);
         setShowFiltersModal(false);
