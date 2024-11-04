@@ -37,7 +37,7 @@ const TandemProfileModal: React.FC<TandemProfileModalProps> = ({
                 onClose={onClose}
                 partnerLearningLanguage={partnerLearningLanguage}
                 pedagogy={pedagogy}
-                profile={profile}
+                partnerProfile={profile}
             />
         </Modal>
     );

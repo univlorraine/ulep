@@ -2,10 +2,32 @@ import { IonButton, IonGrid, IonLabel, IonList, IonRow, isPlatform } from '@ioni
 import { Jitsi } from 'capacitor-jitsi-meet';
 import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useConfig } from '../../../context/ConfigurationContext';
 import { JitsiProps } from './VisioContainer';
+
+interface OnChatMessageReceivedProps {
+    isTrusted: boolean;
+    senderId: string;
+    isPrivate: boolean;
+    message: string;
+    timestamp: string;
+}
 
 const JitsiMobile = ({ jitsiUrl, roomName, jitsiToken }: JitsiProps) => {
     const history = useHistory();
+    const { sendMessage } = useConfig();
+
+    window.addEventListener('onChatMessageReceived', (data: any) => onChatMessageReceived(data));
+
+    const onChatMessageReceived = async (data: OnChatMessageReceivedProps) => {
+        if (roomName && data.isPrivate) {
+            const result = await sendMessage.execute(roomName, data.senderId, data.message);
+
+            if (result instanceof Error) {
+                console.error(result);
+            }
+        }
+    };
 
     const initialiseJitsi = async () => {
         // native device, open jitsi capacitor plugin

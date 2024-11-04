@@ -84,8 +84,8 @@ importers:
         specifier: ^5.3.3
         version: 5.3.3
       capacitor-jitsi-meet:
-        specifier: ^6.1.0
-        version: 6.1.0
+        specifier: 6.2.0-beta.0
+        version: 6.2.0-beta.0
       capacitor-voice-recorder:
         specifier: ^6.0.3
         version: 6.0.3(@capacitor/core@6.1.2)
@@ -1954,8 +1954,8 @@ packages:
   caniuse-lite@1.0.30001667:
     resolution: {integrity: sha512-7LTwJjcRkzKFmtqGsibMeuXmvFDfZq/nzIjnmgCGzKKRVzjD72selLDK1oPF/Oxzmt4fNcPvTDvGqSDG4tCALw==}
 
-  capacitor-jitsi-meet@6.1.0:
-    resolution: {integrity: sha512-D3pLH/ZPxTWSiZTiN00dmJ+HRdI4FvuGpwkVS0N44qX5t33EB7Vefi3CRSm7cuXwOoN9ImDI8nPlcCqbRgVIxA==}
+  capacitor-jitsi-meet@6.2.0-beta.0:
+    resolution: {integrity: sha512-Ft7UBWGo2Ohm3Xv+JbqwpQQN5kKiS2d1TRw2M7CN9fTG7rNKfI4ucp/xYVmVGlUFD02jBcehUDCQ9w59jKD9ig==}
 
   capacitor-voice-recorder@6.0.3:
     resolution: {integrity: sha512-X+JI+ZgiM14eEtTN2pqDEpDFmb/vFE0wFwGlulf7eeBoYI1xJvnbnQ3EdKbqnnOZAgdpgietcA7BBb/WnEZvfA==}
@@ -6746,7 +6746,7 @@ snapshots:
 
   caniuse-lite@1.0.30001667: {}
 
-  capacitor-jitsi-meet@6.1.0:
+  capacitor-jitsi-meet@6.2.0-beta.0:
     dependencies:
       '@capacitor/cli': 6.1.2
       '@capacitor/core': 6.1.2
