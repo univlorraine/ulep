@@ -1,7 +1,5 @@
 .modal {
     --border-radius: 20px;
-    --height: auto;
-    --width: auto;
 }
 
 .container {
@@ -12,12 +10,16 @@
     padding: 20px;
     border-radius: 10px;
     color: black;
+    overflow-y: scroll;
+    height: 100%;
+    width: 100%;
 }
 
 .filterContainer {
     display: flex;
+    height: 100%;
     flex-direction: column;
-    overflow-y: auto;
+    overflow-y: scroll;
 }
 
 .filter {
