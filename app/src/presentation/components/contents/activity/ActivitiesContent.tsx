@@ -176,7 +176,7 @@ export const ActivitiesContent: React.FC<ActivitiesContentProps> = ({
                 currentLanguagesFilter={languageFilter}
                 currentLevelsFilter={proficiencyFilter}
                 currentThemesFilter={activityThemeFilter}
-                title="activity.list.filter.title"
+                title="activity.list.filter_title"
             />
         </div>
     );

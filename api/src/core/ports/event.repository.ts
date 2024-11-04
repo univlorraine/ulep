@@ -64,6 +64,20 @@ export type FindEventsProps = {
   };
 };
 
+export type FindEventsForAnUserProps = {
+  pagination: {
+    page: number;
+    limit: number;
+  };
+  filters: {
+    title?: string;
+    universityId?: string;
+    status?: EventStatus;
+    types?: EventType[];
+    allowedLanguages: string[][];
+  };
+};
+
 export type SubscribeToEventProps = {
   eventId: string;
   profilesIds: string[];
@@ -77,6 +91,9 @@ export type UnsubscribeToEventProps = {
 export interface EventRepository {
   create(props: CreateEventProps): Promise<EventObject>;
   findAll(props: FindEventsProps): Promise<Collection<EventObject>>;
+  findAllForAnUser(
+    props: FindEventsForAnUserProps,
+  ): Promise<Collection<EventObject>>;
   ofId(id: string): Promise<EventObject>;
   update(props: UpdateEventProps): Promise<EventObject>;
   subscribeToEvent(props: SubscribeToEventProps): Promise<EventObject>;

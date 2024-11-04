@@ -5,6 +5,7 @@ import { EventObject } from 'src/core/models/event.model';
 import {
   CreateEventProps,
   EventRepository,
+  FindEventsForAnUserProps,
   FindEventsProps,
   SubscribeToEventProps,
   UnsubscribeToEventProps,
@@ -58,6 +59,76 @@ export class PrismaEventRepository implements EventRepository {
             },
           ],
         },
+      }),
+      status: filters.status,
+      type: {
+        in: filters.types,
+      },
+    };
+
+    const { page, limit } = pagination;
+    const offset = (page - 1) * limit;
+
+    const count = await this.prisma.events.count({ where });
+
+    // If skip is out of range, return an empty array
+    if (offset >= count) {
+      return { items: [], totalItems: count };
+    }
+
+    const events = await this.prisma.events.findMany({
+      skip: offset,
+      take: limit,
+      where,
+      orderBy: {
+        start_date: 'desc',
+      },
+      include: EventRelations,
+    });
+
+    return new Collection<EventObject>({
+      items: events.map(eventMapper),
+      totalItems: count,
+    });
+  }
+
+  async findAllForAnUser({
+    pagination,
+    filters,
+  }: FindEventsForAnUserProps): Promise<Collection<EventObject>> {
+    const where: Prisma.EventsWhereInput = {
+      TitleTextContent: {
+        text: {
+          contains: filters.title,
+          mode: 'insensitive',
+        },
+      },
+      ...(filters.universityId && {
+        OR: [
+          {
+            ConcernedUniversities: {
+              some: {
+                id: filters.universityId,
+              },
+            },
+          },
+          {
+            AuthorUniversity: {
+              id: filters.universityId,
+            },
+          },
+        ],
+      }),
+      ...(filters.allowedLanguages && {
+        OR: filters.allowedLanguages.map((languageList) => ({
+          DiffusionLanguages: {
+            every: {
+              code: {
+                in: languageList,
+              },
+            },
+          },
+        })),
       }),
       status: filters.status,
       type: {

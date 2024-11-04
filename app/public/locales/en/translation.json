@@ -44,9 +44,25 @@
         "languages": "Languages",
         "levels": "Levels",
         "themes": "Themes",
+        "event_type": {
+            "title": "Format",
+            "online": "Online",
+            "presential": "Presential"
+        },
         "apply": "Apply",
         "cancel": "Cancel",
         "is_mine": "My sheets"
+    },
+    "events": {
+        "online": "Online",
+        "open_maps": "Open maps",
+        "subscribe": "Subscribe",
+        "unsubscribe": "Unsubscribe",
+        "join": "Join",
+        "join_online": "Join online",
+        "add_to_calendar": "Add to calendar",
+        "load_more": "See more",
+        "add_to_calendar_success": "ICS file downloaded"
     },
     "news": {
         "list": {
@@ -462,6 +478,10 @@
         "news": {
             "title": "News",
             "see_all": "See all news"
+        },
+        "events": {
+            "title": "Events",
+            "see_all": "See all events"
         }
     },
     "learning": {

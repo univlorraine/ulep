@@ -1,3 +1,7 @@
+.modal {
+    --border-radius: 20px;
+}
+
 .container {
     background: white;
     display: flex;
@@ -5,15 +9,17 @@
     justify-content: center;
     padding: 20px;
     border-radius: 10px;
-    max-height: 80%;
-    min-width: 20%;
     color: black;
+    overflow-y: scroll;
+    height: 100%;
+    width: 100%;
 }
 
 .filterContainer {
     display: flex;
+    height: 100%;
     flex-direction: column;
-    overflow-y: auto;
+    overflow-y: scroll;
 }
 
 .filter {
@@ -49,10 +55,4 @@
     font-weight: 700;
     line-height: 20px;
     text-align: left;
-}
-
-@media (min-width: 768px) {
-    .container {
-        max-width: 50%;
-    }
 }
