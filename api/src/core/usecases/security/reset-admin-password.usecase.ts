@@ -4,9 +4,9 @@ import { ConfigService } from '@nestjs/config';
 import { Env } from 'src/configuration';
 import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
 import {
-  PROFILE_REPOSITORY,
-  ProfileRepository,
-} from 'src/core/ports/profile.repository';
+  UNIVERSITY_REPOSITORY,
+  UniversityRepository,
+} from 'src/core/ports/university.repository';
 
 export class ResetPasswordCommand {
   email: string;
@@ -14,14 +14,14 @@ export class ResetPasswordCommand {
 }
 
 @Injectable()
-export class ResetPasswordUsecase {
-  private readonly logger = new Logger(ResetPasswordUsecase.name);
+export class ResetAdminPasswordUsecase {
+  private readonly logger = new Logger(ResetAdminPasswordUsecase.name);
 
   constructor(
     @Inject(EMAIL_GATEWAY)
     private readonly emailGateway: EmailGateway,
-    @Inject(PROFILE_REPOSITORY)
-    private readonly profileRepository: ProfileRepository,
+    @Inject(UNIVERSITY_REPOSITORY)
+    private readonly universityRepository: UniversityRepository,
     private readonly keycloakClient: KeycloakClient,
     private readonly env: ConfigService<Env, true>,
   ) {}
@@ -34,7 +34,7 @@ export class ResetPasswordUsecase {
     }
 
     const userIsAdmin = await this.keycloakClient.isAdmin(user);
-    if (userIsAdmin) {
+    if (!userIsAdmin) {
       return;
     }
 
@@ -44,7 +44,7 @@ export class ResetPasswordUsecase {
       (credential) => credential.type === 'password',
     );
 
-    const language = await this.getUserLanguage(user.id);
+    const language = await this.getUserLanguage(user);
 
     if (hasPasswordCredentials) {
       await this.sendResetPasswordEmail(user, command.loginUrl, language);
@@ -88,13 +88,18 @@ export class ResetPasswordUsecase {
     }
   }
 
-  private async getUserLanguage(user: string): Promise<string> {
-    const profile = await this.profileRepository.ofUser(user);
+  private async getUserLanguage(user: UserRepresentation): Promise<string> {
+    const defaultLanguage = this.env.get('DEFAULT_TRANSLATION_LANGUAGE');
+    const university = await this.universityRepository.ofId(
+      user.attributes.universityId[0],
+    );
 
-    const language = profile
-      ? profile.nativeLanguage.code
-      : this.env.get('DEFAULT_TRANSLATION_LANGUAGE');
+    if (university) {
+      return university.nativeLanguage.code === defaultLanguage
+        ? defaultLanguage
+        : 'en';
+    }
 
-    return language;
+    return defaultLanguage;
   }
 }
