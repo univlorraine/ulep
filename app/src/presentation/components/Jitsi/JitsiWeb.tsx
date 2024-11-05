@@ -99,7 +99,8 @@ const JitsiWeb = ({ jitsiUrl, language, roomName, jitsiToken }: JitsiProps) => {
                         isHybrid ? history.push('end-session') : history.push('/home', { endSession: true })
                     }
                     getIFrameRef={(iframeRef) => {
-                        iframeRef.style.height = '100%';
+                        const calculatedHeight = window.innerHeight - 80;
+                        iframeRef.style.height = `${calculatedHeight}px`;
                         iframeRef.style.flex = '1';
                     }}
                 />
