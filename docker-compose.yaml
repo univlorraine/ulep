@@ -1,4 +1,4 @@
-version: "3.4"
+version: '3.4'
 
 services:
   api:
@@ -60,16 +60,6 @@ services:
     depends_on:
       - api
     environment:
-      REACT_APP_API_URL: ${REACT_APP_API_URL:-http://0.0.0.0:3002}
-      REACT_APP_KEYCLOAK_URL: ${REACT_APP_KEYCLOAK_URL:-http://0.0.0.0:8080}
-      REACT_APP_KEYCLOAK_REALM: ${REACT_APP_KEYCLOAK_REALM:-etandem}
-      REACT_APP_KEYCLOAK_CLIENT_ID: ${REACT_APP_KEYCLOAK_CLIENT_ID:-react-admin}
-      REACT_APP_KEYCLOAK_CLIENT_SECRET: ${REACT_APP_KEYCLOAK_CLIENT_SECRET:-uKBywX2HlxfvKgxZoKZrbiBSx49CST6W}
-      REACT_APP_SENTRY_DSN: ${ADMIN_SENTRY_DSN:-}
-      REACT_APP_CHAT_URL: ${REACT_APP_CHAT_URL:-http://0.0.0.0:3003}
-      REACT_APP_SOCKET_CHAT_URL: ${REACT_APP_SOCKET_CHAT_URL:-ws://0.0.0.0:5001}
-      REACT_APP_JITSI_DOMAIN: ${REACT_APP_JITSI_DOMAIN:-jitsi.ulep.thestaging.io}
-      REACT_APP_DEFAULT_TRANSLATION_LANGUAGE: ${REACT_APP_DEFAULT_TRANSLATION_LANGUAGE:-FR}
       WDS_SOCKET_PORT: 0
 
   auth:
@@ -127,7 +117,7 @@ services:
   mongo:
     image: mongo:7-jammy
     command:
-      ["mongod", "--replSet", "rs0", "--auth", "--keyFile", "/etc/keyfile.key"]
+      ['mongod', '--replSet', 'rs0', '--auth', '--keyFile', '/etc/keyfile.key']
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-root}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-!ChangeMe!}
@@ -160,7 +150,7 @@ services:
   database:
     image: postgres:${POSTGRES_VERSION:-14}-alpine
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}']
       interval: 5s
       retries: 5
       start_period: 5s
