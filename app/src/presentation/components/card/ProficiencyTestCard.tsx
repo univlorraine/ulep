@@ -67,9 +67,9 @@ const TestedLanguageComponent: React.FC<ProficiencyTestCardProps> = ({ testedLan
 
     return (
         <div className={styles['tested-languages-list']}>
-            <span className={styles.subtitle}>{`${testedLanguages[0].level}  ( ${t(
-                `languages_code.${testedLanguages[0].code}`
-            )} ${codeLanguageToFlag(testedLanguages[0].code)} )`}</span>
+            <span className={styles.subtitle}>{`${testedLanguages[0]?.level}  ( ${t(
+                `languages_code.${testedLanguages[0]?.code}`
+            )} ${codeLanguageToFlag(testedLanguages[0]?.code)} )`}</span>
         </div>
     );
 };
