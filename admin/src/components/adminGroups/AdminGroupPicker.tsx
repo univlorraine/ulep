@@ -18,9 +18,7 @@ const AdminGroupPicker: React.FC<GroupPickerProps> = ({ onChange, value, univers
     if (keycloakGroups.length === 0 || !university) return <>Loading..</>;
 
     const filteredGroups = keycloakGroups.filter(
-        (group) =>
-            (isCentralUniversity(university) || group.name !== AdminGroup.SUPER_ADMIN) &&
-            (!isCentralUniversity(university) || group.name !== AdminGroup.MANAGER)
+        (group) => isCentralUniversity(university) || group.name !== AdminGroup.SUPER_ADMIN
     );
 
     return (
