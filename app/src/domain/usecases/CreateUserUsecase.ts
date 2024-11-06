@@ -117,8 +117,12 @@ class CreateUserUsecase implements CreateUserUsecaseInterface {
                 return new Error('signup_informations_page.error_email_already_exist');
             }
 
-            if (error.statusCode === 400 && error.message === 'Conditions are invalid') {
+            if (error.statusCode === 400 && error.message === 'Domain is invalid') {
                 return new Error('signup_informations_page.error_domain');
+            }
+
+            if (error.statusCode === 400 && error.message === 'Code is invalid') {
+                return new Error('signup_informations_page.error_code');
             }
 
             if (error.statusCode === 400 && error.message === 'User password is not valid') {

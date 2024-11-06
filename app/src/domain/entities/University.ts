@@ -1,5 +1,4 @@
 import Campus from './Campus';
-import Language from './Language';
 
 class University {
     constructor(
@@ -9,6 +8,7 @@ class University {
         public readonly timezone: string,
         public readonly sites: Campus[],
         public readonly hasCode: boolean,
+        public readonly isCodeMandatory: boolean,
         public readonly admissionStart: Date,
         public readonly admissionEnd: Date,
         public readonly openServiceDate: Date,
