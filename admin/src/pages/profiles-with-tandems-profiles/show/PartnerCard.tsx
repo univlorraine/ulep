@@ -1,9 +1,11 @@
-import { Box, Chip, Typography } from '@mui/material';
+import { Box, Chip, Popover, Typography } from '@mui/material';
+import React, { useState } from 'react';
 import { BooleanField, usePermissions, useRefresh, useTranslate } from 'react-admin';
 import CustomAvatar from '../../../components/CustomAvatar';
 import { DisplayLearningType, DisplaySameTandem } from '../../../components/translated';
 import UserStatusChips from '../../../components/UserStatusChips';
 import { LearningLanguage, LearningLanguageWithTandemWithPartnerProfile } from '../../../entities/LearningLanguage';
+import { MatchScore } from '../../../entities/Match';
 import { ProfileWithTandemsProfiles } from '../../../entities/ProfileWithTandemsProfiles';
 import { TandemStatus, TandemWithPartnerLearningLanguage } from '../../../entities/Tandem';
 import { UserStatus } from '../../../entities/User';
@@ -102,7 +104,8 @@ type TandemCardProps = {
     partnerLearningLanguage: LearningLanguage | undefined;
     userProfile: ProfileWithTandemsProfiles;
     userLearningLanguage: LearningLanguageWithTandemWithPartnerProfile;
-    compatibilityScore: number | undefined;
+    compatibilityScores?: MatchScore | undefined;
+    compatibilityScoreTotal: number | undefined;
     hasActiveTandem?: boolean;
     isUserValidationNeeded?: boolean;
     hasTandemWaitingForValidation?: boolean;
@@ -114,7 +117,8 @@ const TandemCard = ({
     partnerLearningLanguage,
     userLearningLanguage,
     userProfile,
-    compatibilityScore,
+    compatibilityScores,
+    compatibilityScoreTotal,
     hasActiveTandem = false,
     isUserValidationNeeded = false,
     hasTandemWaitingForValidation = false,
@@ -123,6 +127,21 @@ const TandemCard = ({
     const translate = useTranslate();
     const refresh = useRefresh();
     const { permissions } = usePermissions();
+    const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+    const [selectedMatchScore, setSelectedMatchScore] = useState<MatchScore | undefined>();
+
+    const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>, matchScore?: MatchScore) => {
+        if (matchScore) {
+            setSelectedMatchScore(matchScore);
+            setAnchorEl(event.currentTarget);
+        }
+    };
+
+    const handlePopoverClose = () => {
+        setAnchorEl(null);
+    };
+
+    const open = Boolean(anchorEl);
 
     return (
         <Box>
@@ -140,7 +159,7 @@ const TandemCard = ({
                 <Box>{translate('learning_languages.show.tandems.globalSuggestions.noResult')}</Box>
             )}
 
-            {partnerLearningLanguage && compatibilityScore && (
+            {partnerLearningLanguage && compatibilityScoreTotal && (
                 <>
                     <div className="line profile-name">
                         <CustomAvatar
@@ -157,7 +176,13 @@ const TandemCard = ({
                             <Typography>{translate('learning_languages.show.fields.score')}</Typography>
                         </span>
                         <span>
-                            <Typography>{(compatibilityScore * 100).toFixed(0)}%</Typography>
+                            <Typography
+                                aria-owns={open ? 'mouse-over-popover' : undefined}
+                                onMouseEnter={(event) => handlePopoverOpen(event, compatibilityScores)}
+                                onMouseLeave={handlePopoverClose}
+                            >
+                                {(compatibilityScoreTotal * 100).toFixed(0)}%
+                            </Typography>
                         </span>
                     </div>
 
@@ -335,6 +360,72 @@ const TandemCard = ({
                         />
                     )}
                 </>
+            )}
+            {compatibilityScores && (
+                <Popover
+                    anchorEl={anchorEl}
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                    }}
+                    id="mouse-over-popover"
+                    onClose={handlePopoverClose}
+                    open={open}
+                    slotProps={{
+                        paper: {
+                            sx: {
+                                borderRadius: 5,
+                                boxShadow: 2,
+                                padding: 1,
+                            },
+                        },
+                    }}
+                    sx={{
+                        pointerEvents: 'none',
+                    }}
+                    transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'left',
+                    }}
+                    disableRestoreFocus
+                >
+                    <Typography sx={{ p: 1 }}>
+                        <strong>Age : </strong>
+                        {selectedMatchScore?.age ? selectedMatchScore.age.toFixed(4) : 0}
+                    </Typography>
+                    <Typography sx={{ p: 1 }}>
+                        <strong>Gender : </strong>
+                        {selectedMatchScore?.gender ? selectedMatchScore.gender.toFixed(4) : 0}
+                    </Typography>
+                    <Typography sx={{ p: 1 }}>
+                        <strong>Goals : </strong>
+                        {selectedMatchScore?.goals ? selectedMatchScore.goals.toFixed(4) : 0}
+                    </Typography>
+                    <Typography sx={{ p: 1 }}>
+                        <strong>Interests : </strong>
+                        {selectedMatchScore?.interests ? selectedMatchScore.interests.toFixed(4) : 0}
+                    </Typography>
+                    <Typography sx={{ p: 1 }}>
+                        <strong>Level : </strong>
+                        {selectedMatchScore?.level.toFixed(4)}
+                    </Typography>
+                    <Typography sx={{ p: 1 }}>
+                        <strong>Status : </strong>
+                        {selectedMatchScore?.status.toFixed(4)}
+                    </Typography>
+                    <Typography sx={{ p: 1 }}>
+                        <strong>Meeting Frequency : </strong>
+                        {selectedMatchScore?.meetingFrequency.toFixed(4)}
+                    </Typography>
+                    <Typography sx={{ p: 1 }}>
+                        <strong>Certificate Option : </strong>
+                        {selectedMatchScore?.certificateOption.toFixed(4)}
+                    </Typography>
+                    <Typography sx={{ p: 1 }}>
+                        <strong>Total : </strong>
+                        {selectedMatchScore?.total}
+                    </Typography>
+                </Popover>
             )}
         </Box>
     );
