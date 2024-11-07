@@ -1,3 +1,4 @@
+import { IonButton } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './AvailabilityModal.module.css';
@@ -35,40 +36,47 @@ const AvailabilityModal: React.FC<AvailabilityModalProps> = ({
                         {title}
                     </span>
 
-                    <button
+                    <IonButton
                         aria-label={t('signup_availabilities_page.UNAVAILABLE') as string}
-                        style={{ backgroundColor: occurrence === 'UNAVAILABLE' ? '#FDEE66' : '#F2F4F7' }}
-                        className={styles['occurence-container']}
+                        fill="clear"
+                        className={`${styles['occurence-container']} ${
+                            occurrence === 'UNAVAILABLE' ? styles.selected : ''
+                        }`}
                         onClick={() => setAvailabilitiesOptions('UNAVAILABLE')}
                     >
                         <p className={styles['occurence-text']}>{t('signup_availabilities_page.UNAVAILABLE')}</p>
-                    </button>
+                    </IonButton>
 
-                    <button
+                    <IonButton
                         aria-label={t('signup_availabilities_page.AVAILABLE') as string}
-                        style={{ backgroundColor: occurrence === 'AVAILABLE' ? '#FDEE66' : '#F2F4F7' }}
-                        className={styles['occurence-container']}
+                        fill="clear"
+                        className={`${styles['occurence-container']} ${
+                            occurrence === 'AVAILABLE' ? styles.selected : ''
+                        }`}
                         onClick={() => setAvailabilitiesOptions('AVAILABLE')}
                     >
                         <p className={styles['occurence-text']}>{t('signup_availabilities_page.AVAILABLE')}</p>
-                    </button>
+                    </IonButton>
 
-                    <button
+                    <IonButton
                         aria-label={t('signup_availabilities_page.VERY_AVAILABLE') as string}
-                        style={{ backgroundColor: occurrence === 'VERY_AVAILABLE' ? '#FDEE66' : '#F2F4F7' }}
-                        className={styles['occurence-container']}
+                        fill="clear"
+                        className={`${styles['occurence-container']} ${
+                            occurrence === 'VERY_AVAILABLE' ? styles.selected : ''
+                        }`}
                         onClick={() => setAvailabilitiesOptions('VERY_AVAILABLE')}
                     >
                         <p className={styles['occurence-text']}>{t('signup_availabilities_page.VERY_AVAILABLE')}</p>
-                    </button>
+                    </IonButton>
 
-                    <button
+                    <IonButton
                         aria-label={t('signup_availabilities_page.modal.validate_button') as string}
-                        className="primary-button margin-top"
+                        className="primary-button margin-top no-padding"
+                        fill="clear"
                         onClick={() => onValidate(occurrence)}
                     >
                         {t('signup_availabilities_page.modal.validate_button')}
-                    </button>
+                    </IonButton>
                 </div>
             </div>
         </Modal>
