@@ -51,6 +51,11 @@
     font-weight: bold;
 }
 
+.secondary-selected-button {
+    background-color: var(--secondary-color);
+    font-weight: bold;
+}
+
 ion-button.confirm {
     --background: #000;
     --background-focused: #000;

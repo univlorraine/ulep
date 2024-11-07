@@ -39,7 +39,7 @@ const QuizzSelectionContent: React.FC<QuizzSelectionContentProps> = ({ onQuizzSe
                                 aria-label={quizz.title}
                                 key={quizz.value}
                                 className={`no-padding ${styles['level-container']} ${
-                                    selectQuizz === quizz.value ? 'primary-selected-button' : ''
+                                    selectQuizz === quizz.value ? 'secondary-selected-button' : ''
                                 }`}
                                 onClick={() => setSelectQuizz(quizz.value)}
                             >
