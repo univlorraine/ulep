@@ -1,3 +1,4 @@
+import { IonButton } from '@ionic/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
@@ -43,30 +44,33 @@ const SignUpFrequencyPage: React.FC = () => {
 
                     {frequencies.map((freq) => {
                         return (
-                            <button
+                            <IonButton
                                 key={freq}
                                 aria-label={t(`signup_frequency_page.${freq}`) as string}
-                                className={frequencyStyle['frequency-container']}
+                                className={`${frequencyStyle['frequency-container']} ${
+                                    freq === frequency ? frequencyStyle.selected : ''
+                                }`}
+                                fill="clear"
                                 onClick={() => setFrequency(freq)}
-                                style={{ background: freq !== frequency ? '#F2F4F7' : '#FDEE66' }}
                             >
                                 <span className={frequencyStyle['frequency-text']}>
                                     {t(`signup_frequency_page.${freq}`)}
                                 </span>
-                            </button>
+                            </IonButton>
                         );
                     })}
                 </div>
                 <div className="extra-large-margin-bottom">
                     <p style={{ textAlign: 'center' }}>{t('signup_frequency_page.required_mention')}</p>
-                    <button
+                    <IonButton
                         aria-label={t('signup_frequency_page.validate_button') as string}
-                        className={`primary-button ${frequency === undefined ? 'disabled' : ''}`}
+                        fill="clear"
+                        className={`primary-button no-padding ${frequency === undefined ? 'disabled' : ''}`}
                         disabled={frequency === undefined}
                         onClick={continueSignUp}
                     >
                         {t('signup_frequency_page.validate_button')}
-                    </button>
+                    </IonButton>
                 </div>
             </div>
         </WebLayoutCentered>
