@@ -127,6 +127,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
             </button>
             <a
                 href={configuration.confidentialityUrl}
+                target="_blank"
                 onClick={browserAdapter.openLinkInBrowser}
                 className={styles['setting-container']}
             >
@@ -135,6 +136,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
             </a>
             <a
                 href={configuration.cguUrl}
+                target="_blank"
                 onClick={browserAdapter.openLinkInBrowser}
                 className={`${styles['setting-container']} large-margin-bottom`}
             >
