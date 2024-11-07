@@ -81,10 +81,15 @@ mc alias set deploy http://$MINIO_HOST:9000 $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
 
 # remove old git clonin
 cd /tmp/
-rm -rf /tmp/locales
 
-# clone the repo
-$GIT_SSH_COMMAND $GIT_SSH_VARIANT git -C /tmp clone --branch develop ssh://git@$GIT_HOST:2222/srv/git/locales.git
+if [ ! -d /tmp/locales ]; then
+     $GIT_SSH_COMMAND $GIT_SSH_VARIANT git -C /tmp clone --branch develop ssh://git@$GIT_HOST:2222/srv/git/locales.git
+else
+     cd /tmp/locales
+     git reset --hard
+     git pull
+fi
+
 
 # wait cloning end
 until [ -f /tmp/locales/fr/api.json ]
