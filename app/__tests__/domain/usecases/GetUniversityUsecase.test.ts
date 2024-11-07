@@ -11,6 +11,7 @@ const httpCallResponse: UniversityCommand = {
         { id: 'id2', name: 'Campus B' },
     ],
     hasCode: true,
+    isCodeMandatory: true,
     parent: undefined,
     timezone: 'timezone',
     website: 'website',
