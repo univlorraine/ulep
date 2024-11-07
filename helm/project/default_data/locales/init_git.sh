@@ -86,8 +86,8 @@ if [ ! -d /tmp/locales ]; then
      $GIT_SSH_COMMAND $GIT_SSH_VARIANT git -C /tmp clone --branch develop ssh://git@$GIT_HOST:2222/srv/git/locales.git
 else
      cd /tmp/locales
-     git reset --hard
-     git pull
+     $GIT_SSH_COMMAND $GIT_SSH_VARIANT git reset --hard
+     $GIT_SSH_COMMAND $GIT_SSH_VARIANT git pull
 fi
 
 
