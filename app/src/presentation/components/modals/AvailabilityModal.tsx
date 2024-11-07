@@ -40,7 +40,7 @@ const AvailabilityModal: React.FC<AvailabilityModalProps> = ({
                         aria-label={t('signup_availabilities_page.UNAVAILABLE') as string}
                         fill="clear"
                         className={`${styles['occurence-container']} ${
-                            occurrence === 'UNAVAILABLE' ? styles.selected : ''
+                            occurrence === 'UNAVAILABLE' ? 'primary-selected-button' : ''
                         }`}
                         onClick={() => setAvailabilitiesOptions('UNAVAILABLE')}
                     >
@@ -51,7 +51,7 @@ const AvailabilityModal: React.FC<AvailabilityModalProps> = ({
                         aria-label={t('signup_availabilities_page.AVAILABLE') as string}
                         fill="clear"
                         className={`${styles['occurence-container']} ${
-                            occurrence === 'AVAILABLE' ? styles.selected : ''
+                            occurrence === 'AVAILABLE' ? 'primary-selected-button' : ''
                         }`}
                         onClick={() => setAvailabilitiesOptions('AVAILABLE')}
                     >
@@ -62,7 +62,7 @@ const AvailabilityModal: React.FC<AvailabilityModalProps> = ({
                         aria-label={t('signup_availabilities_page.VERY_AVAILABLE') as string}
                         fill="clear"
                         className={`${styles['occurence-container']} ${
-                            occurrence === 'VERY_AVAILABLE' ? styles.selected : ''
+                            occurrence === 'VERY_AVAILABLE' ? 'primary-selected-button' : ''
                         }`}
                         onClick={() => setAvailabilitiesOptions('VERY_AVAILABLE')}
                     >
