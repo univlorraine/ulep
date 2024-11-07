@@ -77,6 +77,13 @@ spec:
               value: "https://{{ .Values.socketChatUrl }}.{{ .Values.domain }}"
             - name: REACT_APP_DEFAULT_TRANSLATION_LANGUAGE
               value: "{{ .Values.api.env.defaultTranslationLanguage }}"
+          volumeMounts:
+          - name: "{{ .Values.admin.name }}-env"
+            mountPath: /srv/app/build/config.js
+      volumes:
+      - name: "{{ .Values.admin.name }}-env"
+        configMap:
+          name: "{{ .Values.name }}-env-admin-{{ .Values.admin.name }}"
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
