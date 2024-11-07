@@ -3,10 +3,11 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
 import { AvatarPng, LeftChevronSvg } from '../../../assets';
+import { useConfig } from '../../../context/ConfigurationContext';
+import { isEmailCorrect } from '../../utils';
 import CircleAvatar from '../CircleAvatar';
 import TextInput from '../TextInput';
 import style from './Form.module.css';
-import { useConfig } from '../../../context/ConfigurationContext';
 
 const ForgotPasswordForm = () => {
     const { t } = useTranslation();
@@ -14,10 +15,14 @@ const ForgotPasswordForm = () => {
     const history = useHistory();
     const [email, setEmail] = useState<string>('');
     const [showLoading, hideLoading] = useIonLoading();
+    const [errorMessage, setErrorMessage] = useState<string | undefined>();
     const [showToast] = useIonToast();
 
     const handleForgotPassword = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        if (!isEmailCorrect(email)) {
+            return setErrorMessage(t('forgot_password_page.invalid_email') as string);
+        }
         await showLoading();
         const result = await resetPassword.execute(email);
         if (result instanceof Error) {
@@ -46,12 +51,16 @@ const ForgotPasswordForm = () => {
                         onChange={setEmail}
                         title={t('global.email')}
                         value={email}
-                        type="email"
+                        errorMessage={errorMessage}
                     />
                     <div className={style['bottom-container']}>
-                        <button aria-label={t('forgot_password_page.button') as string} className="primary-button">
+                        <IonButton
+                            fill="clear"
+                            aria-label={t('forgot_password_page.button') as string}
+                            className="primary-button no-padding"
+                        >
                             {t('forgot_password_page.button')}
-                        </button>
+                        </IonButton>
                     </div>
                 </form>
             </IonContent>
