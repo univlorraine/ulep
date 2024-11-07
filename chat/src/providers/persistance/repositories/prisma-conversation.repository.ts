@@ -71,9 +71,11 @@ export class PrismaConversationRepository implements ConversationRepository {
 
         const conversations = await this.prisma.conversation.findMany({
             where: where,
-            orderBy: {
-                lastActivityAt: 'desc',
-            },
+            orderBy: [
+                {
+                    lastActivityAt: 'desc',
+                },
+            ],
             distinct: ['id'],
             include: {
                 Messages: {
