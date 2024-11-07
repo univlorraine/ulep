@@ -107,6 +107,9 @@ const TandemProfile: React.FC<TandemProfileProps> = ({
                 <span className={styles.category}>{t(`global.email`)}</span>
                 <div className={styles['text-container']}>{profile.user.email}</div>
 
+                <span className={styles.category}>{t(`global.frequency.title`)}</span>
+                <div className={styles['text-container']}>{t(`global.frequency.${profile.frequency}`)}</div>
+
                 <span className={styles.category}>{t(`home_page.tandem_validated.goals`)}</span>
                 <div className={styles['text-container']}>
                     <span>{`${t(`home_page.tandem_validated.type.${pedagogy}`)} ( ${level} ) ${codeLanguageToFlag(
