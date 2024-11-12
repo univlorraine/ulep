@@ -58,7 +58,7 @@ const LearningPage = () => {
         setRefresh(!refresh);
         !isHybrid
             ? setDisplayCustomGoalModal({ type: DisplayCustomGoalModalEnum.list })
-            : history.push('/goals', { customLearningGoals });
+            : history.push('/goals', { customLearningGoals, learningLanguageId: currentTandem?.learningLanguage?.id });
     };
 
     const onAddCustomGoalPressed = () => {
