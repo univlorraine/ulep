@@ -23,11 +23,3 @@
     line-height: 20px;
     text-transform: none;
 }
-
-.selected {
-    background-color: var(--primary-color);
-    font-weight: bold;
-    .span {
-        font-weight: bold;
-    }
-}

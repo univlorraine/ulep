@@ -42,12 +42,3 @@
     line-height: 25px;
     padding-bottom: 10px;
 }
-
-.selected {
-    background-color: var(--primary-color);
-    font-weight: bold;
-    text-transform: none;
-    .p {
-        font-weight: bold;
-    }
-}

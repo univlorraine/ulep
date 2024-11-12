@@ -48,7 +48,7 @@ const SignUpFrequencyPage: React.FC = () => {
                                 key={freq}
                                 aria-label={t(`signup_frequency_page.${freq}`) as string}
                                 className={`${frequencyStyle['frequency-container']} ${
-                                    freq === frequency ? frequencyStyle.selected : ''
+                                    freq === frequency ? 'primary-selected-button' : ''
                                 }`}
                                 fill="clear"
                                 onClick={() => setFrequency(freq)}
