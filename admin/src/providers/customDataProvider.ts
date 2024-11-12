@@ -230,11 +230,11 @@ const customDataProvider = {
                 url.search = CountriesQuery(params);
                 break;
             case 'events':
-                url = new URL(`${process.env.REACT_APP_API_URL}/events/admin`);
+                url = new URL(`${window.REACT_APP_API_URL}/events/admin`);
                 url.search = EventsQuery(params);
                 break;
             case 'events/subscriptions':
-                url = new URL(`${process.env.REACT_APP_API_URL}/profiles`);
+                url = new URL(`${window.REACT_APP_API_URL}/profiles`);
                 url.search = ProfilesQuery(params);
                 break;
             case 'profiles':
@@ -530,7 +530,7 @@ const customDataProvider = {
         return response.json();
     },
     unsubscribeToEvent: async (eventId: string, profilesIds: string[]): Promise<void> => {
-        const url = `${process.env.REACT_APP_API_URL}/events/${eventId}/unsubscribe`;
+        const url = `${window.REACT_APP_API_URL}/events/${eventId}/unsubscribe`;
 
         const body = JSON.stringify({
             profilesIds,
@@ -543,7 +543,7 @@ const customDataProvider = {
         }
     },
     subscribeToEvent: async (eventId: string, profilesIds: string[]): Promise<void> => {
-        const url = `${process.env.REACT_APP_API_URL}/events/${eventId}/subscribe`;
+        const url = `${window.REACT_APP_API_URL}/events/${eventId}/subscribe`;
 
         const body = JSON.stringify({
             profilesIds,
@@ -556,7 +556,7 @@ const customDataProvider = {
         }
     },
     sendEventUsersEmail: async (eventId: string, title: string, content: string): Promise<void> => {
-        const url = `${process.env.REACT_APP_API_URL}/events/${eventId}/send-email`;
+        const url = `${window.REACT_APP_API_URL}/events/${eventId}/send-email`;
         const body = JSON.stringify({ title, content });
         const response = await fetch(url, httpClientOptions({ method: 'POST', body }));
 
