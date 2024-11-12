@@ -1,29 +1,43 @@
 import KeyIcon from '@mui/icons-material/Key';
 import LockIcon from '@mui/icons-material/Lock';
-import { Avatar, Button, Card, CardActions, CircularProgress } from '@mui/material';
+import { Avatar, Button, Card, CardActions, CircularProgress, TextField } from '@mui/material';
 import Box from '@mui/material/Box';
 import { useState } from 'react';
-import { Form, required, TextInput, useLogin, useNotify, useTranslate } from 'react-admin';
+import { Form, useLogin, useNotify, useTranslate } from 'react-admin';
 import { ssoLogin } from '../../providers/authProvider';
 import ForgotPassword from './ForgotPassword';
 
 const LoginPage = () => {
     const [loading, setLoading] = useState(false);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const translate = useTranslate();
+    const [loginError, setLoginError] = useState(false);
 
     const notify = useNotify();
     const login = useLogin();
 
-    const handleSubmit = (auth: any) => {
+    const handleSubmit = () => {
         setLoading(true);
-        login(auth).catch((error) => {
+        login({ email, password }).catch((error) => {
             if (error.message === 'Forbidden') {
                 notify(translate('login.domainError'));
             } else {
                 notify(translate('login.loginError'));
             }
+            setLoginError(true);
             setLoading(false);
         });
+    };
+
+    const handleChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setEmail(event.target.value);
+        setLoginError(false);
+    };
+
+    const handleChangePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setPassword(event.target.value);
+        setLoginError(false);
     };
 
     return (
@@ -56,23 +70,28 @@ const LoginPage = () => {
                     </Box>
                     <Box sx={{ padding: '0 1em 1em 1em' }}>
                         <Box sx={{ marginTop: '1em' }}>
-                            <TextInput
+                            <TextField
                                 disabled={loading}
+                                error={loginError}
                                 label={translate('global.email')}
-                                source="email"
-                                validate={required()}
+                                onChange={handleChangeEmail}
+                                type="email"
+                                value={email}
                                 autoFocus
                                 fullWidth
+                                required
                             />
                         </Box>
                         <Box sx={{ marginTop: '1em' }}>
-                            <TextInput
+                            <TextField
                                 disabled={loading}
+                                error={loginError}
                                 label={translate('login.password')}
-                                source="password"
+                                onChange={handleChangePassword}
                                 type="password"
-                                validate={required()}
+                                value={password}
                                 fullWidth
+                                required
                             />
                         </Box>
                     </Box>

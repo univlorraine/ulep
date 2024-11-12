@@ -222,6 +222,14 @@
         "etandem": "Etandem",
         "error": "Error",
         "firstname": "Name",
+        "frequency": {
+            "title": "Frequency of meetings",
+            "ONCE_A_WEEK": "Once a week",
+            "TWICE_A_WEEK": "Two times a week",
+            "THREE_TIMES_A_WEEK": "Three times a week",
+            "TWICE_A_MONTH": "Two times a month",
+            "THREE_TIMES_A_MONTH": "Three times a month"
+        },
         "gender": "Gender",
         "hello": "Hello",
         "lastname": "Last Name",

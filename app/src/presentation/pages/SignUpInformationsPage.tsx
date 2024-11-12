@@ -135,6 +135,10 @@ const SignUpInformationsPage: React.FC = () => {
             return setErrorMessage({ type: 'email', message: t('signup_informations_page.error_email') });
         }
 
+        if (!code && profileSignUp.university?.isCodeMandatory) {
+            return setErrorMessage({ type: 'code', message: t('signup_informations_page.error_code') });
+        }
+
         if (!profileSignUp.university || !profileSignUp.country || !profileSignUp.role) {
             await showToast({ message: t('errors.global'), duration: 1000 });
             return history.push('/signup/');
@@ -167,7 +171,11 @@ const SignUpInformationsPage: React.FC = () => {
 
         if (result instanceof Error) {
             if (result.message === 'signup_informations_page.error_domain') {
-                return setErrorMessage({ type: 'conditions', message: t(result.message) });
+                return setErrorMessage({ type: 'domain', message: t(result.message) });
+            }
+
+            if (result.message === 'signup_informations_page.error_code') {
+                return setErrorMessage({ type: 'code', message: t(result.message) });
             }
 
             if (result.message === 'signup_informations_page.error_password') {
@@ -300,7 +308,7 @@ const SignUpInformationsPage: React.FC = () => {
                 <TextInput
                     autocomplete="email"
                     errorMessage={
-                        errorMessage?.type === 'email' || errorMessage?.type === 'conditions'
+                        errorMessage?.type === 'email' || errorMessage?.type === 'domain'
                             ? errorMessage.message
                             : undefined
                     }
@@ -315,15 +323,13 @@ const SignUpInformationsPage: React.FC = () => {
 
                 {profileSignUp.university?.hasCode && (
                     <TextInput
-                        errorMessage={
-                            errorMessage?.type === 'conditions' ? t('signup_informations_page.error_code') : undefined
-                        }
+                        errorMessage={errorMessage?.type === 'code' ? errorMessage.message : undefined}
                         onChange={setCode}
                         placeholder={t('signup_informations_page.placeholder_code')}
                         title={t('signup_informations_page.code') as string}
                         type="text"
                         value={code}
-                        required={true}
+                        required={profileSignUp.university?.isCodeMandatory}
                     />
                 )}
 

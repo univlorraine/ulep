@@ -1,3 +1,4 @@
+import { IonButton } from '@ionic/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
@@ -36,45 +37,52 @@ const PairingPreferencePage: React.FC = () => {
                 <div>
                     <h1 className="title">{t('pairing_preference_page.title')}</h1>
                     <div className={pairingPreferenceStyles.content}>
-                        <button
+                        <IonButton
                             aria-label={t('pairing_preference_page.same_gender') as string}
-                            className={pairingPreferenceStyles['preference-container']}
-                            style={{ background: sameGender ? configuration.secondaryColor : '#F2F4F7' }}
+                            className={`${pairingPreferenceStyles['preference-container']} ${
+                                sameGender ? 'secondary-selected-button' : ''
+                            }`}
+                            fill="clear"
                             onClick={() => setSameGender(!sameGender)}
                         >
                             <p className={pairingPreferenceStyles['preference-text']}>
                                 {t('pairing_preference_page.same_gender')}
                             </p>
-                        </button>
-                        <button
+                        </IonButton>
+                        <IonButton
                             aria-label={t('pairing_preference_page.same_age') as string}
-                            className={pairingPreferenceStyles['preference-container']}
-                            style={{ background: sameAge ? configuration.secondaryColor : '#F2F4F7' }}
+                            className={`${pairingPreferenceStyles['preference-container']} ${
+                                sameAge ? 'secondary-selected-button' : ''
+                            }`}
+                            fill="clear"
                             onClick={() => setSameAge(!sameAge)}
                         >
                             <p className={pairingPreferenceStyles['preference-text']}>
                                 {t('pairing_preference_page.same_age')}
                             </p>
-                        </button>
-                        <button
+                        </IonButton>
+                        <IonButton
                             aria-label={t('pairing_preference_page.none') as string}
-                            className={pairingPreferenceStyles['preference-container']}
-                            style={{ background: !sameAge && !sameGender ? configuration.secondaryColor : '#F2F4F7' }}
+                            className={`${pairingPreferenceStyles['preference-container']} ${
+                                !sameAge && !sameGender ? 'secondary-selected-button' : ''
+                            }`}
+                            fill="clear"
                             onClick={onNonePressed}
                         >
                             <p className={pairingPreferenceStyles['preference-text']}>
                                 {t('pairing_preference_page.none')}
                             </p>
-                        </button>
+                        </IonButton>
                     </div>
                 </div>
-                <button
+                <IonButton
                     aria-label={t('pairing_preference_page.validate_button') as string}
-                    className="primary-button extra-large-margin-bottom"
+                    fill="clear"
+                    className="primary-button extra-large-margin-bottom no-padding"
                     onClick={onNextStepPressed}
                 >
                     {t('pairing_preference_page.validate_button')}
-                </button>
+                </IonButton>
             </div>
         </WebLayoutCentered>
     );

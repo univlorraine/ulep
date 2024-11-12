@@ -127,6 +127,8 @@ export class UpdateUserUsecase {
           new Tandem({ ...tandem, status: TandemStatus.INACTIVE }),
         );
 
+        await this.deleteConversation(tandem);
+
         if (tandem.status === TandemStatus.ACTIVE) {
           await this.sendTandemCancelledEmails(tandem);
         }
@@ -222,5 +224,9 @@ export class UpdateUserUsecase {
       }
       await this.chatService.createConversation([newContactId, user.id]);
     }
+  }
+
+  private async deleteConversation(tandem: Tandem) {
+    await this.chatService.deleteConversation(tandem.id);
   }
 }

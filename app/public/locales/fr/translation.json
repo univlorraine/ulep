@@ -232,6 +232,14 @@
         "etandem": "Etandem",
         "error": "Erreur",
         "firstname": "Prénom",
+        "frequency": {
+            "title": "Fréquence des rencontres",
+            "ONCE_A_WEEK": "Une fois par semaine",
+            "TWICE_A_WEEK": "Deux fois par semaine",
+            "THREE_TIMES_A_WEEK": "Trois fois par semaine",
+            "TWICE_A_MONTH": "Deux fois par mois",
+            "THREE_TIMES_A_MONTH": "Trois fois par mois"
+        },
         "gender": "Genre",
         "hello": "Bonjour",
         "lastname": "Nom",
