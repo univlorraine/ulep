@@ -36,7 +36,7 @@ const InterestForm: React.FC<InterestFormProps> = ({
                 <Input
                     name="Language"
                     sx={{ mx: 4, my: 2, width: '80px' }}
-                    value={process.env.REACT_APP_DEFAULT_TRANSLATION_LANGUAGE}
+                    value={window.REACT_APP_DEFAULT_TRANSLATION_LANGUAGE}
                     disableUnderline
                 />
                 <Input

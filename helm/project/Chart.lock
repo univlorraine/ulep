@@ -1,10 +1,10 @@
 dependencies:
 - name: postgresql
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: https://charts.bitnami.com/bitnami
   version: 13.2.3
 - name: minio
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 12.8.11
+  repository: https://charts.bitnami.com/bitnami
+  version: 14.7.11
 - name: mongodb
   repository: https://charts.bitnami.com/bitnami
   version: 15.6.2
@@ -14,5 +14,8 @@ dependencies:
 - name: jitsi-meet
   repository: https://jitsi-contrib.github.io/jitsi-helm/
   version: 1.3.8
-digest: sha256:d11e0e96f50fc3528af8076e1111e942fdc690c9ded2485d2621c17eb6c2fe1e
-generated: "2024-06-18T17:29:56.294656+02:00"
+- name: glitchtip
+  repository: https://gitlab.com/api/v4/projects/16325141/packages/helm/stable
+  version: 2.5.1
+digest: sha256:82c828b5ddfd7efb832f048e5cc117ff2c967830409099d7ef505a55e60c713e
+generated: "2024-10-25T14:53:32.166371124+02:00"

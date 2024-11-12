@@ -17,6 +17,14 @@ declare global {
         avatar?: string;
         [key: string]: any;
     }
+    interface Window {
+        REACT_APP_API_URL?: string;
+        REACT_APP_SENTRY_DSN?: string;
+        REACT_APP_CHAT_URL?: string;
+        REACT_APP_SOCKET_CHAT_URL?: string;
+        REACT_APP_JITSI_DOMAIN?: string;
+        REACT_APP_DEFAULT_TRANSLATION_LANGUAGE?: string;
+    }
 }
 
 export {};

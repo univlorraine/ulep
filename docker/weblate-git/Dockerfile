@@ -1,0 +1,1 @@
+FROM rockstorm/git-server

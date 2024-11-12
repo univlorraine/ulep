@@ -1,0 +1,12 @@
+kind: ConfigMap
+metadata:
+  name: "{{ .Values.name }}-env-admin-{{ .Values.admin.name }}"
+apiVersion: v1
+data:
+  config.js: |
+    window.REACT_APP_API_URL = "https://{{ .Values.apiUrl }}.{{ .Values.domain }}";
+    window.REACT_APP_SENTRY_DSN = "{{ .Values.admin.env.sentryDsn }}";
+    window.REACT_APP_CHAT_URL = "https://{{ .Values.chatUrl }}.{{ .Values.domain }}";
+    window.REACT_APP_SOCKET_CHAT_URL = "https://{{ .Values.socketChatUrl }}.{{ .Values.domain }}";
+    window.REACT_APP_JITSI_DOMAIN = "{{ .Values.jitsiUrl }}.{{ .Values.domain }}";
+    window.REACT_APP_DEFAULT_TRANSLATION_LANGUAGE = "{{ .Values.api.env.defaultTranslationLanguage }}";

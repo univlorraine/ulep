@@ -18,3 +18,4 @@ spec:
   selector:
     app.kubernetes.io/name: "{{ include "etandem.name" . }}-{{ .Values.chat.name }}"
     app.kubernetes.io/instance: "{{ .Release.Name }}"
+  sessionAffinity: ClientIP

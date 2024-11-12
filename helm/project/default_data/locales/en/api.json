@@ -1,0 +1,101 @@
+{
+    "export": {
+        "headers": {
+            "learning_request_id": "Request ID",
+            "email": "Email",
+            "firstname": "Firstname",
+            "lastname": "Lastname",
+            "age": "Age",
+            "gender": "Gender",
+            "role": "Role",
+            "status": "Status",
+            "user_deactivated": "Is deactivated",
+            "deactivated_reason": "Deactivation reason",
+            "accepts_email": "Accepts emails",
+            "division": "Division",
+            "diploma": "Diploma",
+            "staff_function": "Function",
+            "user_created_at": "User creation date",
+            "user_last_update": "User last update",
+            "university": "University",
+            "country": "Country",
+            "native_language": "Native language",
+            "mastered_languages": "Mastered languages",
+            "learning_request_created_at": "Request creation date",
+            "learning_request_last_update": "Request last update",
+            "learning_request_language": "Requested language",
+            "learning_request_level": "Requested language level",
+            "learning_request_type": "Learning type",
+            "learning_request_campus": "Campus",
+            "learning_request_same_gender": "Request is same gender",
+            "learning_request_same_age": "Request is same age",
+            "learning_request_certificate_option": "Request with certificate",
+            "learning_request_specific_program": "Request with specific program",
+            "has_associated_tandem": "Has active tandem",
+            "associated_tandem_creation_date": "Tandem creation date",
+            "goals": "Goals",
+            "interests": "Interests",
+            "meeting_frequency": "Meeting frequency",
+            "bio_superpower": "Bio superpower",
+            "bio_favorite_place": "Bio favorite place",
+            "bio_experience": "Bio experience",
+            "bio_anecdote": "Bio anecdote",
+            "monday_availabilities": "Monday availability",
+            "tuesday_availabilities": "Tuesday availability",
+            "wednesday_availabilities": "Wednesday availability",
+            "thursday_availabilities": "Thursday availability",
+            "friday_availabilities": "Friday availability",
+            "saturday_availabilities": "Saturday availability",
+            "sunday_availabilities": "Sunday availability",
+            "availabilities_note": "Availabilities note",
+            "availabilities_note_is_private": "Availabilities note is private",
+            "profile_created_at": "Profile creation date",
+            "profile_last_update": "Profile last update",
+            "is_blacklisted": "Is blacklisted",
+            "suggested_languages": "Languages suggested",
+            "historized_tandems": "Previous tandems",
+            "avatar": "Avatar",
+            "arrayKeys": {
+                "language": "Language",
+                "suggestion_date": "Suggestion date",
+                "historization_date": "Historization date"
+            }
+        },
+        "values": {
+            "true": "Yes",
+            "false": "No",
+            "gender": {
+                "MALE": "Male",
+                "FEMALE": "Female",
+                "OTHER": "Other"
+            },
+            "role": {
+                "STUDENT": "Student",
+                "STAFF": "Staff"
+            },
+            "status": {
+                "ACTIVE": "Active",
+                "BANNED": "Banned",
+                "REPORTED": "Reported",
+                "CANCELED": "Canceled"
+            },
+            "learningType": {
+                "ETANDEM": "E-tandem",
+                "TANDEM": "Tandem",
+                "BOTH": "Both"
+            },
+            "meeting_frequency": {
+                "ONCE_A_WEEK": "Once a week",
+                "TWICE_A_WEEK": "Twice a week",
+                "THREE_TIMES_A_WEEK": "Three times a week",
+                "TWICE_A_MONTH": "Twice a month",
+                "THREE_TIMES_A_MONTH": "Three times a month"
+            },
+            "availabilities": {
+                "UNAVAILABLE": "Unavailable",
+                "AVAILABLE": "Available",
+                "VERY_AVAILABLE": "Very available"
+            }
+        }
+    }
+}

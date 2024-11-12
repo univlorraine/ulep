@@ -1,0 +1,94 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  "{{ .Values.name }}-{{ .Values.git.name }}"
+  labels:
+    {{- include "ulep-weblate.labels" . | nindent 4 }}
+spec:  
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: "{{ .Values.name }}-{{ .Values.git.name }}"
+      app.kubernetes.io/instance: "{{ .Release.Name }}"
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app.kubernetes.io/name: "{{ .Values.name }}-{{ .Values.git.name }}"
+        app.kubernetes.io/instance: "{{ .Release.Name }}"
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "ulep-weblate.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}      
+      containers:
+        - name: git-weblate-{{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.git.image.repository }}:{{ .Values.git.image.tag }}"          
+          command: ["/bin/sh", "-c"]
+          args:
+            - echo starting;
+              apk add sshpass;
+              chmod -R 777 /srv;
+              mkdir -p /home/git/.ssh;
+              touch /home/git/.ssh/authorized_keys;
+              chown git:git /home/git/.ssh;
+              chown git:git /home/git/.ssh/authorized_keys;
+              wget https://dl.min.io/client/mc/release/linux-amd64/mc;
+              chmod +x mc;
+              mv mc /usr/local/bin/;
+              yes y | ssh-keygen -t rsa -N "" -f /home/git/.ssh/id_rsa > /dev/null;
+              chmod 600 /home/git/.ssh/id_rsa;
+              chmod 600 /home/git/.ssh/id_rsa.pub;
+              chown git:git /home/git/.ssh/id_rsa;
+              chown git:git /home/git/.ssh/id_rsa.pub;
+              cat /home/git/.ssh/id_rsa.pub >> /home/git/.ssh/authorized_keys;
+              echo git:${GIT_PASSWORD} | chpasswd;
+              /usr/sbin/sshd -D -e -p 2222;
+          imagePullPolicy: {{ .Values.git.image.pullPolicy }}          
+          ports:
+            - name: http
+              containerPort: 2222
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            - name: SSH_AUTH_METHODS
+              value: "publickey password"            
+            - name: MINIO_HOST
+              value: "{{ .Values.git.env.minioHost }}"
+            - name: MINIO_ACCESS_KEY
+              value: "{{ .Values.git.env.minioAccessKey }}"            
+          envFrom: 
+            - secretRef: 
+                name: "{{ .Values.name }}-secret-{{ .Values.git.name }}"
+          volumeMounts:
+          - name: "{{ .Values.git.name }}-data"
+            mountPath: /srv/git  
+          - name: "git-ssh-keys"
+            mountPath: /home/git/.ssh/
+      volumes:
+      - name: "{{ .Values.git.name }}-data"
+        persistentVolumeClaim:
+          claimName: "{{ .Values.name }}-pvc-{{ .Values.git.name }}"  
+      - name: "git-ssh-keys"
+        persistentVolumeClaim:
+          claimName: "pvc-weblate-git-ssh-keys" 
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

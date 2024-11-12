@@ -13,7 +13,7 @@ if (!element) {
 
 const { ...props } = element.dataset;
 
-const sentryDsn = process.env.REACT_APP_SENTRY_DSN;
+const sentryDsn = window.REACT_APP_SENTRY_DSN;
 if (sentryDsn) {
     Sentry.init({
         dsn: sentryDsn,

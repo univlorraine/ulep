@@ -46,7 +46,7 @@ export const http = async (method: string, path: string, init: Omit<RequestInit,
 const redirectUri = `${window.location.origin}/#/auth-callback`;
 
 export const ssoLogin = () => {
-    window.location.href = `${process.env.REACT_APP_API_URL}/authentication/flow?redirectUri=${encodeURIComponent(
+    window.location.href = `${window.REACT_APP_API_URL}/authentication/flow?redirectUri=${encodeURIComponent(
         redirectUri
     )}`;
 };
@@ -62,7 +62,7 @@ export const refreshAuth = async () => {
 
     if (decoded.exp && decoded.exp < Date.now() / 1000) {
         // This function will fetch the new tokens from the authentication service and update them in localStorage
-        const response = await http('POST', `${process.env.REACT_APP_API_URL}/authentication/refresh-token`, {
+        const response = await http('POST', `${window.REACT_APP_API_URL}/authentication/refresh-token`, {
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: new URLSearchParams({
                 token: refreshToken,
@@ -103,7 +103,7 @@ const authProvider: AuthProvider = {
         const accessToken = jwtManager.getToken('access_token');
         if (accessToken) {
             try {
-                await http('POST', `${process.env.REACT_APP_API_URL}/users/revoke`, {
+                await http('POST', `${window.REACT_APP_API_URL}/users/revoke`, {
                     headers: {
                         'Content-Type': 'application/json',
                         Authorization: `Bearer ${accessToken}`,
@@ -167,7 +167,7 @@ const authProvider: AuthProvider = {
             return Promise.reject(new Error('Fail to decode token'));
         }
 
-        const universitiesRes = await fetch(`${process.env.REACT_APP_API_URL}/universities`, {
+        const universitiesRes = await fetch(`${window.REACT_APP_API_URL}/universities`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`,
             },
@@ -204,7 +204,7 @@ const authProvider: AuthProvider = {
         const code = params.get('code');
 
         if (code) {
-            const response = await http('POST', `${process.env.REACT_APP_API_URL}/authentication/flow/code`, {
+            const response = await http('POST', `${window.REACT_APP_API_URL}/authentication/flow/code`, {
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: new URLSearchParams({
                     code,
