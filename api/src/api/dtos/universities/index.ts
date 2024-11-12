@@ -1,28 +1,28 @@
 import * as Swagger from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import {
-  IsString,
-  IsNotEmpty,
-  IsOptional,
-  IsTimeZone,
-  IsDate,
-  IsUrl,
-  IsArray,
-  IsEmail,
-  Min,
-  Max,
+    IsArray,
+    IsDate,
+    IsEmail,
+    IsNotEmpty,
+    IsOptional,
+    IsString,
+    IsTimeZone,
+    IsUrl,
+    Max,
+    Min,
 } from 'class-validator';
-import { PairingMode, University } from 'src/core/models/university.model';
-import {
-  CreatePartnerUniversityCommand,
-  CreateUniversityCommand,
-  UpdateUniversityCommand,
-} from 'src/core/usecases/university';
-import { IsAfterThan } from 'src/api/validators';
-import { CampusResponse } from '../campus';
+import { AdministratorResponse, MediaObjectResponse } from 'src/api/dtos';
 import { CountryResponse } from 'src/api/dtos/countries';
 import { LanguageResponse } from 'src/api/dtos/languages';
-import { AdministratorResponse, MediaObjectResponse } from 'src/api/dtos';
+import { IsAfterThan } from 'src/api/validators';
+import { PairingMode, University } from 'src/core/models/university.model';
+import {
+    CreatePartnerUniversityCommand,
+    CreateUniversityCommand,
+    UpdateUniversityCommand,
+} from 'src/core/usecases/university';
+import { CampusResponse } from '../campus';
 
 export class CreateUniversityRequest implements CreateUniversityCommand {
   @Swagger.ApiProperty({ type: 'string', isArray: true })
@@ -319,6 +319,10 @@ export class UniversityResponse {
   @Expose({ groups: ['read'] })
   hasCode: boolean;
 
+ @Swagger.ApiProperty({ type: 'boolean' })
+  @Expose({ groups: ['read'] })
+  isCodeMandatory?: boolean;
+
   @Swagger.ApiProperty({ type: 'string', isArray: true })
   @Expose({ groups: ['university:read'] })
   codes: string[];
@@ -384,6 +388,7 @@ export class UniversityResponse {
       admissionStart: university.admissionStart,
       admissionEnd: university.admissionEnd,
       openServiceDate: university.openServiceDate,
+      isCodeMandatory: (university.domains || university.domains?.length === 0) && university.codes?.length > 0,
       closeServiceDate: university.closeServiceDate,
       website: university.website,
       pairingMode: university.pairingMode,

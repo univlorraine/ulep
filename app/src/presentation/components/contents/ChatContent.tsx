@@ -54,7 +54,7 @@ const Content: React.FC<ChatContentProps> = ({
     } = useHandleMessagesFromConversation({
         conversationId: conversation.id,
     });
-    const partner = Conversation.getMainConversationPartner(conversation, profile.id);
+    const partner = Conversation.getMainConversationPartner(conversation, profile.user.id);
     let disconnectInterval: NodeJS.Timeout;
 
     const setSearchMode = () => {

@@ -5,7 +5,6 @@ import {
     FunctionField,
     List,
     Loading,
-    Pagination,
     TextInput,
     minLength,
     useGetIdentity,
@@ -52,8 +51,6 @@ const ChatList = () => {
                         id: identity.id,
                     }}
                     filters={filters}
-                    pagination={<Pagination rowsPerPageOptions={[5]} />}
-                    perPage={5}
                     sx={{
                         flexGrow: 1,
                         transition: (theme: any) =>

@@ -15,6 +15,7 @@
 
 .occurence-container {
     align-items: center;
+    background-color: #f2f4f7;
     display: flex;
     height: 60px;
     justify-content: center;
@@ -27,9 +28,9 @@
     font-family: 'Maven Pro';
     font-size: 16px;
     font-style: normal;
-    font-weight: 500;
     line-height: 20px;
     text-align: center;
+    text-transform: none;
 }
 
 .title {
