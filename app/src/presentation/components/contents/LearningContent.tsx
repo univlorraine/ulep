@@ -1,5 +1,4 @@
 import { IonButton, IonIcon } from '@ionic/react';
-import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 import { useHistory } from 'react-router';
@@ -13,11 +12,10 @@ import ProficiencyTestCard from '../card/ProficiencyTestCard';
 import RessourcesCard from '../card/RessourcesCard';
 import Loader from '../Loader';
 import ActiveTandemCard from '../tandems/ActiveTandemCard';
+import LearningGoalCard from '../tandems/LearningGoalCard';
+import LearningJournalCard from '../tandems/LearningJournalCard';
 import PendingTandemCard from '../tandems/PendingTandemCard';
 import styles from './LearningContent.module.css';
-import LearningJournalCard from '../tandems/LearningJournalCard';
-import LearningGoalCard from '../tandems/LearningGoalCard';
-import { useStoreActions } from '../../../store/storeTypes';
 
 interface LearningContentProps {
     isLoading: boolean;
@@ -29,6 +27,7 @@ interface LearningContentProps {
     onVocabularyListPressed: () => void;
     onActivitiesContentPressed: () => void;
     onShowAllGoalsPressed: () => void;
+    setCurrentTandem: (tandem: Tandem) => void;
 }
 
 const LearningContent: React.FC<LearningContentProps> = ({
@@ -40,11 +39,11 @@ const LearningContent: React.FC<LearningContentProps> = ({
     onValidatedTandemPressed,
     onVocabularyListPressed,
     onActivitiesContentPressed,
+    setCurrentTandem,
     onShowAllGoalsPressed,
 }) => {
     const { t } = useTranslation();
     const history = useHistory();
-    const setCurrentTandem = useStoreActions((actions) => actions.setCurrentTandem);
 
     const openAddLearningLanguagePressed = () => {
         history.push('pairing/languages');
@@ -53,10 +52,6 @@ const LearningContent: React.FC<LearningContentProps> = ({
     const openUniversityInfos = () => {
         console.log('openUniversityInfos');
     };
-
-    if (!currentTandem) {
-        return <Loader />;
-    }
 
     return (
         <div className={`${styles.content} content-wrapper`}>
@@ -69,9 +64,9 @@ const LearningContent: React.FC<LearningContentProps> = ({
                             key={tandem.id}
                             fill="clear"
                             className={`${styles.learningLanguage} ${
-                                tandem.id === currentTandem.id ? styles.selectedLearningLanguage : ''
+                                tandem.id === currentTandem?.id ? styles.selectedLearningLanguage : ''
                             }`}
-                            onClick={() => setCurrentTandem({ tandem })}
+                            onClick={() => setCurrentTandem(tandem)}
                         >
                             <p>{t(`languages_code.${tandem.learningLanguage.code}`)}</p>
                         </IonButton>
@@ -94,7 +89,7 @@ const LearningContent: React.FC<LearningContentProps> = ({
             ) : (
                 <ResponsiveMasonry columnsCountBreakPoints={{ 300: 1, 1024: 2 }}>
                     <Masonry className={styles.masonery} gutter="20px">
-                        {currentTandem.status === 'ACTIVE' && (
+                        {currentTandem && currentTandem.status === 'ACTIVE' && (
                             <>
                                 <ActiveTandemCard
                                     tandem={currentTandem}
@@ -106,9 +101,7 @@ const LearningContent: React.FC<LearningContentProps> = ({
                                 />
                                 {currentTandem.learningLanguage.certificateOption && (
                                     <>
-                                        <LearningJournalCard
-                                            tandem={currentTandem}
-                                        />
+                                        <LearningJournalCard tandem={currentTandem} />
                                         <LearningGoalCard
                                             profile={profile}
                                             customLearningGoals={currentTandem.learningLanguage?.customLearningGoals}
