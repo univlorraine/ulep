@@ -17,7 +17,7 @@ async function updateConversationsWithoutMessages() {
         for (const conversation of conversationsWithoutMessages) {
             await prisma.conversation.update({
                 where: { id: conversation.id },
-                data: { lastActivityAt: null },
+                data: { lastActivityAt: undefined },
             });
         }
 
