@@ -26,20 +26,22 @@ const LanguagePicker: React.FC<LanguagePickerProps> = ({ onChange, value, initia
         }
     }, [initialValue, languages]);
 
-    if (isLoading || !languages || (value === undefined && initialValue)) {
-        return null;
-    }
-
-    const sortedLanguages = useMemo(
-        () =>
-            languages
+    const sortedLanguages = useMemo(() => {
+        if (languages) {
+            return languages
                 .map((language: Language) => ({
                     ...language,
                     label: translate(`languages_code.${language.code}`),
                 }))
-                .sort((a: LanguageWithLabel, b: LanguageWithLabel) => a.label.localeCompare(b.label)),
-        [languages]
-    );
+                .sort((a: LanguageWithLabel, b: LanguageWithLabel) => a.label.localeCompare(b.label));
+        }
+
+        return [];
+    }, [languages]);
+
+    if (isLoading || !languages || (value === undefined && initialValue)) {
+        return null;
+    }
 
     return (
         <FormControl>
