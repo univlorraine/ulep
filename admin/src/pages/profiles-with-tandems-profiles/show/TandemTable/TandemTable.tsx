@@ -22,7 +22,7 @@ import { Profile } from '../../../../entities/Profile';
 import { ProfileWithTandemsProfiles } from '../../../../entities/ProfileWithTandemsProfiles';
 import codeLanguageToFlag from '../../../../utils/codeLanguageToFlag';
 import hasTandemManagementPermission from '../../hasTandemManagementPermission';
-import ProfileLink from '../../ui/ProfileTandemLink';
+import ProfileLink from '../../ui/ProfileLink';
 import { Pagination } from './usePagination';
 
 export interface TandemPartner {
