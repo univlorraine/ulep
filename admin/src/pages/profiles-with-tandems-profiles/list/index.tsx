@@ -33,7 +33,7 @@ import isAgeCriterionMet from '../../../utils/isAgeCriterionMet';
 import hasTandemManagementPermission from '../hasTandemManagementPermission';
 import TandemActions from '../show/Actions/TandemActions';
 import ProfileTandemDetailLink from '../ui/ProfileTandemDetailLink';
-import ProfileWithTandemLink from '../ui/ProfileTandemLink';
+import ProfileTandemLink from '../ui/ProfileTandemLink';
 import useLearningLanguagesStore from '../useLearningLanguagesStore';
 import PairingActions from './PairingActions';
 import SelectedLearningLanguageAction from './SelectedLearningLanguageAction';
@@ -203,7 +203,7 @@ const LearningLanguageList = () => {
                             <>
                                 <Box className="line profile">
                                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                        <ProfileWithTandemLink profile={record} variant="subtitle1" />
+                                        <ProfileTandemLink profile={record} variant="subtitle1" />
                                         <Typography sx={{ color: '#767676' }}>{record.user.university.name}</Typography>
                                     </Box>
                                 </Box>
