@@ -20,13 +20,23 @@ import {
 } from 'src/api/dtos/log-entry';
 import { UpdateCustomLogEntryRequest } from 'src/api/dtos/log-entry/update-custom-log-entry.request';
 import { AuthenticationGuard } from 'src/api/guards';
+import { LogEntryType } from 'src/core/models/log-entry.model';
+import {
+  CreateOrUpdateLogEntryUsecase,
+  GetAllEntriesForUserUsecase,
+  UpdateCustomLogEntryUsecase,
+} from 'src/core/usecases/log-entry';
 
 @Controller('log-entries')
 @Swagger.ApiTags('Log Entries')
 export class LogEntryController {
   logger = new Logger(LogEntryController.name);
 
-  constructor() {}
+  constructor(
+    private readonly createOrUpdateLogEntryUsecase: CreateOrUpdateLogEntryUsecase,
+    private readonly updateCustomLogEntryUsecase: UpdateCustomLogEntryUsecase,
+    private readonly getAllEntriesForUserUsecase: GetAllEntriesForUserUsecase,
+  ) {}
 
   @Get('user/:id')
   @UseGuards(AuthenticationGuard)
@@ -38,7 +48,14 @@ export class LogEntryController {
     @Param('id') id: string,
     @Query() query: GetLogEntriesRequest,
     @CurrentUser() user: KeycloakUser,
-  ) {}
+  ) {
+    return this.getAllEntriesForUserUsecase.execute({
+      id,
+      ownerId: user.sub,
+      page: query.page,
+      limit: query.limit,
+    });
+  }
 
   @Post()
   @UseGuards(AuthenticationGuard)
@@ -47,7 +64,17 @@ export class LogEntryController {
   async createLogEntry(
     @Body() body: CreateCustomLogEntryRequest,
     @CurrentUser() user: KeycloakUser,
-  ) {}
+  ) {
+    const logEntry = await this.createOrUpdateLogEntryUsecase.execute({
+      type: LogEntryType.CUSTOM_ENTRY,
+      metadata: {
+        content: body.content,
+      },
+      ownerId: user.sub,
+    });
+
+    return logEntry;
+  }
 
   @Put(':id')
   @UseGuards(AuthenticationGuard)
@@ -56,5 +83,14 @@ export class LogEntryController {
   async updateLogEntry(
     @Param('id') id: string,
     @Body() body: UpdateCustomLogEntryRequest,
-  ) {}
+    @CurrentUser() user: KeycloakUser,
+  ) {
+    const logEntry = await this.updateCustomLogEntryUsecase.execute({
+      id,
+      content: body.content,
+      ownerId: user.sub,
+    });
+
+    return logEntry;
+  }
 }

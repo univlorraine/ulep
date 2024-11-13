@@ -1,4 +1,4 @@
-import { PrismaService } from '@app/common';
+import { Collection, PrismaService } from '@app/common';
 import { Injectable } from '@nestjs/common';
 import { endOfDay, startOfDay } from 'date-fns';
 import { LogEntry, LogEntryType } from 'src/core/models/log-entry.model';
@@ -13,13 +13,26 @@ import { logEntryMapper } from 'src/providers/persistance/mappers/log-entry.mapp
 export class PrismaLogEntryRepository implements LogEntryRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findAllForUserId(userId: string): Promise<LogEntry[]> {
+  async findAllForUserId(
+    userId: string,
+    page: number,
+    limit: number,
+  ): Promise<Collection<LogEntry>> {
     const logEntries = await this.prisma.logEntry.findMany({
       where: { Owner: { id: userId } },
       orderBy: { created_at: 'asc' },
+      skip: (page - 1) * limit,
+      take: limit,
     });
 
-    return logEntries.map(logEntryMapper);
+    const count = await this.prisma.logEntry.count({
+      where: { Owner: { id: userId } },
+    });
+
+    return {
+      items: logEntries.map(logEntryMapper),
+      totalItems: count,
+    };
   }
   async ofId(id: string): Promise<LogEntry | null> {
     const logEntry = await this.prisma.logEntry.findUnique({

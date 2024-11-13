@@ -8,6 +8,9 @@ import {
   UpdateCampusUsecase,
 } from 'src/core/usecases/campus';
 import { FindAllSuggestedLanguageUsecase } from 'src/core/usecases/language/find-all-suggested-language.usecase';
+import { CreateOrUpdateLogEntryUsecase } from 'src/core/usecases/log-entry';
+import { GetAllEntriesForUserUsecase } from 'src/core/usecases/log-entry/get-all-entries-for-user.usecase';
+import { UpdateCustomLogEntryUsecase } from 'src/core/usecases/log-entry/update-custom-log-entry.usecase';
 import { DeleteObjectiveImageUsecase } from 'src/core/usecases/media/delete-objective-image.usecase';
 import { UploadObjectiveImageUsecase } from 'src/core/usecases/media/upload-objective-image.usecase';
 import { SendMessageNotificationUsecase } from 'src/core/usecases/notifications';
@@ -398,6 +401,10 @@ const usecases: Provider[] = [
   CreateCustomLearningGoalUsecase,
   UpdateCustomLearningGoalUsecase,
   DeleteCustomLearningGoalUsecase,
+  // Log Entry
+  CreateOrUpdateLogEntryUsecase,
+  GetAllEntriesForUserUsecase,
+  UpdateCustomLogEntryUsecase,
 ];
 
 const services: Provider[] = [MatchScorer, CronService];
