@@ -1,17 +1,18 @@
 import { IonContent } from '@ionic/react';
 import { Redirect, useHistory, useLocation } from 'react-router';
+import CustomLearningGoal from '../../../domain/entities/CustomLearningGoal';
 import { useStoreState } from '../../../store/storeTypes';
 import CustomGoalShowContent from '../../components/contents/CustomGoalShowContent';
-import CustomLearningGoal from '../../../domain/entities/CustomLearningGoal';
 
 interface ShowCustomGoalPageProps {
     customLearningGoal: CustomLearningGoal;
+    learningLanguageId: string;
 }
 
 const ShowCustomGoalPage = () => {
     const history = useHistory();
     const location = useLocation<ShowCustomGoalPageProps>();
-    const { customLearningGoal } = location.state;
+    const { customLearningGoal, learningLanguageId } = location.state;
     const profile = useStoreState((state) => state.profile);
 
     if (!profile) {
@@ -19,7 +20,7 @@ const ShowCustomGoalPage = () => {
     }
 
     const goBack = () => {
-        history.push('/goals');
+        history.push('/goals', { learningLanguageId: learningLanguageId });
     };
 
     const onUpdateCustomGoalPressed = (customLearningGoal: CustomLearningGoal) => {
@@ -27,7 +28,7 @@ const ShowCustomGoalPage = () => {
     };
 
     const onShowAllGoalsPressed = (customLearningGoals?: CustomLearningGoal[]) => {
-        history.push('/goals', { customLearningGoals });
+        history.push('/goals', { customLearningGoals, learningLanguageId });
     };
 
     return (

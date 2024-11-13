@@ -1,15 +1,18 @@
 import { IonContent } from '@ionic/react';
 import { Redirect, useHistory, useLocation } from 'react-router';
+import CustomLearningGoal from '../../../domain/entities/CustomLearningGoal';
 import { useStoreState } from '../../../store/storeTypes';
 import GoalsContent from '../../components/contents/GoalsContent';
-import CustomLearningGoal from '../../../domain/entities/CustomLearningGoal';
 
 const GoalsListPage = () => {
     const history = useHistory();
     const profile = useStoreState((state) => state.profile);
-    const learningLanguage = useStoreState((state) => state.currentTandem?.learningLanguage);
-    const location = useLocation<{ customLearningGoals: CustomLearningGoal[] }>();
-    const customLearningGoals = location.state?.customLearningGoals;
+    const location = useLocation<{ customLearningGoals: CustomLearningGoal[]; learningLanguageId: string }>();
+    const { customLearningGoals, learningLanguageId } = location.state;
+
+    const learningLanguage = useStoreState((state) =>
+        state.profile?.learningLanguages.find((learningLanguage) => learningLanguage.id === learningLanguageId)
+    );
 
     if (!profile || !learningLanguage) {
         return <Redirect to="/learning" />;
@@ -20,11 +23,11 @@ const GoalsListPage = () => {
     };
 
     const onAddCustomGoalPressed = () => {
-        history.push('create-custom-goal', { learningLanguageId: learningLanguage?.id });
+        history.push('create-custom-goal', { learningLanguageId });
     };
 
     const onShowCustomGoalPressed = (customLearningGoal: CustomLearningGoal) => {
-        history.push('show-custom-goal', { customLearningGoal });
+        history.push('show-custom-goal', { customLearningGoal, learningLanguageId });
     };
 
     return (
