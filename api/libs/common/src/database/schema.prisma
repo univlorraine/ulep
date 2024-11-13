@@ -193,6 +193,7 @@ model Users {
   SuggestedLanguages SuggestedLanguages[]
   Devices            Device[]
   Contact            Contacts?            @relation(fields: [contact_id], references: [id])
+  LogEntry           LogEntry[]
 
   @@unique([email])
   @@map("users")
@@ -774,4 +775,35 @@ model CustomLearningGoals {
   LearningLanguage LearningLanguages @relation(fields: [learning_language_id], references: [id], onDelete: Cascade)
 
   @@map("learning_goals")
+}
+
+//  * ****************************************************
+//  * Logbook
+//  * ****************************************************
+model LogEntry {
+  id                String @id @default(uuid())
+  type              LogEntryType
+  metadata          Json?
+  user_id           String @unique
+  is_shared         Boolean @default(false)
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+
+  Owner             Users          @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("log_entry")
+}
+
+enum LogEntryType {
+  CONNECTION
+  VISIO
+  TANDEM_CHAT
+  COMMUNITY_CHAT
+  CUSTOM_ENTRY
+  SHARING_LOGS
+  ADD_VOCABULARY
+  SHARE_VOCABULARY
+  EDIT_ACTIVITY
+  SUBMIT_ACTIVITY
+  PLAYED_GAME
 }

@@ -65,6 +65,8 @@ import { PrismaUniversityRepository } from './persistance/repositories/prisma-un
 import { PrismaUserRepository } from './persistance/repositories/prisma-user.repository';
 import { UuidProvider } from './services/uuid.provider';
 import { MinioStorage } from './storage/minio.storage';
+import { LOG_ENTRY_REPOSITORY } from 'src/core/ports/log-entry.repository';
+import { PrismaLogEntryRepository } from 'src/providers/persistance/repositories/prisma-log-entry-repository';
 
 const providers: Provider[] = [
   { provide: INSTANCE_REPOSITORY, useClass: PrismaInstanceRepository },
@@ -192,6 +194,10 @@ const providers: Provider[] = [
     provide: CUSTOM_LEARNING_GOAL_REPOSITORY,
     useClass: PrismaCustomLearningGoalRepository,
   },
+  {
+    provide: LOG_ENTRY_REPOSITORY,
+    useClass: PrismaLogEntryRepository,
+  }
 ];
 
 @Module({
