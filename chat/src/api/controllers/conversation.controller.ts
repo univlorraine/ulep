@@ -31,6 +31,7 @@ import {
     DeleteContactConversationUsecase,
     DeleteConversationUsecase,
     DeleteUserConversationUsecase,
+    ExportMediasFromConversationUsecase,
     GetConversationFromUserIdUsecase,
     GetMessagesFromConversationIdUsecase,
     SearchMessagesIdFromConversationIdUsecase,
@@ -53,6 +54,7 @@ export class ConversationController {
         private getConversationFromUserIdUsecase: GetConversationFromUserIdUsecase,
         private searchMessagesIdFromConversationIdUsecase: SearchMessagesIdFromConversationIdUsecase,
         private uploadMediaUsecase: UploadMediaUsecase,
+        private exportMediasFromConversationUsecase: ExportMediasFromConversationUsecase,
     ) {}
 
     @Get('messages/:id')
@@ -203,5 +205,15 @@ export class ConversationController {
         }
 
         return MessageResponse.from(message);
+    }
+
+    @Get('/:id/export/medias')
+    @Swagger.ApiOperation({ summary: 'Export all medias from conversation id' })
+    async exportMediasFromConversationId(
+        @Param('id') conversationId: string,
+    ): Promise<void> {
+        await this.exportMediasFromConversationUsecase.execute({
+            id: conversationId,
+        });
     }
 }

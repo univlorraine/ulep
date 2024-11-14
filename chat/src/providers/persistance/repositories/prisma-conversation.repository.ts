@@ -2,6 +2,7 @@ import { Collection, PrismaService } from '@app/common';
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { Conversation } from 'src/core/models';
+import { MediaObject } from 'src/core/models/media.model';
 import {
     ConversationPagination,
     ConversationRepository,
