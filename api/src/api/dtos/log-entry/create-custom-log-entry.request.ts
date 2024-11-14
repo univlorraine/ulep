@@ -1,7 +1,31 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { LogEntryType } from 'src/core/models/log-entry.model';
 
 export class CreateCustomLogEntryRequest {
+  // Custom Event
+  @IsString()
+  @IsOptional()
+  content: string;
+
+  // Visio Event
+  @IsNumber()
+  @IsOptional()
+  duration?: number;
+
+  @IsString()
+  @IsOptional()
+  tandemFirstname?: string;
+
+  @IsString()
+  @IsOptional()
+  tandemLastname?: string;
+
+  // Game Event
+  @IsNumber()
+  @IsOptional()
+  percentage?: number;
+
   @IsString()
   @IsNotEmpty()
-  content: string;
+  type: LogEntryType;
 }

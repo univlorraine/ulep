@@ -20,7 +20,6 @@ import {
 } from 'src/api/dtos/log-entry';
 import { UpdateCustomLogEntryRequest } from 'src/api/dtos/log-entry/update-custom-log-entry.request';
 import { AuthenticationGuard } from 'src/api/guards';
-import { LogEntryType } from 'src/core/models/log-entry.model';
 import {
   CreateOrUpdateLogEntryUsecase,
   GetAllEntriesForUserUsecase,
@@ -66,7 +65,7 @@ export class LogEntryController {
     @CurrentUser() user: KeycloakUser,
   ) {
     const logEntry = await this.createOrUpdateLogEntryUsecase.execute({
-      type: LogEntryType.CUSTOM_ENTRY,
+      type: body.type,
       metadata: {
         content: body.content,
       },

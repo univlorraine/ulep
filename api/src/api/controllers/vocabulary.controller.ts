@@ -1,4 +1,5 @@
 import { Collection } from '@app/common';
+import { KeycloakUser } from '@app/keycloak';
 import {
   Body,
   Controller,
@@ -16,6 +17,7 @@ import {
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import * as Swagger from '@nestjs/swagger';
 import { Response } from 'express';
+import { CurrentUser } from 'src/api/decorators';
 import { AuthenticationGuard } from 'src/api/guards';
 import {
   CreateVocabularyListUsecase,
@@ -86,6 +88,7 @@ export class VocabularyController {
   @Swagger.ApiCreatedResponse({ type: () => VocabularyResponse })
   async createVocabulary(
     @Body() body: CreateVocabularyRequest,
+    @CurrentUser() user: KeycloakUser,
     @UploadedFiles()
     files?: {
       wordPronunciation?: Express.Multer.File;
@@ -93,7 +96,10 @@ export class VocabularyController {
     },
   ) {
     //TODO: Add Pipe files validators
-    const vocabulary = await this.createVocabularyUsecase.execute({ ...body });
+    const vocabulary = await this.createVocabularyUsecase.execute({
+      ...body,
+      ownerId: user.sub,
+    });
     const { wordPronunciation, translationPronunciation } = files ?? {};
 
     if (wordPronunciation && wordPronunciation[0]) {
