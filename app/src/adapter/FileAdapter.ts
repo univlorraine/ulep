@@ -40,12 +40,17 @@ class FileAdapter implements FileAdapterInterface {
         if (this.deviceAdapter.isNativePlatform()) {
             const filePath = `${Directory.Documents}/${filename}`;
             const base64Data = await this.convertBlobToBase64(blob);
-            await Filesystem.writeFile({
-                path: filePath,
-                data: base64Data,
-                directory: Directory.Documents,
-                recursive: true,
-            });
+            try {
+                await Filesystem.writeFile({
+                    path: filePath,
+                    data: base64Data,
+                    directory: Directory.Documents,
+                    recursive: true,
+                });
+            } catch (error) {
+                console.error("Erreur lors de l'écriture du fichier:", error);
+                throw error;
+            }
         } else {
             const a = document.createElement('a');
             a.href = url;
@@ -57,10 +62,16 @@ class FileAdapter implements FileAdapterInterface {
         }
     }
 
-    private convertBlobToBase64 = async (blob: Blob): Promise<string> => {
-        const arrayBuffer = await blob.arrayBuffer();
-        const base64String = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
-        return base64String;
+    private convertBlobToBase64 = (blob: Blob): Promise<string> => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const base64String = (reader.result as string).split(',')[1];
+                resolve(base64String);
+            };
+            reader.onerror = reject;
+            reader.readAsDataURL(blob);
+        });
     };
 
     private async createFileFromPickedFile(pickedFile: PickedFile): Promise<File | undefined> {
