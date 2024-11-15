@@ -5,7 +5,7 @@ export class CreateCustomLogEntryRequest {
   // Custom Event
   @IsString()
   @IsOptional()
-  content: string;
+  content?: string;
 
   // Visio Event
   @IsNumber()

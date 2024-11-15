@@ -2,19 +2,23 @@ import { IonContent, useIonToast } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
+import CustomLearningGoal from '../../domain/entities/CustomLearningGoal';
 import Tandem from '../../domain/entities/Tandem';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import LearningContent from '../components/contents/LearningContent';
 import OnlineWebLayout from '../components/layout/OnlineWebLayout';
 import ActivitiesContentModal from '../components/modals/ActivitiesContentModal';
+import GoalsContentModal, {
+    DisplayCustomGoalModal,
+    DisplayCustomGoalModalEnum,
+} from '../components/modals/GoalsContentModal';
+import LearningBookContentModal from '../components/modals/LearningBookContentModal';
 import TandemProfileModal from '../components/modals/TandemProfileModal';
 import TandemStatusModal from '../components/modals/TandemStatusModal';
 import VocabularyContentModal from '../components/modals/VocabularyContentModal';
 import useGetLearningData from '../hooks/useGetLearningData';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../utils';
-import GoalsContentModal, { DisplayCustomGoalModal, DisplayCustomGoalModalEnum } from '../components/modals/GoalsContentModal';
-import CustomLearningGoal from '../../domain/entities/CustomLearningGoal';
 
 const LearningPage = () => {
     const { t } = useTranslation();
@@ -28,6 +32,7 @@ const LearningPage = () => {
     const [displaySelectedTandem, setDisplaySelectedTandem] = useState<Tandem>();
     const [displayActivitiesContent, setDisplayActivitiesContent] = useState<boolean>(false);
     const [displayVocabularyContent, setDisplayVocabularyContent] = useState<boolean>(false);
+    const [displayLearningBookContent, setDisplayLearningBookContent] = useState<boolean>(false);
     const [displayCustomGoalModal, setDisplayCustomGoalModal] = useState<DisplayCustomGoalModal>();
     const profile = useStoreState((state) => state.profile);
     const { tandems, error, isLoading } = useGetLearningData(refresh);
@@ -49,17 +54,22 @@ const LearningPage = () => {
     const onVocabularyContentPressed = () =>
         !isHybrid ? setDisplayVocabularyContent(true) : history.push('/vocabularies');
 
+    const onLearningBookContentPressed = () =>
+        !isHybrid ? setDisplayLearningBookContent(true) : history.push('/learning-book');
+
     const onActivitiesContentPressed = () =>
         !isHybrid ? setDisplayActivitiesContent(true) : history.push('/activities');
 
     const onShowAllGoalsPressed = (customLearningGoals?: CustomLearningGoal[]) => {
         setRefresh(!refresh);
-        !isHybrid ? setDisplayCustomGoalModal({ type: DisplayCustomGoalModalEnum.list }) : history.push('/goals', { customLearningGoals });
+        !isHybrid
+            ? setDisplayCustomGoalModal({ type: DisplayCustomGoalModalEnum.list })
+            : history.push('/goals', { customLearningGoals });
     };
 
     const onAddCustomGoalPressed = () => {
         setDisplayCustomGoalModal({
-            type: DisplayCustomGoalModalEnum.form
+            type: DisplayCustomGoalModalEnum.form,
         });
     };
 
@@ -92,6 +102,7 @@ const LearningPage = () => {
                     onValidatedTandemPressed={onValidatedTandemPressed}
                     onVocabularyListPressed={onVocabularyContentPressed}
                     onActivitiesContentPressed={onActivitiesContentPressed}
+                    onLearningBookContentPressed={onLearningBookContentPressed}
                     onShowAllGoalsPressed={onShowAllGoalsPressed}
                 />
             </IonContent>
@@ -110,6 +121,7 @@ const LearningPage = () => {
                     onValidatedTandemPressed={onValidatedTandemPressed}
                     onVocabularyListPressed={onVocabularyContentPressed}
                     onActivitiesContentPressed={onActivitiesContentPressed}
+                    onLearningBookContentPressed={onLearningBookContentPressed}
                     onShowAllGoalsPressed={onShowAllGoalsPressed}
                 />
             </OnlineWebLayout>
@@ -137,6 +149,11 @@ const LearningPage = () => {
             <ActivitiesContentModal
                 isVisible={displayActivitiesContent}
                 onClose={() => setDisplayActivitiesContent(false)}
+                profile={profile}
+            />
+            <LearningBookContentModal
+                isVisible={displayLearningBookContent}
+                onClose={() => setDisplayLearningBookContent(false)}
                 profile={profile}
             />
             <VocabularyContentModal

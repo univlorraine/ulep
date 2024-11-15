@@ -785,8 +785,7 @@ model LogEntry {
   id                String @id @default(uuid())
   type              LogEntryType
   metadata          Json?
-  user_id           String @unique
-  is_shared         Boolean @default(false)
+  user_id           String
   created_at        DateTime @default(now())
   updated_at        DateTime @updatedAt
 

@@ -20,7 +20,7 @@ export class PrismaLogEntryRepository implements LogEntryRepository {
   ): Promise<Collection<LogEntry>> {
     const logEntries = await this.prisma.logEntry.findMany({
       where: { Owner: { id: userId } },
-      orderBy: { created_at: 'asc' },
+      orderBy: { created_at: 'desc' },
       skip: (page - 1) * limit,
       take: limit,
     });

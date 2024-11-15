@@ -50,6 +50,9 @@ import GetQuizzByLevelUsecase from '../domain/usecases/GetQuizzByLevelUsecase';
 import GetUniversityLanguagesUsecase from '../domain/usecases/GetUniversityLanguagesUsecase';
 import GetUniversityUsecase from '../domain/usecases/GetUniversityUsecase';
 import GetUserUsecase from '../domain/usecases/GetUserUsecase';
+import CreateLogEntryUsecase from '../domain/usecases/log-entries/CreateLogEntryUsecase';
+import GetLogEntriesUsecase from '../domain/usecases/log-entries/GetLogEntriesUsecase';
+import UpdateCustomLogEntryUsecase from '../domain/usecases/log-entries/UpdateCustomLogEntryUsecase';
 import LoginUsecase from '../domain/usecases/LoginUsecase';
 import GetAllNewsUsecase from '../domain/usecases/news/GetAllNewsUsecase';
 import RefreshTokensUsecase from '../domain/usecases/RefreshTokensUsecase';
@@ -217,6 +220,11 @@ const getConfigContextValue = ({
     const updateCustomLearningGoal = new UpdateCustomLearningGoalUsecase(domainHttpAdapter);
     const deleteCustomLearningGoal = new DeleteCustomLearningGoalUsecase(domainHttpAdapter);
 
+    // Log entries
+    const createLogEntry = new CreateLogEntryUsecase(domainHttpAdapter);
+    const updateCustomLogEntry = new UpdateCustomLogEntryUsecase(domainHttpAdapter);
+    const getLogEntries = new GetLogEntriesUsecase(domainHttpAdapter);
+
     return {
         accessToken,
         addDevice,
@@ -298,6 +306,9 @@ const getConfigContextValue = ({
         createCustomLearningGoal,
         updateCustomLearningGoal,
         deleteCustomLearningGoal,
+        createLogEntry,
+        updateCustomLogEntry,
+        getLogEntries,
     };
 };
 

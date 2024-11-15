@@ -108,7 +108,9 @@ export class LogEntryResponse {
       id: logEntry.id,
       type: logEntry.type,
       createdAt: logEntry.createdAt,
-      metadata: LogEntryMetadataResponse.from(this.getMetadata(logEntry)),
+      metadata: LogEntryMetadataResponse.from(
+        LogEntryResponse.getMetadata(logEntry),
+      ),
     });
   }
 

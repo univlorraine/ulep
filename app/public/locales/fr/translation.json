@@ -83,6 +83,16 @@
     "credit": {
         "title": "Auteur du fichier"
     },
+    "learning_book": {
+        "list": {
+            "title": "Journal d'apprentissage"
+        },
+        "entry": {
+            "connection": {
+                "title": "Première connexion de la journée !"
+            }
+        }
+    },
     "activity": {
         "title": "Fiche d'activité",
         "status": {

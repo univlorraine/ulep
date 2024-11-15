@@ -14,6 +14,10 @@ const Store = createStore<TokenStoreTypes>(
             refreshToken: '',
             refreshReports: false,
             currentTandem: undefined,
+            lastConnection: undefined,
+            setLastConnection: action((state, payload) => {
+                state.lastConnection = payload.lastConnection;
+            }),
             setRefreshReports: action((state) => {
                 state.refreshReports = !state.refreshReports;
             }),

@@ -1,0 +1,7 @@
+.modal {
+    --height: 100%;
+    justify-content: flex-end;
+    .content {
+        overflow-y: scroll;
+    }
+}

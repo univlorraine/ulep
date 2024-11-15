@@ -7,9 +7,9 @@ import LearningLanguage from '../domain/entities/LearningLanguage';
 import MediaObject from '../domain/entities/MediaObject';
 import Profile from '../domain/entities/Profile';
 import ProfileSignUp, { Availabilites, BiographySignUp } from '../domain/entities/ProfileSignUp';
+import Tandem from '../domain/entities/Tandem';
 import University from '../domain/entities/University';
 import User from '../domain/entities/User';
-import Tandem from '../domain/entities/Tandem';
 
 export interface TokenStorePayload {
     accessToken: string;
@@ -71,6 +71,10 @@ interface TandemStorePayload {
     tandem: Tandem;
 }
 
+interface LastConnectionStorePayload {
+    lastConnection: Date;
+}
+
 interface UpdateProfile {
     acceptsEmail?: boolean;
     avatar?: MediaObject;
@@ -90,6 +94,7 @@ interface StoreInterface {
     socketChatUrl: string;
     jitsiUrl: string;
     language: string;
+    lastConnection: Date | undefined;
     logout: Action<StoreInterface>;
     refreshToken: string;
     refreshReports: boolean;
@@ -99,6 +104,7 @@ interface StoreInterface {
     setProfile: Action<StoreInterface, ProfileStorePayload>;
     setTokens: Action<StoreInterface, TokenStorePayload>;
     setUser: Action<StoreInterface, UserStorePayload>;
+    setLastConnection: Action<StoreInterface, LastConnectionStorePayload>;
     profile: Profile | undefined;
     profileSignUp: ProfileSignUp;
     updateProfile: Action<StoreInterface, UpdateProfile>;

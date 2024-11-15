@@ -45,14 +45,12 @@ export const logEntryMapper = (snapshot: LogEntrySnapshot): LogEntry => {
         id: snapshot.id,
         type: LogEntryType.CONNECTION,
         createdAt: snapshot.created_at,
-        isShared: snapshot.is_shared,
       });
     case LogEntryType.VISIO:
       return new LogEntryVisio({
         id: snapshot.id,
         type: LogEntryType.VISIO,
         createdAt: snapshot.created_at,
-        isShared: snapshot.is_shared,
         duration: data.duration,
         tandemFirstname: data.tandemFirstname,
         tandemLastname: data.tandemLastname,
@@ -62,7 +60,6 @@ export const logEntryMapper = (snapshot: LogEntrySnapshot): LogEntry => {
         id: snapshot.id,
         type: LogEntryType.TANDEM_CHAT,
         createdAt: snapshot.created_at,
-        isShared: snapshot.is_shared,
         duration: data.duration,
         tandemFirstname: data.tandemFirstname,
         tandemLastname: data.tandemLastname,
@@ -73,7 +70,6 @@ export const logEntryMapper = (snapshot: LogEntrySnapshot): LogEntry => {
         id: snapshot.id,
         type: LogEntryType.COMMUNITY_CHAT,
         createdAt: snapshot.created_at,
-        isShared: snapshot.is_shared,
         conversationId: data.conversationId,
       });
     case LogEntryType.CUSTOM_ENTRY:
@@ -81,7 +77,6 @@ export const logEntryMapper = (snapshot: LogEntrySnapshot): LogEntry => {
         id: snapshot.id,
         type: LogEntryType.CUSTOM_ENTRY,
         createdAt: snapshot.created_at,
-        isShared: snapshot.is_shared,
         content: data.content,
       });
     case LogEntryType.PLAYED_GAME:
@@ -89,7 +84,6 @@ export const logEntryMapper = (snapshot: LogEntrySnapshot): LogEntry => {
         id: snapshot.id,
         type: LogEntryType.PLAYED_GAME,
         createdAt: snapshot.created_at,
-        isShared: snapshot.is_shared,
         percentage: data.percentage,
       });
     case LogEntryType.SHARING_LOGS:
@@ -97,14 +91,12 @@ export const logEntryMapper = (snapshot: LogEntrySnapshot): LogEntry => {
         id: snapshot.id,
         type: LogEntryType.SHARING_LOGS,
         createdAt: snapshot.created_at,
-        isShared: snapshot.is_shared,
       });
     case LogEntryType.SUBMIT_ACTIVITY:
       return new LogEntrySubmitActivity({
         id: snapshot.id,
         type: LogEntryType.SUBMIT_ACTIVITY,
         createdAt: snapshot.created_at,
-        isShared: snapshot.is_shared,
         activityId: data.activityId,
         updatedCount: data.updatedCount,
       });
@@ -113,7 +105,6 @@ export const logEntryMapper = (snapshot: LogEntrySnapshot): LogEntry => {
         id: snapshot.id,
         type: LogEntryType.EDIT_ACTIVITY,
         createdAt: snapshot.created_at,
-        isShared: snapshot.is_shared,
         activityId: data.activityId,
         updatedCount: data.updatedCount,
       });
@@ -122,7 +113,6 @@ export const logEntryMapper = (snapshot: LogEntrySnapshot): LogEntry => {
         id: snapshot.id,
         type: LogEntryType.ADD_VOCABULARY,
         createdAt: snapshot.created_at,
-        isShared: snapshot.is_shared,
         vocabularyListName: data.vocabularyListName,
         vocabularyListId: data.vocabularyListId,
         entryNumber: data.entryNumber,
@@ -132,7 +122,6 @@ export const logEntryMapper = (snapshot: LogEntrySnapshot): LogEntry => {
         id: snapshot.id,
         type: LogEntryType.SHARE_VOCABULARY,
         createdAt: snapshot.created_at,
-        isShared: snapshot.is_shared,
         vocabularyListId: data.vocabularyListId,
         vocabularyListName: data.vocabularyListName,
       });

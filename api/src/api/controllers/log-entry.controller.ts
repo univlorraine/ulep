@@ -48,11 +48,16 @@ export class LogEntryController {
     @Query() query: GetLogEntriesRequest,
     @CurrentUser() user: KeycloakUser,
   ) {
-    return this.getAllEntriesForUserUsecase.execute({
+    const entries = await this.getAllEntriesForUserUsecase.execute({
       id,
       ownerId: user.sub,
       page: query.page,
       limit: query.limit,
+    });
+
+    return new Collection({
+      items: entries.items.map(LogEntryResponse.from),
+      totalItems: entries.totalItems,
     });
   }
 
@@ -72,7 +77,7 @@ export class LogEntryController {
       ownerId: user.sub,
     });
 
-    return logEntry;
+    if (logEntry) return LogEntryResponse.from(logEntry);
   }
 
   @Put(':id')
@@ -90,6 +95,6 @@ export class LogEntryController {
       ownerId: user.sub,
     });
 
-    return logEntry;
+    return LogEntryResponse.from(logEntry);
   }
 }

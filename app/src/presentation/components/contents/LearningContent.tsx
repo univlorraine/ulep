@@ -1,11 +1,11 @@
 import { IonButton, IonIcon } from '@ionic/react';
-import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 import { useHistory } from 'react-router';
 import { AddSvg } from '../../../assets';
 import Profile from '../../../domain/entities/Profile';
 import Tandem from '../../../domain/entities/Tandem';
+import { useStoreActions } from '../../../store/storeTypes';
 import { learningLanguagesToTestedLanguages } from '../../utils';
 import CreateLearningLanguageCard from '../card/CreateLearningLanguageCard';
 import PartnerUniversityCard from '../card/PartnerUniversityCard';
@@ -13,11 +13,10 @@ import ProficiencyTestCard from '../card/ProficiencyTestCard';
 import RessourcesCard from '../card/RessourcesCard';
 import Loader from '../Loader';
 import ActiveTandemCard from '../tandems/ActiveTandemCard';
+import LearningGoalCard from '../tandems/LearningGoalCard';
+import LearningJournalCard from '../tandems/LearningJournalCard';
 import PendingTandemCard from '../tandems/PendingTandemCard';
 import styles from './LearningContent.module.css';
-import LearningJournalCard from '../tandems/LearningJournalCard';
-import LearningGoalCard from '../tandems/LearningGoalCard';
-import { useStoreActions } from '../../../store/storeTypes';
 
 interface LearningContentProps {
     isLoading: boolean;
@@ -29,6 +28,7 @@ interface LearningContentProps {
     onVocabularyListPressed: () => void;
     onActivitiesContentPressed: () => void;
     onShowAllGoalsPressed: () => void;
+    onLearningBookContentPressed: () => void;
 }
 
 const LearningContent: React.FC<LearningContentProps> = ({
@@ -41,6 +41,7 @@ const LearningContent: React.FC<LearningContentProps> = ({
     onVocabularyListPressed,
     onActivitiesContentPressed,
     onShowAllGoalsPressed,
+    onLearningBookContentPressed,
 }) => {
     const { t } = useTranslation();
     const history = useHistory();
@@ -106,9 +107,7 @@ const LearningContent: React.FC<LearningContentProps> = ({
                                 />
                                 {currentTandem.learningLanguage.certificateOption && (
                                     <>
-                                        <LearningJournalCard
-                                            tandem={currentTandem}
-                                        />
+                                        <LearningJournalCard tandem={currentTandem} />
                                         <LearningGoalCard
                                             profile={profile}
                                             customLearningGoals={currentTandem.learningLanguage?.customLearningGoals}
@@ -119,7 +118,7 @@ const LearningContent: React.FC<LearningContentProps> = ({
                             </>
                         )}
                         <RessourcesCard
-                            onLearningJournalPressed={() => console.log('onLearningJournalPressed')}
+                            onLearningBookPressed={onLearningBookContentPressed}
                             onVocabularyPressed={onVocabularyListPressed}
                             onActivityPressed={onActivitiesContentPressed}
                             onGamePressed={() => console.log('onGamePressed')}
