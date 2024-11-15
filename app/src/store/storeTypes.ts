@@ -7,7 +7,6 @@ import LearningLanguage from '../domain/entities/LearningLanguage';
 import MediaObject from '../domain/entities/MediaObject';
 import Profile from '../domain/entities/Profile';
 import ProfileSignUp, { Availabilites, BiographySignUp } from '../domain/entities/ProfileSignUp';
-import Tandem from '../domain/entities/Tandem';
 import University from '../domain/entities/University';
 import User from '../domain/entities/User';
 
@@ -67,10 +66,6 @@ interface ProfileStorePayload {
     profile: Profile;
 }
 
-interface TandemStorePayload {
-    tandem: Tandem;
-}
-
 interface LastConnectionStorePayload {
     lastConnection: Date;
 }
@@ -110,8 +105,6 @@ interface StoreInterface {
     updateProfile: Action<StoreInterface, UpdateProfile>;
     updateProfileSignUp: Action<StoreInterface, SignUpStorePayload>;
     user: User | undefined;
-    currentTandem: Tandem | undefined;
-    setCurrentTandem: Action<StoreInterface, TandemStorePayload>;
 }
 
 const typedHooks = createTypedHooks<StoreInterface>();

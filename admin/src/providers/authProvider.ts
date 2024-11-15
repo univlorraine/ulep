@@ -78,7 +78,7 @@ export const refreshAuth = async () => {
 
 const authProvider: AuthProvider = {
     async login({ email, password }: { email: string; password: string }) {
-        const response = await http('POST', `${process.env.REACT_APP_API_URL}/authentication/token/admin`, {
+        const response = await http('POST', `${window.REACT_APP_API_URL}/authentication/token/admin`, {
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: new URLSearchParams({
                 email,

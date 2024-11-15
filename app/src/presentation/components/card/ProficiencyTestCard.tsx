@@ -28,7 +28,7 @@ const ProficiencyTestCard: React.FC<ProficiencyTestCardProps> = ({ testedLanguag
                     <div className={styles['container-image']}>
                         <img alt="" className={styles.image} src={AdvicePng} aria-hidden={true} />
                     </div>
-                    <TestedLanguageComponent testedLanguages={testedLanguages} />
+                    {testedLanguages.length > 0 && <TestedLanguageComponent testedLanguages={testedLanguages} />}
                 </div>
                 {isHybrid && (
                     <div className={styles['card-button']}>

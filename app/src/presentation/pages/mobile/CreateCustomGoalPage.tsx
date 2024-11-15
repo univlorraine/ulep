@@ -1,8 +1,8 @@
 import { IonContent } from '@ionic/react';
 import { Redirect, useHistory, useLocation } from 'react-router';
+import CustomLearningGoal from '../../../domain/entities/CustomLearningGoal';
 import { useStoreState } from '../../../store/storeTypes';
 import CustomGoalFormContent from '../../components/contents/CustomGoalFormContent';
-import CustomLearningGoal from '../../../domain/entities/CustomLearningGoal';
 
 interface CreateSessionPageProps {
     learningLanguageId: string;
@@ -19,11 +19,11 @@ const CreateCustomGoalPage = () => {
     }
 
     const goBack = () => {
-        history.push('/goals');
+        history.push('/goals', { learningLanguageId });
     };
 
     const onShowAllGoalsPressed = (customLearningGoals: CustomLearningGoal[]) => {
-        history.push('/goals', { customLearningGoals });
+        history.push('/goals', { customLearningGoals, learningLanguageId });
     };
 
     return (

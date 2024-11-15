@@ -5,7 +5,6 @@ import { useHistory } from 'react-router';
 import { AddSvg } from '../../../assets';
 import Profile from '../../../domain/entities/Profile';
 import Tandem from '../../../domain/entities/Tandem';
-import { useStoreActions } from '../../../store/storeTypes';
 import { learningLanguagesToTestedLanguages } from '../../utils';
 import CreateLearningLanguageCard from '../card/CreateLearningLanguageCard';
 import PartnerUniversityCard from '../card/PartnerUniversityCard';
@@ -29,6 +28,7 @@ interface LearningContentProps {
     onActivitiesContentPressed: () => void;
     onShowAllGoalsPressed: () => void;
     onLearningBookContentPressed: () => void;
+    setCurrentTandem: (tandem: Tandem) => void;
 }
 
 const LearningContent: React.FC<LearningContentProps> = ({
@@ -40,12 +40,12 @@ const LearningContent: React.FC<LearningContentProps> = ({
     onValidatedTandemPressed,
     onVocabularyListPressed,
     onActivitiesContentPressed,
+    setCurrentTandem,
     onShowAllGoalsPressed,
     onLearningBookContentPressed,
 }) => {
     const { t } = useTranslation();
     const history = useHistory();
-    const setCurrentTandem = useStoreActions((actions) => actions.setCurrentTandem);
 
     const openAddLearningLanguagePressed = () => {
         history.push('pairing/languages');
@@ -54,10 +54,6 @@ const LearningContent: React.FC<LearningContentProps> = ({
     const openUniversityInfos = () => {
         console.log('openUniversityInfos');
     };
-
-    if (!currentTandem) {
-        return <Loader />;
-    }
 
     return (
         <div className={`${styles.content} content-wrapper`}>
@@ -70,9 +66,9 @@ const LearningContent: React.FC<LearningContentProps> = ({
                             key={tandem.id}
                             fill="clear"
                             className={`${styles.learningLanguage} ${
-                                tandem.id === currentTandem.id ? styles.selectedLearningLanguage : ''
+                                tandem.id === currentTandem?.id ? styles.selectedLearningLanguage : ''
                             }`}
-                            onClick={() => setCurrentTandem({ tandem })}
+                            onClick={() => setCurrentTandem(tandem)}
                         >
                             <p>{t(`languages_code.${tandem.learningLanguage.code}`)}</p>
                         </IonButton>
@@ -95,7 +91,7 @@ const LearningContent: React.FC<LearningContentProps> = ({
             ) : (
                 <ResponsiveMasonry columnsCountBreakPoints={{ 300: 1, 1024: 2 }}>
                     <Masonry className={styles.masonery} gutter="20px">
-                        {currentTandem.status === 'ACTIVE' && (
+                        {currentTandem && currentTandem.status === 'ACTIVE' && (
                             <>
                                 <ActiveTandemCard
                                     tandem={currentTandem}

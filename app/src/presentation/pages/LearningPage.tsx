@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
 import CustomLearningGoal from '../../domain/entities/CustomLearningGoal';
 import Tandem from '../../domain/entities/Tandem';
-import { useStoreActions, useStoreState } from '../../store/storeTypes';
+import { useStoreState } from '../../store/storeTypes';
 import LearningContent from '../components/contents/LearningContent';
 import OnlineWebLayout from '../components/layout/OnlineWebLayout';
 import ActivitiesContentModal from '../components/modals/ActivitiesContentModal';
@@ -27,8 +27,7 @@ const LearningPage = () => {
     const { width } = useWindowDimensions();
     const isHybrid = width < HYBRID_MAX_WIDTH;
     const [refresh, setRefresh] = useState<boolean>(false);
-    const setCurrentTandem = useStoreActions((actions) => actions.setCurrentTandem);
-    const currentTandem = useStoreState((state) => state.currentTandem);
+    const [currentTandem, setCurrentTandem] = useState<Tandem>();
     const [displaySelectedTandem, setDisplaySelectedTandem] = useState<Tandem>();
     const [displayActivitiesContent, setDisplayActivitiesContent] = useState<boolean>(false);
     const [displayVocabularyContent, setDisplayVocabularyContent] = useState<boolean>(false);
@@ -41,7 +40,7 @@ const LearningPage = () => {
         if (tandems.length > 0) {
             const refreshedCurrentTandem = currentTandem && tandems.find((tandem) => tandem.id === currentTandem.id);
             const tandem = refreshedCurrentTandem ?? tandems[0];
-            setCurrentTandem({ tandem });
+            setCurrentTandem(tandem);
         }
     }, [tandems, currentTandem]);
 
@@ -64,7 +63,7 @@ const LearningPage = () => {
         setRefresh(!refresh);
         !isHybrid
             ? setDisplayCustomGoalModal({ type: DisplayCustomGoalModalEnum.list })
-            : history.push('/goals', { customLearningGoals });
+            : history.push('/goals', { customLearningGoals, learningLanguageId: currentTandem?.learningLanguage?.id });
     };
 
     const onAddCustomGoalPressed = () => {
@@ -104,6 +103,7 @@ const LearningPage = () => {
                     onActivitiesContentPressed={onActivitiesContentPressed}
                     onLearningBookContentPressed={onLearningBookContentPressed}
                     onShowAllGoalsPressed={onShowAllGoalsPressed}
+                    setCurrentTandem={setCurrentTandem}
                 />
             </IonContent>
         );
@@ -123,6 +123,7 @@ const LearningPage = () => {
                     onActivitiesContentPressed={onActivitiesContentPressed}
                     onLearningBookContentPressed={onLearningBookContentPressed}
                     onShowAllGoalsPressed={onShowAllGoalsPressed}
+                    setCurrentTandem={setCurrentTandem}
                 />
             </OnlineWebLayout>
             <TandemStatusModal

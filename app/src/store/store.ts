@@ -13,16 +13,12 @@ const Store = createStore<TokenStoreTypes>(
             language: '',
             refreshToken: '',
             refreshReports: false,
-            currentTandem: undefined,
             lastConnection: undefined,
             setLastConnection: action((state, payload) => {
                 state.lastConnection = payload.lastConnection;
             }),
             setRefreshReports: action((state) => {
                 state.refreshReports = !state.refreshReports;
-            }),
-            setCurrentTandem: action((state, payload) => {
-                state.currentTandem = payload.tandem;
             }),
             setApiUrl: action((state, payload) => {
                 state.apiUrl = payload.apiUrl;
