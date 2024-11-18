@@ -388,7 +388,7 @@ export class UniversityResponse {
       admissionStart: university.admissionStart,
       admissionEnd: university.admissionEnd,
       openServiceDate: university.openServiceDate,
-      isCodeMandatory: (university.domains || university.domains?.length === 0) && university.codes?.length > 0,
+      isCodeMandatory: university.domains?.length === 0 && university.codes?.length > 0,
       closeServiceDate: university.closeServiceDate,
       website: university.website,
       pairingMode: university.pairingMode,
