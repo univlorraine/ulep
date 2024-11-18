@@ -212,7 +212,7 @@ export class PrismaActivityRepository implements ActivityRepository {
 
     if (props.status) {
       where.status = {
-        equals: props.status,
+        in: props.status,
       };
     }
 

@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ActivityStatus } from 'src/core/models/activity.model';
 import {
-  ACTIVITY_REPOSITORY,
   ActivityPagination,
   ActivityRepository,
+  ACTIVITY_REPOSITORY,
 } from 'src/core/ports/activity.repository';
 
 interface GetActivitiesCommand {
@@ -32,7 +32,13 @@ export class GetAllActivitiesByAdminUsecase {
       languageLevel: command.languageLevel,
       category: command.category,
       theme: command.theme,
-      status: command.status,
+      status: command.status
+        ? [command.status]
+        : [
+            ActivityStatus.PUBLISHED,
+            ActivityStatus.IN_VALIDATION,
+            ActivityStatus.REJECTED,
+          ],
       university: command.university,
     });
 

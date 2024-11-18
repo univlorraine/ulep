@@ -32,7 +32,7 @@ export type GetActivitiesForAdminProps = {
   languageCode?: string;
   languageLevel?: string;
   searchTitle?: string;
-  status?: ActivityStatus;
+  status?: ActivityStatus[];
   category?: string;
   theme?: string;
   university?: string;
