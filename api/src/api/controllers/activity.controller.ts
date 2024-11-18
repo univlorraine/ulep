@@ -134,7 +134,10 @@ export class ActivityController {
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Get all Activity ressources for admin.' })
   @Swagger.ApiOkResponse({ type: () => ActivityWithThemeCategoryResponse })
-  async getAllActivitiesByAdmin(@Query() query: GetActivitiesByAdminRequest) {
+  async getAllActivitiesByAdmin(
+    @Query() query: GetActivitiesByAdminRequest,
+    @CurrentUser() user: KeycloakUser,
+  ) {
     const activities = await this.getActivitiesByAdminUsecase.execute({
       pagination: {
         page: query.page,
@@ -147,6 +150,7 @@ export class ActivityController {
       theme: query.theme,
       status: query.status,
       university: query.university,
+      userId: user.sub,
     });
 
     return new Collection<ActivityWithThemeCategoryResponse>({

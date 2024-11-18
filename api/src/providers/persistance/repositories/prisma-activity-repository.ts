@@ -216,6 +216,15 @@ export class PrismaActivityRepository implements ActivityRepository {
       };
     }
 
+    // Get all created activities by the current university ( exclude draft activities created by the users )
+    if (props.currentUserUniversityId) {
+      where.AND = [
+        { University: { id: props.currentUserUniversityId } },
+        { status: { in: ActivityStatus.DRAFT } },
+        { Creator: { is: null } },
+      ];
+    }
+
     const activities = await this.prisma.activity.findMany({
       where,
       skip: props.pagination?.page

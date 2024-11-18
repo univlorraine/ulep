@@ -37,6 +37,7 @@ export type GetActivitiesForAdminProps = {
   theme?: string;
   university?: string;
   pagination: ActivityPagination;
+  currentUserUniversityId?: string;
 };
 
 export type CreateActivityProps = {
