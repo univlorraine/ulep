@@ -75,6 +75,9 @@ export class PrismaConversationRepository implements ConversationRepository {
                 {
                     lastActivityAt: 'desc',
                 },
+                {
+                    createdAt: 'desc',
+                },
             ],
             distinct: ['id'],
             include: {
