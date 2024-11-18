@@ -34,7 +34,15 @@ export const ActivityContent: React.FC<ActivityContentProps> = ({
     const [isModalShareVisible, setIsModalShareVisible] = useState(false);
     const [isModalRejectedVisible, setIsModalRejectedVisible] = useState(false);
     const { activity, error, isLoading } = useGetActivity(activityId, refreshActivity);
-    const name = profile.id === activity?.creator.id ? t('activity.show.me') : activity?.creator.user.firstname;
+    let name: string = '';
+
+    if (profile.id === activity?.creator?.id) {
+        name = t('activity.show.me');
+    } else if (activity?.creator) {
+        name = activity.creator.user.firstname;
+    } else if (activity?.university) {
+        name = activity?.university.name;
+    }
 
     if (error) {
         showToast({
@@ -87,7 +95,7 @@ export const ActivityContent: React.FC<ActivityContentProps> = ({
                 onBackPressed={onBackPressed}
                 kebabContent={(closeMenu) => (
                     <IonList lines="none">
-                        {activity.status !== ActivityStatus.PUBLISHED && activity.creator.id === profile.id && (
+                        {activity.status !== ActivityStatus.PUBLISHED && activity.creator?.id === profile.id && (
                             <IonItem
                                 button={true}
                                 detail={false}
@@ -218,10 +226,11 @@ export const ActivityContent: React.FC<ActivityContentProps> = ({
                             ))}
                         </div>
 
-                        <div className={styles['vocabulary-container']}>
-                            <p className={styles['vocabulary-title']}>{t('activity.show.vocabulary')}</p>
-                            {activity.vocabularies.length > 0 &&
-                                activity.vocabularies.map((vocabulary, index) => (
+                        {activity.vocabularies.length > 0 && (
+                            <div className={styles['vocabulary-container']}>
+                                <p className={styles['vocabulary-title']}>{t('activity.show.vocabulary')}</p>
+
+                                {activity.vocabularies.map((vocabulary, index) => (
                                     <div
                                         style={{ backgroundColor: index % 2 === 0 ? '#F2F4F7' : 'white' }}
                                         className={styles['vocabulary-item']}
@@ -239,7 +248,8 @@ export const ActivityContent: React.FC<ActivityContentProps> = ({
                                         )}
                                     </div>
                                 ))}
-                        </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             )}

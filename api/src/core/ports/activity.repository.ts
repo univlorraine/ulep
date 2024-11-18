@@ -19,8 +19,8 @@ export type GetActivitiesProps = {
   languageLevels?: string[];
   themesIds?: string[];
   searchTitle?: string;
-  status?: ActivityStatus[];
   profileId?: string;
+  shouldOnlyTakeMine?: boolean;
   pagination?: ActivityPagination;
 };
 

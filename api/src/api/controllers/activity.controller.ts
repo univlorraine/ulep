@@ -36,7 +36,6 @@ import {
 } from 'src/api/dtos/activity';
 import { AuthenticationGuard } from 'src/api/guards';
 import { Env } from 'src/configuration';
-import { ActivityStatus } from 'src/core/models/activity.model';
 import {
   CreateActivityThemeCategoryUsecase,
   CreateActivityThemeUsecase,
@@ -100,16 +99,7 @@ export class ActivityController {
     @CurrentUser() user: KeycloakUser,
     @Headers('Language-code') languageCode?: string,
   ) {
-    const status = !query.shouldTakeOnlyMine
-      ? [ActivityStatus.PUBLISHED]
-      : [
-          ActivityStatus.PUBLISHED,
-          ActivityStatus.IN_VALIDATION,
-          ActivityStatus.DRAFT,
-        ];
-
     const activities = await this.getActivitiesUsecase.execute({
-      status,
       pagination: {
         page: query.page,
         limit: query.limit,
@@ -118,7 +108,8 @@ export class ActivityController {
       themesIds: query.themesIds,
       languageLevels: query.languageLevels,
       languagesCodes: query.languagesCodes,
-      userId: query.shouldTakeOnlyMine ? user.sub : undefined,
+      shouldOnlyTakeMine: query.shouldTakeOnlyMine,
+      userId: user.sub,
     });
 
     return new Collection<ActivityResponse>({

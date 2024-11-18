@@ -1,22 +1,20 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { Profile } from 'src/core/models';
-import { ActivityStatus } from 'src/core/models/activity.model';
 import {
-  ACTIVITY_REPOSITORY,
   ActivityPagination,
   ActivityRepository,
+  ACTIVITY_REPOSITORY,
 } from 'src/core/ports/activity.repository';
 import {
-  LANGUAGE_REPOSITORY,
   LanguageRepository,
+  LANGUAGE_REPOSITORY,
 } from 'src/core/ports/language.repository';
 import {
-  PROFILE_REPOSITORY,
   ProfileRepository,
+  PROFILE_REPOSITORY,
 } from 'src/core/ports/profile.repository';
 import {
-  STORAGE_INTERFACE,
   StorageInterface,
+  STORAGE_INTERFACE,
 } from 'src/core/ports/storage.interface';
 
 interface GetActivitiesCommand {
@@ -24,9 +22,9 @@ interface GetActivitiesCommand {
   languageLevels?: string[];
   themesIds?: string[];
   searchTitle?: string;
-  status: ActivityStatus[];
   userId?: string;
   pagination: ActivityPagination;
+  shouldOnlyTakeMine?: boolean;
 }
 
 @Injectable()
@@ -61,19 +59,16 @@ export class GetActivitiesUsecase {
       themesIds = themesIds.filter((id) => id !== undefined) as string[];
     }
 
-    let profile: Profile | undefined;
-    if (command.userId) {
-      profile = await this.getProfileFromUserId(command.userId);
-    }
+    const profile = await this.assertProfileExist(command.userId);
 
     const activities = await this.activityRepository.all({
       languageLevels: command.languageLevels,
       languagesCodes: languagesCodes.length > 0 ? languagesCodes : undefined,
-      status: command.status,
       pagination: command.pagination,
       searchTitle: command.searchTitle,
       themesIds: themesIds.length > 0 ? themesIds : undefined,
-      profileId: profile?.id,
+      profileId: profile.id,
+      shouldOnlyTakeMine: command.shouldOnlyTakeMine,
     });
 
     for (const activity of activities.items) {
@@ -96,6 +91,15 @@ export class GetActivitiesUsecase {
       return undefined;
     }
     return language.code;
+  }
+
+  async assertProfileExist(userId: string) {
+    console.log('userId', userId);
+    const profile = await this.profileRepository.ofUser(userId);
+    if (!profile) {
+      throw new NotFoundException('Profile not found');
+    }
+    return profile;
   }
 
   async getProfileFromUserId(userId: string) {

@@ -8,6 +8,7 @@ import {
 } from '../domain/entities/Activity';
 import LanguageCommand from './LanguageCommand';
 import ProfileCommand, { profileCommandToDomain } from './ProfileCommand';
+import UniversityCommand, { universityCommandToDomain } from './UniversityCommand';
 
 export interface ActivityThemeCommand {
     id: string;
@@ -45,9 +46,10 @@ export interface ActivityCommand {
     ressourceUrl?: string;
     ressourceFileUrl?: string;
     theme: ActivityThemeCommand;
-    vocabularies: ActivityVocabularyCommand[];
+    vocabularies?: ActivityVocabularyCommand[];
     exercises: ActivityExercisesCommand[];
     ressourceOgUrl?: any;
+    university: UniversityCommand;
 }
 
 export const activityThemeCommandToDomain = (command: ActivityThemeCommand) => {
@@ -71,7 +73,7 @@ export const activityCommandToDomain = (command: ActivityCommand) => {
         id: command.id,
         title: command.title,
         description: command.description,
-        creator: profileCommandToDomain(command.creator),
+        creator: command.creator ? profileCommandToDomain(command.creator) : undefined,
         status: command.status,
         language: command.language,
         languageLevel: command.languageLevel,
@@ -81,7 +83,8 @@ export const activityCommandToDomain = (command: ActivityCommand) => {
         ressourceOgUrl: command.ressourceOgUrl,
         ressourceFileUrl: command.ressourceFileUrl,
         activityTheme: activityThemeCommandToDomain(command.theme),
-        vocabularies: command.vocabularies.map(activityVocabularyCommandToDomain),
+        vocabularies: command.vocabularies ? command.vocabularies.map(activityVocabularyCommandToDomain) : [],
         exercises: command.exercises.map(activityExercisesCommandToDomain),
+        university: universityCommandToDomain(command.university),
     });
 };
