@@ -28,7 +28,11 @@ export const LogEntriesContent: React.FC<LogEntriesContentProps> = ({
 
     return (
         <div style={{ paddingTop: 0 }}>
-            <HeaderSubContent title={t('logbook.list.title')} onBackPressed={onBackPressed} isBackButton={isModal} />
+            <HeaderSubContent
+                title={t('learning_book.list.title')}
+                onBackPressed={onBackPressed}
+                isBackButton={isModal}
+            />
             <div className={styles['log-entries-list']}>
                 <div className={styles['log-entries-list-container']}>
                     {logEntries.map((logEntry) => (

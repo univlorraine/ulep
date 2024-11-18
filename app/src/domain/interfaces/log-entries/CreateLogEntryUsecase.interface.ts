@@ -1,6 +1,8 @@
 import { LogEntryType } from '../../entities/LogEntry';
 
 interface CreateLogEntryMetadata {
+    date?: Date;
+    title?: string;
     content?: string;
     duration?: number;
     tandemFirstname?: string;

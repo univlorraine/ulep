@@ -91,6 +91,13 @@
             "connection": {
                 "title": "First connection of the day!"
             }
+        },
+        "create": {
+            "title_label": "Title",
+            "description_label": "Description",
+            "cancel_button": "Cancel",
+            "validate_button": "Validate",
+            "date_label": "Date"
         }
     },
     "activity": {

@@ -52,6 +52,7 @@ const Store = createStore<TokenStoreTypes>(
                 state.apiUrl = '';
                 state.chatUrl = '';
                 state.socketChatUrl = '';
+                state.lastConnection = undefined;
             }),
             profile: undefined,
             profileSignUp: new ProfileSignUp(),

@@ -91,6 +91,14 @@
             "connection": {
                 "title": "Première connexion de la journée !"
             }
+        },
+        "create": {
+            "title": "Nouvelle entrée de journal",
+            "title_label": "Titre",
+            "description_label": "Description",
+            "cancel_button": "Annuler",
+            "validate_button": "Valider",
+            "date_label": "Date"
         }
     },
     "activity": {
