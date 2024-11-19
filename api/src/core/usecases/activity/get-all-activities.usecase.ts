@@ -94,7 +94,6 @@ export class GetActivitiesUsecase {
   }
 
   async assertProfileExist(userId: string) {
-    console.log('userId', userId);
     const profile = await this.profileRepository.ofUser(userId);
     if (!profile) {
       throw new NotFoundException('Profile not found');

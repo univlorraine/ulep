@@ -238,13 +238,10 @@ export class PrismaActivityRepository implements ActivityRepository {
         },
         {
           AND: [
+            { University: { id: props.currentUserUniversityId } },
             {
               status: {
-                in: [
-                  ActivityStatus.PUBLISHED,
-                  ActivityStatus.IN_VALIDATION,
-                  ActivityStatus.REJECTED,
-                ],
+                not: ActivityStatus.DRAFT,
               },
             },
           ],

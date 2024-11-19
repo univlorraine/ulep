@@ -48,8 +48,6 @@ export const ActivitiesContent: React.FC<ActivitiesContentProps> = ({
         searchTitle: searchTitle,
     });
 
-    console.warn(activities);
-
     useEffect(() => {
         const handleScroll = () => {
             if (contentRef.current) {
