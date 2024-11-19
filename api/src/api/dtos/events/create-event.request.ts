@@ -81,7 +81,6 @@ export class CreateEventRequest {
   diffusionLanguages: string[];
 
   @ApiProperty()
-  @IsArray()
-  @IsString({ each: true })
-  concernedUniversities: string[];
+  @IsOptional()
+  concernedUniversities?: string[];
 }
