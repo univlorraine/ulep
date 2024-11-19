@@ -232,7 +232,7 @@ export class PrismaActivityRepository implements ActivityRepository {
         {
           AND: [
             { University: { id: props.currentUserUniversityId } },
-            { status: { in: ActivityStatus.DRAFT } },
+            { status: { equals: ActivityStatus.DRAFT } },
             { Creator: { is: null } },
           ],
         },
