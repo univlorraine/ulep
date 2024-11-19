@@ -4,13 +4,14 @@ import Profile from '../../../domain/entities/Profile';
 import Tandem from '../../../domain/entities/Tandem';
 import Vocabulary from '../../../domain/entities/Vocabulary';
 import { CreateVocabularyListCommand } from '../../../domain/interfaces/vocabulary/CreateVocabularyListUsecase.interface';
+import { UpdateVocabularyListCommand } from '../../../domain/interfaces/vocabulary/UpdateVocabularyListUsecase.interface';
 import useVocabulary from '../../hooks/useVocabulary';
 import ErrorPage from '../../pages/ErrorPage';
 import CreateOrUpdateVocabularyContent from '../contents/CreateOrUpdateVocabularyContent';
 import FlipcardsContent from '../contents/FlipcardsContent';
 import VocabularyItemContent from '../contents/VocabularyItemContent';
 import VocabularyListContent from '../contents/VocabularyListContent';
-import AddVocabularyListModal from '../modals/AddVocabularyListModal';
+import AddVocabularyListModal from '../modals/AddOrUpdateVocabularyListModal';
 import SelectTandemModal from '../modals/SelectTandemModal';
 import SelectVocabularyListsForQuizModale from '../modals/SelectVocabularyListsForQuizModal';
 
@@ -40,6 +41,7 @@ const VocabularyContent: React.FC<VocabularyContentProps> = ({ profile, onClose,
         onShareVocabularyList,
         onUpdateVocabulary,
         onCreateVocabulary,
+        onUpdateVocabularyList,
         onDeleteVocabulary,
         setVocabularyListSelected,
         setSearchVocabularies,
@@ -47,6 +49,13 @@ const VocabularyContent: React.FC<VocabularyContentProps> = ({ profile, onClose,
 
     const handleCreateVocabularyList = async (vocabularyList: CreateVocabularyListCommand) => {
         await onCreateVocabularyList(vocabularyList);
+        setShowAddVocabularyListModal(false);
+    };
+
+    const handleUpdateVocabularyList = async (vocabularyList: UpdateVocabularyListCommand) => {
+        if (vocabularyListSelected) {
+            await onUpdateVocabularyList(vocabularyListSelected.id, vocabularyList);
+        }
         setShowAddVocabularyListModal(false);
     };
 
@@ -139,6 +148,7 @@ const VocabularyContent: React.FC<VocabularyContentProps> = ({ profile, onClose,
                     isLoading={isLoading}
                     goBack={() => setVocabularyListSelected(undefined)}
                     onAddVocabulary={onAddOrUpdateVocabulary}
+                    onUpdateVocabularyList={() => setShowAddVocabularyListModal(true)}
                     onSearch={setSearchVocabularies}
                     onShareVocabularyList={() => setShowShareVocabularyListModal(true)}
                     setQuizzSelectedListIds={setQuizzSelectedListIds}
@@ -162,8 +172,10 @@ const VocabularyContent: React.FC<VocabularyContentProps> = ({ profile, onClose,
             )}
             <AddVocabularyListModal
                 isVisible={showAddVocabularyListModal}
+                vocabularyList={vocabularyListSelected}
                 onClose={() => setShowAddVocabularyListModal(false)}
                 onCreateVocabularyList={handleCreateVocabularyList}
+                onUpdateVocabularyList={handleUpdateVocabularyList}
                 profile={profile}
             />
             <SelectTandemModal
