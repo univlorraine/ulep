@@ -11,7 +11,7 @@ import CreateOrUpdateVocabularyContent from '../contents/CreateOrUpdateVocabular
 import FlipcardsContent from '../contents/FlipcardsContent';
 import VocabularyItemContent from '../contents/VocabularyItemContent';
 import VocabularyListContent from '../contents/VocabularyListContent';
-import AddVocabularyListModal from '../modals/AddOrUpdateVocabularyListModal';
+import AddOrUpdateVocabularyListModal from '../modals/AddOrUpdateVocabularyListModal';
 import SelectTandemModal from '../modals/SelectTandemModal';
 import SelectVocabularyListsForQuizModale from '../modals/SelectVocabularyListsForQuizModal';
 
@@ -170,7 +170,7 @@ const VocabularyContent: React.FC<VocabularyContentProps> = ({ profile, onClose,
                     onBackPressed={() => setQuizzSelectedListIds([])}
                 />
             )}
-            <AddVocabularyListModal
+            <AddOrUpdateVocabularyListModal
                 isVisible={showAddVocabularyListModal}
                 vocabularyList={vocabularyListSelected}
                 onClose={() => setShowAddVocabularyListModal(false)}

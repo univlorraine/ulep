@@ -11,7 +11,7 @@ import { useStoreState } from '../../../store/storeTypes';
 import CreateOrUpdateVocabularyContent from '../../components/contents/CreateOrUpdateVocabularyContent';
 import VocabularyItemContent from '../../components/contents/VocabularyItemContent';
 import VocabularyListContent from '../../components/contents/VocabularyListContent';
-import AddVocabularyListModal from '../../components/modals/AddOrUpdateVocabularyListModal';
+import AddOrUpdateVocabularyListModal from '../../components/modals/AddOrUpdateVocabularyListModal';
 import SelectTandemModal from '../../components/modals/SelectTandemModal';
 import SelectVocabularyListsForQuizModale from '../../components/modals/SelectVocabularyListsForQuizModal';
 import useVocabulary from '../../hooks/useVocabulary';
@@ -162,7 +162,7 @@ const VocabulariesPage = () => {
                         onDelete={handleDeleteVocabulary}
                     />
                 )}
-                <AddVocabularyListModal
+                <AddOrUpdateVocabularyListModal
                     isVisible={showAddVocabularyListModal}
                     onClose={() => setShowAddVocabularyListModal(false)}
                     onCreateVocabularyList={handleCreateVocabularyList}
