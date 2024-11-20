@@ -54,6 +54,6 @@ export class CreateActivityRequest {
   exercises: CreateActivityExerciseRequest[];
 
   @ApiProperty({ type: 'string', isArray: true })
-  @IsNotEmpty()
-  vocabularies: string[];
+  @IsOptional()
+  vocabularies?: string[];
 }

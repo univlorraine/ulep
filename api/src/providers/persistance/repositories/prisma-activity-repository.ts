@@ -135,16 +135,23 @@ export class PrismaActivityRepository implements ActivityRepository {
       };
     }
 
-    if (props.profileId) {
+    if (props.shouldOnlyTakeMine) {
       where.Creator = {
         id: props.profileId,
       };
-    }
-
-    if (props.status) {
-      where.status = {
-        in: props.status,
-      };
+    } else {
+      where.OR = [
+        {
+          Creator: {
+            id: props.profileId,
+          },
+        },
+        {
+          status: {
+            in: [ActivityStatus.PUBLISHED],
+          },
+        },
+      ];
     }
 
     const activities = await this.prisma.activity.findMany({
@@ -153,6 +160,9 @@ export class PrismaActivityRepository implements ActivityRepository {
         ? (props.pagination.page - 1) * props.pagination.limit
         : 0,
       take: props.pagination?.limit,
+      orderBy: {
+        updated_at: 'desc',
+      },
       ...ActivityRelations,
     });
 
@@ -212,8 +222,31 @@ export class PrismaActivityRepository implements ActivityRepository {
 
     if (props.status) {
       where.status = {
-        equals: props.status,
+        in: props.status,
       };
+    }
+
+    // Get all created activities by the current university ( exclude draft activities created by the users )
+    if (props.currentUserUniversityId) {
+      where.OR = [
+        {
+          AND: [
+            { University: { id: props.currentUserUniversityId } },
+            { status: { equals: ActivityStatus.DRAFT } },
+            { Creator: { is: null } },
+          ],
+        },
+        {
+          AND: [
+            { University: { id: props.currentUserUniversityId } },
+            {
+              status: {
+                not: ActivityStatus.DRAFT,
+              },
+            },
+          ],
+        },
+      ];
     }
 
     const activities = await this.prisma.activity.findMany({

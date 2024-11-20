@@ -1,6 +1,7 @@
 import Language from './Language';
 import { OGUrl } from './OGUrl';
 import Profile from './Profile';
+import University from './University';
 
 export enum ActivityStatus {
     DRAFT = 'DRAFT',
@@ -15,7 +16,8 @@ export type ActivityProps = {
     description: string;
     status: ActivityStatus;
     imageUrl: string;
-    creator: Profile;
+    creator?: Profile;
+    university: University;
     languageLevel: CEFR;
     language: Language;
     activityTheme: ActivityTheme;
@@ -33,7 +35,8 @@ export class Activity {
     public readonly description: string;
     public readonly status: ActivityStatus;
     public readonly imageUrl: string;
-    public readonly creator: Profile;
+    public readonly creator?: Profile;
+    public readonly university: University;
     public readonly languageLevel: CEFR;
     public readonly language: Language;
     public readonly activityTheme: ActivityTheme;
@@ -52,6 +55,7 @@ export class Activity {
         this.creator = props.creator;
         this.languageLevel = props.languageLevel;
         this.language = props.language;
+        this.university = props.university;
         this.activityTheme = props.activityTheme;
         this.vocabularies = props.vocabularies;
         this.exercises = props.exercises;
@@ -63,11 +67,18 @@ export class Activity {
 }
 
 export class ActivityTheme {
-    constructor(public readonly id: string, public readonly content: string) {}
+    constructor(
+        public readonly id: string,
+        public readonly content: string
+    ) {}
 }
 
 export class ActivityThemeCategory {
-    constructor(public readonly id: string, public readonly content: string, public readonly themes: ActivityTheme[]) {}
+    constructor(
+        public readonly id: string,
+        public readonly content: string,
+        public readonly themes: ActivityTheme[]
+    ) {}
 }
 
 export class ActivityVocabulary {
@@ -79,5 +90,9 @@ export class ActivityVocabulary {
 }
 
 export class ActivityExercises {
-    constructor(public readonly id: string, public readonly content: string, public readonly order: number) {}
+    constructor(
+        public readonly id: string,
+        public readonly content: string,
+        public readonly order: number
+    ) {}
 }

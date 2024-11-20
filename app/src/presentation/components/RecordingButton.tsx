@@ -9,6 +9,7 @@ interface RecordingButtonProps {
     onSendPressed?: () => void;
     handleStartRecord: () => void;
     handleStopRecord: () => void;
+    hideSendButton?: boolean;
     isBlocked: boolean;
 }
 
@@ -18,6 +19,7 @@ const RecordingButton = ({
     handleStartRecord,
     handleStopRecord,
     isBlocked,
+    hideSendButton = false,
 }: RecordingButtonProps) => {
     const { t } = useTranslation();
     const [recording, setRecording] = useState(false);
@@ -79,17 +81,19 @@ const RecordingButton = ({
                     </IonButton>
                 </div>
             )}
-            <IonButton
-                id="send-button"
-                title={t('chat.send_button.send_aria_label') as string}
-                aria-label={t('chat.send_button.send_aria_label') as string}
-                fill="clear"
-                className={styles['sender-button']}
-                disabled={isBlocked}
-                onClick={onSendPressed}
-            >
-                <IonIcon className={styles['sender']} icon={SenderSvg} />
-            </IonButton>
+            {!hideSendButton && (
+                <IonButton
+                    id="send-button"
+                    title={t('chat.send_button.send_aria_label') as string}
+                    aria-label={t('chat.send_button.send_aria_label') as string}
+                    fill="clear"
+                    className={styles['sender-button']}
+                    disabled={isBlocked}
+                    onClick={onSendPressed}
+                >
+                    <IonIcon className={styles['sender']} icon={SenderSvg} />
+                </IonButton>
+            )}
         </div>
     );
 };
