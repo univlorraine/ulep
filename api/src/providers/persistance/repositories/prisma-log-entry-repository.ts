@@ -1,5 +1,6 @@
 import { Collection, PrismaService } from '@app/common';
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { endOfDay, startOfDay } from 'date-fns';
 import { LogEntry, LogEntryType } from 'src/core/models/log-entry.model';
 import {
@@ -67,6 +68,7 @@ export class PrismaLogEntryRepository implements LogEntryRepository {
       data: {
         type: command.type,
         metadata: command.metadata,
+        created_at: command.createdAt ?? new Date(),
         Owner: {
           connect: {
             id: command.ownerId,
@@ -78,9 +80,17 @@ export class PrismaLogEntryRepository implements LogEntryRepository {
     return logEntryMapper(logEntry);
   }
   async update(command: UpdateLogEntryCommand): Promise<LogEntry> {
+    const data: Prisma.LogEntryUpdateInput = {
+      metadata: command.metadata,
+    };
+
+    if (command.createdAt) {
+      data.created_at = command.createdAt;
+    }
+
     const logEntry = await this.prisma.logEntry.update({
       where: { id: command.id },
-      data: { metadata: command.metadata },
+      data,
     });
 
     return logEntryMapper(logEntry);

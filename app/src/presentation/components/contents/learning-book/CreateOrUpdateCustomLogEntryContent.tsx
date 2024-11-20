@@ -1,20 +1,27 @@
 import { IonButton, IonDatetime } from '@ionic/react';
 import { isBefore, startOfDay } from 'date-fns';
 import { formatInTimeZone } from 'date-fns-tz';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { LogEntryCustomEntry } from '../../../../domain/entities/LogEntry';
 import Profile from '../../../../domain/entities/Profile';
 import HeaderSubContent from '../../HeaderSubContent';
 import TextInput from '../../TextInput';
-import styles from './CreateCustomLogEntryContent.module.css';
+import styles from './CreateOrUpdateCustomLogEntryContent.module.css';
 
-interface CreateCustomLogEntryContentProps {
+interface CreateOrUpdateCustomLogEntryContentProps {
     onBackPressed: () => void;
     onSubmit: (data: { date: Date; title: string; description: string }) => void;
     profile: Profile;
+    logEntryToUpdate?: LogEntryCustomEntry;
 }
 
-export const CreateCustomLogEntryContent = ({ onSubmit, onBackPressed, profile }: CreateCustomLogEntryContentProps) => {
+export const CreateOrUpdateCustomLogEntryContent = ({
+    onSubmit,
+    onBackPressed,
+    profile,
+    logEntryToUpdate,
+}: CreateOrUpdateCustomLogEntryContentProps) => {
     const userTz = profile?.user?.university?.timezone;
     const { t } = useTranslation();
     const [entryDate, setEntryDate] = useState<string>(formatInTimeZone(new Date(), userTz, "yyyy-MM-dd'T'HH:mm"));
@@ -26,7 +33,7 @@ export const CreateCustomLogEntryContent = ({ onSubmit, onBackPressed, profile }
     };
 
     const handleSubmit = () => {
-        if (isBefore(entryDate, startOfDay(new Date()))) {
+        if (isBefore(startOfDay(new Date()), new Date(entryDate))) {
             return;
         }
 
@@ -37,9 +44,21 @@ export const CreateCustomLogEntryContent = ({ onSubmit, onBackPressed, profile }
         });
     };
 
+    useEffect(() => {
+        if (logEntryToUpdate) {
+            setEntryDate(formatInTimeZone(logEntryToUpdate.createdAt, userTz, "yyyy-MM-dd'T'HH:mm"));
+            setEntryTitle(logEntryToUpdate.title);
+            setEntryDescription(logEntryToUpdate.content);
+        }
+    }, [logEntryToUpdate]);
+
     return (
         <div>
-            <HeaderSubContent title={t('learning_book.create.title')} onBackPressed={onBackPressed} isBackButton />
+            <HeaderSubContent
+                title={t(`learning_book.${logEntryToUpdate ? 'update' : 'create'}.title`)}
+                onBackPressed={onBackPressed}
+                isBackButton
+            />
             <div className={styles.container}>
                 <p className={styles.date_label}>{t('learning_book.create.date_label')}</p>
                 <IonDatetime
@@ -52,12 +71,14 @@ export const CreateCustomLogEntryContent = ({ onSubmit, onBackPressed, profile }
 
                 <TextInput
                     title={t('learning_book.create.title_label') as string}
+                    placeholder={entryTitle}
                     value={entryTitle}
                     onChange={(title: string) => setEntryTitle(title)}
                 />
 
                 <TextInput
                     title={t('learning_book.create.description_label') as string}
+                    placeholder={entryDescription}
                     value={entryDescription}
                     onChange={(description: string) => setEntryDescription(description)}
                     type="text-area"
@@ -81,4 +102,4 @@ export const CreateCustomLogEntryContent = ({ onSubmit, onBackPressed, profile }
     );
 };
 
-export default CreateCustomLogEntryContent;
+export default CreateOrUpdateCustomLogEntryContent;

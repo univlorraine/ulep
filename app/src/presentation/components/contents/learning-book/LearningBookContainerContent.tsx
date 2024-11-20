@@ -1,9 +1,9 @@
 import { useIonToast } from '@ionic/react';
 import { useState } from 'react';
 import { useConfig } from '../../../../context/ConfigurationContext';
-import { LogEntryType } from '../../../../domain/entities/LogEntry';
+import { LogEntry, LogEntryCustomEntry, LogEntryType } from '../../../../domain/entities/LogEntry';
 import Profile from '../../../../domain/entities/Profile';
-import CreateCustomLogEntryContent from './CreateCustomLogentryContent';
+import CreateCustomLogEntryContent from './CreateOrUpdateCustomLogEntryContent';
 import LogEntriesContent from './LogEntriesContent';
 
 interface LearningBookContainerContentProps {
@@ -12,11 +12,12 @@ interface LearningBookContainerContentProps {
 }
 
 const LearningBookContainerContent: React.FC<LearningBookContainerContentProps> = ({ onClose, profile }) => {
-    const { createLogEntry } = useConfig();
+    const { createLogEntry, updateCustomLogEntry } = useConfig();
     const [showToast] = useIonToast();
     const [isCreateCustomLogEntry, setIsCreateCustomLogEntry] = useState<boolean>(false);
+    const [logEntryToUpdate, setLogEntryToUpdate] = useState<LogEntryCustomEntry | undefined>();
 
-    const createCustomLogEntry = async ({
+    const createorUpdateCustomLogEntry = async ({
         date,
         title,
         description,
@@ -25,17 +26,36 @@ const LearningBookContainerContent: React.FC<LearningBookContainerContentProps> 
         title: string;
         description: string;
     }) => {
-        const result = await createLogEntry.execute({
-            type: LogEntryType.CUSTOM_ENTRY,
-            metadata: {
+        let result;
+        if (logEntryToUpdate) {
+            result = await updateCustomLogEntry.execute(logEntryToUpdate.id, {
                 date,
                 title,
                 content: description,
-            },
-        });
+            });
+        } else {
+            result = await createLogEntry.execute({
+                type: LogEntryType.CUSTOM_ENTRY,
+                metadata: {
+                    date,
+                    title,
+                    content: description,
+                },
+            });
+        }
 
         if (result instanceof Error) {
             showToast(result.message);
+        }
+
+        setIsCreateCustomLogEntry(false);
+        setLogEntryToUpdate(undefined);
+    };
+
+    const handleUpdateCustomLogEntry = (logEntry: LogEntry) => {
+        if (logEntry instanceof LogEntryCustomEntry) {
+            setLogEntryToUpdate(logEntry);
+            setIsCreateCustomLogEntry(true);
         }
     };
 
@@ -44,12 +64,14 @@ const LearningBookContainerContent: React.FC<LearningBookContainerContentProps> 
             {isCreateCustomLogEntry ? (
                 <CreateCustomLogEntryContent
                     onBackPressed={() => setIsCreateCustomLogEntry(false)}
-                    onSubmit={createCustomLogEntry}
+                    onSubmit={createorUpdateCustomLogEntry}
                     profile={profile}
+                    logEntryToUpdate={logEntryToUpdate}
                 />
             ) : (
                 <LogEntriesContent
                     onAddCustomLogEntry={() => setIsCreateCustomLogEntry(true)}
+                    onUpdateCustomLogEntry={handleUpdateCustomLogEntry}
                     onBackPressed={onClose}
                     profile={profile}
                     isModal={false}

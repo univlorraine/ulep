@@ -13,6 +13,8 @@ import {
 export type UpdateCustomLogEntryCommand = {
   id: string;
   content: string;
+  title: string;
+  date: Date;
   ownerId: string;
 };
 
@@ -31,8 +33,10 @@ export class UpdateCustomLogEntryUsecase {
 
     return this.logEntryRepository.update({
       id: command.id,
+      createdAt: command.date,
       metadata: {
         content: command.content,
+        title: command.title,
       },
     });
   }

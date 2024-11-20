@@ -13,6 +13,7 @@ interface CreateLogEntryMetadata {
 export interface CreateLogEntryProps {
     type: LogEntryType;
     metadata: CreateLogEntryMetadata;
+    createdAt?: Date;
 }
 
 interface CreateLogEntryUsecaseInterface {

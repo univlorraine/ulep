@@ -103,14 +103,17 @@ export class LogEntryCommunityChat extends LogEntry {
 
 export type LogEntryCustomEntryProps = LogEntryProps & {
     content: string;
+    title: string;
 };
 
 export class LogEntryCustomEntry extends LogEntry {
     content: string;
+    title: string;
 
     constructor(data: LogEntryCustomEntryProps) {
         super(data);
         this.content = data.content;
+        this.title = data.title;
     }
 }
 

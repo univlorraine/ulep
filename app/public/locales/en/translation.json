@@ -90,14 +90,21 @@
         "entry": {
             "connection": {
                 "title": "First connection of the day!"
+            },
+            "custom": {
+                "button": "Update"
             }
         },
         "create": {
+            "title": "New journal entry",
             "title_label": "Title",
             "description_label": "Description",
             "cancel_button": "Cancel",
             "validate_button": "Validate",
             "date_label": "Date"
+        },
+        "update": {
+            "title": "Update journal entry"
         }
     },
     "activity": {

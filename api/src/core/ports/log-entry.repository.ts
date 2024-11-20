@@ -7,11 +7,13 @@ export type CreateLogEntryCommand = {
   type: LogEntryType;
   ownerId: string;
   metadata: any;
+  createdAt?: Date;
 };
 
 export type UpdateLogEntryCommand = {
   id: string;
   metadata: any;
+  createdAt?: Date;
 };
 
 export interface LogEntryRepository {

@@ -1,7 +1,7 @@
 import { IonButton, IonImg } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
 import { AddSvg } from '../../../../assets';
-import { LogEntry } from '../../../../domain/entities/LogEntry';
+import { LogEntry, LogEntryCustomEntry } from '../../../../domain/entities/LogEntry';
 import Profile from '../../../../domain/entities/Profile';
 import useGetLogEntries from '../../../hooks/useGetLogEntries';
 import LogEntryCard from '../../card/LogEntryCard';
@@ -11,6 +11,7 @@ import styles from './LogEntriesContent.module.css';
 
 interface LogEntriesContentProps {
     onAddCustomLogEntry: () => void;
+    onUpdateCustomLogEntry: (logEntry: LogEntry) => void;
     onBackPressed: () => void;
     profile: Profile;
     isModal?: boolean;
@@ -18,6 +19,7 @@ interface LogEntriesContentProps {
 
 export const LogEntriesContent: React.FC<LogEntriesContentProps> = ({
     onAddCustomLogEntry,
+    onUpdateCustomLogEntry,
     onBackPressed,
     profile,
     isModal,
@@ -25,6 +27,12 @@ export const LogEntriesContent: React.FC<LogEntriesContentProps> = ({
     const { t } = useTranslation();
 
     const { logEntries, isLoading } = useGetLogEntries(false);
+
+    const handleOnPress = (logEntry: LogEntry) => {
+        if (logEntry instanceof LogEntryCustomEntry) {
+            onUpdateCustomLogEntry(logEntry);
+        }
+    };
 
     return (
         <div style={{ paddingTop: 0 }}>
@@ -36,14 +44,7 @@ export const LogEntriesContent: React.FC<LogEntriesContentProps> = ({
             <div className={styles['log-entries-list']}>
                 <div className={styles['log-entries-list-container']}>
                     {logEntries.map((logEntry) => (
-                        <LogEntryCard
-                            key={logEntry.id}
-                            logEntry={logEntry}
-                            profile={profile}
-                            onClick={function (logEntry: LogEntry): void {
-                                throw new Error('Function not implemented.');
-                            }}
-                        />
+                        <LogEntryCard key={logEntry.id} logEntry={logEntry} profile={profile} onClick={handleOnPress} />
                     ))}
                 </div>
                 {isLoading && <Loader />}

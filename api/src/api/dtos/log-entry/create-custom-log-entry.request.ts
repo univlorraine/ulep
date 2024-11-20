@@ -1,4 +1,11 @@
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
+import {
+  IsDate,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { LogEntryType } from 'src/core/models/log-entry.model';
 
 export class CreateCustomLogEntryRequest {
@@ -6,6 +13,15 @@ export class CreateCustomLogEntryRequest {
   @IsString()
   @IsOptional()
   content?: string;
+
+  @IsDate()
+  @IsOptional()
+  @Type(() => Date)
+  createdAt?: Date;
+
+  @IsString()
+  @IsOptional()
+  title?: string;
 
   // Visio Event
   @IsNumber()

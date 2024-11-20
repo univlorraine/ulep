@@ -27,6 +27,7 @@ export type CreateOrUpdateLogEntryCommand = {
   type: LogEntryType;
   metadata: Record<string, any>;
   ownerId: string;
+  createdAt?: Date;
 };
 
 type HandleEntryExistsTodayResult = {
@@ -60,7 +61,10 @@ export class CreateOrUpdateLogEntryUsecase {
         id: action.entryToUpdate.id,
       });
     } else {
-      return this.logEntryRepository.create(command);
+      return this.logEntryRepository.create({
+        ...command,
+        createdAt: command.createdAt,
+      });
     }
   }
 
@@ -214,7 +218,7 @@ export class CreateOrUpdateLogEntryUsecase {
         }
         break;
       case LogEntryType.CUSTOM_ENTRY:
-        if (!metadata.content) {
+        if (!metadata.content && !metadata.title) {
           throw new LogEntryMissingMetadataException();
         }
         break;

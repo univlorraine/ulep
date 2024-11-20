@@ -25,6 +25,7 @@ interface LogEntryMetadata {
     tandemLastname?: string;
     vocabularyListId?: string;
     vocabularyListName?: string;
+    title?: string;
 }
 
 interface LogEntryCommand {
@@ -78,6 +79,7 @@ export const logEntryCommandToDomain = (command: LogEntryCommand) => {
                 type: command.type,
                 ownerId: command.ownerId,
                 content: command.metadata.content!,
+                title: command.metadata.title!,
             });
         case LogEntryType.EDIT_ACTIVITY:
             return new LogEntryEditActivity({

@@ -73,8 +73,10 @@ export class LogEntryController {
       type: body.type,
       metadata: {
         content: body.content,
+        title: body.title,
       },
       ownerId: user.sub,
+      createdAt: body.createdAt,
     });
 
     if (logEntry) return LogEntryResponse.from(logEntry);
@@ -92,6 +94,8 @@ export class LogEntryController {
     const logEntry = await this.updateCustomLogEntryUsecase.execute({
       id,
       content: body.content,
+      title: body.title,
+      date: body.date,
       ownerId: user.sub,
     });
 

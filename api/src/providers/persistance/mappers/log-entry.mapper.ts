@@ -38,6 +38,7 @@ export const logEntryMapper = (snapshot: LogEntrySnapshot): LogEntry => {
     tandemLastname: string;
     vocabularyListId: string;
     vocabularyListName: string;
+    title: string;
   };
   switch (snapshot.type) {
     case LogEntryType.CONNECTION:
@@ -78,6 +79,7 @@ export const logEntryMapper = (snapshot: LogEntrySnapshot): LogEntry => {
         type: LogEntryType.CUSTOM_ENTRY,
         createdAt: snapshot.created_at,
         content: data.content,
+        title: data.title,
       });
     case LogEntryType.PLAYED_GAME:
       return new LogEntryPlayedGame({

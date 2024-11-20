@@ -90,6 +90,9 @@
         "entry": {
             "connection": {
                 "title": "Première connexion de la journée !"
+            },
+            "custom": {
+                "button": "Modifier"
             }
         },
         "create": {
@@ -99,6 +102,9 @@
             "cancel_button": "Annuler",
             "validate_button": "Valider",
             "date_label": "Date"
+        },
+        "update": {
+            "title": "Modifier l'entrée de journal"
         }
     },
     "activity": {
