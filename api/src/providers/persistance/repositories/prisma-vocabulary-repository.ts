@@ -204,6 +204,16 @@ export class PrismaVocabularyRepository implements VocabularyRepository {
             id: profileId,
           })),
         },
+        OriginalLanguage: {
+          connect: {
+            id: props.wordLanguageId,
+          },
+        },
+        TranslationLanguage: {
+          connect: {
+            id: props.translationLanguageId,
+          },
+        },
       },
       ...VocabularyListRelations,
     });

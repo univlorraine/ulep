@@ -277,7 +277,12 @@
     },
     "vocabulary": {
         "list": {
-            "create": "Create a new list",
+            "create": {
+                "title": "Create a new list"
+            },
+            "update": {
+                "title": "Modify the list"
+            },
             "empty": "You haven't created any vocabulary list for this language yet.",
             "go_back": "Go back",
             "menu": "Menu",
@@ -325,6 +330,7 @@
             "empty": "You haven't created any vocabulary pair for this list yet.",
             "create": "New word pair",
             "aria-pressed": "Update vocabulary",
+            "list_update": "Update the list",
             "search": "Search",
             "add": {
                 "cancel": "Cancel",

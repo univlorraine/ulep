@@ -1,6 +1,7 @@
 import { Collection, PrismaService } from '@app/common';
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
+import { startOfDay } from 'date-fns';
 import { EventObject } from 'src/core/models/event.model';
 import {
   CreateEventProps,
@@ -131,6 +132,9 @@ export class PrismaEventRepository implements EventRepository {
         })),
       }),
       status: filters.status,
+      end_date: {
+        gte: startOfDay(new Date()),
+      },
       type: {
         in: filters.types,
       },
@@ -151,7 +155,7 @@ export class PrismaEventRepository implements EventRepository {
       take: limit,
       where,
       orderBy: {
-        start_date: 'desc',
+        start_date: 'asc',
       },
       include: EventRelations,
     });
@@ -212,7 +216,7 @@ export class PrismaEventRepository implements EventRepository {
         deep_link: command.deepLink,
         with_subscription: command.withSubscription,
         ConcernedUniversities: {
-          connect: command.concernedUniversities.map((university) => ({
+          connect: command.concernedUniversities?.map((university) => ({
             id: university,
           })),
         },

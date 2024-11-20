@@ -48,7 +48,7 @@ const CreateActivity = () => {
             formData.append(`exercises[${index}][content]`, exercise.content);
             formData.append(`exercises[${index}][order]`, exercise.order);
         });
-        payload.vocabularies.forEach((vocabulary: any, index: number) => {
+        payload.vocabularies?.forEach((vocabulary: any, index: number) => {
             formData.append(`vocabularies[${index}]`, vocabulary.content);
         });
         vocabulariesFiles?.forEach((vocabularyFile: File, index: number) => {

@@ -446,8 +446,7 @@ const ActivityForm: React.FC<ActivityFormProps> = ({ handleSubmit }) => {
                     !newTheme ||
                     (!record && !newResourceFile && !newResourceURL) ||
                     newExercises.some((exercise) => !exercise.content) ||
-                    newVocabulary.length === 0 ||
-                    newVocabulary.some((vocabulary) => !vocabulary.content)
+                    (newVocabulary.length !== 0 && newVocabulary.some((vocabulary) => !vocabulary.content))
                 }
                 onClick={onCreatePressed}
                 sx={{ mt: 4, width: '100%' }}

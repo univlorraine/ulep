@@ -1,6 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
+import { Language } from 'src/core/models';
 import { LogEntryType } from 'src/core/models/log-entry.model';
+import {
+  LanguageRepository,
+  LANGUAGE_REPOSITORY,
+} from 'src/core/ports/language.repository';
 import {
   ProfileRepository,
   PROFILE_REPOSITORY,
@@ -16,6 +21,8 @@ export class UpdateVocabularyListCommand {
   name?: string;
   symbol?: string;
   profileIds?: string[];
+  wordLanguageCode?: string;
+  translationLanguageCode?: string;
 }
 
 @Injectable()
@@ -27,12 +34,24 @@ export class UpdateVocabularyListUsecase {
     private readonly vocabularyRepository: VocabularyRepository,
     @Inject(CreateOrUpdateLogEntryUsecase)
     private readonly createOrUpdateLogEntryUsecase: CreateOrUpdateLogEntryUsecase,
+    @Inject(LANGUAGE_REPOSITORY)
+    private readonly languageRepository: LanguageRepository,
   ) {}
 
   async execute(command: UpdateVocabularyListCommand) {
     const oldVocabularyList = await this.assertVocabularyListExist(
       command.vocabularyListId,
     );
+    let wordLanguage: Language | undefined;
+    let translationLanguage: Language | undefined;
+    if (command.wordLanguageCode) {
+      wordLanguage = await this.assertLanguageExist(command.wordLanguageCode);
+    }
+    if (command.translationLanguageCode) {
+      translationLanguage = await this.assertLanguageExist(
+        command.translationLanguageCode,
+      );
+    }
 
     await Promise.all(
       command.profileIds.map((profileId) => this.assertProfileExist(profileId)),
@@ -44,6 +63,9 @@ export class UpdateVocabularyListUsecase {
         name: command.name ?? oldVocabularyList.name,
         symbol: command.symbol ?? oldVocabularyList.symbol,
         profileIds: command.profileIds,
+        wordLanguageId: wordLanguage?.id ?? oldVocabularyList.wordLanguage.id,
+        translationLanguageId:
+          translationLanguage?.id ?? oldVocabularyList.translationLanguage.id,
       },
     );
 
@@ -75,5 +97,15 @@ export class UpdateVocabularyListUsecase {
     if (!profile) {
       throw new RessourceDoesNotExist('Profile does not exist');
     }
+  }
+
+  private async assertLanguageExist(languageId: string) {
+    const language = await this.languageRepository.ofCode(languageId);
+
+    if (!language) {
+      throw new RessourceDoesNotExist('Language does not exist');
+    }
+
+    return language;
   }
 }

@@ -19,8 +19,8 @@ export type GetActivitiesProps = {
   languageLevels?: string[];
   themesIds?: string[];
   searchTitle?: string;
-  status?: ActivityStatus[];
   profileId?: string;
+  shouldOnlyTakeMine?: boolean;
   pagination?: ActivityPagination;
 };
 
@@ -32,11 +32,12 @@ export type GetActivitiesForAdminProps = {
   languageCode?: string;
   languageLevel?: string;
   searchTitle?: string;
-  status?: ActivityStatus;
+  status?: ActivityStatus[];
   category?: string;
   theme?: string;
   university?: string;
   pagination: ActivityPagination;
+  currentUserUniversityId?: string;
 };
 
 export type CreateActivityProps = {

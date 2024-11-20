@@ -132,6 +132,7 @@ export const CreateActivityVocabularyContent: React.FC<CreateActivityVocabularyC
                                     handleStartRecord={() => handleStartRecord(index)}
                                     handleStopRecord={() => handleStopRecord(index)}
                                     isBlocked={false}
+                                    hideSendButton
                                 />
                             )}
                         </div>

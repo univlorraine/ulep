@@ -413,8 +413,7 @@ export class UniversityResponse {
       admissionEnd: university.admissionEnd,
       openServiceDate: university.openServiceDate,
       isCodeMandatory:
-        (university.domains || university.domains?.length === 0) &&
-        university.codes?.length > 0,
+        university.domains?.length === 0 && university.codes?.length > 0,
       closeServiceDate: university.closeServiceDate,
       website: university.website,
       pairingMode: university.pairingMode,

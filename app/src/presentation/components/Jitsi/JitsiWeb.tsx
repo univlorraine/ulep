@@ -83,7 +83,7 @@ const JitsiWeb = ({ jitsiUrl, language, roomName, jitsiToken }: JitsiProps) => {
                         isHybrid ? history.push('end-session') : history.push('/home', { endSession: true })
                     }
                     getIFrameRef={(iframeRef) => {
-                        iframeRef.style.height = '100%';
+                        iframeRef.style.height = `calc(100vh - 80px)`;
                         iframeRef.style.flex = '1';
                     }}
                 />
