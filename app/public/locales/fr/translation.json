@@ -268,7 +268,12 @@
     },
     "vocabulary": {
         "list": {
-            "create": "Créer une nouvelle liste",
+            "create": {
+                "title": "Créer une nouvelle liste"
+            },
+            "update": {
+                "title": "Modifier la liste"
+            },
             "empty": "Tu n’as pas encore créé de liste de vocabulaire pour cette langue.",
             "go_back": "Retour",
             "menu": "Menu",
@@ -311,6 +316,7 @@
         "pair": {
             "go_back": "Retour",
             "menu": "Menu",
+            "list_update": "Modifier la liste",
             "share_button": "Partager",
             "export": "Exporter",
             "empty": "Tu n’as pas encore créé de de paire de vocabulaire pour cette liste",

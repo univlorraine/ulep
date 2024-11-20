@@ -32,6 +32,8 @@ export type UpdateVocabularyListProps = {
   name?: string;
   symbol?: string;
   profileIds?: string[];
+  wordLanguageId?: string;
+  translationLanguageId?: string;
 };
 
 export type VocabularyQueryWhere = {

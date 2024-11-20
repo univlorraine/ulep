@@ -3,25 +3,31 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Language from '../../../domain/entities/Language';
 import Profile from '../../../domain/entities/Profile';
+import VocabularyList from '../../../domain/entities/VocabularyList';
 import { CreateVocabularyListCommand } from '../../../domain/interfaces/vocabulary/CreateVocabularyListUsecase.interface';
+import { UpdateVocabularyListCommand } from '../../../domain/interfaces/vocabulary/UpdateVocabularyListUsecase.interface';
 import { codeLanguageToFlag } from '../../utils';
 import Dropdown from '../DropDown';
 import TextInput from '../TextInput';
-import styles from './AddVocabularyListModal.module.css';
+import styles from './AddOrUpdateVocabularyListModal.module.css';
 import Modal from './Modal';
 
-interface AddVocabularyListModalProps {
+interface AddOrUpdateVocabularyListModalProps {
     isVisible: boolean;
     onClose: () => void;
     onCreateVocabularyList: (createVocabularyList: CreateVocabularyListCommand) => void;
+    onUpdateVocabularyList: (updateVocabularyList: UpdateVocabularyListCommand) => void;
     profile: Profile;
+    vocabularyList?: VocabularyList;
 }
 
-const AddVocabularyListModal: React.FC<AddVocabularyListModalProps> = ({
+const AddOrUpdateVocabularyListModal: React.FC<AddOrUpdateVocabularyListModalProps> = ({
     isVisible,
     onClose,
     onCreateVocabularyList,
+    onUpdateVocabularyList,
     profile,
+    vocabularyList,
 }) => {
     //TODO: Add REGEX for symbol
     const { t } = useTranslation();
@@ -52,27 +58,37 @@ const AddVocabularyListModal: React.FC<AddVocabularyListModalProps> = ({
             return;
         }
 
-        onCreateVocabularyList({
-            name,
-            symbol,
-            profileId: profile.id,
-            wordLanguageCode: originLanguage?.code,
-            translationLanguageCode: targetLanguage?.code,
-        });
+        if (vocabularyList) {
+            onUpdateVocabularyList({
+                name,
+                symbol,
+                profileIds: [profile.id],
+                wordLanguageCode: originLanguage?.code,
+                translationLanguageCode: targetLanguage?.code,
+            });
+        } else {
+            onCreateVocabularyList({
+                name,
+                symbol,
+                profileId: profile.id,
+                wordLanguageCode: originLanguage?.code,
+                translationLanguageCode: targetLanguage?.code,
+            });
+        }
     };
 
     useEffect(() => {
         setErrorMessage(undefined);
-        setName('');
-        setSymbol('');
-        setOriginLanguage(profile.nativeLanguage);
-        setTargetLanguage(profile.learningLanguages[0]);
-    }, [isVisible]);
+        setName(vocabularyList?.name ?? '');
+        setSymbol(vocabularyList?.symbol ?? '');
+        setOriginLanguage(vocabularyList?.wordLanguage ?? profile.nativeLanguage);
+        setTargetLanguage(vocabularyList?.translationLanguage ?? profile.learningLanguages[0]);
+    }, [isVisible, vocabularyList]);
 
     return (
         <Modal isVisible={isVisible} onClose={onClose} hideWhiteBackground>
             <div className={styles.container}>
-                <h1 className={styles.title}>{t('vocabulary.list.add.title')}</h1>
+                <h1 className={styles.title}>{t(`vocabulary.list.${vocabularyList ? 'update' : 'add'}.title`)}</h1>
 
                 <TextInput
                     onChange={(text) => setName(text)}
@@ -134,4 +150,4 @@ const AddVocabularyListModal: React.FC<AddVocabularyListModalProps> = ({
     );
 };
 
-export default AddVocabularyListModal;
+export default AddOrUpdateVocabularyListModal;

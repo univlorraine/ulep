@@ -1,5 +1,5 @@
 import { IonButton, IonIcon, IonImg, IonItem, IonLabel, IonList, IonSearchbar, useIonToast } from '@ionic/react';
-import { arrowRedoOutline, downloadOutline } from 'ionicons/icons';
+import { arrowRedoOutline, downloadOutline, pencilOutline } from 'ionicons/icons';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AddSvg, VocabularyPng } from '../../../assets';
@@ -18,6 +18,7 @@ interface VocabularyContentProps {
     vocabularyPairs: Vocabulary[];
     isLoading: boolean;
     onAddVocabulary: (vocabulary?: Vocabulary) => void;
+    onUpdateVocabularyList: () => void;
     onSearch: (search: string) => void;
     onShareVocabularyList: () => void;
     setQuizzSelectedListIds: (selectedListsIds: string[]) => void;
@@ -30,6 +31,7 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
     goBack,
     isLoading,
     onAddVocabulary,
+    onUpdateVocabularyList,
     onSearch,
     onShareVocabularyList,
     setQuizzSelectedListIds,
@@ -111,6 +113,17 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
                         >
                             <IonIcon icon={downloadOutline} aria-hidden="true" />
                             <IonLabel className={styles['popover-label']}>{t('vocabulary.pair.export')}</IonLabel>
+                        </IonItem>
+                        <IonItem
+                            button={true}
+                            detail={false}
+                            onClick={() => {
+                                onUpdateVocabularyList();
+                                closeMenu();
+                            }}
+                        >
+                            <IonIcon icon={pencilOutline} aria-hidden="true" />
+                            <IonLabel className={styles['popover-label']}>{t('vocabulary.pair.list_update')}</IonLabel>
                         </IonItem>
                         <IonItem
                             button={true}
