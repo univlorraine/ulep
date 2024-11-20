@@ -22,7 +22,7 @@ export type CreateEventProps = {
   addressName?: string;
   deepLink?: string;
   withSubscription: boolean;
-  concernedUniversities: string[];
+  concernedUniversities?: string[];
   diffusionLanguages: string[];
   startDate: Date;
   endDate: Date;

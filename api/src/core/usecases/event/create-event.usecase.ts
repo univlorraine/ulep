@@ -27,7 +27,7 @@ export type CreateEventCommand = {
   address?: string;
   addressName?: string;
   withSubscription: boolean;
-  concernedUniversities: string[];
+  concernedUniversities?: string[];
   diffusionLanguages: string[];
   startDate: Date;
   endDate: Date;
