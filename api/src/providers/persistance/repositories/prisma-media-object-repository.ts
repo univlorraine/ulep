@@ -1,10 +1,10 @@
 import { PrismaService } from '@app/common';
 import { Injectable } from '@nestjs/common';
 import {
-  LearningObjective,
-  MediaObject,
-  University,
-  User,
+    LearningObjective,
+    MediaObject,
+    University,
+    User,
 } from 'src/core/models';
 import { MediaObjectRepository } from 'src/core/ports/media-object.repository';
 
@@ -82,9 +82,13 @@ export class PrismaMediaObjectRepository implements MediaObjectRepository {
   }
 
   async avatarOfUser(userId: string): Promise<MediaObject | null> {
+    // Get User or Administrator avatar
     const mediaObject = await this.prisma.mediaObjects.findFirst({
       where: {
-        User: { id: userId },
+        OR: [
+          { User: { id: userId } },
+          { id: userId },
+        ],
       },
     });
 
