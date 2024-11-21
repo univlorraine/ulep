@@ -36,6 +36,7 @@ export const logEntryMapper = (snapshot: LogEntrySnapshot): LogEntry => {
     percentage: number;
     tandemFirstname: string;
     tandemLastname: string;
+    partnerTandemId: string;
     vocabularyListId: string;
     vocabularyListName: string;
     title: string;
@@ -55,6 +56,7 @@ export const logEntryMapper = (snapshot: LogEntrySnapshot): LogEntry => {
         duration: data.duration,
         tandemFirstname: data.tandemFirstname,
         tandemLastname: data.tandemLastname,
+        partnerTandemId: data.partnerTandemId,
       });
     case LogEntryType.TANDEM_CHAT:
       return new LogEntryTandemChat({

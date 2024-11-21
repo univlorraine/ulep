@@ -147,7 +147,9 @@ export class CreateOrUpdateLogEntryUsecase {
         };
       case LogEntryType.VISIO:
         const visioEntryExistsToday = entries.find(
-          (entry) => entry instanceof LogEntryVisio,
+          (entry) =>
+            entry instanceof LogEntryVisio &&
+            entry.partnerTandemId === metadata.partnerTandemId,
         );
 
         return {
@@ -243,11 +245,7 @@ export class CreateOrUpdateLogEntryUsecase {
         }
         break;
       case LogEntryType.VISIO:
-        if (
-          !metadata.duration ||
-          !metadata.tandemFirstname ||
-          !metadata.tandemLastname
-        ) {
+        if (!metadata.duration || !metadata.partnerTandemId) {
           throw new LogEntryMissingMetadataException();
         }
         break;

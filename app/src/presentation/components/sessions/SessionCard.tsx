@@ -1,13 +1,13 @@
+import { IonButton } from '@ionic/react';
+import { formatInTimeZone } from 'date-fns-tz';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
 import Session from '../../../domain/entities/Session';
 import Tandem from '../../../domain/entities/Tandem';
-import styles from './SessionCard.module.css';
-import TandemBubble from './TandemBubble';
-import { formatInTimeZone } from 'date-fns-tz';
 import { useStoreState } from '../../../store/storeTypes';
 import DateFormatted from './DateFormatted';
-import { IonButton } from '@ionic/react';
+import styles from './SessionCard.module.css';
+import TandemBubble from './TandemBubble';
 
 interface SessionCardProps {
     tandem: Tandem;
@@ -58,6 +58,7 @@ const JoinSessionButton: React.FC<JoinSessionButtonProps> = ({ tandem }) => {
         return history.push({
             pathname: '/jitsi',
             search: `?roomName=${tandem.id}`,
+            state: { tandemPartner: tandem.partner },
         });
     };
     return (
@@ -123,7 +124,11 @@ const SessionCard: React.FC<SessionCardProps> = ({
         return (
             <>
                 <ShowSessionButton session={session} tandem={tandem} onShowSessionPressed={onShowSessionPressed} />
-                <UpdateSessionButton session={session} tandem={tandem} onUpdateSessionPressed={onUpdateSessionPressed} />
+                <UpdateSessionButton
+                    session={session}
+                    tandem={tandem}
+                    onUpdateSessionPressed={onUpdateSessionPressed}
+                />
             </>
         );
     };
@@ -152,27 +157,25 @@ const SessionCard: React.FC<SessionCardProps> = ({
                             <>
                                 <div className={styles['text-container']}>
                                     <DateFormatted date={session.startAt} />
-                                    {session.cancelledAt && <div className={styles.cancelled}>{t('session.card.cancelled')}</div>}
+                                    {session.cancelledAt && (
+                                        <div className={styles.cancelled}>{t('session.card.cancelled')}</div>
+                                    )}
                                 </div>
                                 <div className={styles['text-container']}>
-                                    {formatInTimeZone(session.startAt, profile?.user?.university.timezone as string, 'HH:mm (zzzz, zzz)')}
+                                    {formatInTimeZone(
+                                        session.startAt,
+                                        profile?.user?.university.timezone as string,
+                                        'HH:mm (zzzz, zzz)'
+                                    )}
                                 </div>
                             </>
                         ) : (
                             <div className={styles['text-container']}>{t('session.card.no_session')}</div>
                         )}
                     </div>
-                    {!isHybrid && (
-                        <div className={styles.buttons}>
-                            {renderSessionButtons()}
-                        </div>
-                    )}
+                    {!isHybrid && <div className={styles.buttons}>{renderSessionButtons()}</div>}
                 </div>
-                {isHybrid && (
-                    <div className={styles.buttons}>
-                        {renderSessionButtons()}
-                    </div>
-                )}
+                {isHybrid && <div className={styles.buttons}>{renderSessionButtons()}</div>}
             </div>
         </div>
     );

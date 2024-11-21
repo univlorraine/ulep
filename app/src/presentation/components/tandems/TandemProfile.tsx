@@ -48,7 +48,7 @@ const TandemProfile: React.FC<TandemProfileProps> = ({
         history.push({
             pathname: '/jitsi',
             search: `?roomName=${id}`,
-            state: { tandem: profile },
+            state: { tandemPartner: profile },
         });
     };
 

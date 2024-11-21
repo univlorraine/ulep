@@ -74,6 +74,11 @@ export class LogEntryController {
       metadata: {
         content: body.content,
         title: body.title,
+        duration: body.duration,
+        partnerTandemId: body.partnerTandemId,
+        tandemFirstname: body.tandemFirstname,
+        tandemLastname: body.tandemLastname,
+        percentage: body.percentage,
       },
       ownerId: user.sub,
       createdAt: body.createdAt,

@@ -30,6 +30,10 @@ import { HYBRID_MAX_WIDTH } from '../utils';
 
 interface HomePageLocationProps {
     endSession: boolean;
+    duration: number;
+    partnerTandemId: string;
+    tandemFirstname: string;
+    tandemLastname: string;
 }
 
 const HomePage: React.FC = () => {
@@ -54,7 +58,13 @@ const HomePage: React.FC = () => {
 
     const onReportPressed = () => (isHybrid ? history.push('/report') : undefined);
 
-    const onCompleteLearningJournalPressed = () => setIsEndSessionModalOpen(false);
+    const onCloseEndSessionModal = () => {
+        history.replace({
+            pathname: location.pathname,
+            state: {},
+        });
+        setIsEndSessionModalOpen(false);
+    };
 
     const onValidatedTandemPressed = (tandem: Tandem) =>
         !isHybrid ? setSelectedTandem(tandem) : history.push('/tandem-profil', { tandem });
@@ -228,8 +238,12 @@ const HomePage: React.FC = () => {
             />
             <EndSessionModal
                 isOpen={isEndSessionModalOpen}
-                onClose={() => setIsEndSessionModalOpen(false)}
-                onCompleteLearningJournalPressed={onCompleteLearningJournalPressed}
+                onClose={onCloseEndSessionModal}
+                onCompleteLearningJournalPressed={onCloseEndSessionModal}
+                duration={location.state?.duration}
+                partnerTandemId={location.state?.partnerTandemId}
+                tandemFirstname={location.state?.tandemFirstname}
+                tandemLastname={location.state?.tandemLastname}
             />
             <NewsContentModal
                 isVisible={displayNewsContent !== undefined}

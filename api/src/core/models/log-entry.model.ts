@@ -51,18 +51,21 @@ export class LogEntryConnection extends LogEntry {
 
 export type LogEntryVisioProps = LogEntryProps & {
   duration: number;
-  tandemFirstname: string;
-  tandemLastname: string;
+  partnerTandemId: string;
+  tandemFirstname?: string;
+  tandemLastname?: string;
 };
 
 export class LogEntryVisio extends LogEntry {
   duration: number;
-  tandemFirstname: string;
-  tandemLastname: string;
+  partnerTandemId: string;
+  tandemFirstname?: string;
+  tandemLastname?: string;
 
   constructor(data: LogEntryVisioProps) {
     super(data);
     this.duration = data.duration;
+    this.partnerTandemId = data.partnerTandemId;
     this.tandemFirstname = data.tandemFirstname;
     this.tandemLastname = data.tandemLastname;
   }

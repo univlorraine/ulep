@@ -1,6 +1,6 @@
 import { JitsiMeeting } from '@jitsi/react-sdk';
 import IJitsiMeetExternalApi from '@jitsi/react-sdk/lib/types/IJitsiMeetExternalApi';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useHistory } from 'react-router';
 import useGetHomeData from '../../hooks/useGetHomeData';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
@@ -9,15 +9,18 @@ import HomeHeader from '../HomeHeader';
 import styles from './JitsiWeb.module.css';
 import { JitsiProps } from './VisioContainer';
 import VisioInfoFrame from './VisioInfoFrame';
-const JitsiWeb = ({ jitsiUrl, language, roomName, jitsiToken }: JitsiProps) => {
+const JitsiWeb = ({ jitsiUrl, language, roomName, jitsiToken, tandemPartner }: JitsiProps) => {
     const history = useHistory();
     const apiRef = useRef<IJitsiMeetExternalApi>();
     const { width } = useWindowDimensions();
     const isHybrid = width < HYBRID_MAX_WIDTH;
     const { tandems } = useGetHomeData();
     const tandem = tandems.find((t) => t.id === roomName);
+    const [startTime, setStartTime] = useState<number | null>(null);
 
     const handleApiReady = (apiObj: IJitsiMeetExternalApi) => {
+        setStartTime(Date.now());
+
         apiRef.current = apiObj;
         apiRef.current.on('outgoingMessage', handleOutgoingMessage);
     };
@@ -79,9 +82,22 @@ const JitsiWeb = ({ jitsiUrl, language, roomName, jitsiToken }: JitsiProps) => {
                         // you can also store it locally to execute commands
                         handleApiReady(externalApi);
                     }}
-                    onReadyToClose={() =>
-                        isHybrid ? history.push('end-session') : history.push('/home', { endSession: true })
-                    }
+                    onReadyToClose={() => {
+                        let duration;
+                        if (startTime) {
+                            const endTime = Date.now();
+                            duration = endTime - startTime;
+                        }
+                        isHybrid
+                            ? history.push('end-session')
+                            : history.push('/home', {
+                                  endSession: true,
+                                  duration: 12,
+                                  partnerTandemId: tandemPartner?.id,
+                                  tandemFirstname: tandemPartner?.user.firstname,
+                                  tandemLastname: tandemPartner?.user.lastname,
+                              });
+                    }}
                     getIFrameRef={(iframeRef) => {
                         iframeRef.style.height = `calc(100vh - 80px)`;
                         iframeRef.style.flex = '1';

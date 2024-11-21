@@ -1,19 +1,57 @@
-import { IonButton } from '@ionic/react';
+import { IonButton, useIonToast } from '@ionic/react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { StarPng } from '../../../assets';
 import { ReactComponent as Background } from '../../../assets/background.svg';
 import { useConfig } from '../../../context/ConfigurationContext';
+import { LogEntryType } from '../../../domain/entities/LogEntry';
 import styles from './EndSessionContent.module.css';
 
 type EndSessionContentProps = {
     onClose: () => void;
     onCompleteLearningJournalPressed: () => void;
+    duration?: number;
+    partnerTandemId?: string;
+    tandemFirstname?: string;
+    tandemLastname?: string;
 };
 
-const EndSessionContent: React.FC<EndSessionContentProps> = ({ onClose, onCompleteLearningJournalPressed }) => {
+const EndSessionContent: React.FC<EndSessionContentProps> = ({
+    onClose,
+    onCompleteLearningJournalPressed,
+    duration,
+    partnerTandemId,
+    tandemFirstname,
+    tandemLastname,
+}) => {
     const { t } = useTranslation();
+    const [showToast] = useIonToast();
+    const { createLogEntry } = useConfig();
     const { configuration } = useConfig();
+
+    const handleCompleteLearningJournalPressed = async () => {
+        console.log('duration', duration);
+        console.log('partnerTandemId', partnerTandemId);
+        console.log('tandemFirstname', tandemFirstname);
+        console.log('tandemLastname', tandemLastname);
+        if (duration && partnerTandemId && tandemFirstname && tandemLastname) {
+            const result = await createLogEntry.execute({
+                type: LogEntryType.VISIO,
+                metadata: {
+                    duration,
+                    partnerTandemId,
+                    tandemFirstname,
+                    tandemLastname,
+                },
+            });
+
+            if (result instanceof Error) {
+                showToast({ message: t(result.message), duration: 5000 });
+            }
+        }
+
+        onCompleteLearningJournalPressed();
+    };
 
     return (
         <div className={styles.container}>
@@ -36,7 +74,7 @@ const EndSessionContent: React.FC<EndSessionContentProps> = ({ onClose, onComple
                 <IonButton
                     fill="clear"
                     className="primary-button no-padding"
-                    onClick={onCompleteLearningJournalPressed}
+                    onClick={handleCompleteLearningJournalPressed}
                 >
                     {t('home_page.end_session.complete_learning_journal_button')}
                 </IonButton>

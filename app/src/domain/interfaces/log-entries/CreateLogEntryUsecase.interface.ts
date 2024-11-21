@@ -7,6 +7,7 @@ interface CreateLogEntryMetadata {
     duration?: number;
     tandemFirstname?: string;
     tandemLastname?: string;
+    partnerTandemId?: string;
     percentage?: number;
 }
 

@@ -30,6 +30,10 @@ export class CreateCustomLogEntryRequest {
 
   @IsString()
   @IsOptional()
+  partnerTandemId?: string;
+
+  @IsString()
+  @IsOptional()
   tandemFirstname?: string;
 
   @IsString()

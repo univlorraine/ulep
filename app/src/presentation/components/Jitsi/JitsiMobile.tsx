@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { JitsiProps } from './VisioContainer';
 
-const JitsiMobile = ({ jitsiUrl, roomName, jitsiToken }: JitsiProps) => {
+const JitsiMobile = ({ jitsiUrl, roomName, jitsiToken, tandemPartner }: JitsiProps) => {
     const history = useHistory();
 
     const initialiseJitsi = async () => {

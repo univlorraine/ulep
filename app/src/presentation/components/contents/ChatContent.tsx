@@ -6,14 +6,14 @@ import { useHistory } from 'react-router';
 import { KebabSvg, LeftChevronSvg } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
 import { useSocket } from '../../../context/SocketContext';
-import Profile from '../../../domain/entities/Profile';
 import Conversation, { MessagePaginationDirection } from '../../../domain/entities/chat/Conversation';
+import Profile from '../../../domain/entities/Profile';
 import { useStoreState } from '../../../store/storeTypes';
 import useHandleMessagesFromConversation from '../../hooks/useHandleMessagesFromConversation';
-import Loader from '../Loader';
 import ChatInputSender from '../chat/ChatInputSender';
 import ConversationSearchBar from '../chat/ConversationSearchBar';
 import MessagesList from '../chat/MessagesList';
+import Loader from '../Loader';
 import styles from './ChatContent.module.css';
 
 //TODO: modale to display picture on full screen ( almost ? )
@@ -77,6 +77,7 @@ const Content: React.FC<ChatContentProps> = ({
         history.push({
             pathname: '/jitsi',
             search: `?roomName=${conversation.id}`,
+            state: { tandemPartner: partner },
         });
     };
 

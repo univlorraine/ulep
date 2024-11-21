@@ -15,6 +15,7 @@ interface CreateLogEntryPayload {
     percentage?: number;
     title?: string;
     createdAt?: Date;
+    partnerTandemId?: string;
 }
 
 class CreateLogEntryUsecase implements CreateLogEntryUsecaseInterface {
@@ -40,6 +41,10 @@ class CreateLogEntryUsecase implements CreateLogEntryUsecaseInterface {
 
             if (command.metadata.tandemLastname) {
                 payload.tandemLastname = command.metadata.tandemLastname;
+            }
+
+            if (command.metadata.partnerTandemId) {
+                payload.partnerTandemId = command.metadata.partnerTandemId;
             }
 
             if (command.metadata.percentage) {
