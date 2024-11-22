@@ -93,6 +93,10 @@
             },
             "custom": {
                 "button": "Modifier"
+            },
+            "visio": {
+                "title": "Visio avec {{firstname}} {{lastname}}",
+                "subtitle": "L'appel a duré {{minutes}} minutes et {{seconds}} secondes"
             }
         },
         "create": {

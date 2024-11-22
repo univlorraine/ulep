@@ -12,7 +12,6 @@ import {
   LogEntrySubmitActivity,
   LogEntryTandemChat,
   LogEntryType,
-  LogEntryVisio,
 } from 'src/core/models/log-entry.model';
 import {
   LogEntryRepository,
@@ -146,16 +145,10 @@ export class CreateOrUpdateLogEntryUsecase {
           shouldIgnore: Boolean(tandemChatEntryExistsToday),
         };
       case LogEntryType.VISIO:
-        const visioEntryExistsToday = entries.find(
-          (entry) =>
-            entry instanceof LogEntryVisio &&
-            entry.partnerTandemId === metadata.partnerTandemId,
-        );
-
         return {
           entryToUpdate: undefined,
-          shouldCreate: !visioEntryExistsToday,
-          shouldIgnore: Boolean(visioEntryExistsToday),
+          shouldCreate: true,
+          shouldIgnore: undefined,
         };
       case LogEntryType.SHARING_LOGS:
         const sharingLogsEntryExistsToday = entries.find(

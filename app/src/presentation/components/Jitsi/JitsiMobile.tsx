@@ -6,6 +6,7 @@ import { JitsiProps } from './VisioContainer';
 
 const JitsiMobile = ({ jitsiUrl, roomName, jitsiToken, tandemPartner }: JitsiProps) => {
     const history = useHistory();
+    let startTime: number | null = null;
 
     const initialiseJitsi = async () => {
         // native device, open jitsi capacitor plugin
@@ -13,7 +14,6 @@ const JitsiMobile = ({ jitsiUrl, roomName, jitsiToken, tandemPartner }: JitsiPro
             roomName: roomName,
             url: `https://${jitsiUrl}/`,
             token: jitsiToken,
-
             channelLastN: '10',
             avatarURL: '',
             startWithAudioMuted: false,
@@ -39,6 +39,7 @@ const JitsiMobile = ({ jitsiUrl, roomName, jitsiToken, tandemPartner }: JitsiPro
             },
         });
         window.addEventListener('onConferenceLeft', onJitsiUnloaded);
+        startTime = Date.now();
     };
 
     const onJitsiUnloaded = async () => {
@@ -46,7 +47,19 @@ const JitsiMobile = ({ jitsiUrl, roomName, jitsiToken, tandemPartner }: JitsiPro
             window.removeEventListener('onConferenceLeft', onJitsiUnloaded);
         }
 
-        history.push('/end-session');
+        let duration;
+        if (startTime) {
+            const endTime = Date.now();
+            // Subtract 1 second to account for the delay in joining the conference - must be changed later
+            duration = Math.floor((endTime - startTime) / 1000) - 1;
+        }
+
+        history.push('/end-session', {
+            duration,
+            partnerTandemId: tandemPartner?.id,
+            tandemFirstname: tandemPartner?.user.firstname,
+            tandemLastname: tandemPartner?.user.lastname,
+        });
     };
 
     useEffect(() => {

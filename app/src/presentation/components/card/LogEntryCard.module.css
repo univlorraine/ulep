@@ -6,17 +6,30 @@
     padding: 16px;
 }
 
+.primaryContainer {
+    background-color: var(--primary-color);
+}
+
 .line {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
 
-.image {
+.imageContainer {
+    align-self: center;
     background-color: white;
     border-radius: 50%;
+    display: flex;
+    justify-content: center;
     width: 64px;
     height: 64px;
+    padding: 8px;
+}
+
+.image {
+    width: 48px;
+    height: 48px;
 }
 
 .date {

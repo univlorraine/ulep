@@ -1,6 +1,6 @@
 import { JitsiMeeting } from '@jitsi/react-sdk';
 import IJitsiMeetExternalApi from '@jitsi/react-sdk/lib/types/IJitsiMeetExternalApi';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { useHistory } from 'react-router';
 import useGetHomeData from '../../hooks/useGetHomeData';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
@@ -16,11 +16,9 @@ const JitsiWeb = ({ jitsiUrl, language, roomName, jitsiToken, tandemPartner }: J
     const isHybrid = width < HYBRID_MAX_WIDTH;
     const { tandems } = useGetHomeData();
     const tandem = tandems.find((t) => t.id === roomName);
-    const [startTime, setStartTime] = useState<number | null>(null);
+    let startTime: number | null = null;
 
     const handleApiReady = (apiObj: IJitsiMeetExternalApi) => {
-        setStartTime(Date.now());
-
         apiRef.current = apiObj;
         apiRef.current.on('outgoingMessage', handleOutgoingMessage);
     };
@@ -81,18 +79,20 @@ const JitsiWeb = ({ jitsiUrl, language, roomName, jitsiToken, tandemPartner }: J
                         // here you can attach custom event listeners to the Jitsi Meet External API
                         // you can also store it locally to execute commands
                         handleApiReady(externalApi);
+                        startTime = Date.now();
                     }}
                     onReadyToClose={() => {
                         let duration;
                         if (startTime) {
                             const endTime = Date.now();
-                            duration = endTime - startTime;
+                            // Subtract 1 second to account for the delay in joining the conference - must be changed later
+                            duration = Math.floor((endTime - startTime) / 1000) - 1;
                         }
                         isHybrid
                             ? history.push('end-session')
                             : history.push('/home', {
                                   endSession: true,
-                                  duration: 12,
+                                  duration,
                                   partnerTandemId: tandemPartner?.id,
                                   tandemFirstname: tandemPartner?.user.firstname,
                                   tandemLastname: tandemPartner?.user.lastname,

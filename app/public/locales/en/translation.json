@@ -93,6 +93,10 @@
             },
             "custom": {
                 "button": "Update"
+            },
+            "visio": {
+                "title": "Visio with {{firstname}} {{lastname}}",
+                "subtitle": "The call lasted {{minutes}} minutes and {{seconds}} seconds"
             }
         },
         "create": {

@@ -1,7 +1,13 @@
 import { IonButton } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
-import { JournalSvg, StarPng } from '../../../assets';
-import { LogEntry, LogEntryConnection, LogEntryCustomEntry } from '../../../domain/entities/LogEntry';
+import { AvatarPng, JournalSvg, Star2Png } from '../../../assets';
+import {
+    LogEntry,
+    LogEntryConnection,
+    LogEntryCustomEntry,
+    LogEntryType,
+    LogEntryVisio,
+} from '../../../domain/entities/LogEntry';
 import Profile from '../../../domain/entities/Profile';
 import styles from './LogEntryCard.module.css';
 
@@ -17,8 +23,11 @@ const getLogEntryImage = (logEntry: LogEntry): string | undefined => {
     if (logEntry instanceof LogEntryCustomEntry) {
         return JournalSvg;
     } else if (logEntry instanceof LogEntryConnection) {
-        return StarPng;
+        return Star2Png;
+    } else if (logEntry instanceof LogEntryVisio) {
+        return AvatarPng;
     }
+
     return undefined;
 };
 
@@ -28,7 +37,17 @@ const LogEntryTitle: React.FC<LogEntrySubComponentProps> = ({ logEntry }) => {
         return logEntry.title;
     } else if (logEntry instanceof LogEntryConnection) {
         return <>{t('learning_book.entry.connection.title')}</>;
+    } else if (logEntry instanceof LogEntryVisio) {
+        return (
+            <>
+                {t('learning_book.entry.visio.title', {
+                    firstname: logEntry.tandemFirstname,
+                    lastname: logEntry.tandemLastname,
+                })}
+            </>
+        );
     }
+
     return <>{t('learning_book.entry.default.title')}</>;
 };
 
@@ -36,9 +55,17 @@ const LogEntrySubTitle: React.FC<LogEntrySubComponentProps> = ({ logEntry }) => 
     const { t } = useTranslation();
     if (logEntry instanceof LogEntryCustomEntry) {
         return logEntry.content;
-    } else if (logEntry instanceof LogEntryConnection) {
-        return <></>;
+    } else if (logEntry instanceof LogEntryVisio) {
+        return (
+            <>
+                {t('learning_book.entry.visio.subtitle', {
+                    minutes: Math.floor(logEntry.duration / 60),
+                    seconds: logEntry.duration % 60,
+                })}
+            </>
+        );
     }
+
     return <></>;
 };
 
@@ -50,7 +77,7 @@ const LogEntryButton: React.FC<LogEntryButtonProps> = ({ logEntry, onClick }) =>
                 {t('learning_book.entry.custom.button')}
             </IonButton>
         );
-    } else if (logEntry instanceof LogEntryConnection) {
+    } else if (logEntry instanceof LogEntryVisio) {
         return <></>;
     }
     return <></>;
@@ -70,10 +97,17 @@ const LogEntryCard: React.FC<LogEntryCardProps> = ({ logEntry, onClick, profile 
     const image = getLogEntryImage(logEntry);
 
     return (
-        <div className={styles.container} onClick={() => onClick(logEntry)}>
+        <div
+            className={`${styles.container} ${logEntry.type === LogEntryType.VISIO ? styles.primaryContainer : ''}`}
+            onClick={() => onClick(logEntry)}
+        >
             <div className={styles.line}>
                 <p className={styles.date}>{date}</p>
-                {image && <img className={styles.image} src={image} aria-hidden />}
+                {image && (
+                    <div className={styles.imageContainer}>
+                        <img className={styles.image} src={image} aria-hidden />
+                    </div>
+                )}
             </div>
             <span className={styles.title}>
                 <LogEntryTitle logEntry={logEntry} />
