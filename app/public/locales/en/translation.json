@@ -97,6 +97,9 @@
             "visio": {
                 "title": "Visio with {{firstname}} {{lastname}}",
                 "subtitle": "The call lasted {{minutes}} minutes and {{seconds}} seconds"
+            },
+            "tandem_chat": {
+                "title": "Conversation with {{firstname}} {{lastname}} started today"
             }
         },
         "create": {

@@ -5,6 +5,7 @@ import { useConfig } from '../../context/ConfigurationContext';
 import { useSocket } from '../../context/SocketContext';
 import Conversation, { MessagePaginationDirection } from '../../domain/entities/chat/Conversation';
 import { Message, MessageType, MessageWithConversationId } from '../../domain/entities/chat/Message';
+import { LogEntryType } from '../../domain/entities/LogEntry';
 import { UserChat } from '../../domain/entities/User';
 import { useStoreState } from '../../store/storeTypes';
 
@@ -19,7 +20,7 @@ const useHandleMessagesFromConversation = ({
     typeFilter,
     limit = 10,
 }: UseHandleMessagesFromConversationProps) => {
-    const { getMessagesFromConversation, sendMessage } = useConfig();
+    const { getMessagesFromConversation, sendMessage, createLogEntry } = useConfig();
     const { socket } = useSocket();
     const [lastMessageForwardId, setLastMessageForwardId] = useState<string>();
     const [lastMessageBackwardId, setLastMessageBackwardId] = useState<string>();
@@ -88,6 +89,17 @@ const useHandleMessagesFromConversation = ({
                 messageResult.metadata
             )
         );
+
+        const partner = Conversation.getMainConversationPartner(conversation, profile.user.id);
+
+        await createLogEntry.execute({
+            type: LogEntryType.TANDEM_CHAT,
+            metadata: {
+                partnerTandemId: conversation.id,
+                tandemFirstname: partner.firstname,
+                tandemLastname: partner.lastname,
+            },
+        });
     };
 
     const loadMessages = async (

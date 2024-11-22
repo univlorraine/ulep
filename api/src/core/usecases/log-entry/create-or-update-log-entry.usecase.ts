@@ -238,13 +238,18 @@ export class CreateOrUpdateLogEntryUsecase {
         }
         break;
       case LogEntryType.VISIO:
-        if (!metadata.duration || !metadata.partnerTandemId) {
+        if (
+          !metadata.duration ||
+          !metadata.partnerTandemId ||
+          !metadata.tandemFirstname ||
+          !metadata.tandemLastname
+        ) {
           throw new LogEntryMissingMetadataException();
         }
         break;
       case LogEntryType.TANDEM_CHAT:
         if (
-          !metadata.conversationId ||
+          !metadata.partnerTandemId ||
           !metadata.tandemFirstname ||
           !metadata.tandemLastname
         ) {

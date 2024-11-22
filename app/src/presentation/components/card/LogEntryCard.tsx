@@ -5,6 +5,7 @@ import {
     LogEntry,
     LogEntryConnection,
     LogEntryCustomEntry,
+    LogEntryTandemChat,
     LogEntryType,
     LogEntryVisio,
 } from '../../../domain/entities/LogEntry';
@@ -24,7 +25,7 @@ const getLogEntryImage = (logEntry: LogEntry): string | undefined => {
         return JournalSvg;
     } else if (logEntry instanceof LogEntryConnection) {
         return Star2Png;
-    } else if (logEntry instanceof LogEntryVisio) {
+    } else if (logEntry instanceof LogEntryVisio || logEntry instanceof LogEntryTandemChat) {
         return AvatarPng;
     }
 
@@ -37,6 +38,15 @@ const LogEntryTitle: React.FC<LogEntrySubComponentProps> = ({ logEntry }) => {
         return logEntry.title;
     } else if (logEntry instanceof LogEntryConnection) {
         return <>{t('learning_book.entry.connection.title')}</>;
+    } else if (logEntry instanceof LogEntryTandemChat) {
+        return (
+            <>
+                {t('learning_book.entry.tandem_chat.title', {
+                    firstname: logEntry.tandemFirstname,
+                    lastname: logEntry.tandemLastname,
+                })}
+            </>
+        );
     } else if (logEntry instanceof LogEntryVisio) {
         return (
             <>
@@ -98,7 +108,11 @@ const LogEntryCard: React.FC<LogEntryCardProps> = ({ logEntry, onClick, profile 
 
     return (
         <div
-            className={`${styles.container} ${logEntry.type === LogEntryType.VISIO ? styles.primaryContainer : ''}`}
+            className={`${styles.container} ${
+                logEntry.type === LogEntryType.VISIO || logEntry.type === LogEntryType.TANDEM_CHAT
+                    ? styles.primaryContainer
+                    : ''
+            }`}
             onClick={() => onClick(logEntry)}
         >
             <div className={styles.line}>
