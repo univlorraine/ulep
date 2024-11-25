@@ -6,6 +6,7 @@ import {
     LogEntryAddVocabulary,
     LogEntryConnection,
     LogEntryCustomEntry,
+    LogEntryShareVocabulary,
     LogEntryTandemChat,
     LogEntryType,
     LogEntryVisio,
@@ -26,7 +27,7 @@ const getLogEntryImage = (logEntry: LogEntry): string | undefined => {
         return JournalSvg;
     } else if (logEntry instanceof LogEntryConnection) {
         return Star2Png;
-    } else if (logEntry instanceof LogEntryAddVocabulary) {
+    } else if (logEntry instanceof LogEntryAddVocabulary || logEntry instanceof LogEntryShareVocabulary) {
         return VocabularyPng;
     } else if (logEntry instanceof LogEntryVisio || logEntry instanceof LogEntryTandemChat) {
         return AvatarPng;
@@ -47,6 +48,14 @@ const LogEntryTitle: React.FC<LogEntrySubComponentProps> = ({ logEntry }) => {
                 {t('learning_book.entry.add_vocabulary.title', {
                     vocabularyListName: logEntry.vocabularyListName,
                     entryNumber: logEntry.entryNumber,
+                })}
+            </>
+        );
+    } else if (logEntry instanceof LogEntryShareVocabulary) {
+        return (
+            <>
+                {t('learning_book.entry.share_vocabulary.title', {
+                    vocabularyListName: logEntry.vocabularyListName,
                 })}
             </>
         );
@@ -103,6 +112,12 @@ const LogEntryButton: React.FC<LogEntryButtonProps> = ({ logEntry, onClick }) =>
         return (
             <IonButton fill="clear" className="primary-button no-padding" onClick={() => onClick(logEntry)}>
                 {t('learning_book.entry.add_vocabulary.button')}
+            </IonButton>
+        );
+    } else if (logEntry instanceof LogEntryShareVocabulary) {
+        return (
+            <IonButton fill="clear" className="primary-button no-padding" onClick={() => onClick(logEntry)}>
+                {t('learning_book.entry.share_vocabulary.button')}
             </IonButton>
         );
     }

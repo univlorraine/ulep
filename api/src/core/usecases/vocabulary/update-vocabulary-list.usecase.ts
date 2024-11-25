@@ -23,6 +23,7 @@ export class UpdateVocabularyListCommand {
   profileIds?: string[];
   wordLanguageCode?: string;
   translationLanguageCode?: string;
+  userId?: string;
 }
 
 @Injectable()
@@ -52,7 +53,6 @@ export class UpdateVocabularyListUsecase {
         command.translationLanguageCode,
       );
     }
-
     await Promise.all(
       command.profileIds.map((profileId) => this.assertProfileExist(profileId)),
     );
@@ -71,9 +71,12 @@ export class UpdateVocabularyListUsecase {
 
     if (command.profileIds && command.profileIds.length > 0) {
       await this.createOrUpdateLogEntryUsecase.execute({
-        ownerId: vocabularyList.creatorId,
+        ownerId: command.userId,
         type: LogEntryType.SHARE_VOCABULARY,
-        metadata: { vocabularyListId: command.vocabularyListId },
+        metadata: {
+          vocabularyListId: command.vocabularyListId,
+          vocabularyListName: vocabularyList.name,
+        },
       });
     }
 

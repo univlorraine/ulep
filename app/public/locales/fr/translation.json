@@ -104,6 +104,10 @@
             "add_vocabulary": {
                 "title": "Ajout de vocabulaire à la liste {{vocabularyListName}} : {{entryNumber}} entrée(s)",
                 "button": "Voir les listes"
+            },
+            "share_vocabulary": {
+                "title": "Partage de la liste {{vocabularyListName}}",
+                "button": "Voir les listes"
             }
         },
         "create": {

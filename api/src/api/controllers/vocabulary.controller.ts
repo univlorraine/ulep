@@ -219,10 +219,12 @@ export class VocabularyController {
   async updateVocabularyList(
     @Param('id') id: string,
     @Body() body: UpdateVocabularyListRequest,
+    @CurrentUser() user: KeycloakUser,
   ) {
     const vocabularyList = await this.updateVocabularyListUsecase.execute({
       vocabularyListId: id,
       ...body,
+      userId: user.sub,
     });
 
     return VocabularyListResponse.from(vocabularyList);
