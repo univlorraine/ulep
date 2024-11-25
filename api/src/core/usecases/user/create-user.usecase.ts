@@ -2,24 +2,24 @@ import { KeycloakClient } from '@app/keycloak';
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { utcToZonedTime } from 'date-fns-tz';
 import {
-    RessourceAlreadyExists,
-    RessourceDoesNotExist,
-    UnauthorizedOperation,
+  RessourceAlreadyExists,
+  RessourceDoesNotExist,
+  UnauthorizedOperation,
 } from 'src/core/errors';
 import { Gender, Role, User } from 'src/core/models';
 import { CHAT_SERVICE } from 'src/core/ports/chat.service';
 import {
-    COUNTRY_REPOSITORY,
-    CountryRepository,
+  COUNTRY_REPOSITORY,
+  CountryRepository,
 } from 'src/core/ports/country.repository';
 import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
 import {
-    UNIVERSITY_REPOSITORY,
-    UniversityRepository,
+  UNIVERSITY_REPOSITORY,
+  UniversityRepository,
 } from 'src/core/ports/university.repository';
 import {
-    USER_REPOSITORY,
-    UserRepository,
+  USER_REPOSITORY,
+  UserRepository,
 } from 'src/core/ports/user.repository';
 import { ChatService } from 'src/providers/services/chat.service';
 
@@ -112,6 +112,17 @@ export class CreateUserUsecase {
         enabled: true,
         emailVerified: false,
         origin: 'api',
+      });
+    } else if(command.password && keycloakUser) {
+      await this.keycloak.updateUser({
+        id: keycloakUser.id,
+        email: keycloakUser.email,
+        firstname: command.firstname,
+        lastname: command.lastname,
+        password: command.password,
+        universityId: keycloakUser.attributes?.universityId?.[0] || university.id,
+        universityLogin: keycloakUser.attributes?.universityLogin?.[0],
+        languageId: keycloakUser.attributes?.languageId?.[0],
       });
     }
 
