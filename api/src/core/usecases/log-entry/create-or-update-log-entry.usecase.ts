@@ -2,7 +2,6 @@ import { Inject, Injectable } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import { LogEntryMissingMetadataException } from 'src/core/errors/logs-entry.exception';
 import {
-  LogEntry,
   LogEntryAddVocabulary,
   LogEntryCommunityChat,
   LogEntryConnection,
@@ -30,7 +29,7 @@ export type CreateOrUpdateLogEntryCommand = {
 };
 
 type HandleEntryExistsTodayResult = {
-  entryToUpdate: LogEntry;
+  entryToUpdate: { id: string; metadata: Record<string, any> };
   shouldCreate: boolean;
   shouldIgnore: boolean;
 };
@@ -56,8 +55,7 @@ export class CreateOrUpdateLogEntryUsecase {
       return;
     } else if (action.entryToUpdate) {
       return this.logEntryRepository.update({
-        ...command,
-        id: action.entryToUpdate.id,
+        ...action.entryToUpdate,
       });
     } else {
       return this.logEntryRepository.create({
@@ -79,10 +77,21 @@ export class CreateOrUpdateLogEntryUsecase {
           (entry) =>
             entry instanceof LogEntryAddVocabulary &&
             entry.vocabularyListId === metadata.vocabularyListId,
-        );
+        ) as LogEntryAddVocabulary | undefined;
 
         return {
-          entryToUpdate: vocabularyEntryExistsToday,
+          entryToUpdate: vocabularyEntryExistsToday
+            ? {
+                id: vocabularyEntryExistsToday.id,
+                metadata: {
+                  vocabularyListId: metadata.vocabularyListId,
+                  entryNumber: vocabularyEntryExistsToday.entryNumber
+                    ? vocabularyEntryExistsToday.entryNumber + 1
+                    : 1,
+                  vocabularyListName: metadata.vocabularyListName,
+                },
+              }
+            : undefined,
           shouldCreate: !vocabularyEntryExistsToday,
           shouldIgnore: false,
         };
@@ -199,11 +208,7 @@ export class CreateOrUpdateLogEntryUsecase {
   ) {
     switch (type) {
       case LogEntryType.ADD_VOCABULARY:
-        if (
-          !metadata.vocabularyListId ||
-          !metadata.entryNumber ||
-          !metadata.vocabularyListName
-        ) {
+        if (!metadata.vocabularyListId || !metadata.vocabularyListName) {
           throw new LogEntryMissingMetadataException();
         }
         break;

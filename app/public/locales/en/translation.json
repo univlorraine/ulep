@@ -100,6 +100,10 @@
             },
             "tandem_chat": {
                 "title": "Conversation with {{firstname}} {{lastname}} started today"
+            },
+            "add_vocabulary": {
+                "title": "Add vocabulary to the list {{vocabularyListName}} : {{entryNumber}} entry(s)",
+                "button": "See the lists"
             }
         },
         "create": {

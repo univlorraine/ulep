@@ -53,6 +53,15 @@ const LearningPage = () => {
     const onVocabularyContentPressed = () =>
         !isHybrid ? setDisplayVocabularyContent(true) : history.push('/vocabularies');
 
+    const onVocabularyContentPressedFromLearningBook = () => {
+        if (!isHybrid) {
+            setDisplayLearningBookContent(false);
+            setDisplayVocabularyContent(true);
+        } else {
+            history.push('/vocabularies');
+        }
+    };
+
     const onLearningBookContentPressed = () =>
         !isHybrid ? setDisplayLearningBookContent(true) : history.push('/learning-book');
 
@@ -155,6 +164,7 @@ const LearningPage = () => {
             <LearningBookContentModal
                 isVisible={displayLearningBookContent}
                 onClose={() => setDisplayLearningBookContent(false)}
+                onOpenVocabularyList={onVocabularyContentPressedFromLearningBook}
                 profile={profile}
             />
             <VocabularyContentModal

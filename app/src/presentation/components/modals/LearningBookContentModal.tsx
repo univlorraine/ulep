@@ -7,13 +7,23 @@ interface LearningBookContentModalProps {
     isVisible: boolean;
     onClose: () => void;
     profile: Profile;
+    onOpenVocabularyList: () => void;
 }
 
-const LearningBookContentModal: React.FC<LearningBookContentModalProps> = ({ isVisible, onClose, profile }) => {
+const LearningBookContentModal: React.FC<LearningBookContentModalProps> = ({
+    isVisible,
+    onClose,
+    onOpenVocabularyList,
+    profile,
+}) => {
     return (
         <IonModal animated isOpen={isVisible} onDidDismiss={onClose} className={styles.modal}>
             <div className={styles.content}>
-                <LearningBookContainerContent onClose={onClose} profile={profile} />
+                <LearningBookContainerContent
+                    onClose={onClose}
+                    onOpenVocabularyList={onOpenVocabularyList}
+                    profile={profile}
+                />
             </div>
         </IonModal>
     );

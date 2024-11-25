@@ -1,8 +1,9 @@
 import { IonButton } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
-import { AvatarPng, JournalSvg, Star2Png } from '../../../assets';
+import { AvatarPng, JournalSvg, Star2Png, VocabularyPng } from '../../../assets';
 import {
     LogEntry,
+    LogEntryAddVocabulary,
     LogEntryConnection,
     LogEntryCustomEntry,
     LogEntryTandemChat,
@@ -25,6 +26,8 @@ const getLogEntryImage = (logEntry: LogEntry): string | undefined => {
         return JournalSvg;
     } else if (logEntry instanceof LogEntryConnection) {
         return Star2Png;
+    } else if (logEntry instanceof LogEntryAddVocabulary) {
+        return VocabularyPng;
     } else if (logEntry instanceof LogEntryVisio || logEntry instanceof LogEntryTandemChat) {
         return AvatarPng;
     }
@@ -38,6 +41,15 @@ const LogEntryTitle: React.FC<LogEntrySubComponentProps> = ({ logEntry }) => {
         return logEntry.title;
     } else if (logEntry instanceof LogEntryConnection) {
         return <>{t('learning_book.entry.connection.title')}</>;
+    } else if (logEntry instanceof LogEntryAddVocabulary) {
+        return (
+            <>
+                {t('learning_book.entry.add_vocabulary.title', {
+                    vocabularyListName: logEntry.vocabularyListName,
+                    entryNumber: logEntry.entryNumber,
+                })}
+            </>
+        );
     } else if (logEntry instanceof LogEntryTandemChat) {
         return (
             <>
@@ -87,8 +99,12 @@ const LogEntryButton: React.FC<LogEntryButtonProps> = ({ logEntry, onClick }) =>
                 {t('learning_book.entry.custom.button')}
             </IonButton>
         );
-    } else if (logEntry instanceof LogEntryVisio) {
-        return <></>;
+    } else if (logEntry instanceof LogEntryAddVocabulary) {
+        return (
+            <IonButton fill="clear" className="primary-button no-padding" onClick={() => onClick(logEntry)}>
+                {t('learning_book.entry.add_vocabulary.button')}
+            </IonButton>
+        );
     }
     return <></>;
 };

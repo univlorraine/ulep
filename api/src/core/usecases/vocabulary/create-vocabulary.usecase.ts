@@ -24,7 +24,9 @@ export class CreateVocabularyUsecase {
   ) {}
 
   async execute(command: CreateVocabularyCommand) {
-    await this.assertVocabularyListExist(command.vocabularyListId);
+    const vocabularyList = await this.assertVocabularyListExist(
+      command.vocabularyListId,
+    );
 
     const vocabulary = await this.vocabularyRepository.createVocabulary({
       translation: command.translation,
@@ -35,7 +37,11 @@ export class CreateVocabularyUsecase {
     await this.createOrUpdateLogEntryUsecase.execute({
       ownerId: command.ownerId,
       type: LogEntryType.ADD_VOCABULARY,
-      metadata: { vocabularyListId: command.vocabularyListId },
+      metadata: {
+        vocabularyListId: command.vocabularyListId,
+        vocabularyListName: vocabularyList.name,
+        entryNumber: 1,
+      },
     });
 
     return vocabulary;
@@ -48,5 +54,7 @@ export class CreateVocabularyUsecase {
     if (!vocabularyList) {
       throw new RessourceDoesNotExist('Vocabulary list does not exist');
     }
+
+    return vocabularyList;
   }
 }

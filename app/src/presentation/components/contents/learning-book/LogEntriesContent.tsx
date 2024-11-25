@@ -1,7 +1,7 @@
 import { IonButton, IonImg } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
 import { AddSvg } from '../../../../assets';
-import { LogEntry, LogEntryCustomEntry } from '../../../../domain/entities/LogEntry';
+import { LogEntry, LogEntryAddVocabulary, LogEntryCustomEntry } from '../../../../domain/entities/LogEntry';
 import Profile from '../../../../domain/entities/Profile';
 import useGetLogEntries from '../../../hooks/useGetLogEntries';
 import LogEntryCard from '../../card/LogEntryCard';
@@ -12,6 +12,7 @@ import styles from './LogEntriesContent.module.css';
 interface LogEntriesContentProps {
     onAddCustomLogEntry: () => void;
     onUpdateCustomLogEntry: (logEntry: LogEntry) => void;
+    onOpenVocabularyList: () => void;
     onBackPressed: () => void;
     profile: Profile;
     isModal?: boolean;
@@ -20,6 +21,7 @@ interface LogEntriesContentProps {
 export const LogEntriesContent: React.FC<LogEntriesContentProps> = ({
     onAddCustomLogEntry,
     onUpdateCustomLogEntry,
+    onOpenVocabularyList,
     onBackPressed,
     profile,
     isModal,
@@ -31,6 +33,8 @@ export const LogEntriesContent: React.FC<LogEntriesContentProps> = ({
     const handleOnPress = (logEntry: LogEntry) => {
         if (logEntry instanceof LogEntryCustomEntry) {
             onUpdateCustomLogEntry(logEntry);
+        } else if (logEntry instanceof LogEntryAddVocabulary) {
+            onOpenVocabularyList();
         }
     };
 

@@ -8,10 +8,15 @@ import LogEntriesContent from './LogEntriesContent';
 
 interface LearningBookContainerContentProps {
     onClose: () => void;
+    onOpenVocabularyList: () => void;
     profile: Profile;
 }
 
-const LearningBookContainerContent: React.FC<LearningBookContainerContentProps> = ({ onClose, profile }) => {
+const LearningBookContainerContent: React.FC<LearningBookContainerContentProps> = ({
+    onClose,
+    onOpenVocabularyList,
+    profile,
+}) => {
     const { createLogEntry, updateCustomLogEntry } = useConfig();
     const [showToast] = useIonToast();
     const [isCreateCustomLogEntry, setIsCreateCustomLogEntry] = useState<boolean>(false);
@@ -72,6 +77,7 @@ const LearningBookContainerContent: React.FC<LearningBookContainerContentProps> 
                 <LogEntriesContent
                     onAddCustomLogEntry={() => setIsCreateCustomLogEntry(true)}
                     onUpdateCustomLogEntry={handleUpdateCustomLogEntry}
+                    onOpenVocabularyList={onOpenVocabularyList}
                     onBackPressed={onClose}
                     profile={profile}
                     isModal={false}
