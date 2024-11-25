@@ -197,13 +197,20 @@ export class LogEntrySubmitActivity extends LogEntry {
 
 export type LogEntryPlayedGameProps = LogEntryProps & {
     percentage?: number;
+    gameName: string;
 };
+
+export enum GameName {
+    FLIPCARDS = 'Flipcards',
+}
 
 export class LogEntryPlayedGame extends LogEntry {
     percentage?: number;
+    gameName: string;
 
     constructor(data: LogEntryPlayedGameProps) {
         super(data);
         this.percentage = data.percentage;
+        this.gameName = data.gameName;
     }
 }

@@ -21,6 +21,7 @@ interface LogEntryMetadata {
     content?: string;
     duration?: number;
     entryNumber?: number;
+    gameName?: string;
     percentage?: number;
     tandemFirstname?: string;
     tandemLastname?: string;
@@ -99,6 +100,7 @@ export const logEntryCommandToDomain = (command: LogEntryCommand) => {
                 type: command.type,
                 ownerId: command.ownerId,
                 percentage: command.metadata.percentage!,
+                gameName: command.metadata.gameName!,
             });
         case LogEntryType.SHARING_LOGS:
             return new LogEntrySharingLogs({

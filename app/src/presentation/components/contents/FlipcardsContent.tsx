@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Redirect } from 'react-router';
 import { BackgroundPurplePng } from '../../../assets';
+import { useConfig } from '../../../context/ConfigurationContext';
+import { GameName, LogEntryType } from '../../../domain/entities/LogEntry';
 import Profile from '../../../domain/entities/Profile';
 import FlipcardsFinished from '../../components/flashcards/flipcards/FlipcardsFinished';
 import FlipcardsQuiz from '../../components/flashcards/flipcards/FlipcardsQuiz';
@@ -19,11 +21,24 @@ type FlipcardsContentProps = {
 
 const FlipcardsContent = ({ profile, selectedListsId, onBackPressed }: FlipcardsContentProps) => {
     const { t } = useTranslation();
+    const { createLogEntry } = useConfig();
     const [refresh, setRefresh] = useState<boolean>(false);
     const { vocabularies, error, isLoading } = useGetVocabularyFromListsId(selectedListsId, refresh);
     const [numberRightAnswers, setNumberRightAnswers] = useState<number>(0);
     const [isQuizFinished, setIsQuizFinished] = useState<boolean>(false);
     const [showToast] = useIonToast();
+
+    const onQuizzFinished = async () => {
+        setIsQuizFinished(true);
+        console.log('numberRightAnswers', numberRightAnswers);
+        await createLogEntry.execute({
+            type: LogEntryType.PLAYED_GAME,
+            metadata: {
+                percentage: Math.round((numberRightAnswers / vocabularies.length) * 100),
+                gameName: GameName.FLIPCARDS,
+            },
+        });
+    };
 
     const onRestartedQuiz = () => {
         setIsQuizFinished(false);
@@ -54,7 +69,7 @@ const FlipcardsContent = ({ profile, selectedListsId, onBackPressed }: Flipcards
                         vocabularies={vocabularies}
                         setNumberRightAnswers={setNumberRightAnswers}
                         numberRightAnswers={numberRightAnswers}
-                        setIsQuizFinished={setIsQuizFinished}
+                        setIsQuizFinished={onQuizzFinished}
                     />
                 )}
 

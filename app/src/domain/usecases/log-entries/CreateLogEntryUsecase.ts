@@ -1,7 +1,7 @@
 import { HttpResponse } from '../../../adapter/BaseHttpAdapter';
 import { HttpAdapterInterface } from '../../../adapter/DomainHttpAdapter';
 import { ActivityCommand } from '../../../command/ActivityCommand';
-import { LogEntryType } from '../../entities/LogEntry';
+import { GameName, LogEntryType } from '../../entities/LogEntry';
 import CreateLogEntryUsecaseInterface, {
     CreateLogEntryProps,
 } from '../../interfaces/log-entries/CreateLogEntryUsecase.interface';
@@ -13,6 +13,7 @@ interface CreateLogEntryPayload {
     tandemFirstname?: string;
     tandemLastname?: string;
     percentage?: number;
+    gameName?: GameName;
     title?: string;
     createdAt?: Date;
     partnerTandemId?: string;
@@ -26,6 +27,8 @@ class CreateLogEntryUsecase implements CreateLogEntryUsecaseInterface {
             const payload: CreateLogEntryPayload = {
                 type: command.type,
             };
+
+            console.log('command', command);
 
             if (command.metadata.content) {
                 payload.content = command.metadata.content;
@@ -47,7 +50,7 @@ class CreateLogEntryUsecase implements CreateLogEntryUsecaseInterface {
                 payload.partnerTandemId = command.metadata.partnerTandemId;
             }
 
-            if (command.metadata.percentage) {
+            if (command.metadata.percentage !== undefined) {
                 payload.percentage = command.metadata.percentage;
             }
 
@@ -61,6 +64,10 @@ class CreateLogEntryUsecase implements CreateLogEntryUsecaseInterface {
 
             if (command.metadata.date) {
                 payload.createdAt = command.metadata.date;
+            }
+
+            if (command.metadata.gameName) {
+                payload.gameName = command.metadata.gameName;
             }
 
             const httpResponse: HttpResponse<ActivityCommand> = await this.domainHttpAdapter.post(

@@ -1,4 +1,4 @@
-import { LogEntryType } from '../../entities/LogEntry';
+import { GameName, LogEntryType } from '../../entities/LogEntry';
 
 interface CreateLogEntryMetadata {
     date?: Date;
@@ -9,6 +9,7 @@ interface CreateLogEntryMetadata {
     tandemLastname?: string;
     partnerTandemId?: string;
     percentage?: number;
+    gameName?: GameName;
 }
 
 export interface CreateLogEntryProps {

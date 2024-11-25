@@ -20,6 +20,7 @@ type LogEntryMetadataProps = {
   updatedCount?: number;
   conversationId?: string;
   content?: string;
+  gameName?: string;
   title?: string;
   duration?: number;
   entryNumber?: number;
@@ -50,6 +51,10 @@ class LogEntryMetadataResponse {
   @Swagger.ApiProperty({ type: 'string' })
   @Expose({ groups: ['read'] })
   content?: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @Expose({ groups: ['read'] })
+  gameName?: string;
 
   @Swagger.ApiProperty({ type: 'string' })
   @Expose({ groups: ['read'] })
@@ -187,6 +192,7 @@ export class LogEntryResponse {
 
     if (logEntry instanceof LogEntryPlayedGame) {
       metadata = {
+        gameName: logEntry.gameName,
         percentage: logEntry.percentage,
       };
     }

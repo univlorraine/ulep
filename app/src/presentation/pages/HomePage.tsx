@@ -42,7 +42,7 @@ const HomePage: React.FC = () => {
     const [showToast] = useIonToast();
     const { width } = useWindowDimensions();
     const isHybrid = width < HYBRID_MAX_WIDTH;
-    const profile = useStoreState((state) => state.profile);
+    const profile = useStoreState((state: any) => state.profile);
     const [selectedTandem, setSelectedTandem] = useState<Tandem>();
     const [refresh, setRefresh] = useState<boolean>(false);
     const [displaySessionModal, setDisplaySessionModal] = useState<DisplaySessionModal>();

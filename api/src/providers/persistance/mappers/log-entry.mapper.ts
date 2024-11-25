@@ -32,6 +32,7 @@ export const logEntryMapper = (snapshot: LogEntrySnapshot): LogEntry => {
     updatedCount: number;
     conversationId: string;
     content: string;
+    gameName: string;
     duration: number;
     entryNumber: number;
     percentage: number;
@@ -90,6 +91,7 @@ export const logEntryMapper = (snapshot: LogEntrySnapshot): LogEntry => {
         type: LogEntryType.PLAYED_GAME,
         createdAt: snapshot.created_at,
         percentage: data.percentage,
+        gameName: data.gameName,
       });
     case LogEntryType.SHARING_LOGS:
       return new LogEntrySharingLogs({

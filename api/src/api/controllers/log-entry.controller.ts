@@ -79,6 +79,7 @@ export class LogEntryController {
         tandemFirstname: body.tandemFirstname,
         tandemLastname: body.tandemLastname,
         percentage: body.percentage,
+        gameName: body.gameName,
       },
       ownerId: user.sub,
       createdAt: body.createdAt,

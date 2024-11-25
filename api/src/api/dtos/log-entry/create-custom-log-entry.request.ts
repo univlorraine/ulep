@@ -6,7 +6,7 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { LogEntryType } from 'src/core/models/log-entry.model';
+import { GameName, LogEntryType } from 'src/core/models/log-entry.model';
 
 export class CreateCustomLogEntryRequest {
   // Custom Event
@@ -44,6 +44,10 @@ export class CreateCustomLogEntryRequest {
   @IsNumber()
   @IsOptional()
   percentage?: number;
+
+  @IsString()
+  @IsOptional()
+  gameName?: GameName;
 
   @IsString()
   @IsNotEmpty()

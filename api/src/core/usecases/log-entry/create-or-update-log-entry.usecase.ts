@@ -228,7 +228,7 @@ export class CreateOrUpdateLogEntryUsecase {
         }
         break;
       case LogEntryType.PLAYED_GAME:
-        if (!metadata.percentage) {
+        if (!metadata.percentage || !metadata.gameName) {
           throw new LogEntryMissingMetadataException();
         }
         break;
