@@ -6,6 +6,7 @@ import {
     Param,
     Post,
     Query,
+    StreamableFile,
     UploadedFile,
     UseGuards,
     UseInterceptors,
@@ -211,9 +212,14 @@ export class ConversationController {
     @Swagger.ApiOperation({ summary: 'Export all medias from conversation id' })
     async exportMediasFromConversationId(
         @Param('id') conversationId: string,
-    ): Promise<void> {
-        await this.exportMediasFromConversationUsecase.execute({
+    ): Promise<StreamableFile> {
+        const stream = await this.exportMediasFromConversationUsecase.execute({
             id: conversationId,
+        });
+
+        return new StreamableFile(stream, {
+            type: 'application/zip, application/octet-stream',
+            disposition: 'attachment; filename="export.zip"',
         });
     }
 }

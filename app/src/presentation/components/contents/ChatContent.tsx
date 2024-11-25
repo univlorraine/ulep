@@ -1,19 +1,19 @@
 import { IonButton, IonContent, IonIcon, IonItem, IonLabel, IonList, IonPage, IonPopover } from '@ionic/react';
-import { imageOutline, searchOutline, videocam } from 'ionicons/icons';
+import { downloadOutline, imageOutline, searchOutline, videocam } from 'ionicons/icons';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
 import { KebabSvg, LeftChevronSvg } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
 import { useSocket } from '../../../context/SocketContext';
-import Profile from '../../../domain/entities/Profile';
 import Conversation, { MessagePaginationDirection } from '../../../domain/entities/chat/Conversation';
+import Profile from '../../../domain/entities/Profile';
 import { useStoreState } from '../../../store/storeTypes';
 import useHandleMessagesFromConversation from '../../hooks/useHandleMessagesFromConversation';
-import Loader from '../Loader';
 import ChatInputSender from '../chat/ChatInputSender';
 import ConversationSearchBar from '../chat/ConversationSearchBar';
 import MessagesList from '../chat/MessagesList';
+import Loader from '../Loader';
 import styles from './ChatContent.module.css';
 
 //TODO: modale to display picture on full screen ( almost ? )
@@ -35,7 +35,7 @@ const Content: React.FC<ChatContentProps> = ({
 }) => {
     const { t } = useTranslation();
     const { socket } = useSocket();
-    const { recorderAdapter, refreshTokensUsecase } = useConfig();
+    const { recorderAdapter, refreshTokensUsecase, exportMediasFromConversation } = useConfig();
     const isBlocked = conversation.isBlocked;
     const [showMenu, setShowMenu] = useState(false);
     const [currentMessageSearchId, setCurrentMessageSearchId] = useState<string>();
@@ -78,6 +78,11 @@ const Content: React.FC<ChatContentProps> = ({
             pathname: '/jitsi',
             search: `?roomName=${conversation.id}`,
         });
+    };
+
+    const handleExportMedias = async () => {
+        await exportMediasFromConversation.execute(conversation.id);
+        console.log('export medias');
     };
 
     useEffect(() => {
@@ -168,6 +173,12 @@ const Content: React.FC<ChatContentProps> = ({
                                 <IonIcon icon={imageOutline} aria-hidden="true" />
                                 <IonLabel className={styles['chat-popover-label']}>
                                     {t('chat.conversation_menu.medias')}
+                                </IonLabel>
+                            </IonItem>
+                            <IonItem button={true} detail={false} onClick={handleExportMedias}>
+                                <IonIcon icon={downloadOutline} aria-hidden="true" />
+                                <IonLabel className={styles['chat-popover-label']}>
+                                    {t('chat.conversation_menu.export_medias')}
                                 </IonLabel>
                             </IonItem>
                             <IonItem button={true} detail={false} onClick={setSearchMode}>

@@ -13,8 +13,13 @@ import {
     STORAGE_INTERFACE,
     StorageInterface,
 } from 'src/core/ports/storage.interface';
-import { createWriteStream, WriteStream } from 'fs';
-import archiver from 'archiver';
+import {
+    createReadStream,
+    createWriteStream,
+    ReadStream,
+    WriteStream,
+} from 'fs';
+import { create } from 'archiver';
 
 type ExportMediasFromConversationParams = {
     id: string;
@@ -33,7 +38,7 @@ export class ExportMediasFromConversationUsecase {
 
     async execute(
         params: ExportMediasFromConversationParams,
-    ): Promise<WriteStream> {
+    ): Promise<ReadStream> {
         const { id } = params;
 
         const conversation = await this.tryFindConversationById(id);
@@ -71,22 +76,22 @@ export class ExportMediasFromConversationUsecase {
         return medias;
     }
 
-    async exportMedias(medias: MediaObject[]): Promise<WriteStream> {
+    async exportMedias(medias: MediaObject[]): Promise<ReadStream> {
         const output = createWriteStream(__dirname + '/example.zip');
-        const archive = archiver('zip', {
-            zlib: { level: 9 },
+        const archive = create('zip', {
+            zlib: { level: 9 }, // Sets the compression level.
         });
 
         archive.pipe(output);
 
         for (const media of medias) {
-            const file = await this.storage.read('medias', media.name);
+            const file = await this.storage.read('chat', media.name);
             archive.append(file, { name: media.name });
         }
 
         archive.finalize();
 
-        return output;
+        return createReadStream(__dirname + '/example.zip');
     }
 }
 
