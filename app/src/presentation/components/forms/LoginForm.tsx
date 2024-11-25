@@ -23,8 +23,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
     const [errorMessage, setErrorMessage] = useState<string>('');
     const [showLoading, hideLoading] = useIonLoading();
 
-    const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    const handleLogin = async () => {
         await showLoading();
         const result = await login.execute(email, password);
         if (result instanceof Error) {
