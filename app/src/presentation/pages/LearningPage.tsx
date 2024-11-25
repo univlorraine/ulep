@@ -33,7 +33,7 @@ const LearningPage = () => {
     const [displayVocabularyContent, setDisplayVocabularyContent] = useState<boolean>(false);
     const [displayLearningBookContent, setDisplayLearningBookContent] = useState<boolean>(false);
     const [displayCustomGoalModal, setDisplayCustomGoalModal] = useState<DisplayCustomGoalModal>();
-    const profile = useStoreState((state) => state.profile);
+    const profile = useStoreState((state: any) => state.profile);
     const { tandems, error, isLoading } = useGetLearningData(refresh);
 
     useEffect(() => {

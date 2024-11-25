@@ -162,30 +162,36 @@ export class LogEntryShareVocabulary extends LogEntry {
 
 export type LogEntryEditActivityProps = LogEntryProps & {
     activityId: string;
+    activityTitle: string;
     updatedCount: number;
 };
 
 export class LogEntryEditActivity extends LogEntry {
     activityId: string;
+    activityTitle: string;
     updatedCount: number;
 
     constructor(data: LogEntryEditActivityProps) {
         super(data);
         this.activityId = data.activityId;
+        this.activityTitle = data.activityTitle;
         this.updatedCount = data.updatedCount;
     }
 }
 
 export type LogEntrySubmitActivityProps = LogEntryProps & {
     activityId: string;
+    activityTitle: string;
 };
 
 export class LogEntrySubmitActivity extends LogEntry {
     activityId: string;
+    activityTitle: string;
 
     constructor(data: LogEntrySubmitActivityProps) {
         super(data);
         this.activityId = data.activityId;
+        this.activityTitle = data.activityTitle;
     }
 }
 

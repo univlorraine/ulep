@@ -108,6 +108,12 @@
             "share_vocabulary": {
                 "title": "Partage de la liste {{vocabularyListName}}",
                 "button": "Voir les listes"
+            },
+            "edit_activity": {
+                "title": "Activité modifiée : {{activityTitle}}"
+            },
+            "submit_activity": {
+                "title": "Activité soumise : {{activityTitle}}"
             }
         },
         "create": {

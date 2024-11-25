@@ -223,7 +223,7 @@ export class CreateOrUpdateLogEntryUsecase {
         }
         break;
       case LogEntryType.EDIT_ACTIVITY:
-        if (!metadata.activityId || !metadata.updatedCount) {
+        if (!metadata.activityId || !metadata.activityTitle) {
           throw new LogEntryMissingMetadataException();
         }
         break;
@@ -238,7 +238,7 @@ export class CreateOrUpdateLogEntryUsecase {
         }
         break;
       case LogEntryType.SUBMIT_ACTIVITY:
-        if (!metadata.activityId) {
+        if (!metadata.activityId || !metadata.activityTitle) {
           throw new LogEntryMissingMetadataException();
         }
         break;

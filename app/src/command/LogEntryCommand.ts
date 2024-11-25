@@ -15,6 +15,7 @@ import {
 
 interface LogEntryMetadata {
     activityId?: string;
+    activityTitle?: string;
     updatedCount?: number;
     conversationId?: string;
     content?: string;
@@ -88,6 +89,7 @@ export const logEntryCommandToDomain = (command: LogEntryCommand) => {
                 type: command.type,
                 ownerId: command.ownerId,
                 activityId: command.metadata.activityId!,
+                activityTitle: command.metadata.activityTitle!,
                 updatedCount: command.metadata.updatedCount!,
             });
         case LogEntryType.PLAYED_GAME:
@@ -112,6 +114,7 @@ export const logEntryCommandToDomain = (command: LogEntryCommand) => {
                 type: command.type,
                 ownerId: command.ownerId,
                 activityId: command.metadata.activityId!,
+                activityTitle: command.metadata.activityTitle!,
             });
         case LogEntryType.TANDEM_CHAT:
             return new LogEntryTandemChat({

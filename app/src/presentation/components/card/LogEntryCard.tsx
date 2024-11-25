@@ -1,12 +1,14 @@
 import { IonButton } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
-import { AvatarPng, JournalSvg, Star2Png, VocabularyPng } from '../../../assets';
+import { AvatarPng, FicheSvg, JournalSvg, Star2Png, VocabularyPng } from '../../../assets';
 import {
     LogEntry,
     LogEntryAddVocabulary,
     LogEntryConnection,
     LogEntryCustomEntry,
+    LogEntryEditActivity,
     LogEntryShareVocabulary,
+    LogEntrySubmitActivity,
     LogEntryTandemChat,
     LogEntryType,
     LogEntryVisio,
@@ -31,6 +33,8 @@ const getLogEntryImage = (logEntry: LogEntry): string | undefined => {
         return VocabularyPng;
     } else if (logEntry instanceof LogEntryVisio || logEntry instanceof LogEntryTandemChat) {
         return AvatarPng;
+    } else if (logEntry instanceof LogEntrySubmitActivity || logEntry instanceof LogEntryEditActivity) {
+        return FicheSvg;
     }
 
     return undefined;
@@ -74,6 +78,22 @@ const LogEntryTitle: React.FC<LogEntrySubComponentProps> = ({ logEntry }) => {
                 {t('learning_book.entry.visio.title', {
                     firstname: logEntry.tandemFirstname,
                     lastname: logEntry.tandemLastname,
+                })}
+            </>
+        );
+    } else if (logEntry instanceof LogEntrySubmitActivity) {
+        return (
+            <>
+                {t('learning_book.entry.submit_activity.title', {
+                    activityTitle: logEntry.activityTitle,
+                })}
+            </>
+        );
+    } else if (logEntry instanceof LogEntryEditActivity) {
+        return (
+            <>
+                {t('learning_book.entry.edit_activity.title', {
+                    activityTitle: logEntry.activityTitle,
                 })}
             </>
         );

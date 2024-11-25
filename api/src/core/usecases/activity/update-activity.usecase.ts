@@ -109,14 +109,11 @@ export class UpdateActivityUsecase {
         : activity.metadata,
     });
 
-    // Create a log entry when an activity is updated
-    if (command.status === ActivityStatus.IN_VALIDATION) {
-      await this.createOrUpdateLogEntryUsecase.execute({
-        ownerId: activity.creator.user.id,
-        type: LogEntryType.EDIT_ACTIVITY,
-        metadata: { activityId: command.id },
-      });
-    }
+    await this.createOrUpdateLogEntryUsecase.execute({
+      ownerId: activity.creator.user.id,
+      type: LogEntryType.EDIT_ACTIVITY,
+      metadata: { activityId: command.id, activityTitle: command.title },
+    });
 
     // Remove vocabularies that are not in the command
     const vocabulariesToDelete = activity.activityVocabularies.filter(

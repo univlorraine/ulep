@@ -49,8 +49,11 @@ export class UpdateActivityStatusUsecase {
     if (command.status === ActivityStatus.IN_VALIDATION) {
       await this.createOrUpdateLogEntryUsecase.execute({
         ownerId: activity.creator.user.id,
-        type: LogEntryType.SHARE_VOCABULARY,
-        metadata: { activityId: command.id },
+        type: LogEntryType.SUBMIT_ACTIVITY,
+        metadata: {
+          activityId: activity.id,
+          activityTitle: activity.title,
+        },
       });
     }
 

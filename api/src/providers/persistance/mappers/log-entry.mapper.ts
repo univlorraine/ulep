@@ -28,6 +28,7 @@ export type LogEntrySnapshot = Prisma.LogEntryGetPayload<
 export const logEntryMapper = (snapshot: LogEntrySnapshot): LogEntry => {
   const data = snapshot.metadata as {
     activityId: string;
+    activityTitle: string;
     updatedCount: number;
     conversationId: string;
     content: string;
@@ -102,6 +103,7 @@ export const logEntryMapper = (snapshot: LogEntrySnapshot): LogEntry => {
         type: LogEntryType.SUBMIT_ACTIVITY,
         createdAt: snapshot.created_at,
         activityId: data.activityId,
+        activityTitle: data.activityTitle,
         updatedCount: data.updatedCount,
       });
     case LogEntryType.EDIT_ACTIVITY:
@@ -110,6 +112,7 @@ export const logEntryMapper = (snapshot: LogEntrySnapshot): LogEntry => {
         type: LogEntryType.EDIT_ACTIVITY,
         createdAt: snapshot.created_at,
         activityId: data.activityId,
+        activityTitle: data.activityTitle,
         updatedCount: data.updatedCount,
       });
     case LogEntryType.ADD_VOCABULARY:

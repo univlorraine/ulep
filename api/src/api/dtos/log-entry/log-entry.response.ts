@@ -16,6 +16,7 @@ import {
 
 type LogEntryMetadataProps = {
   activityId?: string;
+  activityTitle?: string;
   updatedCount?: number;
   conversationId?: string;
   content?: string;
@@ -33,6 +34,10 @@ class LogEntryMetadataResponse {
   @Swagger.ApiProperty({ type: 'string' })
   @Expose({ groups: ['read'] })
   activityId?: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @Expose({ groups: ['read'] })
+  activityTitle?: string;
 
   @Swagger.ApiProperty({ type: 'number' })
   @Expose({ groups: ['read'] })
@@ -169,13 +174,14 @@ export class LogEntryResponse {
     if (logEntry instanceof LogEntryEditActivity) {
       metadata = {
         activityId: logEntry.activityId,
-        updatedCount: logEntry.updatedCount,
+        activityTitle: logEntry.activityTitle,
       };
     }
 
     if (logEntry instanceof LogEntrySubmitActivity) {
       metadata = {
         activityId: logEntry.activityId,
+        activityTitle: logEntry.activityTitle,
       };
     }
 
