@@ -13,6 +13,7 @@ import {
   LogEntryType,
   LogEntryVisio,
 } from 'src/core/models/log-entry.model';
+import { LogEntriesByDates } from 'src/core/ports/log-entry.repository';
 
 type LogEntryMetadataProps = {
   activityId?: string;
@@ -30,6 +31,32 @@ type LogEntryMetadataProps = {
   vocabularyListId?: string;
   vocabularyListName?: string;
 };
+
+export class LogEntryByDateResponse {
+  @Swagger.ApiProperty({ type: 'date' })
+  @Expose({ groups: ['read'] })
+  date: Date;
+
+  @Swagger.ApiProperty({ type: 'number' })
+  @Expose({ groups: ['read'] })
+  count: number;
+
+  @Swagger.ApiProperty({ type: 'array', isArray: true })
+  @Expose({ groups: ['read'] })
+  entries: LogEntryResponse[];
+
+  constructor(partial: Partial<LogEntryByDateResponse>) {
+    Object.assign(this, partial);
+  }
+
+  static from(logEntriesByDates: LogEntriesByDates): LogEntryByDateResponse {
+    return new LogEntryByDateResponse({
+      date: logEntriesByDates.date,
+      count: logEntriesByDates.count,
+      entries: logEntriesByDates.entries.map(LogEntryResponse.from),
+    });
+  }
+}
 
 class LogEntryMetadataResponse {
   @Swagger.ApiProperty({ type: 'string' })

@@ -4,6 +4,7 @@ import { AddSvg } from '../../../../assets';
 import { LogEntry, LogEntryAddVocabulary, LogEntryCustomEntry } from '../../../../domain/entities/LogEntry';
 import Profile from '../../../../domain/entities/Profile';
 import useGetLogEntries from '../../../hooks/useGetLogEntries';
+import LogEntriesCard from '../../card/LogEntriesCard';
 import LogEntryCard from '../../card/LogEntryCard';
 import HeaderSubContent from '../../HeaderSubContent';
 import Loader from '../../Loader';
@@ -47,9 +48,28 @@ export const LogEntriesContent: React.FC<LogEntriesContentProps> = ({
             />
             <div className={styles['log-entries-list']}>
                 <div className={styles['log-entries-list-container']}>
-                    {logEntries.map((logEntry) => (
-                        <LogEntryCard key={logEntry.id} logEntry={logEntry} profile={profile} onClick={handleOnPress} />
-                    ))}
+                    {logEntries.map((logEntry) => {
+                        if (logEntry.count > 1) {
+                            return (
+                                <LogEntriesCard
+                                    key={logEntry.date.toISOString()}
+                                    date={logEntry.date}
+                                    logEntries={logEntry.entries}
+                                    count={logEntry.count}
+                                    profile={profile}
+                                    onClick={() => {}}
+                                />
+                            );
+                        }
+                        return (
+                            <LogEntryCard
+                                key={logEntry.entries[0].id}
+                                logEntry={logEntry.entries[0]}
+                                profile={profile}
+                                onClick={handleOnPress}
+                            />
+                        );
+                    })}
                 </div>
                 {isLoading && <Loader />}
             </div>

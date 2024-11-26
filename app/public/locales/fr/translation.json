@@ -118,7 +118,8 @@
             "played_game": {
                 "title": "Jeu joué : {{gameName}}",
                 "subtitle": "Vous avez obtenu {{percentage}}% des questions correctes"
-            }
+            },
+            "see_more": "Voir plus"
         },
         "create": {
             "title": "Nouvelle entrée de journal",

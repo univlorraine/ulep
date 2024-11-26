@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useConfig } from '../../context/ConfigurationContext';
-import { LogEntry } from '../../domain/entities/LogEntry';
+import { LogEntriesByDatesProps } from '../../domain/entities/LogEntry';
 import { useStoreState } from '../../store/storeTypes';
 
 const useGetLogEntries = (refresh: boolean) => {
@@ -8,7 +8,7 @@ const useGetLogEntries = (refresh: boolean) => {
     const profile = useStoreState((state) => state.profile);
 
     const [logEntriesResult, setLogEntriesResult] = useState<{
-        logEntries: LogEntry[];
+        logEntries: LogEntriesByDatesProps[];
         error: Error | undefined;
         isLoading: boolean;
     }>({

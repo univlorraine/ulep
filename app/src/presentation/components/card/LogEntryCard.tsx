@@ -25,7 +25,7 @@ interface LogEntryButtonProps {
     onClick: (logEntry: LogEntry) => void;
 }
 
-const getLogEntryImage = (logEntry: LogEntry): string | undefined => {
+export const getLogEntryImage = (logEntry: LogEntry): string | undefined => {
     if (logEntry instanceof LogEntryCustomEntry) {
         return JournalSvg;
     } else if (logEntry instanceof LogEntryConnection) {
@@ -43,100 +43,108 @@ const getLogEntryImage = (logEntry: LogEntry): string | undefined => {
     return undefined;
 };
 
-const LogEntryTitle: React.FC<LogEntrySubComponentProps> = ({ logEntry }) => {
+export const LogEntryTitle: React.FC<LogEntrySubComponentProps> = ({ logEntry }) => {
     const { t } = useTranslation();
-    if (logEntry instanceof LogEntryCustomEntry) {
-        return logEntry.title;
-    } else if (logEntry instanceof LogEntryConnection) {
-        return <>{t('learning_book.entry.connection.title')}</>;
-    } else if (logEntry instanceof LogEntryAddVocabulary) {
-        return (
-            <>
-                {t('learning_book.entry.add_vocabulary.title', {
-                    vocabularyListName: logEntry.vocabularyListName,
-                    entryNumber: logEntry.entryNumber,
-                })}
-            </>
-        );
-    } else if (logEntry instanceof LogEntryShareVocabulary) {
-        return (
-            <>
-                {t('learning_book.entry.share_vocabulary.title', {
-                    vocabularyListName: logEntry.vocabularyListName,
-                })}
-            </>
-        );
-    } else if (logEntry instanceof LogEntryTandemChat) {
-        return (
-            <>
-                {t('learning_book.entry.tandem_chat.title', {
-                    firstname: logEntry.tandemFirstname,
-                    lastname: logEntry.tandemLastname,
-                })}
-            </>
-        );
-    } else if (logEntry instanceof LogEntryVisio) {
-        return (
-            <>
-                {t('learning_book.entry.visio.title', {
-                    firstname: logEntry.tandemFirstname,
-                    lastname: logEntry.tandemLastname,
-                })}
-            </>
-        );
-    } else if (logEntry instanceof LogEntrySubmitActivity) {
-        return (
-            <>
-                {t('learning_book.entry.submit_activity.title', {
-                    activityTitle: logEntry.activityTitle,
-                })}
-            </>
-        );
-    } else if (logEntry instanceof LogEntryEditActivity) {
-        return (
-            <>
-                {t('learning_book.entry.edit_activity.title', {
-                    activityTitle: logEntry.activityTitle,
-                })}
-            </>
-        );
-    } else if (logEntry instanceof LogEntryPlayedGame) {
-        return (
-            <>
-                {t('learning_book.entry.played_game.title', {
-                    gameName: logEntry.gameName,
-                })}
-            </>
-        );
-    }
+    const getTitle = () => {
+        if (logEntry instanceof LogEntryCustomEntry) {
+            return logEntry.title;
+        } else if (logEntry instanceof LogEntryConnection) {
+            return <>{t('learning_book.entry.connection.title')}</>;
+        } else if (logEntry instanceof LogEntryAddVocabulary) {
+            return (
+                <>
+                    {t('learning_book.entry.add_vocabulary.title', {
+                        vocabularyListName: logEntry.vocabularyListName,
+                        entryNumber: logEntry.entryNumber,
+                    })}
+                </>
+            );
+        } else if (logEntry instanceof LogEntryShareVocabulary) {
+            return (
+                <>
+                    {t('learning_book.entry.share_vocabulary.title', {
+                        vocabularyListName: logEntry.vocabularyListName,
+                    })}
+                </>
+            );
+        } else if (logEntry instanceof LogEntryTandemChat) {
+            return (
+                <>
+                    {t('learning_book.entry.tandem_chat.title', {
+                        firstname: logEntry.tandemFirstname,
+                        lastname: logEntry.tandemLastname,
+                    })}
+                </>
+            );
+        } else if (logEntry instanceof LogEntryVisio) {
+            return (
+                <>
+                    {t('learning_book.entry.visio.title', {
+                        firstname: logEntry.tandemFirstname,
+                        lastname: logEntry.tandemLastname,
+                    })}
+                </>
+            );
+        } else if (logEntry instanceof LogEntrySubmitActivity) {
+            return (
+                <>
+                    {t('learning_book.entry.submit_activity.title', {
+                        activityTitle: logEntry.activityTitle,
+                    })}
+                </>
+            );
+        } else if (logEntry instanceof LogEntryEditActivity) {
+            return (
+                <>
+                    {t('learning_book.entry.edit_activity.title', {
+                        activityTitle: logEntry.activityTitle,
+                    })}
+                </>
+            );
+        } else if (logEntry instanceof LogEntryPlayedGame) {
+            return (
+                <>
+                    {t('learning_book.entry.played_game.title', {
+                        gameName: logEntry.gameName,
+                    })}
+                </>
+            );
+        }
 
-    return <>{t('learning_book.entry.default.title')}</>;
+        return <>{t('learning_book.entry.default.title')}</>;
+    };
+
+    return <span className={styles.title}>{getTitle()}</span>;
 };
 
-const LogEntrySubTitle: React.FC<LogEntrySubComponentProps> = ({ logEntry }) => {
+export const LogEntrySubTitle: React.FC<LogEntrySubComponentProps> = ({ logEntry }) => {
     const { t } = useTranslation();
-    if (logEntry instanceof LogEntryCustomEntry) {
-        return logEntry.content;
-    } else if (logEntry instanceof LogEntryVisio) {
-        return (
-            <>
-                {t('learning_book.entry.visio.subtitle', {
-                    minutes: Math.floor(logEntry.duration / 60),
-                    seconds: logEntry.duration % 60,
-                })}
-            </>
-        );
-    } else if (logEntry instanceof LogEntryPlayedGame) {
-        return (
-            <>
-                {t('learning_book.entry.played_game.subtitle', {
-                    percentage: logEntry.percentage,
-                })}
-            </>
-        );
-    }
+    const getSubTitle = () => {
+        if (logEntry instanceof LogEntryCustomEntry) {
+            return logEntry.content;
+        } else if (logEntry instanceof LogEntryVisio) {
+            return (
+                <>
+                    {t('learning_book.entry.visio.subtitle', {
+                        minutes: Math.floor(logEntry.duration / 60),
+                        seconds: logEntry.duration % 60,
+                    })}
+                </>
+            );
+        } else if (logEntry instanceof LogEntryPlayedGame) {
+            return (
+                <>
+                    {t('learning_book.entry.played_game.subtitle', {
+                        percentage: logEntry.percentage,
+                    })}
+                </>
+            );
+        }
 
-    return <></>;
+        return <></>;
+    };
+
+    return <span className={styles.subtitle}>{getSubTitle()}</span>;
 };
 
 const LogEntryButton: React.FC<LogEntryButtonProps> = ({ logEntry, onClick }) => {
@@ -193,12 +201,8 @@ const LogEntryCard: React.FC<LogEntryCardProps> = ({ logEntry, onClick, profile 
                     </div>
                 )}
             </div>
-            <span className={styles.title}>
-                <LogEntryTitle logEntry={logEntry} />
-            </span>
-            <span className={styles.subtitle}>
-                <LogEntrySubTitle logEntry={logEntry} />
-            </span>
+            <LogEntryTitle logEntry={logEntry} />
+            <LogEntrySubTitle logEntry={logEntry} />
             <LogEntryButton logEntry={logEntry} onClick={onClick} />
         </div>
     );

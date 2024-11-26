@@ -1,4 +1,4 @@
-import { Collection, PrismaService } from '@app/common';
+import { PrismaService } from '@app/common';
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { endOfDay, startOfDay } from 'date-fns';
@@ -8,33 +8,54 @@ import {
   LogEntryRepository,
   UpdateLogEntryCommand,
 } from 'src/core/ports/log-entry.repository';
-import { logEntryMapper } from 'src/providers/persistance/mappers/log-entry.mapper';
+import {
+  logEntryMapper,
+  LogEntrySnapshot,
+} from 'src/providers/persistance/mappers/log-entry.mapper';
 
 @Injectable()
 export class PrismaLogEntryRepository implements LogEntryRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findAllForUserId(
+  async findAllForUserIdByDates(
     userId: string,
     page: number,
     limit: number,
-  ): Promise<Collection<LogEntry>> {
-    const logEntries = await this.prisma.logEntry.findMany({
-      where: { Owner: { id: userId } },
-      orderBy: { created_at: 'desc' },
-      skip: (page - 1) * limit,
-      take: limit,
-    });
+  ): Promise<any> {
+    const offset = (page - 1) * limit;
 
-    const count = await this.prisma.logEntry.count({
-      where: { Owner: { id: userId } },
-    });
+    const distinctDatesWithCount = await this.prisma.$queryRaw<
+      { date: Date; count: bigint }[]
+    >`
+    SELECT DATE(created_at) as date, COUNT(*) as count
+    FROM log_entry
+    WHERE user_id = ${userId}
+    GROUP BY DATE(created_at)
+    ORDER BY date DESC
+    LIMIT ${limit} OFFSET ${offset};
+  `;
 
-    return {
-      items: logEntries.map(logEntryMapper),
-      totalItems: count,
-    };
+    const results = [];
+
+    for (const { date, count } of distinctDatesWithCount) {
+      const logEntries = await this.prisma.$queryRaw<LogEntrySnapshot[]>`
+      SELECT *
+      FROM log_entry
+      WHERE user_id = ${userId} AND DATE(created_at) = ${date}
+      ORDER BY created_at DESC
+      LIMIT 3;
+    `;
+
+      results.push({
+        date,
+        count: Number(count),
+        entries: logEntries.map(logEntryMapper),
+      });
+    }
+
+    return results;
   }
+
   async ofId(id: string): Promise<LogEntry | null> {
     const logEntry = await this.prisma.logEntry.findUnique({
       where: { id },

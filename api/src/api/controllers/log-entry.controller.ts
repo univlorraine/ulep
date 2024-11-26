@@ -16,6 +16,7 @@ import { CurrentUser } from 'src/api/decorators';
 import {
   CreateCustomLogEntryRequest,
   GetLogEntriesRequest,
+  LogEntryByDateResponse,
   LogEntryResponse,
 } from 'src/api/dtos/log-entry';
 import { UpdateCustomLogEntryRequest } from 'src/api/dtos/log-entry/update-custom-log-entry.request';
@@ -55,10 +56,7 @@ export class LogEntryController {
       limit: query.limit,
     });
 
-    return new Collection({
-      items: entries.items.map(LogEntryResponse.from),
-      totalItems: entries.totalItems,
-    });
+    return entries.map(LogEntryByDateResponse.from);
   }
 
   @Post()

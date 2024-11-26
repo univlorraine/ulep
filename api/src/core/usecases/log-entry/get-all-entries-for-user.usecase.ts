@@ -28,7 +28,7 @@ export class GetAllEntriesForUserUsecase {
   async execute(command: GetAllEntriesForUserCommand) {
     await this.assertProfileExists(command.ownerId);
 
-    return this.logEntryRepository.findAllForUserId(
+    return this.logEntryRepository.findAllForUserIdByDates(
       command.ownerId,
       command.page,
       command.limit,

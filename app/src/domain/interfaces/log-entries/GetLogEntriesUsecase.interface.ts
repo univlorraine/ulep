@@ -1,7 +1,7 @@
-import { LogEntry } from '../../entities/LogEntry';
+import { LogEntriesByDates } from '../../entities/LogEntry';
 
 interface GetLogEntriesUsecaseInterface {
-    execute(userId: string): Promise<LogEntry[] | Error>;
+    execute(userId: string): Promise<LogEntriesByDates[] | Error>;
 }
 
 export default GetLogEntriesUsecaseInterface;

@@ -1,4 +1,5 @@
 import {
+    LogEntriesByDates,
     LogEntryAddVocabulary,
     LogEntryCommunityChat,
     LogEntryConnection,
@@ -37,6 +38,20 @@ interface LogEntryCommand {
     ownerId: string;
     metadata: LogEntryMetadata;
 }
+
+export interface LogEntryByDateCommand {
+    date: Date;
+    count: number;
+    entries: LogEntryCommand[];
+}
+
+export const logEntryByDateCommandToDomain = (command: LogEntryByDateCommand) => {
+    return new LogEntriesByDates({
+        date: new Date(command.date),
+        count: command.count,
+        entries: command.entries.map(logEntryCommandToDomain),
+    });
+};
 
 export const logEntryCommandToDomain = (command: LogEntryCommand) => {
     switch (command.type) {

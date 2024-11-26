@@ -214,3 +214,21 @@ export class LogEntryPlayedGame extends LogEntry {
         this.gameName = data.gameName;
     }
 }
+
+export type LogEntriesByDatesProps = {
+    date: Date;
+    count: number;
+    entries: LogEntry[];
+};
+
+export class LogEntriesByDates {
+    date: Date;
+    count: number;
+    entries: LogEntry[];
+
+    constructor(data: LogEntriesByDatesProps) {
+        this.date = data.date;
+        this.count = data.count;
+        this.entries = data.entries;
+    }
+}
