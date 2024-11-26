@@ -313,7 +313,7 @@ const SignUpInformationsPage: React.FC = () => {
                             : undefined
                     }
                     disabled={fromIdp}
-                    onChange={setEmail}
+                    onChange={(email) => setEmail(email.trim())}
                     placeholder={t('signup_informations_page.placeholder_email')}
                     title={t('global.email')}
                     type="email"
