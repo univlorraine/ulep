@@ -114,6 +114,10 @@
             },
             "submit_activity": {
                 "title": "Submitted activity: {{activityTitle}}"
+            },
+            "played_game": {
+                "title": "Played game: {{gameName}}",
+                "subtitle": "You scored {{percentage}}% of the questions right"
             }
         },
         "create": {

@@ -28,13 +28,17 @@ const FlipcardsContent = ({ profile, selectedListsId, onBackPressed }: Flipcards
     const [isQuizFinished, setIsQuizFinished] = useState<boolean>(false);
     const [showToast] = useIonToast();
 
-    const onQuizzFinished = async () => {
+    const onQuizzFinished = async (isRight: boolean) => {
         setIsQuizFinished(true);
-        console.log('numberRightAnswers', numberRightAnswers);
+        let localNumberRightAnswers = numberRightAnswers;
+        if (isRight) {
+            localNumberRightAnswers += 1; // If the answer is right, increment the number of right answers
+        }
+        const percentage = Math.round((localNumberRightAnswers / vocabularies.length) * 100);
         await createLogEntry.execute({
             type: LogEntryType.PLAYED_GAME,
             metadata: {
-                percentage: Math.round((numberRightAnswers / vocabularies.length) * 100),
+                percentage,
                 gameName: GameName.FLIPCARDS,
             },
         });

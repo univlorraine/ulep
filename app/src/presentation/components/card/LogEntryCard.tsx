@@ -1,12 +1,13 @@
 import { IonButton } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
-import { AvatarPng, FicheSvg, JournalSvg, Star2Png, VocabularyPng } from '../../../assets';
+import { AvatarPng, DicesPng, FicheSvg, JournalSvg, Star2Png, VocabularyPng } from '../../../assets';
 import {
     LogEntry,
     LogEntryAddVocabulary,
     LogEntryConnection,
     LogEntryCustomEntry,
     LogEntryEditActivity,
+    LogEntryPlayedGame,
     LogEntryShareVocabulary,
     LogEntrySubmitActivity,
     LogEntryTandemChat,
@@ -35,6 +36,8 @@ const getLogEntryImage = (logEntry: LogEntry): string | undefined => {
         return AvatarPng;
     } else if (logEntry instanceof LogEntrySubmitActivity || logEntry instanceof LogEntryEditActivity) {
         return FicheSvg;
+    } else if (logEntry instanceof LogEntryPlayedGame) {
+        return DicesPng;
     }
 
     return undefined;
@@ -97,6 +100,14 @@ const LogEntryTitle: React.FC<LogEntrySubComponentProps> = ({ logEntry }) => {
                 })}
             </>
         );
+    } else if (logEntry instanceof LogEntryPlayedGame) {
+        return (
+            <>
+                {t('learning_book.entry.played_game.title', {
+                    gameName: logEntry.gameName,
+                })}
+            </>
+        );
     }
 
     return <>{t('learning_book.entry.default.title')}</>;
@@ -112,6 +123,14 @@ const LogEntrySubTitle: React.FC<LogEntrySubComponentProps> = ({ logEntry }) => 
                 {t('learning_book.entry.visio.subtitle', {
                     minutes: Math.floor(logEntry.duration / 60),
                     seconds: logEntry.duration % 60,
+                })}
+            </>
+        );
+    } else if (logEntry instanceof LogEntryPlayedGame) {
+        return (
+            <>
+                {t('learning_book.entry.played_game.subtitle', {
+                    percentage: logEntry.percentage,
                 })}
             </>
         );
