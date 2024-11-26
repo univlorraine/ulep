@@ -1,13 +1,10 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { USER_REPOSITORY, UserRepository } from '../../ports/user.repository';
-import { RessourceDoesNotExist } from 'src/core/errors';
-import {
-  STORAGE_INTERFACE,
-  StorageInterface,
-} from 'src/core/ports/storage.interface';
 import { KeycloakClient } from '@app/keycloak';
+import { Inject, Injectable } from '@nestjs/common';
+import { RessourceDoesNotExist } from 'src/core/errors';
 import { CHAT_SERVICE } from 'src/core/ports/chat.service';
+import { DeleteAvatarUsecase } from 'src/core/usecases/media';
 import { ChatService } from 'src/providers/services/chat.service';
+import { USER_REPOSITORY, UserRepository } from '../../ports/user.repository';
 
 export class DeleteUserCommand {
   id: string;
@@ -20,10 +17,10 @@ export class DeleteUserUsecase {
     @Inject(USER_REPOSITORY)
     private readonly userRepository: UserRepository,
     private readonly keycloak: KeycloakClient,
-    @Inject(STORAGE_INTERFACE)
-    private readonly storage: StorageInterface,
     @Inject(CHAT_SERVICE)
     private readonly chatService: ChatService,
+    @Inject(DeleteAvatarUsecase)
+    private readonly deleteAvatarUsecase: DeleteAvatarUsecase,
   ) {}
 
   async execute(command: DeleteUserCommand) {
@@ -34,7 +31,9 @@ export class DeleteUserUsecase {
     }
 
     if (instance.avatar) {
-      await this.storage.delete(instance.avatar.bucket, instance.avatar.name);
+      await this.deleteAvatarUsecase.execute({
+        userId: instance.id,
+      });
     }
 
     if (!command.shouldKeepKeycloakUser) {

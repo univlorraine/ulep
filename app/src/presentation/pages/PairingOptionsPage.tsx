@@ -65,7 +65,7 @@ const PairingOptionsPage: React.FC = () => {
                                 aria-label={`${t('pairing_options_page.same_tandem')} : ${historicEmailPartner}`}
                                 className={`${pairingOptionsStyles['preference-container']} ${
                                     sameTandem ? 'secondary-selected-button' : ''
-                                }`}
+                                } no-padding`}
                                 fill="clear"
                                 onClick={() => setSameTandem(!sameTandem)}
                             >
@@ -78,7 +78,7 @@ const PairingOptionsPage: React.FC = () => {
                             aria-label={t('pairing_options_page.certificat') as string}
                             className={`${pairingOptionsStyles['preference-container']} ${
                                 isForCertificate ? 'secondary-selected-button' : ''
-                            }`}
+                            } no-padding`}
                             fill="clear"
                             onClick={() => setIsForCertificate(!isForCertificate)}
                         >
@@ -90,7 +90,7 @@ const PairingOptionsPage: React.FC = () => {
                             aria-label={t('pairing_options_page.program') as string}
                             className={`${pairingOptionsStyles['preference-container']} ${
                                 isForProgram ? 'secondary-selected-button' : ''
-                            }`}
+                            } no-padding`}
                             fill="clear"
                             onClick={() => setIsForProgram(!isForProgram)}
                         >
@@ -109,7 +109,7 @@ const PairingOptionsPage: React.FC = () => {
                             aria-label={t('pairing_options_page.none') as string}
                             className={`${pairingOptionsStyles['preference-container']} ${
                                 !sameTandem && !isForCertificate && !isForProgram ? 'secondary-selected-button' : ''
-                            }`}
+                            } no-padding`}
                             fill="clear"
                             onClick={onNonePressed}
                         >
