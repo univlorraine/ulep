@@ -18,8 +18,7 @@ const ForgotPasswordForm = () => {
     const [errorMessage, setErrorMessage] = useState<string | undefined>();
     const [showToast] = useIonToast();
 
-    const handleForgotPassword = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    const handleForgotPassword = async () => {
         if (!isEmailCorrect(email)) {
             return setErrorMessage(t('forgot_password_page.invalid_email') as string);
         }
@@ -41,14 +40,14 @@ const ForgotPasswordForm = () => {
                 </IonButton>
             </IonHeader>
             <IonContent>
-                <form className={style['main-content']} onSubmit={handleForgotPassword}>
+                <div className={style['main-content']}>
                     <CircleAvatar backgroundImage={AvatarPng} height={36} viewClassName={style['icons']} width={36} />
                     <div className={`ion-text-center`}>
                         <h1 className={style.title}>{t('forgot_password_page.title')}</h1>
                     </div>
                     <TextInput
                         autocomplete="email"
-                        onChange={setEmail}
+                        onChange={(email) => setEmail(email.trim())}
                         title={t('global.email') as string}
                         value={email}
                         errorMessage={errorMessage}
@@ -58,11 +57,12 @@ const ForgotPasswordForm = () => {
                             fill="clear"
                             aria-label={t('forgot_password_page.button') as string}
                             className="primary-button no-padding"
+                            onClick={() => handleForgotPassword()}
                         >
                             {t('forgot_password_page.button')}
                         </IonButton>
                     </div>
-                </form>
+                </div>
             </IonContent>
         </div>
     );

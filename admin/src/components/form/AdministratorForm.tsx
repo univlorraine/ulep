@@ -44,7 +44,7 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({
     const [password, setPassword] = useState<string>('');
     const [newFirstname, setNewFirstname] = useState<string>(firstname || '');
     const [newLastname, setNewLastname] = useState<string>(lastname || '');
-    const [university, setUniversity] = useState<University | undefined>();
+    const [newUniversityId, setNewUniversityId] = useState<string>(universityId || '');
     const [newGroup, setNewGroup] = useState<KeycloakGroup | undefined>(group);
     const [newLanguage, setNewLanguage] = useState<Language>();
     const [file, setFile] = useState<File>();
@@ -60,28 +60,29 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({
         if (lastname && lastname !== newLastname) {
             setNewLastname(lastname);
         }
-        if (universityId && universityId !== university?.id) {
-            setUniversity(universities?.find((u) => u.id === universityId));
+        if (universityId && universityId !== newUniversityId) {
+            setNewUniversityId(universityId);
         }
         if (group && group !== newGroup) {
             setNewGroup(group);
         }
-    }, [email, firstname, lastname, universityId, languageId, group]);
+    }, [email, firstname, lastname, universityId, languageId, group, universities]);
 
     if (isLoadingIdentity || !identity || isLoadingUniversities || !universities) {
         return <Loading />;
     }
 
     const currentUniversity = universities.find((u) => u.id === universityId);
-    const isSelectedUniversityIsCentral = university && isCentralUniversity(university);
+    const newUniversity = universities.find((u) => u.id === newUniversityId);
+    const isSelectedUniversityIsCentral = newUniversity && isCentralUniversity(newUniversity);
     const isCurrentUniversityIsCentral =
         isSelectedUniversityIsCentral === undefined && currentUniversity
             ? isCentralUniversity(currentUniversity)
             : false;
 
     const getUniversityId = (): string | undefined => {
-        if (university) {
-            return university?.id;
+        if (newUniversity) {
+            return newUniversity?.id;
         }
 
         return identity.universityId;
@@ -107,7 +108,7 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({
 
     const isEmailValid = (): boolean => {
         if (isSelectedUniversityIsCentral) {
-            return university.domains.some((domain) => newEmail.endsWith(domain));
+            return newUniversity.domains.some((domain) => newEmail.endsWith(domain));
         }
 
         if (currentUniversity && isCurrentUniversityIsCentral) {
@@ -147,9 +148,9 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({
                                     {translate(`administrators.${type}.university`)}
                                 </Typography>
                                 <UniversityPicker
-                                    initialValue={universityId}
-                                    onChange={setUniversity}
-                                    value={university}
+                                    onChange={setNewUniversityId}
+                                    universities={universities}
+                                    value={newUniversityId}
                                 />
                             </Box>
                         ))}
@@ -215,7 +216,12 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({
             <Button
                 color="primary"
                 disabled={
-                    (password ? !isPasswordValid(password) : false) || !newFirstname || !newLastname || !isEmailValid()
+                    (password ? !isPasswordValid(password) : false) ||
+                    !newFirstname ||
+                    !newLastname ||
+                    !newUniversityId ||
+                    newUniversityId === 'central' ||
+                    !isEmailValid()
                 }
                 onClick={onCreatePressed}
                 sx={{ mt: 4, width: '100%' }}
