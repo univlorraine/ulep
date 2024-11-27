@@ -31,7 +31,7 @@ export const LogEntriesContent: React.FC<LogEntriesContentProps> = ({
 }) => {
     const { t } = useTranslation();
 
-    const { logEntries, isLoading } = useGetLogEntries(false);
+    const { logEntriesResult, isPaginationEnded, handleOnEndReached } = useGetLogEntries(false);
 
     const handleOnPress = (logEntry: LogEntry) => {
         if (logEntry instanceof LogEntryCustomEntry) {
@@ -50,7 +50,7 @@ export const LogEntriesContent: React.FC<LogEntriesContentProps> = ({
             />
             <div className={styles['log-entries-list']}>
                 <div className={styles['log-entries-list-container']}>
-                    {logEntries.map((logEntry) => {
+                    {logEntriesResult.logEntries.map((logEntry) => {
                         if (logEntry.count > 1) {
                             return (
                                 <LogEntriesCard
@@ -74,7 +74,12 @@ export const LogEntriesContent: React.FC<LogEntriesContentProps> = ({
                         );
                     })}
                 </div>
-                {isLoading && <Loader />}
+                {logEntriesResult.isLoading && <Loader />}
+                {!logEntriesResult.isLoading && !isPaginationEnded && (
+                    <IonButton fill="clear" className="secondary-button" onClick={handleOnEndReached}>
+                        {t('learning_book.list.load_more')}
+                    </IonButton>
+                )}
             </div>
 
             <IonButton fill="clear" className="add-button" onClick={() => onAddCustomLogEntry()}>

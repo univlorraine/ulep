@@ -90,12 +90,14 @@ const LearningBookContainerContent: React.FC<LearningBookContainerContentProps> 
     }
 
     if (isCreateCustomLogEntry) {
-        <CreateCustomLogEntryContent
-            onBackPressed={handleOnClose}
-            onSubmit={createorUpdateCustomLogEntry}
-            profile={profile}
-            logEntryToUpdate={logEntryToUpdate}
-        />;
+        return (
+            <CreateCustomLogEntryContent
+                onBackPressed={handleOnClose}
+                onSubmit={createorUpdateCustomLogEntry}
+                profile={profile}
+                logEntryToUpdate={logEntryToUpdate}
+            />
+        );
     }
 
     return (

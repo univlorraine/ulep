@@ -85,7 +85,8 @@
     },
     "learning_book": {
         "list": {
-            "title": "Journal d'apprentissage"
+            "title": "Journal d'apprentissage",
+            "load_more": "Voir plus"
         },
         "entry": {
             "connection": {
@@ -119,7 +120,9 @@
                 "title": "Jeu joué : {{gameName}}",
                 "subtitle": "Vous avez obtenu {{percentage}}% des questions correctes"
             },
-            "see_more": "Voir plus"
+            "see_more": "Voir plus",
+            "load_more": "Voir plus",
+            "title": "Entrées du journal"
         },
         "create": {
             "title": "Nouvelle entrée de journal",

@@ -85,7 +85,8 @@
     },
     "learning_book": {
         "list": {
-            "title": "Learning journal"
+            "title": "Learning journal",
+            "load_more": "See more"
         },
         "entry": {
             "connection": {
@@ -119,7 +120,9 @@
                 "title": "Played game: {{gameName}}",
                 "subtitle": "You scored {{percentage}}% of the questions right"
             },
-            "see_more": "See more"
+            "see_more": "See more",
+            "load_more": "See more",
+            "title": "Journal entries"
         },
         "create": {
             "title": "New journal entry",

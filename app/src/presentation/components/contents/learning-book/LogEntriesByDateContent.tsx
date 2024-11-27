@@ -1,3 +1,4 @@
+import { IonButton } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
 import { LogEntry, LogEntryAddVocabulary, LogEntryCustomEntry } from '../../../../domain/entities/LogEntry';
 import Profile from '../../../../domain/entities/Profile';
@@ -26,7 +27,7 @@ export const LogEntriesByDateContent: React.FC<LogEntriesByDateContentProps> = (
 }) => {
     const { t } = useTranslation();
 
-    const { logEntries, isLoading } = useGetLogEntriesByDate(date);
+    const { logEntriesResult, isPaginationEnded, handleOnEndReached } = useGetLogEntriesByDate(date);
 
     const handleOnPress = (logEntry: LogEntry) => {
         if (logEntry instanceof LogEntryCustomEntry) {
@@ -51,7 +52,7 @@ export const LogEntriesByDateContent: React.FC<LogEntriesByDateContentProps> = (
             <h1 className={styles.date}>{formattedDate}</h1>
             <div className={styles['log-entries-list']}>
                 <div className={styles['log-entries-list-container']}>
-                    {logEntries.map((logEntry) => {
+                    {logEntriesResult.logEntries.map((logEntry) => {
                         return (
                             <LogEntryCard
                                 key={logEntry.id}
@@ -63,7 +64,12 @@ export const LogEntriesByDateContent: React.FC<LogEntriesByDateContentProps> = (
                         );
                     })}
                 </div>
-                {isLoading && <Loader />}
+                {logEntriesResult.isLoading && <Loader />}
+                {!logEntriesResult.isLoading && !isPaginationEnded && (
+                    <IonButton fill="clear" className="secondary-button" onClick={handleOnEndReached}>
+                        {t('learning_book.entry.load_more')}
+                    </IonButton>
+                )}
             </div>
         </div>
     );
