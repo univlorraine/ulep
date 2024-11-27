@@ -9,7 +9,7 @@ import {
   PROFILE_REPOSITORY,
 } from 'src/core/ports/profile.repository';
 
-export type GetAllEntriesForUserCommand = {
+export type GetAllEntriesForUserGroupedByDatesCommand = {
   id: string;
   ownerId: string;
   page: number;
@@ -17,7 +17,7 @@ export type GetAllEntriesForUserCommand = {
 };
 
 @Injectable()
-export class GetAllEntriesForUserUsecase {
+export class GetAllEntriesForUserGroupedByDatesUsecase {
   constructor(
     @Inject(LOG_ENTRY_REPOSITORY)
     private readonly logEntryRepository: LogEntryRepository,
@@ -25,10 +25,10 @@ export class GetAllEntriesForUserUsecase {
     private readonly profileRepository: ProfileRepository,
   ) {}
 
-  async execute(command: GetAllEntriesForUserCommand) {
+  async execute(command: GetAllEntriesForUserGroupedByDatesCommand) {
     await this.assertProfileExists(command.ownerId);
 
-    return this.logEntryRepository.findAllForUserIdByDates(
+    return this.logEntryRepository.findAllForUserIdGroupedByDates(
       command.ownerId,
       command.page,
       command.limit,

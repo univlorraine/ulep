@@ -1,4 +1,4 @@
-import { PrismaService } from '@app/common';
+import { Collection, PrismaService } from '@app/common';
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { endOfDay, startOfDay } from 'date-fns';
@@ -17,7 +17,7 @@ import {
 export class PrismaLogEntryRepository implements LogEntryRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findAllForUserIdByDates(
+  async findAllForUserIdGroupedByDates(
     userId: string,
     page: number,
     limit: number,
@@ -54,6 +54,37 @@ export class PrismaLogEntryRepository implements LogEntryRepository {
     }
 
     return results;
+  }
+
+  async findAllForUserIdByDate(
+    userId: string,
+    date: Date,
+    page: number,
+    limit: number,
+  ): Promise<Collection<LogEntry>> {
+    const offset = (page - 1) * limit;
+
+    const logEntries = await this.prisma.logEntry.findMany({
+      where: {
+        Owner: { id: userId },
+        created_at: { gte: startOfDay(date), lte: endOfDay(date) },
+      },
+      orderBy: { created_at: 'desc' },
+      skip: offset,
+      take: limit,
+    });
+
+    const count = await this.prisma.logEntry.count({
+      where: {
+        Owner: { id: userId },
+        created_at: { gte: startOfDay(date), lte: endOfDay(date) },
+      },
+    });
+
+    return new Collection({
+      items: logEntries.map(logEntryMapper),
+      totalItems: count,
+    });
   }
 
   async ofId(id: string): Promise<LogEntry | null> {

@@ -4,6 +4,7 @@ import { useConfig } from '../../../../context/ConfigurationContext';
 import { LogEntry, LogEntryCustomEntry, LogEntryType } from '../../../../domain/entities/LogEntry';
 import Profile from '../../../../domain/entities/Profile';
 import CreateCustomLogEntryContent from './CreateOrUpdateCustomLogEntryContent';
+import LogEntriesByDateContent from './LogEntriesByDateContent';
 import LogEntriesContent from './LogEntriesContent';
 
 interface LearningBookContainerContentProps {
@@ -21,6 +22,7 @@ const LearningBookContainerContent: React.FC<LearningBookContainerContentProps> 
     const [showToast] = useIonToast();
     const [isCreateCustomLogEntry, setIsCreateCustomLogEntry] = useState<boolean>(false);
     const [logEntryToUpdate, setLogEntryToUpdate] = useState<LogEntryCustomEntry | undefined>();
+    const [focusLogEntryForADay, setFocusLogEntryForADay] = useState<Date | undefined>();
 
     const createorUpdateCustomLogEntry = async ({
         date,
@@ -64,26 +66,48 @@ const LearningBookContainerContent: React.FC<LearningBookContainerContentProps> 
         }
     };
 
+    const handleOnClose = () => {
+        if (focusLogEntryForADay) {
+            setFocusLogEntryForADay(undefined);
+        } else if (isCreateCustomLogEntry) {
+            setIsCreateCustomLogEntry(false);
+        } else {
+            onClose();
+        }
+    };
+
+    if (focusLogEntryForADay) {
+        return (
+            <LogEntriesByDateContent
+                date={focusLogEntryForADay}
+                onBackPressed={handleOnClose}
+                profile={profile}
+                onUpdateCustomLogEntry={handleUpdateCustomLogEntry}
+                onOpenVocabularyList={onOpenVocabularyList}
+                isModal
+            />
+        );
+    }
+
+    if (isCreateCustomLogEntry) {
+        <CreateCustomLogEntryContent
+            onBackPressed={handleOnClose}
+            onSubmit={createorUpdateCustomLogEntry}
+            profile={profile}
+            logEntryToUpdate={logEntryToUpdate}
+        />;
+    }
+
     return (
-        <>
-            {isCreateCustomLogEntry ? (
-                <CreateCustomLogEntryContent
-                    onBackPressed={() => setIsCreateCustomLogEntry(false)}
-                    onSubmit={createorUpdateCustomLogEntry}
-                    profile={profile}
-                    logEntryToUpdate={logEntryToUpdate}
-                />
-            ) : (
-                <LogEntriesContent
-                    onAddCustomLogEntry={() => setIsCreateCustomLogEntry(true)}
-                    onUpdateCustomLogEntry={handleUpdateCustomLogEntry}
-                    onOpenVocabularyList={onOpenVocabularyList}
-                    onBackPressed={onClose}
-                    profile={profile}
-                    isModal={false}
-                />
-            )}
-        </>
+        <LogEntriesContent
+            onAddCustomLogEntry={() => setIsCreateCustomLogEntry(true)}
+            onUpdateCustomLogEntry={handleUpdateCustomLogEntry}
+            onOpenVocabularyList={onOpenVocabularyList}
+            onBackPressed={handleOnClose}
+            onFocusLogEntryForADay={setFocusLogEntryForADay}
+            profile={profile}
+            isModal={true}
+        />
     );
 };
 

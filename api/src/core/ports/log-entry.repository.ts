@@ -1,3 +1,4 @@
+import { Collection } from '@app/common';
 import { LogEntry, LogEntryType } from 'src/core/models/log-entry.model';
 
 export const LOG_ENTRY_REPOSITORY = 'log-entry.repository';
@@ -22,11 +23,17 @@ export type LogEntriesByDates = {
 };
 
 export interface LogEntryRepository {
-  findAllForUserIdByDates(
+  findAllForUserIdGroupedByDates(
     userId: string,
     page: number,
     limit: number,
   ): Promise<LogEntriesByDates[]>;
+  findAllForUserIdByDate(
+    userId: string,
+    date: Date,
+    page: number,
+    limit: number,
+  ): Promise<Collection<LogEntry>>;
   ofId(id: string): Promise<LogEntry | null>;
   findAllOfTypeToday(type: LogEntryType): Promise<LogEntry[]>;
   create(command: CreateLogEntryCommand): Promise<LogEntry>;

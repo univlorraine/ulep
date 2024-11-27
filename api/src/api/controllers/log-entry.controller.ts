@@ -19,11 +19,13 @@ import {
   LogEntryByDateResponse,
   LogEntryResponse,
 } from 'src/api/dtos/log-entry';
+import { GetLogEntriesByDateRequest } from 'src/api/dtos/log-entry/get-log-entries-by-date.request';
 import { UpdateCustomLogEntryRequest } from 'src/api/dtos/log-entry/update-custom-log-entry.request';
 import { AuthenticationGuard } from 'src/api/guards';
 import {
   CreateOrUpdateLogEntryUsecase,
-  GetAllEntriesForUserUsecase,
+  GetAllEntriesForUserByDateUsecase,
+  GetAllEntriesForUserGroupedByDatesUsecase,
   UpdateCustomLogEntryUsecase,
 } from 'src/core/usecases/log-entry';
 
@@ -35,28 +37,59 @@ export class LogEntryController {
   constructor(
     private readonly createOrUpdateLogEntryUsecase: CreateOrUpdateLogEntryUsecase,
     private readonly updateCustomLogEntryUsecase: UpdateCustomLogEntryUsecase,
-    private readonly getAllEntriesForUserUsecase: GetAllEntriesForUserUsecase,
+    private readonly getAllEntriesForUserByDateUsecase: GetAllEntriesForUserByDateUsecase,
+    private readonly getAllEntriesForUserGroupedByDatesUsecase: GetAllEntriesForUserGroupedByDatesUsecase,
   ) {}
+
+  @Get('user/:id/grouped-by-dates')
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({
+    summary: 'Get all Log Entries for a user grouped by dates.',
+  })
+  @Swagger.ApiOkResponse({
+    type: () => Collection<LogEntryResponse>,
+  })
+  async getLogEntriesGroupedByDates(
+    @Param('id') id: string,
+    @Query() query: GetLogEntriesRequest,
+    @CurrentUser() user: KeycloakUser,
+  ) {
+    const entries =
+      await this.getAllEntriesForUserGroupedByDatesUsecase.execute({
+        id,
+        ownerId: user.sub,
+        page: query.page,
+        limit: query.limit,
+      });
+
+    return entries.map(LogEntryByDateResponse.from);
+  }
 
   @Get('user/:id')
   @UseGuards(AuthenticationGuard)
-  @Swagger.ApiOperation({ summary: 'Get all Log Entries for a user.' })
+  @Swagger.ApiOperation({
+    summary: 'Get all Log Entries for a user and a specific date.',
+  })
   @Swagger.ApiOkResponse({
     type: () => Collection<LogEntryResponse>,
   })
   async getLogEntries(
     @Param('id') id: string,
-    @Query() query: GetLogEntriesRequest,
+    @Query() query: GetLogEntriesByDateRequest,
     @CurrentUser() user: KeycloakUser,
   ) {
-    const entries = await this.getAllEntriesForUserUsecase.execute({
+    const entries = await this.getAllEntriesForUserByDateUsecase.execute({
       id,
       ownerId: user.sub,
+      date: new Date(query.date),
       page: query.page,
       limit: query.limit,
     });
 
-    return entries.map(LogEntryByDateResponse.from);
+    return new Collection({
+      items: entries.items.map(LogEntryResponse.from),
+      totalItems: entries.totalItems,
+    });
   }
 
   @Post()

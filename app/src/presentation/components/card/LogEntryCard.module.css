@@ -71,3 +71,10 @@
     line-height: 20px;
     text-align: left;
 }
+
+.text-container {
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}

@@ -51,6 +51,7 @@ import GetUniversityLanguagesUsecase from '../domain/usecases/GetUniversityLangu
 import GetUniversityUsecase from '../domain/usecases/GetUniversityUsecase';
 import GetUserUsecase from '../domain/usecases/GetUserUsecase';
 import CreateLogEntryUsecase from '../domain/usecases/log-entries/CreateLogEntryUsecase';
+import GetLogEntriesByDateUsecase from '../domain/usecases/log-entries/GetLogEntriesByDateUsecase';
 import GetLogEntriesUsecase from '../domain/usecases/log-entries/GetLogEntriesUsecase';
 import UpdateCustomLogEntryUsecase from '../domain/usecases/log-entries/UpdateCustomLogEntryUsecase';
 import LoginUsecase from '../domain/usecases/LoginUsecase';
@@ -224,6 +225,7 @@ const getConfigContextValue = ({
     const createLogEntry = new CreateLogEntryUsecase(domainHttpAdapter);
     const updateCustomLogEntry = new UpdateCustomLogEntryUsecase(domainHttpAdapter);
     const getLogEntries = new GetLogEntriesUsecase(domainHttpAdapter);
+    const getLogEntriesByDate = new GetLogEntriesByDateUsecase(domainHttpAdapter);
 
     return {
         accessToken,
@@ -309,6 +311,7 @@ const getConfigContextValue = ({
         createLogEntry,
         updateCustomLogEntry,
         getLogEntries,
+        getLogEntriesByDate,
     };
 };
 

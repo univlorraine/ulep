@@ -1,37 +1,32 @@
-import { IonButton, IonImg } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
-import { AddSvg } from '../../../../assets';
 import { LogEntry, LogEntryAddVocabulary, LogEntryCustomEntry } from '../../../../domain/entities/LogEntry';
 import Profile from '../../../../domain/entities/Profile';
-import useGetLogEntries from '../../../hooks/useGetLogEntries';
-import LogEntriesCard from '../../card/LogEntriesCard';
+import useGetLogEntriesByDate from '../../../hooks/useGetLogEntriesByDate';
 import LogEntryCard from '../../card/LogEntryCard';
 import HeaderSubContent from '../../HeaderSubContent';
 import Loader from '../../Loader';
-import styles from './LogEntriesContent.module.css';
+import styles from './LogEntriesByDateContent.module.css';
 
-interface LogEntriesContentProps {
-    onAddCustomLogEntry: () => void;
+interface LogEntriesByDateContentProps {
     onUpdateCustomLogEntry: (logEntry: LogEntry) => void;
     onOpenVocabularyList: () => void;
-    onFocusLogEntryForADay: (date: Date) => void;
     onBackPressed: () => void;
     profile: Profile;
+    date: Date;
     isModal?: boolean;
 }
 
-export const LogEntriesContent: React.FC<LogEntriesContentProps> = ({
-    onAddCustomLogEntry,
+export const LogEntriesByDateContent: React.FC<LogEntriesByDateContentProps> = ({
     onUpdateCustomLogEntry,
     onOpenVocabularyList,
     onBackPressed,
-    onFocusLogEntryForADay,
     profile,
+    date,
     isModal,
 }) => {
     const { t } = useTranslation();
 
-    const { logEntries, isLoading } = useGetLogEntries(false);
+    const { logEntries, isLoading } = useGetLogEntriesByDate(date);
 
     const handleOnPress = (logEntry: LogEntry) => {
         if (logEntry instanceof LogEntryCustomEntry) {
@@ -41,47 +36,37 @@ export const LogEntriesContent: React.FC<LogEntriesContentProps> = ({
         }
     };
 
+    const formattedDate = new Intl.DateTimeFormat(profile.nativeLanguage.code, {
+        day: '2-digit',
+        month: '2-digit',
+    }).format(date);
+
     return (
         <div style={{ paddingTop: 0 }}>
             <HeaderSubContent
-                title={t('learning_book.list.title')}
+                title={t('learning_book.entry.title')}
                 onBackPressed={onBackPressed}
                 isBackButton={isModal}
             />
+            <h1 className={styles.date}>{formattedDate}</h1>
             <div className={styles['log-entries-list']}>
                 <div className={styles['log-entries-list-container']}>
                     {logEntries.map((logEntry) => {
-                        if (logEntry.count > 1) {
-                            return (
-                                <LogEntriesCard
-                                    key={logEntry.date.toISOString()}
-                                    date={logEntry.date}
-                                    logEntries={logEntry.entries}
-                                    count={logEntry.count}
-                                    profile={profile}
-                                    onClick={onFocusLogEntryForADay}
-                                />
-                            );
-                        }
                         return (
                             <LogEntryCard
-                                key={logEntry.entries[0].id}
-                                logEntry={logEntry.entries[0]}
+                                key={logEntry.id}
+                                logEntry={logEntry}
                                 profile={profile}
                                 onClick={handleOnPress}
-                                shouldDisplayDate
+                                shouldDisplayDate={false}
                             />
                         );
                     })}
                 </div>
                 {isLoading && <Loader />}
             </div>
-
-            <IonButton fill="clear" className="add-button" onClick={() => onAddCustomLogEntry()}>
-                <IonImg aria-hidden className="add-button-icon" src={AddSvg} />
-            </IonButton>
         </div>
     );
 };
 
-export default LogEntriesContent;
+export default LogEntriesByDateContent;

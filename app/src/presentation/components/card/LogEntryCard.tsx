@@ -175,9 +175,10 @@ interface LogEntryCardProps {
     logEntry: LogEntry;
     onClick: (logEntry: LogEntry) => void;
     profile: Profile;
+    shouldDisplayDate: boolean;
 }
 
-const LogEntryCard: React.FC<LogEntryCardProps> = ({ logEntry, onClick, profile }) => {
+const LogEntryCard: React.FC<LogEntryCardProps> = ({ logEntry, onClick, profile, shouldDisplayDate = true }) => {
     const date = new Intl.DateTimeFormat(profile.nativeLanguage.code, {
         day: '2-digit',
         month: '2-digit',
@@ -193,16 +194,27 @@ const LogEntryCard: React.FC<LogEntryCardProps> = ({ logEntry, onClick, profile 
             }`}
             onClick={() => onClick(logEntry)}
         >
+            {shouldDisplayDate && (
+                <div className={styles.line}>
+                    <p className={styles.date}>{date}</p>
+                    {image && (
+                        <div className={styles.imageContainer}>
+                            <img className={styles.image} src={image} aria-hidden />
+                        </div>
+                    )}
+                </div>
+            )}
             <div className={styles.line}>
-                <p className={styles.date}>{date}</p>
-                {image && (
+                <div className={styles['text-container']} style={{ width: shouldDisplayDate ? '100%' : '80%' }}>
+                    <LogEntryTitle logEntry={logEntry} />
+                    <LogEntrySubTitle logEntry={logEntry} />
+                </div>
+                {!shouldDisplayDate && image && (
                     <div className={styles.imageContainer}>
                         <img className={styles.image} src={image} aria-hidden />
                     </div>
                 )}
             </div>
-            <LogEntryTitle logEntry={logEntry} />
-            <LogEntrySubTitle logEntry={logEntry} />
             <LogEntryButton logEntry={logEntry} onClick={onClick} />
         </div>
     );

@@ -10,9 +10,10 @@ import {
 import { FindAllSuggestedLanguageUsecase } from 'src/core/usecases/language/find-all-suggested-language.usecase';
 import {
   CreateOrUpdateLogEntryUsecase,
+  GetAllEntriesForUserByDateUsecase,
+  GetAllEntriesForUserGroupedByDatesUsecase,
   ShareLogEntriesUsecase,
 } from 'src/core/usecases/log-entry';
-import { GetAllEntriesForUserUsecase } from 'src/core/usecases/log-entry/get-all-entries-for-user.usecase';
 import { UpdateCustomLogEntryUsecase } from 'src/core/usecases/log-entry/update-custom-log-entry.usecase';
 import { DeleteObjectiveImageUsecase } from 'src/core/usecases/media/delete-objective-image.usecase';
 import { UploadObjectiveImageUsecase } from 'src/core/usecases/media/upload-objective-image.usecase';
@@ -406,7 +407,8 @@ const usecases: Provider[] = [
   DeleteCustomLearningGoalUsecase,
   // Log Entry
   CreateOrUpdateLogEntryUsecase,
-  GetAllEntriesForUserUsecase,
+  GetAllEntriesForUserByDateUsecase,
+  GetAllEntriesForUserGroupedByDatesUsecase,
   UpdateCustomLogEntryUsecase,
   ShareLogEntriesUsecase,
 ];
