@@ -9,7 +9,7 @@ CREATE TABLE "log_entry" (
     "id" TEXT NOT NULL,
     "type" "LogEntryType" NOT NULL,
     "metadata" JSONB,
-    "user_id" TEXT NOT NULL,
+    "learning_language_id" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -17,4 +17,4 @@ CREATE TABLE "log_entry" (
 );
 
 -- AddForeignKey
-ALTER TABLE "log_entry" ADD CONSTRAINT "log_entry_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "log_entry" ADD CONSTRAINT "log_entry_learning_language_id_fkey" FOREIGN KEY ("learning_language_id") REFERENCES "learning_languages"("id") ON DELETE CASCADE ON UPDATE CASCADE;

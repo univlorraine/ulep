@@ -5,7 +5,7 @@ export const LOG_ENTRY_REPOSITORY = 'log-entry.repository';
 
 export type CreateLogEntryCommand = {
   type: LogEntryType;
-  ownerId: string;
+  learningLanguageId: string;
   metadata: any;
   createdAt?: Date;
 };
@@ -24,18 +24,21 @@ export type LogEntriesByDates = {
 
 export interface LogEntryRepository {
   findAllForUserIdGroupedByDates(
-    userId: string,
+    learningLanguageId: string,
     page: number,
     limit: number,
   ): Promise<LogEntriesByDates[]>;
   findAllForUserIdByDate(
-    userId: string,
+    learningLanguageId: string,
     date: Date,
     page: number,
     limit: number,
   ): Promise<Collection<LogEntry>>;
   ofId(id: string): Promise<LogEntry | null>;
-  findAllOfTypeToday(type: LogEntryType): Promise<LogEntry[]>;
+  findAllOfTypeToday(
+    learningLanguageId: string,
+    type: LogEntryType,
+  ): Promise<LogEntry[]>;
   create(command: CreateLogEntryCommand): Promise<LogEntry>;
   update(command: UpdateLogEntryCommand): Promise<LogEntry>;
   delete(id: string): Promise<void>;

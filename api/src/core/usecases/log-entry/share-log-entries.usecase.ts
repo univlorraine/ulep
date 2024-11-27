@@ -1,7 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
-import { User } from 'src/core/models';
+import { LearningLanguage } from 'src/core/models';
 import { LogEntryType } from 'src/core/models/log-entry.model';
+import {
+  LearningLanguageRepository,
+  LEARNING_LANGUAGE_REPOSITORY,
+} from 'src/core/ports/learning-language.repository';
 import {
   UserRepository,
   USER_REPOSITORY,
@@ -10,6 +14,7 @@ import { CreateOrUpdateLogEntryUsecase } from 'src/core/usecases/log-entry/creat
 
 export type ShareLogEntriesCommand = {
   ownerId: string;
+  learningLanguageId: string;
 };
 
 @Injectable()
@@ -17,34 +22,37 @@ export class ShareLogEntriesUsecase {
   constructor(
     @Inject(USER_REPOSITORY)
     private readonly userRepository: UserRepository,
+    @Inject(LEARNING_LANGUAGE_REPOSITORY)
+    private readonly learningLanguageRepository: LearningLanguageRepository,
     @Inject(CreateOrUpdateLogEntryUsecase)
     private readonly createOrUpdateLogEntryUsecase: CreateOrUpdateLogEntryUsecase,
   ) {}
 
   async execute(command: ShareLogEntriesCommand) {
-    const user = await this.assertUserExists(command.ownerId);
+    const learningLanguage = await this.assertLearningLanguageExists(
+      command.learningLanguageId,
+    );
+    await this.learningLanguageRepository.update({
+      ...learningLanguage,
+    } as LearningLanguage);
 
-    await this.userRepository.update({
-      ...user,
-      logEntriesShared: true,
-    } as User);
-
-    await this.createShareLogEntry(command.ownerId);
+    await this.createShareLogEntry(command.learningLanguageId);
   }
 
-  private async assertUserExists(userId: string) {
-    const user = await this.userRepository.ofId(userId);
-    if (!user) {
-      throw new RessourceDoesNotExist('User does not exist');
+  private async assertLearningLanguageExists(learningLanguageId: string) {
+    const learningLanguage =
+      await this.learningLanguageRepository.ofId(learningLanguageId);
+    if (!learningLanguage) {
+      throw new RessourceDoesNotExist('Learning language does not exist');
     }
 
-    return user;
+    return learningLanguage;
   }
 
-  private async createShareLogEntry(userId: string) {
+  private async createShareLogEntry(learningLanguageId: string) {
     await this.createOrUpdateLogEntryUsecase.execute({
       type: LogEntryType.SHARING_LOGS,
-      ownerId: userId,
+      learningLanguageId: learningLanguageId,
       metadata: {},
     });
   }

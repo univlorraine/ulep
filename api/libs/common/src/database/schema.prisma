@@ -194,7 +194,6 @@ model Users {
   SuggestedLanguages SuggestedLanguages[]
   Devices            Device[]
   Contact            Contacts?            @relation(fields: [contact_id], references: [id])
-  LogEntry           LogEntry[]
 
   @@unique([email])
   @@map("users")
@@ -443,6 +442,7 @@ model LearningLanguages {
   Campus         Places?          @relation(fields: [campus_id], references: [id])
   CertificateFile MediaObjects?   @relation("LearningLanguageCertificateFile", fields: [certificate_file_id], references: [id])
   CustomLearningGoals CustomLearningGoals[]
+  LogEntriesByDate LogEntry[]
 
   @@map("learning_languages")
 }
@@ -785,11 +785,11 @@ model LogEntry {
   id                String @id @default(uuid())
   type              LogEntryType
   metadata          Json?
-  user_id           String
+  learning_language_id String
   created_at        DateTime @default(now())
   updated_at        DateTime @updatedAt
 
-  Owner             Users          @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  LearningLanguage LearningLanguages @relation(fields: [learning_language_id], references: [id], onDelete: Cascade)
 
   @@map("log_entry")
 }

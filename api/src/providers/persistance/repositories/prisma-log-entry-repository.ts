@@ -10,6 +10,7 @@ import {
 } from 'src/core/ports/log-entry.repository';
 import {
   logEntryMapper,
+  LogEntryRelations,
   LogEntrySnapshot,
 } from 'src/providers/persistance/mappers/log-entry.mapper';
 
@@ -18,7 +19,7 @@ export class PrismaLogEntryRepository implements LogEntryRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async findAllForUserIdGroupedByDates(
-    userId: string,
+    learningLanguageId: string,
     page: number,
     limit: number,
   ): Promise<any> {
@@ -29,7 +30,7 @@ export class PrismaLogEntryRepository implements LogEntryRepository {
     >`
     SELECT DATE(created_at) as date, COUNT(*) as count
     FROM log_entry
-    WHERE user_id = ${userId}
+    WHERE learning_language_id = ${learningLanguageId}
     GROUP BY DATE(created_at)
     ORDER BY date DESC
     LIMIT ${limit} OFFSET ${offset};
@@ -41,7 +42,7 @@ export class PrismaLogEntryRepository implements LogEntryRepository {
       const logEntries = await this.prisma.$queryRaw<LogEntrySnapshot[]>`
       SELECT *
       FROM log_entry
-      WHERE user_id = ${userId} AND DATE(created_at) = ${date}
+      WHERE learning_language_id = ${learningLanguageId} AND DATE(created_at) = ${date}
       ORDER BY created_at DESC
       LIMIT 3;
     `;
@@ -57,7 +58,7 @@ export class PrismaLogEntryRepository implements LogEntryRepository {
   }
 
   async findAllForUserIdByDate(
-    userId: string,
+    learningLanguageId: string,
     date: Date,
     page: number,
     limit: number,
@@ -66,17 +67,18 @@ export class PrismaLogEntryRepository implements LogEntryRepository {
 
     const logEntries = await this.prisma.logEntry.findMany({
       where: {
-        Owner: { id: userId },
+        LearningLanguage: { id: learningLanguageId },
         created_at: { gte: startOfDay(date), lte: endOfDay(date) },
       },
       orderBy: { created_at: 'desc' },
       skip: offset,
       take: limit,
+      ...LogEntryRelations,
     });
 
     const count = await this.prisma.logEntry.count({
       where: {
-        Owner: { id: userId },
+        LearningLanguage: { id: learningLanguageId },
         created_at: { gte: startOfDay(date), lte: endOfDay(date) },
       },
     });
@@ -90,6 +92,7 @@ export class PrismaLogEntryRepository implements LogEntryRepository {
   async ofId(id: string): Promise<LogEntry | null> {
     const logEntry = await this.prisma.logEntry.findUnique({
       where: { id },
+      ...LogEntryRelations,
     });
 
     if (!logEntry) {
@@ -99,13 +102,18 @@ export class PrismaLogEntryRepository implements LogEntryRepository {
     return logEntryMapper(logEntry);
   }
 
-  async findAllOfTypeToday(type: LogEntryType): Promise<LogEntry[]> {
+  async findAllOfTypeToday(
+    learningLangugageId: string,
+    type: LogEntryType,
+  ): Promise<LogEntry[]> {
     const logEntries = await this.prisma.logEntry.findMany({
       where: {
         type,
+        LearningLanguage: { id: learningLangugageId },
         created_at: { gte: startOfDay(new Date()), lte: endOfDay(new Date()) },
       },
       orderBy: { created_at: 'asc' },
+      ...LogEntryRelations,
     });
 
     if (!logEntries) {
@@ -121,12 +129,13 @@ export class PrismaLogEntryRepository implements LogEntryRepository {
         type: command.type,
         metadata: command.metadata,
         created_at: command.createdAt ?? new Date(),
-        Owner: {
+        LearningLanguage: {
           connect: {
-            id: command.ownerId,
+            id: command.learningLanguageId,
           },
         },
       },
+      ...LogEntryRelations,
     });
 
     return logEntryMapper(logEntry);
@@ -143,6 +152,7 @@ export class PrismaLogEntryRepository implements LogEntryRepository {
     const logEntry = await this.prisma.logEntry.update({
       where: { id: command.id },
       data,
+      ...LogEntryRelations,
     });
 
     return logEntryMapper(logEntry);

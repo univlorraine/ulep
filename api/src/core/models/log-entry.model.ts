@@ -1,3 +1,5 @@
+import { LearningLanguage } from 'src/core/models/learning-language.model';
+
 export enum LogEntryType {
   CONNECTION = 'CONNECTION',
   VISIO = 'VISIO',
@@ -28,18 +30,21 @@ export type LogEntryProps = {
   id: string;
   createdAt: Date;
   type: LogEntryType;
+  learningLanguage: LearningLanguage;
   [key: string]: unknown;
 };
 
 export class LogEntry {
   id: string;
   createdAt: Date;
+  learningLanguage: LearningLanguage;
   type: LogEntryType;
 
   constructor(data: LogEntryProps) {
     this.id = data.id;
     this.createdAt = data.createdAt;
     this.type = data.type;
+    this.learningLanguage = data.learningLanguage;
   }
 }
 

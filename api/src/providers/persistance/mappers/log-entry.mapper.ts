@@ -14,8 +14,15 @@ import {
   LogEntryType,
   LogEntryVisio,
 } from 'src/core/models/log-entry.model';
+import {
+  learningLanguageMapper,
+  LearningLanguageRelations,
+  LearningLanguageSnapshot,
+} from 'src/providers/persistance/mappers/learningLanguage.mapper';
 
-export const LogEntryInclude = Prisma.validator<Prisma.LogEntryInclude>()({});
+export const LogEntryInclude = Prisma.validator<Prisma.LogEntryInclude>()({
+  LearningLanguage: { include: LearningLanguageRelations },
+});
 
 export const LogEntryRelations = {
   include: LogEntryInclude,
@@ -23,7 +30,9 @@ export const LogEntryRelations = {
 
 export type LogEntrySnapshot = Prisma.LogEntryGetPayload<
   typeof LogEntryRelations
->;
+> & {
+  LearningLanguage: LearningLanguageSnapshot;
+};
 
 export const logEntryMapper = (snapshot: LogEntrySnapshot): LogEntry => {
   const data = snapshot.metadata as {
@@ -49,6 +58,7 @@ export const logEntryMapper = (snapshot: LogEntrySnapshot): LogEntry => {
         id: snapshot.id,
         type: LogEntryType.CONNECTION,
         createdAt: snapshot.created_at,
+        learningLanguage: learningLanguageMapper(snapshot.LearningLanguage),
       });
     case LogEntryType.VISIO:
       return new LogEntryVisio({
@@ -59,6 +69,7 @@ export const logEntryMapper = (snapshot: LogEntrySnapshot): LogEntry => {
         tandemFirstname: data.tandemFirstname,
         tandemLastname: data.tandemLastname,
         partnerTandemId: data.partnerTandemId,
+        learningLanguage: learningLanguageMapper(snapshot.LearningLanguage),
       });
     case LogEntryType.TANDEM_CHAT:
       return new LogEntryTandemChat({
@@ -69,6 +80,7 @@ export const logEntryMapper = (snapshot: LogEntrySnapshot): LogEntry => {
         tandemFirstname: data.tandemFirstname,
         tandemLastname: data.tandemLastname,
         conversationId: data.conversationId,
+        learningLanguage: learningLanguageMapper(snapshot.LearningLanguage),
       });
     case LogEntryType.COMMUNITY_CHAT:
       return new LogEntryCommunityChat({
@@ -76,6 +88,7 @@ export const logEntryMapper = (snapshot: LogEntrySnapshot): LogEntry => {
         type: LogEntryType.COMMUNITY_CHAT,
         createdAt: snapshot.created_at,
         conversationId: data.conversationId,
+        learningLanguage: learningLanguageMapper(snapshot.LearningLanguage),
       });
     case LogEntryType.CUSTOM_ENTRY:
       return new LogEntryCustomEntry({
@@ -84,6 +97,7 @@ export const logEntryMapper = (snapshot: LogEntrySnapshot): LogEntry => {
         createdAt: snapshot.created_at,
         content: data.content,
         title: data.title,
+        learningLanguage: learningLanguageMapper(snapshot.LearningLanguage),
       });
     case LogEntryType.PLAYED_GAME:
       return new LogEntryPlayedGame({
@@ -92,12 +106,14 @@ export const logEntryMapper = (snapshot: LogEntrySnapshot): LogEntry => {
         createdAt: snapshot.created_at,
         percentage: data.percentage,
         gameName: data.gameName,
+        learningLanguage: learningLanguageMapper(snapshot.LearningLanguage),
       });
     case LogEntryType.SHARING_LOGS:
       return new LogEntrySharingLogs({
         id: snapshot.id,
         type: LogEntryType.SHARING_LOGS,
         createdAt: snapshot.created_at,
+        learningLanguage: learningLanguageMapper(snapshot.LearningLanguage),
       });
     case LogEntryType.SUBMIT_ACTIVITY:
       return new LogEntrySubmitActivity({
@@ -107,6 +123,7 @@ export const logEntryMapper = (snapshot: LogEntrySnapshot): LogEntry => {
         activityId: data.activityId,
         activityTitle: data.activityTitle,
         updatedCount: data.updatedCount,
+        learningLanguage: learningLanguageMapper(snapshot.LearningLanguage),
       });
     case LogEntryType.EDIT_ACTIVITY:
       return new LogEntryEditActivity({
@@ -116,6 +133,7 @@ export const logEntryMapper = (snapshot: LogEntrySnapshot): LogEntry => {
         activityId: data.activityId,
         activityTitle: data.activityTitle,
         updatedCount: data.updatedCount,
+        learningLanguage: learningLanguageMapper(snapshot.LearningLanguage),
       });
     case LogEntryType.ADD_VOCABULARY:
       return new LogEntryAddVocabulary({
@@ -125,6 +143,7 @@ export const logEntryMapper = (snapshot: LogEntrySnapshot): LogEntry => {
         vocabularyListName: data.vocabularyListName,
         vocabularyListId: data.vocabularyListId,
         entryNumber: data.entryNumber,
+        learningLanguage: learningLanguageMapper(snapshot.LearningLanguage),
       });
     case LogEntryType.SHARE_VOCABULARY:
       return new LogEntryShareVocabulary({
@@ -133,6 +152,7 @@ export const logEntryMapper = (snapshot: LogEntrySnapshot): LogEntry => {
         createdAt: snapshot.created_at,
         vocabularyListId: data.vocabularyListId,
         vocabularyListName: data.vocabularyListName,
+        learningLanguage: learningLanguageMapper(snapshot.LearningLanguage),
       });
     default:
       throw new Error(`Unknown log entry type: ${snapshot.type}`);

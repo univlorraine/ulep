@@ -6,6 +6,7 @@ import {
   LogEntryCommunityChat,
   LogEntryConnection,
   LogEntryEditActivity,
+  LogEntryPlayedGame,
   LogEntryShareVocabulary,
   LogEntrySharingLogs,
   LogEntrySubmitActivity,
@@ -13,18 +14,18 @@ import {
   LogEntryType,
 } from 'src/core/models/log-entry.model';
 import {
+  LearningLanguageRepository,
+  LEARNING_LANGUAGE_REPOSITORY,
+} from 'src/core/ports/learning-language.repository';
+import {
   LogEntryRepository,
   LOG_ENTRY_REPOSITORY,
 } from 'src/core/ports/log-entry.repository';
-import {
-  ProfileRepository,
-  PROFILE_REPOSITORY,
-} from 'src/core/ports/profile.repository';
 
 export type CreateOrUpdateLogEntryCommand = {
   type: LogEntryType;
   metadata: Record<string, any>;
-  ownerId: string;
+  learningLanguageId: string;
   createdAt?: Date;
 };
 
@@ -39,14 +40,15 @@ export class CreateOrUpdateLogEntryUsecase {
   constructor(
     @Inject(LOG_ENTRY_REPOSITORY)
     private readonly logEntryRepository: LogEntryRepository,
-    @Inject(PROFILE_REPOSITORY)
-    private readonly profileRepository: ProfileRepository,
+    @Inject(LEARNING_LANGUAGE_REPOSITORY)
+    private readonly learningLanguageRepository: LearningLanguageRepository,
   ) {}
 
   async execute(command: CreateOrUpdateLogEntryCommand) {
-    await this.assertProfileExists(command.ownerId);
+    await this.assertLearningLanguageExists(command.learningLanguageId);
     this.assertLogEntryMetadataIsValid(command.type, command.metadata);
     const action = await this.assertEntryExistsToday(
+      command.learningLanguageId,
       command.type,
       command.metadata,
     );
@@ -66,10 +68,14 @@ export class CreateOrUpdateLogEntryUsecase {
   }
 
   private async assertEntryExistsToday(
+    learningLanguageId: string,
     type: LogEntryType,
     metadata: Record<string, any>,
   ): Promise<HandleEntryExistsTodayResult> {
-    const entries = await this.logEntryRepository.findAllOfTypeToday(type);
+    const entries = await this.logEntryRepository.findAllOfTypeToday(
+      learningLanguageId,
+      type,
+    );
 
     switch (type) {
       case LogEntryType.ADD_VOCABULARY:
@@ -179,8 +185,18 @@ export class CreateOrUpdateLogEntryUsecase {
           shouldCreate: !connectionEntryExistsToday,
           shouldIgnore: Boolean(connectionEntryExistsToday),
         };
-      case LogEntryType.CUSTOM_ENTRY:
       case LogEntryType.PLAYED_GAME:
+        const playedGameEntryExistsToday = entries.find(
+          (entry) =>
+            entry instanceof LogEntryPlayedGame &&
+            entry.gameName === metadata.gameName,
+        );
+        return {
+          entryToUpdate: undefined,
+          shouldCreate: !playedGameEntryExistsToday,
+          shouldIgnore: Boolean(playedGameEntryExistsToday),
+        };
+      case LogEntryType.CUSTOM_ENTRY:
         return {
           entryToUpdate: undefined,
           shouldCreate: true,
@@ -195,9 +211,10 @@ export class CreateOrUpdateLogEntryUsecase {
     }
   }
 
-  private async assertProfileExists(userId: string) {
-    const profile = await this.profileRepository.ofUser(userId);
-    if (!profile) {
+  private async assertLearningLanguageExists(learningLanguageId: string) {
+    const learningLanguage =
+      await this.learningLanguageRepository.ofId(learningLanguageId);
+    if (!learningLanguage) {
       throw new RessourceDoesNotExist('Profile does not exist');
     }
   }
