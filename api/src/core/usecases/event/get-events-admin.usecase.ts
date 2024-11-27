@@ -5,7 +5,7 @@ import {
   EVENT_REPOSITORY,
 } from 'src/core/ports/event.repository';
 
-export type GetEventsCommand = {
+export type GetEventsAdminCommand = {
   pagination: {
     page: number;
     limit: number;
@@ -27,7 +27,7 @@ export class GetEventsAdminUsecase {
     private readonly eventRepository: EventRepository,
   ) {}
 
-  async execute(command: GetEventsCommand) {
+  async execute(command: GetEventsAdminCommand) {
     return this.eventRepository.findAll(command);
   }
 }

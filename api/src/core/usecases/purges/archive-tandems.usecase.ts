@@ -7,10 +7,19 @@ import {
   UserStatus,
 } from 'src/core/models';
 import Purge from 'src/core/models/purge.model';
+import { CHAT_SERVICE } from 'src/core/ports/chat.service';
+import {
+  LEARNING_LANGUAGE_REPOSITORY,
+  LearningLanguageRepository,
+} from 'src/core/ports/learning-language.repository';
 import {
   PURGE_REPOSITORY,
   PurgeRepository,
 } from 'src/core/ports/purge.repository';
+import {
+  REPORT_REPOSITORY,
+  ReportRepository,
+} from 'src/core/ports/report.repository';
 import {
   TANDEM_REPOSITORY,
   TandemRepository,
@@ -20,20 +29,11 @@ import {
   UserRepository,
 } from 'src/core/ports/user.repository';
 import {
-  REPORT_REPOSITORY,
-  ReportRepository,
-} from 'src/core/ports/report.repository';
-import {
   UUID_PROVIDER,
   UuidProviderInterface,
 } from 'src/core/ports/uuid.provider';
-import { DeleteUserUsecase } from '../user';
-import {
-  LEARNING_LANGUAGE_REPOSITORY,
-  LearningLanguageRepository,
-} from 'src/core/ports/learning-language.repository';
-import { CHAT_SERVICE } from 'src/core/ports/chat.service';
 import { ChatService } from 'src/providers/services/chat.service';
+import { DeleteUserUsecase } from '../user';
 
 export class UserTandemPurgeCommand {
   userId: string;
@@ -63,6 +63,7 @@ export class ArchiveTandemsAndDeleteUsersUsecase {
     private readonly keycloak: KeycloakClient,
     @Inject(UUID_PROVIDER)
     private readonly uuidProvider: UuidProviderInterface,
+    @Inject(DeleteUserUsecase)
     private readonly deleteUsersUsecase: DeleteUserUsecase,
   ) {}
 

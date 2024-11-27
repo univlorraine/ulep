@@ -4,12 +4,12 @@ import { Profile } from '../../../entities/Profile';
 import { ProfileWithTandemsProfiles } from '../../../entities/ProfileWithTandemsProfiles';
 import codeLanguageToFlag from '../../../utils/codeLanguageToFlag';
 
-interface ProfileWithTandemLinkParams {
+interface ProfileTandemLinkParams {
     profile: Profile | ProfileWithTandemsProfiles;
     variant?: string;
 }
 
-const ProfileWithTandemLink = ({ profile, variant = 'body1' }: ProfileWithTandemLinkParams) => {
+const ProfileTandemLink = ({ profile, variant = 'body1' }: ProfileTandemLinkParams) => {
     const redirect = useRedirect();
 
     return (
@@ -27,4 +27,4 @@ const ProfileWithTandemLink = ({ profile, variant = 'body1' }: ProfileWithTandem
     );
 };
 
-export default ProfileWithTandemLink;
+export default ProfileTandemLink;

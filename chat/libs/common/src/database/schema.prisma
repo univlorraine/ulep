@@ -12,7 +12,7 @@ model Conversation {
   id                String        @id @default(uuid()) @map("_id")
   createdAt         DateTime      @default(now())
   participantIds    String[]
-  lastActivityAt    DateTime      @default(now())
+  lastActivityAt    DateTime?
   metadata          Json          @default("{}")
 
   Messages          Message[]

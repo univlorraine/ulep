@@ -9,6 +9,7 @@ export interface NewsRepository {
   findAll(query: {
     offset?: number;
     limit?: number;
+    onlyActiveNews?: boolean;
     where?: NewsQueryWhere;
   }): Promise<Collection<News>>;
   ofId(id: string): Promise<News | null>;

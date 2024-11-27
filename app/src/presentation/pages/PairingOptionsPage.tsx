@@ -1,12 +1,12 @@
+import { IonButton } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
-import { useStoreActions } from '../../store/storeTypes';
+import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import pairingOptionsStyles from './css/PairingOptions.module.css';
 import styles from './css/SignUp.module.css';
-import { useStoreState } from '../../store/storeTypes';
 
 const PairingOptionsPage: React.FC = () => {
     const { t } = useTranslation();
@@ -61,63 +61,70 @@ const PairingOptionsPage: React.FC = () => {
                     <h1 className="title">{t('pairing_options_page.title')}</h1>
                     <div className={pairingOptionsStyles.content}>
                         {historicEmailPartner && (
-                            <button
+                            <IonButton
                                 aria-label={`${t('pairing_options_page.same_tandem')} : ${historicEmailPartner}`}
-                                className={pairingOptionsStyles['preference-container']}
-                                style={{ background: sameTandem ? configuration.secondaryColor : '#F2F4F7' }}
+                                className={`${pairingOptionsStyles['preference-container']} ${
+                                    sameTandem ? 'secondary-selected-button' : ''
+                                } no-padding`}
+                                fill="clear"
                                 onClick={() => setSameTandem(!sameTandem)}
                             >
                                 <p className={pairingOptionsStyles['preference-text']}>
                                     {`${t('pairing_options_page.same_tandem')} : ${historicEmailPartner}`}
                                 </p>
-                            </button>
+                            </IonButton>
                         )}
-                        <button
+                        <IonButton
                             aria-label={t('pairing_options_page.certificat') as string}
-                            className={pairingOptionsStyles['preference-container']}
-                            style={{ background: isForCertificate ? configuration.secondaryColor : '#F2F4F7' }}
+                            className={`${pairingOptionsStyles['preference-container']} ${
+                                isForCertificate ? 'secondary-selected-button' : ''
+                            } no-padding`}
+                            fill="clear"
                             onClick={() => setIsForCertificate(!isForCertificate)}
                         >
                             <p className={pairingOptionsStyles['preference-text']}>
                                 {t('pairing_options_page.certificat')}
                             </p>
-                        </button>
-                        <button
+                        </IonButton>
+                        <IonButton
                             aria-label={t('pairing_options_page.program') as string}
-                            className={pairingOptionsStyles['preference-container']}
-                            style={{ background: isForProgram ? configuration.secondaryColor : '#F2F4F7' }}
+                            className={`${pairingOptionsStyles['preference-container']} ${
+                                isForProgram ? 'secondary-selected-button' : ''
+                            } no-padding`}
+                            fill="clear"
                             onClick={() => setIsForProgram(!isForProgram)}
                         >
-                            <span className={pairingOptionsStyles['preference-text']}>
-                                {t('pairing_options_page.program')}
-                            </span>
-                            <span className={pairingOptionsStyles['preference-description']}>
-                                {t('pairing_options_page.program_subtitle')}
-                            </span>
-                        </button>
+                            <div>
+                                <span className={pairingOptionsStyles['preference-text']}>
+                                    {t('pairing_options_page.program')}
+                                </span>
+                                <br />
+                                <span className={pairingOptionsStyles['preference-description']}>
+                                    {t('pairing_options_page.program_subtitle')}
+                                </span>
+                            </div>
+                        </IonButton>
 
-                        <button
+                        <IonButton
                             aria-label={t('pairing_options_page.none') as string}
-                            className={pairingOptionsStyles['preference-container']}
-                            style={{
-                                background:
-                                    !sameTandem && !isForCertificate && !isForProgram
-                                        ? configuration.secondaryColor
-                                        : '#F2F4F7',
-                            }}
+                            className={`${pairingOptionsStyles['preference-container']} ${
+                                !sameTandem && !isForCertificate && !isForProgram ? 'secondary-selected-button' : ''
+                            } no-padding`}
+                            fill="clear"
                             onClick={onNonePressed}
                         >
                             <p className={pairingOptionsStyles['preference-text']}>{t('pairing_options_page.none')}</p>
-                        </button>
+                        </IonButton>
                     </div>
                 </div>
-                <button
+                <IonButton
                     aria-label={t('pairing_options_page.validate_button') as string}
-                    className={`primary-button extra-large-margin-bottom`}
+                    className={`primary-button extra-large-margin-bottom no-padding`}
+                    fill="clear"
                     onClick={onNextStepPressed}
                 >
                     {t('pairing_options_page.validate_button')}
-                </button>
+                </IonButton>
             </div>
         </WebLayoutCentered>
     );

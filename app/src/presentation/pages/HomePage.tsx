@@ -2,6 +2,7 @@ import { IonContent, useIonToast } from '@ionic/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory, useLocation } from 'react-router';
+import EventObject from '../../domain/entities/Event';
 import News from '../../domain/entities/News';
 import Session from '../../domain/entities/Session';
 import Tandem from '../../domain/entities/Tandem';
@@ -9,6 +10,10 @@ import { useStoreState } from '../../store/storeTypes';
 import HomeContent from '../components/contents/HomeContent';
 import OnlineWebLayout from '../components/layout/OnlineWebLayout';
 import EndSessionModal from '../components/modals/EndSessionModal';
+import EventsContentModal, {
+    DisplayEventsContentModal,
+    DisplayEventsContentModalEnum,
+} from '../components/modals/EventsContentModal';
 import NewsContentModal, {
     DisplayNewsContentModal,
     DisplayNewsContentModalEnum,
@@ -38,7 +43,8 @@ const HomePage: React.FC = () => {
     const [refresh, setRefresh] = useState<boolean>(false);
     const [displaySessionModal, setDisplaySessionModal] = useState<DisplaySessionModal>();
     const [displayNewsContent, setDisplayNewsContent] = useState<DisplayNewsContentModal>();
-    const { tandems, sessions, news, error, isLoading } = useGetHomeData(refresh);
+    const [displayEventsContent, setDisplayEventsContent] = useState<DisplayEventsContentModal>();
+    const { tandems, events, sessions, news, error, isLoading } = useGetHomeData(refresh);
     const location = useLocation<HomePageLocationProps>();
     const [isEndSessionModalOpen, setIsEndSessionModalOpen] = useState<boolean>(location.state?.endSession || false);
 
@@ -127,6 +133,25 @@ const HomePage: React.FC = () => {
         }
     };
 
+    const onShowEventPressed = (selectedEvent?: EventObject) => {
+        if (isHybrid) {
+            history.push(selectedEvent ? 'show-event' : 'events', { event: selectedEvent });
+        } else {
+            setDisplayEventsContent({
+                type: selectedEvent ? DisplayEventsContentModalEnum.show : DisplayEventsContentModalEnum.list,
+                event: selectedEvent,
+            });
+        }
+    };
+
+    const onShowCloseEventPressed = () => {
+        if (displayEventsContent?.type === DisplayEventsContentModalEnum.show) {
+            setDisplayEventsContent({ type: DisplayEventsContentModalEnum.list });
+        } else {
+            setDisplayEventsContent(undefined);
+        }
+    };
+
     if (isHybrid) {
         return (
             <IonContent>
@@ -138,6 +163,8 @@ const HomePage: React.FC = () => {
                     tandems={tandems}
                     sessions={sessions}
                     news={news}
+                    events={events}
+                    onShowEventPressed={onShowEventPressed}
                     onShowSessionPressed={onShowSessionPressed}
                     onUpdateSessionPressed={onUpdateSessionPressed}
                     onCreateSessionPressed={onCreateSessionPressed}
@@ -158,6 +185,8 @@ const HomePage: React.FC = () => {
                     tandems={tandems}
                     sessions={sessions}
                     news={news}
+                    events={events}
+                    onShowEventPressed={onShowEventPressed}
                     onShowSessionPressed={onShowSessionPressed}
                     onUpdateSessionPressed={onUpdateSessionPressed}
                     onCreateSessionPressed={onCreateSessionPressed}
@@ -207,6 +236,13 @@ const HomePage: React.FC = () => {
                 onClose={onShowCloseNewsPressed}
                 onNewsPressed={onShowNewsPressed}
                 displayNewsContentModal={displayNewsContent}
+                profile={profile}
+            />
+            <EventsContentModal
+                isVisible={displayEventsContent !== undefined}
+                onClose={onShowCloseEventPressed}
+                onEventPressed={onShowEventPressed}
+                displayEventsContentModal={displayEventsContent}
                 profile={profile}
             />
         </>

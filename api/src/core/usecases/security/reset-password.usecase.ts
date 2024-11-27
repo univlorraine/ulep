@@ -1,12 +1,12 @@
+import { KeycloakClient, UserRepresentation } from '@app/keycloak';
 import { Inject, Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { Env } from 'src/configuration';
 import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
 import {
   PROFILE_REPOSITORY,
   ProfileRepository,
 } from 'src/core/ports/profile.repository';
-import { KeycloakClient, UserRepresentation } from '@app/keycloak';
-import { ConfigService } from '@nestjs/config';
-import { Env } from 'src/configuration';
 
 export class ResetPasswordCommand {
   email: string;
@@ -33,26 +33,32 @@ export class ResetPasswordUsecase {
       return;
     }
 
+    const userIsAdmin = await this.keycloakClient.isAdmin(user);
+    if (userIsAdmin) {
+      return;
+    }
+
     const credentials = await this.keycloakClient.getUserCredentials(user.id);
 
     const hasPasswordCredentials = credentials.some(
       (credential) => credential.type === 'password',
     );
 
+    const language = await this.getUserLanguage(user.id);
+
     if (hasPasswordCredentials) {
-      await this.sendResetPasswordEmail(user, command.loginUrl);
+      await this.sendResetPasswordEmail(user, command.loginUrl, language);
     } else {
-      await this.sendPasswordChangeDeniedEmail(user);
+      await this.sendPasswordChangeDeniedEmail(user, language);
     }
   }
 
   private async sendResetPasswordEmail(
     user: UserRepresentation,
     loginUrl: string,
+    language: string,
   ): Promise<void> {
     try {
-      const language = await this.getUserLanguage(user.id);
-
       await this.keycloakClient.executeActionEmail(
         ['UPDATE_PASSWORD'],
         user.id,
@@ -66,10 +72,9 @@ export class ResetPasswordUsecase {
 
   private async sendPasswordChangeDeniedEmail(
     user: UserRepresentation,
+    language: string,
   ): Promise<void> {
     try {
-      const language = await this.getUserLanguage(user.id);
-
       await this.emailGateway.sendPasswordChangeDeniedEmail({
         to: user.email,
         language,

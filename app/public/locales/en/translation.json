@@ -44,9 +44,25 @@
         "languages": "Languages",
         "levels": "Levels",
         "themes": "Themes",
+        "event_type": {
+            "title": "Format",
+            "online": "Online",
+            "presential": "Presential"
+        },
         "apply": "Apply",
         "cancel": "Cancel",
         "is_mine": "My sheets"
+    },
+    "events": {
+        "online": "Online",
+        "open_maps": "Open maps",
+        "subscribe": "Subscribe",
+        "unsubscribe": "Unsubscribe",
+        "join": "Join",
+        "join_online": "Join online",
+        "add_to_calendar": "Add to calendar",
+        "load_more": "See more",
+        "add_to_calendar_success": "ICS file downloaded"
     },
     "news": {
         "list": {
@@ -206,6 +222,14 @@
         "etandem": "Etandem",
         "error": "Error",
         "firstname": "Name",
+        "frequency": {
+            "title": "Frequency of meetings",
+            "ONCE_A_WEEK": "Once a week",
+            "TWICE_A_WEEK": "Two times a week",
+            "THREE_TIMES_A_WEEK": "Three times a week",
+            "TWICE_A_MONTH": "Two times a month",
+            "THREE_TIMES_A_MONTH": "Three times a month"
+        },
         "gender": "Gender",
         "hello": "Hello",
         "lastname": "Last Name",
@@ -229,7 +253,12 @@
     },
     "vocabulary": {
         "list": {
-            "create": "Create a new list",
+            "create": {
+                "title": "Create a new list"
+            },
+            "update": {
+                "title": "Modify the list"
+            },
             "empty": "You haven't created any vocabulary list for this language yet.",
             "go_back": "Go back",
             "menu": "Menu",
@@ -277,6 +306,7 @@
             "empty": "You haven't created any vocabulary pair for this list yet.",
             "create": "New word pair",
             "aria-pressed": "Update vocabulary",
+            "list_update": "Update the list",
             "search": "Search",
             "add": {
                 "cancel": "Cancel",
@@ -462,6 +492,10 @@
         "news": {
             "title": "News",
             "see_all": "See all news"
+        },
+        "events": {
+            "title": "Events",
+            "see_all": "See all events"
         }
     },
     "learning": {

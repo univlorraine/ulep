@@ -42,8 +42,17 @@ const SignUpInterestsPage: React.FC = () => {
         return setUserInterests(currentInterests);
     };
 
+    const cleanUserInterests = () => {
+        const validInterestIds = new Set(
+            catergoriesInterests.flatMap((category) => category.interests.map((interest) => interest.id))
+        );
+
+        return userInterests.filter((interestId) => validInterestIds.has(interestId));
+    };
+
     const continueSignUp = async () => {
-        updateProfileSignUp({ interests: userInterests });
+        const cleanedUserInterests = cleanUserInterests();
+        updateProfileSignUp({ interests: cleanedUserInterests });
 
         history.push('/signup/biography');
     };

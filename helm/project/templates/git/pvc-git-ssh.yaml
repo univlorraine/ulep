@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: "{{ .Values.name }}-pvc-ssh-{{ .Values.git.name }}"
+  annotations:
+    "helm.sh/resource-policy": keep
+spec:
+  # volumeMode: Block
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: "{{ .Values.git.pv.storage }}"
+  storageClassName: "{{ .Values.git.pv.storageClassName }}"

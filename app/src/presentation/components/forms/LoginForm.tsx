@@ -23,8 +23,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
     const [errorMessage, setErrorMessage] = useState<string>('');
     const [showLoading, hideLoading] = useIonLoading();
 
-    const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    const handleLogin = async () => {
         await showLoading();
         const result = await login.execute(email, password);
         if (result instanceof Error) {
@@ -69,35 +68,38 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
                     </button>
                 </div>
                 <div className={style.separator} />
-                <form onSubmit={handleLogin}>
-                    <div className="ion-text-center">
-                        <p className={style.subtitle}>{t('login_page.subtitle')}</p>
-                    </div>
-                    <TextInput
-                        autocomplete="email"
-                        onChange={setEmail}
-                        title={t('global.email') as string}
-                        type="email"
-                        value={email}
-                    />
-                    <TextInput
-                        autocomplete="current-password"
-                        onChange={setPassword}
-                        title={t('global.password') as string}
-                        type="password"
-                        value={password}
-                    />
-                    {errorMessage && <p className={style['error-message']}>{t(errorMessage)}</p>}
-                    <div className={style['bottom-container']}>
-                        <button aria-label={t('login_page.button') as string} className="primary-button center-button">
-                            {t('login_page.button')}
-                        </button>
+                <div className="ion-text-center">
+                    <p className={style.subtitle}>{t('login_page.subtitle')}</p>
+                </div>
+                <TextInput
+                    autocomplete="email"
+                    onChange={(email) => setEmail(email.trim())}
+                    title={t('global.email') as string}
+                    type="email"
+                    value={email}
+                />
+                <TextInput
+                    autocomplete="current-password"
+                    onChange={setPassword}
+                    title={t('global.password') as string}
+                    type="password"
+                    value={password}
+                />
+                {errorMessage && <p className={style['error-message']}>{t(errorMessage)}</p>}
+                <div className={style['bottom-container']}>
+                    <IonButton
+                        aria-label={t('login_page.button') as string}
+                        fill="clear"
+                        className="primary-button no-padding"
+                        onClick={handleLogin}
+                    >
+                        {t('login_page.button')}
+                    </IonButton>
 
-                        <IonRouterLink className="secondary-button large-margin-top" routerLink="/forgot-password">
-                            {t('login_page.forgot')}
-                        </IonRouterLink>
-                    </div>
-                </form>
+                    <IonRouterLink className="secondary-button large-margin-top" routerLink="/forgot-password">
+                        {t('login_page.forgot')}
+                    </IonRouterLink>
+                </div>
                 {deviceAdapter.isNativePlatform() && (
                     <span className={`${style.subtitle} ${style['update-instance']}`} onClick={() => handleLogout()}>
                         {t('login_page.update_instance')}

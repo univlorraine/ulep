@@ -8,7 +8,6 @@ import {
   StorageInterface,
   STORAGE_INTERFACE,
 } from 'src/core/ports/storage.interface';
-import { GetMediaObjectUsecase } from '../media';
 
 @Injectable()
 export class GetEventUsecase {
@@ -17,7 +16,6 @@ export class GetEventUsecase {
     private readonly eventRepository: EventRepository,
     @Inject(STORAGE_INTERFACE)
     private readonly storage: StorageInterface,
-    private readonly getMediaObjectUsecase: GetMediaObjectUsecase,
   ) {}
 
   async execute(id: string) {
@@ -27,17 +25,16 @@ export class GetEventUsecase {
       throw new RessourceDoesNotExist();
     }
 
-    const mediaObject = await this.getMediaObjectUsecase.execute({
-      id: `${instance.authorUniversity.id}/${instance.id}`,
-    });
-    const imageURL = mediaObject
+    const imageURL = instance.image
       ? await this.storage.temporaryUrl(
-          mediaObject.bucket,
-          mediaObject.name,
+          instance.image.bucket,
+          instance.image.name,
           60 * 60 * 24,
         )
       : undefined;
 
-    return { ...instance, imageURL };
+    instance.imageURL = imageURL;
+
+    return instance;
   }
 }

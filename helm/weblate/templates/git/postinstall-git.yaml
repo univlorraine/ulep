@@ -1,0 +1,84 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-{{ .Release.Revision }}
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "-5"    
+spec:
+  template:
+    spec:
+      containers:
+      - name: post-install-weblate-git-job-{{ .Release.Revision }}
+        image: alpine:3.20
+        imagePullPolicy: Always
+        command: [ "/bin/sh", "-c", "/opt/scripts/init_git.sh"]
+        env:                   
+          - name: MINIO_HOST
+            value: "{{ .Values.git.env.minioHost }}"
+          - name: MINIO_ACCESS_KEY
+            value: "{{ .Values.git.env.minioAccessKey }}"          
+          - name: GIT_HOST
+            value: "{{ .Values.name }}-{{ .Values.git.name }}"
+        envFrom: 
+            - secretRef: 
+                name: "{{ .Values.name }}-secret-{{ .Values.git.name }}"
+        volumeMounts:
+          - name: weblate-ssh-keys
+            mountPath: /tmp/weblate
+          - name: git-ssh-keys
+            mountPath: /tmp/git
+          - name: "{{ .Values.git.name }}-data"
+            mountPath: /srv/git
+
+
+          - name: config-git-volume
+            mountPath: /opt/scripts
+          - name: config-git-fr-volume
+            mountPath: /opt/scripts/fr
+          - name: config-git-en-volume
+            mountPath: /opt/scripts/en
+          - name: config-git-de-volume
+            mountPath: /opt/scripts/de
+          - name: config-git-es-volume
+            mountPath: /opt/scripts/es
+          - name: config-git-zh-volume
+            mountPath: /opt/scripts/zh
+      volumes:
+        - name: "weblate-ssh-keys"
+          persistentVolumeClaim:
+            claimName:  "{{ .Values.name }}-pvc-{{ .Values.weblate.name }}"
+        - name: "git-ssh-keys"
+          persistentVolumeClaim:
+            claimName: "pvc-weblate-git-ssh-keys"
+        - name: "{{ .Values.git.name }}-data"
+          persistentVolumeClaim:
+            claimName: "{{ .Values.name }}-pvc-{{ .Values.git.name }}" 
+
+
+        - name: config-git-volume
+          configMap:
+            name: {{ .Release.Name }}-git-postinstall-configmap
+            defaultMode: 0777  
+        - name: config-git-fr-volume
+          configMap:
+            name: {{ .Release.Name }}-git-fr-postinstall-configmap
+            defaultMode: 0777
+        - name: config-git-de-volume
+          configMap:
+            name: {{ .Release.Name }}-git-de-postinstall-configmap
+            defaultMode: 0777
+        - name: config-git-es-volume
+          configMap:
+            name: {{ .Release.Name }}-git-es-postinstall-configmap
+            defaultMode: 0777
+        - name: config-git-zh-volume
+          configMap:
+            name: {{ .Release.Name }}-git-zh-postinstall-configmap
+            defaultMode: 0777
+        - name: config-git-en-volume
+          configMap:
+            name: {{ .Release.Name }}-git-en-postinstall-configmap
+            defaultMode: 0777        
+      restartPolicy: Never
+      terminationGracePeriodSeconds: 0

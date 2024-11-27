@@ -132,7 +132,7 @@ importers:
         specifier: ^6.1.0
         version: 6.1.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-lottie:
-        specifier: ^1.2.4
+        specifier: 1.2.4
         version: 1.2.4(react@18.3.1)
       react-responsive-masonry:
         specifier: ^2.3.0

@@ -1,6 +1,6 @@
-import UserResult from "../../src/command/UserResult";
+import UserResult from '../../src/command/UserResult';
 
-const userResult: UserResult =  {
+const userResult: UserResult = {
     id: 'id',
     avatar: { id: 'id', mimeType: 'image/png' },
     acceptsEmail: true,
@@ -17,18 +17,19 @@ const userResult: UserResult =  {
         parent: undefined,
         sites: [],
         hasCode: true,
+        isCodeMandatory: true,
         timezone: 'timezone',
         website: 'site',
         maxTandemsPerUser: 3,
     },
     status: 'ACTIVE',
     staffFunction: 'some job',
-    role: "STAFF",
-    gender: "MALE",
+    role: 'STAFF',
+    gender: 'MALE',
     division: 'some division',
     diploma: 'some diploma',
     country: 'FR',
-    age: 25
+    age: 25,
 };
 
 export default userResult;

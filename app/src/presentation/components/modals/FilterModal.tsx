@@ -1,19 +1,20 @@
-import { IonButton } from '@ionic/react';
+import { IonButton, IonModal } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityTheme, ActivityThemeCategory } from '../../../domain/entities/Activity';
+import { EventType } from '../../../domain/entities/Event';
 import Language from '../../../domain/entities/Language';
 import Profile from '../../../domain/entities/Profile';
 import { CEFR_LEVELS } from '../../utils';
 import Checkbox from '../Checkbox';
 import styles from './FilterModal.module.css';
-import Modal from './Modal';
 
 export enum FiltersToDisplay {
     IS_MINE = 'is_mine',
     LANGUAGES = 'languages',
     LEVELS = 'levels',
     THEMES = 'themes',
+    EVENT_TYPE = 'event_type',
 }
 
 interface FilterModalProps {
@@ -24,16 +25,19 @@ interface FilterModalProps {
         languages,
         levels,
         themes,
+        eventType,
     }: {
         shouldTakeAllMine?: boolean;
         languages?: Language[];
         levels?: CEFR[];
         themes?: ActivityTheme[];
+        eventType?: EventType[];
     }) => void;
     currentShouldTakeAllMineFilter?: boolean;
     currentLanguagesFilter?: Language[];
     currentLevelsFilter?: CEFR[];
     currentThemesFilter?: ActivityTheme[];
+    currentEventTypeFilter?: EventType[];
     profile: Profile;
     themes?: ActivityThemeCategory[];
     title: string;
@@ -49,6 +53,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
     currentLanguagesFilter,
     currentLevelsFilter,
     currentThemesFilter,
+    currentEventTypeFilter,
     themes,
     filterToDisplay,
     title,
@@ -56,6 +61,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
     const { t } = useTranslation();
     const [selectedLanguages, setSelectedLanguages] = useState<Language[]>([]);
     const [selectedThemes, setSelectedThemes] = useState<ActivityTheme[]>([]);
+    const [selectedEventType, setSelectedEventType] = useState<EventType[]>([]);
     const [proficiencyLevelsSelected, setProficiencyLevelsSelected] = useState<CEFR[]>([]);
     const [shouldTakeAllMine, setShouldTakeAllMine] = useState<boolean>(false);
 
@@ -75,6 +81,14 @@ const FilterModal: React.FC<FilterModalProps> = ({
         }
     };
 
+    const addOrRemoveEventType = (eventType: EventType) => {
+        if (selectedEventType.includes(eventType)) {
+            setSelectedEventType(selectedEventType.filter((t) => t !== eventType));
+        } else {
+            setSelectedEventType([...selectedEventType, eventType]);
+        }
+    };
+
     const addOrRemoveProficiencyLevel = (level: CEFR) => {
         if (proficiencyLevelsSelected.includes(level)) {
             setProficiencyLevelsSelected(proficiencyLevelsSelected.filter((l) => l !== level));
@@ -88,11 +102,12 @@ const FilterModal: React.FC<FilterModalProps> = ({
         setSelectedLanguages(currentLanguagesFilter ?? []);
         setProficiencyLevelsSelected(currentLevelsFilter ?? []);
         setSelectedThemes(currentThemesFilter ?? []);
+        setSelectedEventType(currentEventTypeFilter ?? []);
     }, [isVisible]);
 
     const languages = [profile.nativeLanguage, ...profile.masteredLanguages, ...profile.learningLanguages];
     return (
-        <Modal isVisible={isVisible} onClose={onClose} hideWhiteBackground>
+        <IonModal animated isOpen={isVisible} onDidDismiss={onClose} className={styles.modal}>
             <div className={styles.container}>
                 <div className={styles.filterContainer}>
                     <h1>{t(title)}</h1>
@@ -121,6 +136,27 @@ const FilterModal: React.FC<FilterModalProps> = ({
                                         name={t(`languages_code.${language.code}`)}
                                     />
                                 ))}
+                            </div>
+                        </>
+                    )}
+                    {filterToDisplay.includes(FiltersToDisplay.EVENT_TYPE) && (
+                        <>
+                            <p className={styles.filter}>{t('filter.event_type.title')}</p>
+                            <div className={styles.line}>
+                                <Checkbox
+                                    name={t('filter.event_type.online')}
+                                    onPressed={() => {
+                                        addOrRemoveEventType(EventType.ONLINE);
+                                    }}
+                                    isSelected={selectedEventType.includes(EventType.ONLINE)}
+                                />
+                                <Checkbox
+                                    name={t('filter.event_type.presential')}
+                                    onPressed={() => {
+                                        addOrRemoveEventType(EventType.PRESENTIAL);
+                                    }}
+                                    isSelected={selectedEventType.includes(EventType.PRESENTIAL)}
+                                />
                             </div>
                         </>
                     )}
@@ -179,6 +215,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
                             languages: selectedLanguages,
                             levels: proficiencyLevelsSelected,
                             themes: selectedThemes,
+                            eventType: selectedEventType,
                         })
                     }
                 >
@@ -188,7 +225,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
                     {t('filter.cancel')}
                 </IonButton>
             </div>
-        </Modal>
+        </IonModal>
     );
 };
 

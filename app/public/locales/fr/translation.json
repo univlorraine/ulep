@@ -40,6 +40,17 @@
             "unexpected": "Erreur inconnue"
         }
     },
+    "events": {
+        "online": "En ligne",
+        "open_maps": "S'y rendre",
+        "add_to_calendar": "Ajouter au calendrier",
+        "subscribe": "S'abonner",
+        "unsubscribe": "Se désabonner",
+        "join": "M'y rendre",
+        "join_online": "Rejoindre",
+        "load_more": "Voir plus",
+        "add_to_calendar_success": "Fichier ics téléchargé"
+    },
     "news": {
         "list": {
             "title": "Actualités",
@@ -60,6 +71,11 @@
         "languages": "Langues",
         "levels": "Niveaux",
         "themes": "Thèmes",
+        "event_type": {
+            "title": "Format",
+            "online": "En ligne",
+            "presential": "En présentiel"
+        },
         "apply": "Appliquer",
         "cancel": "Annuler",
         "is_mine": "Mes fiches"
@@ -216,6 +232,14 @@
         "etandem": "Etandem",
         "error": "Erreur",
         "firstname": "Prénom",
+        "frequency": {
+            "title": "Fréquence des rencontres",
+            "ONCE_A_WEEK": "Une fois par semaine",
+            "TWICE_A_WEEK": "Deux fois par semaine",
+            "THREE_TIMES_A_WEEK": "Trois fois par semaine",
+            "TWICE_A_MONTH": "Deux fois par mois",
+            "THREE_TIMES_A_MONTH": "Trois fois par mois"
+        },
         "gender": "Genre",
         "hello": "Bonjour",
         "lastname": "Nom",
@@ -244,7 +268,12 @@
     },
     "vocabulary": {
         "list": {
-            "create": "Créer une nouvelle liste",
+            "create": {
+                "title": "Créer une nouvelle liste"
+            },
+            "update": {
+                "title": "Modifier la liste"
+            },
             "empty": "Tu n’as pas encore créé de liste de vocabulaire pour cette langue.",
             "go_back": "Retour",
             "menu": "Menu",
@@ -287,6 +316,7 @@
         "pair": {
             "go_back": "Retour",
             "menu": "Menu",
+            "list_update": "Modifier la liste",
             "share_button": "Partager",
             "export": "Exporter",
             "empty": "Tu n’as pas encore créé de de paire de vocabulaire pour cette liste",
@@ -519,6 +549,10 @@
         "news": {
             "title": "Actualités",
             "see_all": "Voir toutes les actualités"
+        },
+        "events": {
+            "title": "Événements",
+            "see_all": "Voir tous les événements"
         }
     },
     "session": {

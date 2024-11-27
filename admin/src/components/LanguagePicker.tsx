@@ -1,5 +1,5 @@
 import { FormControl, MenuItem, Select } from '@mui/material';
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useGetList, useTranslate } from 'react-admin';
 import Language from '../entities/Language';
 
@@ -7,6 +7,10 @@ interface LanguagePickerProps {
     onChange: (value: Language) => void;
     value?: Language;
     initialValue?: string;
+}
+
+interface LanguageWithLabel extends Language {
+    label: string;
 }
 
 const LanguagePicker: React.FC<LanguagePickerProps> = ({ onChange, value, initialValue }) => {
@@ -21,6 +25,19 @@ const LanguagePicker: React.FC<LanguagePickerProps> = ({ onChange, value, initia
             onChange(languages.find((language: Language) => language.id === initialValue) || { id: 'none' });
         }
     }, [initialValue, languages]);
+
+    const sortedLanguages = useMemo(() => {
+        if (languages) {
+            return languages
+                .map((language: Language) => ({
+                    ...language,
+                    label: translate(`languages_code.${language.code}`),
+                }))
+                .sort((a: LanguageWithLabel, b: LanguageWithLabel) => a.label.localeCompare(b.label));
+        }
+
+        return [];
+    }, [languages]);
 
     if (isLoading || !languages || (value === undefined && initialValue)) {
         return null;
@@ -37,10 +54,10 @@ const LanguagePicker: React.FC<LanguagePickerProps> = ({ onChange, value, initia
                     )
                 }
                 renderValue={(languageId: string) => {
-                    const newLanguage = languages.find((language: Language) => language.id === languageId);
+                    const newLanguage = sortedLanguages.find((language: Language) => language.id === languageId);
 
                     return languageId !== 'none' && newLanguage
-                        ? translate(`languages_code.${newLanguage.code}`)
+                        ? newLanguage.label
                         : translate('language_picker.placeholder');
                 }}
                 sx={{ mb: 2, width: '100%' }}
@@ -49,9 +66,9 @@ const LanguagePicker: React.FC<LanguagePickerProps> = ({ onChange, value, initia
                 displayEmpty
             >
                 <MenuItem value="none">{translate('language_picker.placeholder')}</MenuItem>
-                {languages.map((language: Language) => (
+                {sortedLanguages.map((language: LanguageWithLabel) => (
                     <MenuItem key={language.id} value={language.id}>
-                        {translate(`languages_code.${language.code}`)}
+                        {language.label}
                     </MenuItem>
                 ))}
             </Select>

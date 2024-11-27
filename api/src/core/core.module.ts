@@ -163,6 +163,7 @@ import {
   CreateEventUsecase,
   DeleteEventUsecase,
   GetEventsAdminUsecase,
+  GetEventsUsecase,
   GetEventUsecase,
   SendEmailToSubscribedUsersUsecase,
   SubscribeToEventUsecase,
@@ -180,6 +181,7 @@ import { UpdateCustomLearningGoalUsecase } from './usecases/objective/update-cus
 import { ArchiveTandemsAndDeleteUsersUsecase } from './usecases/purges/archive-tandems.usecase';
 import { GetReportsByUserUsecase } from './usecases/report/get-reports-by-user.usecase';
 import { LogoutAllSessionsUsecase } from './usecases/security/logout-all-sessions.usecase';
+import { ResetAdminPasswordUsecase } from './usecases/security/reset-admin-password.usecase';
 import { ResetPasswordUsecase } from './usecases/security/reset-password.usecase';
 import { CancelSessionUsecase } from './usecases/session/cancel-session.usecase';
 import { CreateSessionUsecase } from './usecases/session/create-session.usecase';
@@ -356,6 +358,7 @@ const usecases: Provider[] = [
   UpdateInstanceUsecase,
   // Security
   ResetPasswordUsecase,
+  ResetAdminPasswordUsecase,
   GetJitsiTokenUsecase,
   LogoutAllSessionsUsecase,
   TokenForAdminUsecase,
@@ -385,6 +388,7 @@ const usecases: Provider[] = [
   CreateEventUsecase,
   DeleteEventUsecase,
   GetEventsAdminUsecase,
+  GetEventsUsecase,
   GetEventUsecase,
   UpdateEventUsecase,
   SubscribeToEventUsecase,

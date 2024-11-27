@@ -2,6 +2,7 @@ import * as Prisma from '@prisma/client';
 import { parseArgs } from 'node:util';
 import { createActivityThemes } from './activity';
 import { createCountries } from './countries';
+import { createEvents } from './events';
 import { createInstance } from './instance';
 import { createInterests } from './interests';
 import { createLanguageCodes } from './languages';
@@ -61,6 +62,7 @@ const load = async () => {
       await prisma.routineExecutions.deleteMany();
       await prisma.tandems.deleteMany();
       await prisma.instance.deleteMany();
+      await prisma.events.deleteMany();
       await prisma.news.deleteMany();
     }
 
@@ -86,6 +88,7 @@ const load = async () => {
       await createUsers(200, 100, prisma);
       await createProfiles(prisma);
       await createNews(20, prisma);
+      await createEvents(40, prisma);
     }
   } catch (e) {
     console.error(e);

@@ -28,7 +28,7 @@ const ProficiencyTestCard: React.FC<ProficiencyTestCardProps> = ({ testedLanguag
                     <div className={styles['container-image']}>
                         <img alt="" className={styles.image} src={AdvicePng} aria-hidden={true} />
                     </div>
-                    <TestedLanguageComponent testedLanguages={testedLanguages} />
+                    {testedLanguages.length > 0 && <TestedLanguageComponent testedLanguages={testedLanguages} />}
                 </div>
                 {isHybrid && (
                     <div className={styles['card-button']}>
@@ -67,9 +67,9 @@ const TestedLanguageComponent: React.FC<ProficiencyTestCardProps> = ({ testedLan
 
     return (
         <div className={styles['tested-languages-list']}>
-            <span className={styles.subtitle}>{`${testedLanguages[0].level}  ( ${t(
-                `languages_code.${testedLanguages[0].code}`
-            )} ${codeLanguageToFlag(testedLanguages[0].code)} )`}</span>
+            <span className={styles.subtitle}>{`${testedLanguages[0]?.level}  ( ${t(
+                `languages_code.${testedLanguages[0]?.code}`
+            )} ${codeLanguageToFlag(testedLanguages[0]?.code)} )`}</span>
         </div>
     );
 };

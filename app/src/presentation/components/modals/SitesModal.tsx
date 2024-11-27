@@ -1,3 +1,4 @@
+import { IonButton } from '@ionic/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Campus from '../../../domain/entities/Campus';
@@ -21,26 +22,30 @@ const SitesModal: React.FC<AvailabilityModalProps> = ({ isVisible, onClose, onVa
                     {sites &&
                         sites.map((campus) => {
                             return (
-                                <button
+                                <IonButton
                                     aria-label={campus.name}
                                     key={campus.id}
+                                    fill="clear"
                                     style={{ backgroundColor: currentCampus === campus ? '#FDEE66' : '#F2F4F7' }}
-                                    className={styles['occurence-container']}
+                                    className={`no-padding ${styles['occurence-container']} ${
+                                        currentCampus === campus ? 'primary-selected-button' : ''
+                                    }`}
                                     onClick={() => setCurrentCampus(campus)}
                                 >
                                     <p className={styles['occurence-text']}>{campus.name}</p>
-                                </button>
+                                </IonButton>
                             );
                         })}
 
-                    <button
+                    <IonButton
                         aria-label={t('signup_availabilities_page.modal.validate_button') as string}
-                        className={`primary-button margin-top ${currentCampus ? '' : 'disabled'}`}
+                        className={`primary-button margin-top no-padding ${currentCampus ? '' : 'disabled'}`}
+                        fill="clear"
                         disabled={!currentCampus}
                         onClick={() => onValidate(currentCampus)}
                     >
                         {t('signup_availabilities_page.modal.validate_button')}
-                    </button>
+                    </IonButton>
                 </div>
             </div>
         </Modal>

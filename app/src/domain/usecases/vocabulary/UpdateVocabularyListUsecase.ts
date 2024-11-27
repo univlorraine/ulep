@@ -17,6 +17,8 @@ class UpdateVocabularyListUsecase implements UpdateVocabularyListUsecaseInterfac
                     name: command.name,
                     symbol: command.symbol,
                     profileIds: command.profileIds,
+                    wordLanguageCode: command.wordLanguageCode,
+                    translationLanguageCode: command.translationLanguageCode,
                 }
             );
 

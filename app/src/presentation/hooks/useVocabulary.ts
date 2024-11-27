@@ -6,6 +6,7 @@ import Profile from '../../domain/entities/Profile';
 import Vocabulary from '../../domain/entities/Vocabulary';
 import VocabularyList from '../../domain/entities/VocabularyList';
 import { CreateVocabularyListCommand } from '../../domain/interfaces/vocabulary/CreateVocabularyListUsecase.interface';
+import { UpdateVocabularyListCommand } from '../../domain/interfaces/vocabulary/UpdateVocabularyListUsecase.interface';
 import { useStoreState } from '../../store/storeTypes';
 
 const useVocabulary = () => {
@@ -49,6 +50,7 @@ const useVocabulary = () => {
             onCreateVocabulary: () => {},
             onCreateVocabularyList: () => {},
             onDeleteVocabulary: () => {},
+            onUpdateVocabularyList: () => {},
         };
 
     const onCreateVocabularyList = async (vocabularyList: CreateVocabularyListCommand) => {
@@ -72,6 +74,20 @@ const useVocabulary = () => {
             return showToast({ message: t(result.message), duration: 5000 });
         }
 
+        setRefreshVocabularyLists(!refreshVocabularyLists);
+    };
+
+    const onUpdateVocabularyList = async (id: string, command: UpdateVocabularyListCommand) => {
+        if (!vocabularyListSelected) {
+            return;
+        }
+        const result = await updateVocabularyList.execute(id, command);
+
+        if (result instanceof Error) {
+            return showToast({ message: t(result.message), duration: 5000 });
+        }
+
+        setVocabularyListSelected(result);
         setRefreshVocabularyLists(!refreshVocabularyLists);
     };
 
@@ -204,6 +220,7 @@ const useVocabulary = () => {
         onCreateVocabulary,
         onCreateVocabularyList,
         onDeleteVocabulary,
+        onUpdateVocabularyList,
     };
 };
 

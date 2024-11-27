@@ -8,9 +8,10 @@ import {
 import * as jwt from 'jsonwebtoken';
 import { Client, Issuer, TokenSet } from 'openid-client';
 import * as qs from 'querystring';
+import { AdminGroup } from 'src/core/models';
 import {
-  KeycloakConfiguration,
   KEYCLOAK_CONFIGURATION,
+  KeycloakConfiguration,
 } from './keycloak.configuration';
 import {
   InvalidCredentialsException,
@@ -277,6 +278,14 @@ export class KeycloakClient {
     const { access_token, refresh_token } = await response.json();
 
     return { accessToken: access_token, refreshToken: refresh_token };
+  }
+
+  async isAdmin(user: UserRepresentation): Promise<boolean> {
+    const userGroups = await this.getUserGroups(user.id);
+
+    return userGroups.some((group: { name: string }) =>
+      Object.values(AdminGroup).includes(group.name as AdminGroup),
+    );
   }
 
   /*

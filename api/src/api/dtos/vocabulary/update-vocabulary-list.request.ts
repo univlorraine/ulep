@@ -13,4 +13,12 @@ export class UpdateVocabularyListRequest {
   @ApiPropertyOptional({ type: 'string' })
   @IsOptional()
   profileIds?: string[];
+
+  @ApiPropertyOptional({ type: 'string' })
+  @IsOptional()
+  wordLanguageCode?: string;
+
+  @ApiPropertyOptional({ type: 'string' })
+  @IsOptional()
+  translationLanguageCode?: string;
 }

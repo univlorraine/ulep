@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-git-postinstall-configmap
+data:
+  init_git.sh: |-
+{{ .Files.Get "default_data/locales/init_git.sh" | indent 4}}

@@ -1,5 +1,5 @@
 import { Box, OutlinedInput, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Loading, useGetIdentity, useGetList, useNotify, usePermissions, useTranslate } from 'react-admin';
 import { AdminGroup, AdministratorFormPayload, KeycloakGroup, Role } from '../../entities/Administrator';
 import Language from '../../entities/Language';
@@ -44,18 +44,45 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({
     const [password, setPassword] = useState<string>('');
     const [newFirstname, setNewFirstname] = useState<string>(firstname || '');
     const [newLastname, setNewLastname] = useState<string>(lastname || '');
-    const [university, setUniversity] = useState<University | undefined>(universities?.find(isCentralUniversity));
+    const [newUniversityId, setNewUniversityId] = useState<string>(universityId || '');
     const [newGroup, setNewGroup] = useState<KeycloakGroup | undefined>(group);
     const [newLanguage, setNewLanguage] = useState<Language>();
     const [file, setFile] = useState<File>();
+
+    // Fix cache issue
+    useEffect(() => {
+        if (email && email !== newEmail) {
+            setNewEmail(email);
+        }
+        if (firstname && firstname !== newFirstname) {
+            setNewFirstname(firstname);
+        }
+        if (lastname && lastname !== newLastname) {
+            setNewLastname(lastname);
+        }
+        if (universityId && universityId !== newUniversityId) {
+            setNewUniversityId(universityId);
+        }
+        if (group && group !== newGroup) {
+            setNewGroup(group);
+        }
+    }, [email, firstname, lastname, universityId, languageId, group, universities]);
 
     if (isLoadingIdentity || !identity || isLoadingUniversities || !universities) {
         return <Loading />;
     }
 
+    const currentUniversity = universities.find((u) => u.id === universityId);
+    const newUniversity = universities.find((u) => u.id === newUniversityId);
+    const isSelectedUniversityIsCentral = newUniversity && isCentralUniversity(newUniversity);
+    const isCurrentUniversityIsCentral =
+        isSelectedUniversityIsCentral === undefined && currentUniversity
+            ? isCentralUniversity(currentUniversity)
+            : false;
+
     const getUniversityId = (): string | undefined => {
-        if (university) {
-            return university?.id;
+        if (newUniversity) {
+            return newUniversity?.id;
         }
 
         return identity.universityId;
@@ -80,8 +107,12 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({
     };
 
     const isEmailValid = (): boolean => {
-        if (university && isCentralUniversity(university)) {
-            return university.domains.some((domain) => newEmail.endsWith(domain));
+        if (isSelectedUniversityIsCentral) {
+            return newUniversity.domains.some((domain) => newEmail.endsWith(domain));
+        }
+
+        if (currentUniversity && isCurrentUniversityIsCentral) {
+            return currentUniversity.domains.some((domain) => newEmail.endsWith(domain));
         }
 
         return Boolean(newEmail);
@@ -117,15 +148,19 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({
                                     {translate(`administrators.${type}.university`)}
                                 </Typography>
                                 <UniversityPicker
-                                    initialValue={universityId}
-                                    onChange={setUniversity}
-                                    value={university}
+                                    onChange={setNewUniversityId}
+                                    universities={universities}
+                                    value={newUniversityId}
                                 />
                             </Box>
                         ))}
                     <Box>
                         <Typography variant="subtitle1">{translate('admin_groups_picker.placeholder')}</Typography>
-                        <AdminGroupPicker onChange={setNewGroup} university={university} value={newGroup} />
+                        <AdminGroupPicker
+                            isCentralUniversity={isSelectedUniversityIsCentral ?? isCurrentUniversityIsCentral}
+                            onChange={setNewGroup}
+                            value={newGroup}
+                        />
                     </Box>
                 </>
             )}
@@ -181,7 +216,12 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({
             <Button
                 color="primary"
                 disabled={
-                    (password ? !isPasswordValid(password) : false) || !newFirstname || !newLastname || !isEmailValid()
+                    (password ? !isPasswordValid(password) : false) ||
+                    !newFirstname ||
+                    !newLastname ||
+                    !newUniversityId ||
+                    newUniversityId === 'central' ||
+                    !isEmailValid()
                 }
                 onClick={onCreatePressed}
                 sx={{ mt: 4, width: '100%' }}
