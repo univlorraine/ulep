@@ -1,22 +1,30 @@
 import { IonButton, IonGrid, IonLabel, IonList, IonRow, isPlatform } from '@ionic/react';
 import { Jitsi } from 'capacitor-jitsi-meet';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useConfig } from '../../../context/ConfigurationContext';
+import { useStoreState } from '../../../store/storeTypes';
 import { JitsiProps } from './VisioContainer';
 
 interface OnChatMessageReceivedProps {
     isTrusted: boolean;
+    isLocal: boolean;
     senderId: string;
-    isPrivate: boolean;
+    isPrivate: string;
     message: string;
     timestamp: string;
+}
+
+interface ParticipantInfo {
+    participantsInfo: string;
 }
 
 const JitsiMobile = ({ jitsiUrl, roomName, jitsiToken }: JitsiProps) => {
     const history = useHistory();
     const { sendMessage } = useConfig();
-    const [count, setCount] = useState(0);
+    const profile = useStoreState((state) => state.profile);
+    const [currentJitsiParticipantId, setCurrentJitsiParticipantId] = useState<string | null>(null);
+    const currentJitsiParticipantIdRef = useRef<string | null>(null);
 
     const initialiseJitsi = async () => {
         await Jitsi.joinConference({
@@ -47,39 +55,26 @@ const JitsiMobile = ({ jitsiUrl, roomName, jitsiToken }: JitsiProps) => {
                 prejoinConfigPage: false,
             },
         });
-
-        console.warn('initialiseJitsi');
-        // native device, open jitsi capacitor plugin
+        //  /!\ WARING: Because of the Strict Mode, the listeners are added twice + on trigger, messages are sent twice
         window.addEventListener('onConferenceLeft', onJitsiUnloaded);
-        window.addEventListener('outgoingMessage', (data: any) => {
-            console.error('outgoingMessage', JSON.stringify(data));
-            setCount(count + 1);
-        });
-
+        window.addEventListener('onParticipantsInfoRetrieved', (data: any) => onParticipantsInfoRetrieved(data));
         window.addEventListener('onChatMessageReceived', (data: any) => onChatMessageReceived(data));
-        window.addEventListener('onParticipantsInfoRetrieved', (data: any) => {
-            console.error('participant info', JSON.stringify(data));
-            //{"isTrusted":false,"participantsInfo":"[{participantId=00b50123, name=My Name, role=moderator, avatarUrl=https://xxx.png, isLocal=true}
-        });
     };
 
     const onJitsiUnloaded = async () => {
-        console.warn('onJitsiUnloaded');
-        console.warn('count', count);
-        setCount(count + 1);
         if (isPlatform('cordova')) {
             window.removeEventListener('onConferenceLeft', onJitsiUnloaded);
-            window.removeEventListener('onChatMessageReceived', () => onChatMessageReceived);
+            window.removeEventListener('onChatMessageReceived', (data: any) => onChatMessageReceived(data));
+            window.removeEventListener('onParticipantsInfoRetrieved', (data: any) => onParticipantsInfoRetrieved(data));
         }
 
         history.push('/end-session');
     };
 
     const onChatMessageReceived = async (data: OnChatMessageReceivedProps) => {
-        console.log('roomName', roomName);
-        console.log('onChatMessageReceived', data);
-        if (roomName && data.isPrivate) {
-            const result = await sendMessage.execute(roomName, data.senderId, data.message);
+        const currentId = currentJitsiParticipantIdRef.current;
+        if (roomName && data.senderId === currentId) {
+            const result = await sendMessage.execute(roomName, profile!.user.id, data.message);
 
             if (result instanceof Error) {
                 console.error(result);
@@ -87,8 +82,36 @@ const JitsiMobile = ({ jitsiUrl, roomName, jitsiToken }: JitsiProps) => {
         }
     };
 
+    const onParticipantsInfoRetrieved = async (data: ParticipantInfo) => {
+        const participantsInfoString = data.participantsInfo;
+        const jsonString = participantsInfoString
+            .replace(/(\w+)=/g, '"$1":') // Remplace les égalités par des deux-points
+            .replace(/:([^,\]}]+)/g, (match, p1) => {
+                // Ajoute des guillemets autour des valeurs de chaîne, sauf pour les booléens
+                if (p1 === 'true' || p1 === 'false' || !isNaN(p1)) {
+                    return `:${p1}`;
+                }
+                return `:"${p1.replace(/"/g, '\\"')}"`; // Échappe les guillemets dans les valeurs
+            });
+        const participantsInfo = JSON.parse(jsonString);
+        const localParticipantId = participantsInfo.find(
+            (participant: any) => participant.isLocal === true
+        ).participantId;
+        setCurrentJitsiParticipantId(localParticipantId);
+    };
+
+    useEffect(() => {
+        currentJitsiParticipantIdRef.current = currentJitsiParticipantId;
+    }, [currentJitsiParticipantId]);
+
     useEffect(() => {
         initialiseJitsi();
+
+        return () => {
+            window.removeEventListener('onConferenceLeft', onJitsiUnloaded);
+            window.removeEventListener('onChatMessageReceived', (data: any) => onChatMessageReceived(data));
+            window.removeEventListener('onParticipantsInfoRetrieved', (data: any) => onParticipantsInfoRetrieved(data));
+        };
     }, []);
 
     return (
@@ -102,7 +125,7 @@ const JitsiMobile = ({ jitsiUrl, roomName, jitsiToken }: JitsiProps) => {
                         </IonRow>
                         <IonRow class="ion-justify-content-center">
                             <IonButton fill="clear" onClick={initialiseJitsi}>
-                                Rejoin Video Session {count}
+                                Rejoin Video Session
                             </IonButton>
                         </IonRow>
                         <IonRow class="ion-justify-content-center">
