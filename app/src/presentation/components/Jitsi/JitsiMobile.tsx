@@ -23,10 +23,14 @@ const JitsiMobile = ({ jitsiUrl, roomName, jitsiToken }: JitsiProps) => {
     const history = useHistory();
     const { deviceAdapter, sendMessage } = useConfig();
     const profile = useStoreState((state) => state.profile);
+    const isJitsiInitializedRef = useRef(false);
     const [currentJitsiParticipantId, setCurrentJitsiParticipantId] = useState<string | null>(null);
     const currentJitsiParticipantIdRef = useRef<string | null>(null);
 
     const initialiseJitsi = async () => {
+        if (isJitsiInitializedRef.current) return;
+        isJitsiInitializedRef.current = true;
+
         await Jitsi.joinConference({
             roomName: roomName,
             url: `https://${jitsiUrl}/`,
@@ -117,16 +121,19 @@ const JitsiMobile = ({ jitsiUrl, roomName, jitsiToken }: JitsiProps) => {
     };
 
     useEffect(() => {
+        const handleConferenceLeft = () => onJitsiUnloaded();
+        const handleParticipantsInfoRetrieved = (data: any) => onParticipantsInfoRetrieved(data);
+        const handleChatMessageReceived = (data: any) => onChatMessageReceived(data);
         //  /!\ WARING: Because of the Strict Mode, the listeners are added twice + on trigger, messages are sent twice
-        window.addEventListener('onConferenceLeft', onJitsiUnloaded);
-        window.addEventListener('onParticipantsInfoRetrieved', (data: any) => onParticipantsInfoRetrieved(data));
-        window.addEventListener('onChatMessageReceived', (data: any) => onChatMessageReceived(data));
+        window.addEventListener('onConferenceLeft', handleConferenceLeft);
+        window.addEventListener('onParticipantsInfoRetrieved', handleParticipantsInfoRetrieved);
+        window.addEventListener('onChatMessageReceived', handleChatMessageReceived);
         initialiseJitsi();
 
         return () => {
-            window.removeEventListener('onConferenceLeft', onJitsiUnloaded);
-            window.removeEventListener('onChatMessageReceived', (data: any) => onChatMessageReceived(data));
-            window.removeEventListener('onParticipantsInfoRetrieved', (data: any) => onParticipantsInfoRetrieved(data));
+            window.removeEventListener('onConferenceLeft', handleConferenceLeft);
+            window.removeEventListener('onChatMessageReceived', handleChatMessageReceived);
+            window.removeEventListener('onParticipantsInfoRetrieved', handleParticipantsInfoRetrieved);
         };
     }, []);
 
