@@ -21,7 +21,7 @@ interface ParticipantInfo {
 
 const JitsiMobile = ({ jitsiUrl, roomName, jitsiToken }: JitsiProps) => {
     const history = useHistory();
-    const { sendMessage } = useConfig();
+    const { deviceAdapter, sendMessage } = useConfig();
     const profile = useStoreState((state) => state.profile);
     const [currentJitsiParticipantId, setCurrentJitsiParticipantId] = useState<string | null>(null);
     const currentJitsiParticipantIdRef = useRef<string | null>(null);
@@ -55,10 +55,6 @@ const JitsiMobile = ({ jitsiUrl, roomName, jitsiToken }: JitsiProps) => {
                 prejoinConfigPage: false,
             },
         });
-        //  /!\ WARING: Because of the Strict Mode, the listeners are added twice + on trigger, messages are sent twice
-        window.addEventListener('onConferenceLeft', onJitsiUnloaded);
-        window.addEventListener('onParticipantsInfoRetrieved', (data: any) => onParticipantsInfoRetrieved(data));
-        window.addEventListener('onChatMessageReceived', (data: any) => onChatMessageReceived(data));
     };
 
     const onJitsiUnloaded = async () => {
@@ -83,10 +79,24 @@ const JitsiMobile = ({ jitsiUrl, roomName, jitsiToken }: JitsiProps) => {
     };
 
     const onParticipantsInfoRetrieved = async (data: ParticipantInfo) => {
-        const participantsInfoString = data.participantsInfo;
+        let participantId;
+        if (deviceAdapter.isAndroid()) {
+            participantId = handlePayloadForAndroid(data);
+        } else {
+            participantId = handlePayloadForIos(data);
+        }
+        setCurrentJitsiParticipantId(participantId);
+    };
+
+    useEffect(() => {
+        currentJitsiParticipantIdRef.current = currentJitsiParticipantId;
+    }, [currentJitsiParticipantId]);
+
+    const handlePayloadForAndroid = (payload: any) => {
+        const participantsInfoString = payload.participantsInfo;
         const jsonString = participantsInfoString
             .replace(/(\w+)=/g, '"$1":') // Remplace les égalités par des deux-points
-            .replace(/:([^,\]}]+)/g, (match, p1) => {
+            .replace(/:([^,\]}]+)/g, (match: string, p1: any) => {
                 // Ajoute des guillemets autour des valeurs de chaîne, sauf pour les booléens
                 if (p1 === 'true' || p1 === 'false' || !isNaN(p1)) {
                     return `:${p1}`;
@@ -94,17 +104,23 @@ const JitsiMobile = ({ jitsiUrl, roomName, jitsiToken }: JitsiProps) => {
                 return `:"${p1.replace(/"/g, '\\"')}"`; // Échappe les guillemets dans les valeurs
             });
         const participantsInfo = JSON.parse(jsonString);
-        const localParticipantId = participantsInfo.find(
-            (participant: any) => participant.isLocal === true
-        ).participantId;
-        setCurrentJitsiParticipantId(localParticipantId);
+
+        return participantsInfo.find((participant: any) => participant.isLocal === true).participantId;
+    };
+
+    const handlePayloadForIos = (payload: any) => {
+        const participantsArray = Object.keys(payload)
+            .filter((key) => !isNaN(Number(key)))
+            .map((key) => payload[key]);
+
+        return participantsArray.find((participant: any) => participant.isLocal === true).participantId;
     };
 
     useEffect(() => {
-        currentJitsiParticipantIdRef.current = currentJitsiParticipantId;
-    }, [currentJitsiParticipantId]);
-
-    useEffect(() => {
+        //  /!\ WARING: Because of the Strict Mode, the listeners are added twice + on trigger, messages are sent twice
+        window.addEventListener('onConferenceLeft', onJitsiUnloaded);
+        window.addEventListener('onParticipantsInfoRetrieved', (data: any) => onParticipantsInfoRetrieved(data));
+        window.addEventListener('onChatMessageReceived', (data: any) => onChatMessageReceived(data));
         initialiseJitsi();
 
         return () => {
