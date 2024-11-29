@@ -1,6 +1,6 @@
 import { IonContent } from '@ionic/react';
 import { useEffect, useState } from 'react';
-import { Redirect, useHistory } from 'react-router';
+import { Redirect, useHistory, useLocation } from 'react-router';
 import { useConfig } from '../../../context/ConfigurationContext';
 import Profile from '../../../domain/entities/Profile';
 import Tandem from '../../../domain/entities/Tandem';
@@ -16,8 +16,13 @@ import SelectTandemModal from '../../components/modals/SelectTandemModal';
 import SelectVocabularyListsForQuizModale from '../../components/modals/SelectVocabularyListsForQuizModal';
 import useVocabulary from '../../hooks/useVocabulary';
 
-const VocabulariesPage = () => {
+interface VocabulariesPageProps {
+    tandem?: Tandem;
+}
+
+const VocabulariesPage: React.FC<VocabulariesPageProps> = ({ tandem }) => {
     const history = useHistory();
+    const location = useLocation<VocabulariesPageProps>();
     const profile = useStoreState((state) => state.profile);
     const { getAllTandems } = useConfig();
     const [vocabularySelected, setVocabularySelected] = useState<Vocabulary>();
@@ -162,13 +167,16 @@ const VocabulariesPage = () => {
                         onDelete={handleDeleteVocabulary}
                     />
                 )}
-                <AddOrUpdateVocabularyListModal
-                    isVisible={showAddVocabularyListModal}
-                    onClose={() => setShowAddVocabularyListModal(false)}
-                    onCreateVocabularyList={handleCreateVocabularyList}
-                    onUpdateVocabularyList={handleUpdateVocabularyList}
-                    profile={profile}
-                />
+                {location.state?.tandem && (
+                    <AddOrUpdateVocabularyListModal
+                        isVisible={showAddVocabularyListModal}
+                        onClose={() => setShowAddVocabularyListModal(false)}
+                        onCreateVocabularyList={handleCreateVocabularyList}
+                        onUpdateVocabularyList={handleUpdateVocabularyList}
+                        profile={profile}
+                        currentLearningLanguage={location.state.tandem.learningLanguage}
+                    />
+                )}
                 <SelectTandemModal
                     isVisible={showShareVocabularyListModal}
                     onClose={() => setShowShareVocabularyListModal(false)}
