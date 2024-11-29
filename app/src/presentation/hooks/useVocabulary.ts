@@ -21,6 +21,7 @@ const useVocabulary = (learningLanguage?: LearningLanguage) => {
         updateVocabulary,
         createVocabulary,
         deleteVocabulary,
+        deleteVocabularyList,
     } = useConfig();
     const [refreshVocabularyLists, setRefreshVocabularyLists] = useState<boolean>(false);
     const [refreshVocabularies, setRefreshVocabularies] = useState<boolean>(false);
@@ -52,6 +53,7 @@ const useVocabulary = (learningLanguage?: LearningLanguage) => {
             onCreateVocabularyList: () => {},
             onDeleteVocabulary: () => {},
             onUpdateVocabularyList: () => {},
+            onDeleteVocabularyList: () => {},
         };
 
     const onCreateVocabularyList = async (vocabularyList: CreateVocabularyListCommand) => {
@@ -151,6 +153,21 @@ const useVocabulary = (learningLanguage?: LearningLanguage) => {
         setRefreshVocabularies(!refreshVocabularies);
     };
 
+    const onDeleteVocabularyList = async () => {
+        if (!vocabularyListSelected) {
+            return;
+        }
+
+        const result = await deleteVocabularyList.execute(vocabularyListSelected.id);
+
+        if (result instanceof Error) {
+            return showToast({ message: t(result.message), duration: 5000 });
+        }
+
+        setVocabularyListSelected(undefined);
+        setRefreshVocabularyLists(!refreshVocabularyLists);
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             setVocabularyResult({
@@ -222,6 +239,7 @@ const useVocabulary = (learningLanguage?: LearningLanguage) => {
         onCreateVocabularyList,
         onDeleteVocabulary,
         onUpdateVocabularyList,
+        onDeleteVocabularyList,
     };
 };
 

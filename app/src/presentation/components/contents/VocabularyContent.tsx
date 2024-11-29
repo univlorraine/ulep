@@ -50,6 +50,7 @@ const VocabularyContent: React.FC<VocabularyContentProps> = ({
         onCreateVocabulary,
         onUpdateVocabularyList,
         onDeleteVocabulary,
+        onDeleteVocabularyList,
         setVocabularyListSelected,
         setSearchVocabularies,
     } = useVocabulary(currentLearningLanguage);
@@ -156,6 +157,7 @@ const VocabularyContent: React.FC<VocabularyContentProps> = ({
                     goBack={() => setVocabularyListSelected(undefined)}
                     onAddVocabulary={onAddOrUpdateVocabulary}
                     onUpdateVocabularyList={() => setShowAddVocabularyListModal(true)}
+                    onDeleteVocabularyList={onDeleteVocabularyList}
                     onSearch={setSearchVocabularies}
                     onShareVocabularyList={() => setShowShareVocabularyListModal(true)}
                     setQuizzSelectedListIds={setQuizzSelectedListIds}
