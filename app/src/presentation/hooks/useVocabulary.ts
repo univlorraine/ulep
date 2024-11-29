@@ -2,6 +2,7 @@ import { useIonToast } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useConfig } from '../../context/ConfigurationContext';
+import LearningLanguage from '../../domain/entities/LearningLanguage';
 import Profile from '../../domain/entities/Profile';
 import Vocabulary from '../../domain/entities/Vocabulary';
 import VocabularyList from '../../domain/entities/VocabularyList';
@@ -9,7 +10,7 @@ import { CreateVocabularyListCommand } from '../../domain/interfaces/vocabulary/
 import { UpdateVocabularyListCommand } from '../../domain/interfaces/vocabulary/UpdateVocabularyListUsecase.interface';
 import { useStoreState } from '../../store/storeTypes';
 
-const useVocabulary = () => {
+const useVocabulary = (learningLanguage?: LearningLanguage) => {
     const { t } = useTranslation();
     const [showToast] = useIonToast();
     const {
@@ -156,7 +157,7 @@ const useVocabulary = () => {
                 ...vocabularyResult,
                 isLoading: true,
             });
-            const vocabularyListsResult = await getVocabularyLists.execute(profile.id);
+            const vocabularyListsResult = await getVocabularyLists.execute(profile.id, learningLanguage?.code);
 
             if (vocabularyListsResult instanceof Error) {
                 return setVocabularyResult({

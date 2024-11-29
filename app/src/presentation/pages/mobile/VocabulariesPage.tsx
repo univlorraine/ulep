@@ -46,7 +46,7 @@ const VocabulariesPage: React.FC<VocabulariesPageProps> = ({ tandem }) => {
         onDeleteVocabulary,
         setVocabularyListSelected,
         setSearchVocabularies,
-    } = useVocabulary();
+    } = useVocabulary(tandem?.learningLanguage);
 
     const handleCreateVocabularyList = async (vocabularyList: CreateVocabularyListCommand) => {
         await onCreateVocabularyList(vocabularyList);

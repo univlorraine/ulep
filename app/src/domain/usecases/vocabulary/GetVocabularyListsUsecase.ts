@@ -8,10 +8,12 @@ import GetVocabularyListsUsecaseInterface from '../../interfaces/vocabulary/GetV
 class GetVocabularyListsUsecase implements GetVocabularyListsUsecaseInterface {
     constructor(private readonly domainHttpAdapter: HttpAdapterInterface) {}
 
-    async execute(profileId: string): Promise<VocabularyList[] | Error> {
+    async execute(profileId: string, languageCode?: string): Promise<VocabularyList[] | Error> {
         try {
             const httpResponse: HttpResponse<CollectionCommand<VocabularyListCommand>> =
-                await this.domainHttpAdapter.get(`/vocabulary/list/${profileId}`);
+                await this.domainHttpAdapter.get(
+                    `/vocabulary/list/${profileId}${languageCode ? `?languageCode=${languageCode}` : ''}`
+                );
 
             if (!httpResponse.parsedBody) {
                 return new Error('errors.global');

@@ -1,5 +1,5 @@
 import { IonModal } from '@ionic/react';
-import Language from '../../../domain/entities/Language';
+import LearningLanguage from '../../../domain/entities/LearningLanguage';
 import Profile from '../../../domain/entities/Profile';
 import VocabularyContent from '../contents/VocabularyContent';
 import styles from './VocabularyContentModal.module.css';
@@ -8,7 +8,7 @@ interface VocabularyContentModalProps {
     isVisible: boolean;
     onClose: () => void;
     profile: Profile;
-    currentLearningLanguage: Language;
+    currentLearningLanguage: LearningLanguage;
 }
 
 const VocabularyContentModal: React.FC<VocabularyContentModalProps> = ({
