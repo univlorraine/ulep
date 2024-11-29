@@ -9,9 +9,10 @@ import styles from './ProficiencyTestCard.module.css';
 
 interface ProficiencyTestCardProps {
     testedLanguages: TestedLanguage[];
+    currentColor?: string;
 }
 
-const ProficiencyTestCard: React.FC<ProficiencyTestCardProps> = ({ testedLanguages }) => {
+const ProficiencyTestCard: React.FC<ProficiencyTestCardProps> = ({ testedLanguages, currentColor }) => {
     const { t } = useTranslation();
     const history = useHistory();
     const { width } = useWindowDimensions();
@@ -23,7 +24,7 @@ const ProficiencyTestCard: React.FC<ProficiencyTestCardProps> = ({ testedLanguag
             buttonText={t('proficiency_test.button') as string}
             onButtonPressed={() => history.push('/cefr/languages')}
         >
-            <div className={styles.container}>
+            <div className={styles.container} style={{ backgroundColor: currentColor }}>
                 <div className={styles['container-content']}>
                     <div className={styles['container-image']}>
                         <img alt="" className={styles.image} src={AdvicePng} aria-hidden={true} />

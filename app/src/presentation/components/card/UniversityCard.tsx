@@ -10,9 +10,10 @@ import styles from './UniversityCard.module.css';
 interface UniversityCardProps {
     university: University;
     onPress: () => void;
+    currentColor?: string;
 }
 
-const UniversityCard: React.FC<UniversityCardProps> = ({ university, onPress }) => {
+const UniversityCard: React.FC<UniversityCardProps> = ({ university, onPress, currentColor }) => {
     const { t } = useTranslation();
     const formattedAdmissionStart = format(new Date(university.admissionStart), 'dd/MM/yyyy');
     const formattedAdmissionEnd = format(new Date(university.admissionEnd), 'dd/MM/yyyy');
@@ -20,7 +21,10 @@ const UniversityCard: React.FC<UniversityCardProps> = ({ university, onPress }) 
     const isHybrid = width < HYBRID_MAX_WIDTH;
 
     return (
-        <div className={`${styles.card} ${university.isCentral ? styles.central : styles.partner}`}>
+        <div
+            className={`${styles.card} ${university.isCentral ? styles.central : styles.partner}`}
+            style={{ backgroundColor: currentColor }}
+        >
             <div className={`${styles.container}`}>
                 {university.logo ? (
                     <NetworkImage
