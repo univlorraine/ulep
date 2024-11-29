@@ -329,8 +329,8 @@
                 "pronunciation": "Prononciation",
                 "add_prounonciation": "Ajouter",
                 "delete_prounonciation": "Supprimer",
-                "default_translation": "Traduction",
-                "default_word": "Mot",
+                "default_translation": "Mot à apprendre",
+                "default_word": "Traduction",
                 "title": "Nouvelle pair de mots",
                 "edit_title": "Editer la pair de mots"
             },
