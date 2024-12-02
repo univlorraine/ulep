@@ -123,17 +123,18 @@
         }
     },
     "instance": {
-        "button": "",
-        "error": "",
-        "subtitle": "",
-        "title": ""
+        "button": "确认并继续",
+        "error": "学校数据加载时出错",
+        "subtitle": "在下列菜单中选择学校信息",
+        "title": "你的任务",
+        "update_instance": "更换大学"
     },
     "languages": {
-        "french": "",
-        "english": "",
-        "deutsche": "",
-        "spanish": "",
-        "chinese": ""
+        "french": "法语",
+        "english": "英语",
+        "deutsche": "德语",
+        "spanish": "西班牙语",
+        "chinese": "中文"
     },
     "login_page": {
         "button": "登录",
