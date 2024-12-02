@@ -17,6 +17,7 @@ interface AddOrUpdateVocabularyListModalProps {
     onClose: () => void;
     onCreateVocabularyList: (createVocabularyList: CreateVocabularyListCommand) => void;
     onUpdateVocabularyList: (updateVocabularyList: UpdateVocabularyListCommand) => void;
+    currentLearningLanguage: Language;
     profile: Profile;
     vocabularyList?: VocabularyList;
 }
@@ -26,6 +27,7 @@ const AddOrUpdateVocabularyListModal: React.FC<AddOrUpdateVocabularyListModalPro
     onClose,
     onCreateVocabularyList,
     onUpdateVocabularyList,
+    currentLearningLanguage,
     profile,
     vocabularyList,
 }) => {
@@ -34,7 +36,9 @@ const AddOrUpdateVocabularyListModal: React.FC<AddOrUpdateVocabularyListModalPro
     const [name, setName] = useState<string>('');
     const [symbol, setSymbol] = useState<string>('');
     const [originLanguage, setOriginLanguage] = useState<Language>(profile.nativeLanguage);
-    const [targetLanguage, setTargetLanguage] = useState<Language>(profile.learningLanguages[0]);
+    const [targetLanguage, setTargetLanguage] = useState<Language>(
+        currentLearningLanguage ?? profile.learningLanguages[0]
+    );
     const [errorMessage, setErrorMessage] = useState<{ type: string; message: string }>();
 
     const masteredLanguages = [profile.nativeLanguage, ...profile.masteredLanguages].map((language) => ({
@@ -82,7 +86,9 @@ const AddOrUpdateVocabularyListModal: React.FC<AddOrUpdateVocabularyListModalPro
         setName(vocabularyList?.name ?? '');
         setSymbol(vocabularyList?.symbol ?? '');
         setOriginLanguage(vocabularyList?.wordLanguage ?? profile.nativeLanguage);
-        setTargetLanguage(vocabularyList?.translationLanguage ?? profile.learningLanguages[0]);
+        setTargetLanguage(
+            vocabularyList?.translationLanguage ?? currentLearningLanguage ?? profile.learningLanguages[0]
+        );
     }, [isVisible, vocabularyList]);
 
     return (
@@ -107,23 +113,6 @@ const AddOrUpdateVocabularyListModal: React.FC<AddOrUpdateVocabularyListModalPro
 
                 <div className="large-margin-bottom">
                     <Dropdown<Language>
-                        onChange={(value) => setOriginLanguage(value)}
-                        value={{
-                            label: `${codeLanguageToFlag(originLanguage.code)} ${t(
-                                `languages_code.${originLanguage.code}`
-                            )}`,
-                            value: originLanguage,
-                        }}
-                        options={masteredLanguages}
-                        placeholder={t('vocabulary.list.add.origin_language')}
-                        title={t('vocabulary.list.add.origin_language')}
-                        ariaLabel={t('vocabulary.list.add.origin_language') as string}
-                        required={true}
-                    />
-                </div>
-
-                <div className="large-margin-bottom">
-                    <Dropdown<Language>
                         onChange={(value) => setTargetLanguage(value)}
                         value={{
                             label: `${codeLanguageToFlag(targetLanguage.code)} ${t(
@@ -135,6 +124,24 @@ const AddOrUpdateVocabularyListModal: React.FC<AddOrUpdateVocabularyListModalPro
                         placeholder={t('vocabulary.list.add.target_language')}
                         title={t('vocabulary.list.add.target_language')}
                         ariaLabel={t('vocabulary.list.add.target_language') as string}
+                        required={true}
+                        disabled={Boolean(currentLearningLanguage)}
+                    />
+                </div>
+
+                <div className="large-margin-bottom">
+                    <Dropdown<Language>
+                        onChange={(value) => setOriginLanguage(value)}
+                        value={{
+                            label: `${codeLanguageToFlag(originLanguage.code)} ${t(
+                                `languages_code.${originLanguage.code}`
+                            )}`,
+                            value: originLanguage,
+                        }}
+                        options={masteredLanguages}
+                        placeholder={t('vocabulary.list.add.origin_language')}
+                        title={t('vocabulary.list.add.origin_language')}
+                        ariaLabel={t('vocabulary.list.add.origin_language') as string}
                         required={true}
                     />
                 </div>

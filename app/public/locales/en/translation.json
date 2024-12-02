@@ -257,7 +257,11 @@
                 "title": "Create a new list"
             },
             "update": {
-                "title": "Modify the list"
+                "title": "Update the list"
+            },
+            "delete": {
+                "title": "Delete the list",
+                "modal": "Are you sure you want to delete this list ?"
             },
             "empty": "You haven't created any vocabulary list for this language yet.",
             "go_back": "Go back",
@@ -272,14 +276,14 @@
                 "cancel": "Cancel",
                 "create": "Validate",
                 "origin_language": "Translation language",
-                "target_language": "Language to translate",
+                "target_language": "Language to learn",
                 "title": "New vocabulary list",
                 "symbol": "List symbol",
                 "name": "List name",
                 "symbol_error": "The symbol is required",
                 "name_error": "The name is required",
                 "origin_language_error": "The translation language is required",
-                "target_language_error": "The language to translate is required"
+                "target_language_error": "The language to learn is required"
             },
             "share": {
                 "cancel": "Cancel",

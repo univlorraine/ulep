@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useConfig } from '../../../context/ConfigurationContext';
+import LearningLanguage from '../../../domain/entities/LearningLanguage';
 import Profile from '../../../domain/entities/Profile';
 import Tandem from '../../../domain/entities/Tandem';
 import Vocabulary from '../../../domain/entities/Vocabulary';
@@ -19,9 +20,15 @@ interface VocabularyContentProps {
     profile: Profile;
     onClose: () => void;
     isModal?: boolean;
+    currentLearningLanguage: LearningLanguage;
 }
 
-const VocabularyContent: React.FC<VocabularyContentProps> = ({ profile, onClose, isModal }) => {
+const VocabularyContent: React.FC<VocabularyContentProps> = ({
+    profile,
+    onClose,
+    isModal,
+    currentLearningLanguage,
+}) => {
     const { getAllTandems } = useConfig();
     const [vocabularySelected, setVocabularySelected] = useState<Vocabulary>();
     const [showAddVocabularyListModal, setShowAddVocabularyListModal] = useState(false);
@@ -43,9 +50,10 @@ const VocabularyContent: React.FC<VocabularyContentProps> = ({ profile, onClose,
         onCreateVocabulary,
         onUpdateVocabularyList,
         onDeleteVocabulary,
+        onDeleteVocabularyList,
         setVocabularyListSelected,
         setSearchVocabularies,
-    } = useVocabulary();
+    } = useVocabulary(currentLearningLanguage);
 
     const handleCreateVocabularyList = async (vocabularyList: CreateVocabularyListCommand) => {
         await onCreateVocabularyList(vocabularyList);
@@ -149,6 +157,7 @@ const VocabularyContent: React.FC<VocabularyContentProps> = ({ profile, onClose,
                     goBack={() => setVocabularyListSelected(undefined)}
                     onAddVocabulary={onAddOrUpdateVocabulary}
                     onUpdateVocabularyList={() => setShowAddVocabularyListModal(true)}
+                    onDeleteVocabularyList={onDeleteVocabularyList}
                     onSearch={setSearchVocabularies}
                     onShareVocabularyList={() => setShowShareVocabularyListModal(true)}
                     setQuizzSelectedListIds={setQuizzSelectedListIds}
@@ -176,6 +185,7 @@ const VocabularyContent: React.FC<VocabularyContentProps> = ({ profile, onClose,
                 onClose={() => setShowAddVocabularyListModal(false)}
                 onCreateVocabularyList={handleCreateVocabularyList}
                 onUpdateVocabularyList={handleUpdateVocabularyList}
+                currentLearningLanguage={currentLearningLanguage}
                 profile={profile}
             />
             <SelectTandemModal

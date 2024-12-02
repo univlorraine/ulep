@@ -59,6 +59,7 @@ export class InMemoryVocabularyRepository implements VocabularyRepository {
 
   async findAllVocabularyLists(
     profileId: string,
+    languageCode?: string,
     pagination?: VocabularyPagination,
   ): Promise<VocabularyList[]> {
     const start = pagination?.page

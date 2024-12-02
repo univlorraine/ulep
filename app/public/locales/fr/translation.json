@@ -274,6 +274,10 @@
             "update": {
                 "title": "Modifier la liste"
             },
+            "delete": {
+                "title": "Supprimer la liste",
+                "modal": "Êtes-vous sûr de vouloir supprimer cette liste ?"
+            },
             "empty": "Tu n’as pas encore créé de liste de vocabulaire pour cette langue.",
             "go_back": "Retour",
             "menu": "Menu",
@@ -287,14 +291,14 @@
                 "cancel": "Annuler",
                 "create": "Valider",
                 "origin_language": "Langue de traduction",
-                "target_language": "Langue à traduire",
+                "target_language": "Langue à apprendre",
                 "title": "Nouvelle liste de vocabulaire",
                 "symbol": "Symbole de la liste",
                 "name": "Nom de la liste",
                 "symbol_error": "Le symbole est obligatoire",
                 "name_error": "Le nom est obligatoire",
                 "origin_language_error": "La langue de traduction est obligatoire",
-                "target_language_error": "La langue à traduire est obligatoire"
+                "target_language_error": "La Langue à apprendre est obligatoire"
             },
             "share": {
                 "cancel": "Annuler",

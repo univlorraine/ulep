@@ -1,4 +1,5 @@
 import { IonModal } from '@ionic/react';
+import LearningLanguage from '../../../domain/entities/LearningLanguage';
 import Profile from '../../../domain/entities/Profile';
 import VocabularyContent from '../contents/VocabularyContent';
 import styles from './VocabularyContentModal.module.css';
@@ -7,13 +8,24 @@ interface VocabularyContentModalProps {
     isVisible: boolean;
     onClose: () => void;
     profile: Profile;
+    currentLearningLanguage: LearningLanguage;
 }
 
-const VocabularyContentModal: React.FC<VocabularyContentModalProps> = ({ isVisible, onClose, profile }) => {
+const VocabularyContentModal: React.FC<VocabularyContentModalProps> = ({
+    isVisible,
+    onClose,
+    profile,
+    currentLearningLanguage,
+}) => {
     return (
         <IonModal animated isOpen={isVisible} onDidDismiss={onClose} className={styles.modal}>
             <div className={styles.content}>
-                <VocabularyContent profile={profile} onClose={onClose} isModal />
+                <VocabularyContent
+                    profile={profile}
+                    onClose={onClose}
+                    currentLearningLanguage={currentLearningLanguage}
+                    isModal
+                />
             </div>
         </IonModal>
     );
