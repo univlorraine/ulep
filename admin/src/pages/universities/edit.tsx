@@ -1,5 +1,4 @@
-import React from 'react';
-import { useTranslate, useNotify, useRedirect, useUpdate, Edit, WithRecord } from 'react-admin';
+import { Edit, useNotify, useRedirect, useTranslate, useUpdate, WithRecord } from 'react-admin';
 import UniversityForm from '../../components/form/UniversityForm';
 import UniversitiesPagesHeader from '../../components/tabs/UniversitiesPagesHeader';
 import Administrator from '../../entities/Administrator';
@@ -140,7 +139,7 @@ const EditUniversity = () => {
                             specificLanguagesAvailable={record.specificLanguagesAvailable}
                             timezone={record.timezone}
                             tradKey="update"
-                            universityId={record.parent ? record.id : undefined}
+                            universityId={record.id}
                             website={record.website}
                         />
                     )}

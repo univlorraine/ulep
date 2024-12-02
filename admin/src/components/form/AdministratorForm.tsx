@@ -219,8 +219,7 @@ const AdministratorForm: React.FC<AdministratorFormProps> = ({
                     (password ? !isPasswordValid(password) : false) ||
                     !newFirstname ||
                     !newLastname ||
-                    !newUniversityId ||
-                    newUniversityId === 'central' ||
+                    !getUniversityId() ||
                     !isEmailValid()
                 }
                 onClick={onCreatePressed}
