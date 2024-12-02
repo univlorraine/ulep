@@ -274,6 +274,10 @@
             "update": {
                 "title": "Modifier la liste"
             },
+            "delete": {
+                "title": "Supprimer la liste",
+                "modal": "Êtes-vous sûr de vouloir supprimer cette liste ?"
+            },
             "empty": "Tu n’as pas encore créé de liste de vocabulaire pour cette langue.",
             "go_back": "Retour",
             "menu": "Menu",

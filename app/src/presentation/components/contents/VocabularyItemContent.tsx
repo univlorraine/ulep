@@ -1,5 +1,5 @@
 import { IonButton, IonIcon, IonImg, IonItem, IonLabel, IonList, IonSearchbar, useIonToast } from '@ionic/react';
-import { arrowRedoOutline, downloadOutline, pencilOutline } from 'ionicons/icons';
+import { arrowRedoOutline, downloadOutline, pencilOutline, trashOutline } from 'ionicons/icons';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AddSvg, VocabularyPng } from '../../../assets';
@@ -8,6 +8,7 @@ import Profile from '../../../domain/entities/Profile';
 import Vocabulary from '../../../domain/entities/Vocabulary';
 import VocabularyList from '../../../domain/entities/VocabularyList';
 import HeaderSubContent from '../HeaderSubContent';
+import ConfirmModal from '../modals/ConfirmModal';
 import VocabularyLine from '../vocabulary/VocabularyLine';
 import styles from './VocabularyListContent.module.css';
 
@@ -19,6 +20,7 @@ interface VocabularyContentProps {
     isLoading: boolean;
     onAddVocabulary: (vocabulary?: Vocabulary) => void;
     onUpdateVocabularyList: () => void;
+    onDeleteVocabularyList: () => void;
     onSearch: (search: string) => void;
     onShareVocabularyList: () => void;
     setQuizzSelectedListIds: (selectedListsIds: string[]) => void;
@@ -32,6 +34,7 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
     isLoading,
     onAddVocabulary,
     onUpdateVocabularyList,
+    onDeleteVocabularyList,
     onSearch,
     onShareVocabularyList,
     setQuizzSelectedListIds,
@@ -39,6 +42,7 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
     const { t } = useTranslation();
     const [showToast] = useIonToast();
     const { getVocabularyListPdf } = useConfig();
+    const [showDeleteVocabularyListModal, setShowDeleteVocabularyListModal] = useState(false);
     const [search, setSearch] = useState('');
 
     const exportToPdf = async () => {
@@ -123,7 +127,18 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
                             }}
                         >
                             <IonIcon icon={pencilOutline} aria-hidden="true" />
-                            <IonLabel className={styles['popover-label']}>{t('vocabulary.pair.list_update')}</IonLabel>
+                            <IonLabel className={styles['popover-label']}>{t('vocabulary.list.update.title')}</IonLabel>
+                        </IonItem>
+                        <IonItem
+                            button={true}
+                            detail={false}
+                            onClick={() => {
+                                setShowDeleteVocabularyListModal(true);
+                                closeMenu();
+                            }}
+                        >
+                            <IonIcon icon={trashOutline} aria-hidden="true" />
+                            <IonLabel className={styles['popover-label']}>{t('vocabulary.list.delete.title')}</IonLabel>
                         </IonItem>
                         <IonItem
                             button={true}
@@ -195,6 +210,13 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
             <IonButton fill="clear" className={styles.addButton} onClick={() => onAddVocabulary()}>
                 <IonImg aria-hidden className={styles.addIcon} src={AddSvg} />
             </IonButton>
+
+            <ConfirmModal
+                isVisible={showDeleteVocabularyListModal}
+                onClose={() => setShowDeleteVocabularyListModal(false)}
+                onValidate={() => onDeleteVocabularyList()}
+                title={t('vocabulary.list.delete.modal')}
+            />
         </div>
     );
 };

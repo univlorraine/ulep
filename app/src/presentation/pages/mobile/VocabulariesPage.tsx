@@ -44,9 +44,10 @@ const VocabulariesPage: React.FC<VocabulariesPageProps> = ({ tandem }) => {
         onCreateVocabulary,
         onUpdateVocabularyList,
         onDeleteVocabulary,
+        onDeleteVocabularyList,
         setVocabularyListSelected,
         setSearchVocabularies,
-    } = useVocabulary();
+    } = useVocabulary(tandem?.learningLanguage);
 
     const handleCreateVocabularyList = async (vocabularyList: CreateVocabularyListCommand) => {
         await onCreateVocabularyList(vocabularyList);
@@ -153,6 +154,7 @@ const VocabulariesPage: React.FC<VocabulariesPageProps> = ({ tandem }) => {
                         goBack={() => setVocabularyListSelected(undefined)}
                         onAddVocabulary={onAddOrUpdateVocabulary}
                         onUpdateVocabularyList={onAddOrUpdateVocabulary}
+                        onDeleteVocabularyList={onDeleteVocabularyList}
                         onSearch={setSearchVocabularies}
                         onShareVocabularyList={() => setShowShareVocabularyListModal(true)}
                         setQuizzSelectedListIds={onSelectedVocabularyListsIdsForQuiz}

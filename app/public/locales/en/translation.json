@@ -257,7 +257,11 @@
                 "title": "Create a new list"
             },
             "update": {
-                "title": "Modify the list"
+                "title": "Update the list"
+            },
+            "delete": {
+                "title": "Delete the list",
+                "modal": "Are you sure you want to delete this list ?"
             },
             "empty": "You haven't created any vocabulary list for this language yet.",
             "go_back": "Go back",
