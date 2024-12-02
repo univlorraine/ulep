@@ -1,14 +1,14 @@
 import { IonButton, IonDatetime, IonDatetimeButton, IonModal } from '@ionic/react';
-import { addDays, setHours, setMinutes, startOfTomorrow, subHours } from 'date-fns';
+import { addDays, setHours, setMinutes, startOfTomorrow } from 'date-fns';
+import { formatInTimeZone, fromZonedTime } from 'date-fns-tz';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Redirect } from 'react-router';
 import Profile from '../../../domain/entities/Profile';
 import Session from '../../../domain/entities/Session';
 import { SessionFormData } from '../contents/SessionFormContent';
 import TextInput from '../TextInput';
 import styles from './SessionForm.module.css';
-import { formatInTimeZone } from 'date-fns-tz';
-import { Redirect } from 'react-router';
-import { useTranslation } from 'react-i18next';
 
 interface SessionFormProps {
     onBackPressed: (() => void) | undefined;
@@ -19,8 +19,8 @@ interface SessionFormProps {
 }
 
 const SessionForm: React.FC<SessionFormProps> = ({ onBackPressed, onSubmit, session, profile, partner }) => {
-    const userTz = profile?.user?.university?.timezone;
-    const partnerTz = partner?.user?.university?.timezone;
+    const userTz = profile?.user?.university?.timezone; // TODO: replace university timezone by user profile timezone
+    const partnerTz = partner?.user?.university?.timezone; // TODO: replace university timezone by partner profile timezone
 
     if (!userTz || !partnerTz) {
         return <Redirect to="/" />;
@@ -28,13 +28,11 @@ const SessionForm: React.FC<SessionFormProps> = ({ onBackPressed, onSubmit, sess
 
     const startAt = session?.startAt || setMinutes(setHours(addDays(new Date(), 1), 18), 0);
     const { t } = useTranslation();
-    const [datetime, setDatetime] = useState<string>(
-        formatInTimeZone(startAt, userTz, "yyyy-MM-dd'T'HH:mm")
-    );
+    const [datetime, setDatetime] = useState<string>(formatInTimeZone(startAt, userTz, "yyyy-MM-dd'T'HH:mm"));
     const [comment, setComment] = useState(session?.comment || '');
 
     const handleSubmit = () => {
-        onSubmit({ id: session?.id, date: new Date(datetime), comment });
+        onSubmit({ id: session?.id, date: fromZonedTime(datetime, userTz), comment });
     };
 
     const onDatetimeChange = (newDate: string) => {
@@ -51,9 +49,9 @@ const SessionForm: React.FC<SessionFormProps> = ({ onBackPressed, onSubmit, sess
                     <IonDatetimeButton className={styles.datetimeBtn} datetime="datetime"></IonDatetimeButton>
                     {userTz !== partnerTz && (
                         <p className={styles.datetimeInfo}>
-                            {t('session.time_for_partner', { name: partner?.user?.firstname})}
-                            <strong> {formatInTimeZone(startAt, partnerTz, 'HH:mm')} </strong>
-                            ({formatInTimeZone(startAt, partnerTz, 'zzzz, zzz')})
+                            {t('session.time_for_partner', { name: partner?.user?.firstname })}
+                            <strong> {formatInTimeZone(startAt, partnerTz, 'HH:mm')} </strong>(
+                            {formatInTimeZone(startAt, partnerTz, 'zzzz, zzz')})
                         </p>
                     )}
                     <IonModal keepContentsMounted={true}>
@@ -74,18 +72,12 @@ const SessionForm: React.FC<SessionFormProps> = ({ onBackPressed, onSubmit, sess
                 <IonButton fill="clear" className="tertiary-button no-padding" onClick={onBackPressed}>
                     {t('activity.create.cancel_button')}
                 </IonButton>
-                <IonButton
-                    fill="clear"
-                    className={`primary-button no-padding`}
-                    onClick={handleSubmit}
-                >
+                <IonButton fill="clear" className={`primary-button no-padding`} onClick={handleSubmit}>
                     {session?.id ? t('session.form.update') : t('session.form.submit')}
                 </IonButton>
             </div>
         </>
-
     );
 };
 
 export default SessionForm;
-
