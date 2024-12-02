@@ -135,7 +135,7 @@ export class UpdateUniversityUsecase {
     oldContactId: string,
     usersToUpdate: string[],
   ) {
-    if (oldContactId !== university.defaultContactId) {
+    if (oldContactId && oldContactId !== university.defaultContactId) {
       const profileAdmin = await this.profileRepository.ofUser(oldContactId);
 
       let chatIdsToIgnore = [];

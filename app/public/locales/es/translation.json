@@ -123,17 +123,18 @@
         }
     },
     "instance": {
-        "button": "",
-        "error": "",
-        "subtitle": "",
-        "title": ""
+        "button": "Validar y continuar",
+        "error": "Error al cargar la solicitud",
+        "subtitle": "Elija su solicitud en la siguiente lista",
+        "title": "Su programa",
+        "update_instance": "Cambiar instancia"
     },
     "languages": {
-        "french": "",
-        "english": "",
-        "deutsche": "",
-        "spanish": "",
-        "chinese": ""
+        "french": "Francés",
+        "english": "Inglés",
+        "deutsche": "Alemán",
+        "spanish": "Español",
+        "chinese": "Chino"
     },
     "login_page": {
         "button": "Conectarse",
