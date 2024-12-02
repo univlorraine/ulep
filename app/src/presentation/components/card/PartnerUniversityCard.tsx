@@ -6,9 +6,10 @@ import UniversityCard from './UniversityCard';
 interface UniversityCardProps {
     university: University;
     onPress: () => void;
+    currentColor?: string;
 }
 
-const PartnerUniversityCard: React.FC<UniversityCardProps> = ({ university, onPress }) => {
+const PartnerUniversityCard: React.FC<UniversityCardProps> = ({ university, onPress, currentColor }) => {
     const { t } = useTranslation();
 
     return (
@@ -17,7 +18,7 @@ const PartnerUniversityCard: React.FC<UniversityCardProps> = ({ university, onPr
             buttonText={t('partner_university.button') as string}
             onButtonPressed={onPress}
         >
-            <UniversityCard university={university} onPress={onPress} />
+            <UniversityCard university={university} onPress={onPress} currentColor={currentColor} />
         </LearningCard>
     );
 };
