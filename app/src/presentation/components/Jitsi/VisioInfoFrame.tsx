@@ -45,7 +45,7 @@ const VisioInfoFrame: React.FC<VisioInfoFrameProps> = ({ tandem }) => {
                         language={tandem.learningLanguage}
                         level={tandem.level}
                         pedagogy={tandem.pedagogy}
-                        profile={tandem.partner}
+                        partnerProfile={tandem.partner}
                         partnerLearningLanguage={tandem.partnerLearningLanguage}
                         className={styles.tandemContent}
                     />

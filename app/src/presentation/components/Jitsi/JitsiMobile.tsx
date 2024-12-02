@@ -1,19 +1,40 @@
 import { IonButton, IonGrid, IonLabel, IonList, IonRow, isPlatform } from '@ionic/react';
 import { Jitsi } from 'capacitor-jitsi-meet';
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useConfig } from '../../../context/ConfigurationContext';
+import { useStoreState } from '../../../store/storeTypes';
 import { JitsiProps } from './VisioContainer';
+
+interface OnChatMessageReceivedProps {
+    isTrusted: boolean;
+    isLocal: boolean;
+    senderId: string;
+    isPrivate: string;
+    message: string;
+    timestamp: string;
+}
+
+interface ParticipantInfo {
+    participantsInfo: string;
+}
 
 const JitsiMobile = ({ jitsiUrl, roomName, jitsiToken }: JitsiProps) => {
     const history = useHistory();
+    const { deviceAdapter, sendMessage } = useConfig();
+    const profile = useStoreState((state) => state.profile);
+    const isJitsiInitializedRef = useRef(false);
+    const [currentJitsiParticipantId, setCurrentJitsiParticipantId] = useState<string | null>(null);
+    const currentJitsiParticipantIdRef = useRef<string | null>(null);
 
     const initialiseJitsi = async () => {
-        // native device, open jitsi capacitor plugin
+        if (isJitsiInitializedRef.current) return;
+        isJitsiInitializedRef.current = true;
+
         await Jitsi.joinConference({
             roomName: roomName,
             url: `https://${jitsiUrl}/`,
             token: jitsiToken,
-
             channelLastN: '10',
             avatarURL: '',
             startWithAudioMuted: false,
@@ -38,19 +59,82 @@ const JitsiMobile = ({ jitsiUrl, roomName, jitsiToken }: JitsiProps) => {
                 prejoinConfigPage: false,
             },
         });
-        window.addEventListener('onConferenceLeft', onJitsiUnloaded);
     };
 
     const onJitsiUnloaded = async () => {
         if (isPlatform('cordova')) {
             window.removeEventListener('onConferenceLeft', onJitsiUnloaded);
+            window.removeEventListener('onChatMessageReceived', (data: any) => onChatMessageReceived(data));
+            window.removeEventListener('onParticipantsInfoRetrieved', (data: any) => onParticipantsInfoRetrieved(data));
         }
 
         history.push('/end-session');
     };
 
+    const onChatMessageReceived = async (data: OnChatMessageReceivedProps) => {
+        const currentId = currentJitsiParticipantIdRef.current;
+        if (roomName && data.senderId === currentId) {
+            const result = await sendMessage.execute(roomName, profile!.user.id, data.message);
+
+            if (result instanceof Error) {
+                console.error(result);
+            }
+        }
+    };
+
+    const onParticipantsInfoRetrieved = async (data: ParticipantInfo) => {
+        let participantId;
+        if (deviceAdapter.isAndroid()) {
+            participantId = handlePayloadForAndroid(data);
+        } else {
+            participantId = handlePayloadForIos(data);
+        }
+        setCurrentJitsiParticipantId(participantId);
+    };
+
     useEffect(() => {
+        currentJitsiParticipantIdRef.current = currentJitsiParticipantId;
+    }, [currentJitsiParticipantId]);
+
+    const handlePayloadForAndroid = (payload: any) => {
+        const participantsInfoString = payload.participantsInfo;
+        const jsonString = participantsInfoString
+            .replace(/(\w+)=/g, '"$1":') // Remplace les égalités par des deux-points
+            .replace(/:([^,\]}]+)/g, (match: string, p1: any) => {
+                // Ajoute des guillemets autour des valeurs de chaîne, sauf pour les booléens
+                if (p1 === 'true' || p1 === 'false' || !isNaN(p1)) {
+                    return `:${p1}`;
+                }
+                return `:"${p1.replace(/"/g, '\\"')}"`; // Échappe les guillemets dans les valeurs
+            });
+        const participantsInfo = JSON.parse(jsonString);
+
+        return participantsInfo.find((participant: any) => participant.isLocal === true).participantId;
+    };
+
+    const handlePayloadForIos = (payload: any) => {
+        const participantsArray = Object.keys(payload)
+            .filter((key) => !isNaN(Number(key)))
+            .map((key) => payload[key]);
+
+        return participantsArray.find((participant: any) => participant.isLocal === true).participantId;
+    };
+
+    useEffect(() => {
+        const handleConferenceLeft = () => onJitsiUnloaded();
+        const handleParticipantsInfoRetrieved = (data: any) => onParticipantsInfoRetrieved(data);
+        const handleChatMessageReceived = (data: any) => onChatMessageReceived(data);
+        //  /!\ WARING: Because of the Strict Mode, the listeners are added twice + on trigger, messages are sent twice
+        window.addEventListener('onConferenceLeft', handleConferenceLeft);
+        window.addEventListener('onParticipantsInfoRetrieved', handleParticipantsInfoRetrieved);
+        window.addEventListener('onChatMessageReceived', handleChatMessageReceived);
         initialiseJitsi();
+
+        return () => {
+            window.removeEventListener('onConferenceLeft', handleConferenceLeft);
+            window.removeEventListener('onChatMessageReceived', handleChatMessageReceived);
+            window.removeEventListener('onParticipantsInfoRetrieved', handleParticipantsInfoRetrieved);
+        };
     }, []);
 
     return (
