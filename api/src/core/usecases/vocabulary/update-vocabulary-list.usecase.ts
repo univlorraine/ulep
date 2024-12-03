@@ -70,14 +70,20 @@ export class UpdateVocabularyListUsecase {
     );
 
     if (command.profileIds && command.profileIds.length > 0) {
-      await this.createOrUpdateLogEntryUsecase.execute({
-        ownerId: command.userId,
-        type: LogEntryType.SHARE_VOCABULARY,
-        metadata: {
-          vocabularyListId: command.vocabularyListId,
-          vocabularyListName: vocabularyList.name,
-        },
-      });
+      const learningLanguage =
+        vocabularyList.creator.findLearningLanguageByCode(
+          vocabularyList.translationLanguage.code,
+        );
+      if (learningLanguage) {
+        await this.createOrUpdateLogEntryUsecase.execute({
+          learningLanguageId: learningLanguage.id,
+          type: LogEntryType.SHARE_VOCABULARY,
+          metadata: {
+            vocabularyListId: command.vocabularyListId,
+            vocabularyListName: vocabularyList.name,
+          },
+        });
+      }
     }
 
     return vocabularyList;

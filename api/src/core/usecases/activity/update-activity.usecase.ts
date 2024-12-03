@@ -109,11 +109,16 @@ export class UpdateActivityUsecase {
         : activity.metadata,
     });
 
-    await this.createOrUpdateLogEntryUsecase.execute({
-      ownerId: activity.creator.user.id,
-      type: LogEntryType.EDIT_ACTIVITY,
-      metadata: { activityId: command.id, activityTitle: command.title },
-    });
+    const learningLanguage = activity.creator.findLearningLanguageByCode(
+      activity.language.code,
+    );
+    if (learningLanguage) {
+      await this.createOrUpdateLogEntryUsecase.execute({
+        learningLanguageId: learningLanguage.id,
+        type: LogEntryType.EDIT_ACTIVITY,
+        metadata: { activityId: command.id, activityTitle: command.title },
+      });
+    }
 
     // Remove vocabularies that are not in the command
     const vocabulariesToDelete = activity.activityVocabularies.filter(

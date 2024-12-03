@@ -13,7 +13,7 @@ class GetLogEntriesUsecase implements GetLogEntriesUsecaseInterface {
     async execute(params: GetLogEntriesUsecaseParams): Promise<LogEntriesByDates[] | Error> {
         try {
             const httpResponse: HttpResponse<LogEntryByDateCommand[]> = await this.domainHttpAdapter.get(
-                `/log-entries/user/${params.userId}/grouped-by-dates?page=${params.page}&limit=${DEFAULT_LOG_ENTRIES_BY_DATE_PAGE_SIZE}`
+                `/log-entries/learning-language/${params.learningLanguageId}/grouped-by-dates?page=${params.page}&limit=${DEFAULT_LOG_ENTRIES_BY_DATE_PAGE_SIZE}`
             );
 
             if (!httpResponse.parsedBody) {

@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import {
-  VOCABULARY_REPOSITORY,
   VocabularyPagination,
   VocabularyRepository,
+  VOCABULARY_REPOSITORY,
 } from 'src/core/ports/vocabulary.repository';
 
 export class FindAllVocabularyListCommand {

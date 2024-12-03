@@ -3,23 +3,23 @@ import { KeycloakClient, UserRepresentation } from '@app/keycloak';
 import { Inject, Injectable } from '@nestjs/common';
 import { TandemStatus, User } from 'src/core/models';
 import {
-  CHAT_SERVICE,
   ChatServicePort,
+  CHAT_SERVICE,
   ConversationWithUsers,
   MessageWithUser,
 } from 'src/core/ports/chat.service';
 import {
-  PROFILE_REPOSITORY,
   ProfileQueryWhere,
   ProfileRepository,
+  PROFILE_REPOSITORY,
 } from 'src/core/ports/profile.repository';
 import {
-  TANDEM_REPOSITORY,
   TandemRepository,
+  TANDEM_REPOSITORY,
 } from 'src/core/ports/tandem.repository';
 import {
-  USER_REPOSITORY,
   UserRepository,
+  USER_REPOSITORY,
 } from 'src/core/ports/user.repository';
 
 export class GetAllConversationsFromUserIdCommand {
@@ -133,6 +133,9 @@ export class GetAllConversationsFromUserIdUsecase {
               isBlocked:
                 tandems.find((tandem) => tandem.id === conversation.id)
                   ?.status === TandemStatus.PAUSED,
+              learningLanguages: tandems.find(
+                (tandem) => tandem.id === conversation.id,
+              )?.learningLanguages,
             },
             lastMessage: conversation.lastMessage
               ? ({
@@ -141,7 +144,7 @@ export class GetAllConversationsFromUserIdUsecase {
                 } as MessageWithUser)
               : undefined,
             lastActivityAt: conversation.lastActivity,
-          } as ConversationWithUsers),
+          }) as ConversationWithUsers,
       )
       .filter((conversation) =>
         conversation.users.every((user) => user !== undefined),

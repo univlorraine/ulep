@@ -14,6 +14,7 @@ interface CreateLogEntryMetadata {
 
 export interface CreateLogEntryProps {
     type: LogEntryType;
+    learningLanguageId: string;
     metadata: CreateLogEntryMetadata;
     createdAt?: Date;
 }

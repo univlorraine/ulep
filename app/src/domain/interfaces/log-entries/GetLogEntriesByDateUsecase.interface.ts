@@ -6,6 +6,7 @@ export type GetLogEntriesByDateUsecaseParams = {
     userId: string;
     date: Date;
     page: number;
+    learningLanguageId: string;
 };
 
 interface GetLogEntriesByDateUsecaseInterface {

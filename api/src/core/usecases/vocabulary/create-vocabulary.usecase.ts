@@ -34,15 +34,21 @@ export class CreateVocabularyUsecase {
       word: command.word,
     });
 
-    await this.createOrUpdateLogEntryUsecase.execute({
-      ownerId: command.ownerId,
-      type: LogEntryType.ADD_VOCABULARY,
-      metadata: {
-        vocabularyListId: command.vocabularyListId,
-        vocabularyListName: vocabularyList.name,
-        entryNumber: 1,
-      },
-    });
+    const learningLanguage = vocabularyList.creator.findLearningLanguageByCode(
+      vocabularyList.translationLanguage.code,
+    );
+
+    if (learningLanguage) {
+      await this.createOrUpdateLogEntryUsecase.execute({
+        learningLanguageId: learningLanguage.id,
+        type: LogEntryType.ADD_VOCABULARY,
+        metadata: {
+          vocabularyListId: command.vocabularyListId,
+          vocabularyListName: vocabularyList.name,
+          entryNumber: 1,
+        },
+      });
+    }
 
     return vocabulary;
   }

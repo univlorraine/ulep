@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useConfig } from '../../../context/ConfigurationContext';
 import Profile from '../../../domain/entities/Profile';
+import { UserChat } from '../../../domain/entities/User';
 import { useStoreState } from '../../../store/storeTypes';
 import JitsiMobile from './JitsiMobile';
 import JitsiWeb from './JitsiWeb';
@@ -13,7 +14,8 @@ export interface JitsiProps {
     language: string;
     roomName: string;
     jitsiToken: string;
-    tandemPartner?: Profile;
+    tandemPartner?: Profile | UserChat;
+    learningLanguageId: string;
 }
 
 const VisioContainer = () => {
@@ -24,7 +26,7 @@ const VisioContainer = () => {
     const [jitsiToken, setJitsiToken] = useState<string>();
     const jitsiUrl = useStoreState((state) => state.jitsiUrl);
     const roomName = location.search ? location.search.split('roomName=')[1] : '';
-    const { tandemPartner } = location.state || {};
+    const { tandemPartner, learningLanguageId } = location.state || {};
 
     const fetchJitsiToken = async () => {
         const response = await getJitsiToken.execute(accessToken);
@@ -53,6 +55,7 @@ const VisioContainer = () => {
                 roomName={roomName}
                 jitsiToken={jitsiToken}
                 tandemPartner={tandemPartner}
+                learningLanguageId={learningLanguageId}
             />
         );
     } else {
@@ -63,6 +66,7 @@ const VisioContainer = () => {
                 roomName={roomName}
                 jitsiToken={jitsiToken}
                 tandemPartner={tandemPartner}
+                learningLanguageId={learningLanguageId}
             />
         );
     }

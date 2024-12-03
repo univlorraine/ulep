@@ -2,9 +2,10 @@ import { IonButton, IonGrid, IonLabel, IonList, IonRow, isPlatform } from '@ioni
 import { Jitsi } from 'capacitor-jitsi-meet';
 import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import Profile from '../../../domain/entities/Profile';
 import { JitsiProps } from './VisioContainer';
 
-const JitsiMobile = ({ jitsiUrl, roomName, jitsiToken, tandemPartner }: JitsiProps) => {
+const JitsiMobile = ({ jitsiUrl, roomName, jitsiToken, tandemPartner, learningLanguageId }: JitsiProps) => {
     const history = useHistory();
     let startTime: number | null = null;
 
@@ -54,11 +55,15 @@ const JitsiMobile = ({ jitsiUrl, roomName, jitsiToken, tandemPartner }: JitsiPro
             duration = Math.floor((endTime - startTime) / 1000) - 1;
         }
 
+        const firstname = tandemPartner instanceof Profile ? tandemPartner.user.firstname : tandemPartner?.firstname;
+        const lastname = tandemPartner instanceof Profile ? tandemPartner.user.lastname : tandemPartner?.lastname;
+
         history.push('/end-session', {
             duration,
             partnerTandemId: tandemPartner?.id,
-            tandemFirstname: tandemPartner?.user.firstname,
-            tandemLastname: tandemPartner?.user.lastname,
+            tandemFirstname: firstname,
+            tandemLastname: lastname,
+            learningLanguageId,
         });
     };
 

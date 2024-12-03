@@ -74,11 +74,21 @@ const Content: React.FC<ChatContentProps> = ({
     };
 
     const onOpenVideoCall = () => {
+        const conversationLearningLanguage = findCommonLearningLanguage();
         history.push({
             pathname: '/jitsi',
             search: `?roomName=${conversation.id}`,
-            state: { tandemPartner: partner },
+            state: { tandemPartner: partner, learningLanguageId: conversationLearningLanguage?.id },
         });
+    };
+
+    const findCommonLearningLanguage = () => {
+        for (const profileLanguage of profile.learningLanguages) {
+            if (conversation.learningLanguages?.some((language) => language.id === profileLanguage.id)) {
+                return profileLanguage;
+            }
+        }
+        return null;
     };
 
     useEffect(() => {

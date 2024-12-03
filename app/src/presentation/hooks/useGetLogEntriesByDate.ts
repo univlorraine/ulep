@@ -5,7 +5,7 @@ import { DEFAULT_ACTIVITIES_PAGE_SIZE } from '../../domain/interfaces/activity/G
 import { DEFAULT_LOG_ENTRIES_BY_DATE_PAGE_SIZE } from '../../domain/interfaces/log-entries/GetLogEntriesByDateUsecase.interface';
 import { useStoreState } from '../../store/storeTypes';
 
-const useGetLogEntriesByDate = (date: Date) => {
+const useGetLogEntriesByDate = (date: Date, learningLanguageId: string) => {
     const { getLogEntriesByDate } = useConfig();
     const profile = useStoreState((state) => state.profile);
     const [page, setPage] = useState<number>(1);
@@ -36,6 +36,7 @@ const useGetLogEntriesByDate = (date: Date) => {
             const logEntries = await getLogEntriesByDate.execute({
                 userId: profile.user.id,
                 date,
+                learningLanguageId,
                 page,
             });
             if (logEntries instanceof Error) {
@@ -68,6 +69,7 @@ const useGetLogEntriesByDate = (date: Date) => {
             const result = await getLogEntriesByDate.execute({
                 userId: profile.user.id,
                 date,
+                learningLanguageId,
                 page: 1,
             });
             if (result instanceof Error) {

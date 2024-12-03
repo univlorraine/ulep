@@ -1,6 +1,7 @@
 import { useIonToast } from '@ionic/react';
 import { useState } from 'react';
 import { useConfig } from '../../../../context/ConfigurationContext';
+import LearningLanguage from '../../../../domain/entities/LearningLanguage';
 import { LogEntry, LogEntryCustomEntry, LogEntryType } from '../../../../domain/entities/LogEntry';
 import Profile from '../../../../domain/entities/Profile';
 import CreateCustomLogEntryContent from './CreateOrUpdateCustomLogEntryContent';
@@ -11,12 +12,14 @@ interface LearningBookContainerContentProps {
     onClose: () => void;
     onOpenVocabularyList: () => void;
     profile: Profile;
+    learningLanguage: LearningLanguage;
 }
 
 const LearningBookContainerContent: React.FC<LearningBookContainerContentProps> = ({
     onClose,
     onOpenVocabularyList,
     profile,
+    learningLanguage,
 }) => {
     const { createLogEntry, updateCustomLogEntry } = useConfig();
     const [showToast] = useIonToast();
@@ -43,6 +46,7 @@ const LearningBookContainerContent: React.FC<LearningBookContainerContentProps> 
         } else {
             result = await createLogEntry.execute({
                 type: LogEntryType.CUSTOM_ENTRY,
+                learningLanguageId: learningLanguage.id,
                 metadata: {
                     date,
                     title,
@@ -84,6 +88,7 @@ const LearningBookContainerContent: React.FC<LearningBookContainerContentProps> 
                 profile={profile}
                 onUpdateCustomLogEntry={handleUpdateCustomLogEntry}
                 onOpenVocabularyList={onOpenVocabularyList}
+                learningLanguage={profile.learningLanguages[0]}
                 isModal
             />
         );
@@ -107,6 +112,7 @@ const LearningBookContainerContent: React.FC<LearningBookContainerContentProps> 
             onOpenVocabularyList={onOpenVocabularyList}
             onBackPressed={handleOnClose}
             onFocusLogEntryForADay={setFocusLogEntryForADay}
+            learningLanguage={learningLanguage}
             profile={profile}
             isModal={true}
         />

@@ -3,6 +3,7 @@ import { LogEntriesByDates } from '../../entities/LogEntry';
 export const DEFAULT_LOG_ENTRIES_PAGE_SIZE = 10;
 export type GetLogEntriesUsecaseParams = {
     userId: string;
+    learningLanguageId: string;
     page: number;
 };
 

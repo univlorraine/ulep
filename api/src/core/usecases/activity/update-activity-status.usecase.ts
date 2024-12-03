@@ -47,14 +47,20 @@ export class UpdateActivityStatusUsecase {
 
     // Create a log entry when an activity is submitted for validation
     if (command.status === ActivityStatus.IN_VALIDATION) {
-      await this.createOrUpdateLogEntryUsecase.execute({
-        ownerId: activity.creator.user.id,
-        type: LogEntryType.SUBMIT_ACTIVITY,
-        metadata: {
-          activityId: activity.id,
-          activityTitle: activity.title,
-        },
-      });
+      const learningLanguage = await this.findActivityLearningLanguageCreator(
+        command.id,
+      );
+
+      if (learningLanguage) {
+        await this.createOrUpdateLogEntryUsecase.execute({
+          learningLanguageId: learningLanguage.id,
+          type: LogEntryType.SUBMIT_ACTIVITY,
+          metadata: {
+            activityId: activity.id,
+            activityTitle: activity.title,
+          },
+        });
+      }
     }
 
     const updatedActivity = await this.activityRepository.updateActivityStatus(
@@ -131,5 +137,13 @@ export class UpdateActivityStatusUsecase {
         activity: { title: activity.title },
       });
     }
+  }
+
+  private async findActivityLearningLanguageCreator(activityId: string) {
+    const activity = await this.activityRepository.ofId(activityId);
+    if (!activity) {
+      throw new RessourceDoesNotExist('Activity does not exist');
+    }
+    return activity.creator.findLearningLanguageByCode(activity.language.code);
   }
 }

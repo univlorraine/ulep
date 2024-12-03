@@ -14,4 +14,8 @@ export class UpdateCustomLogEntryRequest {
   @IsNotEmpty()
   @Type(() => Date)
   date: Date;
+
+  @IsString()
+  @IsNotEmpty()
+  learningLanguageId: string;
 }

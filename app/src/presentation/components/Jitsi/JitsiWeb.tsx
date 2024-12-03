@@ -2,6 +2,7 @@ import { JitsiMeeting } from '@jitsi/react-sdk';
 import IJitsiMeetExternalApi from '@jitsi/react-sdk/lib/types/IJitsiMeetExternalApi';
 import { useRef } from 'react';
 import { useHistory } from 'react-router';
+import Profile from '../../../domain/entities/Profile';
 import useGetHomeData from '../../hooks/useGetHomeData';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../../utils';
@@ -9,7 +10,8 @@ import HomeHeader from '../HomeHeader';
 import styles from './JitsiWeb.module.css';
 import { JitsiProps } from './VisioContainer';
 import VisioInfoFrame from './VisioInfoFrame';
-const JitsiWeb = ({ jitsiUrl, language, roomName, jitsiToken, tandemPartner }: JitsiProps) => {
+
+const JitsiWeb = ({ jitsiUrl, language, roomName, jitsiToken, tandemPartner, learningLanguageId }: JitsiProps) => {
     const history = useHistory();
     const apiRef = useRef<IJitsiMeetExternalApi>();
     const { width } = useWindowDimensions();
@@ -82,6 +84,10 @@ const JitsiWeb = ({ jitsiUrl, language, roomName, jitsiToken, tandemPartner }: J
                         startTime = Date.now();
                     }}
                     onReadyToClose={() => {
+                        const firstname =
+                            tandemPartner instanceof Profile ? tandemPartner.user.firstname : tandemPartner?.firstname;
+                        const lastname =
+                            tandemPartner instanceof Profile ? tandemPartner.user.lastname : tandemPartner?.lastname;
                         let duration;
                         if (startTime) {
                             const endTime = Date.now();
@@ -94,8 +100,9 @@ const JitsiWeb = ({ jitsiUrl, language, roomName, jitsiToken, tandemPartner }: J
                                   endSession: true,
                                   duration,
                                   partnerTandemId: tandemPartner?.id,
-                                  tandemFirstname: tandemPartner?.user.firstname,
-                                  tandemLastname: tandemPartner?.user.lastname,
+                                  tandemFirstname: firstname,
+                                  tandemLastname: lastname,
+                                  learningLanguageId,
                               });
                     }}
                     getIFrameRef={(iframeRef) => {

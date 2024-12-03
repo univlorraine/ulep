@@ -11,7 +11,6 @@ import {
 import {
   logEntryMapper,
   LogEntryRelations,
-  LogEntrySnapshot,
 } from 'src/providers/persistance/mappers/log-entry.mapper';
 
 @Injectable()
@@ -24,7 +23,6 @@ export class PrismaLogEntryRepository implements LogEntryRepository {
     limit: number,
   ): Promise<any> {
     const offset = (page - 1) * limit;
-
     const distinctDatesWithCount = await this.prisma.$queryRaw<
       { date: Date; count: bigint }[]
     >`
@@ -39,13 +37,15 @@ export class PrismaLogEntryRepository implements LogEntryRepository {
     const results = [];
 
     for (const { date, count } of distinctDatesWithCount) {
-      const logEntries = await this.prisma.$queryRaw<LogEntrySnapshot[]>`
-      SELECT *
-      FROM log_entry
-      WHERE learning_language_id = ${learningLanguageId} AND DATE(created_at) = ${date}
-      ORDER BY created_at DESC
-      LIMIT 3;
-    `;
+      const logEntries = await this.prisma.logEntry.findMany({
+        where: {
+          LearningLanguage: { id: learningLanguageId },
+          created_at: { gte: startOfDay(date), lte: endOfDay(date) },
+        },
+        orderBy: { created_at: 'desc' },
+        take: 3,
+        ...LogEntryRelations,
+      });
 
       results.push({
         date,

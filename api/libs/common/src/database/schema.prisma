@@ -178,7 +178,6 @@ model Users {
   deactivated        Boolean              @default(false)
   deactivated_reason String?
   accepts_email      Boolean              @default(true)
-  log_entries_shared Boolean              @default(false)
   division           String?
   diploma            String?
   staff_function     String?
@@ -427,6 +426,7 @@ model LearningLanguages {
   learning_journal        Boolean?
   consulting_interview    Boolean?
   shared_certificate      Boolean?
+  shared_logs_date        DateTime?
   certificate_file_id     String? @unique
   campus_id               String?
   tandem_id               String?

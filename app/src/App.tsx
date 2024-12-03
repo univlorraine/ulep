@@ -62,9 +62,13 @@ const AppCore = () => {
         if (!profile) {
             return;
         }
-        await createLogEntry.execute({
-            type: LogEntryType.CONNECTION,
-            metadata: {},
+
+        profile.learningLanguages.forEach(async (learningLanguage) => {
+            await createLogEntry.execute({
+                learningLanguageId: learningLanguage.id,
+                type: LogEntryType.CONNECTION,
+                metadata: {},
+            });
         });
     };
 

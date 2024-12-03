@@ -34,6 +34,7 @@ interface HomePageLocationProps {
     partnerTandemId: string;
     tandemFirstname: string;
     tandemLastname: string;
+    learningLanguageId: string;
 }
 
 const HomePage: React.FC = () => {
@@ -218,7 +219,7 @@ const HomePage: React.FC = () => {
             <TandemProfileModal
                 isVisible={!!selectedTandem && selectedTandem.status === 'ACTIVE'}
                 id={selectedTandem?.id}
-                language={selectedTandem?.learningLanguage}
+                learningLanguage={selectedTandem?.learningLanguage}
                 level={selectedTandem?.level}
                 onClose={() => setSelectedTandem(undefined)}
                 partnerLearningLanguage={selectedTandem?.partnerLearningLanguage}
@@ -244,6 +245,7 @@ const HomePage: React.FC = () => {
                 partnerTandemId={location.state?.partnerTandemId}
                 tandemFirstname={location.state?.tandemFirstname}
                 tandemLastname={location.state?.tandemLastname}
+                learningLanguageId={location.state?.learningLanguageId}
             />
             <NewsContentModal
                 isVisible={displayNewsContent !== undefined}

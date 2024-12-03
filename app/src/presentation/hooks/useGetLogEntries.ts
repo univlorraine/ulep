@@ -4,7 +4,7 @@ import { LogEntriesByDatesProps } from '../../domain/entities/LogEntry';
 import { DEFAULT_LOG_ENTRIES_BY_DATE_PAGE_SIZE } from '../../domain/interfaces/log-entries/GetLogEntriesByDateUsecase.interface';
 import { useStoreState } from '../../store/storeTypes';
 
-const useGetLogEntries = (refresh: boolean) => {
+const useGetLogEntries = (learningLanguageId: string, refresh: boolean) => {
     const { getLogEntries } = useConfig();
     const profile = useStoreState((state) => state.profile);
     const [page, setPage] = useState<number>(1);
@@ -34,6 +34,7 @@ const useGetLogEntries = (refresh: boolean) => {
             });
             const result = await getLogEntries.execute({
                 userId: profile.user.id,
+                learningLanguageId,
                 page,
             });
             if (result instanceof Error) {
@@ -61,6 +62,7 @@ const useGetLogEntries = (refresh: boolean) => {
             });
             const result = await getLogEntries.execute({
                 userId: profile.user.id,
+                learningLanguageId,
                 page: 1,
             });
             if (result instanceof Error) {

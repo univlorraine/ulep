@@ -1,6 +1,7 @@
 import { IonButton, IonImg } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
 import { AddSvg } from '../../../../assets';
+import LearningLanguage from '../../../../domain/entities/LearningLanguage';
 import { LogEntry, LogEntryAddVocabulary, LogEntryCustomEntry } from '../../../../domain/entities/LogEntry';
 import Profile from '../../../../domain/entities/Profile';
 import useGetLogEntries from '../../../hooks/useGetLogEntries';
@@ -17,6 +18,7 @@ interface LogEntriesContentProps {
     onFocusLogEntryForADay: (date: Date) => void;
     onBackPressed: () => void;
     profile: Profile;
+    learningLanguage: LearningLanguage;
     isModal?: boolean;
 }
 
@@ -27,11 +29,12 @@ export const LogEntriesContent: React.FC<LogEntriesContentProps> = ({
     onBackPressed,
     onFocusLogEntryForADay,
     profile,
+    learningLanguage,
     isModal,
 }) => {
     const { t } = useTranslation();
 
-    const { logEntriesResult, isPaginationEnded, handleOnEndReached } = useGetLogEntries(false);
+    const { logEntriesResult, isPaginationEnded, handleOnEndReached } = useGetLogEntries(learningLanguage.id, false);
 
     const handleOnPress = (logEntry: LogEntry) => {
         if (logEntry instanceof LogEntryCustomEntry) {

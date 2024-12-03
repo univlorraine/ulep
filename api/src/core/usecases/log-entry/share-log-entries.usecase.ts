@@ -34,6 +34,7 @@ export class ShareLogEntriesUsecase {
     );
     await this.learningLanguageRepository.update({
       ...learningLanguage,
+      sharedLogsDate: new Date(),
     } as LearningLanguage);
 
     await this.createShareLogEntry(command.learningLanguageId);

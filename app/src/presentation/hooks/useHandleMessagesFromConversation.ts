@@ -94,6 +94,7 @@ const useHandleMessagesFromConversation = ({
 
         await createLogEntry.execute({
             type: LogEntryType.TANDEM_CHAT,
+            learningLanguageId: '', // TODO: add learning language id
             metadata: {
                 partnerTandemId: conversation.id,
                 tandemFirstname: partner.firstname,

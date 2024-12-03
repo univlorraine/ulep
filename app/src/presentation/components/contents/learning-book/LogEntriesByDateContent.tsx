@@ -1,5 +1,6 @@
 import { IonButton } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
+import LearningLanguage from '../../../../domain/entities/LearningLanguage';
 import { LogEntry, LogEntryAddVocabulary, LogEntryCustomEntry } from '../../../../domain/entities/LogEntry';
 import Profile from '../../../../domain/entities/Profile';
 import useGetLogEntriesByDate from '../../../hooks/useGetLogEntriesByDate';
@@ -15,6 +16,7 @@ interface LogEntriesByDateContentProps {
     profile: Profile;
     date: Date;
     isModal?: boolean;
+    learningLanguage: LearningLanguage;
 }
 
 export const LogEntriesByDateContent: React.FC<LogEntriesByDateContentProps> = ({
@@ -24,10 +26,14 @@ export const LogEntriesByDateContent: React.FC<LogEntriesByDateContentProps> = (
     profile,
     date,
     isModal,
+    learningLanguage,
 }) => {
     const { t } = useTranslation();
 
-    const { logEntriesResult, isPaginationEnded, handleOnEndReached } = useGetLogEntriesByDate(date);
+    const { logEntriesResult, isPaginationEnded, handleOnEndReached } = useGetLogEntriesByDate(
+        date,
+        learningLanguage.id
+    );
 
     const handleOnPress = (logEntry: LogEntry) => {
         if (logEntry instanceof LogEntryCustomEntry) {

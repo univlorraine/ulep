@@ -1,4 +1,5 @@
 import Language from '../../../domain/entities/Language';
+import LearningLanguage from '../../../domain/entities/LearningLanguage';
 import Profile from '../../../domain/entities/Profile';
 import TandemProfile from '../tandems/TandemProfile';
 import Modal from './Modal';
@@ -7,7 +8,7 @@ interface TandemProfileModalProps {
     id?: string;
     isVisible: boolean;
     onClose: () => void;
-    language?: Language;
+    learningLanguage?: LearningLanguage;
     level?: CEFR;
     partnerLearningLanguage?: Language;
     pedagogy?: Pedagogy;
@@ -17,14 +18,14 @@ interface TandemProfileModalProps {
 const TandemProfileModal: React.FC<TandemProfileModalProps> = ({
     id,
     isVisible,
-    language,
+    learningLanguage,
     level,
     onClose,
     partnerLearningLanguage,
     pedagogy,
     profile,
 }) => {
-    if (!id || !language || !profile || !level || !pedagogy || !partnerLearningLanguage) {
+    if (!id || !learningLanguage || !profile || !level || !pedagogy || !partnerLearningLanguage) {
         return <div />;
     }
 
@@ -32,7 +33,7 @@ const TandemProfileModal: React.FC<TandemProfileModalProps> = ({
         <Modal isVisible={isVisible} onClose={onClose} hideWhiteBackground>
             <TandemProfile
                 id={id}
-                language={language}
+                learningLanguage={learningLanguage}
                 level={level}
                 onClose={onClose}
                 partnerLearningLanguage={partnerLearningLanguage}

@@ -1,5 +1,4 @@
 import { Collection } from '@app/common';
-import { KeycloakUser } from '@app/keycloak';
 import {
   Body,
   Controller,
@@ -12,7 +11,6 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
-import { CurrentUser } from 'src/api/decorators';
 import {
   CreateCustomLogEntryRequest,
   GetLogEntriesRequest,
@@ -41,7 +39,7 @@ export class LogEntryController {
     private readonly getAllEntriesForUserGroupedByDatesUsecase: GetAllEntriesForUserGroupedByDatesUsecase,
   ) {}
 
-  @Get('user/:id/grouped-by-dates')
+  @Get('learning-language/:id/grouped-by-dates')
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({
     summary: 'Get all Log Entries for a user grouped by dates.',
@@ -52,12 +50,10 @@ export class LogEntryController {
   async getLogEntriesGroupedByDates(
     @Param('id') id: string,
     @Query() query: GetLogEntriesRequest,
-    @CurrentUser() user: KeycloakUser,
   ) {
     const entries =
       await this.getAllEntriesForUserGroupedByDatesUsecase.execute({
-        id,
-        ownerId: user.sub,
+        learningLanguageId: id,
         page: query.page,
         limit: query.limit,
       });
@@ -65,7 +61,7 @@ export class LogEntryController {
     return entries.map(LogEntryByDateResponse.from);
   }
 
-  @Get('user/:id')
+  @Get('learning-language/:id')
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({
     summary: 'Get all Log Entries for a user and a specific date.',
@@ -76,11 +72,9 @@ export class LogEntryController {
   async getLogEntries(
     @Param('id') id: string,
     @Query() query: GetLogEntriesByDateRequest,
-    @CurrentUser() user: KeycloakUser,
   ) {
     const entries = await this.getAllEntriesForUserByDateUsecase.execute({
-      id,
-      ownerId: user.sub,
+      learningLanguageId: id,
       date: new Date(query.date),
       page: query.page,
       limit: query.limit,
@@ -96,10 +90,7 @@ export class LogEntryController {
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Create a new custom Log Entry.' })
   @Swagger.ApiOkResponse({ type: () => LogEntryResponse })
-  async createLogEntry(
-    @Body() body: CreateCustomLogEntryRequest,
-    @CurrentUser() user: KeycloakUser,
-  ) {
+  async createLogEntry(@Body() body: CreateCustomLogEntryRequest) {
     const logEntry = await this.createOrUpdateLogEntryUsecase.execute({
       type: body.type,
       metadata: {
@@ -112,7 +103,7 @@ export class LogEntryController {
         percentage: body.percentage,
         gameName: body.gameName,
       },
-      ownerId: user.sub,
+      learningLanguageId: body.learningLanguageId,
       createdAt: body.createdAt,
     });
 
@@ -126,14 +117,13 @@ export class LogEntryController {
   async updateLogEntry(
     @Param('id') id: string,
     @Body() body: UpdateCustomLogEntryRequest,
-    @CurrentUser() user: KeycloakUser,
   ) {
     const logEntry = await this.updateCustomLogEntryUsecase.execute({
       id,
       content: body.content,
       title: body.title,
       date: body.date,
-      ownerId: user.sub,
+      learningLanguageId: body.learningLanguageId,
     });
 
     return LogEntryResponse.from(logEntry);

@@ -149,7 +149,7 @@ const LearningPage = () => {
             <TandemProfileModal
                 isVisible={!!displaySelectedTandem && displaySelectedTandem.status === 'ACTIVE'}
                 id={displaySelectedTandem?.id}
-                language={displaySelectedTandem?.learningLanguage}
+                learningLanguage={displaySelectedTandem?.learningLanguage}
                 level={displaySelectedTandem?.level}
                 onClose={() => setDisplaySelectedTandem(undefined)}
                 partnerLearningLanguage={displaySelectedTandem?.partnerLearningLanguage}
@@ -164,6 +164,7 @@ const LearningPage = () => {
             <LearningBookContentModal
                 isVisible={displayLearningBookContent}
                 onClose={() => setDisplayLearningBookContent(false)}
+                learningLanguage={currentTandem?.learningLanguage}
                 onOpenVocabularyList={onVocabularyContentPressedFromLearningBook}
                 profile={profile}
             />

@@ -10,7 +10,6 @@ import {
 } from 'src/core/ports/log-entry.repository';
 
 export type GetAllEntriesForUserGroupedByDatesCommand = {
-  id: string;
   learningLanguageId: string;
   page: number;
   limit: number;
@@ -39,7 +38,7 @@ export class GetAllEntriesForUserGroupedByDatesUsecase {
     const learningLanguage =
       await this.learningLanguageRepository.ofId(learningLanguageId);
     if (!learningLanguage) {
-      throw new RessourceDoesNotExist('Profile does not exist');
+      throw new RessourceDoesNotExist('Learning language does not exist');
     }
   }
 }

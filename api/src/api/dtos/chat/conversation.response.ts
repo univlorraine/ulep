@@ -2,6 +2,7 @@ import * as Swagger from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { MessageResponse } from 'src/api/dtos/chat/message.response';
 import { UserChatResponse } from 'src/api/dtos/chat/user-conversation.response';
+import { LearningLanguageResponse } from 'src/api/dtos/learning-languages';
 import { UserResponse } from 'src/api/dtos/users';
 import { ConversationWithUsers } from 'src/core/ports/chat.service';
 
@@ -10,6 +11,10 @@ class MetadataResponse {
   @Expose({ groups: ['chat'] })
   isBlocked: boolean;
 
+  @Swagger.ApiProperty({ type: LearningLanguageResponse, isArray: true })
+  @Expose({ groups: ['chat'] })
+  learningLanguages: LearningLanguageResponse[];
+
   constructor(partial: Partial<MetadataResponse>) {
     Object.assign(this, partial);
   }
@@ -17,6 +22,9 @@ class MetadataResponse {
   static from(metadata: any): MetadataResponse {
     return new MetadataResponse({
       isBlocked: metadata.isBlocked,
+      learningLanguages: metadata.learningLanguages?.map((learningLanguage) =>
+        LearningLanguageResponse.fromDomain(learningLanguage),
+      ),
     });
   }
 }

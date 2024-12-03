@@ -14,7 +14,7 @@ class GetLogEntriesByDateUsecase implements GetLogEntriesByDateUsecaseInterface 
     async execute(params: GetLogEntriesByDateUsecaseParams): Promise<LogEntry[] | Error> {
         try {
             const httpResponse: HttpResponse<CollectionCommand<LogEntryCommand>> = await this.domainHttpAdapter.get(
-                `/log-entries/user/${params.userId}?date=${params.date.toISOString()}&page=${params.page}&limit=${DEFAULT_LOG_ENTRIES_BY_DATE_PAGE_SIZE}`
+                `/log-entries/learning-language/${params.learningLanguageId}?date=${params.date.toISOString()}&page=${params.page}&limit=${DEFAULT_LOG_ENTRIES_BY_DATE_PAGE_SIZE}`
             );
 
             if (!httpResponse.parsedBody || !httpResponse.parsedBody.items) {

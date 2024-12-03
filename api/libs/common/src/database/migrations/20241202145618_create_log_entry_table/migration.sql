@@ -2,7 +2,7 @@
 CREATE TYPE "LogEntryType" AS ENUM ('CONNECTION', 'VISIO', 'TANDEM_CHAT', 'COMMUNITY_CHAT', 'CUSTOM_ENTRY', 'SHARING_LOGS', 'ADD_VOCABULARY', 'SHARE_VOCABULARY', 'EDIT_ACTIVITY', 'SUBMIT_ACTIVITY', 'PLAYED_GAME');
 
 -- AlterTable
-ALTER TABLE "users" ADD COLUMN     "log_entries_shared" BOOLEAN NOT NULL DEFAULT false;
+ALTER TABLE "learning_languages" ADD COLUMN     "shared_logs_date" TIMESTAMP(3);
 
 -- CreateTable
 CREATE TABLE "log_entry" (

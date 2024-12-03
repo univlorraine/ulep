@@ -14,6 +14,7 @@ type EndSessionContentProps = {
     partnerTandemId?: string;
     tandemFirstname?: string;
     tandemLastname?: string;
+    learningLanguageId: string;
 };
 
 const EndSessionContent: React.FC<EndSessionContentProps> = ({
@@ -23,6 +24,7 @@ const EndSessionContent: React.FC<EndSessionContentProps> = ({
     partnerTandemId,
     tandemFirstname,
     tandemLastname,
+    learningLanguageId,
 }) => {
     const { t } = useTranslation();
     const [showToast] = useIonToast();
@@ -33,6 +35,7 @@ const EndSessionContent: React.FC<EndSessionContentProps> = ({
         if (duration && partnerTandemId && tandemFirstname && tandemLastname) {
             const result = await createLogEntry.execute({
                 type: LogEntryType.VISIO,
+                learningLanguageId: learningLanguageId,
                 metadata: {
                     duration,
                     partnerTandemId,

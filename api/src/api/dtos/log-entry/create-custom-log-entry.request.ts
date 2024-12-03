@@ -51,5 +51,9 @@ export class CreateCustomLogEntryRequest {
 
   @IsString()
   @IsNotEmpty()
+  learningLanguageId: string;
+
+  @IsString()
+  @IsNotEmpty()
   type: LogEntryType;
 }

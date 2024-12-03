@@ -17,6 +17,7 @@ interface CreateLogEntryPayload {
     title?: string;
     createdAt?: Date;
     partnerTandemId?: string;
+    learningLanguageId: string;
 }
 
 class CreateLogEntryUsecase implements CreateLogEntryUsecaseInterface {
@@ -26,9 +27,8 @@ class CreateLogEntryUsecase implements CreateLogEntryUsecaseInterface {
         try {
             const payload: CreateLogEntryPayload = {
                 type: command.type,
+                learningLanguageId: command.learningLanguageId,
             };
-
-            console.log('command', command);
 
             if (command.metadata.content) {
                 payload.content = command.metadata.content;

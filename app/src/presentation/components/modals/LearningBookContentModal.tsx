@@ -1,4 +1,5 @@
 import { IonModal } from '@ionic/react';
+import LearningLanguage from '../../../domain/entities/LearningLanguage';
 import Profile from '../../../domain/entities/Profile';
 import LearningBookContainerContent from '../contents/learning-book/LearningBookContainerContent';
 import styles from './LearningBookContentModal.module.css';
@@ -8,6 +9,7 @@ interface LearningBookContentModalProps {
     onClose: () => void;
     profile: Profile;
     onOpenVocabularyList: () => void;
+    learningLanguage?: LearningLanguage;
 }
 
 const LearningBookContentModal: React.FC<LearningBookContentModalProps> = ({
@@ -15,7 +17,12 @@ const LearningBookContentModal: React.FC<LearningBookContentModalProps> = ({
     onClose,
     onOpenVocabularyList,
     profile,
+    learningLanguage,
 }) => {
+    if (!learningLanguage) {
+        return null;
+    }
+
     return (
         <IonModal animated isOpen={isVisible} onDidDismiss={onClose} className={styles.modal}>
             <div className={styles.content}>
@@ -23,6 +30,7 @@ const LearningBookContentModal: React.FC<LearningBookContentModalProps> = ({
                     onClose={onClose}
                     onOpenVocabularyList={onOpenVocabularyList}
                     profile={profile}
+                    learningLanguage={learningLanguage}
                 />
             </div>
         </IonModal>

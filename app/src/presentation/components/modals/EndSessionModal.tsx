@@ -9,6 +9,7 @@ type EndSessionModalProps = {
     partnerTandemId?: string;
     tandemFirstname?: string;
     tandemLastname?: string;
+    learningLanguageId: string;
 };
 
 const EndSessionModal: React.FC<EndSessionModalProps> = ({
@@ -19,6 +20,7 @@ const EndSessionModal: React.FC<EndSessionModalProps> = ({
     partnerTandemId,
     tandemFirstname,
     tandemLastname,
+    learningLanguageId,
 }) => {
     return (
         <IonModal className="end-session-modal" isOpen={isOpen} onDidDismiss={onClose}>
@@ -29,6 +31,7 @@ const EndSessionModal: React.FC<EndSessionModalProps> = ({
                 partnerTandemId={partnerTandemId}
                 tandemFirstname={tandemFirstname}
                 tandemLastname={tandemLastname}
+                learningLanguageId={learningLanguageId}
             />
         </IonModal>
     );

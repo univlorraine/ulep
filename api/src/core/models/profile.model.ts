@@ -152,4 +152,12 @@ export class Profile {
 
     return true;
   }
+
+  public findLearningLanguageByCode(
+    code: string,
+  ): LearningLanguage | undefined {
+    return this.learningLanguages.find(
+      (learningLanguage) => learningLanguage.language.code === code,
+    );
+  }
 }
