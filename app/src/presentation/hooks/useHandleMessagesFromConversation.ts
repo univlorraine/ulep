@@ -13,12 +13,14 @@ interface UseHandleMessagesFromConversationProps {
     conversationId: string;
     typeFilter?: MessageType;
     limit?: number;
+    learningLanguageId?: string;
 }
 
 const useHandleMessagesFromConversation = ({
     conversationId,
     typeFilter,
     limit = 10,
+    learningLanguageId,
 }: UseHandleMessagesFromConversationProps) => {
     const { getMessagesFromConversation, sendMessage, createLogEntry } = useConfig();
     const { socket } = useSocket();
@@ -92,15 +94,17 @@ const useHandleMessagesFromConversation = ({
 
         const partner = Conversation.getMainConversationPartner(conversation, profile.user.id);
 
-        await createLogEntry.execute({
-            type: LogEntryType.TANDEM_CHAT,
-            learningLanguageId: '', // TODO: add learning language id
-            metadata: {
-                partnerTandemId: conversation.id,
-                tandemFirstname: partner.firstname,
-                tandemLastname: partner.lastname,
-            },
-        });
+        if (learningLanguageId) {
+            await createLogEntry.execute({
+                type: LogEntryType.TANDEM_CHAT,
+                learningLanguageId,
+                metadata: {
+                    partnerTandemId: conversation.id,
+                    tandemFirstname: partner.firstname,
+                    tandemLastname: partner.lastname,
+                },
+            });
+        }
     };
 
     const loadMessages = async (

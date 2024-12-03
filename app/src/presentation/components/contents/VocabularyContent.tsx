@@ -177,6 +177,7 @@ const VocabularyContent: React.FC<VocabularyContentProps> = ({
                     profile={profile}
                     selectedListsId={quizzSelectedListIds}
                     onBackPressed={() => setQuizzSelectedListIds([])}
+                    learningLanguageId={currentLearningLanguage.id}
                 />
             )}
             <AddOrUpdateVocabularyListModal

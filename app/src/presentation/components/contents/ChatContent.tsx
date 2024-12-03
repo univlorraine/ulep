@@ -42,6 +42,17 @@ const Content: React.FC<ChatContentProps> = ({
     const [isSearchMode, setIsSearchMode] = useState<boolean>(false);
     const history = useHistory();
     const accessToken = useStoreState((state) => state.accessToken);
+
+    const findLearningLanguageConversation = () => {
+        const profileLearningLanguages = profile.learningLanguages;
+        const conversationLearningLanguages = conversation.learningLanguages;
+        for (const profileLearningLanguage of profileLearningLanguages) {
+            if (conversationLearningLanguages?.some((language) => language.id === profileLearningLanguage.id)) {
+                return profileLearningLanguage;
+            }
+        }
+    };
+
     const {
         messages,
         handleSendMessage,
@@ -53,6 +64,7 @@ const Content: React.FC<ChatContentProps> = ({
         clearMessages,
     } = useHandleMessagesFromConversation({
         conversationId: conversation.id,
+        learningLanguageId: findLearningLanguageConversation()?.id,
     });
     const partner = Conversation.getMainConversationPartner(conversation, profile.user.id);
     let disconnectInterval: NodeJS.Timeout;

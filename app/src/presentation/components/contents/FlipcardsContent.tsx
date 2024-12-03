@@ -17,9 +17,10 @@ type FlipcardsContentProps = {
     profile: Profile;
     selectedListsId: string[];
     onBackPressed: () => void;
+    learningLanguageId: string;
 };
 
-const FlipcardsContent = ({ profile, selectedListsId, onBackPressed }: FlipcardsContentProps) => {
+const FlipcardsContent = ({ profile, selectedListsId, onBackPressed, learningLanguageId }: FlipcardsContentProps) => {
     const { t } = useTranslation();
     const { createLogEntry } = useConfig();
     const [refresh, setRefresh] = useState<boolean>(false);
@@ -37,7 +38,7 @@ const FlipcardsContent = ({ profile, selectedListsId, onBackPressed }: Flipcards
         const percentage = Math.round((localNumberRightAnswers / vocabularies.length) * 100);
         await createLogEntry.execute({
             type: LogEntryType.PLAYED_GAME,
-            learningLanguageId: '', // TODO: add learning language id
+            learningLanguageId,
             metadata: {
                 percentage,
                 gameName: GameName.FLIPCARDS,
