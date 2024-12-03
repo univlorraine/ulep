@@ -64,17 +64,24 @@ export class PrismaLogEntryRepository implements LogEntryRepository {
     limit: number,
   ): Promise<Collection<LogEntry>> {
     const offset = (page - 1) * limit;
+    const startOfDayDate = startOfDay(date);
+    const endOfDayDate = endOfDay(date);
+    console.log('startOfDayDate', startOfDayDate, 'endOfDayDate', endOfDayDate);
+    console.log('learningLanguageId', learningLanguageId);
 
     const logEntries = await this.prisma.logEntry.findMany({
       where: {
-        LearningLanguage: { id: learningLanguageId },
-        created_at: { gte: startOfDay(date), lte: endOfDay(date) },
+        AND: [
+          { LearningLanguage: { id: learningLanguageId } },
+          { created_at: { gte: startOfDayDate, lte: endOfDayDate } },
+        ],
       },
       orderBy: { created_at: 'desc' },
       skip: offset,
       take: limit,
       ...LogEntryRelations,
     });
+    console.log('logEntries', logEntries);
 
     const count = await this.prisma.logEntry.count({
       where: {

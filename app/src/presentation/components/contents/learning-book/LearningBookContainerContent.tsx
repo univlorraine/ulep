@@ -88,7 +88,7 @@ const LearningBookContainerContent: React.FC<LearningBookContainerContentProps> 
                 profile={profile}
                 onUpdateCustomLogEntry={handleUpdateCustomLogEntry}
                 onOpenVocabularyList={onOpenVocabularyList}
-                learningLanguage={profile.learningLanguages[0]}
+                learningLanguage={learningLanguage}
                 isModal
             />
         );
