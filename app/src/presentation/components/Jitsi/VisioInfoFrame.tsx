@@ -29,8 +29,13 @@ const VisioInfoFrame: React.FC<VisioInfoFrameProps> = ({ tandem }) => {
             />
             <div className={styles.content}>
                 {selectedMenuItem === 'home' && <VisioWelcomeContent setSelectedMenuItem={setSelectedMenuItem} />}
-                {selectedMenuItem === 'vocabulary' && (
-                    <VocabularyContent profile={profile} onClose={() => {}} isModal={false} />
+                {selectedMenuItem === 'vocabulary' && tandem?.learningLanguage && (
+                    <VocabularyContent
+                        profile={profile}
+                        onClose={() => {}}
+                        isModal={false}
+                        currentLearningLanguage={tandem.learningLanguage}
+                    />
                 )}
                 {selectedMenuItem === 'activity' && (
                     <ActivitiesContainerContent onClose={() => {}} profile={profile} isModal={false} />
@@ -40,7 +45,7 @@ const VisioInfoFrame: React.FC<VisioInfoFrameProps> = ({ tandem }) => {
                         language={tandem.learningLanguage}
                         level={tandem.level}
                         pedagogy={tandem.pedagogy}
-                        profile={tandem.partner}
+                        partnerProfile={tandem.partner}
                         partnerLearningLanguage={tandem.partnerLearningLanguage}
                         className={styles.tandemContent}
                     />

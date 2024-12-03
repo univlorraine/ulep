@@ -363,9 +363,13 @@ export class PrismaMediaObjectRepository implements MediaObjectRepository {
   }
 
   async avatarOfUser(userId: string): Promise<MediaObject | null> {
+    // Get User or Administrator avatar
     const mediaObject = await this.prisma.mediaObjects.findFirst({
       where: {
-        User: { id: userId },
+        OR: [
+          { User: { id: userId } },
+          { id: userId },
+        ],
       },
     });
 

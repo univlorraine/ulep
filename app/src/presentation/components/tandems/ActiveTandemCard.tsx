@@ -9,11 +9,11 @@ import styles from './ActiveTandemCard.module.css';
 interface ActiveTandemCardProps {
     tandem: Tandem;
     onTandemPressed: () => void;
+    currentColor: string;
 }
 
-const ActiveTandemCard: React.FC<ActiveTandemCardProps> = ({ onTandemPressed, tandem }) => {
+const ActiveTandemCard: React.FC<ActiveTandemCardProps> = ({ onTandemPressed, tandem, currentColor }) => {
     const { t } = useTranslation();
-    const language = tandem.partnerLearningLanguage;
     const { width } = useWindowDimensions();
     const isHybrid = width < HYBRID_MAX_WIDTH;
 
@@ -23,12 +23,17 @@ const ActiveTandemCard: React.FC<ActiveTandemCardProps> = ({ onTandemPressed, ta
             buttonText={t('learning.card.my_tandem.button') as string}
             onButtonPressed={onTandemPressed}
         >
-            <button className={styles.container} onClick={onTandemPressed} disabled={!isHybrid}>
+            <button
+                className={styles.container}
+                onClick={onTandemPressed}
+                disabled={!isHybrid}
+                style={{ backgroundColor: currentColor }}
+            >
                 <div className={styles['avatar-container']}>
                     <Avatar className={styles.avatar} user={tandem.partner?.user} />
                     <div className={styles['flag-container']}>
-                        <span className={styles.flag} role="img" aria-label={language.name}>
-                            {codeLanguageToFlag(language.code)}
+                        <span className={styles.flag} role="img" aria-label={tandem.learningLanguage.name}>
+                            {codeLanguageToFlag(tandem.learningLanguage.code)}
                         </span>
                     </div>
                 </div>

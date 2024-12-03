@@ -38,7 +38,7 @@ import {
   CreateVocabularyRequest,
   GetVocabulariesFromListQuery,
   GetVocabulariesFromSelectedListsQuery,
-  PaginationDto,
+  GetVocabulariesListQuery,
   UpdateVocabularyListRequest,
   UpdateVocabularyRequest,
   VocabularyListResponse,
@@ -148,10 +148,11 @@ export class VocabularyController {
   @Swagger.ApiOkResponse({ type: () => VocabularyListResponse })
   async getVocabularyList(
     @Param('id') id: string,
-    @Query() query: PaginationDto,
+    @Query() query: GetVocabulariesListQuery,
   ): Promise<Collection<VocabularyListResponse>> {
     const vocabularyLists = await this.findAllVocabularyListUsecase.execute({
       profileId: id,
+      languageCode: query.languageCode,
       pagination: {
         page: query.page,
         limit: query.limit,

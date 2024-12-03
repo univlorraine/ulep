@@ -10,6 +10,7 @@ interface TandemLineProps {
     profile?: Profile;
     onPressed: () => void;
     status: TandemStatus;
+    currentColor?: string;
 }
 
 const getTitleFromStatusAndProfile = (status: TandemStatus, hasProfile: boolean) => {
@@ -25,17 +26,17 @@ const getTitleFromStatusAndProfile = (status: TandemStatus, hasProfile: boolean)
         return 'home_page.waiting_tandem.tandem_not_found';
     }
 
-    if(status === 'PAUSED') {
+    if (status === 'PAUSED') {
         return 'home_page.waiting_tandem.tandem_paused';
     }
 
     return '';
 };
 
-const TandemLine: React.FC<TandemLineProps> = ({ language, profile, onPressed, status }) => {
+const TandemLine: React.FC<TandemLineProps> = ({ language, profile, onPressed, status, currentColor }) => {
     const { t } = useTranslation();
     return (
-        <button className={styles.container} onClick={onPressed}>
+        <button className={styles.container} onClick={onPressed} style={{ backgroundColor: currentColor }}>
             <div className={styles['left-container']}>
                 <div className={styles['flag-container']}>
                     <span className={styles.flag} role="img" aria-label={language.name}>

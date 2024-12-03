@@ -103,10 +103,11 @@ const Content: React.FC<ChatContentProps> = ({
         // Its a trick to reconnect the socket if it is disconnected when the socket wont reconnect by itself
         // Must be changed when the websocket is fixed
         socket.onDisconnect(() => {
-            disconnectInterval = setInterval(() => {
+            disconnectInterval = setInterval(async () => {
                 if (!socket.isConnected()) {
                     refreshTokens();
                     socket.connect(accessToken);
+                    await loadMessages(true);
                 } else {
                     clearInterval(disconnectInterval);
                 }

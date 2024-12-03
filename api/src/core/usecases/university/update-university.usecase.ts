@@ -140,24 +140,26 @@ export class UpdateUniversityUsecase {
     oldContactId: string,
     usersToUpdate: string[],
   ) {
-    const profileAdmin = await this.profileRepository.ofUser(oldContactId);
+    if (oldContactId && oldContactId !== university.defaultContactId) {
+      const profileAdmin = await this.profileRepository.ofUser(oldContactId);
 
-    let chatIdsToIgnore = [];
-    if (profileAdmin) {
-      chatIdsToIgnore = await this.tandemRepository.getTandemsForProfile(
-        profileAdmin.id,
+      let chatIdsToIgnore = [];
+      if (profileAdmin) {
+        chatIdsToIgnore = await this.tandemRepository.getTandemsForProfile(
+          profileAdmin.id,
+        );
+      }
+      await this.chatService.deleteConversationByContactId(
+        oldContactId,
+        chatIdsToIgnore.map((tandem) => tandem.id),
       );
-    }
-    await this.chatService.deleteConversationByContactId(
-      oldContactId,
-      chatIdsToIgnore.map((tandem) => tandem.id),
-    );
-    await this.chatService.createConversations(
-      usersToUpdate
-        .filter((userId) => userId !== university.defaultContactId)
+      await this.chatService.createConversations(
+        usersToUpdate
+          .filter((userId) => userId !== university.defaultContactId)
         .map((userId) => ({
           participants: [userId, university.defaultContactId],
         })),
-    );
+      );
+    }
   }
 }

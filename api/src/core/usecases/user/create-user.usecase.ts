@@ -113,6 +113,17 @@ export class CreateUserUsecase {
         emailVerified: false,
         origin: 'api',
       });
+    } else if(command.password && keycloakUser) {
+      await this.keycloak.updateUser({
+        id: keycloakUser.id,
+        email: keycloakUser.email,
+        firstname: command.firstname,
+        lastname: command.lastname,
+        password: command.password,
+        universityId: keycloakUser.attributes?.universityId?.[0] || university.id,
+        universityLogin: keycloakUser.attributes?.universityLogin?.[0],
+        languageId: keycloakUser.attributes?.languageId?.[0],
+      });
     }
 
     if (!keycloakUser) {

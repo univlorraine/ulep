@@ -123,17 +123,18 @@
         }
     },
     "instance": {
-        "button": "",
-        "error": "",
-        "subtitle": "",
-        "title": ""
+        "button": "Bestätigen und fortfahren",
+        "error": "Fehler beim Laden",
+        "subtitle": "Wähle eine Option aus der folgenden Liste",
+        "title": "Dein Programm",
+        "update_instance": "Instanz wechseln"
     },
     "languages": {
-        "french": "",
-        "english": "",
-        "deutsche": "",
-        "spanish": "",
-        "chinese": ""
+        "french": "Französisch",
+        "english": "Englisch",
+        "deutsche": "Deutsch",
+        "spanish": "Spanisch",
+        "chinese": "Chinesisch"
     },
     "login_page": {
         "button": "Anmelden",

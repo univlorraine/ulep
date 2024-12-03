@@ -143,7 +143,7 @@ const EditUniversity = () => {
                             specificLanguagesAvailable={record.specificLanguagesAvailable}
                             timezone={record.timezone}
                             tradKey="update"
-                            universityId={record.parent ? record.id : undefined}
+                            universityId={record.id}
                             website={record.website}
                         />
                     )}

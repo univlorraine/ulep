@@ -7,14 +7,20 @@ import TandemLine from './TandemLine';
 interface PendingTandemCardProps {
     tandem: Tandem;
     onTandemPressed: () => void;
+    currentColor?: string;
 }
 
-const PendingTandemCard: React.FC<PendingTandemCardProps> = ({ tandem, onTandemPressed }) => {
+const PendingTandemCard: React.FC<PendingTandemCardProps> = ({ tandem, onTandemPressed, currentColor }) => {
     const { t } = useTranslation();
     return (
         <LearningCard title={t('learning.card.pending_tandem')}>
             <div className={styles.content}>
-                <TandemLine language={tandem.learningLanguage} onPressed={onTandemPressed} status={tandem.status} />
+                <TandemLine
+                    language={tandem.learningLanguage}
+                    onPressed={onTandemPressed}
+                    status={tandem.status}
+                    currentColor={currentColor}
+                />
             </div>
         </LearningCard>
     );

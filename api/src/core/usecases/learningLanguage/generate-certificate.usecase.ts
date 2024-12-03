@@ -63,7 +63,11 @@ export class GenerateCertificateUsecase {
     const tandem = await this.tandemRepository.getTandemForLearningLanguage(id);
 
     if (!learningLanguage) {
-      throw new RessourceDoesNotExist();
+      throw new RessourceDoesNotExist('Learning language not found');
+    }
+
+    if (!tandem) {
+      throw new RessourceDoesNotExist('Tandem not found');
     }
 
     const certificateModel =

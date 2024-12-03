@@ -51,7 +51,7 @@ const LearningPage = () => {
         !isHybrid ? setDisplaySelectedTandem(tandem) : history.push('/tandem-profil', { tandem });
 
     const onVocabularyContentPressed = () =>
-        !isHybrid ? setDisplayVocabularyContent(true) : history.push('/vocabularies');
+        !isHybrid ? setDisplayVocabularyContent(true) : history.push('/vocabularies', { tandem: currentTandem });
 
     const onVocabularyContentPressedFromLearningBook = () => {
         if (!isHybrid) {
@@ -168,11 +168,14 @@ const LearningPage = () => {
                 onOpenVocabularyList={onVocabularyContentPressedFromLearningBook}
                 profile={profile}
             />
-            <VocabularyContentModal
-                isVisible={displayVocabularyContent}
-                onClose={() => setDisplayVocabularyContent(false)}
-                profile={profile}
-            />
+            {currentTandem && (
+                <VocabularyContentModal
+                    isVisible={displayVocabularyContent}
+                    onClose={() => setDisplayVocabularyContent(false)}
+                    profile={profile}
+                    currentLearningLanguage={currentTandem.learningLanguage}
+                />
+            )}
             {tandems.length > 0 && (
                 <GoalsContentModal
                     isVisible={Boolean(displayCustomGoalModal)}

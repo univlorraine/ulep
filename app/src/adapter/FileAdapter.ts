@@ -38,7 +38,6 @@ class FileAdapter implements FileAdapterInterface {
     async saveFile(file: string, filename: string): Promise<void> {
         const response = await fetch(file);
         const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
 
         if (this.deviceAdapter.isNativePlatform()) {
             const filePath = `${Directory.Documents}/${filename}`;
@@ -55,6 +54,7 @@ class FileAdapter implements FileAdapterInterface {
                 throw error;
             }
         } else {
+            const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
             a.download = filename || 'true';

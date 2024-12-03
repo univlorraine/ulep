@@ -1,8 +1,10 @@
 import { JitsiMeeting } from '@jitsi/react-sdk';
 import IJitsiMeetExternalApi from '@jitsi/react-sdk/lib/types/IJitsiMeetExternalApi';
 import { useRef } from 'react';
-import { useHistory } from 'react-router';
+import { Redirect, useHistory } from 'react-router';
+import { useConfig } from '../../../context/ConfigurationContext';
 import Profile from '../../../domain/entities/Profile';
+import { useStoreState } from '../../../store/storeTypes';
 import useGetHomeData from '../../hooks/useGetHomeData';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../../utils';
@@ -15,10 +17,16 @@ const JitsiWeb = ({ jitsiUrl, language, roomName, jitsiToken, tandemPartner, lea
     const history = useHistory();
     const apiRef = useRef<IJitsiMeetExternalApi>();
     const { width } = useWindowDimensions();
+    const { sendMessage } = useConfig();
+    const profile = useStoreState((state) => state.profile);
     const isHybrid = width < HYBRID_MAX_WIDTH;
     const { tandems } = useGetHomeData();
     const tandem = tandems.find((t) => t.id === roomName);
     let startTime: number | null = null;
+
+    if (!profile) {
+        return <Redirect to={'/'} />;
+    }
 
     const handleApiReady = (apiObj: IJitsiMeetExternalApi) => {
         apiRef.current = apiObj;
@@ -29,8 +37,15 @@ const JitsiWeb = ({ jitsiUrl, language, roomName, jitsiToken, tandemPartner, lea
         privateMessage: boolean; // whether this is a private or group message
         message: string; // the text of the message
     }) => {
-        // TODO: Message sent from jitsi chat to sync with our chat
-        console.log('handleOutgoingMessage', { payload });
+        if (!roomName) {
+            return;
+        }
+
+        const result = sendMessage.execute(roomName, profile.user.id, payload.message);
+
+        if (result instanceof Error) {
+            console.error(result);
+        }
     };
 
     return (

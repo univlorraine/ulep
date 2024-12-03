@@ -14,7 +14,7 @@ interface TandemProfileContentProps {
     learningLanguage: LearningLanguage;
     level: CEFR;
     pedagogy: Pedagogy;
-    profile: Profile;
+    partnerProfile: Profile;
     partnerLearningLanguage: Language;
     className?: string;
 }
@@ -23,7 +23,7 @@ const TandemProfileContent: React.FC<TandemProfileContentProps> = ({
     learningLanguage,
     level,
     pedagogy,
-    profile,
+    partnerProfile,
     partnerLearningLanguage,
     className,
 }) => {
@@ -39,10 +39,9 @@ const TandemProfileContent: React.FC<TandemProfileContentProps> = ({
             <span className="title extra-large-margin-bottom large-margin-top">
                 {t(`home_page.tandem_validated.title`)}
             </span>
-            <TandemCard profile={profile} language={learningLanguage} />
-
+            <TandemCard profile={partnerProfile} language={learningLanguage} />
             <span className={styles.category}>{t(`global.email`)}</span>
-            <div className={styles['text-container']}>{profile.user.email}</div>
+            <div className={styles['text-container']}>{partnerProfile.user.email}</div>
 
             <span className={styles.category}>{t(`home_page.tandem_validated.goals`)}</span>
             <div className={styles['text-container']}>
@@ -50,7 +49,7 @@ const TandemProfileContent: React.FC<TandemProfileContentProps> = ({
                     partnerLearningLanguage.code
                 )}`}</span>{' '}
                 <br />
-                {profile.goals.map((goal) => (
+                {partnerProfile.goals.map((goal) => (
                     <React.Fragment key={goal.id}>
                         {goal.name}
                         <br />
@@ -61,8 +60,8 @@ const TandemProfileContent: React.FC<TandemProfileContentProps> = ({
             <span className={styles.category}>{t(`home_page.tandem_validated.languages`)}</span>
             <div className={styles['text-container']}>
                 <>
-                    {profile.nativeLanguage.name} <br />
-                    {profile.masteredLanguages.map((masteredLangauge) => (
+                    {partnerProfile.nativeLanguage.name} <br />
+                    {partnerProfile.masteredLanguages.map((masteredLangauge) => (
                         <div key={masteredLangauge.id}>
                             {masteredLangauge.name}
                             <br />
@@ -72,7 +71,7 @@ const TandemProfileContent: React.FC<TandemProfileContentProps> = ({
             </div>
             <span className={styles.category}>{t(`home_page.tandem_validated.interests`)}</span>
             <div className={styles.interests}>
-                {profile.interests.map((interest) => {
+                {partnerProfile.interests.map((interest) => {
                     return (
                         <div key={interest.id} className={styles.interest}>
                             {interest.name}
@@ -81,29 +80,29 @@ const TandemProfileContent: React.FC<TandemProfileContentProps> = ({
                 })}
             </div>
             <span className={styles.category}>{t(`home_page.tandem_validated.power`)}</span>
-            <div className={styles['text-container']}>{profile.biography.superpower}</div>
+            <div className={styles['text-container']}>{partnerProfile.biography.superpower}</div>
             <span className={styles.category}>{t(`home_page.tandem_validated.incredible`)}</span>
-            <div className={styles['text-container']}>{profile.biography.anecdote}</div>
+            <div className={styles['text-container']}>{partnerProfile.biography.anecdote}</div>
             <span className={styles.category}>{t(`home_page.tandem_validated.place`)}</span>
-            <div className={styles['text-container']}>{profile.biography.favoritePlace}</div>
+            <div className={styles['text-container']}>{partnerProfile.biography.favoritePlace}</div>
             <span className={styles.category}>{t(`home_page.tandem_validated.travel`)}</span>
-            <div className={styles['text-container']}>{profile.biography.experience}</div>
+            <div className={styles['text-container']}>{partnerProfile.biography.experience}</div>
             <span className={styles.category}>{t(`home_page.tandem_validated.availabilities`)}</span>
-            <div className={styles['text-container']}>{profile.user.university.timezone}</div>
+            <div className={styles['text-container']}>{partnerProfile.user.university.timezone}</div>
             <div className={styles.separator} />
-            {Object.keys(profile.availabilities).map((availabilityKey) => {
+            {Object.keys(partnerProfile.availabilities).map((availabilityKey) => {
                 return (
                     <AvailabilityLine
                         key={availabilityKey}
-                        availability={profile.availabilities[availabilityKey as keyof Availabilites]}
+                        availability={partnerProfile.availabilities[availabilityKey as keyof Availabilites]}
                         day={availabilityKey}
                     />
                 );
             })}
-            {!profile.availabilitiesNotePrivacy && (
+            {!partnerProfile.availabilitiesNotePrivacy && (
                 <>
                     <span className={styles.category}>{t(`home_page.tandem_validated.availabilities_note`)}</span>
-                    <div className={styles['text-container']}>{profile.availabilitiesNote}</div>
+                    <div className={styles['text-container']}>{partnerProfile.availabilitiesNote}</div>
                 </>
             )}
         </div>

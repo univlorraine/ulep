@@ -20,7 +20,7 @@ interface TandemProfileProps {
     level: CEFR;
     onClose: () => void;
     pedagogy: Pedagogy;
-    profile: Profile;
+    partnerProfile: Profile;
     partnerLearningLanguage: Language;
 }
 
@@ -30,7 +30,7 @@ const TandemProfile: React.FC<TandemProfileProps> = ({
     level,
     onClose,
     pedagogy,
-    profile,
+    partnerProfile,
     partnerLearningLanguage,
 }) => {
     const { t } = useTranslation();
@@ -49,7 +49,7 @@ const TandemProfile: React.FC<TandemProfileProps> = ({
         history.push({
             pathname: '/jitsi',
             search: `?roomName=${id}`,
-            state: { tandemPartner: profile, learningLanguageId: learningLanguage.id },
+            state: { tandemPartner: meProfile, learningLanguageId: learningLanguage.id },
         });
     };
 
@@ -101,7 +101,7 @@ const TandemProfile: React.FC<TandemProfileProps> = ({
                 learningLanguage={learningLanguage}
                 level={level}
                 pedagogy={pedagogy}
-                profile={profile}
+                partnerProfile={partnerProfile}
                 partnerLearningLanguage={partnerLearningLanguage}
                 className={styles.content}
             />
