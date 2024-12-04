@@ -1,5 +1,6 @@
 import { useIonToast } from '@ionic/react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useConfig } from '../../../../context/ConfigurationContext';
 import LearningLanguage from '../../../../domain/entities/LearningLanguage';
 import { LogEntry, LogEntryCustomEntry, LogEntryType } from '../../../../domain/entities/LogEntry';
@@ -21,7 +22,8 @@ const LearningBookContainerContent: React.FC<LearningBookContainerContentProps> 
     profile,
     learningLanguage,
 }) => {
-    const { createLogEntry, updateCustomLogEntry } = useConfig();
+    const { t } = useTranslation();
+    const { createLogEntry, updateCustomLogEntry, shareLogEntries } = useConfig();
     const [showToast] = useIonToast();
     const [isCreateCustomLogEntry, setIsCreateCustomLogEntry] = useState<boolean>(false);
     const [logEntryToUpdate, setLogEntryToUpdate] = useState<LogEntryCustomEntry | undefined>();
@@ -56,11 +58,20 @@ const LearningBookContainerContent: React.FC<LearningBookContainerContentProps> 
         }
 
         if (result instanceof Error) {
-            showToast(result.message);
+            showToast(t(result.message), 3000);
         }
 
         setIsCreateCustomLogEntry(false);
         setLogEntryToUpdate(undefined);
+    };
+
+    const handleExportLogEntries = async () => {
+        const result = await shareLogEntries.execute(learningLanguage.id);
+        if (result instanceof Error) {
+            showToast(t(result.message), 3000);
+        } else {
+            showToast(t('learning_book.share.success'), 3000);
+        }
     };
 
     const handleUpdateCustomLogEntry = (logEntry: LogEntry) => {
@@ -112,6 +123,8 @@ const LearningBookContainerContent: React.FC<LearningBookContainerContentProps> 
             onOpenVocabularyList={onOpenVocabularyList}
             onBackPressed={handleOnClose}
             onFocusLogEntryForADay={setFocusLogEntryForADay}
+            onShareLogEntries={handleExportLogEntries}
+            onExportLogEntries={() => {}}
             learningLanguage={learningLanguage}
             profile={profile}
             isModal={true}

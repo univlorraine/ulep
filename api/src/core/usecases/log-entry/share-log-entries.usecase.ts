@@ -13,7 +13,6 @@ import {
 import { CreateOrUpdateLogEntryUsecase } from 'src/core/usecases/log-entry/create-or-update-log-entry.usecase';
 
 export type ShareLogEntriesCommand = {
-  ownerId: string;
   learningLanguageId: string;
 };
 

@@ -66,8 +66,6 @@ export class PrismaLogEntryRepository implements LogEntryRepository {
     const offset = (page - 1) * limit;
     const startOfDayDate = startOfDay(date);
     const endOfDayDate = endOfDay(date);
-    console.log('startOfDayDate', startOfDayDate, 'endOfDayDate', endOfDayDate);
-    console.log('learningLanguageId', learningLanguageId);
 
     const logEntries = await this.prisma.logEntry.findMany({
       where: {
@@ -81,7 +79,6 @@ export class PrismaLogEntryRepository implements LogEntryRepository {
       take: limit,
       ...LogEntryRelations,
     });
-    console.log('logEntries', logEntries);
 
     const count = await this.prisma.logEntry.count({
       where: {

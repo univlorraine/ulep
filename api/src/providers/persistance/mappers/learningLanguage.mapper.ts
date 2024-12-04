@@ -85,7 +85,9 @@ export const learningLanguageMapper = (
     learningJournal: instance.learning_journal ?? false,
     consultingInterview: instance.consulting_interview ?? false,
     sharedCertificate: instance.shared_certificate ?? false,
-    sharedLogsDate: instance.shared_logs_date,
+    sharedLogsDate: instance.shared_logs_date
+      ? new Date(instance.shared_logs_date)
+      : undefined,
     certificateFile:
       instance.CertificateFile &&
       new MediaObject({

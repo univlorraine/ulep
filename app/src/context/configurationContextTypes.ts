@@ -55,6 +55,7 @@ import GetUserUsecaseInterface from '../domain/interfaces/GetUserUsecase.interfa
 import CreateLogEntryUsecaseInterface from '../domain/interfaces/log-entries/CreateLogEntryUsecase.interface';
 import GetLogEntriesByDateUsecaseInterface from '../domain/interfaces/log-entries/GetLogEntriesByDateUsecase.interface';
 import GetLogEntriesUsecaseInterface from '../domain/interfaces/log-entries/GetLogEntriesUsecase.interface';
+import ShareLogEntriesUsecaseInterface from '../domain/interfaces/log-entries/ShareLogEntriesUsecase.interface';
 import UpdateCustomLogEntryUsecaseInterface from '../domain/interfaces/log-entries/UpdateCustomLogEntryUsecase.interface';
 import LoginUsecaseInterface from '../domain/interfaces/LoginUsecase.interface';
 import GetAllNewsUsecaseInterface from '../domain/interfaces/news/GetAllNewsUsecase.interface';
@@ -174,4 +175,5 @@ export interface ConfigContextValueType {
     updateCustomLogEntry: UpdateCustomLogEntryUsecaseInterface;
     getLogEntries: GetLogEntriesUsecaseInterface;
     getLogEntriesByDate: GetLogEntriesByDateUsecaseInterface;
+    shareLogEntries: ShareLogEntriesUsecaseInterface;
 }

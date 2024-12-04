@@ -24,6 +24,7 @@ import {
   CreateOrUpdateLogEntryUsecase,
   GetAllEntriesForUserByDateUsecase,
   GetAllEntriesForUserGroupedByDatesUsecase,
+  ShareLogEntriesUsecase,
   UpdateCustomLogEntryUsecase,
 } from 'src/core/usecases/log-entry';
 
@@ -37,6 +38,7 @@ export class LogEntryController {
     private readonly updateCustomLogEntryUsecase: UpdateCustomLogEntryUsecase,
     private readonly getAllEntriesForUserByDateUsecase: GetAllEntriesForUserByDateUsecase,
     private readonly getAllEntriesForUserGroupedByDatesUsecase: GetAllEntriesForUserGroupedByDatesUsecase,
+    private readonly shareLogEntriesUsecase: ShareLogEntriesUsecase,
   ) {}
 
   @Get('learning-language/:id/grouped-by-dates')
@@ -127,5 +129,15 @@ export class LogEntryController {
     });
 
     return LogEntryResponse.from(logEntry);
+  }
+
+  @Post('share/:id')
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Share a Learning Language Log Entry.' })
+  @Swagger.ApiOkResponse({ type: () => LogEntryResponse })
+  async shareLogEntry(@Param('id') id: string) {
+    await this.shareLogEntriesUsecase.execute({
+      learningLanguageId: id,
+    });
   }
 }

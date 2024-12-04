@@ -9,6 +9,7 @@ import {
     LogEntryEditActivity,
     LogEntryPlayedGame,
     LogEntryShareVocabulary,
+    LogEntrySharingLogs,
     LogEntrySubmitActivity,
     LogEntryTandemChat,
     LogEntryType,
@@ -28,7 +29,7 @@ interface LogEntryButtonProps {
 export const getLogEntryImage = (logEntry: LogEntry): string | undefined => {
     if (logEntry instanceof LogEntryCustomEntry) {
         return JournalSvg;
-    } else if (logEntry instanceof LogEntryConnection) {
+    } else if (logEntry instanceof LogEntryConnection || logEntry instanceof LogEntrySharingLogs) {
         return Star2Png;
     } else if (logEntry instanceof LogEntryAddVocabulary || logEntry instanceof LogEntryShareVocabulary) {
         return VocabularyPng;
@@ -109,6 +110,8 @@ export const LogEntryTitle: React.FC<LogEntrySubComponentProps> = ({ logEntry })
                     })}
                 </>
             );
+        } else if (logEntry instanceof LogEntrySharingLogs) {
+            return <>{t('learning_book.entry.sharing_logs.title')}</>;
         }
 
         return <>{t('learning_book.entry.default.title')}</>;

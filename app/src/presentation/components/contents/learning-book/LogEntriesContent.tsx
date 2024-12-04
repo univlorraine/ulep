@@ -1,4 +1,6 @@
-import { IonButton, IonImg } from '@ionic/react';
+import { IonButton, IonIcon, IonImg, IonItem, IonLabel, IonList } from '@ionic/react';
+import { arrowRedoOutline, downloadOutline } from 'ionicons/icons';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AddSvg } from '../../../../assets';
 import LearningLanguage from '../../../../domain/entities/LearningLanguage';
@@ -17,6 +19,8 @@ interface LogEntriesContentProps {
     onOpenVocabularyList: () => void;
     onFocusLogEntryForADay: (date: Date) => void;
     onBackPressed: () => void;
+    onShareLogEntries: () => void;
+    onExportLogEntries: () => void;
     profile: Profile;
     learningLanguage: LearningLanguage;
     isModal?: boolean;
@@ -28,11 +32,14 @@ export const LogEntriesContent: React.FC<LogEntriesContentProps> = ({
     onOpenVocabularyList,
     onBackPressed,
     onFocusLogEntryForADay,
+    onExportLogEntries,
+    onShareLogEntries,
     profile,
     learningLanguage,
     isModal,
 }) => {
     const { t } = useTranslation();
+    const [refresh, setRefresh] = useState<boolean>(false);
 
     const { logEntriesResult, isPaginationEnded, handleOnEndReached } = useGetLogEntries(learningLanguage.id, false);
 
@@ -50,6 +57,33 @@ export const LogEntriesContent: React.FC<LogEntriesContentProps> = ({
                 title={t('learning_book.list.title')}
                 onBackPressed={onBackPressed}
                 isBackButton={isModal}
+                kebabContent={(closeMenu) => (
+                    <IonList lines="none">
+                        <IonItem
+                            button={true}
+                            detail={false}
+                            onClick={async () => {
+                                await onShareLogEntries();
+                                setRefresh(!refresh);
+                                closeMenu();
+                            }}
+                        >
+                            <IonIcon icon={arrowRedoOutline} aria-hidden="true" />
+                            <IonLabel className={styles['popover-label']}>{t('learning_book.list.share')}</IonLabel>
+                        </IonItem>
+                        <IonItem
+                            button={true}
+                            detail={false}
+                            onClick={() => {
+                                onExportLogEntries();
+                                closeMenu();
+                            }}
+                        >
+                            <IonIcon icon={downloadOutline} aria-hidden="true" />
+                            <IonLabel className={styles['popover-label']}> {t('learning_book.list.export')}</IonLabel>
+                        </IonItem>
+                    </IonList>
+                )}
             />
             <div className={styles['log-entries-list']}>
                 <div className={styles['log-entries-list-container']}>

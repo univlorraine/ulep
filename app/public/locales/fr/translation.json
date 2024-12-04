@@ -86,7 +86,11 @@
     "learning_book": {
         "list": {
             "title": "Journal d'apprentissage",
-            "load_more": "Voir plus"
+            "load_more": "Voir plus",
+            "share": {
+                "title": "Partager les entrées",
+                "success": "Les entrées ont été partagées"
+            }
         },
         "entry": {
             "connection": {
@@ -119,6 +123,9 @@
             "played_game": {
                 "title": "Jeu joué : {{gameName}}",
                 "subtitle": "Vous avez obtenu {{percentage}}% des questions correctes"
+            },
+            "sharing_logs": {
+                "title": "Les entrées ont été partagées"
             },
             "see_more": "Voir plus",
             "load_more": "Voir plus",

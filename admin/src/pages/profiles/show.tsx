@@ -1,3 +1,4 @@
+import { format } from 'date-fns/format';
 import {
     ArrayField,
     BooleanField,
@@ -190,6 +191,13 @@ const ProfileTab = () => {
                             label={translate('learning_languages.show.fields.sharedCertificate')}
                             sortable={false}
                             source="sharedCertificate"
+                        />
+                        <FunctionField
+                            render={(record: Pick<LearningLanguage, 'sharedLogsDate'>) =>
+                                record.sharedLogsDate ? format(record.sharedLogsDate, 'dd/MM/yyyy') : ''
+                            }
+                            sortable={false}
+                            source="sharedLogsDate"
                         />
                         <ReferenceUploadFileField
                             label={translate('learning_languages.show.fields.certificateFile')}
