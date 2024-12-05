@@ -65,6 +65,9 @@ importers:
       csv-stringify:
         specifier: ^6.5.1
         version: 6.5.1
+      csv-writer:
+        specifier: ^1.6.0
+        version: 1.6.0
       date-fns:
         specifier: ^4.1.0
         version: 4.1.0
@@ -2063,6 +2066,9 @@ packages:
 
   csv-stringify@6.5.1:
     resolution: {integrity: sha512-+9lpZfwpLntpTIEpFbwQyWuW/hmI/eHuJZD1XzeZpfZTqkf1fyvBbBLXTJJMsBuuS11uTShMqPwzx4A6ffXgRQ==}
+
+  csv-writer@1.6.0:
+    resolution: {integrity: sha512-NOx7YDFWEsM/fTRAJjRpPp8t+MKRVvniAg9wQlUKx20MFrPs73WLJhFf5iteqrxNYnsy924K3Iroh3yNHeYd2g==}
 
   date-fns-tz@3.2.0:
     resolution: {integrity: sha512-sg8HqoTEulcbbbVXeg84u5UnlsQa8GS5QXMqjjYIhS4abEVVKIUwe0/l/UhrZdKaL/W5eWZNlbTeEIiOXTcsBQ==}
@@ -7234,6 +7240,8 @@ snapshots:
   css-what@6.1.0: {}
 
   csv-stringify@6.5.1: {}
+
+  csv-writer@1.6.0: {}
 
   date-fns-tz@3.2.0(date-fns@4.1.0):
     dependencies:

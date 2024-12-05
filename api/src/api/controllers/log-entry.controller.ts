@@ -8,9 +8,11 @@ import {
   Post,
   Put,
   Query,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
+import { Response } from 'express';
 import {
   CreateCustomLogEntryRequest,
   GetLogEntriesRequest,
@@ -22,6 +24,7 @@ import { UpdateCustomLogEntryRequest } from 'src/api/dtos/log-entry/update-custo
 import { AuthenticationGuard } from 'src/api/guards';
 import {
   CreateOrUpdateLogEntryUsecase,
+  ExportLogEntriesUsecase,
   GetAllEntriesForUserByDateUsecase,
   GetAllEntriesForUserGroupedByDatesUsecase,
   ShareLogEntriesUsecase,
@@ -39,6 +42,7 @@ export class LogEntryController {
     private readonly getAllEntriesForUserByDateUsecase: GetAllEntriesForUserByDateUsecase,
     private readonly getAllEntriesForUserGroupedByDatesUsecase: GetAllEntriesForUserGroupedByDatesUsecase,
     private readonly shareLogEntriesUsecase: ShareLogEntriesUsecase,
+    private readonly exportLogEntriesUsecase: ExportLogEntriesUsecase,
   ) {}
 
   @Get('learning-language/:id/grouped-by-dates')
@@ -139,5 +143,23 @@ export class LogEntryController {
     await this.shareLogEntriesUsecase.execute({
       learningLanguageId: id,
     });
+  }
+
+  @Get('export/:id')
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Export all Log Entries for a user.' })
+  @Swagger.ApiOkResponse({ type: 'string', description: 'CSV file' })
+  async exportLogEntries(@Param('id') id: string, @Res() res: Response) {
+    const { buffer, language } = await this.exportLogEntriesUsecase.execute({
+      learningLanguageId: id,
+    });
+
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader(
+      'Content-Disposition',
+      `attachment; filename=log_entries_${language.code}.csv`,
+    );
+
+    res.send(buffer);
   }
 }

@@ -27,7 +27,7 @@ export class GetAllEntriesForUserGroupedByDatesUsecase {
   async execute(command: GetAllEntriesForUserGroupedByDatesCommand) {
     await this.assertLearningLanguageExists(command.learningLanguageId);
 
-    return this.logEntryRepository.findAllForUserIdGroupedByDates(
+    return this.logEntryRepository.findAllForLearningLanguageGroupedByDates(
       command.learningLanguageId,
       command.page,
       command.limit,

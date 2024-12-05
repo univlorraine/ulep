@@ -77,7 +77,10 @@ class FileAdapter implements FileAdapterInterface {
                 const base64String = (reader.result as string).split(',')[1];
                 resolve(base64String);
             };
-            reader.onerror = reject;
+            reader.onerror = (error) => {
+                console.log(error);
+                reject(error);
+            };
             reader.readAsDataURL(blob);
         });
     };

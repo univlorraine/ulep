@@ -23,12 +23,12 @@ export type LogEntriesByDates = {
 };
 
 export interface LogEntryRepository {
-  findAllForUserIdGroupedByDates(
+  findAllForLearningLanguageGroupedByDates(
     learningLanguageId: string,
     page: number,
     limit: number,
   ): Promise<LogEntriesByDates[]>;
-  findAllForUserIdByDate(
+  findAllForLearningLanguageByDate(
     learningLanguageId: string,
     date: Date,
     page: number,
@@ -38,6 +38,10 @@ export interface LogEntryRepository {
   findAllOfTypeToday(
     learningLanguageId: string,
     type: LogEntryType,
+  ): Promise<LogEntry[]>;
+  findAllForLearningLanguage(
+    learningLanguageId: string,
+    beforeDate: Date,
   ): Promise<LogEntry[]>;
   create(command: CreateLogEntryCommand): Promise<LogEntry>;
   update(command: UpdateLogEntryCommand): Promise<LogEntry>;

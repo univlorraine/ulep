@@ -90,6 +90,9 @@
             "share": {
                 "title": "Share the logs",
                 "success": "Logs have been shared"
+            },
+            "export": {
+                "success": "Logs have been exported"
             }
         },
         "entry": {

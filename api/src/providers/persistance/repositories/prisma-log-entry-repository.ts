@@ -17,7 +17,7 @@ import {
 export class PrismaLogEntryRepository implements LogEntryRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findAllForUserIdGroupedByDates(
+  async findAllForLearningLanguageGroupedByDates(
     learningLanguageId: string,
     page: number,
     limit: number,
@@ -57,7 +57,7 @@ export class PrismaLogEntryRepository implements LogEntryRepository {
     return results;
   }
 
-  async findAllForUserIdByDate(
+  async findAllForLearningLanguageByDate(
     learningLanguageId: string,
     date: Date,
     page: number,
@@ -91,6 +91,26 @@ export class PrismaLogEntryRepository implements LogEntryRepository {
       items: logEntries.map(logEntryMapper),
       totalItems: count,
     });
+  }
+
+  async findAllForLearningLanguage(
+    learningLanguageId: string,
+    beforeDate: Date,
+  ): Promise<LogEntry[]> {
+    const endOfDayDate = endOfDay(beforeDate);
+
+    const logEntries = await this.prisma.logEntry.findMany({
+      where: {
+        AND: [
+          { LearningLanguage: { id: learningLanguageId } },
+          { created_at: { lte: endOfDayDate } },
+        ],
+      },
+      orderBy: { created_at: 'desc' },
+      ...LogEntryRelations,
+    });
+
+    return logEntries.map(logEntryMapper);
   }
 
   async ofId(id: string): Promise<LogEntry | null> {

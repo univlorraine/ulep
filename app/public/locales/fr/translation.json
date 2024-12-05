@@ -90,6 +90,9 @@
             "share": {
                 "title": "Partager les entrées",
                 "success": "Les entrées ont été partagées"
+            },
+            "export": {
+                "success": "Les entrées ont été exportées"
             }
         },
         "entry": {

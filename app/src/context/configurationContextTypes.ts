@@ -53,6 +53,7 @@ import GetUniversityInterface from '../domain/interfaces/GetUniversity.interface
 import GetUniversityLanguagesUsecaseInterface from '../domain/interfaces/GetUniversityLanguagesUsecase.interface';
 import GetUserUsecaseInterface from '../domain/interfaces/GetUserUsecase.interface';
 import CreateLogEntryUsecaseInterface from '../domain/interfaces/log-entries/CreateLogEntryUsecase.interface';
+import ExportLogEntriesUsecaseInterface from '../domain/interfaces/log-entries/ExportLogEntriesUsecase.interface';
 import GetLogEntriesByDateUsecaseInterface from '../domain/interfaces/log-entries/GetLogEntriesByDateUsecase.interface';
 import GetLogEntriesUsecaseInterface from '../domain/interfaces/log-entries/GetLogEntriesUsecase.interface';
 import ShareLogEntriesUsecaseInterface from '../domain/interfaces/log-entries/ShareLogEntriesUsecase.interface';
@@ -176,4 +177,5 @@ export interface ConfigContextValueType {
     getLogEntries: GetLogEntriesUsecaseInterface;
     getLogEntriesByDate: GetLogEntriesByDateUsecaseInterface;
     shareLogEntries: ShareLogEntriesUsecaseInterface;
+    exportLogEntries: ExportLogEntriesUsecaseInterface;
 }

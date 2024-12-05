@@ -10,6 +10,7 @@ import {
 import { FindAllSuggestedLanguageUsecase } from 'src/core/usecases/language/find-all-suggested-language.usecase';
 import {
   CreateOrUpdateLogEntryUsecase,
+  ExportLogEntriesUsecase,
   GetAllEntriesForUserByDateUsecase,
   GetAllEntriesForUserGroupedByDatesUsecase,
   ShareLogEntriesUsecase,
@@ -411,6 +412,7 @@ const usecases: Provider[] = [
   GetAllEntriesForUserGroupedByDatesUsecase,
   UpdateCustomLogEntryUsecase,
   ShareLogEntriesUsecase,
+  ExportLogEntriesUsecase,
 ];
 
 const services: Provider[] = [MatchScorer, CronService];

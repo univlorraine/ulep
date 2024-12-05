@@ -25,7 +25,7 @@ const LearningBookContainerContent: React.FC<LearningBookContainerContentProps> 
     learningLanguage,
 }) => {
     const { t } = useTranslation();
-    const { createLogEntry, updateCustomLogEntry, shareLogEntries } = useConfig();
+    const { createLogEntry, updateCustomLogEntry, shareLogEntries, exportLogEntries } = useConfig();
     const [showToast] = useIonToast();
     const [isCreateCustomLogEntry, setIsCreateCustomLogEntry] = useState<boolean>(false);
     const [logEntryToUpdate, setLogEntryToUpdate] = useState<LogEntryCustomEntry | undefined>();
@@ -67,12 +67,21 @@ const LearningBookContainerContent: React.FC<LearningBookContainerContentProps> 
         setLogEntryToUpdate(undefined);
     };
 
-    const handleExportLogEntries = async () => {
+    const handleShareLogEntries = async () => {
         const result = await shareLogEntries.execute(learningLanguage.id);
         if (result instanceof Error) {
             showToast(t(result.message), 3000);
         } else {
             showToast(t('learning_book.share.success'), 3000);
+        }
+    };
+
+    const handleExportLogEntries = async () => {
+        const result = await exportLogEntries.execute(learningLanguage.id);
+        if (result instanceof Error) {
+            showToast(t(result.message), 3000);
+        } else {
+            showToast(t('learning_book.export.success'), 3000);
         }
     };
 
@@ -127,8 +136,8 @@ const LearningBookContainerContent: React.FC<LearningBookContainerContentProps> 
             onOpenActivity={onOpenActivity}
             onBackPressed={handleOnClose}
             onFocusLogEntryForADay={setFocusLogEntryForADay}
-            onShareLogEntries={handleExportLogEntries}
-            onExportLogEntries={() => {}}
+            onShareLogEntries={handleShareLogEntries}
+            onExportLogEntries={handleExportLogEntries}
             learningLanguage={learningLanguage}
             profile={profile}
             isModal={true}
