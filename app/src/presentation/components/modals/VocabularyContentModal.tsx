@@ -9,6 +9,7 @@ interface VocabularyContentModalProps {
     onClose: () => void;
     profile: Profile;
     currentLearningLanguage: LearningLanguage;
+    currentVocabularyListId?: string;
 }
 
 const VocabularyContentModal: React.FC<VocabularyContentModalProps> = ({
@@ -16,6 +17,7 @@ const VocabularyContentModal: React.FC<VocabularyContentModalProps> = ({
     onClose,
     profile,
     currentLearningLanguage,
+    currentVocabularyListId,
 }) => {
     return (
         <IonModal animated isOpen={isVisible} onDidDismiss={onClose} className={styles.modal}>
@@ -24,6 +26,7 @@ const VocabularyContentModal: React.FC<VocabularyContentModalProps> = ({
                     profile={profile}
                     onClose={onClose}
                     currentLearningLanguage={currentLearningLanguage}
+                    currentVocabularyListId={currentVocabularyListId}
                     isModal
                 />
             </div>

@@ -33,6 +33,8 @@ const LearningPage = () => {
     const [displayVocabularyContent, setDisplayVocabularyContent] = useState<boolean>(false);
     const [displayLearningBookContent, setDisplayLearningBookContent] = useState<boolean>(false);
     const [displayCustomGoalModal, setDisplayCustomGoalModal] = useState<DisplayCustomGoalModal>();
+    const [currentActivityId, setCurrentActivityId] = useState<string>();
+    const [currentVocabularyListId, setCurrentVocabularyListId] = useState<string>();
     const profile = useStoreState((state: any) => state.profile);
     const { tandems, error, isLoading } = useGetLearningData(refresh);
 
@@ -53,13 +55,34 @@ const LearningPage = () => {
     const onVocabularyContentPressed = () =>
         !isHybrid ? setDisplayVocabularyContent(true) : history.push('/vocabularies', { tandem: currentTandem });
 
-    const onVocabularyContentPressedFromLearningBook = () => {
+    const onVocabularyContentPressedFromLearningBook = (vocabularyListId: string) => {
         if (!isHybrid) {
             setDisplayLearningBookContent(false);
             setDisplayVocabularyContent(true);
+            setCurrentVocabularyListId(vocabularyListId);
         } else {
-            history.push('/vocabularies');
+            history.push('/vocabularies', { vocabularyListId });
         }
+    };
+
+    const onVocabularyModalClosed = () => {
+        setDisplayVocabularyContent(false);
+        setCurrentVocabularyListId(undefined);
+    };
+
+    const onActivitiesContentPressedFromLearningBook = (activityId: string) => {
+        if (!isHybrid) {
+            setDisplayLearningBookContent(false);
+            setDisplayActivitiesContent(true);
+            setCurrentActivityId(activityId);
+        } else {
+            history.push('/activities', { activityId });
+        }
+    };
+
+    const onActivitiesModalClosed = () => {
+        setDisplayActivitiesContent(false);
+        setCurrentActivityId(undefined);
     };
 
     const onLearningBookContentPressed = () =>
@@ -156,23 +179,26 @@ const LearningPage = () => {
                 pedagogy={displaySelectedTandem?.pedagogy}
                 profile={displaySelectedTandem?.partner}
             />
-            <ActivitiesContentModal
-                isVisible={displayActivitiesContent}
-                onClose={() => setDisplayActivitiesContent(false)}
-                profile={profile}
-            />
             <LearningBookContentModal
                 isVisible={displayLearningBookContent}
                 onClose={() => setDisplayLearningBookContent(false)}
                 learningLanguage={currentTandem?.learningLanguage}
                 onOpenVocabularyList={onVocabularyContentPressedFromLearningBook}
+                onOpenActivity={onActivitiesContentPressedFromLearningBook}
                 profile={profile}
+            />
+            <ActivitiesContentModal
+                isVisible={displayActivitiesContent}
+                onClose={onActivitiesModalClosed}
+                profile={profile}
+                currentActivityId={currentActivityId}
             />
             {currentTandem && (
                 <VocabularyContentModal
                     isVisible={displayVocabularyContent}
-                    onClose={() => setDisplayVocabularyContent(false)}
+                    onClose={onVocabularyModalClosed}
                     profile={profile}
+                    currentVocabularyListId={currentVocabularyListId}
                     currentLearningLanguage={currentTandem.learningLanguage}
                 />
             )}

@@ -4,7 +4,14 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AddSvg } from '../../../../assets';
 import LearningLanguage from '../../../../domain/entities/LearningLanguage';
-import { LogEntry, LogEntryAddVocabulary, LogEntryCustomEntry } from '../../../../domain/entities/LogEntry';
+import {
+    LogEntry,
+    LogEntryAddVocabulary,
+    LogEntryCustomEntry,
+    LogEntryEditActivity,
+    LogEntryShareVocabulary,
+    LogEntrySubmitActivity,
+} from '../../../../domain/entities/LogEntry';
 import Profile from '../../../../domain/entities/Profile';
 import useGetLogEntries from '../../../hooks/useGetLogEntries';
 import LogEntriesCard from '../../card/LogEntriesCard';
@@ -16,7 +23,8 @@ import styles from './LogEntriesContent.module.css';
 interface LogEntriesContentProps {
     onAddCustomLogEntry: () => void;
     onUpdateCustomLogEntry: (logEntry: LogEntry) => void;
-    onOpenVocabularyList: () => void;
+    onOpenVocabularyList: (vocabularyListId: string) => void;
+    onOpenActivity: (activityId: string) => void;
     onFocusLogEntryForADay: (date: Date) => void;
     onBackPressed: () => void;
     onShareLogEntries: () => void;
@@ -30,6 +38,7 @@ export const LogEntriesContent: React.FC<LogEntriesContentProps> = ({
     onAddCustomLogEntry,
     onUpdateCustomLogEntry,
     onOpenVocabularyList,
+    onOpenActivity,
     onBackPressed,
     onFocusLogEntryForADay,
     onExportLogEntries,
@@ -46,8 +55,10 @@ export const LogEntriesContent: React.FC<LogEntriesContentProps> = ({
     const handleOnPress = (logEntry: LogEntry) => {
         if (logEntry instanceof LogEntryCustomEntry) {
             onUpdateCustomLogEntry(logEntry);
-        } else if (logEntry instanceof LogEntryAddVocabulary) {
-            onOpenVocabularyList();
+        } else if (logEntry instanceof LogEntryAddVocabulary || logEntry instanceof LogEntryShareVocabulary) {
+            onOpenVocabularyList(logEntry.vocabularyListId);
+        } else if (logEntry instanceof LogEntryEditActivity || logEntry instanceof LogEntrySubmitActivity) {
+            onOpenActivity(logEntry.activityId);
         }
     };
 

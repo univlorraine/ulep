@@ -108,17 +108,19 @@
             },
             "add_vocabulary": {
                 "title": "Ajout de vocabulaire à la liste {{vocabularyListName}} : {{entryNumber}} entrée(s)",
-                "button": "Voir les listes"
+                "button": "Voir la liste"
             },
             "share_vocabulary": {
                 "title": "Partage de la liste {{vocabularyListName}}",
-                "button": "Voir les listes"
+                "button": "Voir la liste"
             },
             "edit_activity": {
-                "title": "Activité modifiée : {{activityTitle}}"
+                "title": "Activité modifiée : {{activityTitle}}",
+                "button": "Voir l'activité"
             },
             "submit_activity": {
-                "title": "Activité soumise : {{activityTitle}}"
+                "title": "Activité soumise : {{activityTitle}}",
+                "button": "Voir l'activité"
             },
             "played_game": {
                 "title": "Jeu joué : {{gameName}}",

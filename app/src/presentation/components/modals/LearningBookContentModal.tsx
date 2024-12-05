@@ -8,7 +8,8 @@ interface LearningBookContentModalProps {
     isVisible: boolean;
     onClose: () => void;
     profile: Profile;
-    onOpenVocabularyList: () => void;
+    onOpenVocabularyList: (vocabularyListId: string) => void;
+    onOpenActivity: (activityId: string) => void;
     learningLanguage?: LearningLanguage;
 }
 
@@ -16,6 +17,7 @@ const LearningBookContentModal: React.FC<LearningBookContentModalProps> = ({
     isVisible,
     onClose,
     onOpenVocabularyList,
+    onOpenActivity,
     profile,
     learningLanguage,
 }) => {
@@ -29,6 +31,7 @@ const LearningBookContentModal: React.FC<LearningBookContentModalProps> = ({
                 <LearningBookContainerContent
                     onClose={onClose}
                     onOpenVocabularyList={onOpenVocabularyList}
+                    onOpenActivity={onOpenActivity}
                     profile={profile}
                     learningLanguage={learningLanguage}
                 />

@@ -150,28 +150,16 @@ export const LogEntrySubTitle: React.FC<LogEntrySubComponentProps> = ({ logEntry
     return <span className={styles.subtitle}>{getSubTitle()}</span>;
 };
 
-const LogEntryButton: React.FC<LogEntryButtonProps> = ({ logEntry, onClick }) => {
+const getLogEntryButton = (logEntry: LogEntry) => {
     const { t } = useTranslation();
     if (logEntry instanceof LogEntryCustomEntry) {
-        return (
-            <IonButton fill="clear" className="primary-button no-padding" onClick={() => onClick(logEntry)}>
-                {t('learning_book.entry.custom.button')}
-            </IonButton>
-        );
-    } else if (logEntry instanceof LogEntryAddVocabulary) {
-        return (
-            <IonButton fill="clear" className="primary-button no-padding" onClick={() => onClick(logEntry)}>
-                {t('learning_book.entry.add_vocabulary.button')}
-            </IonButton>
-        );
-    } else if (logEntry instanceof LogEntryShareVocabulary) {
-        return (
-            <IonButton fill="clear" className="primary-button no-padding" onClick={() => onClick(logEntry)}>
-                {t('learning_book.entry.share_vocabulary.button')}
-            </IonButton>
-        );
+        return t('learning_book.entry.custom.button');
+    } else if (logEntry instanceof LogEntryAddVocabulary || logEntry instanceof LogEntryShareVocabulary) {
+        return t('learning_book.entry.add_vocabulary.button');
+    } else if (logEntry instanceof LogEntrySubmitActivity || logEntry instanceof LogEntryEditActivity) {
+        return t('learning_book.entry.submit_activity.button');
     }
-    return <></>;
+    return undefined;
 };
 
 interface LogEntryCardProps {
@@ -187,6 +175,7 @@ const LogEntryCard: React.FC<LogEntryCardProps> = ({ logEntry, onClick, profile,
         month: '2-digit',
     }).format(new Date(logEntry.createdAt));
     const image = getLogEntryImage(logEntry);
+    const button = getLogEntryButton(logEntry);
 
     return (
         <div
@@ -218,7 +207,11 @@ const LogEntryCard: React.FC<LogEntryCardProps> = ({ logEntry, onClick, profile,
                     </div>
                 )}
             </div>
-            <LogEntryButton logEntry={logEntry} onClick={onClick} />
+            {button && (
+                <IonButton fill="clear" className="primary-button no-padding" onClick={() => onClick(logEntry)}>
+                    {button}
+                </IonButton>
+            )}
         </div>
     );
 };

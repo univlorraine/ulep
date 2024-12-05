@@ -11,7 +11,8 @@ import LogEntriesContent from './LogEntriesContent';
 
 interface LearningBookContainerContentProps {
     onClose: () => void;
-    onOpenVocabularyList: () => void;
+    onOpenVocabularyList: (vocabularyListId: string) => void;
+    onOpenActivity: (activityId: string) => void;
     profile: Profile;
     learningLanguage: LearningLanguage;
 }
@@ -19,6 +20,7 @@ interface LearningBookContainerContentProps {
 const LearningBookContainerContent: React.FC<LearningBookContainerContentProps> = ({
     onClose,
     onOpenVocabularyList,
+    onOpenActivity,
     profile,
     learningLanguage,
 }) => {
@@ -99,6 +101,7 @@ const LearningBookContainerContent: React.FC<LearningBookContainerContentProps> 
                 profile={profile}
                 onUpdateCustomLogEntry={handleUpdateCustomLogEntry}
                 onOpenVocabularyList={onOpenVocabularyList}
+                onOpenActivity={onOpenActivity}
                 learningLanguage={learningLanguage}
                 isModal
             />
@@ -121,6 +124,7 @@ const LearningBookContainerContent: React.FC<LearningBookContainerContentProps> 
             onAddCustomLogEntry={() => setIsCreateCustomLogEntry(true)}
             onUpdateCustomLogEntry={handleUpdateCustomLogEntry}
             onOpenVocabularyList={onOpenVocabularyList}
+            onOpenActivity={onOpenActivity}
             onBackPressed={handleOnClose}
             onFocusLogEntryForADay={setFocusLogEntryForADay}
             onShareLogEntries={handleExportLogEntries}
