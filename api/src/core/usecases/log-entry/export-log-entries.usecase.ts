@@ -1,7 +1,17 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { stringify } from 'csv-stringify';
 import { RessourceDoesNotExist } from 'src/core/errors';
-import { LogEntry } from 'src/core/models/log-entry.model';
+import {
+  LogEntry,
+  LogEntryAddVocabulary,
+  LogEntryCustomEntry,
+  LogEntryEditActivity,
+  LogEntryPlayedGame,
+  LogEntryShareVocabulary,
+  LogEntrySubmitActivity,
+  LogEntryTandemChat,
+  LogEntryVisio,
+} from 'src/core/models/log-entry.model';
 import {
   LearningLanguageRepository,
   LEARNING_LANGUAGE_REPOSITORY,
@@ -50,7 +60,7 @@ export class ExportLogEntriesUsecase {
     const passThrough = new PassThrough();
     const csvStringifier = stringify({
       header: true,
-      columns: ['id', 'type', 'date'],
+      columns: ['id', 'type', 'date', 'metadata'],
     });
 
     csvStringifier.pipe(passThrough);
@@ -60,6 +70,7 @@ export class ExportLogEntriesUsecase {
         id: entry.id,
         type: entry.type,
         date: entry.createdAt.toISOString(),
+        metadata: this.formatMetadata(entry),
       });
     });
     csvStringifier.end();
@@ -73,6 +84,44 @@ export class ExportLogEntriesUsecase {
       });
       passThrough.on('error', reject);
     });
+  }
+
+  private formatMetadata(entry: LogEntry): string {
+    if (entry instanceof LogEntryVisio) {
+      return JSON.stringify({
+        duration: entry.duration,
+        partner: `${entry.tandemFirstname} ${entry.tandemLastname}`,
+      });
+    } else if (entry instanceof LogEntryTandemChat) {
+      return JSON.stringify({
+        partner: `${entry.tandemFirstname} ${entry.tandemLastname}`,
+      });
+    } else if (entry instanceof LogEntryCustomEntry) {
+      return JSON.stringify({
+        title: entry.title,
+        content: entry.content,
+      });
+    } else if (
+      entry instanceof LogEntryShareVocabulary ||
+      entry instanceof LogEntryAddVocabulary
+    ) {
+      return JSON.stringify({
+        listName: entry.vocabularyListName,
+      });
+    } else if (
+      entry instanceof LogEntryEditActivity ||
+      entry instanceof LogEntrySubmitActivity
+    ) {
+      return JSON.stringify({
+        title: entry.activityTitle,
+      });
+    } else if (entry instanceof LogEntryPlayedGame) {
+      return JSON.stringify({
+        gameName: entry.gameName,
+        percentage: entry.percentage,
+      });
+    }
+    return '';
   }
 
   private async assertLearningLanguageExists(learningLanguageId: string) {
