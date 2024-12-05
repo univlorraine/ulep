@@ -1,9 +1,11 @@
 import { IonPage } from '@ionic/react';
-import { useHistory } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 import EndSessionContent from '../../components/contents/EndSessionContent';
 
 const EndSessionPage: React.FC = () => {
     const history = useHistory();
+    const location = useLocation<{ learningLanguageId: string }>();
+    const { learningLanguageId } = location.state;
 
     const onCompleteLearningJournalPressed = () => {
         history.push('/learning-journal');
@@ -12,6 +14,7 @@ const EndSessionPage: React.FC = () => {
     return (
         <IonPage>
             <EndSessionContent
+                learningLanguageId={learningLanguageId}
                 onClose={() => history.push('/home')}
                 onCompleteLearningJournalPressed={onCompleteLearningJournalPressed}
             />

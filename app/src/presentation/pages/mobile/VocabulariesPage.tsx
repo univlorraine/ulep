@@ -103,7 +103,7 @@ const VocabulariesPage: React.FC<VocabulariesPageProps> = ({ tandem }) => {
     };
 
     const onSelectedVocabularyListsIdsForQuiz = (selectedListsId: string[]) => {
-        history.push('/flipcards', { selectedListsId });
+        history.push('/flipcards', { selectedListsId, learningLanguageId: tandem?.learningLanguage.id });
     };
 
     const getProfilesTandems = async () => {
