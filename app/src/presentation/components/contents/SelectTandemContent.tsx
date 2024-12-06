@@ -42,14 +42,15 @@ const SelectTandemContent: React.FC<SelectTandemContentProps> = ({ onBackPressed
                     <p className="text">{t('sidebar_modal.tandem.no_tandem')}</p>
                 ) : (
                     <div className={styles['tandem-container']}>
-                        {tandems &&
-                            tandems.length &&
-                            tandems.map((tandem) => {
-                                if (!tandem.partner) {
-                                    return null;
-                                }
-                                return <TandemCardButton tandem={tandem} onClick={() => setSelectedTandem(tandem)} />;
-                            })}
+                        {tandems
+                            ?.filter((tandem) => tandem.partner)
+                            .map((tandem) => (
+                                <TandemCardButton
+                                    key={tandem.id}
+                                    tandem={tandem}
+                                    onClick={() => setSelectedTandem(tandem)}
+                                />
+                            ))}
                     </div>
                 )}
             </div>

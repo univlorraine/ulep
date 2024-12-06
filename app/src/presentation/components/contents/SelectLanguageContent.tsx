@@ -25,23 +25,21 @@ const SelectLanguageContent: React.FC<SelectLanguageContentProps> = ({
             <div className={styles.content}>
                 <h1 className="title">{t('sidebar_modal.languages.title')}</h1>
                 <p className={`text ${styles.text}`}>{t('sidebar_modal.languages.text')}</p>
-                <>
-                    <div className={styles['languages-container']}>
-                        {learningLanguages &&
-                            learningLanguages.length &&
-                            learningLanguages.map((learningLanguage) => {
-                                return (
-                                    <FlagBubble
-                                        key={learningLanguage.code}
-                                        role="button"
-                                        language={learningLanguage}
-                                        onPressed={() => setSelectedLanguage(learningLanguage)}
-                                        textColor="black"
-                                    />
-                                );
-                            })}
-                    </div>
-                </>
+                <div className={styles['languages-container']}>
+                    {learningLanguages &&
+                        learningLanguages.length &&
+                        learningLanguages.map((learningLanguage) => {
+                            return (
+                                <FlagBubble
+                                    key={learningLanguage.code}
+                                    role="button"
+                                    language={learningLanguage}
+                                    onPressed={() => setSelectedLanguage(learningLanguage)}
+                                    textColor="black"
+                                />
+                            );
+                        })}
+                </div>
             </div>
         </div>
     );

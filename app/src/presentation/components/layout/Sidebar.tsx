@@ -21,8 +21,8 @@ const Sidebar: React.FC<SidebarProps> = ({
     onDisplayActivitySidebar,
     onDisplaySessionModal,
 }) => {
-    const history = useHistory();
     const { t } = useTranslation();
+    const history = useHistory();
     const location = useLocation();
 
     const navigateToHome = () => {
