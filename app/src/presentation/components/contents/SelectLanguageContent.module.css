@@ -1,0 +1,14 @@
+.content {
+    padding: 20px;
+
+    .text {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .languages-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+}
