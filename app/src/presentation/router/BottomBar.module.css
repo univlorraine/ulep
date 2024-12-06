@@ -1,0 +1,32 @@
+.menuNew {
+    transform: translateY(-50%);
+    --offset-y: -70px;
+}
+
+.newIcon_container {
+    width: 24px;
+    height: 24px;
+}
+
+.newIcon {
+    position: fixed;
+    bottom: 25px;
+    left: 50%;
+    transform: translate(-50%, 0) rotate(0deg);
+    overflow: visible;
+    width: 56px;
+    height: 56px;
+    background-color: rgba(253, 238, 102, 1);
+    border-radius: 90px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 110;
+    color: black;
+    box-shadow: 0px 4.67px 28px 0px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease-in-out;
+    transform-origin: center;
+    &.active {
+        transform: translate(-50%, 0) rotate(45deg);
+    }
+}

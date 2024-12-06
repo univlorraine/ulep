@@ -174,6 +174,7 @@ const useVocabulary = (learningLanguage?: LearningLanguage, currentVocabularyLis
                 ...vocabularyResult,
                 isLoading: true,
             });
+
             const vocabularyListsResult = await getVocabularyLists.execute(profile.id, learningLanguage?.code);
 
             if (vocabularyListsResult instanceof Error) {

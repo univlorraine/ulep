@@ -156,6 +156,14 @@ ion-radio {
     line-height: 40px;
 }
 
+.modal.modal-side {
+    --height: 100%;
+    justify-content: flex-end;
+    &.hybrid {
+        --width: 100%;
+    }
+}
+
 @media (min-width: 768px) {
     .subcontent-container {
         background-color: white;
