@@ -86,7 +86,7 @@ const LearningPage = () => {
     };
 
     const onLearningBookContentPressed = () =>
-        !isHybrid ? setDisplayLearningBookContent(true) : history.push('/learning-book');
+        !isHybrid ? setDisplayLearningBookContent(true) : history.push('/learning-book', { tandem: currentTandem });
 
     const onActivitiesContentPressed = () =>
         !isHybrid ? setDisplayActivitiesContent(true) : history.push('/activities');

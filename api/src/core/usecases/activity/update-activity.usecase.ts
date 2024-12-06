@@ -112,6 +112,8 @@ export class UpdateActivityUsecase {
     const learningLanguage = activity.creator.findLearningLanguageByCode(
       activity.language.code,
     );
+
+    console.log('debug : learningLanguage', learningLanguage);
     if (learningLanguage) {
       await this.createOrUpdateLogEntryUsecase.execute({
         learningLanguageId: learningLanguage.id,

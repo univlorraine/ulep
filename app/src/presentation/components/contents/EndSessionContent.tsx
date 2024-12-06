@@ -32,6 +32,10 @@ const EndSessionContent: React.FC<EndSessionContentProps> = ({
     const { configuration } = useConfig();
 
     const handleCompleteLearningJournalPressed = async () => {
+        console.log('debug : duration', duration);
+        console.log('debug : partnerTandemId', partnerTandemId);
+        console.log('debug : tandemFirstname', tandemFirstname);
+        console.log('debug : tandemLastname', tandemLastname);
         if (duration && partnerTandemId && tandemFirstname && tandemLastname) {
             const result = await createLogEntry.execute({
                 type: LogEntryType.VISIO,

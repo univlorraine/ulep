@@ -43,7 +43,7 @@ export class CreateVocabularyUsecase {
         learningLanguageId: learningLanguage.id,
         type: LogEntryType.ADD_VOCABULARY,
         metadata: {
-          vocabularyListId: command.vocabularyListId,
+          vocabularyListId: vocabularyList.id,
           vocabularyListName: vocabularyList.name,
           entryNumber: 1,
         },

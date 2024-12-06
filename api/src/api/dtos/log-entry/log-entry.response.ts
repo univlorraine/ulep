@@ -161,7 +161,7 @@ export class LogEntryResponse {
 
     if (logEntry instanceof LogEntryAddVocabulary) {
       metadata = {
-        vocabularyListId: logEntry.vocabularyListName,
+        vocabularyListId: logEntry.vocabularyListId,
         vocabularyListName: logEntry.vocabularyListName,
         entryNumber: logEntry.entryNumber,
       };

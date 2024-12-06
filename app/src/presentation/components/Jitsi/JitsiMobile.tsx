@@ -65,6 +65,10 @@ const JitsiMobile = ({ jitsiUrl, roomName, jitsiToken, tandemPartner, learningLa
         startTime = Date.now();
     };
 
+    const isProfile = (obj: any): obj is Profile => {
+        return obj && obj.user && typeof obj.user.firstname === 'string' && typeof obj.user.lastname === 'string';
+    };
+
     const onJitsiUnloaded = async () => {
         if (isPlatform('cordova')) {
             window.removeEventListener('onConferenceLeft', onJitsiUnloaded);
@@ -79,8 +83,8 @@ const JitsiMobile = ({ jitsiUrl, roomName, jitsiToken, tandemPartner, learningLa
             duration = Math.floor((endTime - startTime) / 1000) - 1;
         }
 
-        const firstname = tandemPartner instanceof Profile ? tandemPartner.user.firstname : tandemPartner?.firstname;
-        const lastname = tandemPartner instanceof Profile ? tandemPartner.user.lastname : tandemPartner?.lastname;
+        const firstname = isProfile(tandemPartner) ? tandemPartner.user.firstname : tandemPartner?.firstname;
+        const lastname = isProfile(tandemPartner) ? tandemPartner.user.lastname : tandemPartner?.lastname;
 
         history.push('/end-session', {
             duration,

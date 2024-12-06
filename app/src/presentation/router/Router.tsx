@@ -26,6 +26,7 @@ import EventListPage from '../pages/mobile/EventListPage';
 import EventShowPage from '../pages/mobile/EventShowPage';
 import FlipcardsPage from '../pages/mobile/FlipcardsPage';
 import GoalsListPage from '../pages/mobile/GoalsListPage';
+import LearningBookPage from '../pages/mobile/LearningBookPage';
 import MediaPage from '../pages/mobile/MediaPage';
 import NewsListPage from '../pages/mobile/NewsListPage';
 import NewsShowPage from '../pages/mobile/NewsShowPage';
@@ -170,6 +171,9 @@ const OfflineRouter: React.FC = () => {
                 </MobileRoute>
                 <MobileRoute exact path={'/flipcards'}>
                     <FlipcardsPage />
+                </MobileRoute>
+                <MobileRoute exact path={'/learning-book'}>
+                    <LearningBookPage />
                 </MobileRoute>
                 <MobileRoute exact path={'/goals'}>
                     <GoalsListPage />
