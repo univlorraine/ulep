@@ -1,6 +1,6 @@
 {
   "name": "api",
-  "version": "0.27.0",
+  "version": "0.35.0",
   "description": "",
   "author": "",
   "private": true,
@@ -18,10 +18,10 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "migrate": "pnpx prisma migrate dev",
-    "seed": "pnpx prisma db seed -- --delete ",
-    "seed:ul": "pnpx prisma db seed -- --delete --seed ul",
-    "seed:random": "pnpx prisma db seed -- --seed random --delete"
+    "migrate": "pnpx prisma@5.22.0 migrate dev",
+    "seed": "pnpx prisma@5.22.0 db seed -- --delete ",
+    "seed:ul": "pnpx prisma@5.22.0 db seed -- --delete --seed ul",
+    "seed:random": "pnpx prisma@5.22.0 db seed -- --seed random --delete"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.673.0",

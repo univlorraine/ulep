@@ -1,0 +1,21 @@
+{{- if .Values.git.ingress.enabled -}}
+{{- $svcPort := .Values.git.service.port -}}
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRouteTCP
+metadata:
+  name: "{{ .Values.name }}-{{ .Values.git.name }}"
+  labels:
+    {{- include "etandem.labels" . | nindent 4 }}
+  {{- with .Values.git.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  entryPoints:
+    - git #must match with traefik configuration
+  routes:
+  - match: HostSNI(`*`)
+    services:
+    - name: "{{ $.Values.name }}-{{ $.Values.git.name }}"
+      port: 2222
+{{- end }}

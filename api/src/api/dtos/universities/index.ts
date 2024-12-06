@@ -335,6 +335,10 @@ export class UniversityResponse {
   @Expose({ groups: ['read'] })
   hasCode: boolean;
 
+  @Swagger.ApiProperty({ type: 'boolean' })
+  @Expose({ groups: ['read'] })
+  isCodeMandatory?: boolean;
+
   @Swagger.ApiProperty({ type: 'string', isArray: true })
   @Expose({ groups: ['university:read'] })
   codes: string[];
@@ -408,6 +412,8 @@ export class UniversityResponse {
       admissionStart: university.admissionStart,
       admissionEnd: university.admissionEnd,
       openServiceDate: university.openServiceDate,
+      isCodeMandatory:
+        university.domains?.length === 0 && university.codes?.length > 0,
       closeServiceDate: university.closeServiceDate,
       website: university.website,
       pairingMode: university.pairingMode,

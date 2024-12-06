@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
-import {
-  UNIVERSITY_REPOSITORY,
-  UniversityRepository,
-} from '../../ports/university.repository';
 import { RessourceDoesNotExist } from 'src/core/errors';
+import {
+  UniversityRepository,
+  UNIVERSITY_REPOSITORY,
+} from '../../ports/university.repository';
 
 @Injectable()
 export class GetUniversityUsecase {

@@ -1,10 +1,12 @@
 import { Collection, PrismaService } from '@app/common';
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
+import { startOfDay } from 'date-fns';
 import { EventObject } from 'src/core/models/event.model';
 import {
   CreateEventProps,
   EventRepository,
+  FindEventsForAnUserProps,
   FindEventsProps,
   SubscribeToEventProps,
   UnsubscribeToEventProps,
@@ -91,6 +93,79 @@ export class PrismaEventRepository implements EventRepository {
     });
   }
 
+  async findAllForAnUser({
+    pagination,
+    filters,
+  }: FindEventsForAnUserProps): Promise<Collection<EventObject>> {
+    const where: Prisma.EventsWhereInput = {
+      TitleTextContent: {
+        text: {
+          contains: filters.title,
+          mode: 'insensitive',
+        },
+      },
+      ...(filters.universityId && {
+        OR: [
+          {
+            ConcernedUniversities: {
+              some: {
+                id: filters.universityId,
+              },
+            },
+          },
+          {
+            AuthorUniversity: {
+              id: filters.universityId,
+            },
+          },
+        ],
+      }),
+      ...(filters.allowedLanguages && {
+        OR: filters.allowedLanguages.map((languageList) => ({
+          DiffusionLanguages: {
+            every: {
+              code: {
+                in: languageList,
+              },
+            },
+          },
+        })),
+      }),
+      status: filters.status,
+      end_date: {
+        gte: startOfDay(new Date()),
+      },
+      type: {
+        in: filters.types,
+      },
+    };
+
+    const { page, limit } = pagination;
+    const offset = (page - 1) * limit;
+
+    const count = await this.prisma.events.count({ where });
+
+    // If skip is out of range, return an empty array
+    if (offset >= count) {
+      return { items: [], totalItems: count };
+    }
+
+    const events = await this.prisma.events.findMany({
+      skip: offset,
+      take: limit,
+      where,
+      orderBy: {
+        start_date: 'asc',
+      },
+      include: EventRelations,
+    });
+
+    return new Collection<EventObject>({
+      items: events.map(eventMapper),
+      totalItems: count,
+    });
+  }
+
   async ofId(id: string): Promise<EventObject> {
     const event = await this.prisma.events.findUnique({
       where: { id },
@@ -141,7 +216,7 @@ export class PrismaEventRepository implements EventRepository {
         deep_link: command.deepLink,
         with_subscription: command.withSubscription,
         ConcernedUniversities: {
-          connect: command.concernedUniversities.map((university) => ({
+          connect: command.concernedUniversities?.map((university) => ({
             id: university,
           })),
         },

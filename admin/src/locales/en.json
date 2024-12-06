@@ -115,6 +115,9 @@
                 "user_email": "Email"
             }
         },
+        "errors": {
+            "email": "The email is not valid, you must use the university email address"
+        },
         "tabLabel": "Administrators",
         "university": "Manager",
         "update": {
@@ -199,6 +202,105 @@
         "saturday": "Saturday",
         "sunday": "Sunday"
     },
+    "events": {
+        "label": "Events",
+        "title": "Events",
+        "list": {
+            "title": "Title",
+            "university": "Author university",
+            "defaultLanguage": "Default language",
+            "translations": "Translations",
+            "status": "Status",
+            "startDate": "Start date",
+            "endDate": "End date",
+            "type": "Type",
+            "filters": {
+                "title": "Title",
+                "language": "Language",
+                "status": "Status",
+                "university": "University",
+                "type": "Type"
+            }
+        },
+        "status": {
+            "DRAFT": "Draft",
+            "READY": "Published"
+        },
+        "type": {
+            "ONLINE": "Online",
+            "PRESENTIAL": "Presential"
+        },
+        "form": {
+            "add_translation": "Add a translation",
+            "change_language": "Change the default language",
+            "type": {
+                "label": "Event type",
+                "online": "Online",
+                "presential": "Presential"
+            },
+            "author": "Author",
+            "status": "Status",
+            "start_date": "Start date",
+            "end_date": "End date",
+            "illustration": "Illustration",
+            "image_credit": "Image credit",
+            "title": "Title",
+            "content": "Content",
+            "subscriptions": "Subscriptions",
+            "with_subscriptions": "With subscriptions",
+            "concerned_universities": {
+                "label": "Concerned universities",
+                "button": "Add"
+            },
+            "diffusion_languages": {
+                "label": "Diffused languages",
+                "button": "Add"
+            },
+            "event_url": "Event URL",
+            "address": "Address",
+            "address_name": "Place name",
+            "error": {
+                "required": "All fields are required"
+            },
+            "remove_translation": "Remove translation"
+        },
+        "create": {
+            "cta": "Create",
+            "error": "An error occurred while creating the event"
+        },
+        "update": {
+            "cta": "Update",
+            "error": "An error occurred while updating the event"
+        },
+        "subscriptions": {
+            "title": "Subscriptions to the event : %{eventTitle}",
+            "author": "Author : %{universityName}",
+            "list": {
+                "firstname": "Firstname",
+                "lastname": "Lastname",
+                "university": "University",
+                "email": "Email",
+                "cta": "Actions"
+            },
+            "searchProfile": "Search a profile",
+            "search": {
+                "button": "Subscribe users",
+                "subscribe": "Subscribe"
+            },
+            "email": {
+                "button": "Send an email",
+                "title": "Send an email to the subscribers",
+                "form": {
+                    "title": "Title",
+                    "content": "Content"
+                },
+                "send": "Send",
+                "success": "The email has been sent to the subscribers",
+                "error": "An error occurred while sending the email"
+            },
+            "unsubscribe": "Unsubscribe"
+        }
+    },
     "global": {
         "all": "All",
         "age": "Age",
@@ -229,6 +331,12 @@
         "both": "Both",
         "deleted_user": "Deleted user",
         "sso_login": "Authenticate",
+        "forgot_password": "Forgot password",
+        "forgot_password_modal": {
+            "title": "Password reset request",
+            "description": "To reset your password, please enter your email below.",
+            "send_button": "Send"
+        },  
         "userStatus": {
             "active": "Active",
             "banned": "Banned",
@@ -354,6 +462,7 @@
     },
     "login": {
         "connect": "Connect",
+        "domainError": "Central administrators must use SSO to login.",
         "loginError": "Wrong email / password",
         "password": "Password"
     },

@@ -43,7 +43,6 @@ import KebabSvg from './kebab.svg';
 import LearningSvg from './learning.svg';
 import ArrowLeftSvg from './left-arrow.svg';
 import LeftChevronSvg from './left-chevron.svg';
-import LogoTextSvg from './logo-text.svg';
 import LogoSvg from './logo.svg';
 import MailBoxPng from './mailbox.png';
 import MessagesPng from './messages.png';
@@ -117,7 +116,6 @@ export {
     LearningSvg,
     LeftChevronSvg,
     LogoSvg,
-    LogoTextSvg,
     MailBoxPng,
     MessagesPng,
     PaperclipSvg,

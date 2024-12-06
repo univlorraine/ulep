@@ -1,11 +1,21 @@
-import { Box, Checkbox, FormControlLabel, FormGroup, MenuItem, OutlinedInput, Select, Typography } from '@mui/material';
+import {
+    Box,
+    Divider,
+    FormControlLabel,
+    FormGroup,
+    MenuItem,
+    OutlinedInput,
+    Select,
+    Switch,
+    Typography,
+} from '@mui/material';
 import { DateTimePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import daysjs from 'dayjs';
 import { RichTextInput } from 'ra-input-rich-text';
 import React, { useEffect, useState } from 'react';
-import { Button, Loading, TabbedForm, useGetIdentity, useRecordContext, useTranslate } from 'react-admin';
+import { Button, Form, Loading, TabbedForm, useGetIdentity, useRecordContext, useTranslate } from 'react-admin';
 import { News, NewsFormPayload, NewsStatus, NewsTranslation } from '../../entities/News';
 import University from '../../entities/University';
 import customDataProvider from '../../providers/customDataProvider';
@@ -91,80 +101,23 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
     const locale = i18nProvider.getLocale();
 
     return (
-        <LocalizationProvider adapterLocale={locale} dateAdapter={AdapterDayjs}>
-            <Box
-                sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    '& .MuiToolbar-root': { display: 'none' },
-                    '& .MuiDivider-root': { display: 'none' },
-                }}
-            >
-                <Box sx={{ display: 'flex', gap: 1, marginBottom: '20px' }}>
-                    <Select
-                        onChange={(e: any) => setNewTranslationLanguage(e.target.value as string)}
-                        sx={{ width: '200px' }}
-                        value={newTranslationLanguage}
-                    >
-                        {availableLanguages.map((language) => (
-                            <MenuItem key={language} value={language}>
-                                {language}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                    <Button
-                        label={translate('news.form.add_translation')}
-                        onClick={() => {
-                            if (newTranslationLanguage) {
-                                setTranslations([
-                                    ...translations,
-                                    { languageCode: newTranslationLanguage, title: '', content: '' },
-                                ]);
-                                setNewTranslationLanguage('');
-                            }
-                        }}
-                        variant="contained"
-                    />
-                </Box>
-                <TabbedForm>
-                    <TabbedForm.Tab
-                        label={defaultLanguage}
-                        sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}
-                    >
-                        {availableLanguages.length > 0 && (
-                            <Box>
-                                <Typography variant="subtitle1">{translate('news.form.change_language')}</Typography>
-                                <Select
-                                    onChange={(e: any) => {
-                                        setDefaultLanguage(e.target.value as string);
-                                    }}
-                                    sx={{ width: '200px' }}
-                                    value={defaultLanguage}
-                                >
-                                    {availableLanguages.map((language) => (
-                                        <MenuItem key={language} value={language}>
-                                            {language}
-                                        </MenuItem>
-                                    ))}
-                                    <MenuItem key={defaultLanguage} value={defaultLanguage}>
-                                        {defaultLanguage}
-                                    </MenuItem>
-                                </Select>
-                            </Box>
-                        )}
-
-                        <Box>
-                            <Typography variant="subtitle1">{translate('news.form.author')}</Typography>
-                            <Typography>{universityData?.name}</Typography>
-                        </Box>
-
+        <Form>
+            <LocalizationProvider adapterLocale={locale} dateAdapter={AdapterDayjs}>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        '& .MuiToolbar-root': { display: 'none' },
+                    }}
+                >
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                         <Box>
                             <Typography variant="subtitle1">{translate('news.status.label')}</Typography>
                             <FormGroup>
                                 <FormControlLabel
                                     checked={status === NewsStatus.READY}
                                     control={
-                                        <Checkbox
+                                        <Switch
                                             onChange={(event: any) =>
                                                 setStatus(event.target.checked ? NewsStatus.READY : NewsStatus.DRAFT)
                                             }
@@ -173,6 +126,11 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                                     label={translate(`news.status.${NewsStatus.READY}`)}
                                 />
                             </FormGroup>
+                        </Box>
+
+                        <Box>
+                            <Typography variant="subtitle1">{translate('news.form.author')}</Typography>
+                            <Typography>{universityData?.name}</Typography>
                         </Box>
 
                         <Box display="flex" flexDirection="row" gap="50px">
@@ -231,106 +189,170 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                                 />
                             </Box>
                         )}
+                    </Box>
 
-                        <Box sx={{ width: '100%' }}>
-                            <Typography variant="subtitle1">{translate('news.form.title')}</Typography>
-                            <OutlinedInput
-                                name="Title"
-                                onChange={(e: any) => setTitle(e.target.value)}
-                                placeholder="Title"
-                                type="text"
-                                value={title}
-                                fullWidth
-                                required
-                            />
-                        </Box>
+                    <Divider sx={{ margin: '40px 0' }} />
 
-                        <Box sx={{ width: '100%', '& .RaLabeled-label': { display: 'none' } }}>
-                            <Typography variant="subtitle1">{translate('news.form.content')}</Typography>
-                            <RichTextInput
-                                defaultValue={content}
-                                onChange={(e: any) => setContent(e)}
-                                source={defaultLanguage}
-                                fullWidth
-                            />
-                        </Box>
-                    </TabbedForm.Tab>
-
-                    {translations?.map((translation, index) => (
-                        <TabbedForm.Tab
-                            key={translation.languageCode}
-                            label={translation.languageCode}
-                            sx={{ display: 'flex', flexDirection: 'column', gap: '30px' }}
+                    <Box sx={{ display: 'flex', gap: 1, marginBottom: '20px', marginLeft: 'auto' }}>
+                        <Select
+                            onChange={(e: any) => setNewTranslationLanguage(e.target.value as string)}
+                            sx={{ width: '200px' }}
+                            value={newTranslationLanguage}
                         >
-                            <Box sx={{ display: 'flex', width: '100%', justifyContent: 'flex-end' }}>
-                                <Button
-                                    onClick={() => {
-                                        const filteredTranslations = translations?.filter(
-                                            (originalTranslation) =>
-                                                translation.languageCode !== originalTranslation.languageCode
-                                        );
-                                        setTranslations(filteredTranslations);
-                                    }}
-                                    variant="outlined"
-                                >
-                                    <span style={{ fontSize: '0.9rem' }}>
-                                        {translate('news.form.remove_translation')}
-                                    </span>
-                                </Button>
-                            </Box>
+                            {availableLanguages.map((language) => (
+                                <MenuItem key={language} value={language}>
+                                    {language}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                        <Button
+                            disabled={!newTranslationLanguage}
+                            label={translate('news.form.add_translation')}
+                            onClick={() => {
+                                if (newTranslationLanguage) {
+                                    setTranslations([
+                                        ...translations,
+                                        { languageCode: newTranslationLanguage, title: '', content: '' },
+                                    ]);
+                                    setNewTranslationLanguage('');
+                                }
+                            }}
+                            variant="contained"
+                        />
+                    </Box>
 
-                            <Box sx={{ width: '100%' }}>
-                                <Typography variant="subtitle1">{translate('news.form.title')}</Typography>
-                                <Box alignItems="center" display="flex" flexDirection="row">
+                    <Box sx={{ '& .MuiDivider-root': { display: 'none' } }}>
+                        <TabbedForm>
+                            <TabbedForm.Tab
+                                label={defaultLanguage}
+                                sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}
+                            >
+                                {availableLanguages.length > 0 && (
+                                    <Box>
+                                        <Typography variant="subtitle1">
+                                            {translate('news.form.change_language')}
+                                        </Typography>
+                                        <Select
+                                            onChange={(e: any) => {
+                                                setDefaultLanguage(e.target.value as string);
+                                            }}
+                                            sx={{ width: '200px' }}
+                                            value={defaultLanguage}
+                                        >
+                                            {availableLanguages.map((language) => (
+                                                <MenuItem key={language} value={language}>
+                                                    {language}
+                                                </MenuItem>
+                                            ))}
+                                            <MenuItem key={defaultLanguage} value={defaultLanguage}>
+                                                {defaultLanguage}
+                                            </MenuItem>
+                                        </Select>
+                                    </Box>
+                                )}
+
+                                <Box sx={{ width: '100%' }}>
+                                    <Typography variant="subtitle1">{translate('news.form.title')}</Typography>
                                     <OutlinedInput
                                         name="Title"
-                                        onChange={(e: any) => {
-                                            const newTranslations = [...translations];
-                                            newTranslations[index].title = e.target.value;
-                                            setTranslations(newTranslations);
-                                        }}
+                                        onChange={(e: any) => setTitle(e.target.value)}
                                         placeholder="Title"
                                         type="text"
-                                        value={translation.title}
+                                        value={title}
+                                        fullWidth
                                         required
                                     />
                                 </Box>
-                            </Box>
 
-                            <Box sx={{ width: '100%', '& .RaLabeled-label': { display: 'none' } }}>
-                                <Typography variant="subtitle1">{translate('news.form.content')}</Typography>
-                                <RichTextInput
-                                    defaultValue={translation.content || ''}
-                                    onChange={(e: any) => {
-                                        const newTranslations = [...translations];
-                                        const newTranslation = {
-                                            languageCode: translation.languageCode,
-                                            title: translation.title,
-                                            content: e,
-                                        };
-                                        newTranslations[index] = newTranslation;
+                                <Box sx={{ width: '100%', '& .RaLabeled-label': { display: 'none' } }}>
+                                    <Typography variant="subtitle1">{translate('news.form.content')}</Typography>
+                                    <RichTextInput
+                                        defaultValue={content}
+                                        onChange={(e: any) => setContent(e)}
+                                        source={defaultLanguage}
+                                        fullWidth
+                                    />
+                                </Box>
+                            </TabbedForm.Tab>
 
-                                        setTranslations(newTranslations);
-                                    }}
-                                    source={translation.languageCode}
-                                    fullWidth
-                                />
-                            </Box>
-                        </TabbedForm.Tab>
-                    ))}
-                </TabbedForm>
-                <Button
-                    color="primary"
-                    disabled={false}
-                    onClick={onCreatePressed}
-                    sx={{ mt: 4, width: '100%' }}
-                    type="button"
-                    variant="contained"
-                >
-                    <span>{record ? translate('news.update.cta') : translate('news.create.cta')}</span>
-                </Button>
-            </Box>
-        </LocalizationProvider>
+                            {translations?.map((translation, index) => (
+                                <TabbedForm.Tab
+                                    key={translation.languageCode}
+                                    label={translation.languageCode}
+                                    sx={{ display: 'flex', flexDirection: 'column', gap: '30px' }}
+                                >
+                                    <Box sx={{ display: 'flex', width: '100%', justifyContent: 'flex-end' }}>
+                                        <Button
+                                            onClick={() => {
+                                                const filteredTranslations = translations?.filter(
+                                                    (originalTranslation) =>
+                                                        translation.languageCode !== originalTranslation.languageCode
+                                                );
+                                                setTranslations(filteredTranslations);
+                                            }}
+                                            variant="outlined"
+                                        >
+                                            <span style={{ fontSize: '0.9rem' }}>
+                                                {translate('news.form.remove_translation')}
+                                            </span>
+                                        </Button>
+                                    </Box>
+
+                                    <Box sx={{ width: '100%' }}>
+                                        <Typography variant="subtitle1">{translate('news.form.title')}</Typography>
+                                        <Box alignItems="center" display="flex" flexDirection="row">
+                                            <OutlinedInput
+                                                name="Title"
+                                                onChange={(e: any) => {
+                                                    const newTranslations = [...translations];
+                                                    newTranslations[index].title = e.target.value;
+                                                    setTranslations(newTranslations);
+                                                }}
+                                                placeholder="Title"
+                                                type="text"
+                                                value={translation.title}
+                                                required
+                                            />
+                                        </Box>
+                                    </Box>
+
+                                    <Box sx={{ width: '100%', '& .RaLabeled-label': { display: 'none' } }}>
+                                        <Typography variant="subtitle1">{translate('news.form.content')}</Typography>
+                                        <RichTextInput
+                                            defaultValue={translation.content || ''}
+                                            onChange={(e: any) => {
+                                                const newTranslations = [...translations];
+                                                const newTranslation = {
+                                                    languageCode: translation.languageCode,
+                                                    title: translation.title,
+                                                    content: e,
+                                                };
+                                                newTranslations[index] = newTranslation;
+
+                                                setTranslations(newTranslations);
+                                            }}
+                                            source={translation.languageCode}
+                                            fullWidth
+                                        />
+                                    </Box>
+                                </TabbedForm.Tab>
+                            ))}
+                        </TabbedForm>
+                    </Box>
+
+                    <Button
+                        color="primary"
+                        disabled={!title || !content || !startPublicationDate || !endPublicationDate}
+                        onClick={onCreatePressed}
+                        sx={{ mt: 4, width: '100%' }}
+                        type="button"
+                        variant="contained"
+                    >
+                        <span>{record ? translate('news.update.cta') : translate('news.create.cta')}</span>
+                    </Button>
+                </Box>
+            </LocalizationProvider>
+        </Form>
     );
 };
 

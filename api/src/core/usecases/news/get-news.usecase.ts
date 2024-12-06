@@ -3,12 +3,21 @@ import { KeycloakUser } from '@app/keycloak';
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { News, NewsStatus, Profile, Tandem } from 'src/core/models';
 import {
-  NEWS_REPOSITORY,
   NewsRepository,
+  NEWS_REPOSITORY,
 } from 'src/core/ports/news.repository';
-import { PROFILE_REPOSITORY, ProfileRepository } from 'src/core/ports/profile.repository';
-import { STORAGE_INTERFACE, StorageInterface } from 'src/core/ports/storage.interface';
-import { UNIVERSITY_REPOSITORY, UniversityRepository } from 'src/core/ports/university.repository';
+import {
+  ProfileRepository,
+  PROFILE_REPOSITORY,
+} from 'src/core/ports/profile.repository';
+import {
+  StorageInterface,
+  STORAGE_INTERFACE,
+} from 'src/core/ports/storage.interface';
+import {
+  UniversityRepository,
+  UNIVERSITY_REPOSITORY,
+} from 'src/core/ports/university.repository';
 import { GetTandemsForProfileUsecase } from 'src/core/usecases/tandem';
 
 export type GetNewsCommand = {
@@ -42,17 +51,23 @@ export class GetNewsUsecase {
 
     const profile = await this.profileRepository.ofUser(query.user.sub);
 
-    if(!profile) {
+    if (!profile) {
       throw new NotFoundException('Profile not found');
     }
 
-    const tandems = await this.getTandemsForProfileUsecase.execute({profile: profile.id});
+    const tandems = await this.getTandemsForProfileUsecase.execute({
+      profile: profile.id,
+    });
 
-    const universityIds = await this.getUniversityIdsFromProfile(profile, tandems);
+    const universityIds = await this.getUniversityIdsFromProfile(
+      profile,
+      tandems,
+    );
 
-    let news =  await this.newsRepository.findAll({
+    let news = await this.newsRepository.findAll({
       offset,
       limit,
+      onlyActiveNews: true,
       where: {
         ...where,
         status: NewsStatus.READY,
@@ -84,17 +99,30 @@ export class GetNewsUsecase {
     return newsWithImageUrl;
   }
 
-  private async getUniversityIdsFromProfile(profile: Profile, tandems: Tandem[]) {
+  private async getUniversityIdsFromProfile(
+    profile: Profile,
+    tandems: Tandem[],
+  ) {
     const universityIds: string[] = [];
-    const centralUniversity = await this.universityRepository.findUniversityCentral();
+    const centralUniversity =
+      await this.universityRepository.findUniversityCentral();
 
     universityIds.push(centralUniversity.id);
 
-    if(profile.user.university.id && universityIds.indexOf(profile.user.university.id) === -1) {
+    if (
+      profile.user.university.id &&
+      universityIds.indexOf(profile.user.university.id) === -1
+    ) {
       universityIds.push(profile.user.university.id);
     }
 
-    const universityIdsFromTandems: string[] = tandems.map(tandem => tandem.learningLanguages.map(learningLanguage => learningLanguage.profile.user.university.id)).flat();
+    const universityIdsFromTandems: string[] = tandems
+      .map((tandem) =>
+        tandem.learningLanguages.map(
+          (learningLanguage) => learningLanguage.profile.user.university.id,
+        ),
+      )
+      .flat();
     for (const ids of universityIdsFromTandems) {
       if (ids && universityIds.indexOf(ids) === -1) {
         universityIds.push(ids);

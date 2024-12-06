@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
-import Configuration from '../../domain/entities/Confirguration';
-import { useTranslation } from 'react-i18next';
 import { useIonToast } from '@ionic/react';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import Configuration from '../../domain/entities/Confirguration';
 
 interface InstanceCommand {
     name: string;
@@ -17,6 +17,7 @@ interface InstanceCommand {
     secondaryDarkColor: string;
     hasConnector: boolean;
     isInMaintenance: boolean;
+    logoURL: string;
 }
 
 const useFetchConfiguration = (apiUrl: string) => {
@@ -50,7 +51,8 @@ const useFetchConfiguration = (apiUrl: string) => {
                     result.secondaryColor,
                     result.secondaryDarkColor,
                     result.secondaryBackgroundColor,
-                    result.isInMaintenance
+                    result.isInMaintenance,
+                    result.logoURL
                 )
             );
             document.documentElement.style.setProperty('--primary-color', result.primaryColor);

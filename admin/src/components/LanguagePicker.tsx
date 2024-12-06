@@ -1,5 +1,5 @@
 import { FormControl, MenuItem, Select } from '@mui/material';
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useGetList, useTranslate } from 'react-admin';
 import Language from '../entities/Language';
 
@@ -7,6 +7,10 @@ interface LanguagePickerProps {
     onChange: (value: Language) => void;
     value?: Language;
     initialValue?: string;
+}
+
+interface LanguageWithLabel extends Language {
+    label: string;
 }
 
 const LanguagePicker: React.FC<LanguagePickerProps> = ({ onChange, value, initialValue }) => {
@@ -17,38 +21,54 @@ const LanguagePicker: React.FC<LanguagePickerProps> = ({ onChange, value, initia
     const translate = useTranslate();
 
     useEffect(() => {
-        if (initialValue && languages) {
-            onChange(languages.find((language: Language) => language.id === initialValue));
+        if (initialValue !== undefined && languages) {
+            onChange(languages.find((language: Language) => language.id === initialValue) || { id: 'none' });
         }
     }, [initialValue, languages]);
 
-    if (isLoading || !languages || (!value && initialValue)) {
-        return <div />;
+    const sortedLanguages = useMemo(() => {
+        if (languages) {
+            return languages
+                .map((language: Language) => ({
+                    ...language,
+                    label: translate(`languages_code.${language.code}`),
+                }))
+                .sort((a: LanguageWithLabel, b: LanguageWithLabel) => a.label.localeCompare(b.label));
+        }
+
+        return [];
+    }, [languages]);
+
+    if (isLoading || !languages || (value === undefined && initialValue)) {
+        return null;
     }
 
     return (
         <FormControl>
             <Select
-                id="language-picker"
                 onChange={(event) =>
-                    onChange(languages.find((newLanguage: Language) => event.target.value === newLanguage.id))
+                    onChange(
+                        languages.find((newLanguage: Language) => event.target.value === newLanguage.id) || {
+                            id: 'none',
+                        }
+                    )
                 }
                 renderValue={(languageId: string) => {
-                    const newLanguage = languages.find((language: Language) => language.id === languageId);
+                    const newLanguage = sortedLanguages.find((language: Language) => language.id === languageId);
 
-                    return languageId
-                        ? translate(`languages_code.${newLanguage.code}`)
+                    return languageId !== 'none' && newLanguage
+                        ? newLanguage.label
                         : translate('language_picker.placeholder');
                 }}
                 sx={{ mb: 2, width: '100%' }}
-                value={value?.id || undefined}
+                value={value?.id || 'none'}
                 disableUnderline
                 displayEmpty
             >
-                <MenuItem value={undefined}>{translate('language_picker.placeholder')}</MenuItem>
-                {languages.map((language: Language) => (
+                <MenuItem value="none">{translate('language_picker.placeholder')}</MenuItem>
+                {sortedLanguages.map((language: LanguageWithLabel) => (
                     <MenuItem key={language.id} value={language.id}>
-                        {translate(`languages_code.${language.code}`)}
+                        {language.label}
                     </MenuItem>
                 ))}
             </Select>

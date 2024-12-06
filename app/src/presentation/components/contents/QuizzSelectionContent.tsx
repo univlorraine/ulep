@@ -1,3 +1,4 @@
+import { IonButton } from '@ionic/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useConfig } from '../../../context/ConfigurationContext';
@@ -37,12 +38,10 @@ const QuizzSelectionContent: React.FC<QuizzSelectionContentProps> = ({ onQuizzSe
                                 aria-checked={selectQuizz === quizz.value}
                                 aria-label={quizz.title}
                                 key={quizz.value}
-                                className={styles['level-container']}
+                                className={`no-padding ${styles['level-container']} ${
+                                    selectQuizz === quizz.value ? 'secondary-selected-button' : ''
+                                }`}
                                 onClick={() => setSelectQuizz(quizz.value)}
-                                style={{
-                                    backgroundColor:
-                                        quizz.value === selectQuizz ? configuration.secondaryColor : '#F2F4F7',
-                                }}
                             >
                                 <div className={styles['bubble-container']}>
                                     <div
@@ -65,21 +64,23 @@ const QuizzSelectionContent: React.FC<QuizzSelectionContentProps> = ({ onQuizzSe
                 </div>
             </div>
             <div>
-                <button
+                <IonButton
                     aria-label={t('pairing_quizz_description_page.validate_button') as string}
-                    className={`primary-button large-margin-bottom ${!selectQuizz ? 'disabled' : ''}`}
+                    className={`primary-button large-margin-bottom no-padding ${!selectQuizz ? 'disabled' : ''}`}
+                    fill="clear"
                     disabled={!selectQuizz}
                     onClick={() => onQuizzSelected(selectQuizz)}
                 >
                     {t('pairing_quizz_description_page.validate_button')}
-                </button>
-                <button
+                </IonButton>
+                <IonButton
                     aria-label={t('pairing_quizz_description_page.pass_button') as string}
-                    className="secondary-button extra-large-margin-bottom"
+                    className="secondary-button extra-large-margin-bottom no-padding"
+                    fill="clear"
                     onClick={() => onQuizzSelected('A1')}
                 >
                     {t('pairing_quizz_description_page.pass_button')}
-                </button>
+                </IonButton>
             </div>
         </>
     );

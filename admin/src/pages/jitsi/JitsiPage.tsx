@@ -7,7 +7,7 @@ const JitsiPage = () => {
     const location = useLocation();
     const redirect = useRedirect();
     const [jitsiToken, setJitsiToken] = useState<string>();
-    const jitsiDomain = process.env.REACT_APP_JITSI_DOMAIN;
+    const jitsiDomain = window.REACT_APP_JITSI_DOMAIN;
     const dataProvider = useDataProvider();
     const [locale] = useLocaleState();
 

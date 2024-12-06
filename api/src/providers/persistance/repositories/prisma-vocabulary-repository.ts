@@ -74,6 +74,7 @@ export class PrismaVocabularyRepository implements VocabularyRepository {
 
   async findAllVocabularyLists(
     profileId: string,
+    languageCode?: string,
     pagination?: VocabularyPagination,
   ): Promise<VocabularyList[]> {
     const vocabularyLists = await this.prisma.vocabularyList.findMany({
@@ -83,6 +84,11 @@ export class PrismaVocabularyRepository implements VocabularyRepository {
             id: profileId,
           },
         },
+        ...(languageCode && {
+          TranslationLanguage: {
+            code: languageCode,
+          },
+        }),
       },
       skip: pagination?.page ? (pagination.page - 1) * pagination.limit : 0,
       take: pagination?.limit,
@@ -203,6 +209,16 @@ export class PrismaVocabularyRepository implements VocabularyRepository {
           connect: props.profileIds.map((profileId) => ({
             id: profileId,
           })),
+        },
+        OriginalLanguage: {
+          connect: {
+            id: props.wordLanguageId,
+          },
+        },
+        TranslationLanguage: {
+          connect: {
+            id: props.translationLanguageId,
+          },
         },
       },
       ...VocabularyListRelations,

@@ -10,7 +10,6 @@ import { LanguageResponse } from '../languages';
 import { ProfileResponse } from '../profiles';
 import { UniversityResponse } from '../universities';
 import { UserResponse } from '../users';
-
 export class EventTranslationResponse {
   @Swagger.ApiProperty({ type: 'string' })
   @Expose({ groups: ['read'] })
@@ -93,7 +92,7 @@ export class EventResponse {
   diffusionLanguages?: LanguageResponse[];
 
   @Swagger.ApiProperty({ type: [UniversityResponse] })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['event:admin'] })
   @IsArray()
   concernedUniversities?: UniversityResponse[];
 
@@ -117,6 +116,10 @@ export class EventResponse {
   @Expose({ groups: ['read'] })
   endDate: Date;
 
+  @Swagger.ApiProperty({ type: 'boolean' })
+  @Expose({ groups: ['event:front'] })
+  isUserSubscribed: boolean;
+
   @Swagger.ApiProperty({ type: [UserResponse] })
   @Expose({ groups: ['event:subscribedProfiles'] })
   @IsArray()
@@ -134,7 +137,7 @@ export class EventResponse {
     Object.assign(this, partial);
   }
 
-  static fromDomain(instance: EventObject) {
+  static fromDomain(instance: EventObject, profileId?: string) {
     return new EventResponse({
       id: instance.id,
       title: instance.title,
@@ -166,6 +169,9 @@ export class EventResponse {
       subscribedProfiles: instance.subscribedProfiles?.map((profile) =>
         ProfileResponse.fromDomain(profile),
       ),
+      isUserSubscribed: profileId
+        ? instance.isUserSubscribed(profileId)
+        : undefined,
       createdAt: instance.createdAt,
       updatedAt: instance.updatedAt,
     });

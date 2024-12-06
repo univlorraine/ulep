@@ -1,7 +1,11 @@
 .content {
-    padding: 16px;
     display: flex;
     flex-direction: column;
+}
+
+.container {
+    background-color: #f4f5fe;
+    padding: 16px;
 }
 
 .learningLanguageContainer {
@@ -40,6 +44,7 @@
     font-family: 'Roboto';
     font-size: 48px;
     font-weight: 700;
+    padding: 16px;
 }
 
 @media (min-width: 768px) {

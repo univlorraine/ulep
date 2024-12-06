@@ -17,7 +17,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  ingressClassName: traefik
+  ingressClassName: {{ $.Values.auth.ingress.ingressClassName }}
   {{- if .Values.auth.ingress.tls }}
   tls:
     {{- range .Values.auth.ingress.tls }}

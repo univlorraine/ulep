@@ -3,10 +3,11 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
 import { AvatarPng, LeftChevronSvg } from '../../../assets';
+import { useConfig } from '../../../context/ConfigurationContext';
+import { isEmailCorrect } from '../../utils';
 import CircleAvatar from '../CircleAvatar';
 import TextInput from '../TextInput';
 import style from './Form.module.css';
-import { useConfig } from '../../../context/ConfigurationContext';
 
 const ForgotPasswordForm = () => {
     const { t } = useTranslation();
@@ -14,10 +15,13 @@ const ForgotPasswordForm = () => {
     const history = useHistory();
     const [email, setEmail] = useState<string>('');
     const [showLoading, hideLoading] = useIonLoading();
+    const [errorMessage, setErrorMessage] = useState<string | undefined>();
     const [showToast] = useIonToast();
 
-    const handleForgotPassword = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    const handleForgotPassword = async () => {
+        if (!isEmailCorrect(email)) {
+            return setErrorMessage(t('forgot_password_page.invalid_email') as string);
+        }
         await showLoading();
         const result = await resetPassword.execute(email);
         if (result instanceof Error) {
@@ -36,24 +40,29 @@ const ForgotPasswordForm = () => {
                 </IonButton>
             </IonHeader>
             <IonContent>
-                <form className={style['main-content']} onSubmit={handleForgotPassword}>
+                <div className={style['main-content']}>
                     <CircleAvatar backgroundImage={AvatarPng} height={36} viewClassName={style['icons']} width={36} />
                     <div className={`ion-text-center`}>
                         <h1 className={style.title}>{t('forgot_password_page.title')}</h1>
                     </div>
                     <TextInput
                         autocomplete="email"
-                        onChange={setEmail}
+                        onChange={(email) => setEmail(email.trim())}
                         title={t('global.email') as string}
                         value={email}
-                        type="email"
+                        errorMessage={errorMessage}
                     />
                     <div className={style['bottom-container']}>
-                        <button aria-label={t('forgot_password_page.button') as string} className="primary-button">
+                        <IonButton
+                            fill="clear"
+                            aria-label={t('forgot_password_page.button') as string}
+                            className="primary-button no-padding"
+                            onClick={() => handleForgotPassword()}
+                        >
                             {t('forgot_password_page.button')}
-                        </button>
+                        </IonButton>
                     </div>
-                </form>
+                </div>
             </IonContent>
         </div>
     );

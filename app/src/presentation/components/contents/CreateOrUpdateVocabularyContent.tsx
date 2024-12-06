@@ -211,6 +211,7 @@ const CreateOrUpdateVocabularyContent: React.FC<CreateOrUpdateVocabularyContentP
                         <IonButton
                             fill="clear"
                             className={`primary-button no-padding ${!word && !translation ? 'disabled' : ''}`}
+                            disabled={!word || !translation}
                             onClick={() =>
                                 onSubmit(word, translation, undefined, wordPronunciation, translationPronunciation)
                             }
@@ -222,7 +223,8 @@ const CreateOrUpdateVocabularyContent: React.FC<CreateOrUpdateVocabularyContentP
                     <div className={styles.buttonContainer}>
                         <IonButton
                             fill="clear"
-                            className="primary-button no-padding"
+                            className={`primary-button no-padding ${!word && !translation ? 'disabled' : ''}`}
+                            disabled={!word || !translation}
                             onClick={() =>
                                 onSubmit(
                                     word,

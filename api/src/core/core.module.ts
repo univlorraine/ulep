@@ -12,6 +12,7 @@ import { DeleteObjectiveImageUsecase } from 'src/core/usecases/media/delete-obje
 import { UploadObjectiveImageUsecase } from 'src/core/usecases/media/upload-objective-image.usecase';
 import { SendMessageNotificationUsecase } from 'src/core/usecases/notifications';
 import { UpdateObjectiveUsecase } from 'src/core/usecases/objective/update-objective.usecase';
+import { TokenForAdminUsecase } from 'src/core/usecases/security/token-for-admin.usecase';
 import { GetVocabularyListPdfUsecase } from 'src/core/usecases/vocabulary/get-vocabulary-list-pdf.usecase';
 import { ProvidersModule } from 'src/providers/providers.module';
 import { MatchScorer } from './services/MatchScorer';
@@ -161,8 +162,10 @@ import { UpdateActivityStatusUsecase } from './usecases/activity/update-activity
 import {
   CreateEventUsecase,
   DeleteEventUsecase,
+  GetEventsAdminUsecase,
   GetEventsUsecase,
   GetEventUsecase,
+  SendEmailToSubscribedUsersUsecase,
   SubscribeToEventUsecase,
   UnsubscribeToEventUsecase,
   UpdateEventUsecase,
@@ -178,6 +181,7 @@ import { UpdateCustomLearningGoalUsecase } from './usecases/objective/update-cus
 import { ArchiveTandemsAndDeleteUsersUsecase } from './usecases/purges/archive-tandems.usecase';
 import { GetReportsByUserUsecase } from './usecases/report/get-reports-by-user.usecase';
 import { LogoutAllSessionsUsecase } from './usecases/security/logout-all-sessions.usecase';
+import { ResetAdminPasswordUsecase } from './usecases/security/reset-admin-password.usecase';
 import { ResetPasswordUsecase } from './usecases/security/reset-password.usecase';
 import { CancelSessionUsecase } from './usecases/session/cancel-session.usecase';
 import { CreateSessionUsecase } from './usecases/session/create-session.usecase';
@@ -354,8 +358,10 @@ const usecases: Provider[] = [
   UpdateInstanceUsecase,
   // Security
   ResetPasswordUsecase,
+  ResetAdminPasswordUsecase,
   GetJitsiTokenUsecase,
   LogoutAllSessionsUsecase,
+  TokenForAdminUsecase,
   // Notifications
   SendMessageNotificationUsecase,
   // Chat
@@ -381,11 +387,13 @@ const usecases: Provider[] = [
   // Event
   CreateEventUsecase,
   DeleteEventUsecase,
+  GetEventsAdminUsecase,
   GetEventsUsecase,
   GetEventUsecase,
   UpdateEventUsecase,
   SubscribeToEventUsecase,
   UnsubscribeToEventUsecase,
+  SendEmailToSubscribedUsersUsecase,
   // Custom Learning Goals
   CreateCustomLearningGoalUsecase,
   UpdateCustomLearningGoalUsecase,

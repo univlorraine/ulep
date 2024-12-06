@@ -34,6 +34,7 @@ export class Instance {
   readonly isInMaintenance: boolean;
   readonly daysBeforeClosureNotification: number;
   readonly defaultCertificateFile?: MediaObject;
+  logoURL: string;
 
   constructor(instance: InstanceProps) {
     this.id = instance.id;

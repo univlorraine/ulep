@@ -2,14 +2,15 @@ import { useIonToast } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useConfig } from '../../context/ConfigurationContext';
-import Language from '../../domain/entities/Language';
+import LearningLanguage from '../../domain/entities/LearningLanguage';
 import Profile from '../../domain/entities/Profile';
 import Vocabulary from '../../domain/entities/Vocabulary';
 import VocabularyList from '../../domain/entities/VocabularyList';
 import { CreateVocabularyListCommand } from '../../domain/interfaces/vocabulary/CreateVocabularyListUsecase.interface';
+import { UpdateVocabularyListCommand } from '../../domain/interfaces/vocabulary/UpdateVocabularyListUsecase.interface';
 import { useStoreState } from '../../store/storeTypes';
 
-const useVocabulary = (selectedLanguage?: Language) => {
+const useVocabulary = (learningLanguage?: LearningLanguage) => {
     const { t } = useTranslation();
     const [showToast] = useIonToast();
     const {
@@ -20,6 +21,7 @@ const useVocabulary = (selectedLanguage?: Language) => {
         updateVocabulary,
         createVocabulary,
         deleteVocabulary,
+        deleteVocabularyList,
     } = useConfig();
     const [refreshVocabularyLists, setRefreshVocabularyLists] = useState<boolean>(false);
     const [refreshVocabularies, setRefreshVocabularies] = useState<boolean>(false);
@@ -50,6 +52,8 @@ const useVocabulary = (selectedLanguage?: Language) => {
             onCreateVocabulary: () => {},
             onCreateVocabularyList: () => {},
             onDeleteVocabulary: () => {},
+            onUpdateVocabularyList: () => {},
+            onDeleteVocabularyList: () => {},
         };
 
     const onCreateVocabularyList = async (vocabularyList: CreateVocabularyListCommand) => {
@@ -73,6 +77,20 @@ const useVocabulary = (selectedLanguage?: Language) => {
             return showToast({ message: t(result.message), duration: 5000 });
         }
 
+        setRefreshVocabularyLists(!refreshVocabularyLists);
+    };
+
+    const onUpdateVocabularyList = async (id: string, command: UpdateVocabularyListCommand) => {
+        if (!vocabularyListSelected) {
+            return;
+        }
+        const result = await updateVocabularyList.execute(id, command);
+
+        if (result instanceof Error) {
+            return showToast({ message: t(result.message), duration: 5000 });
+        }
+
+        setVocabularyListSelected(result);
         setRefreshVocabularyLists(!refreshVocabularyLists);
     };
 
@@ -135,18 +153,29 @@ const useVocabulary = (selectedLanguage?: Language) => {
         setRefreshVocabularies(!refreshVocabularies);
     };
 
+    const onDeleteVocabularyList = async () => {
+        if (!vocabularyListSelected) {
+            return;
+        }
+
+        const result = await deleteVocabularyList.execute(vocabularyListSelected.id);
+
+        if (result instanceof Error) {
+            return showToast({ message: t(result.message), duration: 5000 });
+        }
+
+        setVocabularyListSelected(undefined);
+        setRefreshVocabularyLists(!refreshVocabularyLists);
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             setVocabularyResult({
                 ...vocabularyResult,
                 isLoading: true,
             });
-            let vocabularyListsResult = await getVocabularyLists.execute(profile.id);
-            if (selectedLanguage) {
-                vocabularyListsResult = (vocabularyListsResult as VocabularyList[]).filter(
-                    (vocabularyList) => vocabularyList.translationLanguage.code === selectedLanguage.code
-                );
-            }
+
+            const vocabularyListsResult = await getVocabularyLists.execute(profile.id, learningLanguage?.code);
 
             if (vocabularyListsResult instanceof Error) {
                 return setVocabularyResult({
@@ -210,6 +239,8 @@ const useVocabulary = (selectedLanguage?: Language) => {
         onCreateVocabulary,
         onCreateVocabularyList,
         onDeleteVocabulary,
+        onUpdateVocabularyList,
+        onDeleteVocabularyList,
     };
 };
 

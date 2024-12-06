@@ -7,6 +7,7 @@ import {
   AccountBlockedEmailProps,
   ActivityStatusChangeEmailProps,
   EmailGateway,
+  EventDeletedEmailProps,
   NewMessageEmailProps,
   NewPartnerEmail,
   NewReportEmailProps,
@@ -14,16 +15,19 @@ import {
   NewTandemNoticeEmailProps,
   NewUserRegistrationNoticeEmailProps,
   PasswordChangeDeniedEmailProps,
+  SendEmailToSubscribedToEventUserProps,
   SendWelcomeMailProps,
   SessionCanceledEmailProps,
   SessionCreatedEmailProps,
   SessionStartEmailProps,
   SessionUpdatedEmailProps,
+  SubscribedToEventEmailProps,
   TandemCanceledEmailProps,
   TandemCanceledNoticeEmailProps,
   TandemClosureNoticeEmailProps,
   TandemPausedUnpausedEmailProps,
   TandemValidationNoticeEmailProps,
+  UnsubscribedFromEventEmailProps,
 } from 'src/core/ports/email.gateway';
 
 @Injectable()
@@ -484,8 +488,7 @@ export class SmtpEmailGateway implements EmailGateway {
         ...translations,
       },
     });
-}
-
+  }
 
   async sendSessionStartEmail(props: SessionStartEmailProps): Promise<void> {
     const translations = this.translate(
@@ -508,7 +511,9 @@ export class SmtpEmailGateway implements EmailGateway {
     });
   }
 
-  async sendSessionCanceledEmail(props: SessionCanceledEmailProps): Promise<void> {
+  async sendSessionCanceledEmail(
+    props: SessionCanceledEmailProps,
+  ): Promise<void> {
     const translations = this.translate('sessionCanceled', props.language, {
       ...props,
     });
@@ -525,7 +530,9 @@ export class SmtpEmailGateway implements EmailGateway {
     });
   }
 
-  async sendSessionUpdatedEmail(props: SessionUpdatedEmailProps): Promise<void> {
+  async sendSessionUpdatedEmail(
+    props: SessionUpdatedEmailProps,
+  ): Promise<void> {
     const translations = this.translate('sessionUpdated', props.language, {
       ...props,
     });
@@ -542,7 +549,9 @@ export class SmtpEmailGateway implements EmailGateway {
     });
   }
 
-  async sendSessionCreatedEmail(props: SessionCreatedEmailProps): Promise<void> {
+  async sendSessionCreatedEmail(
+    props: SessionCreatedEmailProps,
+  ): Promise<void> {
     const translations = this.translate('sessionCreated', props.language, {
       ...props,
     });
@@ -555,6 +564,80 @@ export class SmtpEmailGateway implements EmailGateway {
         links: this.links,
         images: this.images,
         ...translations,
+      },
+    });
+  }
+
+  async sendSubscribedToEventEmail(
+    props: SubscribedToEventEmailProps,
+  ): Promise<void> {
+    const translations = this.translate('subscribedToEvent', props.language, {
+      ...props,
+    });
+
+    await this.mailer.sendMail({
+      to: props.to,
+      subject: translations.title,
+      template: 'user',
+      variables: {
+        links: this.links,
+        images: this.images,
+        ...translations,
+      },
+    });
+  }
+
+  async sendUnsubscribedFromEventEmail(
+    props: UnsubscribedFromEventEmailProps,
+  ): Promise<void> {
+    const translations = this.translate(
+      'unsubscribedFromEvent',
+      props.language,
+      {
+        ...props,
+      },
+    );
+
+    await this.mailer.sendMail({
+      to: props.to,
+      subject: translations.title,
+      template: 'user',
+      variables: {
+        links: this.links,
+        images: this.images,
+        ...translations,
+      },
+    });
+  }
+
+  async sendEventDeletedEmail(props: EventDeletedEmailProps): Promise<void> {
+    const translations = this.translate('deletedEvent', props.language, {
+      ...props,
+    });
+
+    await this.mailer.sendMail({
+      to: props.to,
+      subject: translations.title,
+      template: 'user',
+      variables: {
+        links: this.links,
+        images: this.images,
+        ...translations,
+      },
+    });
+  }
+
+  async sendEmailToSubscribedToEventUser(
+    props: SendEmailToSubscribedToEventUserProps,
+  ): Promise<void> {
+    this.mailer.sendMail({
+      to: props.to,
+      subject: props.title,
+      template: 'user',
+      variables: {
+        links: this.links,
+        images: this.images,
+        bodyHtml: props.content,
       },
     });
   }

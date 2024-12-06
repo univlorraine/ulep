@@ -239,6 +239,7 @@ const isoCodes = {
     family: 'Indo-European',
     name: 'Deutsch',
     mainUniversityStatus: LanguageStatus.PRIMARY,
+    secondaryUniversityActive: true,
     wikiUrl: 'https://en.wikipedia.org/wiki/German_language',
   },
   dv: {
@@ -275,7 +276,7 @@ const isoCodes = {
     family: 'Indo-European',
     name: 'English',
     mainUniversityStatus: LanguageStatus.PRIMARY,
-
+    secondaryUniversityActive: true,
     wikiUrl: 'https://en.wikipedia.org/wiki/English_language',
   },
   eo: {
@@ -347,6 +348,7 @@ const isoCodes = {
     family: 'Indo-European',
     name: 'Français',
     mainUniversityStatus: LanguageStatus.PRIMARY,
+    secondaryUniversityActive: true,
     wikiUrl: 'https://en.wikipedia.org/wiki/French_language',
   },
   fy: {
@@ -1302,6 +1304,8 @@ export const createLanguageCodes = async (prisma: PrismaClient) => {
         name: isoCodes[code].name,
         mainUniversityStatus:
           isoCodes[code]?.mainUniversityStatus || LanguageStatus.UNACTIVE,
+        secondaryUniversityActive:
+          isoCodes[code]?.secondaryUniversityActive || false,
       },
     });
   }

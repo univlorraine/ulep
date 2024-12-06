@@ -4,7 +4,10 @@ import {
   KeycloakRealmRoles,
 } from '@app/keycloak';
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { Env } from 'src/configuration';
 import { RessourceDoesNotExist } from 'src/core/errors';
+import { University } from 'src/core/models';
 import {
   UNIVERSITY_REPOSITORY,
   UniversityRepository,
@@ -14,8 +17,7 @@ export class CreateAdministratorCommand {
   email: string;
   firstname: string;
   lastname: string;
-  password: string;
-  universityId?: string;
+  universityId: string;
   languageId?: string;
   group: KeycloakGroup;
 }
@@ -23,15 +25,14 @@ export class CreateAdministratorCommand {
 @Injectable()
 export class CreateAdministratorUsecase {
   constructor(
+    private readonly env: ConfigService<Env, true>,
     private readonly keycloakClient: KeycloakClient,
     @Inject(UNIVERSITY_REPOSITORY)
     private readonly universityRepository: UniversityRepository,
   ) {}
 
   async execute(command: CreateAdministratorCommand) {
-    if (command.universityId) {
-      await this.assertUniversityExist(command.universityId);
-    }
+    const university = await this.getUniversity(command.universityId);
 
     let user = await this.keycloakClient.getUserByEmail(command.email);
 
@@ -42,7 +43,6 @@ export class CreateAdministratorUsecase {
         email: command.email,
         firstname: command.firstname,
         lastname: command.lastname,
-        password: command.password,
         universityId: command.universityId,
         languageId: command.languageId,
         groups: [command.group.name],
@@ -58,14 +58,11 @@ export class CreateAdministratorUsecase {
         throw new BadRequestException('User is already an administrator');
       }
 
-      const hasCredentials = await this.hasCredentials(user.id);
-
       await this.keycloakClient.updateUser({
         id: user.id,
         email: command.email,
         firstname: command.firstname,
         lastname: command.lastname,
-        password: hasCredentials ? undefined : command.password,
         universityLogin: user.attributes?.universityLogin,
         universityId: command.universityId,
         groups: [command.group],
@@ -77,15 +74,28 @@ export class CreateAdministratorUsecase {
       );
     }
 
+    const hasCredentials = await this.hasCredentials(user.id);
+
+    if (university.parent && !hasCredentials) {
+      await this.keycloakClient.executeActionEmail(
+        ['UPDATE_PASSWORD'],
+        user.id,
+        university.nativeLanguage.code === 'fr' ? 'fr' : 'en',
+        this.env.get('ADMIN_URL'),
+      );
+    }
+
     return user;
   }
 
-  private async assertUniversityExist(id: string) {
+  private async getUniversity(id: string): Promise<University> {
     const university = await this.universityRepository.ofId(id);
 
     if (!university) {
       throw new RessourceDoesNotExist('University does not exist');
     }
+
+    return university;
   }
 
   private async isAdministator(user: string) {

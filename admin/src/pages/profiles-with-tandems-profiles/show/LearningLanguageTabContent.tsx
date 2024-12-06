@@ -13,8 +13,8 @@ import useLearningLanguagesStore from '../useLearningLanguagesStore';
 import OtherProposals from './OtherProposals';
 import PartnerCard, { PartnerType } from './PartnerCard';
 
-import './show.css';
 import ProfileCard from './ProfileCard';
+import './show.css';
 import TandemInfo from './TandemInfo';
 
 type TabPanelLayoutProps = {
@@ -93,7 +93,7 @@ const LearningLanguageTabContent = ({ learningLanguage }: LearningLanguageTabCon
                     />
 
                     <PartnerCard
-                        compatibilityScore={learningLanguage.tandem.compatibilityScore}
+                        compatibilityScoreTotal={learningLanguage.tandem.compatibilityScore}
                         partnerLearningLanguage={learningLanguage.tandem.partnerLearningLanguage}
                         tandem={learningLanguage.tandem}
                         userLearningLanguage={learningLanguage}
@@ -125,7 +125,7 @@ const LearningLanguageTabContent = ({ learningLanguage }: LearningLanguageTabCon
                     />
 
                     <PartnerCard
-                        compatibilityScore={learningLanguage.tandem.compatibilityScore}
+                        compatibilityScoreTotal={learningLanguage.tandem.compatibilityScore}
                         hasTandemWaitingForValidation={hasTandemWaitingForValidation}
                         isUserValidationNeeded={isUserValidationNeeded}
                         partnerLearningLanguage={learningLanguage.tandem.partnerLearningLanguage}
@@ -146,7 +146,7 @@ const LearningLanguageTabContent = ({ learningLanguage }: LearningLanguageTabCon
                 <ProfileCard hasActiveTandem={hasActiveTandem} learningLanguage={learningLanguage} record={record} />
 
                 <PartnerCard
-                    compatibilityScore={learningLanguage.tandem?.compatibilityScore}
+                    compatibilityScoreTotal={learningLanguage.tandem?.compatibilityScore}
                     partnerLearningLanguage={learningLanguage.tandem?.partnerLearningLanguage}
                     partnerType={PartnerType.BEST_OVERALL}
                     tandem={learningLanguage?.tandem}
@@ -156,7 +156,8 @@ const LearningLanguageTabContent = ({ learningLanguage }: LearningLanguageTabCon
 
                 {!isAutomaticPairingMode && (
                     <PartnerCard
-                        compatibilityScore={bestMatch?.score.total}
+                        compatibilityScoreTotal={bestMatch?.score.total}
+                        compatibilityScores={bestMatch?.score}
                         partnerLearningLanguage={bestMatch?.target}
                         partnerType={PartnerType.BEST_MATCH}
                         tandem={learningLanguage?.tandem}

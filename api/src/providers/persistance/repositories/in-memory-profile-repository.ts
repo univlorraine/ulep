@@ -1,6 +1,6 @@
 import { Collection } from '@app/common';
-import { ProfileRepository } from '../../../core/ports/profile.repository';
 import { Profile } from '../../../core/models/profile.model';
+import { ProfileRepository } from '../../../core/ports/profile.repository';
 
 export class InMemoryProfileRepository implements ProfileRepository {
   #profiles: Map<string, Profile> = new Map();

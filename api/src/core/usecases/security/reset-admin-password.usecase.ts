@@ -1,0 +1,105 @@
+import { KeycloakClient, UserRepresentation } from '@app/keycloak';
+import { Inject, Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { Env } from 'src/configuration';
+import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
+import {
+  UNIVERSITY_REPOSITORY,
+  UniversityRepository,
+} from 'src/core/ports/university.repository';
+
+export class ResetPasswordCommand {
+  email: string;
+  loginUrl: string;
+}
+
+@Injectable()
+export class ResetAdminPasswordUsecase {
+  private readonly logger = new Logger(ResetAdminPasswordUsecase.name);
+
+  constructor(
+    @Inject(EMAIL_GATEWAY)
+    private readonly emailGateway: EmailGateway,
+    @Inject(UNIVERSITY_REPOSITORY)
+    private readonly universityRepository: UniversityRepository,
+    private readonly keycloakClient: KeycloakClient,
+    private readonly env: ConfigService<Env, true>,
+  ) {}
+
+  async execute(command: ResetPasswordCommand): Promise<void> {
+    const user = await this.keycloakClient.getUserByEmail(command.email);
+
+    if (!user) {
+      return;
+    }
+
+    const userIsAdmin = await this.keycloakClient.isAdmin(user);
+    if (!userIsAdmin) {
+      return;
+    }
+
+    const credentials = await this.keycloakClient.getUserCredentials(user.id);
+
+    const hasPasswordCredentials = credentials.some(
+      (credential) => credential.type === 'password',
+    );
+
+    const language = await this.getUserLanguage(user);
+
+    if (hasPasswordCredentials) {
+      await this.sendResetPasswordEmail(user, command.loginUrl, language);
+    } else {
+      await this.sendPasswordChangeDeniedEmail(user, language);
+    }
+  }
+
+  private async sendResetPasswordEmail(
+    user: UserRepresentation,
+    loginUrl: string,
+    language: string,
+  ): Promise<void> {
+    try {
+      await this.keycloakClient.executeActionEmail(
+        ['UPDATE_PASSWORD'],
+        user.id,
+        language,
+        loginUrl,
+      );
+    } catch (error) {
+      this.logger.error('Error while sending ResetPasswordEmail', error);
+    }
+  }
+
+  private async sendPasswordChangeDeniedEmail(
+    user: UserRepresentation,
+    language: string,
+  ): Promise<void> {
+    try {
+      await this.emailGateway.sendPasswordChangeDeniedEmail({
+        to: user.email,
+        language,
+        user: {
+          firstname: user.firstName,
+          lastname: user.lastName,
+        },
+      });
+    } catch (error) {
+      this.logger.error('Error while sending PasswordChangeDeniedEmail', error);
+    }
+  }
+
+  private async getUserLanguage(user: UserRepresentation): Promise<string> {
+    const defaultLanguage = this.env.get('DEFAULT_TRANSLATION_LANGUAGE');
+    const university = await this.universityRepository.ofId(
+      user.attributes.universityId[0],
+    );
+
+    if (university) {
+      return university.nativeLanguage.code === defaultLanguage
+        ? defaultLanguage
+        : 'en';
+    }
+
+    return defaultLanguage;
+  }
+}

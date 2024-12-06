@@ -4,6 +4,8 @@ export type UpdateVocabularyListCommand = {
     name?: string;
     symbol?: string;
     profileIds?: string[];
+    wordLanguageCode?: string;
+    translationLanguageCode?: string;
 };
 
 interface UpdateVocabularyListUsecaseInterface {

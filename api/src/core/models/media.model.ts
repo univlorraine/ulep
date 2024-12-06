@@ -65,6 +65,8 @@ export class MediaObject {
         return '.jpg';
       case 'image/jpeg':
         return '.jpeg';
+      case 'image/svg+xml':
+        return '.svg';
       // audio mime types
       case 'audio/mpeg':
         return '.mp3';

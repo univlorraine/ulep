@@ -24,7 +24,7 @@ const TandemProfilePage: React.FC = () => {
                 onClose={() => history.goBack()}
                 partnerLearningLanguage={tandem.partnerLearningLanguage}
                 pedagogy={tandem.pedagogy}
-                profile={tandem.partner}
+                partnerProfile={tandem.partner}
             />
         </IonPage>
     );

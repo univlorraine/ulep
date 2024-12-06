@@ -22,7 +22,7 @@ import { Profile } from '../../../../entities/Profile';
 import { ProfileWithTandemsProfiles } from '../../../../entities/ProfileWithTandemsProfiles';
 import codeLanguageToFlag from '../../../../utils/codeLanguageToFlag';
 import hasTandemManagementPermission from '../../hasTandemManagementPermission';
-import ProfileLink from '../../ui/ProfileTandemLink';
+import ProfileLink from '../../ui/ProfileLink';
 import { Pagination } from './usePagination';
 
 export interface TandemPartner {
@@ -252,35 +252,35 @@ const TandemTable = ({
             >
                 <Typography sx={{ p: 1 }}>
                     <strong>Age : </strong>
-                    {Math.ceil(selectedMatchScore?.age ?? 0)}
+                    {selectedMatchScore?.age ? selectedMatchScore.age.toFixed(4) : 0}
                 </Typography>
                 <Typography sx={{ p: 1 }}>
                     <strong>Gender : </strong>
-                    {Math.round(selectedMatchScore?.gender ?? 0)}
+                    {selectedMatchScore?.gender ? selectedMatchScore.gender.toFixed(4) : 0}
                 </Typography>
                 <Typography sx={{ p: 1 }}>
                     <strong>Goals : </strong>
-                    {Math.round(selectedMatchScore?.goals ?? 0)}
+                    {selectedMatchScore?.goals ? selectedMatchScore.goals.toFixed(4) : 0}
                 </Typography>
                 <Typography sx={{ p: 1 }}>
                     <strong>Interests : </strong>
-                    {Math.round(selectedMatchScore?.interests ?? 0)}
+                    {selectedMatchScore?.interests ? selectedMatchScore.interests.toFixed(4) : 0}
                 </Typography>
                 <Typography sx={{ p: 1 }}>
                     <strong>Level : </strong>
-                    {selectedMatchScore?.level}
+                    {selectedMatchScore?.level.toFixed(4)}
                 </Typography>
                 <Typography sx={{ p: 1 }}>
                     <strong>Status : </strong>
-                    {selectedMatchScore?.status}
+                    {selectedMatchScore?.status.toFixed(4)}
                 </Typography>
                 <Typography sx={{ p: 1 }}>
                     <strong>Meeting Frequency : </strong>
-                    {selectedMatchScore?.meetingFrequency}
+                    {selectedMatchScore?.meetingFrequency.toFixed(4)}
                 </Typography>
                 <Typography sx={{ p: 1 }}>
                     <strong>Certificate Option : </strong>
-                    {selectedMatchScore?.certificateOption}
+                    {selectedMatchScore?.certificateOption.toFixed(4)}
                 </Typography>
                 <Typography sx={{ p: 1 }}>
                     <strong>Total : </strong>

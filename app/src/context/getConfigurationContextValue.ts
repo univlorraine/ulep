@@ -28,6 +28,10 @@ import CreateUserUsecase from '../domain/usecases/CreateUserUsecase';
 import DeleteCustomLearningGoalUsecase from '../domain/usecases/DeleteCustomLearningGoalUsecase';
 import EditProfileUsecase from '../domain/usecases/EditProfileUsecase';
 import EditUserUsecase from '../domain/usecases/EditUserUsecase';
+import GetAllEventsUsecase from '../domain/usecases/event/GetAllEventsUsecase';
+import GetEventUsecase from '../domain/usecases/event/GetEventUsecase';
+import SubscribeToEventUsecase from '../domain/usecases/event/SubscribeToEventUsecase';
+import UnsubscribeToEventUsecase from '../domain/usecases/event/UnsubscribeToEventUsecase';
 import GetAllCountriesUsecase from '../domain/usecases/GetAllCountriesUsecase';
 import GetAllGoalsUsecase from '../domain/usecases/GetAllGoalsUsecase';
 import GetAllInterestCategoriesUsecase from '../domain/usecases/GetAllInterestCategoriesUsecase';
@@ -85,6 +89,7 @@ interface GetConfigContextValueProps {
     setUser: Function;
     configuration: Configuration;
     logout: Function;
+    logoUrl: string;
 }
 
 const getConfigContextValue = ({
@@ -98,6 +103,7 @@ const getConfigContextValue = ({
     setUser,
     configuration,
     logout,
+    logoUrl,
 }: GetConfigContextValueProps): ConfigContextValueType => {
     const browserAdapter = new BrowserAdapter();
     const cameraAdapter = new CameraAdapter();
@@ -196,6 +202,11 @@ const getConfigContextValue = ({
     //News
     const getAllNews = new GetAllNewsUsecase(domainHttpAdapter);
 
+    // Events
+    const subscribeToEvent = new SubscribeToEventUsecase(domainHttpAdapter);
+    const unsubscribeToEvent = new UnsubscribeToEventUsecase(domainHttpAdapter);
+    const getAllEvents = new GetAllEventsUsecase(domainHttpAdapter);
+    const getEvent = new GetEventUsecase(domainHttpAdapter);
     // Report
     const updateReportStatus = new UpdateReportStatusUsecase(domainHttpAdapter);
     const getAllReportCategories = new GetAllReportCategoriesUsecase(domainHttpAdapter);
@@ -249,6 +260,7 @@ const getConfigContextValue = ({
         getUniversity,
         getUniversityLanguages,
         login,
+        logoUrl,
         notificationAdapter,
         resetPassword,
         searchMessagesIdsFromConversation,
@@ -277,6 +289,10 @@ const getConfigContextValue = ({
         updateSession,
         cancelSession,
         getAllNews,
+        getAllEvents,
+        subscribeToEvent,
+        unsubscribeToEvent,
+        getEvent,
         updateReportStatus,
         getReport,
         createCustomLearningGoal,

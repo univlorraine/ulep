@@ -119,4 +119,8 @@ export class EventObject {
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
+
+  public isUserSubscribed(profileId: string) {
+    return this.subscribedProfiles?.some((profile) => profile.id === profileId);
+  }
 }

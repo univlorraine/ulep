@@ -1,16 +1,23 @@
-import { Injectable } from '@nestjs/common';
 import { Collection, ModeQuery, PrismaService } from '@app/common';
-import { NewsRepository } from 'src/core/ports/news.repository';
-import { newsMapper, NewsRelations } from '../mappers/news.mapper';
+import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
+import { endOfDay, startOfDay } from 'date-fns';
 import { News } from 'src/core/models';
+import { NewsRepository } from 'src/core/ports/news.repository';
 import { CreateNewsCommand } from 'src/core/usecases/news/create-news.usecase';
 import { UpdateNewsCommand } from 'src/core/usecases/news/update-news.usecase';
+import { newsMapper, NewsRelations } from '../mappers/news.mapper';
 
 @Injectable()
 export class PrismaNewsRepository implements NewsRepository {
   constructor(private readonly prisma: PrismaService) {}
-  async findAll({ limit, offset, where }): Promise<Collection<News>> {
-    const wherePayload = where
+  async findAll({
+    limit,
+    offset,
+    onlyActiveNews,
+    where,
+  }): Promise<Collection<News>> {
+    const wherePayload: Prisma.NewsWhereInput = where
       ? {
           Organization: {
             id: {
@@ -44,6 +51,20 @@ export class PrismaNewsRepository implements NewsRepository {
           status: where.status,
         }
       : {};
+
+    if (onlyActiveNews) {
+      const todayStart = startOfDay(new Date());
+      const todayEnd = endOfDay(new Date());
+
+      // Start publication date is before end of today
+      wherePayload.start_publication_date = {
+        lte: todayEnd,
+      };
+      // End publication date is after today
+      wherePayload.end_publication_date = {
+        gte: todayStart,
+      };
+    }
 
     const count = await this.prisma.news.count({
       where: wherePayload,

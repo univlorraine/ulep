@@ -43,7 +43,7 @@ export type EventSnapshot = Prisma.Events & {
 };
 
 export const eventMapper = (snapshot: EventSnapshot): EventObject => {
-  return {
+  return new EventObject({
     id: snapshot.id,
     authorUniversity: universityMapper(snapshot.AuthorUniversity),
     image:
@@ -74,7 +74,7 @@ export const eventMapper = (snapshot: EventSnapshot): EventObject => {
     concernedUniversities: snapshot.ConcernedUniversities.map(universityMapper),
     createdAt: snapshot.created_at,
     updatedAt: snapshot.updated_at,
-  };
+  });
 };
 
 export const eventTranslationsMapper = (

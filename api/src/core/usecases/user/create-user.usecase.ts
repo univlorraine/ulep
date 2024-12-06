@@ -73,16 +73,16 @@ export class CreateUserUsecase {
       throw new RessourceDoesNotExist('Country code does not exist');
     }
 
-    if (
-      university.codes.length > 0 &&
-      !university.codes.some((codeToCheck) => codeToCheck === command.code)
-    ) {
+    if(university.domains.length === 0 && (university.codes.length > 0 &&
+      !university.codes.some((codeToCheck) => codeToCheck === command.code))) {
       throw new BadRequestException('Code is invalid');
     }
 
     if (
       university.domains.length > 0 &&
-      !university.domains.some((domain) => command.email.includes(domain))
+      !university.domains.some((domain) => command.email.includes(domain)) &&
+      university.codes.length > 0 &&
+      !university.codes.some((codeToCheck) => codeToCheck === command.code)
     ) {
       throw new BadRequestException('Domain is invalid');
     }
@@ -112,6 +112,17 @@ export class CreateUserUsecase {
         enabled: true,
         emailVerified: false,
         origin: 'api',
+      });
+    } else if(command.password && keycloakUser) {
+      await this.keycloak.updateUser({
+        id: keycloakUser.id,
+        email: keycloakUser.email,
+        firstname: command.firstname,
+        lastname: command.lastname,
+        password: command.password,
+        universityId: keycloakUser.attributes?.universityId?.[0] || university.id,
+        universityLogin: keycloakUser.attributes?.universityLogin?.[0],
+        languageId: keycloakUser.attributes?.languageId?.[0],
       });
     }
 

@@ -18,7 +18,7 @@
     color: white;
 }
 
-.tertiary-button .button-inner{
+.tertiary-button .button-inner {
     gap: 10px;
 }
 
@@ -72,6 +72,16 @@
     color: #c266ff;
     height: 400px;
     width: 400px;
+}
+
+.primary-selected-button {
+    background-color: var(--primary-color);
+    font-weight: bold;
+}
+
+.secondary-selected-button {
+    background-color: var(--secondary-color);
+    font-weight: bold;
 }
 
 ion-button.confirm {

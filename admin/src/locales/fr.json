@@ -115,13 +115,16 @@
                 "user_email": "Email"
             }
         },
+        "errors": {
+            "email": "L'email n'est pas valide, vous devez utiliser l'adresse email de l'université"
+        },
         "tabLabel": "Administrateurs",
         "university": "Gestionnaire de",
         "update": {
             "email": "Mettez à jour l'email de l'utilisateur",
             "error": "Une erreur est survenue lors de la mise à jour d'un administrateur",
             "error_mail": "Cet email est utilisé par un autre utilisateur",
-            "password": "Veuillez saisir un mot de passe pour l'administrateur ( 1 majuscule, 1 minuscule et 1 chiffre ) si vous voulez le mettre à jour",
+            "password": "Veuillez saisir un mot de passe ( 1 majuscule, 1 minuscule et 1 chiffre ) si vous voulez le mettre à jour",
             "title": "Mise à jour d'un administrateur",
             "university": "Mettez à jour l'université à administrer",
             "group": "Mettez à jour le(s) rôle(s) de l'administrateur"
@@ -199,6 +202,105 @@
         "saturday": "Samedi",
         "sunday": "Dimanche"
     },
+    "events": {
+        "label": "Evènements",
+        "title": "Evènements",
+        "list": {
+            "title": "Titre",
+            "university": "Auteur",
+            "defaultLanguage": "Langue par défaut",
+            "translations": "Traductions",
+            "status": "Statut",
+            "startDate": "Date de début",
+            "endDate": "Date de fin",
+            "type": "Type",
+            "filters": {
+                "title": "Titre",
+                "language": "Langue",
+                "status": "Statut",
+                "university": "Université",
+                "type": "Type"
+            }
+        },
+        "status": {
+            "DRAFT": "Brouillon",
+            "READY": "Publié"
+        },
+        "type": {
+            "ONLINE": "En ligne",
+            "PRESENTIAL": "Présentiel"
+        },
+        "form": {
+            "add_translation": "Ajouter une traduction",
+            "change_language": "Changer la langue par défaut",
+            "type": {
+                "label": "Type d'évènement",
+                "online": "En ligne",
+                "presential": "Présentiel"
+            },
+            "author": "Auteur",
+            "status": "Statut",
+            "start_date": "Date de début",
+            "end_date": "Date de fin",
+            "illustration": "Illustration",
+            "image_credit": "Credit de l'image",
+            "title": "Titre",
+            "content": "Contenu",
+            "subscriptions": "Inscriptions",
+            "with_subscriptions": "Avec inscriptions",
+            "concerned_universities": {
+                "label": "Universités concernées",
+                "button": "Ajouter"
+            },
+            "diffusion_languages": {
+                "label": "Langues diffusées",
+                "button": "Ajouter"
+            },
+            "event_url": "URL de l'évènement",
+            "address": "Adresse",
+            "address_name": "Nom du lieu",
+            "error": {
+                "required": "Tous les champs sont obligatoires"
+            },
+            "remove_translation": "Supprimer la traduction"
+        },
+        "create": {
+            "cta": "Créer",
+            "error": "Une erreur est survenue pendant la création de l'évènement"
+        },
+        "update": {
+            "cta": "Mettre à jour",
+            "error": "Une erreur est survenue pendant la mise à jour de l'évènement"
+        },
+        "subscriptions": {
+            "title": "Inscrits à l'évènement : %{eventTitle}",
+            "author": "Auteur : %{universityName}",
+            "list": {
+                "firstname": "Prénom",
+                "lastname": "Nom",
+                "university": "Université",
+                "email": "Email",
+                "cta": "Actions"
+            },
+            "searchProfile": "Rechercher un profil",
+            "search": {
+                "button": "Inscrire des utilisateurs",
+                "subscribe": "Inscrire"
+            },
+            "email": {
+                "button": "Envoyer un email",
+                "title": "Envoyer un email aux inscrits",
+                "form": {
+                    "title": "Titre",
+                    "content": "Contenu"
+                },
+                "send": "Envoyer",
+                "success": "L'email a bien été envoyé aux inscrits",
+                "error": "Une erreur est survenue lors de l'envoi de l'email"
+            },
+            "unsubscribe": "Désinscrire"
+        }
+    },
     "global": {
         "all": "Tout",
         "age": "Age",
@@ -227,6 +329,12 @@
         "both": "Les deux",
         "deleted_user": "Utilisateur supprimé",
         "sso_login": "M'authentifier",
+        "forgot_password": "Mot de passe oublié",
+        "forgot_password_modal": {
+            "title": "Demande de réinitialisation de mot de passe",
+            "description": "Afin de réinitialiser votre mot de passe, veuillez renseigner votre email ci-dessous.",
+            "send_button": "Envoyer"
+        },
         "userStatus": {
             "active": "Actif",
             "banned": "Bloqué",
@@ -356,6 +464,7 @@
     },
     "login": {
         "connect": "Connexion",
+        "domainError": "Les administrateurs centraux doivent utiliser SSO pour se connecter.",
         "loginError": "Mauvais email ou mot de passe",
         "password": "Mot de passe"
     },

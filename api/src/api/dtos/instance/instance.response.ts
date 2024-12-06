@@ -67,6 +67,10 @@ export class InstanceResponse {
   @Expose({ groups: ['read'] })
   defaultCertificateFile?: MediaObjectResponse;
 
+  @ApiProperty({ type: 'string', format: 'url' })
+  @Expose({ groups: ['read'] })
+  logoURL: string;
+
   constructor(partial: Partial<InstanceResponse>) {
     Object.assign(this, partial);
   }
@@ -89,6 +93,7 @@ export class InstanceResponse {
       defaultCertificateFile: instance.defaultCertificateFile
         ? MediaObjectResponse.fromMediaObject(instance.defaultCertificateFile)
         : null,
+      logoURL: instance.logoURL,
     });
   }
 }

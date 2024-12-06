@@ -4,17 +4,19 @@ import { RessourceDoesNotExist } from 'src/core/errors';
 import { Profile } from 'src/core/models';
 import { User } from 'src/core/models/user.model';
 import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
+import { LANGUAGE_REPOSITORY, LanguageRepository } from 'src/core/ports/language.repository';
 import {
-  NOTIFICATION_GATEWAY,
-  NotificationGateway,
+    NOTIFICATION_GATEWAY,
+    NotificationGateway,
 } from 'src/core/ports/notification.gateway';
 import {
-  PROFILE_REPOSITORY,
-  ProfileRepository,
+    PROFILE_REPOSITORY,
+    ProfileRepository,
 } from 'src/core/ports/profile.repository';
+import { UNIVERSITY_REPOSITORY, UniversityRepository } from 'src/core/ports/university.repository';
 import {
-  USER_REPOSITORY,
-  UserRepository,
+    USER_REPOSITORY,
+    UserRepository,
 } from 'src/core/ports/user.repository';
 
 export type SendMessageNotificationCommand = {
@@ -26,6 +28,10 @@ export type SendMessageNotificationCommand = {
 @Injectable()
 export class SendMessageNotificationUsecase {
   constructor(
+    @Inject(LANGUAGE_REPOSITORY)
+    private readonly languageRepository: LanguageRepository,
+    @Inject(UNIVERSITY_REPOSITORY)
+    private readonly universityRepository: UniversityRepository,
     @Inject(USER_REPOSITORY)
     private readonly userRepository: UserRepository,
     @Inject(PROFILE_REPOSITORY)
@@ -51,18 +57,27 @@ export class SendMessageNotificationUsecase {
       sender = keycloakUser;
     }
 
-    const profilePromises = command.usersId.map((userId) =>
-      this.profileRepository.ofUser(userId),
-    );
-    const profiles = (await Promise.all(profilePromises)).filter(
-      (profile) => profile !== null && profile.user.acceptsEmail,
-    );
-
     const firstname =
       sender instanceof User ? sender.firstname : sender.firstName;
     const lastname = sender instanceof User ? sender.lastname : sender.lastName;
 
-    this.sendEmailToUsers(profiles, firstname, lastname, command.content);
+
+    const profiles = [];
+    for (const userId of command.usersId) {
+      const profile = await this.profileRepository.ofUser(userId);
+      if (profile !== null && profile.user.acceptsEmail) {
+        profiles.push(profile);
+        await this.sendEmail(profile.user.email, profile.nativeLanguage.code, command.content, { firstname: profile.user.firstname, lastname: profile.user.lastname }, { firstname, lastname });
+      } else {
+        const keycloakUser = await this.keycloakService.getUserById(userId);
+        if (keycloakUser && (keycloakUser.attributes?.['languageId'] || keycloakUser.attributes?.['universityId'])) {
+          const language = await this.languageRepository.ofId(keycloakUser.attributes['languageId'][0]);
+          const university = await this.universityRepository.ofId(keycloakUser.attributes['universityId'][0]);
+           await this.sendEmail(keycloakUser.email, language.code || university.nativeLanguage.code, command.content, { firstname: keycloakUser.firstName, lastname: keycloakUser.lastName }, { firstname, lastname });
+        }
+      }
+    }
+
     this.sendPushNotificationToUsers(
       profiles,
       firstname,
@@ -102,25 +117,13 @@ export class SendMessageNotificationUsecase {
     });
   }
 
-  private async sendEmailToUsers(
-    profiles: Profile[],
-    firstname: string,
-    lastname: string,
-    content: string,
-  ) {
-    for (const profile of profiles) {
-      if (profile.user.email) {
-        await this.emailGateway.sendNewMessageEmail({
-          to: profile.user.email,
-          language: profile.nativeLanguage.code,
-          content,
-          user: {
-            firstname: profile.user.firstname,
-            lastname: profile.user.lastname,
-          },
-          sender: { firstname, lastname },
-        });
-      }
-    }
+  private async sendEmail(email: string, language: string, content: string, user: { firstname: string, lastname: string }, sender: { firstname: string, lastname: string }) {
+    await this.emailGateway.sendNewMessageEmail({
+      to: email,
+      language,
+      content,
+      user,
+      sender,
+    });
   }
 }

@@ -2,19 +2,22 @@ import { IonContent, useIonToast } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
+import CustomLearningGoal from '../../domain/entities/CustomLearningGoal';
 import Tandem from '../../domain/entities/Tandem';
-import { useStoreActions, useStoreState } from '../../store/storeTypes';
+import { useStoreState } from '../../store/storeTypes';
 import LearningContent from '../components/contents/LearningContent';
 import OnlineWebLayout from '../components/layout/OnlineWebLayout';
 import ActivitiesContentModal from '../components/modals/ActivitiesContentModal';
+import GoalsContentModal, {
+    DisplayCustomGoalModal,
+    DisplayCustomGoalModalEnum,
+} from '../components/modals/GoalsContentModal';
 import TandemProfileModal from '../components/modals/TandemProfileModal';
 import TandemStatusModal from '../components/modals/TandemStatusModal';
 import VocabularyContentModal from '../components/modals/VocabularyContentModal';
 import useGetLearningData from '../hooks/useGetLearningData';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../utils';
-import GoalsContentModal, { DisplayCustomGoalModal, DisplayCustomGoalModalEnum } from '../components/modals/GoalsContentModal';
-import CustomLearningGoal from '../../domain/entities/CustomLearningGoal';
 
 const LearningPage = () => {
     const { t } = useTranslation();
@@ -23,8 +26,7 @@ const LearningPage = () => {
     const { width } = useWindowDimensions();
     const isHybrid = width < HYBRID_MAX_WIDTH;
     const [refresh, setRefresh] = useState<boolean>(false);
-    const setCurrentTandem = useStoreActions((actions) => actions.setCurrentTandem);
-    const currentTandem = useStoreState((state) => state.currentTandem);
+    const [currentTandem, setCurrentTandem] = useState<Tandem>();
     const [displaySelectedTandem, setDisplaySelectedTandem] = useState<Tandem>();
     const [displayActivitiesContent, setDisplayActivitiesContent] = useState<boolean>(false);
     const [displayVocabularyContent, setDisplayVocabularyContent] = useState<boolean>(false);
@@ -36,7 +38,7 @@ const LearningPage = () => {
         if (tandems.length > 0) {
             const refreshedCurrentTandem = currentTandem && tandems.find((tandem) => tandem.id === currentTandem.id);
             const tandem = refreshedCurrentTandem ?? tandems[0];
-            setCurrentTandem({ tandem });
+            setCurrentTandem(tandem);
         }
     }, [tandems, currentTandem]);
 
@@ -47,19 +49,21 @@ const LearningPage = () => {
         !isHybrid ? setDisplaySelectedTandem(tandem) : history.push('/tandem-profil', { tandem });
 
     const onVocabularyContentPressed = () =>
-        !isHybrid ? setDisplayVocabularyContent(true) : history.push('/vocabularies');
+        !isHybrid ? setDisplayVocabularyContent(true) : history.push('/vocabularies', { tandem: currentTandem });
 
     const onActivitiesContentPressed = () =>
         !isHybrid ? setDisplayActivitiesContent(true) : history.push('/activities');
 
     const onShowAllGoalsPressed = (customLearningGoals?: CustomLearningGoal[]) => {
         setRefresh(!refresh);
-        !isHybrid ? setDisplayCustomGoalModal({ type: DisplayCustomGoalModalEnum.list }) : history.push('/goals', { customLearningGoals });
+        !isHybrid
+            ? setDisplayCustomGoalModal({ type: DisplayCustomGoalModalEnum.list })
+            : history.push('/goals', { customLearningGoals, learningLanguageId: currentTandem?.learningLanguage?.id });
     };
 
     const onAddCustomGoalPressed = () => {
         setDisplayCustomGoalModal({
-            type: DisplayCustomGoalModalEnum.form
+            type: DisplayCustomGoalModalEnum.form,
         });
     };
 
@@ -93,6 +97,7 @@ const LearningPage = () => {
                     onVocabularyListPressed={onVocabularyContentPressed}
                     onActivitiesContentPressed={onActivitiesContentPressed}
                     onShowAllGoalsPressed={onShowAllGoalsPressed}
+                    setCurrentTandem={setCurrentTandem}
                 />
             </IonContent>
         );
@@ -111,6 +116,7 @@ const LearningPage = () => {
                     onVocabularyListPressed={onVocabularyContentPressed}
                     onActivitiesContentPressed={onActivitiesContentPressed}
                     onShowAllGoalsPressed={onShowAllGoalsPressed}
+                    setCurrentTandem={setCurrentTandem}
                 />
             </OnlineWebLayout>
             <TandemStatusModal
@@ -139,11 +145,14 @@ const LearningPage = () => {
                 onClose={() => setDisplayActivitiesContent(false)}
                 profile={profile}
             />
-            <VocabularyContentModal
-                isVisible={displayVocabularyContent}
-                onClose={() => setDisplayVocabularyContent(false)}
-                profile={profile}
-            />
+            {currentTandem && (
+                <VocabularyContentModal
+                    isVisible={displayVocabularyContent}
+                    onClose={() => setDisplayVocabularyContent(false)}
+                    profile={profile}
+                    currentLearningLanguage={currentTandem.learningLanguage}
+                />
+            )}
             {tandems.length > 0 && (
                 <GoalsContentModal
                     isVisible={Boolean(displayCustomGoalModal)}

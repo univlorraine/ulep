@@ -4,12 +4,22 @@ import {
   INSTANCE_REPOSITORY,
   InstanceRepository,
 } from 'src/core/ports/instance.repository';
+import {
+  STORAGE_INTERFACE,
+  StorageInterface,
+} from 'src/core/ports/storage.interface';
+import {
+  ASSETS_BUCKET,
+  LOGO_FILENAME,
+} from 'src/providers/storage/minio.storage';
 
 @Injectable()
 export class GetInstanceUsecase {
   constructor(
     @Inject(INSTANCE_REPOSITORY)
     private readonly instanceRepository: InstanceRepository,
+    @Inject(STORAGE_INTERFACE)
+    private readonly storage: StorageInterface,
   ) {}
 
   async execute() {
@@ -18,6 +28,14 @@ export class GetInstanceUsecase {
     if (!instance) {
       throw new RessourceDoesNotExist();
     }
+
+    const instanceLogo = await this.storage.temporaryUrl(
+      ASSETS_BUCKET,
+      LOGO_FILENAME,
+      60 * 60 * 24,
+    );
+
+    instance.logoURL = instanceLogo;
 
     return instance;
   }

@@ -35,9 +35,11 @@ const VocabularyListLine: React.FC<VocabularyListLineProps> = ({ vocabularyList,
                     count: vocabularyList.numberOfVocabularies,
                 })}`}</span>
 
-                <span className={styles.pronunciation}>{`${t('vocabulary.list.missing_pronunciation', {
-                    count: numberOfMissingPronunciation,
-                })}`}</span>
+                {numberOfMissingPronunciation > 0 && (
+                    <span className={styles.pronunciation}>{`${t('vocabulary.list.missing_pronunciation', {
+                        count: numberOfMissingPronunciation,
+                    })}`}</span>
+                )}
                 <IonIcon name="arrow-forward" />
             </div>
         </IonButton>

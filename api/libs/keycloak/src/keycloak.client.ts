@@ -8,6 +8,7 @@ import {
 import * as jwt from 'jsonwebtoken';
 import { Client, Issuer, TokenSet } from 'openid-client';
 import * as qs from 'querystring';
+import { AdminGroup } from 'src/core/models';
 import {
   KEYCLOAK_CONFIGURATION,
   KeycloakConfiguration,
@@ -279,6 +280,14 @@ export class KeycloakClient {
     return { accessToken: access_token, refreshToken: refresh_token };
   }
 
+  async isAdmin(user: UserRepresentation): Promise<boolean> {
+    const userGroups = await this.getUserGroups(user.id);
+
+    return userGroups.some((group: { name: string }) =>
+      Object.values(AdminGroup).includes(group.name as AdminGroup),
+    );
+  }
+
   /*
    * Let Keycloak validate the access token and return the userinfo.
    */
@@ -379,13 +388,6 @@ export class KeycloakClient {
           firstName: props.firstname,
           lastName: props.lastname,
           enabled: true,
-          credentials: [
-            {
-              type: 'password',
-              value: props.password,
-              temporary: false,
-            },
-          ],
           attributes: {
             universityId: props.universityId,
             languageId: props.languageId,

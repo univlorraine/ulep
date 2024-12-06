@@ -2,22 +2,28 @@ import { IonContent } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { Redirect, useHistory, useLocation } from 'react-router';
 import { useConfig } from '../../../context/ConfigurationContext';
-import Language from '../../../domain/entities/Language';
 import Profile from '../../../domain/entities/Profile';
 import Tandem from '../../../domain/entities/Tandem';
 import Vocabulary from '../../../domain/entities/Vocabulary';
 import { CreateVocabularyListCommand } from '../../../domain/interfaces/vocabulary/CreateVocabularyListUsecase.interface';
+import { UpdateVocabularyListCommand } from '../../../domain/interfaces/vocabulary/UpdateVocabularyListUsecase.interface';
 import { useStoreState } from '../../../store/storeTypes';
 import CreateOrUpdateVocabularyContent from '../../components/contents/CreateOrUpdateVocabularyContent';
 import VocabularyItemContent from '../../components/contents/VocabularyItemContent';
 import VocabularyListContent from '../../components/contents/VocabularyListContent';
-import AddVocabularyListModal from '../../components/modals/AddVocabularyListModal';
+import AddOrUpdateVocabularyListModal from '../../components/modals/AddOrUpdateVocabularyListModal';
 import SelectTandemModal from '../../components/modals/SelectTandemModal';
 import SelectVocabularyListsForQuizModale from '../../components/modals/SelectVocabularyListsForQuizModal';
 import useVocabulary from '../../hooks/useVocabulary';
 
-const VocabulariesPage = () => {
+interface VocabulariesPageProps {
+    tandem?: Tandem;
+}
+
+const VocabulariesPage: React.FC<VocabulariesPageProps> = () => {
     const history = useHistory();
+    const location = useLocation<VocabulariesPageProps>();
+    const { tandem } = location.state;
     const profile = useStoreState((state) => state.profile);
     const { getAllTandems } = useConfig();
     const [vocabularySelected, setVocabularySelected] = useState<Vocabulary>();
@@ -26,8 +32,6 @@ const VocabulariesPage = () => {
     const [showSelectVocabularyListsForQuizModal, setShowSelectVocabularyListsForQuizModal] = useState(false);
     const [tandems, setTandems] = useState<Tandem[]>([]);
     const [addContentMode, setAddContentMode] = useState(false);
-    const location = useLocation<{ language: Language }>();
-    const { language } = location.state;
 
     const {
         vocabularies,
@@ -39,10 +43,12 @@ const VocabulariesPage = () => {
         onShareVocabularyList,
         onUpdateVocabulary,
         onCreateVocabulary,
+        onUpdateVocabularyList,
         onDeleteVocabulary,
+        onDeleteVocabularyList,
         setVocabularyListSelected,
         setSearchVocabularies,
-    } = useVocabulary(language);
+    } = useVocabulary(tandem?.learningLanguage);
 
     const handleCreateVocabularyList = async (vocabularyList: CreateVocabularyListCommand) => {
         await onCreateVocabularyList(vocabularyList);
@@ -88,6 +94,13 @@ const VocabulariesPage = () => {
         const tandemsWithProfile = tandems.filter((tandem) => tandem.partner !== undefined);
         await onShareVocabularyList(tandemsWithProfile.map((tandem) => tandem.partner) as Profile[]);
         setShowShareVocabularyListModal(false);
+    };
+
+    const handleUpdateVocabularyList = async (vocabularyList: UpdateVocabularyListCommand) => {
+        if (vocabularyListSelected) {
+            await onUpdateVocabularyList(vocabularyListSelected.id, vocabularyList);
+        }
+        setShowAddVocabularyListModal(false);
     };
 
     const onSelectedVocabularyListsIdsForQuiz = (selectedListsId: string[]) => {
@@ -141,6 +154,8 @@ const VocabulariesPage = () => {
                         isLoading={isLoading}
                         goBack={() => setVocabularyListSelected(undefined)}
                         onAddVocabulary={onAddOrUpdateVocabulary}
+                        onUpdateVocabularyList={onAddOrUpdateVocabulary}
+                        onDeleteVocabularyList={onDeleteVocabularyList}
                         onSearch={setSearchVocabularies}
                         onShareVocabularyList={() => setShowShareVocabularyListModal(true)}
                         setQuizzSelectedListIds={onSelectedVocabularyListsIdsForQuiz}
@@ -155,12 +170,16 @@ const VocabulariesPage = () => {
                         onDelete={handleDeleteVocabulary}
                     />
                 )}
-                <AddVocabularyListModal
-                    isVisible={showAddVocabularyListModal}
-                    onClose={() => setShowAddVocabularyListModal(false)}
-                    onCreateVocabularyList={handleCreateVocabularyList}
-                    profile={profile}
-                />
+                {location.state?.tandem && (
+                    <AddOrUpdateVocabularyListModal
+                        isVisible={showAddVocabularyListModal}
+                        onClose={() => setShowAddVocabularyListModal(false)}
+                        onCreateVocabularyList={handleCreateVocabularyList}
+                        onUpdateVocabularyList={handleUpdateVocabularyList}
+                        profile={profile}
+                        currentLearningLanguage={location.state.tandem.learningLanguage}
+                    />
+                )}
                 <SelectTandemModal
                     isVisible={showShareVocabularyListModal}
                     onClose={() => setShowShareVocabularyListModal(false)}

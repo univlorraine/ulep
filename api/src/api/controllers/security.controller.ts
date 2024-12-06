@@ -17,7 +17,9 @@ import { Response } from 'express';
 import { Env } from 'src/configuration';
 import { GetJitsiTokenUsecase } from 'src/core/usecases/jitsi/get-jitsi-token.usecase';
 import { LogoutAllSessionsUsecase } from 'src/core/usecases/security/logout-all-sessions.usecase';
+import { ResetAdminPasswordUsecase } from 'src/core/usecases/security/reset-admin-password.usecase';
 import { ResetPasswordUsecase } from 'src/core/usecases/security/reset-password.usecase';
+import { TokenForAdminUsecase } from 'src/core/usecases/security/token-for-admin.usecase';
 import { CurrentUser } from '../decorators';
 import {
   BearerTokensFromCodeRequest,
@@ -36,15 +38,33 @@ export class SecurityController {
   private readonly logger = new Logger(SecurityController.name);
 
   #appUrl: string;
+  #adminUrl: string;
 
   constructor(
     private readonly keycloakClient: KeycloakClient,
     private readonly resetPasswordUsecase: ResetPasswordUsecase,
+    private readonly resetAdminPasswordUsecase: ResetAdminPasswordUsecase,
     private readonly logoutAllSessionsUsecase: LogoutAllSessionsUsecase,
+    private readonly tokenForAdminUsecase: TokenForAdminUsecase,
     private readonly getJitsiTokenUsecase: GetJitsiTokenUsecase,
     env: ConfigService<Env, true>,
   ) {
     this.#appUrl = env.get('APP_URL');
+    this.#adminUrl = env.get('ADMIN_URL');
+  }
+
+  @Post('token/admin')
+  @Swagger.ApiOperation({ summary: 'Request a JWT token for admin.' })
+  @Swagger.ApiOkResponse({ type: BearerTokensResponse })
+  async loginAdmin(
+    @Body() { email, password }: BearerTokensRequest,
+  ): Promise<BearerTokensResponse> {
+    const credentials = await this.tokenForAdminUsecase.execute({
+      email,
+      password,
+    });
+
+    return new BearerTokensResponse(credentials);
   }
 
   @Post('token')
@@ -134,6 +154,15 @@ export class SecurityController {
     return await this.resetPasswordUsecase.execute({
       email: body.email,
       loginUrl: `${this.#appUrl}/login`,
+    });
+  }
+
+  @Post('administrators/reset-password')
+  @Swagger.ApiOperation({ summary: 'Send email to reset admin password' })
+  async resetAdminPassword(@Body() body: ResetPasswordRequest): Promise<void> {
+    return await this.resetAdminPasswordUsecase.execute({
+      email: body.email,
+      loginUrl: `${this.#adminUrl}`,
     });
   }
 }

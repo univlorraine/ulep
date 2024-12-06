@@ -13,12 +13,8 @@ const Store = createStore<TokenStoreTypes>(
             language: '',
             refreshToken: '',
             refreshReports: false,
-            currentTandem: undefined,
             setRefreshReports: action((state) => {
                 state.refreshReports = !state.refreshReports;
-            }),
-            setCurrentTandem: action((state, payload) => {
-                state.currentTandem = payload.tandem;
             }),
             setApiUrl: action((state, payload) => {
                 state.apiUrl = payload.apiUrl;

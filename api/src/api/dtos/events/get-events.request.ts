@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import { IsArray, IsEnum, IsOptional, IsString } from 'class-validator';
-import { EventStatus, EventType } from 'src/core/models/event.model';
+import { EventType } from 'src/core/models/event.model';
 import { PaginationDto } from '../pagination';
 
 export class GetEventsQuery extends PaginationDto {
@@ -11,28 +12,15 @@ export class GetEventsQuery extends PaginationDto {
 
   @ApiProperty()
   @IsOptional()
-  @IsString()
-  authorUniversityId?: string;
-
-  @ApiProperty()
-  @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  concernedUniversitiesIds?: string[];
-
-  @ApiProperty()
-  @IsOptional()
-  @IsString()
-  @IsEnum(EventStatus)
-  status?: EventStatus;
-
-  @ApiProperty()
-  @IsOptional()
   @IsArray()
   @IsEnum(EventType, { each: true })
+  @Transform(({ value }) => (Array.isArray(value) ? value : [value]))
   types?: EventType[];
 
   @ApiProperty()
+  @IsArray()
   @IsOptional()
-  languageCode: string;
+  @IsString({ each: true })
+  @Transform(({ value }) => (Array.isArray(value) ? value : [value]))
+  languageCodes?: string[];
 }

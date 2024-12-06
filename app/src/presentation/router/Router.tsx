@@ -22,6 +22,8 @@ import ChatPage from '../pages/mobile/ChatPage';
 import CreateCustomGoalPage from '../pages/mobile/CreateCustomGoalPage';
 import CreateSessionPage from '../pages/mobile/CreateSessionPage';
 import EndSessionPage from '../pages/mobile/EndSessionPage';
+import EventListPage from '../pages/mobile/EventListPage';
+import EventShowPage from '../pages/mobile/EventShowPage';
 import FlipcardsPage from '../pages/mobile/FlipcardsPage';
 import GoalsListPage from '../pages/mobile/GoalsListPage';
 import MediaPage from '../pages/mobile/MediaPage';
@@ -144,6 +146,12 @@ const OfflineRouter: React.FC = () => {
                 </MobileRoute>
                 <MobileRoute exact path={'/show-news'}>
                     <NewsShowPage />
+                </MobileRoute>
+                <MobileRoute exact path={'/events'}>
+                    <EventListPage />
+                </MobileRoute>
+                <MobileRoute exact path={'/show-event'}>
+                    <EventShowPage />
                 </MobileRoute>
                 <MobileRoute exact path={'/sessions'}>
                     <SessionListPage />
