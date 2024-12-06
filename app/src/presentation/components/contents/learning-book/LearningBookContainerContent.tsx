@@ -72,7 +72,7 @@ const LearningBookContainerContent: React.FC<LearningBookContainerContentProps> 
         if (result instanceof Error) {
             showToast(t(result.message), 3000);
         } else {
-            showToast(t('learning_book.share.success'), 3000);
+            showToast(t('learning_book.list.share.success'), 3000);
         }
     };
 
@@ -81,7 +81,7 @@ const LearningBookContainerContent: React.FC<LearningBookContainerContentProps> 
         if (result instanceof Error) {
             showToast(t(result.message), 3000);
         } else {
-            showToast(t('learning_book.export.success'), 3000);
+            showToast(t('learning_book.list.export.success'), 3000);
         }
     };
 

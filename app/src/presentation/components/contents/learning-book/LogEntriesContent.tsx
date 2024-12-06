@@ -80,7 +80,9 @@ export const LogEntriesContent: React.FC<LogEntriesContentProps> = ({
                             }}
                         >
                             <IonIcon icon={arrowRedoOutline} aria-hidden="true" />
-                            <IonLabel className={styles['popover-label']}>{t('learning_book.list.share')}</IonLabel>
+                            <IonLabel className={styles['popover-label']}>
+                                {t('learning_book.list.share.title')}
+                            </IonLabel>
                         </IonItem>
                         <IonItem
                             button={true}
@@ -91,7 +93,9 @@ export const LogEntriesContent: React.FC<LogEntriesContentProps> = ({
                             }}
                         >
                             <IonIcon icon={downloadOutline} aria-hidden="true" />
-                            <IonLabel className={styles['popover-label']}> {t('learning_book.list.export')}</IonLabel>
+                            <IonLabel className={styles['popover-label']}>
+                                {t('learning_book.list.export.title')}
+                            </IonLabel>
                         </IonItem>
                     </IonList>
                 )}

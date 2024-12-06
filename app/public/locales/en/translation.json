@@ -92,6 +92,7 @@
                 "success": "Logs have been shared"
             },
             "export": {
+                "title": "Export the logs",
                 "success": "Logs have been exported"
             }
         },

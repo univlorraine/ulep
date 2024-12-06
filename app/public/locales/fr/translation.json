@@ -92,7 +92,8 @@
                 "success": "Les entrées ont été partagées"
             },
             "export": {
-                "success": "Les entrées ont été exportées"
+                "success": "Les entrées ont été exportées",
+                "title": "Exporter les entrées"
             }
         },
         "entry": {

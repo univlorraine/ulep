@@ -12,7 +12,9 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
+import { User } from '@sentry/node';
 import { Response } from 'express';
+import { CurrentUser } from 'src/api/decorators';
 import {
   CreateCustomLogEntryRequest,
   GetLogEntriesRequest,
@@ -149,9 +151,14 @@ export class LogEntryController {
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Export all Log Entries for a user.' })
   @Swagger.ApiOkResponse({ type: 'string', description: 'CSV file' })
-  async exportLogEntries(@Param('id') id: string, @Res() res: Response) {
+  async exportLogEntries(
+    @Param('id') id: string,
+    @CurrentUser() user: User,
+    @Res() res: Response,
+  ) {
     const { buffer, language } = await this.exportLogEntriesUsecase.execute({
       learningLanguageId: id,
+      userId: user.sub,
     });
 
     res.setHeader('Content-Type', 'text/csv');

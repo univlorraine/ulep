@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { stringify } from 'csv-stringify';
 import { RessourceDoesNotExist } from 'src/core/errors';
+import { Profile } from 'src/core/models';
 import {
   LogEntry,
   LogEntryAddVocabulary,
@@ -20,15 +21,22 @@ import {
   LogEntryRepository,
   LOG_ENTRY_REPOSITORY,
 } from 'src/core/ports/log-entry.repository';
+import {
+  ProfileRepository,
+  PROFILE_REPOSITORY,
+} from 'src/core/ports/profile.repository';
 import { PassThrough } from 'stream';
 
 export type ExportLogEntriesCommand = {
   learningLanguageId: string;
+  userId: string;
 };
 
 @Injectable()
 export class ExportLogEntriesUsecase {
   constructor(
+    @Inject(PROFILE_REPOSITORY)
+    private readonly profileRepository: ProfileRepository,
     @Inject(LOG_ENTRY_REPOSITORY)
     private readonly logEntryRepository: LogEntryRepository,
     @Inject(LEARNING_LANGUAGE_REPOSITORY)
@@ -36,11 +44,16 @@ export class ExportLogEntriesUsecase {
   ) {}
 
   async execute(command: ExportLogEntriesCommand) {
+    const profile = await this.assertUserExists(command.userId);
     const learningLanguage = await this.assertLearningLanguageExists(
       command.learningLanguageId,
     );
+    const isExportForCurrentUser = this.isExportForCurrentUser(
+      command.learningLanguageId,
+      profile,
+    );
 
-    if (!learningLanguage.sharedLogsDate) {
+    if (!learningLanguage.sharedLogsDate && !isExportForCurrentUser) {
       throw new RessourceDoesNotExist(
         'Learning language does not have shared logs',
       );
@@ -48,7 +61,7 @@ export class ExportLogEntriesUsecase {
 
     const logEntries = await this.logEntryRepository.findAllForLearningLanguage(
       command.learningLanguageId,
-      learningLanguage.sharedLogsDate,
+      isExportForCurrentUser ? new Date() : learningLanguage.sharedLogsDate,
     );
 
     const buffer = await this.exportToCSV(logEntries);
@@ -133,5 +146,20 @@ export class ExportLogEntriesUsecase {
     }
 
     return learningLanguage;
+  }
+
+  private async assertUserExists(userId: string) {
+    const profile = await this.profileRepository.ofUser(userId);
+
+    return profile;
+  }
+
+  private isExportForCurrentUser(
+    learningLanguageId: string,
+    profile?: Profile,
+  ) {
+    return profile?.learningLanguages.some(
+      (learningLanguage) => learningLanguage.id === learningLanguageId,
+    );
   }
 }

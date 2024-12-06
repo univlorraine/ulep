@@ -113,7 +113,6 @@ export class UpdateActivityUsecase {
       activity.language.code,
     );
 
-    console.log('debug : learningLanguage', learningLanguage);
     if (learningLanguage) {
       await this.createOrUpdateLogEntryUsecase.execute({
         learningLanguageId: learningLanguage.id,
