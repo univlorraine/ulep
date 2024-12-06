@@ -158,7 +158,6 @@ ion-radio {
 
 .modal.modal-side {
     --height: 100%;
-    --width: 50%;
     justify-content: flex-end;
     &.hybrid {
         --width: 100%;

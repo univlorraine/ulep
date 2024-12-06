@@ -1,7 +1,7 @@
 import { IonModal } from '@ionic/react';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import Language from '../../../domain/entities/Language';
+import LearningLanguage from '../../../domain/entities/LearningLanguage';
 import { useStoreState } from '../../../store/storeTypes';
 import SelectLanguageContent from '../contents/SelectLanguageContent';
 import VocabularyContent from '../contents/VocabularyContent';
@@ -13,7 +13,7 @@ interface NewVocabularyMenuModalProps {
 }
 
 const NewVocabularyMenuModal: React.FC<NewVocabularyMenuModalProps> = ({ isVisible, onClose, isHybrid }) => {
-    const [selectedLanguage, setSelectedLanguage] = useState<Language>();
+    const [selectedLanguage, setSelectedLanguage] = useState<LearningLanguage>();
     const history = useHistory();
 
     const profile = useStoreState((state) => state.profile);
@@ -21,11 +21,11 @@ const NewVocabularyMenuModal: React.FC<NewVocabularyMenuModalProps> = ({ isVisib
         return null;
     }
 
-    const onSelectedLanguage = (language: Language) => {
+    const onSelectedLanguage = (language: LearningLanguage) => {
         setSelectedLanguage(language);
     };
 
-    const onSelectedLanguageMobile = (language: Language) => {
+    const onSelectedLanguageMobile = (language: LearningLanguage) => {
         history.push('/vocabularies', { language });
     };
 
@@ -70,7 +70,7 @@ const NewVocabularyMenuModal: React.FC<NewVocabularyMenuModalProps> = ({ isVisib
                     profile={profile}
                     onClose={() => setSelectedLanguage(undefined)}
                     isModal
-                    selectedLanguage={selectedLanguage}
+                    currentLearningLanguage={selectedLanguage}
                 />
             )}
         </IonModal>

@@ -54,7 +54,6 @@ const BottomBar: React.FC = () => {
                     </IonTabButton>
                     <IonTabButton className={styles.newIcon_button}>
                         <div className={styles.newIcon_container}></div>
-                        <span>{t('navigation.bottom_bar.new')}</span>
                     </IonTabButton>
                     <IonTabButton tab="conversations" href="/conversations">
                         <img alt="Conversations" src={ConversationsSvg} />

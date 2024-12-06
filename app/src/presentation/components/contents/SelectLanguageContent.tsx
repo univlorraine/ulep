@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import Language from '../../../domain/entities/Language';
+import LearningLanguage from '../../../domain/entities/LearningLanguage';
 import Profile from '../../../domain/entities/Profile';
 import FlagBubble from '../FlagBubble';
 import HeaderSubContent from '../HeaderSubContent';
@@ -7,7 +7,7 @@ import styles from './SelectLanguageContent.module.css';
 
 interface SelectLanguageContentProps {
     onBackPressed: () => void;
-    setSelectedLanguage: (language: Language) => void;
+    setSelectedLanguage: (language: LearningLanguage) => void;
     profile: Profile;
 }
 
@@ -17,7 +17,7 @@ const SelectLanguageContent: React.FC<SelectLanguageContentProps> = ({
     profile,
 }) => {
     const { t } = useTranslation();
-    const languages = profile?.learningLanguages;
+    const learningLanguages = profile?.learningLanguages;
 
     return (
         <div className={styles.container}>
@@ -27,16 +27,16 @@ const SelectLanguageContent: React.FC<SelectLanguageContentProps> = ({
                 <p className={`text ${styles.text}`}>{t('sidebar_modal.languages.text')}</p>
                 <>
                     <div className={styles['languages-container']}>
-                        {languages &&
-                            languages.length &&
-                            languages.map((language) => {
+                        {learningLanguages &&
+                            learningLanguages.length &&
+                            learningLanguages.map((learningLanguage) => {
                                 return (
                                     <FlagBubble
-                                        key={language.code}
+                                        key={learningLanguage.code}
                                         role="button"
-                                        language={language}
-                                        onPressed={setSelectedLanguage}
-                                        textColor={'black'}
+                                        language={learningLanguage}
+                                        onPressed={() => setSelectedLanguage(learningLanguage)}
+                                        textColor="black"
                                     />
                                 );
                             })}
