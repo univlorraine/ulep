@@ -110,7 +110,13 @@ const JitsiWeb = ({ jitsiUrl, language, roomName, jitsiToken, tandemPartner, lea
                             duration = Math.floor((endTime - startTime) / 1000) - 1;
                         }
                         isHybrid
-                            ? history.push('end-session')
+                            ? history.push('/end-session', {
+                                  duration,
+                                  partnerTandemId: tandemPartner?.id,
+                                  tandemFirstname: firstname,
+                                  tandemLastname: lastname,
+                                  learningLanguageId,
+                              })
                             : history.push('/home', {
                                   endSession: true,
                                   duration,

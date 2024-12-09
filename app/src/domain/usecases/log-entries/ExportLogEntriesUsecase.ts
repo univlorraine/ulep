@@ -21,7 +21,7 @@ class ExportLogEntriesUsecase implements ExportLogEntriesUsecaseInterface {
 
             return await this.fileAdapter.saveBlob(httpResponse.parsedBody, `log_entries.csv`);
         } catch (error: any) {
-            console.log(error);
+            console.error(error);
             return new Error('errors.global');
         }
     }
