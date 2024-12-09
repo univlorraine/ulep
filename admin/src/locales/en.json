@@ -260,7 +260,8 @@
             "address": "Address",
             "address_name": "Place name",
             "error": {
-                "required": "All fields are required"
+                "required": "All fields are required",
+                "start_date_greater_than_end_date": "The start date must be before the end date"
             },
             "remove_translation": "Remove translation"
         },
@@ -336,7 +337,7 @@
             "title": "Password reset request",
             "description": "To reset your password, please enter your email below.",
             "send_button": "Send"
-        },  
+        },
         "userStatus": {
             "active": "Active",
             "banned": "Banned",

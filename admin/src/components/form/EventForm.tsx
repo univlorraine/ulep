@@ -27,6 +27,7 @@ import {
     TabbedForm,
     useGetIdentity,
     useGetList,
+    useNotify,
     useRecordContext,
     useTranslate,
 } from 'react-admin';
@@ -49,7 +50,7 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
         sort: { field: 'name', order: 'ASC' },
     });
     const universitiesLanguages = useGetUniversitiesLanguages();
-
+    const notify = useNotify();
     const record: EventObject = useRecordContext();
 
     const [universityData, setUniversityData] = useState<University>(record?.authorUniversity || undefined);
@@ -127,27 +128,34 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
         setAvailableLanguages(filteredAvailableLanguages);
     }, [universitiesLanguages, translations, defaultLanguage]);
 
-    const onCreatePressed = () =>
-        handleSubmit({
-            id: record?.id,
-            title,
-            content,
-            languageCode: defaultLanguage,
-            translations,
-            status,
-            type,
-            withSubscription,
-            authorUniversityId,
-            startDate,
-            endDate,
-            image,
-            imageCredit,
-            eventURL: type === EventType.ONLINE ? eventURL : undefined,
-            address: type === EventType.PRESENTIAL ? address : undefined,
-            addressName: type === EventType.PRESENTIAL ? addressName : undefined,
-            diffusionLanguages,
-            concernedUniversities,
-        });
+    const onCreatePressed = () => {
+        if (startDate && endDate && startDate > endDate) {
+            notify('events.form.error.start_date_greater_than_end_date', {
+                type: 'error',
+            });
+        } else {
+            handleSubmit({
+                id: record?.id,
+                title,
+                content,
+                languageCode: defaultLanguage,
+                translations,
+                status,
+                type,
+                withSubscription,
+                authorUniversityId,
+                startDate,
+                endDate,
+                image,
+                imageCredit,
+                eventURL: type === EventType.ONLINE ? eventURL : undefined,
+                address: type === EventType.PRESENTIAL ? address : undefined,
+                addressName: type === EventType.PRESENTIAL ? addressName : undefined,
+                diffusionLanguages,
+                concernedUniversities,
+            });
+        }
+    };
 
     if (isLoadingIdentity || !identity || isLoadingUniversities) {
         return <Loading />;
