@@ -260,7 +260,8 @@
             "address": "Adresse",
             "address_name": "Nom du lieu",
             "error": {
-                "required": "Tous les champs sont obligatoires"
+                "required": "Tous les champs sont obligatoires",
+                "start_date_greater_than_end_date": "La date de début doit être avant la date de fin"
             },
             "remove_translation": "Supprimer la traduction"
         },
