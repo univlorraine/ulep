@@ -125,7 +125,10 @@ const AddOrUpdateVocabularyListModal: React.FC<AddOrUpdateVocabularyListModalPro
                         title={t('vocabulary.list.add.target_language')}
                         ariaLabel={t('vocabulary.list.add.target_language') as string}
                         required={true}
-                        disabled={Boolean(currentLearningLanguage)}
+                        disabled={
+                            Boolean(currentLearningLanguage) ||
+                            (vocabularyList && vocabularyList?.numberOfVocabularies > 0)
+                        }
                     />
                 </div>
 
@@ -143,6 +146,7 @@ const AddOrUpdateVocabularyListModal: React.FC<AddOrUpdateVocabularyListModalPro
                         title={t('vocabulary.list.add.origin_language')}
                         ariaLabel={t('vocabulary.list.add.origin_language') as string}
                         required={true}
+                        disabled={vocabularyList && vocabularyList.numberOfVocabularies > 0}
                     />
                 </div>
 
