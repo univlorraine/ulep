@@ -67,7 +67,7 @@ const VocabulariesPage: React.FC<VocabulariesPageProps> = () => {
 
     const handleCreateOrUpdateVocabulary = (
         word: string,
-        translation: string,
+        translation?: string,
         id?: string,
         wordPronunciation?: File,
         translationPronunciation?: File,
@@ -76,9 +76,9 @@ const VocabulariesPage: React.FC<VocabulariesPageProps> = () => {
     ) => {
         if (id) {
             onUpdateVocabulary(
+                id,
                 word,
                 translation,
-                id,
                 wordPronunciation,
                 translationPronunciation,
                 deletePronunciationWord,
