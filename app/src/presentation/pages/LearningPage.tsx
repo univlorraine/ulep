@@ -61,7 +61,7 @@ const LearningPage = () => {
             setDisplayVocabularyContent(true);
             setCurrentVocabularyListId(vocabularyListId);
         } else {
-            history.push('/vocabularies', { vocabularyListId });
+            history.push('/vocabularies', { tandem: currentTandem, vocabularyListId });
         }
     };
 

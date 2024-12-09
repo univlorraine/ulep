@@ -11,6 +11,7 @@ interface SidebarProps {
     onDisplayReport: () => void;
     onDisplayVocabularySidebar: () => void;
     onDisplayActivitySidebar: () => void;
+    onDisplayLearningDiary: () => void;
     onOpenActivitySidebar: () => void;
     onDisplaySessionModal: () => void;
 }
@@ -19,6 +20,7 @@ const Sidebar: React.FC<SidebarProps> = ({
     onDisplayReport,
     onDisplayVocabularySidebar,
     onDisplayActivitySidebar,
+    onDisplayLearningDiary,
     onDisplaySessionModal,
 }) => {
     const { t } = useTranslation();
@@ -89,7 +91,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             <MenuNew
                 className={styles.menuNew}
                 onVocabularyPressed={onDisplayVocabularySidebar}
-                onLearningDiaryPressed={() => {}}
+                onLearningDiaryPressed={onDisplayLearningDiary}
                 onSessionPressed={onDisplaySessionModal}
                 onActivityPressed={onDisplayActivitySidebar}
                 trigger="click-trigger-new"

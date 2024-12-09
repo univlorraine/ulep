@@ -31,7 +31,7 @@ const LearningBookContainerContent: React.FC<LearningBookContainerContentProps> 
     const [logEntryToUpdate, setLogEntryToUpdate] = useState<LogEntryCustomEntry | undefined>();
     const [focusLogEntryForADay, setFocusLogEntryForADay] = useState<Date | undefined>();
 
-    const createorUpdateCustomLogEntry = async ({
+    const createOrUpdateCustomLogEntry = async ({
         date,
         title,
         description,
@@ -121,7 +121,7 @@ const LearningBookContainerContent: React.FC<LearningBookContainerContentProps> 
         return (
             <CreateCustomLogEntryContent
                 onBackPressed={handleOnClose}
-                onSubmit={createorUpdateCustomLogEntry}
+                onSubmit={createOrUpdateCustomLogEntry}
                 profile={profile}
                 logEntryToUpdate={logEntryToUpdate}
             />

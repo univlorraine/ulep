@@ -26,7 +26,7 @@ const LearningBookPage: React.FC = () => {
                     onOpenVocabularyList={(currentVocabularyListId) =>
                         history.push('vocabularies', { tandem, currentVocabularyListId })
                     }
-                    onOpenActivity={(currentActivityId) => history.push('activities', { tandem, currentActivityId })}
+                    onOpenActivity={(activityId) => history.push('activities', { tandem, activityId })}
                     profile={profile}
                     learningLanguage={tandem.learningLanguage}
                 />

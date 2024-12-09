@@ -1,5 +1,4 @@
 import { IonButton, IonDatetime } from '@ionic/react';
-import { isBefore, startOfDay } from 'date-fns';
 import { formatInTimeZone } from 'date-fns-tz';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -33,10 +32,6 @@ export const CreateOrUpdateCustomLogEntryContent = ({
     };
 
     const handleSubmit = () => {
-        if (isBefore(startOfDay(new Date()), new Date(entryDate))) {
-            return;
-        }
-
         onSubmit({
             date: new Date(entryDate),
             title: entryTitle,

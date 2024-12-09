@@ -44,7 +44,7 @@ const VocabularyListContent: React.FC<VocabularyListContentProps> = ({
                         <p className={styles.emptyText}>{t('vocabulary.list.empty')}</p>
                         <IonButton className="tertiary-button no-padding" fill="clear" onClick={onAddVocabularyList}>
                             <IonIcon aria-hidden slot="start" name="add-outline" />
-                            {t('vocabulary.list.create')}
+                            {t('vocabulary.list.create.title')}
                         </IonButton>
                     </div>
                 )}
