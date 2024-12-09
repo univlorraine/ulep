@@ -480,7 +480,8 @@
             "remove_translation": "Remove translation",
             "error": {
                 "required": "The publication dates, title and content fields are required",
-                "notFound": "News not found"
+                "notFound": "News not found",
+                "start_publication_date_greater_than_end_publication_date": "The start publication date must be before the end publication date"
             },
             "start_publication_date": "Start publication date",
             "end_publication_date": "End publication date",

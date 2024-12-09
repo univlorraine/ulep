@@ -15,7 +15,16 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import daysjs from 'dayjs';
 import { RichTextInput } from 'ra-input-rich-text';
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Loading, TabbedForm, useGetIdentity, useRecordContext, useTranslate } from 'react-admin';
+import {
+    Button,
+    Form,
+    Loading,
+    TabbedForm,
+    useGetIdentity,
+    useNotify,
+    useRecordContext,
+    useTranslate,
+} from 'react-admin';
 import { News, NewsFormPayload, NewsStatus, NewsTranslation } from '../../entities/News';
 import University from '../../entities/University';
 import customDataProvider from '../../providers/customDataProvider';
@@ -32,6 +41,7 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
     const translate = useTranslate();
     const universitiesLanguages = useGetUniversitiesLanguages();
+    const notify = useNotify();
 
     const record: News = useRecordContext();
 
@@ -79,20 +89,27 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
         setAvailableLanguages(filteredAvailableLanguages);
     }, [universitiesLanguages, translations, defaultLanguage]);
 
-    const onCreatePressed = () =>
-        handleSubmit({
-            id: record?.id,
-            title,
-            content,
-            languageCode: defaultLanguage,
-            translations,
-            status,
-            universityId: identity?.universityId,
-            startPublicationDate,
-            endPublicationDate,
-            image,
-            creditImage,
-        });
+    const onCreatePressed = () => {
+        if (startPublicationDate && endPublicationDate && startPublicationDate > endPublicationDate) {
+            notify('news.form.error.start_publication_date_greater_than_end_publication_date', {
+                type: 'error',
+            });
+        } else {
+            handleSubmit({
+                id: record?.id,
+                title,
+                content,
+                languageCode: defaultLanguage,
+                translations,
+                status,
+                universityId: identity?.universityId,
+                startPublicationDate,
+                endPublicationDate,
+                image,
+                creditImage,
+            });
+        }
+    };
 
     if (isLoadingIdentity || !identity) {
         return <Loading />;
