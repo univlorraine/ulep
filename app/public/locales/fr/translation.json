@@ -348,14 +348,15 @@
             "create": "Nouvelle pair de mots",
             "search": "Rechercher",
             "aria-pressed": "Mettre à jour le vocabulaire",
+            "no_translation": "Aucune traduction",
             "add": {
                 "cancel": "Annuler",
                 "save": "Enregistrer",
                 "pronunciation": "Prononciation",
                 "add_prounonciation": "Ajouter",
                 "delete_prounonciation": "Supprimer",
-                "default_translation": "Mot à apprendre",
-                "default_word": "Traduction",
+                "default_translation": "Traduction",
+                "default_word": "Mot à apprendre",
                 "title": "Nouvelle pair de mots",
                 "edit_title": "Editer la pair de mots"
             },

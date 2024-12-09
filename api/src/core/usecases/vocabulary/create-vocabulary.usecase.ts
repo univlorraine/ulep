@@ -1,12 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import {
-  VOCABULARY_REPOSITORY,
   VocabularyRepository,
+  VOCABULARY_REPOSITORY,
 } from 'src/core/ports/vocabulary.repository';
 
 export class CreateVocabularyCommand {
-  translation: string;
+  translation?: string;
   vocabularyListId: string;
   word: string;
 }

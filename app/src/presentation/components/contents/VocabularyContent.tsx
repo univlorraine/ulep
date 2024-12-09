@@ -79,7 +79,7 @@ const VocabularyContent: React.FC<VocabularyContentProps> = ({
 
     const handleCreateOrUpdateVocabulary = (
         word: string,
-        translation: string,
+        translation?: string,
         id?: string,
         wordPronunciation?: File,
         translationPronunciation?: File,
@@ -88,9 +88,9 @@ const VocabularyContent: React.FC<VocabularyContentProps> = ({
     ) => {
         if (id) {
             onUpdateVocabulary(
+                id,
                 word,
                 translation,
-                id,
                 wordPronunciation,
                 translationPronunciation,
                 deletePronunciationWord,

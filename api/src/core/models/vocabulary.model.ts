@@ -17,7 +17,7 @@ type VocabularyListProps = {
 type VocabularyProps = {
   id: string;
   word: string;
-  translation: string;
+  translation?: string;
   pronunciationWord?: MediaObject;
   pronunciationTranslation?: MediaObject;
   pronunciationWordUrl?: string;
@@ -61,7 +61,7 @@ export class Vocabulary {
 
   readonly word: string;
 
-  readonly translation: string;
+  readonly translation?: string;
 
   pronunciationWord?: MediaObject;
 

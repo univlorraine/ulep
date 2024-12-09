@@ -95,9 +95,9 @@ const useVocabulary = (learningLanguage?: LearningLanguage) => {
     };
 
     const onUpdateVocabulary = async (
-        word: string,
-        translation: string,
         id: string,
+        word: string,
+        translation?: string,
         wordPronunciation?: File,
         translationPronunciation?: File,
         deletePronunciationWord?: boolean,
@@ -121,7 +121,7 @@ const useVocabulary = (learningLanguage?: LearningLanguage) => {
 
     const onCreateVocabulary = async (
         word: string,
-        translation: string,
+        translation?: string,
         wordPronunciation?: File,
         translationPronunciation?: File
     ) => {
