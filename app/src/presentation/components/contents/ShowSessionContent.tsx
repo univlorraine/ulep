@@ -120,7 +120,7 @@ const Content: React.FC<ShowSessionContentProps> = ({
                         <div className={styles.line}>
                             <div className={styles.icon}>💬</div>
                             <div className={styles.line_content}>
-                                <p>{session.comment}</p>
+                                <p className={styles.comment}>{session.comment}</p>
                             </div>
                         </div>
                     </div>
