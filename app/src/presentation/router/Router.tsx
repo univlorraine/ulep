@@ -258,10 +258,6 @@ const OfflineRouter: React.FC = () => {
                 <Route exact path="/edit/informations">
                     <EditInformationsPage />
                 </Route>
-                {/* Vocabulary route */}
-                <PrivateRoute exact path="/vocabularies">
-                    <VocabulariesPage />
-                </PrivateRoute>
                 {/* Quizz route */}
                 <PrivateRoute exact path="/cefr/languages">
                     <CEFRQuizzLanguagePage />

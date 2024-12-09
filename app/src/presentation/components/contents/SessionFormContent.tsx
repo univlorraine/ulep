@@ -57,7 +57,7 @@ const Content: React.FC<SessionFormContentProps> = ({ goBack, tandem, session, p
     };
 
     return (
-        <div className={`${styles.container} subcontent-container content-wrapper`}>
+        <div className={styles.container}>
             <HeaderSubContent
                 title={t(session ? 'session.form.update_title' : 'session.form.create_title', {
                     name: tandem?.partner?.user?.firstname,

@@ -192,7 +192,8 @@
             "home": "Accueil",
             "conversations": "Conversations",
             "learning": "Learning",
-            "profile": "Profil"
+            "profile": "Profil",
+            "new": "Nouveau"
         },
         "sidebar": {
             "home": "Accueil",
@@ -200,7 +201,27 @@
             "learning": "Apprentissage",
             "disconnect": "Déconnexion",
             "profile": "Profil",
-            "settings": "Paramètres"
+            "settings": "Paramètres",
+            "new": {
+                "title": "Nouveau...",
+                "vocabulary": "Mot de vocabulaire",
+                "learning_diary": "Entrée dans le journal d’apprentissage",
+                "session": "Session avec un tandem",
+                "activity": "Fiche d'activité"
+            }
+        }
+    },
+    "sidebar_modal": {
+        "languages": {
+            "head_title": "Choisir la langue",
+            "title": "Quelle langue ?",
+            "text": "Pour quelle langue souhaites-tu réaliser cette action ?"
+        },
+        "tandem": {
+            "head_title": "Choix du tandem",
+            "title": "Qui ?",
+            "text": "Pour quel tandem souhaites-tu réaliser cette action ?",
+            "no_tandem": "Tu n'as pas de tandem actif"
         }
     },
     "maintenance_page": {

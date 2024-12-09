@@ -19,7 +19,7 @@ const VocabularyContentModal: React.FC<VocabularyContentModalProps> = ({
 }) => {
     return (
         <IonModal animated isOpen={isVisible} onDidDismiss={onClose} className={styles.modal}>
-            <div className={styles.content}>
+            <div>
                 <VocabularyContent
                     profile={profile}
                     onClose={onClose}

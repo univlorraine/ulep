@@ -58,7 +58,7 @@
 }
 
 .block {
-    background-color: #F2F4F7;
+    background-color: #f2f4f7;
     padding: 20px;
     border-radius: 10px;
 }
@@ -136,6 +136,10 @@
     width: 75%;
     height: 75%;
     z-index: 1;
+}
+
+.comment {
+    white-space: pre-line;
 }
 
 @media (min-width: 768px) {

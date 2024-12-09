@@ -1,0 +1,18 @@
+.container {
+    overflow-y: auto;
+}
+
+.content {
+    padding: 20px;
+}
+
+.tandem-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.text {
+    text-align: center;
+    margin-bottom: 40px;
+}

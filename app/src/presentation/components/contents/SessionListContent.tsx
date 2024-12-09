@@ -40,7 +40,7 @@ const Content: React.FC<SessionListContentProps> = ({
     };
 
     return (
-        <div className={`${styles.container} subcontent-container content-wrapper`}>
+        <div className={styles.container}>
             <HeaderSubContent
                 title={t('session.list.title', { count: sessions.length })}
                 onBackPressed={() => goBack?.()}

@@ -1,10 +1,10 @@
-import Profile from "../../../domain/entities/Profile";
-import Session from "../../../domain/entities/Session";
-import Tandem from "../../../domain/entities/Tandem";
-import SessionFormContent from "../contents/SessionFormContent";
-import SessionListContent from "../contents/SessionListContent";
-import ShowSessionContent from "../contents/ShowSessionContent";
-import Modal from "./Modal";
+import { IonModal } from '@ionic/react';
+import Profile from '../../../domain/entities/Profile';
+import Session from '../../../domain/entities/Session';
+import Tandem from '../../../domain/entities/Tandem';
+import SessionFormContent from '../contents/SessionFormContent';
+import SessionListContent from '../contents/SessionListContent';
+import ShowSessionContent from '../contents/ShowSessionContent';
 
 export const DisplaySessionModalEnum = {
     list: 'list',
@@ -42,13 +42,12 @@ const SessionsContentModal: React.FC<SessionsContentModalProps> = ({
     onUpdateSessionPressed,
     onShowSessionPressed,
 }) => {
-
     if (!displaySessionModal) {
         return null;
     }
 
     return (
-        <Modal isVisible={isVisible} onClose={onClose} position="flex-end" hideWhiteBackground>
+        <IonModal animated isOpen={isVisible} onDidDismiss={onClose} className="modal modal-side">
             <>
                 {displaySessionModal?.type === DisplaySessionModalEnum.list && (
                     <SessionListContent
@@ -61,8 +60,7 @@ const SessionsContentModal: React.FC<SessionsContentModalProps> = ({
                         onShowSessionPressed={onShowSessionPressed}
                     />
                 )}
-                {displaySessionModal?.type === DisplaySessionModalEnum.form &&
-                displaySessionModal.tandem && (
+                {displaySessionModal?.type === DisplaySessionModalEnum.form && displaySessionModal.tandem && (
                     <SessionFormContent
                         goBack={onClose}
                         isHybrid={false}
@@ -73,20 +71,20 @@ const SessionsContentModal: React.FC<SessionsContentModalProps> = ({
                     />
                 )}
                 {displaySessionModal?.type === DisplaySessionModalEnum.show &&
-                        displaySessionModal.session &&
-                        displaySessionModal.tandem && (
-                    <ShowSessionContent
-                        goBack={onClose}
-                        isHybrid={false}
-                        profile={profile}
-                        session={displaySessionModal.session}
-                        tandem={displaySessionModal.tandem}
-                        confirmCreation={displaySessionModal.confirmCreation || false}
-                        onUpdateSessionPressed={onUpdateSessionPressed}
-                    />
-                )}
+                    displaySessionModal.session &&
+                    displaySessionModal.tandem && (
+                        <ShowSessionContent
+                            goBack={onClose}
+                            isHybrid={false}
+                            profile={profile}
+                            session={displaySessionModal.session}
+                            tandem={displaySessionModal.tandem}
+                            confirmCreation={displaySessionModal.confirmCreation || false}
+                            onUpdateSessionPressed={onUpdateSessionPressed}
+                        />
+                    )}
             </>
-        </Modal>
+        </IonModal>
     );
 };
 

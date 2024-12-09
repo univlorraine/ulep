@@ -57,7 +57,7 @@ const Content: React.FC<ShowSessionContentProps> = ({
     const isSessionCancelled = session.cancelledAt !== null;
 
     return (
-        <div className={`${styles.container} subcontent-container content-wrapper`}>
+        <div className={styles.container}>
             {confirmCreation ? (
                 <div className={styles.confirm_header}>
                     <h1 className={styles.confirm_title}>{t('session.confirm_creation_title')}</h1>
@@ -120,7 +120,7 @@ const Content: React.FC<ShowSessionContentProps> = ({
                         <div className={styles.line}>
                             <div className={styles.icon}>💬</div>
                             <div className={styles.line_content}>
-                                <p>{session.comment}</p>
+                                <p className={styles.comment}>{session.comment}</p>
                             </div>
                         </div>
                     </div>

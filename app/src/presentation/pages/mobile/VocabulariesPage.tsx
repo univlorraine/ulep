@@ -20,9 +20,10 @@ interface VocabulariesPageProps {
     tandem?: Tandem;
 }
 
-const VocabulariesPage: React.FC<VocabulariesPageProps> = ({ tandem }) => {
+const VocabulariesPage: React.FC<VocabulariesPageProps> = () => {
     const history = useHistory();
     const location = useLocation<VocabulariesPageProps>();
+    const { tandem } = location.state;
     const profile = useStoreState((state) => state.profile);
     const { getAllTandems } = useConfig();
     const [vocabularySelected, setVocabularySelected] = useState<Vocabulary>();

@@ -50,8 +50,8 @@ const SessionForm: React.FC<SessionFormProps> = ({ onBackPressed, onSubmit, sess
                     {userTz !== partnerTz && (
                         <p className={styles.datetimeInfo}>
                             {t('session.time_for_partner', { name: partner?.user?.firstname })}
-                            <strong> {formatInTimeZone(startAt, partnerTz, 'HH:mm')} </strong>(
-                            {formatInTimeZone(startAt, partnerTz, 'zzzz, zzz')})
+                            <strong> {formatInTimeZone(new Date(datetime), partnerTz, 'HH:mm')} </strong>(
+                            {formatInTimeZone(new Date(datetime), partnerTz, 'zzzz, zzz')})
                         </p>
                     )}
                     <IonModal keepContentsMounted={true}>
