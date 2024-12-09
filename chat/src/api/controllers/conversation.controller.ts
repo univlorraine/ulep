@@ -6,6 +6,7 @@ import {
     Param,
     Post,
     Query,
+    Res,
     StreamableFile,
     UploadedFile,
     UseGuards,
@@ -213,13 +214,8 @@ export class ConversationController {
     async exportMediasFromConversationId(
         @Param('id') conversationId: string,
     ): Promise<StreamableFile> {
-        const stream = await this.exportMediasFromConversationUsecase.execute({
+        return await this.exportMediasFromConversationUsecase.execute({
             id: conversationId,
-        });
-
-        return new StreamableFile(stream, {
-            type: 'application/zip, application/octet-stream',
-            disposition: 'attachment; filename="export.zip"',
         });
     }
 }

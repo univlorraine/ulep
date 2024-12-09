@@ -35,7 +35,7 @@ const Content: React.FC<ChatContentProps> = ({
 }) => {
     const { t } = useTranslation();
     const { socket } = useSocket();
-    const { recorderAdapter, refreshTokensUsecase, exportMediasFromConversation } = useConfig();
+    const { recorderAdapter, refreshTokensUsecase, exportMediasFromConversation, fileAdapter } = useConfig();
     const isBlocked = conversation.isBlocked;
     const [showMenu, setShowMenu] = useState(false);
     const [currentMessageSearchId, setCurrentMessageSearchId] = useState<string>();
@@ -81,8 +81,16 @@ const Content: React.FC<ChatContentProps> = ({
     };
 
     const handleExportMedias = async () => {
-        await exportMediasFromConversation.execute(conversation.id);
-        console.log('export medias');
+        const response = await exportMediasFromConversation.execute(conversation.id);
+
+        if (response instanceof Error) {
+            console.error(response);
+            setShowMenu(false);
+            return;
+        }
+
+        fileAdapter.saveBlob(response, 'export-medias.zip');
+        setShowMenu(false);
     };
 
     useEffect(() => {

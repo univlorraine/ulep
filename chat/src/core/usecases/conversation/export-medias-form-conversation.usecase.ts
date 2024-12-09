@@ -1,4 +1,9 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+    Inject,
+    Injectable,
+    NotFoundException,
+    StreamableFile,
+} from '@nestjs/common';
 import { Conversation } from 'src/core/models';
 import { MediaObject } from 'src/core/models/media.model';
 import {
@@ -13,12 +18,7 @@ import {
     STORAGE_INTERFACE,
     StorageInterface,
 } from 'src/core/ports/storage.interface';
-import {
-    createReadStream,
-    createWriteStream,
-    ReadStream,
-    WriteStream,
-} from 'fs';
+import { createReadStream, createWriteStream } from 'fs';
 import { create } from 'archiver';
 
 type ExportMediasFromConversationParams = {
@@ -38,7 +38,7 @@ export class ExportMediasFromConversationUsecase {
 
     async execute(
         params: ExportMediasFromConversationParams,
-    ): Promise<ReadStream> {
+    ): Promise<StreamableFile> {
         const { id } = params;
 
         const conversation = await this.tryFindConversationById(id);
@@ -47,7 +47,7 @@ export class ExportMediasFromConversationUsecase {
             conversation.id,
         );
 
-        return this.exportMedias(medias);
+        return this.exportMedias(conversation.id, medias);
     }
 
     async tryFindConversationById(
@@ -76,22 +76,34 @@ export class ExportMediasFromConversationUsecase {
         return medias;
     }
 
-    async exportMedias(medias: MediaObject[]): Promise<ReadStream> {
-        const output = createWriteStream(__dirname + '/example.zip');
+    async exportMedias(
+        conversationId: string,
+        medias: MediaObject[],
+    ): Promise<StreamableFile> {
+        const tmpPath = `/tmp/${conversationId}.zip`;
+        const output = createWriteStream(tmpPath);
         const archive = create('zip', {
             zlib: { level: 9 }, // Sets the compression level.
+            readableObjectMode: true,
         });
 
         archive.pipe(output);
 
         for (const media of medias) {
             const file = await this.storage.read('chat', media.name);
-            archive.append(file, { name: media.name });
+            archive.append(file, {
+                name: media.name.replace(conversationId, ''),
+            });
         }
 
-        archive.finalize();
+        await archive.finalize();
 
-        return createReadStream(__dirname + '/example.zip');
+        const stream = createReadStream(tmpPath);
+
+        return new StreamableFile(stream, {
+            type: 'application/zip, application/octet-stream',
+            disposition: `attachment; filename="${conversationId}.zip"`,
+        });
     }
 }
 
