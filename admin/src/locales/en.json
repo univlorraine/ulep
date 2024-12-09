@@ -336,7 +336,7 @@
             "title": "Password reset request",
             "description": "To reset your password, please enter your email below.",
             "send_button": "Send"
-        },  
+        },
         "userStatus": {
             "active": "Active",
             "banned": "Banned",
@@ -491,7 +491,10 @@
             "DRAFT": "Draft"
         },
         "create": {
-            "cta": "Create"
+            "cta": "Create",
+            "error": {
+                "start_publication_date_greater_than_end_publication_date": "The start publication date must be before the end publication date"
+            }
         },
         "update": {
             "cta": "Update"

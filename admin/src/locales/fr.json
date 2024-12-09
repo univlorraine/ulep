@@ -493,7 +493,10 @@
             "DRAFT": "Brouillon"
         },
         "create": {
-            "cta": "Créer"
+            "cta": "Créer",
+            "error": {
+                "start_publication_date_greater_than_end_publication_date": "La date de début de publication doit être avant la date de fin de publication"
+            }
         },
         "update": {
             "cta": "Mettre à jour"
