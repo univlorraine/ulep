@@ -481,7 +481,8 @@
             "remove_translation": "Supprimer la traduction",
             "error": {
                 "notFound": "Actualité non trouvée",
-                "required": "Les dates de publication, le titre et le contenu sont obligatoires"
+                "required": "Les dates de publication, le titre et le contenu sont obligatoires",
+                "start_publication_date_greater_than_end_publication_date": "La date de début de publication doit être avant la date de fin de publication"
             },
             "start_publication_date": "Date de début de publication",
             "end_publication_date": "Date de fin de publication",
@@ -493,10 +494,7 @@
             "DRAFT": "Brouillon"
         },
         "create": {
-            "cta": "Créer",
-            "error": {
-                "start_publication_date_greater_than_end_publication_date": "La date de début de publication doit être avant la date de fin de publication"
-            }
+            "cta": "Créer"
         },
         "update": {
             "cta": "Mettre à jour"

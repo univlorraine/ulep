@@ -91,7 +91,7 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
 
     const onCreatePressed = () => {
         if (startPublicationDate && endPublicationDate && startPublicationDate > endPublicationDate) {
-            notify('news.create.error.start_publication_date_greater_than_end_publication_date', {
+            notify('news.form.error.start_publication_date_greater_than_end_publication_date', {
                 type: 'error',
             });
         } else {
