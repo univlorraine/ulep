@@ -1,5 +1,4 @@
 .content {
-    background-color: var(--secondary-color);
     display: flex;
     flex-direction: column;
     padding: 10px;
