@@ -1,6 +1,6 @@
 import { IonButton, IonDatetime, IonDatetimeButton, IonModal } from '@ionic/react';
 import { addDays, setHours, setMinutes, startOfTomorrow } from 'date-fns';
-import { formatInTimeZone } from 'date-fns-tz';
+import { formatInTimeZone, fromZonedTime } from 'date-fns-tz';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Redirect } from 'react-router';
@@ -19,8 +19,8 @@ interface SessionFormProps {
 }
 
 const SessionForm: React.FC<SessionFormProps> = ({ onBackPressed, onSubmit, session, profile, partner }) => {
-    const userTz = profile?.user?.university?.timezone;
-    const partnerTz = partner?.user?.university?.timezone;
+    const userTz = profile?.user?.university?.timezone; // TODO: replace university timezone by user profile timezone
+    const partnerTz = partner?.user?.university?.timezone; // TODO: replace university timezone by partner profile timezone
 
     if (!userTz || !partnerTz) {
         return <Redirect to="/" />;
@@ -32,7 +32,7 @@ const SessionForm: React.FC<SessionFormProps> = ({ onBackPressed, onSubmit, sess
     const [comment, setComment] = useState(session?.comment || '');
 
     const handleSubmit = () => {
-        onSubmit({ id: session?.id, date: new Date(datetime), comment });
+        onSubmit({ id: session?.id, date: fromZonedTime(datetime, userTz), comment });
     };
 
     const onDatetimeChange = (newDate: string) => {
