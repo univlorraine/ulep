@@ -8,9 +8,10 @@ import styles from './ActivityCard.module.css';
 interface ActivityCardProps {
     activity: Activity;
     onClick: (activity: Activity) => void;
+    isHybrid: boolean;
 }
 
-const ActivityCard: React.FC<ActivityCardProps> = ({ activity, onClick }) => {
+const ActivityCard: React.FC<ActivityCardProps> = ({ activity, onClick, isHybrid }) => {
     const { t } = useTranslation();
 
     return (
@@ -38,9 +39,11 @@ const ActivityCard: React.FC<ActivityCardProps> = ({ activity, onClick }) => {
                     <span className={styles['information-content']}>{activity.activityTheme.content}</span>
                 </div>
 
-                <IonButton fill="clear">
-                    <IonIcon icon={ArrowRightSvg} />
-                </IonButton>
+                {!isHybrid && (
+                    <IonButton fill="clear">
+                        <IonIcon icon={ArrowRightSvg} />
+                    </IonButton>
+                )}
             </div>
         </button>
     );
