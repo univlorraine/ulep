@@ -1,6 +1,6 @@
 import { IonButton, IonIcon, IonImg, IonText } from '@ionic/react';
 import { addSharp, closeCircle, documentOutline, trashBinOutline } from 'ionicons/icons';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useConfig } from '../../../../context/ConfigurationContext';
 import { Activity, ActivityTheme, ActivityThemeCategory } from '../../../../domain/entities/Activity';
@@ -45,6 +45,8 @@ export const CreateActivityInformationsContent = ({
     const [ressourceFile, setRessourceFile] = useState<File>();
     const [isRessourceUrl, setIsRessourceUrl] = useState<boolean>(!!activityToUpdate?.ressourceUrl);
     const [hideRessourceActivity, setHideRessourceActivity] = useState<boolean>(false);
+
+    const imageRef = useRef<string | undefined>(activityToUpdate?.imageUrl);
 
     useEffect(() => {
         if (selectedThemeCategory) {
@@ -96,6 +98,7 @@ export const CreateActivityInformationsContent = ({
 
         if (image) {
             setImage(image);
+            imageRef.current = URL.createObjectURL(image);
         }
     };
 
@@ -122,6 +125,7 @@ export const CreateActivityInformationsContent = ({
     const clearImage = () => {
         setImage(undefined);
         setHideUrlImage(true);
+        imageRef.current = undefined;
     };
 
     const clearRessource = () => {
@@ -150,6 +154,7 @@ export const CreateActivityInformationsContent = ({
     };
 
     const showFileRessource = ressourceFile || (activityToUpdate?.ressourceFileUrl && !hideRessourceActivity);
+    const imageToDisplay = imageRef.current ?? activityToUpdate?.imageUrl;
 
     return (
         <div>
@@ -173,10 +178,7 @@ export const CreateActivityInformationsContent = ({
                 </IonButton>
             ) : (
                 <div className={`${styles.imageContainer} margin-bottom`}>
-                    <IonImg
-                        className={styles.image}
-                        src={image ? URL.createObjectURL(image) : activityToUpdate?.imageUrl}
-                    />
+                    <IonImg className={styles.image} src={imageToDisplay} />
                     <IonButton
                         fill="clear"
                         className="image"
