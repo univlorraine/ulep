@@ -1,6 +1,7 @@
 import { HttpResponse } from '../../../adapter/BaseHttpAdapter';
 import { HttpAdapterInterface } from '../../../adapter/DomainHttpAdapter';
 import { ActivityCommand, activityCommandToDomain } from '../../../command/ActivityCommand';
+import { normalizeString } from '../../../presentation/utils';
 import { Activity } from '../../entities/Activity';
 import UpdateActivityUsecaseInterface, {
     UpdateActivityCommand,
@@ -55,7 +56,9 @@ class UpdateActivityUsecase implements UpdateActivityUsecaseInterface {
 
                     formData.vocabularies.push(vocabularyToUpdate);
                     if (vocabulary.file) {
-                        const newFile = new File([vocabulary.file], `${vocabulary.content}.wav`, {
+                        const vocabularyNormalized = normalizeString(vocabulary.content);
+                        const newFileName = `${vocabularyNormalized}.wav`;
+                        const newFile = new File([vocabulary.file], newFileName, {
                             type: vocabulary.file.type,
                         });
                         formData.vocabulariesFiles
