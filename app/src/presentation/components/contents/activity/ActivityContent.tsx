@@ -1,5 +1,5 @@
 import { IonButton, IonIcon, IonItem, IonLabel, IonList, useIonToast } from '@ionic/react';
-import { downloadOutline, hammerOutline, helpOutline } from 'ionicons/icons';
+import { downloadOutline, helpOutline, pencilOutline } from 'ionicons/icons';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowRightSvg } from '../../../../assets';
@@ -104,7 +104,7 @@ export const ActivityContent: React.FC<ActivityContentProps> = ({
                                     closeMenu();
                                 }}
                             >
-                                <IonIcon icon={hammerOutline} aria-hidden="true" />
+                                <IonIcon icon={pencilOutline} aria-hidden="true" />
                                 <IonLabel className={styles['popover-label']}>{t('activity.show.update')}</IonLabel>
                             </IonItem>
                         )}
