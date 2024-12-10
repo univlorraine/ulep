@@ -76,7 +76,8 @@
         },
         "error": {
             "update": "An error occurred while updating the activity",
-            "create": "An error occurred while creating the activity"
+            "create": "An error occurred while creating the activity",
+            "alreadyPublished": "You cannot update an already published activity"
         }
     },
     "activities_categories": {
