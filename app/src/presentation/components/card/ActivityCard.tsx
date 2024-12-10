@@ -1,4 +1,5 @@
 import { IonButton, IonIcon } from '@ionic/react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowRightSvg } from '../../../assets';
 import { Activity } from '../../../domain/entities/Activity';
@@ -19,7 +20,14 @@ const ActivityCard: React.FC<ActivityCardProps> = ({ activity, onClick, isHybrid
             <img className={styles.image} src={activity.imageUrl} alt={activity.title} />
             <div className={styles.content}>
                 <p className={styles.title}>{activity.title}</p>
-                <span className={styles.subtitle}>{activity.description}</span>
+                <span className={styles.subtitle}>
+                    {activity.description.split('\n').map((line, index) => (
+                        <React.Fragment key={index}>
+                            {line}
+                            <br />
+                        </React.Fragment>
+                    ))}
+                </span>
             </div>
             <div className={styles.information}>
                 <div className={styles['information-container']}>
