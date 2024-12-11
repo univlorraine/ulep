@@ -85,16 +85,38 @@ export class PrismaVocabularyRepository implements VocabularyRepository {
   ): Promise<VocabularyList[]> {
     const vocabularyLists = await this.prisma.vocabularyList.findMany({
       where: {
-        Editors: {
-          some: {
-            id: profileId,
+        OR: [
+          {
+            AND: [
+              {
+                Creator: {
+                  id: profileId,
+                },
+              },
+              {
+                OriginalLanguage: {
+                  code: languageCode,
+                },
+              },
+            ],
           },
-        },
-        ...(languageCode && {
-          OriginalLanguage: {
-            code: languageCode,
+          {
+            AND: [
+              {
+                Editors: {
+                  some: {
+                    id: profileId,
+                  },
+                },
+              },
+              {
+                TranslationLanguage: {
+                  code: languageCode,
+                },
+              },
+            ],
           },
-        }),
+        ],
       },
       skip: pagination?.page ? (pagination.page - 1) * pagination.limit : 0,
       take: pagination?.limit,

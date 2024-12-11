@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useConfig } from '../../context/ConfigurationContext';
 import LearningLanguage from '../../domain/entities/LearningLanguage';
 import Profile from '../../domain/entities/Profile';
+import Tandem from '../../domain/entities/Tandem';
 import Vocabulary from '../../domain/entities/Vocabulary';
 import VocabularyList from '../../domain/entities/VocabularyList';
 import { CreateVocabularyListCommand } from '../../domain/interfaces/vocabulary/CreateVocabularyListUsecase.interface';
@@ -14,6 +15,7 @@ const useVocabulary = (learningLanguage?: LearningLanguage) => {
     const { t } = useTranslation();
     const [showToast] = useIonToast();
     const {
+        getAllTandems,
         getVocabularyLists,
         getVocabularies,
         createVocabularyList,
@@ -23,6 +25,7 @@ const useVocabulary = (learningLanguage?: LearningLanguage) => {
         deleteVocabulary,
         deleteVocabularyList,
     } = useConfig();
+    const [associatedTandem, setAssociatedTandem] = useState<Tandem>();
     const [refreshVocabularyLists, setRefreshVocabularyLists] = useState<boolean>(false);
     const [refreshVocabularies, setRefreshVocabularies] = useState<boolean>(false);
     const [vocabularyListSelected, setVocabularyListSelected] = useState<VocabularyList | undefined>(undefined);
@@ -45,6 +48,7 @@ const useVocabulary = (learningLanguage?: LearningLanguage) => {
         return {
             ...vocabularyResult,
             vocabularyListSelected,
+            associatedTandem,
             setSearchVocabularies,
             setVocabularyListSelected,
             onShareVocabularyList: () => {},
@@ -77,6 +81,7 @@ const useVocabulary = (learningLanguage?: LearningLanguage) => {
             return showToast({ message: t(result.message), duration: 5000 });
         }
 
+        showToast('vocabulary.list.share.success');
         setRefreshVocabularyLists(!refreshVocabularyLists);
     };
 
@@ -169,13 +174,37 @@ const useVocabulary = (learningLanguage?: LearningLanguage) => {
     };
 
     useEffect(() => {
+        const getProfilesTandems = async () => {
+            if (!profile) {
+                return [];
+            }
+            const tandems = await getAllTandems.execute(profile.id);
+
+            if (tandems instanceof Error) {
+                return [];
+            }
+
+            const associatedTandem = tandems.find((tandem) => tandem.learningLanguage?.id === learningLanguage?.id);
+
+            if (associatedTandem) {
+                setAssociatedTandem(associatedTandem);
+            }
+        };
+        getProfilesTandems();
+    }, [profile]);
+
+    useEffect(() => {
         const fetchData = async () => {
+            if (!associatedTandem) {
+                return;
+            }
+
             setVocabularyResult({
                 ...vocabularyResult,
                 isLoading: true,
             });
 
-            const vocabularyListsResult = await getVocabularyLists.execute(profile.id, learningLanguage?.code);
+            const vocabularyListsResult = await getVocabularyLists.execute(profile.id, learningLanguage!.code);
 
             if (vocabularyListsResult instanceof Error) {
                 return setVocabularyResult({
@@ -197,7 +226,7 @@ const useVocabulary = (learningLanguage?: LearningLanguage) => {
         };
 
         fetchData();
-    }, [profile, refreshVocabularyLists, vocabularyListSelected]);
+    }, [associatedTandem, refreshVocabularyLists, vocabularyListSelected]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -232,6 +261,7 @@ const useVocabulary = (learningLanguage?: LearningLanguage) => {
     return {
         ...vocabularyResult,
         vocabularyListSelected,
+        associatedTandem,
         setSearchVocabularies,
         setVocabularyListSelected,
         onShareVocabularyList,

@@ -288,7 +288,9 @@
             "share": {
                 "cancel": "Cancel",
                 "create": "Validate",
-                "title": "With whom do you want to share?"
+                "title": "With whom do you want to share?",
+                "no_tandem": "You don't have a tandem for this language",
+                "success": "The vocabulary list has been shared"
             },
             "start_quiz": {
                 "title": "Select the lists to practice on",
