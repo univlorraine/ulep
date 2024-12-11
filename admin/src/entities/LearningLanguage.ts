@@ -31,6 +31,7 @@ export type LearningLanguage = {
     sharedCertificate?: boolean;
     certificateFile?: MediaObject;
     sameTandemEmail?: string;
+    sharedLogsDate?: Date;
 };
 
 export type LearningLanguageWithTandemWithPartnerProfile = {

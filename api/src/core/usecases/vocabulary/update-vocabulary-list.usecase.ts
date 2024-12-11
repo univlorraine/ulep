@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import { Language } from 'src/core/models';
+import { LogEntryType } from 'src/core/models/log-entry.model';
 import {
   LanguageRepository,
   LANGUAGE_REPOSITORY,
@@ -13,6 +14,7 @@ import {
   VocabularyRepository,
   VOCABULARY_REPOSITORY,
 } from 'src/core/ports/vocabulary.repository';
+import { CreateOrUpdateLogEntryUsecase } from 'src/core/usecases/log-entry';
 
 export class UpdateVocabularyListCommand {
   vocabularyListId: string;
@@ -21,6 +23,7 @@ export class UpdateVocabularyListCommand {
   profileIds?: string[];
   wordLanguageCode?: string;
   translationLanguageCode?: string;
+  userId?: string;
 }
 
 @Injectable()
@@ -30,6 +33,8 @@ export class UpdateVocabularyListUsecase {
     private readonly profileRepository: ProfileRepository,
     @Inject(VOCABULARY_REPOSITORY)
     private readonly vocabularyRepository: VocabularyRepository,
+    @Inject(CreateOrUpdateLogEntryUsecase)
+    private readonly createOrUpdateLogEntryUsecase: CreateOrUpdateLogEntryUsecase,
     @Inject(LANGUAGE_REPOSITORY)
     private readonly languageRepository: LanguageRepository,
   ) {}
@@ -48,7 +53,6 @@ export class UpdateVocabularyListUsecase {
         command.translationLanguageCode,
       );
     }
-
     await Promise.all(
       command.profileIds.map((profileId) => this.assertProfileExist(profileId)),
     );
@@ -64,6 +68,23 @@ export class UpdateVocabularyListUsecase {
           translationLanguage?.id ?? oldVocabularyList.translationLanguage.id,
       },
     );
+
+    if (command.profileIds && command.profileIds.length > 0) {
+      const learningLanguage =
+        vocabularyList.creator.findLearningLanguageByCode(
+          vocabularyList.translationLanguage.code,
+        );
+      if (learningLanguage) {
+        await this.createOrUpdateLogEntryUsecase.execute({
+          learningLanguageId: learningLanguage.id,
+          type: LogEntryType.SHARE_VOCABULARY,
+          metadata: {
+            vocabularyListId: command.vocabularyListId,
+            vocabularyListName: vocabularyList.name,
+          },
+        });
+      }
+    }
 
     return vocabularyList;
   }

@@ -6,6 +6,7 @@ import { Route, Switch } from 'react-router';
 import { ConversationsSvg, HomeSvg, LearningSvg, ProfileSvg } from '../../assets';
 import MenuNew from '../components/MenuNew';
 import NewActivityMenuModal from '../components/modals/NewActivityMenuModal';
+import NewLogEntryMenuModal from '../components/modals/NewLogEntryMenuModal';
 import NewSessionMenuModal from '../components/modals/NewSessionMenuModal';
 import NewVocabularyMenuModal from '../components/modals/NewVocabularyMenuModal';
 import ConversationsPage from '../pages/ConversationsPage';
@@ -23,7 +24,7 @@ const BottomBar: React.FC = () => {
     const [showVocabularyModal, setShowVocabularyModal] = useState<boolean>(false);
     const [showActivityModal, setShowActivityModal] = useState<boolean>(false);
     const [showSessionModal, setShowSessionModal] = useState<boolean>(false);
-
+    const [showLearningDiaryModal, setShowLearningDiaryModal] = useState<boolean>(false);
     return (
         <PrivateRoute path="/(home|conversations|learning|profile)">
             <IonTabs>
@@ -77,7 +78,7 @@ const BottomBar: React.FC = () => {
                 className={styles.menuNew}
                 setIsMenuVisible={setIsMenuNewVisible}
                 onVocabularyPressed={() => setShowVocabularyModal(true)}
-                onLearningDiaryPressed={() => {}}
+                onLearningDiaryPressed={() => setShowLearningDiaryModal(true)}
                 onSessionPressed={() => setShowSessionModal(true)}
                 onActivityPressed={() => setShowActivityModal(true)}
                 trigger="click-trigger-new-mobile"
@@ -90,6 +91,11 @@ const BottomBar: React.FC = () => {
             />
             <NewActivityMenuModal isVisible={showActivityModal} onClose={() => setShowActivityModal(false)} isHybrid />
             <NewSessionMenuModal isVisible={showSessionModal} onClose={() => setShowSessionModal(false)} />
+            <NewLogEntryMenuModal
+                isVisible={showLearningDiaryModal}
+                onClose={() => setShowLearningDiaryModal(false)}
+                isHybrid
+            />
         </PrivateRoute>
     );
 };

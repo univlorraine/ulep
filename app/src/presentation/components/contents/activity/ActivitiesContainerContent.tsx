@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Activity } from '../../../../domain/entities/Activity';
 import Profile from '../../../../domain/entities/Profile';
 import useGetActivityThemes from '../../../hooks/useGetActivityThemes';
@@ -10,9 +10,15 @@ interface ActivitiesContainerContentProps {
     onClose: () => void;
     profile: Profile;
     isModal?: boolean;
+    currentActivityId?: string;
 }
 
-const ActivitiesContainerContent: React.FC<ActivitiesContainerContentProps> = ({ onClose, profile, isModal }) => {
+const ActivitiesContainerContent: React.FC<ActivitiesContainerContentProps> = ({
+    onClose,
+    profile,
+    isModal,
+    currentActivityId,
+}) => {
     const [displayCreateActivity, setDisplayCreateActivity] = useState<boolean>(false);
     const [activityIdToDisplay, setActivityIdToDisplay] = useState<string | undefined>();
     const [activityToUpdate, setActivityToUpdate] = useState<Activity | undefined>();
@@ -34,6 +40,12 @@ const ActivitiesContainerContent: React.FC<ActivitiesContainerContentProps> = ({
         setDisplayCreateActivity(false);
         setActivityIdToDisplay(undefined);
     };
+
+    useEffect(() => {
+        if (currentActivityId) {
+            setActivityIdToDisplay(currentActivityId);
+        }
+    }, [currentActivityId]);
 
     return (
         <>

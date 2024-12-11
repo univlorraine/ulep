@@ -19,7 +19,7 @@ const TandemProfilePage: React.FC = () => {
         <IonPage>
             <TandemProfile
                 id={tandem.id}
-                language={tandem.learningLanguage}
+                learningLanguage={tandem.learningLanguage}
                 level={tandem.level}
                 onClose={() => history.goBack()}
                 partnerLearningLanguage={tandem.partnerLearningLanguage}

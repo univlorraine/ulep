@@ -1,5 +1,5 @@
 import { useIonToast } from '@ionic/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import LearningLanguage from '../../../domain/entities/LearningLanguage';
 import Profile from '../../../domain/entities/Profile';
 import Vocabulary from '../../../domain/entities/Vocabulary';
@@ -19,6 +19,7 @@ interface VocabularyContentProps {
     onClose: () => void;
     isModal?: boolean;
     currentLearningLanguage: LearningLanguage;
+    currentVocabularyListId?: string;
 }
 
 const VocabularyContent: React.FC<VocabularyContentProps> = ({
@@ -26,6 +27,7 @@ const VocabularyContent: React.FC<VocabularyContentProps> = ({
     onClose,
     isModal,
     currentLearningLanguage,
+    currentVocabularyListId,
 }) => {
     const [showToast] = useIonToast();
     const [vocabularySelected, setVocabularySelected] = useState<Vocabulary>();
@@ -33,6 +35,7 @@ const VocabularyContent: React.FC<VocabularyContentProps> = ({
     const [showSelectVocabularyListsForQuizModal, setShowSelectVocabularyListsForQuizModal] = useState(false);
     const [addContentMode, setAddContentMode] = useState(false);
     const [quizzSelectedListIds, setQuizzSelectedListIds] = useState<string[]>([]);
+    const [initialSelectionDone, setInitialSelectionDone] = useState(false);
 
     const {
         vocabularies,
@@ -112,6 +115,16 @@ const VocabularyContent: React.FC<VocabularyContentProps> = ({
         setQuizzSelectedListIds(selectedListsIds);
     };
 
+    useEffect(() => {
+        if (!initialSelectionDone && currentVocabularyListId && vocabularyLists.length > 0) {
+            const selectedList = vocabularyLists.find((list) => list.id === currentVocabularyListId);
+            if (selectedList) {
+                setVocabularyListSelected(selectedList);
+                setInitialSelectionDone(true);
+            }
+        }
+    }, [initialSelectionDone, currentVocabularyListId, vocabularyLists]);
+
     if (error) {
         return <ErrorPage />;
     }
@@ -159,6 +172,7 @@ const VocabularyContent: React.FC<VocabularyContentProps> = ({
                     profile={profile}
                     selectedListsId={quizzSelectedListIds}
                     onBackPressed={() => setQuizzSelectedListIds([])}
+                    learningLanguageId={currentLearningLanguage.id}
                 />
             )}
             <AddOrUpdateVocabularyListModal

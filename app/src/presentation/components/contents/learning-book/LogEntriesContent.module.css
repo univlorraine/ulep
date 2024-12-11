@@ -1,0 +1,10 @@
+.log-entries-list {
+    padding: 20px;
+}
+
+.log-entries-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    overflow-y: auto;
+}

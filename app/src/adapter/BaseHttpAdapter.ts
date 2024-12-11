@@ -65,7 +65,7 @@ class BaseHttpAdapter {
     async http<T>(path: string, args: RequestInit, contentType = 'application/json'): Promise<HttpResponse<T>> {
         const headers: Record<string, string> = {
             ...(args.headers as Record<string, string>),
-            Accept: 'application/json, application/pdf',
+            Accept: 'application/json, application/pdf, text/csv',
         };
 
         if (contentType !== 'multipart/form-data') {
@@ -96,6 +96,8 @@ class BaseHttpAdapter {
                     if (responseContentType && responseContentType.indexOf('application/json') !== -1) {
                         return res.json();
                     } else if (responseContentType && responseContentType.indexOf('application/pdf') !== -1) {
+                        return res.blob();
+                    } else if (responseContentType && responseContentType.indexOf('text/csv') !== -1) {
                         return res.blob();
                     }
 

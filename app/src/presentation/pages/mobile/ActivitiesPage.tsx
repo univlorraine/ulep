@@ -1,6 +1,6 @@
 import { IonContent } from '@ionic/react';
-import { useState } from 'react';
-import { Redirect, useHistory } from 'react-router';
+import { useEffect, useState } from 'react';
+import { Redirect, useHistory, useLocation } from 'react-router';
 import { Activity } from '../../../domain/entities/Activity';
 import { useStoreState } from '../../../store/storeTypes';
 import ActivitiesContent from '../../components/contents/activity/ActivitiesContent';
@@ -8,8 +8,14 @@ import { ActivityContent } from '../../components/contents/activity/ActivityCont
 import CreateActivityContent from '../../components/contents/activity/CreateOrUpdateActivityContent';
 import useGetActivityThemes from '../../hooks/useGetActivityThemes';
 
+interface ActivitiesPageProps {
+    activityId?: string;
+}
+
 const ActivitiesPage = () => {
     const history = useHistory();
+    const location = useLocation<ActivitiesPageProps>();
+    const { activityId } = location.state || {};
     const profile = useStoreState((state) => state.profile);
     const [displayCreateActivity, setDisplayCreateActivity] = useState<boolean>(false);
     const [activityIdToDisplay, setActivityIdToDisplay] = useState<string | undefined>();
@@ -40,6 +46,12 @@ const ActivitiesPage = () => {
     const goBack = () => {
         history.push('/learning');
     };
+
+    useEffect(() => {
+        if (activityId) {
+            setActivityIdToDisplay(activityId);
+        }
+    }, [activityId]);
 
     return (
         <IonContent>

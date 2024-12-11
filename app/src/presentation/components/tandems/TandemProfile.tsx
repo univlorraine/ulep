@@ -5,6 +5,7 @@ import { ArrowLeftSvg, CameraSvg, ChatSvg, CloseBlackSvg } from '../../../assets
 import { ReactComponent as Background } from '../../../assets/background.svg';
 import { useConfig } from '../../../context/ConfigurationContext';
 import Language from '../../../domain/entities/Language';
+import LearningLanguage from '../../../domain/entities/LearningLanguage';
 import Profile from '../../../domain/entities/Profile';
 import { useStoreState } from '../../../store/storeTypes';
 import useOnOpenChat from '../../hooks/useOnOpenChat';
@@ -15,7 +16,7 @@ import TandemProfileContent from './TandemProfileContent';
 
 interface TandemProfileProps {
     id: string;
-    language: Language;
+    learningLanguage: LearningLanguage;
     level: CEFR;
     onClose: () => void;
     pedagogy: Pedagogy;
@@ -25,7 +26,7 @@ interface TandemProfileProps {
 
 const TandemProfile: React.FC<TandemProfileProps> = ({
     id,
-    language,
+    learningLanguage,
     level,
     onClose,
     pedagogy,
@@ -48,7 +49,7 @@ const TandemProfile: React.FC<TandemProfileProps> = ({
         history.push({
             pathname: '/jitsi',
             search: `?roomName=${id}`,
-            state: { tandem: partnerProfile },
+            state: { tandemPartner: meProfile, learningLanguageId: learningLanguage.id },
         });
     };
 
@@ -97,7 +98,7 @@ const TandemProfile: React.FC<TandemProfileProps> = ({
             </div>
 
             <TandemProfileContent
-                language={language}
+                learningLanguage={learningLanguage}
                 level={level}
                 pedagogy={pedagogy}
                 partnerProfile={partnerProfile}
