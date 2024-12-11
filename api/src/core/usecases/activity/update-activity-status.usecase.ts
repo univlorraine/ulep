@@ -1,6 +1,7 @@
 import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import { Activity, ActivityStatus } from 'src/core/models/activity.model';
+import { LogEntryType } from 'src/core/models/log-entry.model';
 import {
   ActivityRepository,
   ACTIVITY_REPOSITORY,
@@ -10,6 +11,7 @@ import {
   NotificationGateway,
   NOTIFICATION_GATEWAY,
 } from 'src/core/ports/notification.gateway';
+import { CreateOrUpdateLogEntryUsecase } from 'src/core/usecases/log-entry';
 
 export class UpdateActivityStatusCommand {
   id: string;
@@ -25,6 +27,8 @@ export class UpdateActivityStatusUsecase {
     private readonly notificationGateway: NotificationGateway,
     @Inject(EMAIL_GATEWAY)
     private readonly emailGateway: EmailGateway,
+    @Inject(CreateOrUpdateLogEntryUsecase)
+    private readonly createOrUpdateLogEntryUsecase: CreateOrUpdateLogEntryUsecase,
   ) {}
 
   async execute(command: UpdateActivityStatusCommand) {
@@ -39,6 +43,24 @@ export class UpdateActivityStatusUsecase {
       activity.status === ActivityStatus.PUBLISHED
     ) {
       throw new ForbiddenException('Activity is already published');
+    }
+
+    // Create a log entry when an activity is submitted for validation
+    if (command.status === ActivityStatus.IN_VALIDATION) {
+      const learningLanguage = await this.findActivityLearningLanguageCreator(
+        command.id,
+      );
+
+      if (learningLanguage) {
+        await this.createOrUpdateLogEntryUsecase.execute({
+          learningLanguageId: learningLanguage.id,
+          type: LogEntryType.SUBMIT_ACTIVITY,
+          metadata: {
+            activityId: activity.id,
+            activityTitle: activity.title,
+          },
+        });
+      }
     }
 
     const updatedActivity = await this.activityRepository.updateActivityStatus(
@@ -115,5 +137,13 @@ export class UpdateActivityStatusUsecase {
         activity: { title: activity.title },
       });
     }
+  }
+
+  private async findActivityLearningLanguageCreator(activityId: string) {
+    const activity = await this.activityRepository.ofId(activityId);
+    if (!activity) {
+      throw new RessourceDoesNotExist('Activity does not exist');
+    }
+    return activity.creator.findLearningLanguageByCode(activity.language.code);
   }
 }

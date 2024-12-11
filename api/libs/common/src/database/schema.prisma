@@ -426,6 +426,7 @@ model LearningLanguages {
   learning_journal        Boolean?
   consulting_interview    Boolean?
   shared_certificate      Boolean?
+  shared_logs_date        DateTime?
   certificate_file_id     String? @unique
   campus_id               String?
   tandem_id               String?
@@ -441,6 +442,7 @@ model LearningLanguages {
   Campus         Places?          @relation(fields: [campus_id], references: [id])
   CertificateFile MediaObjects?   @relation("LearningLanguageCertificateFile", fields: [certificate_file_id], references: [id])
   CustomLearningGoals CustomLearningGoals[]
+  LogEntriesByDate LogEntry[]
 
   @@map("learning_languages")
 }
@@ -774,4 +776,34 @@ model CustomLearningGoals {
   LearningLanguage LearningLanguages @relation(fields: [learning_language_id], references: [id], onDelete: Cascade)
 
   @@map("learning_goals")
+}
+
+//  * ****************************************************
+//  * Logbook
+//  * ****************************************************
+model LogEntry {
+  id                String @id @default(uuid())
+  type              LogEntryType
+  metadata          Json?
+  learning_language_id String
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+
+  LearningLanguage LearningLanguages @relation(fields: [learning_language_id], references: [id], onDelete: Cascade)
+
+  @@map("log_entry")
+}
+
+enum LogEntryType {
+  CONNECTION
+  VISIO
+  TANDEM_CHAT
+  COMMUNITY_CHAT
+  CUSTOM_ENTRY
+  SHARING_LOGS
+  ADD_VOCABULARY
+  SHARE_VOCABULARY
+  EDIT_ACTIVITY
+  SUBMIT_ACTIVITY
+  PLAYED_GAME
 }

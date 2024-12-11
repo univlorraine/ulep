@@ -100,6 +100,7 @@ export class PrismaLearningLanguageRepository
         consulting_interview: item.consultingInterview,
         shared_certificate: item.sharedCertificate,
         specific_program: item.specificProgram,
+        shared_logs_date: item.sharedLogsDate,
       },
     });
   }

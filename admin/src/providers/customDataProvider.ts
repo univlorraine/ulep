@@ -432,6 +432,16 @@ const customDataProvider = {
 
         return response;
     },
+    exportLogEntries: async (learningLanguageId: string): Promise<Response> => {
+        const url = `${window.REACT_APP_API_URL}/log-entries/export/${learningLanguageId}`;
+        const response = await fetch(url, httpClientOptions({ method: 'GET' }));
+
+        if (!response.ok) {
+            await throwError(response);
+        }
+
+        return response;
+    },
     getKeycloackAdminGroups: async () => {
         const url = `${window.REACT_APP_API_URL}/users/admin/groups`;
         const response = await fetch(url, httpClientOptions({ method: 'GET' }));

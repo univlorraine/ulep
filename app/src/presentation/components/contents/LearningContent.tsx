@@ -31,6 +31,7 @@ interface LearningContentProps {
     onVocabularyListPressed: () => void;
     onActivitiesContentPressed: () => void;
     onShowAllGoalsPressed: () => void;
+    onLearningBookContentPressed: () => void;
     setCurrentTandem: (tandem: Tandem) => void;
 }
 
@@ -45,6 +46,7 @@ const LearningContent: React.FC<LearningContentProps> = ({
     onActivitiesContentPressed,
     setCurrentTandem,
     onShowAllGoalsPressed,
+    onLearningBookContentPressed,
 }) => {
     const { t } = useTranslation();
     const { deviceAdapter } = useConfig();
@@ -129,7 +131,7 @@ const LearningContent: React.FC<LearningContentProps> = ({
                                 </>
                             )}
                             <RessourcesCard
-                                onLearningJournalPressed={() => console.log('onLearningJournalPressed')}
+                                onLearningBookPressed={onLearningBookContentPressed}
                                 onVocabularyPressed={onVocabularyListPressed}
                                 onActivityPressed={onActivitiesContentPressed}
                                 onGamePressed={() => console.log('onGamePressed')}

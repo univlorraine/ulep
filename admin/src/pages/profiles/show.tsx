@@ -1,3 +1,4 @@
+import { format } from 'date-fns/format';
 import {
     ArrayField,
     BooleanField,
@@ -24,6 +25,7 @@ import { LearningLanguage } from '../../entities/LearningLanguage';
 import { Profile } from '../../entities/Profile';
 import User from '../../entities/User';
 import CertificateModal from './CertificateModal';
+import LogExportButton from './Export/LogExportButton';
 import ProfileExportButton from './Export/ProfileExportButton';
 
 const Title = () => {
@@ -190,6 +192,20 @@ const ProfileTab = () => {
                             label={translate('learning_languages.show.fields.sharedCertificate')}
                             sortable={false}
                             source="sharedCertificate"
+                        />
+                        <FunctionField
+                            render={(record: Pick<LearningLanguage, 'id' | 'code' | 'sharedLogsDate'>) =>
+                                record.sharedLogsDate ? (
+                                    <>
+                                        {format(record.sharedLogsDate, 'dd/MM/yyyy')}
+                                        <LogExportButton languageCode={record.code} learningLanguageId={record.id} />
+                                    </>
+                                ) : (
+                                    ''
+                                )
+                            }
+                            sortable={false}
+                            source="sharedLogsDate"
                         />
                         <ReferenceUploadFileField
                             label={translate('learning_languages.show.fields.certificateFile')}

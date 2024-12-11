@@ -1,0 +1,80 @@
+.container {
+    background-color: #f2f4f7;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px;
+}
+
+.primaryContainer {
+    background-color: var(--primary-color);
+}
+
+.line {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.imageContainer {
+    position: relative;
+    align-self: center;
+    background-color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    padding: 8px;
+    margin-left: -24px;
+}
+
+.image {
+    width: 48px;
+    height: 48px;
+}
+
+.imageContainer:first-child {
+    margin-left: 0;
+}
+
+.images {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+}
+
+.date {
+    font-family: Roboto;
+    font-size: 37px;
+    font-weight: 700;
+    line-height: 40px;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+}
+
+.title {
+    font-family: Roboto;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 25px;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+}
+
+.subtitle {
+    font-family: Maven Pro;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+    text-align: left;
+}
+
+.text-container {
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}

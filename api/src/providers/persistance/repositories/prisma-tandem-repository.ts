@@ -5,7 +5,7 @@ import {
   FindWhereProps,
   TandemRepository,
 } from '../../../core/ports/tandem.repository';
-import { TandemRelations, tandemMapper } from '../mappers/tandem.mapper';
+import { tandemMapper, TandemRelations } from '../mappers/tandem.mapper';
 
 @Injectable()
 export class PrismaTandemRepository implements TandemRepository {
@@ -276,6 +276,7 @@ export class PrismaTandemRepository implements TandemRepository {
           in: ids,
         },
       },
+      include: TandemRelations,
     });
 
     return tandems.map(tandemMapper);

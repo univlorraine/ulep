@@ -12,6 +12,7 @@ import GoalsContentModal, {
     DisplayCustomGoalModal,
     DisplayCustomGoalModalEnum,
 } from '../components/modals/GoalsContentModal';
+import LearningBookContentModal from '../components/modals/LearningBookContentModal';
 import TandemProfileModal from '../components/modals/TandemProfileModal';
 import TandemStatusModal from '../components/modals/TandemStatusModal';
 import VocabularyContentModal from '../components/modals/VocabularyContentModal';
@@ -30,8 +31,11 @@ const LearningPage = () => {
     const [displaySelectedTandem, setDisplaySelectedTandem] = useState<Tandem>();
     const [displayActivitiesContent, setDisplayActivitiesContent] = useState<boolean>(false);
     const [displayVocabularyContent, setDisplayVocabularyContent] = useState<boolean>(false);
+    const [displayLearningBookContent, setDisplayLearningBookContent] = useState<boolean>(false);
     const [displayCustomGoalModal, setDisplayCustomGoalModal] = useState<DisplayCustomGoalModal>();
-    const profile = useStoreState((state) => state.profile);
+    const [currentActivityId, setCurrentActivityId] = useState<string>();
+    const [currentVocabularyListId, setCurrentVocabularyListId] = useState<string>();
+    const profile = useStoreState((state: any) => state.profile);
     const { tandems, error, isLoading } = useGetLearningData(refresh);
 
     useEffect(() => {
@@ -50,6 +54,39 @@ const LearningPage = () => {
 
     const onVocabularyContentPressed = () =>
         !isHybrid ? setDisplayVocabularyContent(true) : history.push('/vocabularies', { tandem: currentTandem });
+
+    const onVocabularyContentPressedFromLearningBook = (vocabularyListId: string) => {
+        if (!isHybrid) {
+            setDisplayLearningBookContent(false);
+            setDisplayVocabularyContent(true);
+            setCurrentVocabularyListId(vocabularyListId);
+        } else {
+            history.push('/vocabularies', { tandem: currentTandem, vocabularyListId });
+        }
+    };
+
+    const onVocabularyModalClosed = () => {
+        setDisplayVocabularyContent(false);
+        setCurrentVocabularyListId(undefined);
+    };
+
+    const onActivitiesContentPressedFromLearningBook = (activityId: string) => {
+        if (!isHybrid) {
+            setDisplayLearningBookContent(false);
+            setDisplayActivitiesContent(true);
+            setCurrentActivityId(activityId);
+        } else {
+            history.push('/activities', { activityId });
+        }
+    };
+
+    const onActivitiesModalClosed = () => {
+        setDisplayActivitiesContent(false);
+        setCurrentActivityId(undefined);
+    };
+
+    const onLearningBookContentPressed = () =>
+        !isHybrid ? setDisplayLearningBookContent(true) : history.push('/learning-book', { tandem: currentTandem });
 
     const onActivitiesContentPressed = () =>
         !isHybrid ? setDisplayActivitiesContent(true) : history.push('/activities');
@@ -96,6 +133,7 @@ const LearningPage = () => {
                     onValidatedTandemPressed={onValidatedTandemPressed}
                     onVocabularyListPressed={onVocabularyContentPressed}
                     onActivitiesContentPressed={onActivitiesContentPressed}
+                    onLearningBookContentPressed={onLearningBookContentPressed}
                     onShowAllGoalsPressed={onShowAllGoalsPressed}
                     setCurrentTandem={setCurrentTandem}
                 />
@@ -115,6 +153,7 @@ const LearningPage = () => {
                     onValidatedTandemPressed={onValidatedTandemPressed}
                     onVocabularyListPressed={onVocabularyContentPressed}
                     onActivitiesContentPressed={onActivitiesContentPressed}
+                    onLearningBookContentPressed={onLearningBookContentPressed}
                     onShowAllGoalsPressed={onShowAllGoalsPressed}
                     setCurrentTandem={setCurrentTandem}
                 />
@@ -133,23 +172,33 @@ const LearningPage = () => {
             <TandemProfileModal
                 isVisible={!!displaySelectedTandem && displaySelectedTandem.status === 'ACTIVE'}
                 id={displaySelectedTandem?.id}
-                language={displaySelectedTandem?.learningLanguage}
+                learningLanguage={displaySelectedTandem?.learningLanguage}
                 level={displaySelectedTandem?.level}
                 onClose={() => setDisplaySelectedTandem(undefined)}
                 partnerLearningLanguage={displaySelectedTandem?.partnerLearningLanguage}
                 pedagogy={displaySelectedTandem?.pedagogy}
                 profile={displaySelectedTandem?.partner}
             />
+            <LearningBookContentModal
+                isVisible={displayLearningBookContent}
+                onClose={() => setDisplayLearningBookContent(false)}
+                learningLanguage={currentTandem?.learningLanguage}
+                onOpenVocabularyList={onVocabularyContentPressedFromLearningBook}
+                onOpenActivity={onActivitiesContentPressedFromLearningBook}
+                profile={profile}
+            />
             <ActivitiesContentModal
                 isVisible={displayActivitiesContent}
-                onClose={() => setDisplayActivitiesContent(false)}
+                onClose={onActivitiesModalClosed}
                 profile={profile}
+                currentActivityId={currentActivityId}
             />
             {currentTandem && (
                 <VocabularyContentModal
                     isVisible={displayVocabularyContent}
-                    onClose={() => setDisplayVocabularyContent(false)}
+                    onClose={onVocabularyModalClosed}
                     profile={profile}
+                    currentVocabularyListId={currentVocabularyListId}
                     currentLearningLanguage={currentTandem.learningLanguage}
                 />
             )}

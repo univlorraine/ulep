@@ -70,7 +70,6 @@ export const vocabularyListMapper = (
     vocabularies: snapshot.Vocabulary.map(vocabularyMapper),
     wordLanguage: languageMapper(snapshot.OriginalLanguage),
     translationLanguage: languageMapper(snapshot.TranslationLanguage),
-    creatorId: snapshot.Creator?.id,
-    creatorName: snapshot.Creator?.User.firstname,
+    creator: profileMapper(snapshot.Creator),
   });
 };

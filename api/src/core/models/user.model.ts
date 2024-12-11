@@ -1,5 +1,5 @@
-import Device from './device.model';
 import { CountryCode } from './country-code.model';
+import Device from './device.model';
 import { Language } from './language.model';
 import { MediaObject } from './media.model';
 import { University } from './university.model';
@@ -48,6 +48,7 @@ export type UserProps = {
   avatar?: MediaObject;
   contactId?: string;
   status?: UserStatus;
+  logEntriesShared?: boolean;
   deactivatedReason?: string;
   acceptsEmail: boolean;
   diploma?: string;
@@ -73,6 +74,7 @@ export class User {
   readonly avatar?: MediaObject;
   readonly status?: UserStatus;
   readonly deactivated?: boolean;
+  readonly logEntriesShared?: boolean;
   readonly deactivatedReason?: string;
   readonly diploma?: string;
   readonly division?: string;
@@ -100,6 +102,7 @@ export class User {
     this.division = props.division;
     this.staffFunction = props.staffFunction;
     this.deactivated = props.deactivated;
+    this.logEntriesShared = props.logEntriesShared;
     this.createdAt = props.createdAt;
     this.updatedAt = props.updatedAt;
     this.devices = props.devices ?? [];

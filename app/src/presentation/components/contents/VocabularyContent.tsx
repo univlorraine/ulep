@@ -21,6 +21,7 @@ interface VocabularyContentProps {
     onClose: () => void;
     isModal?: boolean;
     currentLearningLanguage: LearningLanguage;
+    currentVocabularyListId?: string;
 }
 
 const VocabularyContent: React.FC<VocabularyContentProps> = ({
@@ -28,6 +29,7 @@ const VocabularyContent: React.FC<VocabularyContentProps> = ({
     onClose,
     isModal,
     currentLearningLanguage,
+    currentVocabularyListId,
 }) => {
     const { getAllTandems } = useConfig();
     const [vocabularySelected, setVocabularySelected] = useState<Vocabulary>();
@@ -37,6 +39,7 @@ const VocabularyContent: React.FC<VocabularyContentProps> = ({
     const [tandems, setTandems] = useState<Tandem[]>([]);
     const [addContentMode, setAddContentMode] = useState(false);
     const [quizzSelectedListIds, setQuizzSelectedListIds] = useState<string[]>([]);
+    const [initialSelectionDone, setInitialSelectionDone] = useState(false);
 
     const {
         vocabularies,
@@ -130,6 +133,16 @@ const VocabularyContent: React.FC<VocabularyContentProps> = ({
         getProfilesTandems();
     }, [profile]);
 
+    useEffect(() => {
+        if (!initialSelectionDone && currentVocabularyListId && vocabularyLists.length > 0) {
+            const selectedList = vocabularyLists.find((list) => list.id === currentVocabularyListId);
+            if (selectedList) {
+                setVocabularyListSelected(selectedList);
+                setInitialSelectionDone(true);
+            }
+        }
+    }, [initialSelectionDone, currentVocabularyListId, vocabularyLists]);
+
     if (error) {
         return <ErrorPage />;
     }
@@ -177,6 +190,7 @@ const VocabularyContent: React.FC<VocabularyContentProps> = ({
                     profile={profile}
                     selectedListsId={quizzSelectedListIds}
                     onBackPressed={() => setQuizzSelectedListIds([])}
+                    learningLanguageId={currentLearningLanguage.id}
                 />
             )}
             <AddOrUpdateVocabularyListModal

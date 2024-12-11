@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import Language from '../../../domain/entities/Language';
+import LearningLanguage from '../../../domain/entities/LearningLanguage';
 import Profile from '../../../domain/entities/Profile';
 import { Availabilites } from '../../../domain/entities/ProfileSignUp';
 import { useStoreState } from '../../../store/storeTypes';
@@ -10,7 +11,7 @@ import TandemCard from './TandemCard';
 import styles from './TandemProfileContent.module.css';
 
 interface TandemProfileContentProps {
-    language: Language;
+    learningLanguage: LearningLanguage;
     level: CEFR;
     pedagogy: Pedagogy;
     partnerProfile: Profile;
@@ -19,7 +20,7 @@ interface TandemProfileContentProps {
 }
 
 const TandemProfileContent: React.FC<TandemProfileContentProps> = ({
-    language,
+    learningLanguage,
     level,
     pedagogy,
     partnerProfile,
@@ -38,8 +39,7 @@ const TandemProfileContent: React.FC<TandemProfileContentProps> = ({
             <span className="title extra-large-margin-bottom large-margin-top">
                 {t(`home_page.tandem_validated.title`)}
             </span>
-            <TandemCard profile={partnerProfile} language={language} />
-
+            <TandemCard profile={partnerProfile} language={learningLanguage} />
             <span className={styles.category}>{t(`global.email`)}</span>
             <div className={styles['text-container']}>{partnerProfile.user.email}</div>
 

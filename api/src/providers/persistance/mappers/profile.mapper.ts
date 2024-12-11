@@ -104,6 +104,9 @@ export const profileMapper = (instance: ProfileSnapshot): Profile => {
           learningJournal: learningLanguage.learning_journal ?? false,
           consultingInterview: learningLanguage.consulting_interview ?? false,
           sharedCertificate: learningLanguage.shared_certificate ?? false,
+          sharedLogsDate: learningLanguage.shared_logs_date
+            ? new Date(learningLanguage.shared_logs_date)
+            : undefined,
           certificateFile:
             learningLanguage.CertificateFile &&
             new MediaObject({

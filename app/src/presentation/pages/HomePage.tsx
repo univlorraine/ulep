@@ -30,6 +30,11 @@ import { HYBRID_MAX_WIDTH } from '../utils';
 
 interface HomePageLocationProps {
     endSession: boolean;
+    duration: number;
+    partnerTandemId: string;
+    tandemFirstname: string;
+    tandemLastname: string;
+    learningLanguageId: string;
 }
 
 const HomePage: React.FC = () => {
@@ -38,7 +43,7 @@ const HomePage: React.FC = () => {
     const [showToast] = useIonToast();
     const { width } = useWindowDimensions();
     const isHybrid = width < HYBRID_MAX_WIDTH;
-    const profile = useStoreState((state) => state.profile);
+    const profile = useStoreState((state: any) => state.profile);
     const [selectedTandem, setSelectedTandem] = useState<Tandem>();
     const [refresh, setRefresh] = useState<boolean>(false);
     const [displaySessionModal, setDisplaySessionModal] = useState<DisplaySessionModal>();
@@ -54,7 +59,13 @@ const HomePage: React.FC = () => {
 
     const onReportPressed = () => (isHybrid ? history.push('/report') : undefined);
 
-    const onCompleteLearningJournalPressed = () => setIsEndSessionModalOpen(false);
+    const onCloseEndSessionModal = () => {
+        history.replace({
+            pathname: location.pathname,
+            state: {},
+        });
+        setIsEndSessionModalOpen(false);
+    };
 
     const onValidatedTandemPressed = (tandem: Tandem) =>
         !isHybrid ? setSelectedTandem(tandem) : history.push('/tandem-profil', { tandem });
@@ -208,7 +219,7 @@ const HomePage: React.FC = () => {
             <TandemProfileModal
                 isVisible={!!selectedTandem && selectedTandem.status === 'ACTIVE'}
                 id={selectedTandem?.id}
-                language={selectedTandem?.learningLanguage}
+                learningLanguage={selectedTandem?.learningLanguage}
                 level={selectedTandem?.level}
                 onClose={() => setSelectedTandem(undefined)}
                 partnerLearningLanguage={selectedTandem?.partnerLearningLanguage}
@@ -228,8 +239,13 @@ const HomePage: React.FC = () => {
             />
             <EndSessionModal
                 isOpen={isEndSessionModalOpen}
-                onClose={() => setIsEndSessionModalOpen(false)}
-                onCompleteLearningJournalPressed={onCompleteLearningJournalPressed}
+                onClose={onCloseEndSessionModal}
+                onCompleteLearningJournalPressed={onCloseEndSessionModal}
+                duration={location.state?.duration}
+                partnerTandemId={location.state?.partnerTandemId}
+                tandemFirstname={location.state?.tandemFirstname}
+                tandemLastname={location.state?.tandemLastname}
+                learningLanguageId={location.state?.learningLanguageId}
             />
             <NewsContentModal
                 isVisible={displayNewsContent !== undefined}

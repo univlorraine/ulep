@@ -36,12 +36,7 @@ const NewVocabularyMenuModal: React.FC<NewVocabularyMenuModalProps> = ({ isVisib
 
     if (isHybrid) {
         return (
-            <IonModal
-                animated
-                isOpen={isVisible}
-                onDidDismiss={onCloseModal}
-                className={`modal modal-side ${isHybrid ? 'hybrid' : ''}`}
-            >
+            <IonModal animated isOpen={isVisible} onDidDismiss={onCloseModal} className={`modal modal-side hybrid`}>
                 <SelectLanguageContent
                     onBackPressed={onClose}
                     setSelectedLanguage={onSelectedLanguageMobile}
@@ -52,12 +47,7 @@ const NewVocabularyMenuModal: React.FC<NewVocabularyMenuModalProps> = ({ isVisib
     }
 
     return (
-        <IonModal
-            animated
-            isOpen={isVisible}
-            onDidDismiss={onCloseModal}
-            className={`modal modal-side ${isHybrid ? 'hybrid' : ''}`}
-        >
+        <IonModal animated isOpen={isVisible} onDidDismiss={onCloseModal} className={`modal modal-side`}>
             {!selectedLanguage && (
                 <SelectLanguageContent
                     onBackPressed={onClose}

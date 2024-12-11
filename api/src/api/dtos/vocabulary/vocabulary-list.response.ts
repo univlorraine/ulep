@@ -66,8 +66,8 @@ export class VocabularyListResponse {
       translationLanguage: LanguageResponse.fromLanguage(
         vocabularyList.translationLanguage,
       ),
-      creatorId: vocabularyList.creatorId,
-      creatorName: vocabularyList.creatorName,
+      creatorId: vocabularyList.creator.id,
+      creatorName: `${vocabularyList.creator.user.firstname} ${vocabularyList.creator.user.lastname}`,
       numberOfVocabularies: vocabularyList.vocabularies.length,
       missingPronunciationOfWords: vocabularyList.vocabularies.filter(
         (vocabulary) => !vocabulary.pronunciationWord,
