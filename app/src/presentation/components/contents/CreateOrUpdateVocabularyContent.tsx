@@ -232,9 +232,9 @@ const CreateOrUpdateVocabularyContent: React.FC<CreateOrUpdateVocabularyContentP
                                     vocabulary.id,
                                     wordPronunciation,
                                     translationPronunciation,
+                                    Boolean(vocabulary.pronunciationWordUrl) && hideUploadedWordPronunciation,
                                     Boolean(vocabulary.pronunciationTranslationUrl) &&
-                                        hideUploadedTranslationPronunciation,
-                                    Boolean(vocabulary.pronunciationWordUrl) && hideUploadedWordPronunciation
+                                        hideUploadedTranslationPronunciation
                                 )
                             }
                         >
