@@ -60,6 +60,7 @@ export class CreateCommunityChatUsecase {
       { field: 'code', order: 'asc' },
       LanguageStatus.PRIMARY,
     );
+
     for (const centralLanguage of centralLanguages.items) {
       await this.createCommunityChatFromLanguagePair(
         centralLanguage.code,
@@ -72,7 +73,11 @@ export class CreateCommunityChatUsecase {
     centralLanguageCode: string,
     partnerLanguageCode: string,
   ) {
-    if (centralLanguageCode === partnerLanguageCode) {
+    if (
+      centralLanguageCode === partnerLanguageCode ||
+      centralLanguageCode === '*' ||
+      partnerLanguageCode === '*'
+    ) {
       return;
     }
 
