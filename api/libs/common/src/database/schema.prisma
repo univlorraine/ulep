@@ -71,6 +71,8 @@ model LanguageCodes {
   TranslationVocabularyList VocabularyList[] @relation("TranslationLanguage")
   Activities             Activity[]
   Events                 Events[] @relation("DiffusionLanguages")
+  CommunityChatCentral CommunityChat[] @relation("CentralLanguage")
+  CommunityChatPartner CommunityChat[] @relation("PartnerLanguage")
 
   @@unique([name])
   @@unique([code])
@@ -806,4 +808,21 @@ enum LogEntryType {
   EDIT_ACTIVITY
   SUBMIT_ACTIVITY
   PLAYED_GAME
+}
+
+//  * ****************************************************
+//  * Community chat
+//  * ****************************************************
+
+model CommunityChat {
+  id                String   @id @default(uuid()) // ID will be the same as the chat id from the chat service
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+  central_language_id String
+  partner_language_id String
+
+  CentralLanguage LanguageCodes @relation("CentralLanguage", fields: [central_language_id], references: [id], onDelete: Cascade)
+  PartnerLanguage LanguageCodes @relation("PartnerLanguage", fields: [partner_language_id], references: [id], onDelete: Cascade)
+
+  @@map("community_chat")
 }

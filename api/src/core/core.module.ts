@@ -32,6 +32,7 @@ import {
   CreateActivityThemeUsecase,
   CreateActivityUsecase,
   CreateAdministratorUsecase,
+  CreateCommunityChatUsecase,
   CreateInterestCategoryUsecase,
   CreateInterestUsecase,
   CreateLearningLanguageUseCase,
@@ -376,6 +377,7 @@ const usecases: Provider[] = [
   GenerateConversationsUsecase,
   GetAllConversationsFromUserIdUsecase,
   GetMessagesFromConversationUsecase,
+  CreateCommunityChatUsecase,
   // Vocabulary
   CreateVocabularyUsecase,
   CreateVocabularyListUsecase,

@@ -70,7 +70,7 @@ export interface ChatServicePort {
     users: string[],
     tandemId?: string,
     metadata?: any,
-  ): Promise<any>;
+  ): Promise<Conversation>;
   createConversations(conversations: CreateConversations[]): Promise<any>;
   deleteConversation(tandemId: string): Promise<any>;
 }

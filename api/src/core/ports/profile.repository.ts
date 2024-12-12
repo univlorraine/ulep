@@ -73,6 +73,11 @@ export interface ProfileRepository {
     where?: ProfileQueryWhere,
   ) => Promise<Collection<Profile>>;
 
+  findAllWithMasteredLanguageAndLearningLanguage: (
+    firstLanguageCode: string,
+    secondLanguageCode: string,
+  ) => Promise<Profile[]>;
+
   findAllWithTandemsProfiles: (
     offset?: number,
     limit?: number,
