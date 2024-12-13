@@ -72,5 +72,6 @@ export interface ChatServicePort {
     metadata?: any,
   ): Promise<Conversation>;
   createConversations(conversations: CreateConversations[]): Promise<any>;
+  addUserToConversation(conversationId: string, userId: string): Promise<any>;
   deleteConversation(tandemId: string): Promise<any>;
 }

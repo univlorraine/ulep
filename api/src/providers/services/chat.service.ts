@@ -208,4 +208,28 @@ export class ChatService implements ChatServicePort {
       this.logger.error('Error while deleting conversation', { error });
     }
   }
+
+  async addUserToConversation(
+    conversationId: string,
+    userId: string,
+  ): Promise<any> {
+    if (!this.env.get('CHAT_URL')) {
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        this.env.get('CHAT_URL') +
+          '/conversations/' +
+          conversationId +
+          '/add-user',
+        { userId },
+        { headers: this.headers },
+      );
+
+      return response.data;
+    } catch (error) {
+      this.logger.error('Error while adding user to conversation', { error });
+    }
+  }
 }

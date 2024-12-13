@@ -28,13 +28,21 @@ export class PrismaCommunityChatRepository implements CommunityChatRepository {
   }
 
   async findByLanguageCodes(
-    centralLanguageCode: string,
-    partnerLanguageCode: string,
+    firstLanguageCode: string,
+    secondLanguageCode: string,
   ): Promise<CommunityChat | null> {
     const result = await this.prisma.communityChat.findFirst({
       where: {
-        CentralLanguage: { code: centralLanguageCode },
-        PartnerLanguage: { code: partnerLanguageCode },
+        OR: [
+          {
+            CentralLanguage: { code: firstLanguageCode },
+            PartnerLanguage: { code: secondLanguageCode },
+          },
+          {
+            CentralLanguage: { code: secondLanguageCode },
+            PartnerLanguage: { code: firstLanguageCode },
+          },
+        ],
       },
       ...CommunityChatRelations,
     });

@@ -7,6 +7,7 @@ import {
   GetCampusUsecase,
   UpdateCampusUsecase,
 } from 'src/core/usecases/campus';
+import { AddUserToCommunityChatUsecase } from 'src/core/usecases/chat/add-user-to-community-chat.usecase';
 import { FindAllSuggestedLanguageUsecase } from 'src/core/usecases/language/find-all-suggested-language.usecase';
 import {
   CreateOrUpdateLogEntryUsecase,
@@ -374,6 +375,7 @@ const usecases: Provider[] = [
   // Notifications
   SendMessageNotificationUsecase,
   // Chat
+  AddUserToCommunityChatUsecase,
   GenerateConversationsUsecase,
   GetAllConversationsFromUserIdUsecase,
   GetMessagesFromConversationUsecase,

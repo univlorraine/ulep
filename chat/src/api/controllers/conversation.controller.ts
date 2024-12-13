@@ -34,9 +34,11 @@ import {
     GetConversationFromUserIdUsecase,
     GetMessagesFromConversationIdUsecase,
     SearchMessagesIdFromConversationIdUsecase,
+    UpdateConversationUsecase,
     UploadMediaUsecase,
 } from 'src/core/usecases';
 import { FilePipe } from '../validators/files.validator';
+import { AddUserToConversationRequest } from 'src/api/dtos/conversation/add-user-to-conversation.request';
 
 //TODO: Allow route only for rest api
 @Controller('conversations')
@@ -53,6 +55,7 @@ export class ConversationController {
         private getConversationFromUserIdUsecase: GetConversationFromUserIdUsecase,
         private searchMessagesIdFromConversationIdUsecase: SearchMessagesIdFromConversationIdUsecase,
         private uploadMediaUsecase: UploadMediaUsecase,
+        private updateConversationUsecase: UpdateConversationUsecase,
     ) {}
 
     @Get('messages/:id')
@@ -130,6 +133,19 @@ export class ConversationController {
             metadata: body.metadata,
         });
         return ConversationResponse.from(conversation);
+    }
+
+    @Post('/:id/add-user')
+    @Swagger.ApiOperation({ summary: 'Add a user to a conversation' })
+    async addUserToConversation(
+        @Param('id') conversationId: string,
+        @Body() body: AddUserToConversationRequest,
+    ) {
+        await this.updateConversationUsecase.execute({
+            id: conversationId,
+            usersToAdd: [body.userId],
+            metadata: {},
+        });
     }
 
     @Post('/multi')

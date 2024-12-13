@@ -34,7 +34,7 @@ class Conversation {
             return tandemContact;
         }
 
-        return otherParticipants[0];
+        return otherParticipants[0] || conversation.participants[0];
     }
 }
 

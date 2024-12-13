@@ -56,6 +56,7 @@ interface ConversationLineProps {
     currentConversation?: Conversation;
 }
 
+//TODO: Handle no partner in conversation for community chat
 const ConversationLine: React.FC<ConversationLineProps> = ({
     conversation,
     currentConversation,

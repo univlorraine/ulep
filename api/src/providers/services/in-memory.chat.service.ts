@@ -29,6 +29,9 @@ export class InMemoryChatService implements ChatServicePort {
   ): Promise<Collection<Message>> {
     return;
   }
+  addUserToConversation(conversationId: string, userId: string): Promise<any> {
+    return;
+  }
   deleteConversation(tandemId: string): Promise<any> {
     return;
   }
