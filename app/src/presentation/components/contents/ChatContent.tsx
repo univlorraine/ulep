@@ -42,6 +42,7 @@ const Content: React.FC<ChatContentProps> = ({
     const [isSearchMode, setIsSearchMode] = useState<boolean>(false);
     const history = useHistory();
     const accessToken = useStoreState((state) => state.accessToken);
+    const isCommunity = conversation.isForCommunity;
 
     const findLearningLanguageConversation = () => {
         const profileLearningLanguages = profile.learningLanguages;
@@ -86,6 +87,10 @@ const Content: React.FC<ChatContentProps> = ({
     };
 
     const onOpenVideoCall = () => {
+        if (isCommunity) {
+            return;
+        }
+
         const conversationLearningLanguage = findCommonLearningLanguage();
         history.push({
             pathname: '/jitsi',
@@ -148,11 +153,16 @@ const Content: React.FC<ChatContentProps> = ({
                 )}
                 <div className={styles['title-container']}>
                     <h2 className={styles.title}>
-                        {t('chat.title', {
-                            name: partner.firstname,
-                        })}
+                        {!isCommunity
+                            ? t('chat.title', {
+                                  name: partner.firstname,
+                              })
+                            : t('chat.community.name', {
+                                  firstLanguage: t(`languages_code.${conversation.centralLanguage?.code}`),
+                                  secondLanguage: t(`languages_code.${conversation.partnerLanguage?.code}`),
+                              })}
                     </h2>
-                    {!isBlocked && (
+                    {!isBlocked && !isCommunity && (
                         <IonButton
                             fill="clear"
                             className={styles.camera}
@@ -179,20 +189,22 @@ const Content: React.FC<ChatContentProps> = ({
                 <IonPopover trigger="click-trigger" triggerAction="click" isOpen={showMenu} showBackdrop={false}>
                     <IonContent>
                         <IonList lines="none">
-                            <IonItem
-                                button={true}
-                                detail={false}
-                                onClick={() =>
-                                    setCurrentContent
-                                        ? setCurrentContent('media')
-                                        : history.push('/media', { conversation })
-                                }
-                            >
-                                <IonIcon icon={imageOutline} aria-hidden="true" />
-                                <IonLabel className={styles['chat-popover-label']}>
-                                    {t('chat.conversation_menu.medias')}
-                                </IonLabel>
-                            </IonItem>
+                            {!isCommunity && (
+                                <IonItem
+                                    button={true}
+                                    detail={false}
+                                    onClick={() =>
+                                        setCurrentContent
+                                            ? setCurrentContent('media')
+                                            : history.push('/media', { conversation })
+                                    }
+                                >
+                                    <IonIcon icon={imageOutline} aria-hidden="true" />
+                                    <IonLabel className={styles['chat-popover-label']}>
+                                        {t('chat.conversation_menu.medias')}
+                                    </IonLabel>
+                                </IonItem>
+                            )}
                             <IonItem button={true} detail={false} onClick={setSearchMode}>
                                 <IonIcon icon={searchOutline} aria-hidden="true" />
                                 <IonLabel className={styles['chat-popover-label']}>
@@ -221,6 +233,7 @@ const Content: React.FC<ChatContentProps> = ({
                     isScrollForwardOver={isScrollForwardOver}
                     isScrollBackwardOver={isScrollBackwardOver}
                     setImageToDisplay={setImageToDisplay}
+                    isCommunity={isCommunity}
                 />
             ) : (
                 <div className={styles.loader}>
@@ -230,6 +243,7 @@ const Content: React.FC<ChatContentProps> = ({
             {!isSearchMode && (
                 <ChatInputSender
                     isBlocked={isBlocked}
+                    isCommunity={isCommunity}
                     conversation={conversation}
                     handleSendMessage={handleSendMessage}
                 />

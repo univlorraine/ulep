@@ -11,6 +11,7 @@ import styles from './MessagesList.module.css';
 interface MessagesListProps {
     currentMessageSearchId?: string;
     messages: Message[];
+    isCommunity: boolean;
     isScrollForwardOver: boolean;
     isScrollBackwardOver: boolean;
     loadMessages: (direction: MessagePaginationDirection) => void;
@@ -21,6 +22,7 @@ interface MessagesListProps {
 const MessagesList: React.FC<MessagesListProps> = ({
     currentMessageSearchId,
     messages,
+    isCommunity,
     isScrollForwardOver,
     isScrollBackwardOver,
     loadMessages,
@@ -74,6 +76,7 @@ const MessagesList: React.FC<MessagesListProps> = ({
                             currentMessageSearchId={currentMessageSearchId}
                             message={message}
                             isCurrentUserMessage={isCurrentUserMessage}
+                            isCommunity={isCommunity}
                             setImageToDisplay={message.type === MessageType.Image ? setImageToDisplay : undefined}
                         />
                     </div>

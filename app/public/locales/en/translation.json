@@ -443,6 +443,7 @@
             "links": "Links"
         },
         "reportMessageButton": "Report message",
+        "likeMessageButton": "Like message",
         "no_messages": "No messages",
         "no_conversations": "No conversations",
         "send_image_aria_label": "Send image",

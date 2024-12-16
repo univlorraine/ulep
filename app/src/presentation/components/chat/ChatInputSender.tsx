@@ -10,11 +10,17 @@ import styles from './ChatInputSender.module.css';
 
 interface ChatInputSenderProps {
     isBlocked: boolean;
+    isCommunity: boolean;
     conversation: Conversation;
     handleSendMessage: (conversation: Conversation, message: string, file?: File, filename?: string) => void;
 }
 
-const ChatInputSender: React.FC<ChatInputSenderProps> = ({ isBlocked, conversation, handleSendMessage }) => {
+const ChatInputSender: React.FC<ChatInputSenderProps> = ({
+    isBlocked,
+    isCommunity,
+    conversation,
+    handleSendMessage,
+}) => {
     const { t } = useTranslation();
     const { cameraAdapter, fileAdapter, recorderAdapter } = useConfig();
     const [showToast] = useIonToast();
@@ -190,6 +196,7 @@ const ChatInputSender: React.FC<ChatInputSenderProps> = ({ isBlocked, conversati
                     handleStartRecord={handleStartRecord}
                     handleStopRecord={handleStopRecord}
                     isBlocked={isBlocked}
+                    hideRecordButton={isCommunity}
                 />
             </div>
         </div>

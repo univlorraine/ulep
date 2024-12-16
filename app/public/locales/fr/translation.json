@@ -479,6 +479,7 @@
             "links": "Liens"
         },
         "reportMessageButton": "Signaler le message",
+        "likeMessageButton": "Liker le message",
         "no_messages": "Aucun message",
         "no_conversations": "Aucune conversation",
         "send_image_aria_label": "Envoyer une image",

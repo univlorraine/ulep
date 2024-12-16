@@ -1,4 +1,5 @@
-import { IonButton, IonIcon, IonPopover, IonText, useIonToast } from '@ionic/react';
+import { IonAvatar, IonButton, IonIcon, IonPopover, IonText, useIonToast } from '@ionic/react';
+import { alertCircleOutline, thumbsUpOutline } from 'ionicons/icons';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DownloadSvg, KebabSvg } from '../../../assets';
@@ -6,10 +7,34 @@ import { useConfig } from '../../../context/ConfigurationContext';
 import { Message, MessageType } from '../../../domain/entities/chat/Message';
 import AudioLine from '../AudioLine';
 import OGCard from '../card/OGCard';
+import NetworkImage from '../NetworkImage';
 import styles from './MessageComponent.module.css';
+
+interface ChatAvatarProps {
+    avatar?: string;
+    firstname: string;
+    lastname: string;
+}
+
+const ChatAvatar: React.FC<ChatAvatarProps> = ({ avatar, firstname, lastname }) => (
+    <NetworkImage
+        className={styles.avatarContainer}
+        id={avatar ?? ''}
+        aria-hidden={true}
+        onErrorComponent={() => (
+            <IonAvatar className={styles.image} aria-hidden={true}>
+                <span className={styles.avatarLetter}>
+                    {firstname[0].toUpperCase()}
+                    {lastname[0].toUpperCase()}
+                </span>
+            </IonAvatar>
+        )}
+    />
+);
 
 interface MessageProps {
     isCurrentUserMessage: boolean;
+    isCommunity: boolean;
     message: Message;
     currentMessageSearchId?: string;
     onMessagePressed?: (e: React.MouseEvent<HTMLIonButtonElement>) => void;
@@ -19,6 +44,7 @@ interface MessageProps {
 const MessageComponent: React.FC<MessageProps> = ({
     message,
     isCurrentUserMessage,
+    isCommunity,
     currentMessageSearchId,
     setImageToDisplay,
 }) => {
@@ -78,6 +104,7 @@ const MessageComponent: React.FC<MessageProps> = ({
                     <MessageText
                         message={message}
                         isCurrentUserMessage={isCurrentUserMessage}
+                        isCommunity={isCommunity}
                         currentMessageSearchId={currentMessageSearchId}
                     />
                 );
@@ -86,18 +113,32 @@ const MessageComponent: React.FC<MessageProps> = ({
                     <MessageImage
                         message={message}
                         isCurrentUserMessage={isCurrentUserMessage}
+                        isCommunity={isCommunity}
                         setImageToDisplay={setImageToDisplay}
                     />
                 );
             case MessageType.Audio:
-                return <MessageAudio message={message} isCurrentUserMessage={isCurrentUserMessage} />;
+                return (
+                    <MessageAudio
+                        message={message}
+                        isCurrentUserMessage={isCurrentUserMessage}
+                        isCommunity={isCommunity}
+                    />
+                );
             case MessageType.File:
-                return <MessageFile message={message} isCurrentUserMessage={isCurrentUserMessage} />;
+                return (
+                    <MessageFile
+                        message={message}
+                        isCurrentUserMessage={isCurrentUserMessage}
+                        isCommunity={isCommunity}
+                    />
+                );
             case MessageType.Link:
                 return (
                     <MessageLink
                         message={message}
                         isCurrentUserMessage={isCurrentUserMessage}
+                        isCommunity={isCommunity}
                         currentMessageSearchId={currentMessageSearchId}
                     />
                 );
@@ -114,6 +155,13 @@ const MessageComponent: React.FC<MessageProps> = ({
                     <IonText className={styles.date}>{date}</IonText>
                 </div>
                 <div className={styles.messageContent}>
+                    {isCommunity && !isCurrentUserMessage && (
+                        <ChatAvatar
+                            avatar={message.sender.avatar?.id}
+                            firstname={message.sender.firstname}
+                            lastname={message.sender.lastname}
+                        />
+                    )}
                     {renderMessageContent()}
                     {!isCurrentUserMessage && (
                         <IonButton
@@ -138,8 +186,15 @@ const MessageComponent: React.FC<MessageProps> = ({
                 onDidDismiss={() => setDisplayPopover(false)}
                 className={styles.fullHeightPopover}
             >
-                <IonButton fill="clear" className={styles.reportButton} onClick={reportMessage}>
-                    <IonText className={styles.reportButtonText}>{t('chat.reportMessageButton')}</IonText>
+                {isCommunity && (
+                    <IonButton fill="clear" className={styles.contextButton} onClick={() => {}}>
+                        <IonIcon icon={thumbsUpOutline} className={styles.contextButtonIcon} />
+                        <IonText className={styles.contextButtonText}>{t('chat.likeMessageButton')}</IonText>
+                    </IonButton>
+                )}
+                <IonButton fill="clear" className={styles.contextButton} onClick={reportMessage}>
+                    <IonIcon icon={alertCircleOutline} className={styles.contextButtonIcon} />
+                    <IonText className={styles.contextButtonText}>{t('chat.reportMessageButton')}</IonText>
                 </IonButton>
             </IonPopover>
         </>

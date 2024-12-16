@@ -155,14 +155,35 @@
     flex-direction: column;
     width: fit-content;
 }
-.reportButton {
+.contextButton {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.reportButtonText {
+.contextButtonText {
     color: black;
+}
+
+.contextButtonIcon {
+    margin-right: 8px;
+    color: black;
+}
+
+.avatarContainer {
+    align-items: center;
+    background-color: var(--primary-color);
+    border-radius: 50%;
+    color: black;
+    display: flex;
+    flex-direction: row;
+    font-size: 24px;
+    justify-content: center;
+    height: 50px;
+    width: 50px;
+    margin-right: 8px;
+    min-width: 50px;
+    min-height: 50px;
 }
 
 .fullHeightPopover {
