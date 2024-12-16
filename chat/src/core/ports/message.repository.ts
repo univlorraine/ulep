@@ -27,5 +27,7 @@ export interface MessageRepository {
         id: string,
         search: string,
     ) => Promise<string[]>;
+    like: (id: string) => Promise<Message>;
+    unlike: (id: string) => Promise<Message>;
     update: (message: Message) => Promise<Message>;
 }

@@ -13,6 +13,10 @@ import {
     CONVERSATION_REPOSITORY,
     ConversationRepository,
 } from 'src/core/ports/conversation.repository';
+import {
+    MESSAGE_REPOSITORY,
+    MessageRepository,
+} from 'src/core/ports/message.repository';
 import { ROOM_REPOSITORY } from 'src/core/ports/room.repository';
 import { RedisRoomService } from 'src/providers/services/room.service';
 
@@ -30,6 +34,8 @@ export class HubGateway
     constructor(
         @Inject(CONVERSATION_REPOSITORY)
         private readonly conversationRepository: ConversationRepository,
+        @Inject(MESSAGE_REPOSITORY)
+        private readonly messageRepository: MessageRepository,
         @Inject(ROOM_REPOSITORY) private readonly roomService: RedisRoomService,
         private readonly keycloakClient: KeycloakClient,
     ) {
@@ -92,6 +98,30 @@ export class HubGateway
             .to(message.conversationId)
             .timeout(1000)
             .emit('message', message);
+    }
+
+    /**
+     * Publish an update to a specific conversation.
+     */
+    @SubscribeMessage('like')
+    async like(client: Socket, message: Message): Promise<void> {
+        await this.messageRepository.like(message.id);
+        this.server
+            .to(message.conversationId)
+            .timeout(1000)
+            .emit('liked', message);
+    }
+
+    /**
+     * Publish an update to a specific conversation.
+     */
+    @SubscribeMessage('unlike')
+    async unlike(client: Socket, message: Message): Promise<void> {
+        await this.messageRepository.unlike(message.id);
+        this.server
+            .to(message.conversationId)
+            .timeout(1000)
+            .emit('unliked', message);
     }
 
     /**

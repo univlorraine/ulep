@@ -29,6 +29,7 @@ model Message {
   isDeleted             Boolean      @default(false)
   ownerId               String
   type                  String       @default("text")
+  likes                 Int          @default(0)
   updatedAt             DateTime     @updatedAt
   mediaObjectId         String?
   thumbnailId           String?

@@ -23,6 +23,7 @@ export const messageMapper = (snapshot: MessagesSnapshot): Message => {
         createdAt: snapshot.createdAt,
         updatedAt: snapshot.updatedAt,
         conversationId: snapshot.conversationId,
+        likes: snapshot.likes,
         isReported: snapshot.isReported,
         isDeleted: snapshot.isDeleted,
         ownerId: snapshot.ownerId,

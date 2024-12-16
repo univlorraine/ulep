@@ -34,6 +34,24 @@ export class InMemoryMessageRepository implements MessageRepository {
         return message || null;
     }
 
+    async like(id: string): Promise<Message> {
+        const message = this.#messages.find((message) => message.id === id);
+        if (!message) {
+            return Promise.reject(null);
+        }
+        const updatedMessage = { ...message, likes: message.likes + 1 };
+        return Promise.resolve(updatedMessage);
+    }
+
+    async unlike(id: string): Promise<Message> {
+        const message = this.#messages.find((message) => message.id === id);
+        if (!message) {
+            return Promise.reject(null);
+        }
+        const updatedMessage = { ...message, likes: message.likes - 1 };
+        return Promise.resolve(updatedMessage);
+    }
+
     async create(message: Message): Promise<Message> {
         this.#messages.push(message);
         return Promise.resolve(message);

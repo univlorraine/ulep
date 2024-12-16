@@ -31,6 +31,26 @@ export class PrismaMessageRepository implements MessageRepository {
         return messageMapper(messageSent);
     }
 
+    async like(id: string): Promise<Message> {
+        const message = await this.prisma.message.update({
+            where: { id },
+            data: { likes: { increment: 1 } },
+            ...MessagesRelations,
+        });
+
+        return messageMapper(message);
+    }
+
+    async unlike(id: string): Promise<Message> {
+        const message = await this.prisma.message.update({
+            where: { id },
+            data: { likes: { decrement: 1 } },
+            ...MessagesRelations,
+        });
+
+        return messageMapper(message);
+    }
+
     async findById(id: string): Promise<Message | null> {
         const message = await this.prisma.message.findUnique({
             where: { id },

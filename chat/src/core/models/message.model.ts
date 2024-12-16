@@ -13,6 +13,7 @@ interface MessageProps {
     isReported: boolean;
     isDeleted: boolean;
     ownerId: string;
+    likes: number;
     type: MessageType;
     createdAt?: Date;
     updatedAt?: Date;
@@ -26,6 +27,7 @@ export class Message {
     readonly isReported: boolean;
     readonly isDeleted: boolean;
     readonly ownerId: string;
+    readonly likes: number;
     readonly type: MessageType;
     readonly createdAt?: Date;
     readonly updatedAt?: Date;
@@ -39,6 +41,7 @@ export class Message {
         this.isReported = props.isReported;
         this.isDeleted = props.isDeleted;
         this.ownerId = props.ownerId;
+        this.likes = props.likes;
         this.type = props.type;
         this.updatedAt = props.updatedAt;
         this.metadata = props.metadata;
