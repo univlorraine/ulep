@@ -53,4 +53,17 @@ export class PrismaCommunityChatRepository implements CommunityChatRepository {
 
     return communityChatMapper(result);
   }
+
+  async ofId(id: string): Promise<CommunityChat | null> {
+    const result = await this.prisma.communityChat.findUnique({
+      where: { id },
+      ...CommunityChatRelations,
+    });
+
+    if (!result) {
+      return null;
+    }
+
+    return communityChatMapper(result);
+  }
 }

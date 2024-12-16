@@ -2,6 +2,7 @@ import * as Swagger from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { MessageResponse } from 'src/api/dtos/chat/message.response';
 import { UserChatResponse } from 'src/api/dtos/chat/user-conversation.response';
+import { LanguageResponse } from 'src/api/dtos/languages';
 import { LearningLanguageResponse } from 'src/api/dtos/learning-languages';
 import { UserResponse } from 'src/api/dtos/users';
 import { ConversationWithUsers } from 'src/core/ports/chat.service';
@@ -15,6 +16,14 @@ class MetadataResponse {
   @Expose({ groups: ['chat'] })
   learningLanguages: LearningLanguageResponse[];
 
+  @Swagger.ApiProperty({ type: LanguageResponse })
+  @Expose({ groups: ['chat'] })
+  centralLanguage: LanguageResponse;
+
+  @Swagger.ApiProperty({ type: LanguageResponse })
+  @Expose({ groups: ['chat'] })
+  partnerLanguage: LanguageResponse;
+
   constructor(partial: Partial<MetadataResponse>) {
     Object.assign(this, partial);
   }
@@ -25,6 +34,12 @@ class MetadataResponse {
       learningLanguages: metadata.learningLanguages?.map((learningLanguage) =>
         LearningLanguageResponse.fromDomain(learningLanguage),
       ),
+      centralLanguage: metadata.centralLanguage
+        ? LanguageResponse.fromLanguage(metadata.centralLanguage)
+        : undefined,
+      partnerLanguage: metadata.partnerLanguage
+        ? LanguageResponse.fromLanguage(metadata.partnerLanguage)
+        : undefined,
     });
   }
 }
@@ -50,6 +65,10 @@ export class ConversationResponse {
   @Expose({ groups: ['chat'] })
   lastMessage?: MessageResponse;
 
+  @Swagger.ApiProperty({ type: 'boolean' })
+  @Expose({ groups: ['chat'] })
+  isForCommunity: boolean;
+
   @Swagger.ApiProperty({ type: 'object' })
   @Expose({ groups: ['chat'] })
   metadata: MetadataResponse;
@@ -63,6 +82,7 @@ export class ConversationResponse {
       id: conversation.id,
       createdAt: conversation.createdAt,
       lastActivityAt: conversation.lastActivityAt,
+      isForCommunity: conversation.isForCommunity,
       users: conversation.users.map(UserChatResponse.fromDomain),
       metadata: MetadataResponse.from(conversation.metadata),
       lastMessage: conversation.lastMessage

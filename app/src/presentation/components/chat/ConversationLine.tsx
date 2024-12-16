@@ -3,6 +3,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import Conversation from '../../../domain/entities/chat/Conversation';
 import { Message } from '../../../domain/entities/chat/Message';
+import Language from '../../../domain/entities/Language';
+import { codeLanguageToFlag } from '../../utils';
 import NetworkImage from '../NetworkImage';
 import styles from './ConversationLine.module.css';
 
@@ -27,6 +29,27 @@ const ConversationAvatar: React.FC<ConversationAvatarProps> = ({ avatar, firstna
                 </IonAvatar>
             )}
         />
+    );
+};
+
+interface CommunityConversationAvatarProps {
+    primaryLanguage?: Language;
+    partnerLanguage?: Language;
+}
+
+const CommunityConversationAvatar: React.FC<CommunityConversationAvatarProps> = ({
+    primaryLanguage,
+    partnerLanguage,
+}) => {
+    return (
+        <div className={styles.communityAvatar}>
+            {partnerLanguage && (
+                <span className={styles.partnerLanguage}>{codeLanguageToFlag(partnerLanguage.code)}</span>
+            )}
+            {primaryLanguage && (
+                <span className={styles.primaryLanguage}>{codeLanguageToFlag(primaryLanguage.code)}</span>
+            )}
+        </div>
     );
 };
 
@@ -65,6 +88,13 @@ const ConversationLine: React.FC<ConversationLineProps> = ({
 }) => {
     const { t } = useTranslation();
     const partner = Conversation.getMainConversationPartner(conversation, userId);
+    const name =
+        conversation.isForCommunity && conversation.centralLanguage && conversation.partnerLanguage
+            ? t('chat.community.name', {
+                  firstLanguage: t(`languages_code.${conversation.centralLanguage.code}`),
+                  secondLanguage: t(`languages_code.${conversation.partnerLanguage.code}`),
+              })
+            : partner.firstname;
     return (
         <IonItem
             className={styles.line}
@@ -74,14 +104,21 @@ const ConversationLine: React.FC<ConversationLineProps> = ({
             color={conversation.id === currentConversation?.id ? 'light' : undefined}
         >
             <div className={styles.container}>
-                <ConversationAvatar
-                    avatar={partner.avatar?.id || partner.id}
-                    firstname={partner.firstname}
-                    lastname={partner.lastname}
-                />
+                {conversation.isForCommunity ? (
+                    <CommunityConversationAvatar
+                        primaryLanguage={conversation.centralLanguage}
+                        partnerLanguage={conversation.partnerLanguage}
+                    />
+                ) : (
+                    <ConversationAvatar
+                        avatar={partner.avatar?.id || partner.id}
+                        firstname={partner.firstname}
+                        lastname={partner.lastname}
+                    />
+                )}
                 <div className={styles.content}>
                     <div className={styles['top-line']}>
-                        <span className={styles.name}>{partner.firstname}</span>
+                        <span className={styles.name}>{name}</span>
                         {conversation.lastMessage && (
                             <span className={styles.date}>{`${t(
                                 conversation.lastMessage.getMessageDate()

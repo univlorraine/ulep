@@ -398,6 +398,9 @@
         }
     },
     "chat": {
+        "community": {
+            "name": "Room {{firstLanguage}} - {{secondLanguage}}"
+        },
         "ariaLabelFileDownloaded": "Downloading file : {{filename}}",
         "fileDownloaded": "File downloaded",
         "me": "Me",

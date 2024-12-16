@@ -434,6 +434,9 @@
         }
     },
     "chat": {
+        "community": {
+            "name": "Salon {{firstLanguage}} - {{secondLanguage}}"
+        },
         "ariaLabelFileDownloaded": "Téléchargement du fichier : {{filename}}",
         "fileDownloaded": "Fichier téléchargé",
         "messageReport": "Message envoyé par : {{firstname}} {{lastname}} le {{date}} ---- {{message}}",

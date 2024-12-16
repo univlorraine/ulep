@@ -24,6 +24,7 @@ export type ConversationWithUsers = {
   lastActivityAt: Date;
   lastMessage?: MessageWithUser;
   metadata: any;
+  isForCommunity: boolean;
 };
 
 export interface Message {
