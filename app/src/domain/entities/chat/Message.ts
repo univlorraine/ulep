@@ -23,6 +23,8 @@ export class MessageWithoutSender {
         public readonly createdAt: Date,
         public readonly senderId: string,
         public readonly type: MessageType,
+        public likes: number = 0,
+        public didLike: boolean = false,
         public readonly metadata: MessageMetadata
     ) {}
 
@@ -69,9 +71,11 @@ export class Message extends MessageWithoutSender {
         public readonly createdAt: Date,
         public readonly sender: UserChat,
         public readonly type: MessageType,
+        public likes: number = 0,
+        public didLike: boolean = false,
         public readonly metadata: MessageMetadata
     ) {
-        super(id, content, createdAt, sender.id, type, metadata);
+        super(id, content, createdAt, sender.id, type, likes, didLike, metadata);
     }
 }
 
@@ -83,8 +87,10 @@ export class MessageWithConversationId extends Message {
         public readonly sender: UserChat,
         public readonly type: MessageType,
         public readonly conversationId: string,
+        public likes: number = 0,
+        public didLike: boolean = false,
         public readonly metadata: any
     ) {
-        super(id, content, createdAt, sender, type, metadata);
+        super(id, content, createdAt, sender, type, likes, didLike, metadata);
     }
 }

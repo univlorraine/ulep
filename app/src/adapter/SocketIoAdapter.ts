@@ -1,6 +1,6 @@
 import socketIo, { Socket } from 'socket.io-client';
-import { UserChat } from '../domain/entities/User';
 import { Message, MessageWithConversationId } from '../domain/entities/chat/Message';
+import { UserChat } from '../domain/entities/User';
 import SocketIoAdapterInterface from './interfaces/SocketIoAdapter.interface';
 
 class SocketIoAdapter implements SocketIoAdapterInterface {
@@ -37,6 +37,34 @@ class SocketIoAdapter implements SocketIoAdapterInterface {
         return message;
     }
 
+    like(conversationId: string, messageId: string, userId: string): void {
+        this.socket?.emit('like', conversationId, messageId, userId);
+    }
+
+    unlike(conversationId: string, messageId: string, userId: string): void {
+        this.socket?.emit('unlike', conversationId, messageId, userId);
+    }
+
+    onLiked(currentConversationId: string, handler: (messageId: string, userId: string) => void): void {
+        this.socket!.on('liked', (conversationId: string, messageId: string, userId: string) => {
+            if (conversationId !== currentConversationId) {
+                return;
+            }
+
+            handler(messageId, userId);
+        });
+    }
+
+    onUnliked(currentConversationId: string, handler: (messageId: string, userId: string) => void): void {
+        this.socket!.on('unliked', (conversationId: string, messageId: string, userId: string) => {
+            if (conversationId !== currentConversationId) {
+                return;
+            }
+
+            handler(messageId, userId);
+        });
+    }
+
     onMessage(conversationId: string, handler: (message: Message) => void): void {
         //TODO: Later if asked we can call antoher function to update the last message conversation through this
         //TODO: If not conversationId then call the handler for other conversation that will call an injected function to parent
@@ -60,6 +88,8 @@ class SocketIoAdapter implements SocketIoAdapterInterface {
                         message.sender.avatar
                     ),
                     message.type,
+                    0,
+                    false,
                     message.metadata
                 )
             );
@@ -72,6 +102,14 @@ class SocketIoAdapter implements SocketIoAdapterInterface {
 
     offDisconnect(): void {
         this.socket!.off('disconnect');
+    }
+
+    offLike(): void {
+        this.socket!.off('liked');
+    }
+
+    offUnlike(): void {
+        this.socket!.off('unliked');
     }
 }
 

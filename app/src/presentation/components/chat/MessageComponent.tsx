@@ -1,5 +1,5 @@
 import { IonAvatar, IonButton, IonIcon, IonPopover, IonText, useIonToast } from '@ionic/react';
-import { alertCircleOutline, thumbsUpOutline } from 'ionicons/icons';
+import { alertCircleOutline, thumbsUp, thumbsUpOutline } from 'ionicons/icons';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DownloadSvg, KebabSvg } from '../../../assets';
@@ -32,12 +32,34 @@ const ChatAvatar: React.FC<ChatAvatarProps> = ({ avatar, firstname, lastname }) 
     />
 );
 
+interface LikeButtonProps {
+    message: Message;
+    isCurrentUserMessage: boolean;
+}
+
+const LikeButton: React.FC<LikeButtonProps> = ({ isCurrentUserMessage, message }) => {
+    if (message.likes === 0) {
+        return null;
+    }
+
+    return (
+        <div
+            className={`${isCurrentUserMessage ? styles.likeContainerLeft : styles.likeContainerRight} ${styles.likeContainer}`}
+        >
+            <IonIcon icon={thumbsUp} className={styles.likeIcon} />
+            <IonText className={styles.likeCount}>{message.likes}</IonText>
+        </div>
+    );
+};
+
 interface MessageProps {
     isCurrentUserMessage: boolean;
     isCommunity: boolean;
     message: Message;
     currentMessageSearchId?: string;
     onMessagePressed?: (e: React.MouseEvent<HTMLIonButtonElement>) => void;
+    onLikeMessage?: (messageId: string) => void;
+    onUnlikeMessage?: (messageId: string) => void;
     setImageToDisplay?: (imageUrl: string) => void;
 }
 
@@ -47,6 +69,8 @@ const MessageComponent: React.FC<MessageProps> = ({
     isCommunity,
     currentMessageSearchId,
     setImageToDisplay,
+    onLikeMessage,
+    onUnlikeMessage,
 }) => {
     const { t } = useTranslation();
     const { createReportMessage } = useConfig();
@@ -88,6 +112,15 @@ const MessageComponent: React.FC<MessageProps> = ({
             message: t('chat.messageReported'),
             duration: 2000,
         });
+    };
+
+    const manageLikeOnMessage = () => {
+        if (message.didLike) {
+            onUnlikeMessage?.(message.id);
+        } else {
+            onLikeMessage?.(message.id);
+        }
+        setDisplayPopover(false);
     };
 
     const onOpenActionsPopover = (e: React.MouseEvent<HTMLIonButtonElement>) => {
@@ -187,9 +220,11 @@ const MessageComponent: React.FC<MessageProps> = ({
                 className={styles.fullHeightPopover}
             >
                 {isCommunity && (
-                    <IonButton fill="clear" className={styles.contextButton} onClick={() => {}}>
+                    <IonButton fill="clear" className={styles.contextButton} onClick={manageLikeOnMessage}>
                         <IonIcon icon={thumbsUpOutline} className={styles.contextButtonIcon} />
-                        <IonText className={styles.contextButtonText}>{t('chat.likeMessageButton')}</IonText>
+                        <IonText className={styles.contextButtonText}>
+                            {message.didLike ? t('chat.unlikeMessageButton') : t('chat.likeMessageButton')}
+                        </IonText>
                     </IonButton>
                 )}
                 <IonButton fill="clear" className={styles.contextButton} onClick={reportMessage}>
@@ -211,6 +246,7 @@ const MessageText: React.FC<MessageProps> = ({ message, isCurrentUserMessage, cu
             }`}
         >
             {message.content}
+            <LikeButton message={message} isCurrentUserMessage={isCurrentUserMessage} />
         </div>
     );
 };
@@ -225,12 +261,16 @@ const MessageImage: React.FC<MessageProps> = ({ message, isCurrentUserMessage, s
     };
 
     return (
-        <IonButton fill="clear" className={`${styles.messageImage} ${messageClass}`} onClick={openModal}>
-            <img className={styles.image} src={message.getThumbnail()} />
-        </IonButton>
+        <div className={`${styles.messageImage} ${messageClass}`}>
+            <IonButton fill="clear" onClick={openModal}>
+                <img className={styles.image} src={message.getThumbnail()} />
+            </IonButton>
+            <LikeButton message={message} isCurrentUserMessage={isCurrentUserMessage} />
+        </div>
     );
 };
 
+//There is no like button for audio messages because there is not audio file on community chat
 const MessageAudio: React.FC<MessageProps> = ({ message, isCurrentUserMessage }) => {
     const messageClass = isCurrentUserMessage ? styles.currentUser : styles.otherUser;
 
@@ -268,6 +308,7 @@ const MessageFile: React.FC<MessageProps> = ({ message, isCurrentUserMessage }) 
                     icon={DownloadSvg}
                 />
             </IonButton>
+            <LikeButton message={message} isCurrentUserMessage={isCurrentUserMessage} />
         </div>
     );
 };
@@ -300,6 +341,7 @@ const MessageLink: React.FC<MessageProps> = ({ message, isCurrentUserMessage, cu
                     )
                 )}
             </IonText>
+            <LikeButton message={message} isCurrentUserMessage={isCurrentUserMessage} />
         </div>
     );
 };

@@ -6,6 +6,21 @@ export enum MessageType {
     Link = 'link',
 }
 
+interface MessageLikeProps {
+    messageId: string;
+    userId: string;
+}
+
+export class MessageLike {
+    readonly messageId: string;
+    readonly userId: string;
+
+    constructor(props: MessageLikeProps) {
+        this.messageId = props.messageId;
+        this.userId = props.userId;
+    }
+}
+
 interface MessageProps {
     id: string;
     conversationId: string;
@@ -13,7 +28,7 @@ interface MessageProps {
     isReported: boolean;
     isDeleted: boolean;
     ownerId: string;
-    likes: number;
+    usersLiked: MessageLike[];
     type: MessageType;
     createdAt?: Date;
     updatedAt?: Date;
@@ -27,7 +42,7 @@ export class Message {
     readonly isReported: boolean;
     readonly isDeleted: boolean;
     readonly ownerId: string;
-    readonly likes: number;
+    readonly usersLiked: MessageLike[];
     readonly type: MessageType;
     readonly createdAt?: Date;
     readonly updatedAt?: Date;
@@ -41,7 +56,7 @@ export class Message {
         this.isReported = props.isReported;
         this.isDeleted = props.isDeleted;
         this.ownerId = props.ownerId;
-        this.likes = props.likes;
+        this.usersLiked = props.usersLiked;
         this.type = props.type;
         this.updatedAt = props.updatedAt;
         this.metadata = props.metadata;

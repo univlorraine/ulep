@@ -1,11 +1,12 @@
 import { Prisma } from '@prisma/client';
 import { Message } from 'src/core/models';
-import { MessageType } from 'src/core/models/message.model';
+import { MessageLike, MessageType } from 'src/core/models/message.model';
 
 const MessagesInclude = Prisma.validator<Prisma.MessageInclude>()({
     Conversation: true,
     MediaObject: true,
     Thumbnail: true,
+    MessageLikes: true,
 });
 
 export const MessagesRelations = { include: MessagesInclude };
@@ -23,7 +24,15 @@ export const messageMapper = (snapshot: MessagesSnapshot): Message => {
         createdAt: snapshot.createdAt,
         updatedAt: snapshot.updatedAt,
         conversationId: snapshot.conversationId,
-        likes: snapshot.likes,
+        usersLiked: snapshot.MessageLikes
+            ? snapshot.MessageLikes.map(
+                  (like) =>
+                      new MessageLike({
+                          messageId: like.messageId,
+                          userId: like.userId,
+                      }),
+              )
+            : [],
         isReported: snapshot.isReported,
         isDeleted: snapshot.isDeleted,
         ownerId: snapshot.ownerId,

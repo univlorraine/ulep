@@ -120,6 +120,14 @@ export class MessageResponse {
   @Expose({ groups: ['chat'] })
   type: string;
 
+  @Swagger.ApiProperty({ type: 'number' })
+  @Expose({ groups: ['chat'] })
+  likes: number;
+
+  @Swagger.ApiProperty({ type: 'boolean' })
+  @Expose({ groups: ['chat'] })
+  didLike: boolean;
+
   @Swagger.ApiProperty({ type: 'object' })
   @Expose({ groups: ['chat'] })
   metadata: MetadataMessageResponse;
@@ -128,11 +136,13 @@ export class MessageResponse {
     Object.assign(this, partial);
   }
 
-  static from(message: MessageWithUser): MessageResponse {
+  static from(message: MessageWithUser, userId: string): MessageResponse {
     return new MessageResponse({
       id: message.id,
       createdAt: message.createdAt,
       content: message.content,
+      likes: message.likes.length,
+      didLike: message.likes.some((like) => like === userId),
       user: UserChatResponse.fromDomain(message.user),
       type: message.type,
       metadata: MetadataMessageResponse.from(message.metadata),

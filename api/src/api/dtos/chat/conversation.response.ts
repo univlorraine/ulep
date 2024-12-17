@@ -77,7 +77,10 @@ export class ConversationResponse {
     Object.assign(this, partial);
   }
 
-  static from(conversation: ConversationWithUsers): ConversationResponse {
+  static from(
+    conversation: ConversationWithUsers,
+    userId: string,
+  ): ConversationResponse {
     return new ConversationResponse({
       id: conversation.id,
       createdAt: conversation.createdAt,
@@ -86,7 +89,7 @@ export class ConversationResponse {
       users: conversation.users.map(UserChatResponse.fromDomain),
       metadata: MetadataResponse.from(conversation.metadata),
       lastMessage: conversation.lastMessage
-        ? MessageResponse.from(conversation.lastMessage)
+        ? MessageResponse.from(conversation.lastMessage, userId)
         : undefined,
     });
   }

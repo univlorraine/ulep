@@ -31,24 +31,32 @@ export class PrismaMessageRepository implements MessageRepository {
         return messageMapper(messageSent);
     }
 
-    async like(id: string): Promise<Message> {
-        const message = await this.prisma.message.update({
-            where: { id },
-            data: { likes: { increment: 1 } },
-            ...MessagesRelations,
+    async like(messageId: string, userId: string): Promise<void> {
+        await this.prisma.messageLike.create({
+            data: {
+                Message: { connect: { id: messageId } },
+                userId,
+            },
         });
-
-        return messageMapper(message);
     }
 
-    async unlike(id: string): Promise<Message> {
-        const message = await this.prisma.message.update({
-            where: { id },
-            data: { likes: { decrement: 1 } },
-            ...MessagesRelations,
+    async unlike(messageId: string, userId: string): Promise<void> {
+        const messageLike = await this.prisma.messageLike.findFirst({
+            where: { messageId, userId },
         });
 
-        return messageMapper(message);
+        if (messageLike) {
+            await this.prisma.message.update({
+                where: { id: messageId },
+                data: {
+                    MessageLikes: {
+                        delete: {
+                            id: messageLike.id,
+                        },
+                    },
+                },
+            });
+        }
     }
 
     async findById(id: string): Promise<Message | null> {

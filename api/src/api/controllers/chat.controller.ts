@@ -12,6 +12,8 @@ import {
 import * as Swagger from '@nestjs/swagger';
 import { AuthenticationGuard } from '../guards';
 
+import { KeycloakUser } from '@app/keycloak';
+import { CurrentUser } from 'src/api/decorators';
 import {
   ConversationResponse,
   GetConversationQuery,
@@ -39,6 +41,7 @@ export class ChatController {
   @UseGuards(AuthenticationGuard)
   async getAllConversations(
     @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() user: KeycloakUser,
     @Query() params: GetConversationQuery,
   ): Promise<Collection<ConversationResponse>> {
     const conversations =
@@ -61,7 +64,9 @@ export class ChatController {
       });
 
     return new Collection<ConversationResponse>({
-      items: conversations.items.map(ConversationResponse.from),
+      items: conversations.items.map((conversation) =>
+        ConversationResponse.from(conversation, user.sub),
+      ),
       totalItems: conversations.totalItems,
     });
   }
@@ -73,6 +78,7 @@ export class ChatController {
   @UseGuards(AuthenticationGuard)
   async getMessagesFromConversation(
     @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() user: KeycloakUser,
     @Query() params: GetMessagesQueryParams,
   ) {
     const messages = await this.getMessagesFromConversationUsecase.execute({
@@ -85,7 +91,7 @@ export class ChatController {
     });
 
     return new Collection<MessageResponse>({
-      items: messages.map(MessageResponse.from),
+      items: messages.map((message) => MessageResponse.from(message, user.sub)),
       totalItems: messages.length,
     });
   }

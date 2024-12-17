@@ -72,6 +72,7 @@ export class CreateMessageUsecase {
             content: command.content,
             ownerId: command.ownerId,
             conversationId: command.conversationId,
+            usersLiked: [],
             type: openGraphResult
                 ? MessageType.Link
                 : await Message.categorizeFileType(command.mimetype),

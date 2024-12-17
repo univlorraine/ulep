@@ -33,6 +33,7 @@ export interface Message {
   createdAt: Date;
   ownerId: string;
   type: string;
+  likes: string[];
   metadata: any;
 }
 
@@ -42,6 +43,7 @@ export interface MessageWithUser {
   createdAt: Date;
   user: User | UserRepresentation;
   type: string;
+  likes: string[];
   metadata: any;
 }
 

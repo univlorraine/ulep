@@ -63,6 +63,10 @@ const Content: React.FC<ChatContentProps> = ({
         loadMessages,
         addNewMessage,
         clearMessages,
+        onLikeMessage,
+        onUnlikeMessage,
+        onLikeMessageReceived,
+        onUnlikeMessageReceived,
     } = useHandleMessagesFromConversation({
         conversationId: conversation.id,
         learningLanguageId: findLearningLanguageConversation()?.id,
@@ -112,6 +116,8 @@ const Content: React.FC<ChatContentProps> = ({
         recorderAdapter.requestPermission();
         socket.connect(accessToken);
         socket.onMessage(conversation.id, addNewMessage);
+        socket.onLiked(conversation.id, onLikeMessageReceived);
+        socket.onUnliked(conversation.id, onUnlikeMessageReceived);
 
         const refreshTokens = async () => {
             await refreshTokensUsecase.execute();
@@ -135,6 +141,8 @@ const Content: React.FC<ChatContentProps> = ({
             socket.disconnect();
             socket.offMessage();
             socket.offDisconnect();
+            socket.offLike();
+            socket.offUnlike();
             clearInterval(disconnectInterval);
         };
     }, [conversation.id, accessToken]);
@@ -229,6 +237,8 @@ const Content: React.FC<ChatContentProps> = ({
                     currentMessageSearchId={currentMessageSearchId}
                     messages={messages}
                     loadMessages={(direction) => loadMessages(false, direction)}
+                    onLikeMessage={onLikeMessage}
+                    onUnlikeMessage={onUnlikeMessage}
                     userId={profile.user.id}
                     isScrollForwardOver={isScrollForwardOver}
                     isScrollBackwardOver={isScrollBackwardOver}

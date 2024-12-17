@@ -104,24 +104,30 @@ export class HubGateway
      * Publish an update to a specific conversation.
      */
     @SubscribeMessage('like')
-    async like(client: Socket, message: Message): Promise<void> {
-        await this.messageRepository.like(message.id);
+    async like(client: Socket, ids: string[]): Promise<void> {
+        const conversationId = ids[0];
+        const messageId = ids[1];
+        const userId = ids[2];
+        await this.messageRepository.like(messageId, userId);
         this.server
-            .to(message.conversationId)
+            .to(conversationId)
             .timeout(1000)
-            .emit('liked', message);
+            .emit('liked', conversationId, messageId, userId);
     }
 
     /**
      * Publish an update to a specific conversation.
      */
     @SubscribeMessage('unlike')
-    async unlike(client: Socket, message: Message): Promise<void> {
-        await this.messageRepository.unlike(message.id);
+    async unlike(client: Socket, ids: string[]): Promise<void> {
+        const conversationId = ids[0];
+        const messageId = ids[1];
+        const userId = ids[2];
+        await this.messageRepository.unlike(messageId, userId);
         this.server
-            .to(message.conversationId)
+            .to(conversationId)
             .timeout(1000)
-            .emit('unliked', message);
+            .emit('unliked', conversationId, messageId, userId);
     }
 
     /**

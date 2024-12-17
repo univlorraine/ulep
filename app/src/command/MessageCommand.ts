@@ -9,6 +9,8 @@ export interface MessageCommand {
     user: UserChatCommand;
     type: string;
     metadata: any;
+    likes: number;
+    didLike: boolean;
 }
 
 // From Chat api
@@ -23,6 +25,8 @@ export const messageWithoutSenderCommandToDomain = (command: MessageWithoutSende
         new Date(command.createdAt),
         command.ownerId,
         command.type as MessageType,
+        command.likes,
+        command.didLike,
         command.metadata
     );
 };
@@ -34,6 +38,8 @@ export const messageCommandToDomain = (command: MessageCommand) => {
         new Date(command.createdAt),
         userChatCommandToDomain(command.user),
         command.type as MessageType,
+        command.likes,
+        command.didLike,
         command.metadata
     );
 };

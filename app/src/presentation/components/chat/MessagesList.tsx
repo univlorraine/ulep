@@ -15,6 +15,8 @@ interface MessagesListProps {
     isScrollForwardOver: boolean;
     isScrollBackwardOver: boolean;
     loadMessages: (direction: MessagePaginationDirection) => void;
+    onLikeMessage: (messageId: string) => void;
+    onUnlikeMessage: (messageId: string) => void;
     userId: string;
     setImageToDisplay: (imageUrl: string) => void;
 }
@@ -28,6 +30,8 @@ const MessagesList: React.FC<MessagesListProps> = ({
     loadMessages,
     userId,
     setImageToDisplay,
+    onLikeMessage,
+    onUnlikeMessage,
 }) => {
     const { t } = useTranslation();
     const { isLoading, messagesEndRef, handleScroll } = useMessages({
@@ -78,6 +82,8 @@ const MessagesList: React.FC<MessagesListProps> = ({
                             isCurrentUserMessage={isCurrentUserMessage}
                             isCommunity={isCommunity}
                             setImageToDisplay={message.type === MessageType.Image ? setImageToDisplay : undefined}
+                            onLikeMessage={onLikeMessage}
+                            onUnlikeMessage={onUnlikeMessage}
                         />
                     </div>
                 );

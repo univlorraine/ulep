@@ -51,7 +51,89 @@ const useHandleMessagesFromConversation = ({
             addNewMessage: () => {},
             clearMessages: () => {},
             handleSendMessage: () => {},
+            onLikeMessage: () => {},
+            onUnlikeMessage: () => {},
+            onLikeMessageReceived: () => {},
+            onUnlikeMessageReceived: () => {},
         };
+
+    const onLikeMessage = (messageId: string) => {
+        const messageToLike = messagesResult.messages.find((message) => message.id === messageId);
+        if (!messageToLike) {
+            return;
+        }
+        messageToLike.likes++;
+        messageToLike.didLike = true;
+        socket.like(conversationId, messageId, profile.user.id);
+    };
+
+    const onUnlikeMessage = (messageId: string) => {
+        const messageToUnlike = messagesResult.messages.find((message) => message.id === messageId);
+        if (!messageToUnlike) {
+            return;
+        }
+        messageToUnlike.likes--;
+        messageToUnlike.didLike = false;
+        socket.unlike(conversationId, messageId, profile.user.id);
+    };
+
+    const onLikeMessageReceived = (messageId: string, userId: string) => {
+        if (userId === profile.user.id) {
+            return;
+        }
+
+        setMessagesResult((current: any) => {
+            const updatedMessages = current.messages.map((message: any) => {
+                if (message.id === messageId) {
+                    return new Message(
+                        message.id,
+                        message.content,
+                        message.createdAt,
+                        message.sender,
+                        message.type,
+                        message.likes + 1,
+                        message.didLike,
+                        message.metadata
+                    );
+                }
+                return message;
+            });
+
+            return {
+                ...current,
+                messages: updatedMessages,
+            };
+        });
+    };
+
+    const onUnlikeMessageReceived = (messageId: string, userId: string) => {
+        if (userId === profile.user.id) {
+            return;
+        }
+
+        setMessagesResult((current: any) => {
+            const updatedMessages = current.messages.map((message: any) => {
+                if (message.id === messageId) {
+                    return new Message(
+                        message.id,
+                        message.content,
+                        message.createdAt,
+                        message.sender,
+                        message.type,
+                        message.likes - 1,
+                        message.didLike,
+                        message.metadata
+                    );
+                }
+                return message;
+            });
+
+            return {
+                ...current,
+                messages: updatedMessages,
+            };
+        });
+    };
 
     const addNewMessage = (message: Message) => {
         setMessagesResult((current) => ({
@@ -88,6 +170,8 @@ const useHandleMessagesFromConversation = ({
                 ),
                 messageResult.type,
                 conversation.id,
+                0,
+                false,
                 messageResult.metadata
             )
         );
@@ -216,7 +300,17 @@ const useHandleMessagesFromConversation = ({
         fetchData();
     }, [profile, conversationId, typeFilter]);
 
-    return { ...messagesResult, loadMessages, addNewMessage, clearMessages, handleSendMessage };
+    return {
+        ...messagesResult,
+        loadMessages,
+        addNewMessage,
+        clearMessages,
+        handleSendMessage,
+        onLikeMessage,
+        onUnlikeMessage,
+        onLikeMessageReceived,
+        onUnlikeMessageReceived,
+    };
 };
 
 export default useHandleMessagesFromConversation;
