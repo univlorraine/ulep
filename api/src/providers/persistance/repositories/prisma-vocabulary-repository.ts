@@ -79,11 +79,22 @@ export class PrismaVocabularyRepository implements VocabularyRepository {
   ): Promise<VocabularyList[]> {
     const vocabularyLists = await this.prisma.vocabularyList.findMany({
       where: {
-        Editors: {
-          some: {
-            id: profileId,
+        OR: [
+          {
+            Editors: {
+              some: {
+                id: profileId,
+              },
+            },
           },
-        },
+          {
+            Readers: {
+              some: {
+                id: profileId,
+              },
+            },
+          },
+        ],
         ...(languageCode && {
           TranslationLanguage: {
             code: languageCode,
@@ -225,6 +236,38 @@ export class PrismaVocabularyRepository implements VocabularyRepository {
     });
 
     return vocabularyListMapper(vocabularyList);
+  }
+
+  async addReaderToVocabularyList(
+    vocabularyListId: string,
+    profileId: string,
+  ): Promise<void> {
+    await this.prisma.vocabularyList.update({
+      where: { id: vocabularyListId },
+      data: {
+        Readers: {
+          connect: {
+            id: profileId,
+          },
+        },
+      },
+    });
+  }
+
+  async removeReaderFromVocabularyList(
+    vocabularyListId: string,
+    profileId: string,
+  ): Promise<void> {
+    await this.prisma.vocabularyList.update({
+      where: { id: vocabularyListId },
+      data: {
+        Readers: {
+          disconnect: {
+            id: profileId,
+          },
+        },
+      },
+    });
   }
 
   async deleteVocabulary(id: string): Promise<void> {

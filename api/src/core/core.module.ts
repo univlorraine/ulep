@@ -28,6 +28,7 @@ import { MatchScorer } from './services/MatchScorer';
 import {
   AddDeviceUsecase,
   AddLanguageRequestUsecase,
+  AddReaderToVocabularyListUsecase,
   CountAllSuggestedLanguageUsecase,
   CreateActivityThemeCategoryUsecase,
   CreateActivityThemeUsecase,
@@ -137,6 +138,7 @@ import {
   GetUsersUsecase,
   GetUserUsecase,
   RefuseTandemUsecase,
+  RemoveReaderToVocabularyListUsecase,
   UpdateActivityThemeCategoryUsecase,
   UpdateActivityThemeUsecase,
   UpdateActivityUsecase,
@@ -391,6 +393,8 @@ const usecases: Provider[] = [
   UpdateVocabularyUsecase,
   UpdateVocabularyListUsecase,
   GetVocabularyListPdfUsecase,
+  AddReaderToVocabularyListUsecase,
+  RemoveReaderToVocabularyListUsecase,
   // Session
   CancelSessionUsecase,
   CreateSessionUsecase,

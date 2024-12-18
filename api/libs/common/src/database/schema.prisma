@@ -365,6 +365,7 @@ model Profiles {
   Interests             Interests[]
   CreatorVocabularyList VocabularyList[]     @relation("Creator")
   EditorVocabularyList  VocabularyList[]     @relation("Editor")
+  ReadersVocabularyList VocabularyList[]     @relation("Reader")
   Activities            Activity[]
   Events                Events[]
 
@@ -583,6 +584,7 @@ model VocabularyList {
   TranslationLanguage LanguageCodes @relation("TranslationLanguage", fields: [translation_language_code_id], references: [id], onDelete: Cascade)
   Creator             Profiles?     @relation("Creator", fields: [creator_id], references: [id])
   Editors             Profiles[]    @relation("Editor")
+  Readers             Profiles[]    @relation("Reader")
   Vocabulary          Vocabulary[]
 
   @@map("vocabulary_list")
