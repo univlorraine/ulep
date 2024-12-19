@@ -15,9 +15,6 @@ const MessageVocabulary: React.FC<MessageProps> = ({ message, isCurrentUserMessa
         profile: state.profile,
     }));
     const messageClass = isCurrentUserMessage ? styles.currentUser : styles.otherUser;
-    if (!message.metadata.vocabularyList) {
-        return;
-    }
 
     const handleVocabularyPressed = () => {
         if (!message.metadata.vocabularyList || !profile) {
@@ -41,6 +38,10 @@ const MessageVocabulary: React.FC<MessageProps> = ({ message, isCurrentUserMessa
             duration: 2000,
         });
     };
+
+    if (!message.metadata.vocabularyList) {
+        return <div />;
+    }
 
     return (
         <div className={messageClass}>
