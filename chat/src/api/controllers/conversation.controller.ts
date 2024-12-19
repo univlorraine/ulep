@@ -203,6 +203,7 @@ export class ConversationController {
             ownerId: body.senderId,
             mimetype: file?.mimetype,
             originalFilename: body.filename,
+            type: body.type,
         });
 
         if (file && body.filename) {

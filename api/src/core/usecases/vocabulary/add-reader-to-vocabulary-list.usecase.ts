@@ -1,5 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
+import { Profile } from 'src/core/models';
+import { VocabularyList } from 'src/core/models/vocabulary.model';
 import {
   ProfileRepository,
   PROFILE_REPOSITORY,
@@ -24,12 +26,18 @@ export class AddReaderToVocabularyListUsecase {
   ) {}
 
   async execute(command: AddReaderToVocabularyListCommand) {
-    await this.assertProfileExist(command.profileId);
-    await this.assertVocabularyListExist(command.vocabularyListId);
-
-    await this.vocabularyRepository.addReaderToVocabularyList(
+    const profile = await this.assertProfileExist(command.profileId);
+    const vocabularyList = await this.assertVocabularyListExist(
       command.vocabularyListId,
-      command.profileId,
+    );
+
+    if (!this.assertProfileHasAccessToVocabularyList(vocabularyList, profile)) {
+      return;
+    }
+
+    return this.vocabularyRepository.addReaderToVocabularyList(
+      vocabularyList.id,
+      profile.id,
     );
   }
 
@@ -40,6 +48,8 @@ export class AddReaderToVocabularyListUsecase {
     if (!vocabularyList) {
       throw new RessourceDoesNotExist('Vocabulary list does not exist');
     }
+
+    return vocabularyList;
   }
 
   private async assertProfileExist(id: string) {
@@ -48,5 +58,22 @@ export class AddReaderToVocabularyListUsecase {
     if (!profile) {
       throw new RessourceDoesNotExist('Profile does not exist');
     }
+
+    return profile;
+  }
+
+  private async assertProfileHasAccessToVocabularyList(
+    vocabularyList: VocabularyList,
+    profile: Profile,
+  ) {
+    const isReader = vocabularyList.readers.find(
+      (reader) => reader.id === profile.id,
+    );
+    const isEditor = vocabularyList.editors.find(
+      (editor) => editor.id === profile.id,
+    );
+    const isCreator = vocabularyList.creator.id === profile.id;
+
+    return isReader || isEditor || isCreator;
   }
 }

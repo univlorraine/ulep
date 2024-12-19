@@ -1,6 +1,7 @@
 import * as Swagger from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { UserChatResponse } from 'src/api/dtos/chat/user-conversation.response';
+import { VocabularyListResponse } from 'src/api/dtos/vocabulary/vocabulary-list.response';
 import { MessageWithUser } from 'src/core/ports/chat.service';
 
 class OGImageResponse {
@@ -83,6 +84,10 @@ class MetadataMessageResponse {
   @Expose({ groups: ['chat'] })
   filePath?: string;
 
+  @Swagger.ApiProperty({ type: 'object' })
+  @Expose({ groups: ['chat'] })
+  vocabularyList?: VocabularyListResponse;
+
   constructor(partial: Partial<MetadataMessageResponse>) {
     Object.assign(this, partial);
   }
@@ -95,6 +100,9 @@ class MetadataMessageResponse {
         : undefined,
       thumbnail: metadata.thumbnail,
       filePath: metadata.filePath,
+      vocabularyList: metadata.vocabularyList
+        ? VocabularyListResponse.from(metadata.vocabularyList)
+        : undefined,
     });
   }
 }

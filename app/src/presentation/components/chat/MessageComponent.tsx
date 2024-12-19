@@ -1,14 +1,18 @@
 import { IonAvatar, IonButton, IonIcon, IonPopover, IonText, useIonToast } from '@ionic/react';
-import { alertCircleOutline, thumbsUp, thumbsUpOutline } from 'ionicons/icons';
+import { alertCircleOutline, thumbsUpOutline } from 'ionicons/icons';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DownloadSvg, KebabSvg } from '../../../assets';
+import { KebabSvg } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
 import { Message, MessageType } from '../../../domain/entities/chat/Message';
-import AudioLine from '../AudioLine';
-import OGCard from '../card/OGCard';
 import NetworkImage from '../NetworkImage';
 import styles from './MessageComponent.module.css';
+import MessageAudio from './messages/MessageAudio';
+import MessageFile from './messages/MessageFile';
+import MessageImage from './messages/MessageImage';
+import MessageLink from './messages/MessageLink';
+import MessageText from './messages/MessageText';
+import MessageVocabulary from './messages/MessageVocabulary';
 
 interface ChatAvatarProps {
     avatar?: string;
@@ -32,27 +36,7 @@ const ChatAvatar: React.FC<ChatAvatarProps> = ({ avatar, firstname, lastname }) 
     />
 );
 
-interface LikeButtonProps {
-    message: Message;
-    isCurrentUserMessage: boolean;
-}
-
-const LikeButton: React.FC<LikeButtonProps> = ({ isCurrentUserMessage, message }) => {
-    if (message.likes === 0) {
-        return null;
-    }
-
-    return (
-        <div
-            className={`${isCurrentUserMessage ? styles.likeContainerLeft : styles.likeContainerRight} ${styles.likeContainer}`}
-        >
-            <IonIcon icon={thumbsUp} className={styles.likeIcon} />
-            <IonText className={styles.likeCount}>{message.likes}</IonText>
-        </div>
-    );
-};
-
-interface MessageProps {
+export interface MessageProps {
     isCurrentUserMessage: boolean;
     isCommunity: boolean;
     message: Message;
@@ -175,6 +159,14 @@ const MessageComponent: React.FC<MessageProps> = ({
                         currentMessageSearchId={currentMessageSearchId}
                     />
                 );
+            case MessageType.Vocabulary:
+                return (
+                    <MessageVocabulary
+                        message={message}
+                        isCurrentUserMessage={isCurrentUserMessage}
+                        isCommunity={isCommunity}
+                    />
+                );
             default:
                 return null;
         }
@@ -233,116 +225,6 @@ const MessageComponent: React.FC<MessageProps> = ({
                 </IonButton>
             </IonPopover>
         </>
-    );
-};
-
-const MessageText: React.FC<MessageProps> = ({ message, isCurrentUserMessage, currentMessageSearchId }) => {
-    const messageClass = isCurrentUserMessage ? styles.currentUser : styles.otherUser;
-
-    return (
-        <div
-            className={`${styles.message} ${messageClass} ${
-                message.id === currentMessageSearchId ? styles.searchMessage : ''
-            }`}
-        >
-            {message.content}
-            <LikeButton message={message} isCurrentUserMessage={isCurrentUserMessage} />
-        </div>
-    );
-};
-
-const MessageImage: React.FC<MessageProps> = ({ message, isCurrentUserMessage, setImageToDisplay }) => {
-    const messageClass = isCurrentUserMessage ? styles.currentUser : styles.otherUser;
-
-    const openModal = () => {
-        if (setImageToDisplay) {
-            setImageToDisplay(message.content);
-        }
-    };
-
-    return (
-        <div className={`${styles.messageImage} ${messageClass}`}>
-            <IonButton fill="clear" onClick={openModal}>
-                <img className={styles.image} src={message.getThumbnail()} />
-            </IonButton>
-            <LikeButton message={message} isCurrentUserMessage={isCurrentUserMessage} />
-        </div>
-    );
-};
-
-//There is no like button for audio messages because there is not audio file on community chat
-const MessageAudio: React.FC<MessageProps> = ({ message, isCurrentUserMessage }) => {
-    const messageClass = isCurrentUserMessage ? styles.currentUser : styles.otherUser;
-
-    return (
-        <div className={`${styles.messageAudio} ${messageClass}`}>
-            <AudioLine audioFile={message.content} />
-        </div>
-    );
-};
-
-const MessageFile: React.FC<MessageProps> = ({ message, isCurrentUserMessage }) => {
-    const { fileAdapter } = useConfig();
-    const { t } = useTranslation();
-    const [showToast] = useIonToast();
-    const messageClass = isCurrentUserMessage ? styles.currentUser : styles.otherUser;
-    const fileName = decodeURI(message.metadata?.originalFilename);
-
-    const handleDownload = async (e: React.MouseEvent<HTMLIonButtonElement>) => {
-        e.preventDefault();
-        e.stopPropagation();
-        await fileAdapter.saveFile(message.content, fileName);
-        showToast({
-            message: t('chat.fileDownloaded'),
-            duration: 2000,
-        });
-    };
-
-    return (
-        <div className={messageClass}>
-            <IonButton fill="clear" className={styles.downloadButton} onClick={handleDownload}>
-                <IonText className={styles.downloadTitle}>{fileName}</IonText>
-                <IonIcon
-                    aria-label={t('chat.ariaLabelFileDownloaded', { filename: fileName }) as string}
-                    className={styles.download}
-                    icon={DownloadSvg}
-                />
-            </IonButton>
-            <LikeButton message={message} isCurrentUserMessage={isCurrentUserMessage} />
-        </div>
-    );
-};
-
-const MessageLink: React.FC<MessageProps> = ({ message, isCurrentUserMessage, currentMessageSearchId }) => {
-    const messageClass = isCurrentUserMessage ? styles.currentUser : styles.otherUser;
-    const linkRegex = /(https?:\/\/[^\s]+)/g;
-    const parts = message.content.split(linkRegex);
-
-    return (
-        <div
-            className={`${styles.messageLink} ${messageClass} ${
-                message.id === currentMessageSearchId ? styles.searchMessage : ''
-            } ${styles.outerContainer}`}
-        >
-            <OGCard
-                imageUrl={message.metadata?.openGraphResult?.ogImage?.[0]?.url}
-                title={message.metadata?.openGraphResult?.ogTitle}
-                description={message.metadata?.openGraphResult?.ogDescription}
-                url={message.content}
-            />
-            <IonText className={styles.linkText}>
-                {parts.map((part, index) =>
-                    linkRegex.test(part) ? (
-                        <a key={index} href={part} target="_blank" rel="noopener noreferrer">
-                            {part}
-                        </a>
-                    ) : (
-                        part
-                    )
-                )}
-            </IonText>
-            <LikeButton message={message} isCurrentUserMessage={isCurrentUserMessage} />
-        </div>
     );
 };
 

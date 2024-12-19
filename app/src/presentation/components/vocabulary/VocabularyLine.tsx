@@ -8,14 +8,16 @@ import styles from './VocabularyLine.module.css';
 interface VocabularyLineProps {
     vocabulary: Vocabulary;
     onVocabularyClick: (vocabulary: Vocabulary) => void;
+    isEditable?: boolean;
 }
 
-const VocabularyLine: React.FC<VocabularyLineProps> = ({ vocabulary, onVocabularyClick }) => {
+const VocabularyLine: React.FC<VocabularyLineProps> = ({ vocabulary, onVocabularyClick, isEditable }) => {
     const { t } = useTranslation();
     return (
         <button
             aria-label={t('vocabulary.pair.aria-pressed') as string}
             className={styles.container}
+            disabled={!isEditable}
             onClick={() => onVocabularyClick(vocabulary)}
         >
             <div className={styles.content}>
@@ -32,7 +34,7 @@ const VocabularyLine: React.FC<VocabularyLineProps> = ({ vocabulary, onVocabular
                     )}
                 </div>
             </div>
-            <IonIcon icon={chevronForwardOutline} aria-hidden="true" />
+            {isEditable && <IonIcon icon={chevronForwardOutline} aria-hidden="true" />}
         </button>
     );
 };

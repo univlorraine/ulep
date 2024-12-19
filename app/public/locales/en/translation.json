@@ -27,7 +27,11 @@
             "noMessage": "No message",
             "image": "Image",
             "audio": "Audio",
-            "file": "File"
+            "file": "File",
+            "vocabulary": "Shared vocabulary list"
+        },
+        "vocabulary": {
+            "added": "Vocabulary list added to your profile"
         }
     },
     "date": {
@@ -366,6 +370,10 @@
                 "title": "Review your vocabulary with flashcards!",
                 "paragraph": "Find the equivalent translation of the word displayed and try to reach a 100% score",
                 "button": "Start the flashcards"
+            },
+            "card": {
+                "title": "Liste de vocabulaire",
+                "creator": "Créé par {{name}}"
             }
         },
         "pair": {
@@ -448,7 +456,12 @@
         "no_messages": "No messages",
         "no_conversations": "No conversations",
         "send_image_aria_label": "Send image",
-        "send_file_aria_label": "Send file"
+        "send_file_aria_label": "Send file",
+        "send_vocabulary_list_aria_label": "Send vocabulary list",
+        "vocabulary_list": {
+            "close": "Close",
+            "title": "Select the list to share"
+        }
     },
     "connection_page": {
         "connect_title": "Already have an account ?",

@@ -1,13 +1,16 @@
-import { MessageWithoutSender } from '../../entities/chat/Message';
+import { MessageType, MessageWithoutSender } from '../../entities/chat/Message';
+
+export interface SendMessageUsecasePayload {
+    conversationId: string;
+    senderId: string;
+    content?: string;
+    file?: File;
+    filename?: string;
+    type?: MessageType;
+}
 
 interface SendMessageUsecaseInterface {
-    execute(
-        conversationId: string,
-        senderId: string,
-        content?: string,
-        file?: File,
-        filename?: string
-    ): Promise<MessageWithoutSender | Error>;
+    execute(payload: SendMessageUsecasePayload): Promise<MessageWithoutSender | Error>;
 }
 
 export default SendMessageUsecaseInterface;

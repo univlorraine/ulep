@@ -1,10 +1,16 @@
 import { IonButton, IonIcon, useIonToast } from '@ionic/react';
+import { languageOutline } from 'ionicons/icons';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CloseBlackSvg, PaperclipSvg, PictureSvg } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
 import Conversation from '../../../domain/entities/chat/Conversation';
+import { MessageType } from '../../../domain/entities/chat/Message';
+import Profile from '../../../domain/entities/Profile';
+import VocabularyList from '../../../domain/entities/VocabularyList';
 import AudioLine from '../AudioLine';
+import VocabularyListCard from '../card/VocabularyListCard';
+import SelectVocabularyListModal from '../modals/SelectVocabularyListModal';
 import RecordingButton from '../RecordingButton';
 import styles from './ChatInputSender.module.css';
 
@@ -12,7 +18,17 @@ interface ChatInputSenderProps {
     isBlocked: boolean;
     isCommunity: boolean;
     conversation: Conversation;
-    handleSendMessage: (conversation: Conversation, message: string, file?: File, filename?: string) => void;
+    profile: Profile;
+    languageCode?: string;
+    vocabularyLists: VocabularyList[];
+    handleSendMessage: (
+        conversation: Conversation,
+        message: string,
+        file?: File,
+        filename?: string,
+        type?: MessageType,
+        metadata?: any
+    ) => void;
 }
 
 const ChatInputSender: React.FC<ChatInputSenderProps> = ({
@@ -20,15 +36,19 @@ const ChatInputSender: React.FC<ChatInputSenderProps> = ({
     isCommunity,
     conversation,
     handleSendMessage,
+    profile,
+    vocabularyLists,
 }) => {
     const { t } = useTranslation();
     const { cameraAdapter, fileAdapter, recorderAdapter } = useConfig();
     const [showToast] = useIonToast();
     const [message, setMessage] = useState('');
+    const [openVocabularyListModal, setOpenVocabularyListModal] = useState<boolean>(false);
     const [isRecording, setIsRecording] = useState<boolean>(false);
     const [imageToSend, setImageToSend] = useState<File | undefined>(undefined);
     const [audioFile, setAudioFile] = useState<File | undefined>(undefined);
     const [fileToSend, setFileToSend] = useState<File | undefined>(undefined);
+    const [selectedVocabularyList, setSelectedVocabularyList] = useState<VocabularyList | undefined>(undefined);
 
     const handleStartRecord = () => {
         // If we are already recording or if we have an audio file, we don't want to start a new recording
@@ -100,8 +120,20 @@ const ChatInputSender: React.FC<ChatInputSenderProps> = ({
         }
     };
 
+    const handleVocabularyListClick = async () => {
+        if (isBlocked) {
+            return;
+        }
+        setOpenVocabularyListModal(true);
+    };
+
+    const handleSelectedVocabularyList = (vocabularyList: VocabularyList) => {
+        setSelectedVocabularyList(vocabularyList);
+        setOpenVocabularyListModal(false);
+    };
+
     const onSendPressed = async () => {
-        if (isRecording || (!message && !imageToSend && !audioFile && !fileToSend)) {
+        if (isRecording || (!message && !imageToSend && !audioFile && !fileToSend && !selectedVocabularyList)) {
             return;
         }
 
@@ -117,13 +149,15 @@ const ChatInputSender: React.FC<ChatInputSenderProps> = ({
             file = fileToSend;
             filename = fileToSend.name;
         }
+        const content = selectedVocabularyList ? selectedVocabularyList.id : message;
+        const type = selectedVocabularyList ? MessageType.Vocabulary : undefined;
+        handleSendMessage(conversation, content, file, filename, type, { vocabularyList: selectedVocabularyList });
 
         setMessage('');
         setImageToSend(undefined);
         setAudioFile(undefined);
         setFileToSend(undefined);
-
-        handleSendMessage(conversation, message, file, filename);
+        setSelectedVocabularyList(undefined);
     };
 
     useEffect(() => {
@@ -131,6 +165,7 @@ const ChatInputSender: React.FC<ChatInputSenderProps> = ({
         setImageToSend(undefined);
         setAudioFile(undefined);
         setFileToSend(undefined);
+        setSelectedVocabularyList(undefined);
     }, [conversation]);
 
     return (
@@ -152,6 +187,16 @@ const ChatInputSender: React.FC<ChatInputSenderProps> = ({
                 >
                     <IonIcon className={styles.icon} icon={PaperclipSvg} />
                 </IonButton>
+                {isCommunity && vocabularyLists.length > 0 && (
+                    <IonButton
+                        fill="clear"
+                        size="small"
+                        onClick={handleVocabularyListClick}
+                        aria-label={t('chat.send_vocabulary_list_aria_label') as string}
+                    >
+                        <IonIcon className={styles.icon} icon={languageOutline} />
+                    </IonButton>
+                )}
             </div>
             <div className={styles['sender-view']}>
                 {imageToSend && (
@@ -178,7 +223,10 @@ const ChatInputSender: React.FC<ChatInputSenderProps> = ({
                         <span>{fileToSend.name}</span>
                     </div>
                 )}
-                {!imageToSend && !audioFile && !fileToSend && (
+                {vocabularyLists && selectedVocabularyList && (
+                    <VocabularyListCard vocabularyList={selectedVocabularyList} />
+                )}
+                {!imageToSend && !audioFile && !fileToSend && !selectedVocabularyList && (
                     <textarea
                         className={styles.input}
                         maxLength={1000}
@@ -199,6 +247,15 @@ const ChatInputSender: React.FC<ChatInputSenderProps> = ({
                     hideRecordButton={isCommunity}
                 />
             </div>
+            {isCommunity && (
+                <SelectVocabularyListModal
+                    isVisible={openVocabularyListModal}
+                    onClose={() => setOpenVocabularyListModal(false)}
+                    onValidate={handleSelectedVocabularyList}
+                    profile={profile}
+                    vocabularyLists={vocabularyLists}
+                />
+            )}
         </div>
     );
 };

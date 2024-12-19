@@ -1,4 +1,14 @@
-import { IonButton, IonContent, IonIcon, IonItem, IonLabel, IonList, IonPage, IonPopover } from '@ionic/react';
+import {
+    IonButton,
+    IonContent,
+    IonIcon,
+    IonItem,
+    IonLabel,
+    IonList,
+    IonPage,
+    IonPopover,
+    useIonToast,
+} from '@ionic/react';
 import { imageOutline, searchOutline, videocam } from 'ionicons/icons';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -8,6 +18,7 @@ import { useConfig } from '../../../context/ConfigurationContext';
 import { useSocket } from '../../../context/SocketContext';
 import Conversation, { MessagePaginationDirection } from '../../../domain/entities/chat/Conversation';
 import Profile from '../../../domain/entities/Profile';
+import VocabularyList from '../../../domain/entities/VocabularyList';
 import { useStoreState } from '../../../store/storeTypes';
 import useHandleMessagesFromConversation from '../../hooks/useHandleMessagesFromConversation';
 import ChatInputSender from '../chat/ChatInputSender';
@@ -35,11 +46,13 @@ const Content: React.FC<ChatContentProps> = ({
 }) => {
     const { t } = useTranslation();
     const { socket } = useSocket();
-    const { recorderAdapter, refreshTokensUsecase } = useConfig();
+    const [showToast] = useIonToast();
+    const { getVocabularyLists, recorderAdapter, refreshTokensUsecase } = useConfig();
     const isBlocked = conversation.isBlocked;
     const [showMenu, setShowMenu] = useState(false);
     const [currentMessageSearchId, setCurrentMessageSearchId] = useState<string>();
     const [isSearchMode, setIsSearchMode] = useState<boolean>(false);
+    const [vocabularyLists, setVocabularyLists] = useState<VocabularyList[]>([]);
     const history = useHistory();
     const accessToken = useStoreState((state) => state.accessToken);
     const isCommunity = conversation.isForCommunity;
@@ -52,6 +65,14 @@ const Content: React.FC<ChatContentProps> = ({
                 return profileLearningLanguage;
             }
         }
+    };
+
+    const findLearningLanguageCommunityConversation = () => {
+        const profileLearningLanguages = profile.learningLanguages;
+        return (
+            profileLearningLanguages.find((language) => language.code === conversation.centralLanguage?.code) ||
+            profileLearningLanguages.find((language) => language.code === conversation.partnerLanguage?.code)
+        );
     };
 
     const {
@@ -95,21 +116,12 @@ const Content: React.FC<ChatContentProps> = ({
             return;
         }
 
-        const conversationLearningLanguage = findCommonLearningLanguage();
+        const conversationLearningLanguage = findLearningLanguageConversation();
         history.push({
             pathname: '/jitsi',
             search: `?roomName=${conversation.id}`,
             state: { tandemPartner: partner, learningLanguageId: conversationLearningLanguage?.id },
         });
-    };
-
-    const findCommonLearningLanguage = () => {
-        for (const profileLanguage of profile.learningLanguages) {
-            if (conversation.learningLanguages?.some((language) => language.id === profileLanguage.id)) {
-                return profileLanguage;
-            }
-        }
-        return null;
     };
 
     useEffect(() => {
@@ -146,6 +158,25 @@ const Content: React.FC<ChatContentProps> = ({
             clearInterval(disconnectInterval);
         };
     }, [conversation.id, accessToken]);
+
+    const getAllVocabularyLists = async () => {
+        const result = await getVocabularyLists.execute(profile.id, findLearningLanguageCommunityConversation()?.code);
+        if (result instanceof Error) {
+            showToast(result.message, 3000);
+        } else {
+            setVocabularyLists(result);
+        }
+    };
+
+    useEffect(() => {
+        if (conversation.isForCommunity) {
+            getAllVocabularyLists();
+        }
+
+        return () => {
+            setVocabularyLists([]);
+        };
+    }, [conversation.id, profile.id]);
 
     return (
         <div className={`${styles.container} content-wrapper`}>
@@ -256,6 +287,8 @@ const Content: React.FC<ChatContentProps> = ({
                     isCommunity={isCommunity}
                     conversation={conversation}
                     handleSendMessage={handleSendMessage}
+                    vocabularyLists={vocabularyLists}
+                    profile={profile}
                 />
             )}
         </div>

@@ -81,25 +81,58 @@ export class PrismaVocabularyRepository implements VocabularyRepository {
       where: {
         OR: [
           {
-            Editors: {
-              some: {
-                id: profileId,
+            AND: [
+              {
+                OR: [
+                  {
+                    Creator: {
+                      id: profileId,
+                    },
+                  },
+                  {
+                    Readers: {
+                      some: {
+                        id: profileId,
+                      },
+                    },
+                  },
+                ],
               },
-            },
+              {
+                OriginalLanguage: {
+                  code: languageCode,
+                },
+              },
+            ],
           },
           {
-            Readers: {
-              some: {
-                id: profileId,
+            AND: [
+              {
+                OR: [
+                  {
+                    Editors: {
+                      some: {
+                        id: profileId,
+                      },
+                    },
+                  },
+                  {
+                    Readers: {
+                      some: {
+                        id: profileId,
+                      },
+                    },
+                  },
+                ],
               },
-            },
+              {
+                TranslationLanguage: {
+                  code: languageCode,
+                },
+              },
+            ],
           },
         ],
-        ...(languageCode && {
-          TranslationLanguage: {
-            code: languageCode,
-          },
-        }),
       },
       skip: pagination?.page ? (pagination.page - 1) * pagination.limit : 0,
       take: pagination?.limit,

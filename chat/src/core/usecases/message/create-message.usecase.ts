@@ -25,6 +25,7 @@ interface CreateMessageCommand {
     originalFilename?: string;
     mimetype?: string;
     filePath?: string;
+    type?: MessageType;
 }
 
 export class CreateMessageUsecase {
@@ -66,6 +67,11 @@ export class CreateMessageUsecase {
                 console.warn('Url not found for open graph', url);
             }
         }
+        const type =
+            command.type ??
+            (openGraphResult
+                ? MessageType.Link
+                : await Message.categorizeFileType(command.mimetype));
 
         const message = new Message({
             id: this.uuidProvider.generate(),
@@ -73,9 +79,7 @@ export class CreateMessageUsecase {
             ownerId: command.ownerId,
             conversationId: command.conversationId,
             usersLiked: [],
-            type: openGraphResult
-                ? MessageType.Link
-                : await Message.categorizeFileType(command.mimetype),
+            type,
             isReported: false,
             isDeleted: false,
             metadata: {

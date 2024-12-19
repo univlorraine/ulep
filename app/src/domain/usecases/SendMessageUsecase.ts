@@ -1,42 +1,43 @@
 import { HttpResponse } from '../../adapter/BaseHttpAdapter';
 import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
 import { MessageWithoutSenderCommand, messageWithoutSenderCommandToDomain } from '../../command/MessageCommand';
-import { MessageWithoutSender } from '../entities/chat/Message';
-import SendMessageUsecaseInterface from '../interfaces/chat/SendMessageUsecase.interface';
+import { MessageType, MessageWithoutSender } from '../entities/chat/Message';
+import SendMessageUsecaseInterface, {
+    SendMessageUsecasePayload,
+} from '../interfaces/chat/SendMessageUsecase.interface';
 
 type MessagePayload = {
     content?: string;
     senderId: string;
     file?: File;
     filename?: string;
+    type?: MessageType;
 };
 
 class SendMessageUsecase implements SendMessageUsecaseInterface {
     constructor(private readonly chatHttpAdapter: HttpAdapterInterface) {}
 
-    async execute(
-        conversationId: string,
-        senderId: string,
-        content?: string,
-        file?: File,
-        filename?: string
-    ): Promise<MessageWithoutSender | Error> {
+    async execute(payload: SendMessageUsecasePayload): Promise<MessageWithoutSender | Error> {
         try {
             const body: MessagePayload = {
-                content,
-                senderId,
+                content: payload.content,
+                senderId: payload.senderId,
             };
 
-            if (file) {
-                body.file = file;
+            if (payload.file) {
+                body.file = payload.file;
             }
 
-            if (filename) {
-                body.filename = filename;
+            if (payload.filename) {
+                body.filename = payload.filename;
+            }
+
+            if (payload.type) {
+                body.type = payload.type;
             }
 
             const httpResponse: HttpResponse<MessageWithoutSenderCommand> = await this.chatHttpAdapter.post(
-                '/conversations/' + conversationId + '/message',
+                '/conversations/' + payload.conversationId + '/message',
                 body,
                 {},
                 'multipart/form-data'

@@ -145,8 +145,22 @@ const useHandleMessagesFromConversation = ({
         }));
     };
 
-    const handleSendMessage = async (conversation: Conversation, message: string, file?: File, filename?: string) => {
-        const messageResult = await sendMessage.execute(conversation.id, profile.user.id, message, file, filename);
+    const handleSendMessage = async (
+        conversation: Conversation,
+        message: string,
+        file?: File,
+        filename?: string,
+        type?: MessageType,
+        metadata?: any
+    ) => {
+        const messageResult = await sendMessage.execute({
+            conversationId: conversation.id,
+            senderId: profile.user.id,
+            content: message,
+            file,
+            filename,
+            type,
+        });
 
         if (messageResult instanceof Error) {
             return showToast({
@@ -172,7 +186,7 @@ const useHandleMessagesFromConversation = ({
                 conversation.id,
                 0,
                 false,
-                messageResult.metadata
+                { ...messageResult.metadata, ...metadata }
             )
         );
 

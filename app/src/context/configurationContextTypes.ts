@@ -72,6 +72,7 @@ import UpdateAvatarUsecaseInterface from '../domain/interfaces/UpdateAvatarUseca
 import UpdateCustomLearningGoalUsecaseInterface from '../domain/interfaces/UpdateCustomLearningGoal.interface';
 import UpdateNotificationPermissionUsecaseInterface from '../domain/interfaces/UpdateNotificationPermissionUsecase.interface';
 import UpdateSessionUsecaseInterface from '../domain/interfaces/UpdateSessionUsecase.interface';
+import AddReaderToVocabularyListUsecaseInterface from '../domain/interfaces/vocabulary/AddReaderToVocabularyListUsecase.interface';
 import CreateVocabularyListUsecaseInterface from '../domain/interfaces/vocabulary/CreateVocabularyListUsecase.interface';
 import CreateVocabularyUsecaseInterface from '../domain/interfaces/vocabulary/CreateVocabularyUsecase.interface';
 import DeleteVocabularyListUsecaseInterface from '../domain/interfaces/vocabulary/DeleteVocabularyListUsecase.interface';
@@ -141,6 +142,7 @@ export interface ConfigContextValueType {
     updateActivity: UpdateActivityUsecaseInterface;
     updateActivityStatus: UpdateActivityStatusUsecaseInterface;
     // Vocabulary
+    addReaderToVocabularyList: AddReaderToVocabularyListUsecaseInterface;
     createVocabulary: CreateVocabularyUsecaseInterface;
     updateVocabulary: UpdateVocabularyUsecaseInterface;
     deleteVocabulary: DeleteVocabularyUsecaseInterface;

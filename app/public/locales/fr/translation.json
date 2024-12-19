@@ -27,7 +27,11 @@
             "noMessage": "Aucun message",
             "image": "Image",
             "audio": "Audio",
-            "file": "Fichier"
+            "file": "Fichier",
+            "vocabulary": "Liste de vocabulaire partagée"
+        },
+        "vocabulary": {
+            "added": "Liste de vocabulaire ajoutée à votre profil"
         }
     },
     "date": {
@@ -484,7 +488,12 @@
         "no_messages": "Aucun message",
         "no_conversations": "Aucune conversation",
         "send_image_aria_label": "Envoyer une image",
-        "send_file_aria_label": "Envoyer un fichier"
+        "send_file_aria_label": "Envoyer un fichier",
+        "send_vocabulary_list_aria_label": "Envoyer une liste de vocabulaire",
+        "vocabulary_list": {
+            "close": "Fermer",
+            "title": "Sélectionner la liste à partager"
+        }
     },
     "connection_page": {
         "connect_title": "As-tu déjà un compte ?",
