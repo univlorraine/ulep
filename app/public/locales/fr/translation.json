@@ -28,7 +28,8 @@
             "image": "Image",
             "audio": "Audio",
             "file": "Fichier",
-            "vocabulary": "Liste de vocabulaire partagée"
+            "vocabulary": "Liste de vocabulaire partagée",
+            "activity": "Fiche d'activité partagée"
         },
         "vocabulary": {
             "added": "Liste de vocabulaire ajoutée à votre profil"

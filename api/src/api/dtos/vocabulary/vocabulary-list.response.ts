@@ -5,7 +5,7 @@ import { VocabularyList } from 'src/core/models/vocabulary.model';
 
 export class VocabularyListResponse {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
-  @Expose({ groups: ['read', 'chat'] })
+  @Expose({ groups: ['read'] })
   id: string;
 
   @Swagger.ApiProperty({ type: 'string', format: 'date-time' })
@@ -13,11 +13,11 @@ export class VocabularyListResponse {
   createdAt: Date;
 
   @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['read', 'chat'] })
+  @Expose({ groups: ['read'] })
   name: string;
 
   @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['read', 'chat'] })
+  @Expose({ groups: ['read'] })
   symbol: string;
 
   @Swagger.ApiProperty({ type: () => LanguageResponse })
@@ -38,11 +38,11 @@ export class VocabularyListResponse {
   wordLanguage: LanguageResponse;
 
   @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['read', 'chat'] })
+  @Expose({ groups: ['read'] })
   creatorId: string;
 
   @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['read', 'chat'] })
+  @Expose({ groups: ['read'] })
   creatorName: string;
 
   @Swagger.ApiProperty({ type: 'number' })

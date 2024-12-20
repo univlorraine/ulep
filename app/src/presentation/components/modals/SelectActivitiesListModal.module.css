@@ -1,0 +1,49 @@
+.modal {
+    --border-radius: 20px;
+}
+
+.container {
+    background: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+    border-radius: 10px;
+    overflow-y: auto;
+    height: 100%;
+    width: 100%;
+}
+
+.close {
+    align-self: flex-end;
+}
+
+.close_icon {
+    width: 24px;
+    height: 24px;
+}
+
+.list {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    overflow-y: scroll;
+}
+
+.title {
+    color: black;
+    font-family: Roboto;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 32px;
+    text-align: left;
+}
+
+.button {
+    border-radius: 5px;
+    border: 1px solid black;
+    display: flex;
+    margin-top: auto;
+    width: 100%;
+    text-decoration-line: none !important;
+}

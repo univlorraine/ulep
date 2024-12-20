@@ -5,6 +5,7 @@ export enum MessageType {
     File = 'file',
     Link = 'link',
     Vocabulary = 'vocabulary',
+    Activity = 'activity',
 }
 
 interface MessageLikeProps {

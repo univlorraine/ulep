@@ -1,4 +1,5 @@
 import { differenceInCalendarDays, format, isToday, isYesterday } from 'date-fns';
+import { Activity } from '../Activity';
 import { UserChat } from '../User';
 import VocabularyList from '../VocabularyList';
 
@@ -9,6 +10,7 @@ export enum MessageType {
     File = 'file',
     Link = 'link',
     Vocabulary = 'vocabulary',
+    Activity = 'activity',
 }
 
 interface MessageMetadata {
@@ -17,6 +19,7 @@ interface MessageMetadata {
     openGraphResult: any;
     thumbnail?: string;
     vocabularyList?: VocabularyList;
+    activity?: Activity;
 }
 
 export class MessageWithoutSender {

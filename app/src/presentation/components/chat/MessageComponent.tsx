@@ -7,6 +7,7 @@ import { useConfig } from '../../../context/ConfigurationContext';
 import { Message, MessageType } from '../../../domain/entities/chat/Message';
 import NetworkImage from '../NetworkImage';
 import styles from './MessageComponent.module.css';
+import MessageActivity from './messages/MessageActivity';
 import MessageAudio from './messages/MessageAudio';
 import MessageFile from './messages/MessageFile';
 import MessageImage from './messages/MessageImage';
@@ -162,6 +163,14 @@ const MessageComponent: React.FC<MessageProps> = ({
             case MessageType.Vocabulary:
                 return (
                     <MessageVocabulary
+                        message={message}
+                        isCurrentUserMessage={isCurrentUserMessage}
+                        isCommunity={isCommunity}
+                    />
+                );
+            case MessageType.Activity:
+                return (
+                    <MessageActivity
                         message={message}
                         isCurrentUserMessage={isCurrentUserMessage}
                         isCommunity={isCommunity}
