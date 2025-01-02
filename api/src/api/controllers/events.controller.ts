@@ -85,6 +85,10 @@ export class EventsController {
         types: query.types,
         languageCode: query.languageCode,
       },
+      orderBy: {
+        field: query.field,
+        order: query.order,
+      },
     });
 
     return new Collection<EventResponse>({

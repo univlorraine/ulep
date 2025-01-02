@@ -18,6 +18,10 @@ export type GetEventsAdminCommand = {
     types?: EventType[];
     languageCode: string;
   };
+  orderBy?: {
+    field: string;
+    order: string;
+  };
 };
 
 @Injectable()
