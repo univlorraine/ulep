@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
-import {  NewsStatus } from 'src/core/models';
+import { NewsStatus } from 'src/core/models';
 import {
-  NEWS_REPOSITORY,
   NewsRepository,
+  NEWS_REPOSITORY,
 } from 'src/core/ports/news.repository';
 
 export type GetNewsAdminCommand = {
@@ -14,6 +14,10 @@ export type GetNewsAdminCommand = {
     status: NewsStatus;
     languageCodes: string[];
   };
+  orderBy?: {
+    field: string;
+    order: string;
+  };
 };
 
 @Injectable()
@@ -24,12 +28,13 @@ export class GetNewsAdminUsecase {
   ) {}
 
   async execute(query: GetNewsAdminCommand) {
-    const { page, limit, where } = query;
+    const { page, limit, where, orderBy } = query;
     const offset = (page - 1) * limit;
     return await this.newsRepository.findAll({
       offset,
       limit,
       where,
+      orderBy,
     });
   }
 }

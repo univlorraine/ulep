@@ -12,6 +12,10 @@ export interface NewsParams {
         page: string;
         perPage: string;
     };
+    sort?: {
+        field: string;
+        order: string;
+    };
 }
 
 const NewsQuery = (params: NewsParams) => {
@@ -22,6 +26,8 @@ const NewsQuery = (params: NewsParams) => {
         languageCodes: [params.filter.languageCode],
         page: params.pagination.page,
         limit: params.pagination.perPage,
+        field: params.sort?.field,
+        order: params.sort?.order.toLowerCase(),
     };
 
     return new URLSearchParams(qsAdapter().stringify(query)).toString();
