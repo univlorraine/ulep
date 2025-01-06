@@ -151,24 +151,25 @@ export class ConversationController {
     }
 
     @Post('contact/:id')
-    @Swagger.ApiOperation({ summary: 'Delete a conversation' })
+    @Swagger.ApiOperation({
+        summary:
+            'Delete all conversations of a user excepted the ones in chatIdsToIgnore',
+    })
     async deleteContactConversation(
-        @Param('id') conversationId: string,
+        @Param('id') userId: string,
         @Body() body: DeleteContactConversationRequest,
     ): Promise<void> {
         await this.deleteContactConversationUsecase.execute({
-            id: conversationId,
+            id: userId,
             chatIdsToIgnore: body.chatIdsToIgnore,
         });
     }
 
     @Delete('user/:id')
-    @Swagger.ApiOperation({ summary: 'Delete a conversation' })
-    async deleteUserConversation(
-        @Param('id') conversationId: string,
-    ): Promise<void> {
+    @Swagger.ApiOperation({ summary: 'Delete all conversations of a user' })
+    async deleteUserConversation(@Param('id') userId: string): Promise<void> {
         await this.deleteUserConversationUsecase.execute({
-            id: conversationId,
+            id: userId,
         });
     }
 
