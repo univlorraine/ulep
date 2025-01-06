@@ -16,4 +16,8 @@ export class SendMessageRequest {
     @IsEnum(MessageType)
     @IsOptional()
     type?: MessageType;
+
+    @IsString()
+    @IsOptional()
+    parentId?: string;
 }

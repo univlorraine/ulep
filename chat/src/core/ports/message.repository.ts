@@ -23,6 +23,10 @@ export interface MessageRepository {
         contentFilter?: string,
         typeFilter?: MessageType,
     ) => Promise<Message[]>;
+    findResponsesByMessageId: (
+        messageId: string,
+        pagination?: MessagePagination,
+    ) => Promise<Message[]>;
     searchMessagesIdByConversationId: (
         id: string,
         search: string,

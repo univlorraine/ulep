@@ -204,6 +204,7 @@ export class ConversationController {
             mimetype: file?.mimetype,
             originalFilename: body.filename,
             type: body.type,
+            parentId: body.parentId,
         });
 
         if (file && body.filename) {

@@ -26,6 +26,7 @@ interface CreateMessageCommand {
     mimetype?: string;
     filePath?: string;
     type?: MessageType;
+    parentId?: string;
 }
 
 export class CreateMessageUsecase {
@@ -82,6 +83,7 @@ export class CreateMessageUsecase {
             type,
             isReported: false,
             isDeleted: false,
+            numberOfReplies: 0,
             metadata: {
                 filePath: command.filePath,
                 originalFilename: command.originalFilename,
@@ -92,6 +94,8 @@ export class CreateMessageUsecase {
         const createdMessage = await this.messageRepository.create(message);
 
         await this.conversationRepository.updateLastActivityAt(conversation.id);
+
+        //TODO: Send notification to parent message owner only if it's a reply
 
         this.notificationService.sendNotification(
             message.ownerId,

@@ -106,6 +106,31 @@ export class PrismaMessageRepository implements MessageRepository {
         return messagesIds.map((message) => message.id);
     }
 
+    async findResponsesByMessageId(
+        messageId: string,
+        pagination: MessagePagination,
+    ): Promise<Message[]> {
+        const messagesPagination = {};
+        const where = { parentId: messageId };
+        const cursor = pagination.lastMessageId
+            ? { id: pagination.lastMessageId }
+            : undefined;
+
+        if (pagination.limit !== undefined) {
+            messagesPagination['take'] = pagination.limit;
+        }
+
+        const messages = await this.prisma.message.findMany({
+            where,
+            cursor,
+            orderBy: { createdAt: 'desc' },
+            ...messagesPagination,
+            ...MessagesRelations,
+        });
+
+        return messages.map(messageMapper);
+    }
+
     async findMessagesByConversationId(
         conversationId: string,
         pagination: MessagePagination,
@@ -113,7 +138,7 @@ export class PrismaMessageRepository implements MessageRepository {
         typeFilter?: MessageType,
     ): Promise<Message[]> {
         const messagesPagination = {};
-        const where = { conversationId };
+        const where = { conversationId, parentId: null };
         const cursor = pagination.lastMessageId
             ? { id: pagination.lastMessageId }
             : undefined;

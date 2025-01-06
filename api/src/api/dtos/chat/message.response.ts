@@ -148,6 +148,10 @@ export class MessageResponse {
   @Expose({ groups: ['read'] })
   metadata: MetadataMessageResponse;
 
+  @Swagger.ApiProperty({ type: 'number' })
+  @Expose({ groups: ['read'] })
+  numberOfReplies: number;
+
   constructor(partial: Partial<MessageResponse>) {
     Object.assign(this, partial);
   }
@@ -162,6 +166,7 @@ export class MessageResponse {
       user: UserChatResponse.fromDomain(message.user),
       type: message.type,
       metadata: MetadataMessageResponse.from(message.metadata),
+      numberOfReplies: message.numberOfReplies,
     });
   }
 }
