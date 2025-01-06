@@ -32,7 +32,6 @@ export type UpdateEventProps = {
   id: string;
   title: string;
   content: string;
-  authorUniversityId: string;
   translations: EventTranslation[];
   languageCode: string;
   status?: string;

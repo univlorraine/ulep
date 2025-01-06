@@ -30,7 +30,6 @@ const EditEvent = () => {
         formData.append('title', payload.title);
         formData.append('content', payload.content);
         formData.append('languageCode', payload.languageCode);
-        formData.append('authorUniversityId', payload.authorUniversityId);
         formData.append('withSubscription', payload.withSubscription.toString());
         formData.append('status', payload.status);
         formData.append('type', payload.type);
