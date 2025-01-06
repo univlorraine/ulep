@@ -60,8 +60,8 @@ spec:
           imagePullPolicy: {{ .Values.auth.image.pullPolicy }}
           args:
             - start
-            - --proxy
-            - edge
+            - --proxy-headers 
+            - xforwarded            
             - --health-enabled
             - 'true'
             - --hostname
@@ -117,6 +117,8 @@ spec:
               value: "{{ .Values.keycloakUrl }}.{{ .Values.domain }}"
             - name: KC_LOG_LEVEL
               value: "{{ .Values.auth.env.logLevel }}"
+            - name: KC_PROXY
+              value: "edge"
           envFrom: 
             - secretRef: 
                 name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.auth.name }}"
