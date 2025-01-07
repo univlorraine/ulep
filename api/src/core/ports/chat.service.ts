@@ -70,6 +70,7 @@ export interface ChatServicePort {
     contentFilter?: string,
     typeFilter?: string,
     direction?: ChatPaginationDirection,
+    parentId?: string,
   ): Promise<Collection<Message>>;
   createConversation(
     users: string[],

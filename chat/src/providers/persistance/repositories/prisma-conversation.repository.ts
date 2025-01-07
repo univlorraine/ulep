@@ -86,6 +86,9 @@ export class PrismaConversationRepository implements ConversationRepository {
                     orderBy: {
                         createdAt: 'desc',
                     },
+                    where: {
+                        ParentMessage: null,
+                    },
                 },
             },
             ...conversationPagination,

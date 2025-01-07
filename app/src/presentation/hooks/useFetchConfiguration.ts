@@ -57,6 +57,7 @@ const useFetchConfiguration = (apiUrl: string) => {
             );
             document.documentElement.style.setProperty('--primary-color', result.primaryColor);
             document.documentElement.style.setProperty('--primary-dark-color', result.primaryDarkColor);
+            document.documentElement.style.setProperty('--primary-background-color', result.primaryBackgroundColor);
             document.documentElement.style.setProperty('--secondary-color', result.secondaryColor);
             document.documentElement.style.setProperty('--secondary-dark-color', result.secondaryDarkColor);
         } catch (error: any) {

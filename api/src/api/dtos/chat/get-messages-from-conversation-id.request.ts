@@ -18,4 +18,8 @@ export class GetMessagesQueryParams extends PaginationDto {
   @IsString()
   @IsOptional()
   direction: ChatPaginationDirection;
+
+  @IsString()
+  @IsOptional()
+  parentId: string;
 }

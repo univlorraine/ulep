@@ -75,6 +75,7 @@ export class ConversationController {
                 },
                 contentFilter: params.contentFilter,
                 typeFilter: params.typeFilter,
+                parentId: params.parentId,
             });
 
         return new CollectionResponse<MessageResponse>({

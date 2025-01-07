@@ -18,8 +18,8 @@ class GetMessagesFromConversationUsecase implements GetMessagesFromConversationU
                 `/chat/messages/${id}?${params.lastMessageId ? `lastMessageId=${params.lastMessageId}` : ''}&${
                     params.limit ? `limit=${params.limit}` : ''
                 }&${params.typeFilter ? `typeFilter=${params.typeFilter}` : ''}&${
-                    params.direction ? `direction=${direction}` : ''
-                }`
+                    params.direction ? `direction=${direction}&` : ''
+                }${params.parentId ? `parentId=${params.parentId}` : ''}`
             );
 
             if (!httpResponse.parsedBody || httpResponse.parsedBody.items === undefined) {

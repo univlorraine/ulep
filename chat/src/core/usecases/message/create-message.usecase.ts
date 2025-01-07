@@ -91,7 +91,10 @@ export class CreateMessageUsecase {
             },
         });
 
-        const createdMessage = await this.messageRepository.create(message);
+        const createdMessage = await this.messageRepository.create(
+            message,
+            command.parentId,
+        );
 
         await this.conversationRepository.updateLastActivityAt(conversation.id);
 

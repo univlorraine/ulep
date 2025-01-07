@@ -18,6 +18,7 @@ export interface MessageCommand {
     metadata: any;
     likes: number;
     didLike: boolean;
+    numberOfReplies: number;
 }
 
 // From Chat api
@@ -40,7 +41,8 @@ export const messageWithoutSenderCommandToDomain = (command: MessageWithoutSende
             vocabularyList: command.metadata.vocabularyList
                 ? vocabularyListCommandToDomain(command.metadata.vocabularyList)
                 : undefined,
-        }
+        },
+        command.numberOfReplies
     );
 };
 
@@ -59,6 +61,7 @@ export const messageCommandToDomain = (command: MessageCommand) => {
             vocabularyList: command.metadata.vocabularyList
                 ? vocabularyListCommandToDomain(command.metadata.vocabularyList)
                 : undefined,
-        }
+        },
+        command.numberOfReplies
     );
 };

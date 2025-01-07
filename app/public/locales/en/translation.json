@@ -451,6 +451,10 @@
             "audios": "Audios",
             "links": "Links"
         },
+        "replyMessageButton": "Reply to message",
+        "goBackToConversation": "Revenir au salon",
+        "numberOfReplies": "See reply",
+        "numberOfReplies_plural": "See {{count}} replies",
         "reportMessageButton": "Report message",
         "likeMessageButton": "Like message",
         "unlikeMessageButton": "Unlike message",

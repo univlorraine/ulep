@@ -112,6 +112,7 @@ export class ChatService implements ChatServicePort {
     contentFilter?: string,
     typeFilter?: string,
     direction?: ChatPaginationDirection,
+    parentId?: string,
   ): Promise<any> {
     if (!this.env.get('CHAT_URL')) {
       return;
@@ -125,7 +126,9 @@ export class ChatService implements ChatServicePort {
           lastMessageId ? `&lastMessageId=${lastMessageId}` : ''
         }${contentFilter ? `&contentFilter=${contentFilter}` : ''}${
           typeFilter ? `&typeFilter=${typeFilter}` : ''
-        }${direction ? `&direction=${direction}` : ''}`,
+        }${direction ? `&direction=${direction}` : ''}${
+          parentId ? `&parentId=${parentId}` : ''
+        }`,
         { headers: this.headers },
       );
 

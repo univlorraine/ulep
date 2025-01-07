@@ -15,7 +15,7 @@ export type MessagePagination = {
 };
 
 export interface MessageRepository {
-    create: (message: Message) => Promise<Message>;
+    create: (message: Message, parentId?: string) => Promise<Message>;
     findById: (id: string) => Promise<Message | null>;
     findMessagesByConversationId: (
         id: string,

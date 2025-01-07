@@ -15,16 +15,22 @@ import {
 export class PrismaMessageRepository implements MessageRepository {
     constructor(private readonly prisma: PrismaService) {}
 
-    async create(message: Message): Promise<Message> {
+    async create(message: Message, parentId?: string): Promise<Message> {
+        const data = {
+            content: message.content,
+            isReported: message.isReported,
+            type: message.type,
+            ownerId: message.ownerId,
+            metadata: message.metadata,
+            Conversation: { connect: { id: message.conversationId } },
+        };
+
+        if (parentId) {
+            data['ParentMessage'] = { connect: { id: parentId } };
+        }
+
         const messageSent = await this.prisma.message.create({
-            data: {
-                content: message.content,
-                isReported: message.isReported,
-                type: message.type,
-                ownerId: message.ownerId,
-                metadata: message.metadata,
-                Conversation: { connect: { id: message.conversationId } },
-            },
+            data,
             ...MessagesRelations,
         });
 
@@ -138,7 +144,7 @@ export class PrismaMessageRepository implements MessageRepository {
         typeFilter?: MessageType,
     ): Promise<Message[]> {
         const messagesPagination = {};
-        const where = { conversationId, parentId: null };
+        const where = { conversationId, ParentMessage: { is: null } };
         const cursor = pagination.lastMessageId
             ? { id: pagination.lastMessageId }
             : undefined;
