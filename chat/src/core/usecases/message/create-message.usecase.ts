@@ -98,13 +98,24 @@ export class CreateMessageUsecase {
 
         await this.conversationRepository.updateLastActivityAt(conversation.id);
 
-        //TODO: Send notification to parent message owner only if it's a reply
-
-        this.notificationService.sendNotification(
-            message.ownerId,
-            conversation.usersIds.filter((id) => id !== message.ownerId),
-            message.content,
-        );
+        if (command.parentId) {
+            const parentMessage = await this.messageRepository.findById(
+                command.parentId,
+            );
+            if (parentMessage?.ownerId !== message.ownerId) {
+                this.notificationService.sendNotification(
+                    message.ownerId,
+                    [parentMessage.ownerId],
+                    message.content,
+                );
+            }
+        } else {
+            this.notificationService.sendNotification(
+                message.ownerId,
+                conversation.usersIds.filter((id) => id !== message.ownerId),
+                message.content,
+            );
+        }
 
         return createdMessage;
     }
