@@ -17,6 +17,8 @@ import { ROOM_REPOSITORY } from 'src/core/ports/room.repository';
 import { RedisRoomService } from 'src/providers/services/room.service';
 import { NOTIFICATION_SERVICE } from 'src/core/ports/notification.service';
 import { NotificationService } from 'src/providers/services/notification.service';
+import { HASHTAG_REPOSITORY } from 'src/core/ports/hastag.repository';
+import { PrismaHashtagRepository } from 'src/providers/persistance/repositories/prisma-hashtag.repository';
 
 const providers: Provider[] = [
     {
@@ -50,6 +52,10 @@ const providers: Provider[] = [
     {
         provide: NOTIFICATION_SERVICE,
         useClass: NotificationService,
+    },
+    {
+        provide: HASHTAG_REPOSITORY,
+        useClass: PrismaHashtagRepository,
     },
 ];
 

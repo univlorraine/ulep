@@ -35,9 +35,11 @@ import {
     SearchMessagesIdFromConversationIdUsecase,
     UpdateConversationUsecase,
     UploadMediaUsecase,
+    GetHashtagsFromConversationIdUsecase,
 } from 'src/core/usecases';
 import { FilePipe } from '../validators/files.validator';
 import { AddUserToConversationRequest } from 'src/api/dtos/conversation/add-user-to-conversation.request';
+import { HashtagResponse } from 'src/api/dtos/hashtags';
 
 //TODO: Allow route only for rest api
 @Controller('conversations')
@@ -51,10 +53,27 @@ export class ConversationController {
         private deleteUserConversationUsecase: DeleteUserConversationUsecase,
         private getMessagesFromConversationIdUsecase: GetMessagesFromConversationIdUsecase,
         private getConversationFromUserIdUsecase: GetConversationFromUserIdUsecase,
+        private getHashtagsFromConversationIdUsecase: GetHashtagsFromConversationIdUsecase,
         private searchMessagesIdFromConversationIdUsecase: SearchMessagesIdFromConversationIdUsecase,
         private uploadMediaUsecase: UploadMediaUsecase,
         private updateConversationUsecase: UpdateConversationUsecase,
     ) {}
+
+    @Get('hashtags/:id')
+    @Swagger.ApiOperation({ summary: 'Get all hashtags from conversation id' })
+    async getHashtagsByConversationId(
+        @Param('id') conversationId: string,
+    ): Promise<CollectionResponse<HashtagResponse>> {
+        const hashtags =
+            await this.getHashtagsFromConversationIdUsecase.execute({
+                id: conversationId,
+            });
+
+        return new CollectionResponse<HashtagResponse>({
+            items: hashtags.map(HashtagResponse.from),
+            totalItems: hashtags.length,
+        });
+    }
 
     @Get('messages/:id')
     @Swagger.ApiOperation({ summary: 'Get all messages from conversation id' })
