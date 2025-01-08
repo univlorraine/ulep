@@ -1,6 +1,6 @@
 export * from './create-conversation.usecase';
 export * from './create-multiple-conversations.usecase';
-export * from './delete-contact-conversation.usecase';
+export * from './delete-user-conversation.usecase';
 export * from './delete-conversation.usecase';
 export * from './get-conversation-from-user-id.usecase';
 export * from './get-messages-from-conversation-id.usecase';

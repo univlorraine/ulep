@@ -4,24 +4,23 @@ import {
     ConversationRepository,
 } from 'src/core/ports/conversation.repository';
 
-export class DeleteContactConversationCommand {
+export class DeleteUserConversationCommand {
     id: string;
     chatIdsToIgnore: string[];
     chatIdsToLeave: string[];
 }
 
 @Injectable()
-export class DeleteContactConversationUsecase {
+export class DeleteUserConversationUsecase {
     constructor(
         @Inject(CONVERSATION_REPOSITORY)
         private readonly conversationRepository: ConversationRepository,
     ) {}
 
-    async execute(command: DeleteContactConversationCommand) {
+    async execute(command: DeleteUserConversationCommand) {
         const conversations = await this.conversationRepository.findByUserId(
             command.id,
         );
-        console.log(conversations);
 
         const chatIdsToIgnoreSet = new Set(command.chatIdsToIgnore);
 

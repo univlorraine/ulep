@@ -28,7 +28,7 @@ import {
     CreateConversationUsecase,
     CreateMessageUsecase,
     CreateMultipleConversationsUsecase,
-    DeleteContactConversationUsecase,
+    DeleteUserConversationUsecase,
     DeleteConversationUsecase,
     GetConversationFromUserIdUsecase,
     GetMessagesFromConversationIdUsecase,
@@ -48,7 +48,7 @@ export class ConversationController {
         private createMultipleConversationsUsecase: CreateMultipleConversationsUsecase,
         private createConversationUsecase: CreateConversationUsecase,
         private deleteConversationUsecase: DeleteConversationUsecase,
-        private deleteContactConversationUsecase: DeleteContactConversationUsecase,
+        private deleteUserConversationUsecase: DeleteUserConversationUsecase,
         private getMessagesFromConversationIdUsecase: GetMessagesFromConversationIdUsecase,
         private getConversationFromUserIdUsecase: GetConversationFromUserIdUsecase,
         private searchMessagesIdFromConversationIdUsecase: SearchMessagesIdFromConversationIdUsecase,
@@ -170,11 +170,11 @@ export class ConversationController {
         summary:
             'Delete all conversations from user except the ones in chatIdsToIgnore',
     })
-    async deleteContactConversation(
+    async deleteUserConversation(
         @Param('id') userId: string,
         @Body() body: DeleteUserConversationRequest,
     ): Promise<void> {
-        await this.deleteContactConversationUsecase.execute({
+        await this.deleteUserConversationUsecase.execute({
             id: userId,
             chatIdsToIgnore: body.chatIdsToIgnore,
             chatIdsToLeave: body.chatIdsToLeave,
