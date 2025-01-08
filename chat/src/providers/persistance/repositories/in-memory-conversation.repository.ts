@@ -124,13 +124,6 @@ export class InMemoryConversationRepository implements ConversationRepository {
         return Promise.resolve();
     }
 
-    deleteUserFromConversations(userId: string): Promise<void> {
-        this.#conversations = this.#conversations.filter(
-            (conversation) => !conversation.usersIds.includes(userId),
-        );
-        return Promise.resolve();
-    }
-
     createConversations(conversations: CreateConversations[]): Promise<void> {
         this.#conversations = conversations.map((conversation) => ({
             id: conversation.tandemId,

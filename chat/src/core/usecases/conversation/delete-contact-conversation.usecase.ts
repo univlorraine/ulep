@@ -7,6 +7,7 @@ import {
 export class DeleteContactConversationCommand {
     id: string;
     chatIdsToIgnore: string[];
+    chatIdsToLeave: string[];
 }
 
 @Injectable()
@@ -20,6 +21,7 @@ export class DeleteContactConversationUsecase {
         const conversations = await this.conversationRepository.findByUserId(
             command.id,
         );
+        console.log(conversations);
 
         const chatIdsToIgnoreSet = new Set(command.chatIdsToIgnore);
 
@@ -29,7 +31,10 @@ export class DeleteContactConversationUsecase {
 
         const deletePromises = conversationsToDelete.map(
             async (conversation) => {
-                if (conversation.usersIds.length === 2) {
+                if (
+                    conversation.usersIds.length === 2 &&
+                    !command.chatIdsToLeave.includes(conversation.id)
+                ) {
                     return this.conversationRepository.delete(conversation.id);
                 } else {
                     const updatedUserIds = conversation.usersIds.filter(

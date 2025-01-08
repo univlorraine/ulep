@@ -157,9 +157,10 @@ export class ChatService implements ChatServicePort {
     }
   }
 
-  async deleteConversationByContactId(
-    contactId: string,
+  async deleteConversationByUserId(
+    userId: string,
     chatIdsToIgnore?: string[],
+    chatIdsToLeave?: string[],
   ): Promise<any> {
     if (!this.env.get('CHAT_URL')) {
       return;
@@ -167,25 +168,11 @@ export class ChatService implements ChatServicePort {
 
     try {
       const response = await axios.post(
-        this.env.get('CHAT_URL') + '/conversations/contact/' + contactId,
-        { chatIdsToIgnore },
-        { headers: this.headers },
-      );
-
-      return response.data;
-    } catch (error) {
-      this.logger.error('Error while deleting conversation', { error });
-    }
-  }
-
-  async deleteConversationByUserId(userId: string): Promise<any> {
-    if (!this.env.get('CHAT_URL')) {
-      return;
-    }
-
-    try {
-      const response = await axios.delete(
         this.env.get('CHAT_URL') + '/conversations/user/' + userId,
+        {
+          chatIdsToIgnore: chatIdsToIgnore || [],
+          chatIdsToLeave: chatIdsToLeave || [],
+        },
         { headers: this.headers },
       );
 
