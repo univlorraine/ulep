@@ -155,6 +155,9 @@ const customDataProvider = {
             case 'chat':
                 url = new URL(`${window.REACT_APP_API_URL}/chat/messages/${params.id}`);
                 break;
+            case 'events':
+                url = new URL(`${window.REACT_APP_API_URL}/events/admin/${params.id}`);
+                break;
             default:
                 break;
         }
