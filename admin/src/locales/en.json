@@ -263,7 +263,8 @@
                 "required": "All fields are required",
                 "start_date_greater_than_end_date": "The start date must be before the end date"
             },
-            "remove_translation": "Remove translation"
+            "remove_translation": "Remove translation",
+            "mandatory": "The fields marked with an * are mandatory"
         },
         "create": {
             "cta": "Create",

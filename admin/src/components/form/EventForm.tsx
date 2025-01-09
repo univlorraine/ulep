@@ -279,7 +279,7 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
 
                             <Box>
                                 <Typography variant="subtitle1">
-                                    {translate(`events.form.diffusion_languages.label`)}
+                                    {translate(`events.form.diffusion_languages.label`)} *
                                 </Typography>
                                 <Table>
                                     <TableBody>
@@ -374,7 +374,7 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
 
                         {type === EventType.ONLINE && (
                             <Box sx={{ width: '100%' }}>
-                                <Typography variant="subtitle1">{translate('events.form.event_url')}</Typography>
+                                <Typography variant="subtitle1">{translate('events.form.event_url')} *</Typography>
                                 <OutlinedInput
                                     name="eventURL"
                                     onChange={(e: any) => setEventURL(e.target.value)}
@@ -389,7 +389,9 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                         {type === EventType.PRESENTIAL && (
                             <>
                                 <Box sx={{ width: '100%' }}>
-                                    <Typography variant="subtitle1">{translate('events.form.address_name')}</Typography>
+                                    <Typography variant="subtitle1">
+                                        {translate('events.form.address_name')} *
+                                    </Typography>
                                     <OutlinedInput
                                         name="addressName"
                                         onChange={(e: any) => setAddressName(e.target.value)}
@@ -401,7 +403,7 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                                 </Box>
 
                                 <Box sx={{ width: '100%' }}>
-                                    <Typography variant="subtitle1">{translate('events.form.address')}</Typography>
+                                    <Typography variant="subtitle1">{translate('events.form.address')} *</Typography>
                                     <OutlinedInput
                                         name="address"
                                         onChange={(e: any) => setAddress(e.target.value)}
@@ -416,7 +418,7 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
 
                         <Box display="flex" flexDirection="row" gap="50px">
                             <Box>
-                                <Typography variant="subtitle1">{translate('events.form.start_date')}</Typography>
+                                <Typography variant="subtitle1">{translate('events.form.start_date')} *</Typography>
                                 <DateTimePicker
                                     ampm={false}
                                     // @ts-ignore
@@ -431,7 +433,7 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                             </Box>
 
                             <Box>
-                                <Typography variant="subtitle1">{translate('events.form.end_date')}</Typography>
+                                <Typography variant="subtitle1">{translate('events.form.end_date')} *</Typography>
                                 <DateTimePicker
                                     ampm={false}
                                     // @ts-ignore
@@ -527,7 +529,7 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                                 )}
 
                                 <Box sx={{ width: '100%' }}>
-                                    <Typography variant="subtitle1">{translate('events.form.title')}</Typography>
+                                    <Typography variant="subtitle1">{translate('events.form.title')} *</Typography>
                                     <OutlinedInput
                                         name="Title"
                                         onChange={(e: any) => setTitle(e.target.value)}
@@ -539,7 +541,7 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                                 </Box>
 
                                 <Box sx={{ width: '100%', '& .RaLabeled-label': { display: 'none' } }}>
-                                    <Typography variant="subtitle1">{translate('events.form.content')}</Typography>
+                                    <Typography variant="subtitle1">{translate('events.form.content')} *</Typography>
                                     <RichTextInput
                                         defaultValue={content}
                                         onChange={(e: any) => setContent(e)}
@@ -613,6 +615,10 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                             ))}
                         </TabbedForm>
                     </Box>
+
+                    <Typography sx={{ marginTop: '20px', fontStyle: 'italic' }}>
+                        {translate('events.form.mandatory')}
+                    </Typography>
 
                     <Button
                         color="primary"
