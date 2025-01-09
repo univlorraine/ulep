@@ -29,12 +29,24 @@ export class GetNewsAdminUsecase {
 
   async execute(query: GetNewsAdminCommand) {
     const { page, limit, where, orderBy } = query;
+
+    // format the Capitalized orderBy field to snake_case
+    const formattedField = orderBy?.field?.replace(
+      /[A-Z]/g,
+      (letter) => `_${letter.toLowerCase()}`,
+    );
+
     const offset = (page - 1) * limit;
     return await this.newsRepository.findAll({
       offset,
       limit,
       where,
-      orderBy,
+      orderBy: orderBy
+        ? {
+            field: formattedField,
+            order: orderBy?.order,
+          }
+        : undefined,
     });
   }
 }

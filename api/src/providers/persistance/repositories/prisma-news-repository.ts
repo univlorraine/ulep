@@ -85,13 +85,6 @@ export class PrismaNewsRepository implements NewsRepository {
         order = { TitleTextContent: { text: orderBy.order } };
       } else if (orderBy.field === 'id') {
         order = { updated_at: 'desc' };
-      } else {
-        // Converts camelCase field name to snake_case
-        const formattedField = orderBy?.field?.replace(
-          /[A-Z]/g,
-          (letter) => `_${letter.toLowerCase()}`,
-        );
-        order = { [formattedField]: orderBy.order };
       }
     }
 

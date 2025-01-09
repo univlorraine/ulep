@@ -81,19 +81,12 @@ export class PrismaEventRepository implements EventRepository {
     let order = { updated_at: 'desc' as SortOrder } as any;
 
     if (orderBy) {
-      if (orderBy.field === 'authorUniversity.name') {
+      if (orderBy.field === 'author_university.name') {
         order = { AuthorUniversity: { name: orderBy.order } };
       } else if (orderBy.field === 'title') {
         order = { TitleTextContent: { text: orderBy.order } };
       } else if (orderBy.field === 'id') {
         order = { updated_at: 'desc' };
-      } else {
-        // Converts camelCase field name to snake_case
-        const formattedField = orderBy?.field?.replace(
-          /[A-Z]/g,
-          (letter) => `_${letter.toLowerCase()}`,
-        );
-        order = { [formattedField]: orderBy.order };
       }
     }
 

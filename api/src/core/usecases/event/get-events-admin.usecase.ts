@@ -32,6 +32,20 @@ export class GetEventsAdminUsecase {
   ) {}
 
   async execute(command: GetEventsAdminCommand) {
-    return this.eventRepository.findAll(command);
+    // format the Capitalized orderBy field to snake_case
+    const formattedField = command.orderBy?.field?.replace(
+      /[A-Z]/g,
+      (letter) => `_${letter.toLowerCase()}`,
+    );
+
+    return this.eventRepository.findAll({
+      ...command,
+      orderBy: command.orderBy
+        ? {
+            field: formattedField,
+            order: command.orderBy?.order,
+          }
+        : undefined,
+    });
   }
 }
