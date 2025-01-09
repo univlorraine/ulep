@@ -5,21 +5,21 @@ import { Env } from 'src/configuration';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import { Tandem, TandemStatus, User, UserStatus } from 'src/core/models';
 import { CHAT_SERVICE } from 'src/core/ports/chat.service';
-import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
+import { EmailGateway, EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
 import {
-  PROFILE_REPOSITORY,
   ProfileRepository,
+  PROFILE_REPOSITORY,
 } from 'src/core/ports/profile.repository';
 import {
-  TANDEM_HISTORY_REPOSITORY,
   TandemHistoryRepository,
+  TANDEM_HISTORY_REPOSITORY,
 } from 'src/core/ports/tandem-history.repository';
 import {
-  TANDEM_REPOSITORY,
   TandemRepository,
+  TANDEM_REPOSITORY,
 } from 'src/core/ports/tandem.repository';
 import { ChatService } from 'src/providers/services/chat.service';
-import { USER_REPOSITORY, UserRepository } from '../../ports/user.repository';
+import { UserRepository, USER_REPOSITORY } from '../../ports/user.repository';
 
 export class UpdateUserCommand {
   status?: UserStatus;
@@ -215,10 +215,10 @@ export class UpdateUserUsecase {
   private async handleConversation(user: User, newContactId: string) {
     if (newContactId !== user.contactId) {
       if (user.contactId) {
-        const chatToIgnore = await this.findUserTandems(user.contactId);
+        const chatToIgnore = await this.findUserTandems(user.id);
 
         await this.chatService.deleteConversationByContactId(
-          user.contactId,
+          user.id,
           chatToIgnore.map((chat) => chat.id),
         );
       }
