@@ -88,20 +88,11 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
 
     // Concerned universities
     const forcedConcernedUniversities: University[] = [];
-    if (universities) {
-        const centralUniversity = universities.filter((university: University) => university.parent === null)[0];
-        forcedConcernedUniversities.push(centralUniversity);
-
-        if (authorUniversityId !== centralUniversity.id) {
-            forcedConcernedUniversities.push(
-                universities.filter((university: University) => university.id === authorUniversityId)[0]
-            );
-        }
-    }
     const [concernedUniversities, setConcernedUniversities] = useState<University[]>(
-        record?.concernedUniversities ?? forcedConcernedUniversities
+        record?.concernedUniversities ?? []
     );
     const [newConcernedUniversity, setNewConcernedUniversity] = useState<University>();
+    const [availableConcernedUniversities, setAvailableConcernedUniversities] = useState<University[]>([]);
 
     useEffect(() => {
         async function fetchUniversityData(universityId: string) {
@@ -127,6 +118,25 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
         );
         setAvailableLanguages(filteredAvailableLanguages);
     }, [universitiesLanguages, translations, defaultLanguage]);
+
+    useEffect(() => {
+        if (!universities) return;
+
+        const centralUniversity = universities.filter((university: University) => university.parent === null)[0];
+
+        const authorIsFromCentralUniversity = authorUniversityId === centralUniversity.id;
+
+        const possibleConcernedUniversities = authorIsFromCentralUniversity ? universities : [centralUniversity];
+        setAvailableConcernedUniversities(possibleConcernedUniversities);
+
+        if (!authorIsFromCentralUniversity) {
+            forcedConcernedUniversities.push(
+                universities.filter((university: University) => university.id === authorUniversityId)[0]
+            );
+        }
+
+        setConcernedUniversities(record?.concernedUniversities ?? forcedConcernedUniversities);
+    }, [universities]);
 
     const onCreatePressed = () => {
         if (startDate && endDate && startDate > endDate) {
@@ -243,7 +253,7 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                                         sx={{ width: '300px' }}
                                         value={newConcernedUniversity}
                                     >
-                                        {universities
+                                        {availableConcernedUniversities
                                             ?.filter(
                                                 (university) =>
                                                     !concernedUniversities.some(
@@ -251,7 +261,7 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                                                             university.id === concernedUniversity.id
                                                     )
                                             )
-                                            .map((university) => (
+                                            .map((university: any) => (
                                                 <MenuItem key={university.id} value={university}>
                                                     {university.name}
                                                 </MenuItem>
