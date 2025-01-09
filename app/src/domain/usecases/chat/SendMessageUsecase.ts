@@ -1,10 +1,10 @@
-import { HttpResponse } from '../../adapter/BaseHttpAdapter';
-import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
-import { MessageWithoutSenderCommand, messageWithoutSenderCommandToDomain } from '../../command/MessageCommand';
-import { MessageType, MessageWithoutSender } from '../entities/chat/Message';
+import { HttpResponse } from '../../../adapter/BaseHttpAdapter';
+import { HttpAdapterInterface } from '../../../adapter/DomainHttpAdapter';
+import { MessageWithoutSenderCommand, messageWithoutSenderCommandToDomain } from '../../../command/MessageCommand';
+import { MessageType, MessageWithoutSender } from '../../entities/chat/Message';
 import SendMessageUsecaseInterface, {
     SendMessageUsecasePayload,
-} from '../interfaces/chat/SendMessageUsecase.interface';
+} from '../../interfaces/chat/SendMessageUsecase.interface';
 
 type MessagePayload = {
     content?: string;
