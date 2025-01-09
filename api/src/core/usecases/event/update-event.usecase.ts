@@ -18,7 +18,6 @@ export type UpdateEventCommand = {
   id: string;
   title: string;
   content: string;
-  authorUniversityId: string;
   translations?: EventTranslation[];
   languageCode: string;
   status?: string;
@@ -50,7 +49,6 @@ export class UpdateEventUsecase {
   async execute(command: UpdateEventCommand) {
     await this.assertEventExists(command.id);
     await this.assertLanguageExists(command.languageCode);
-    await this.assertUniversityExists(command.authorUniversityId);
 
     let addressUrl = undefined;
     if (command.address) {
@@ -63,7 +61,6 @@ export class UpdateEventUsecase {
       content: command.content,
       languageCode: command.languageCode,
       translations: command.translations ?? [],
-      authorUniversityId: command.authorUniversityId,
       status: command.status,
       startDate: command.startDate,
       endDate: command.endDate,
@@ -87,16 +84,6 @@ export class UpdateEventUsecase {
     }
 
     return event;
-  }
-
-  private async assertUniversityExists(id: string) {
-    const university = await this.universityRepository.ofId(id);
-
-    if (!university) {
-      throw new RessourceDoesNotExist('University does not exist');
-    }
-
-    return university;
   }
 
   private async assertLanguageExists(code: string) {
