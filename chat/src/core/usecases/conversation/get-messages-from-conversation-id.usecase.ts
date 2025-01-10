@@ -17,7 +17,7 @@ import {
 export class GetMessagesFromConversationIdCommand {
     id: string;
     pagination: MessagePagination;
-    contentFilter: string;
+    hashtagFilter: string;
     typeFilter: MessageType;
     parentId?: string;
 }
@@ -49,7 +49,7 @@ export class GetMessagesFromConversationIdUsecase {
                 await this.messageRepository.findMessagesByConversationId(
                     command.id,
                     command.pagination,
-                    command.contentFilter,
+                    command.hashtagFilter,
                     command.typeFilter,
                 );
         } else {

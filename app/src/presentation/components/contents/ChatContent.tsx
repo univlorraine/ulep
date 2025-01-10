@@ -21,6 +21,7 @@ import Conversation, { MessagePaginationDirection } from '../../../domain/entiti
 import Profile from '../../../domain/entities/Profile';
 import VocabularyList from '../../../domain/entities/VocabularyList';
 import { useStoreState } from '../../../store/storeTypes';
+import useHandleHastagsFromConversation from '../../hooks/useHandleHastagsFromConversation';
 import useHandleMessagesFromConversation from '../../hooks/useHandleMessagesFromConversation';
 import ChatInputSender from '../chat/ChatInputSender';
 import ConversationSearchBar from '../chat/ConversationSearchBar';
@@ -98,6 +99,11 @@ const Content: React.FC<ChatContentProps> = ({
         conversationId: conversation.id,
         learningLanguageId: findLearningLanguageConversation()?.id,
     });
+
+    const { hashtags, isLoading: hashtagsLoading } = useHandleHastagsFromConversation({
+        conversationId: conversation.id,
+    });
+
     const partner = Conversation.getMainConversationPartner(conversation, profile.user.id);
     let disconnectInterval: NodeJS.Timeout;
 
@@ -109,12 +115,12 @@ const Content: React.FC<ChatContentProps> = ({
     const unsetSearchMode = () => {
         setIsSearchMode(false);
         setCurrentMessageSearchId(undefined);
-        onLoadMessages(true, MessagePaginationDirection.FORWARD);
+        onLoadMessages({ isFirstMessage: true, direction: MessagePaginationDirection.FORWARD });
     };
 
     const loadMessageFromSearch = (messageId: string) => {
         setCurrentMessageSearchId(messageId);
-        onLoadMessages(true, MessagePaginationDirection.BOTH, messageId);
+        onLoadMessages({ isFirstMessage: true, direction: MessagePaginationDirection.BOTH, messageId });
     };
 
     const onOpenVideoCall = () => {
@@ -148,7 +154,7 @@ const Content: React.FC<ChatContentProps> = ({
                 if (!socket.isConnected()) {
                     refreshTokens();
                     socket.connect(accessToken);
-                    await onLoadMessages(true);
+                    await onLoadMessages({ isFirstMessage: true });
                 } else {
                     clearInterval(disconnectInterval);
                 }
@@ -310,7 +316,7 @@ const Content: React.FC<ChatContentProps> = ({
                 <MessagesList
                     currentMessageSearchId={currentMessageSearchId}
                     messages={messages}
-                    loadMessages={(direction) => onLoadMessages(false, direction)}
+                    loadMessages={(direction) => onLoadMessages({ isFirstMessage: false, direction })}
                     onLikeMessage={onLikeMessage}
                     onUnlikeMessage={onUnlikeMessage}
                     onReplyToMessage={onReplyToMessage}
@@ -329,6 +335,10 @@ const Content: React.FC<ChatContentProps> = ({
             )}
             {!isSearchMode && (
                 <ChatInputSender
+                    hashtags={hashtags}
+                    isHastagsLoading={hashtagsLoading}
+                    searchHashtag={(hashtag) => onLoadMessages({ isFirstMessage: true, hashtagToFilter: hashtag })}
+                    isReplayMode={Boolean(messageToReply)}
                     isBlocked={isBlocked}
                     isCommunity={isCommunity}
                     conversation={conversation}

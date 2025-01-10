@@ -25,7 +25,7 @@ export class GetMessagesFromConversationCommand {
   conversationId: string;
   limit: number;
   lastMessageId?: string;
-  contentFilter?: string;
+  hashtagFilter?: string;
   typeFilter?: string;
   direction?: ChatPaginationDirection;
   parentId?: string;
@@ -51,7 +51,7 @@ export class GetMessagesFromConversationUsecase {
         command.conversationId,
         command.limit,
         command.lastMessageId,
-        command.contentFilter,
+        command.hashtagFilter,
         command.typeFilter,
         command.direction,
         command.parentId,

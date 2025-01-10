@@ -487,6 +487,7 @@
         "goBackToConversation": "Revenir au salon",
         "numberOfReplies": "Voir la réponse",
         "numberOfReplies_plural": "Voir {{count}} réponses",
+        "popularHashtags": "Thématiques populaires",
         "reportMessageButton": "Signaler le message",
         "likeMessageButton": "Liker le message",
         "unlikeMessageButton": "Déliker le message",

@@ -85,7 +85,7 @@ export class ChatController {
       conversationId: id,
       limit: params.limit,
       lastMessageId: params.lastMessageId,
-      contentFilter: params.contentFilter,
+      hashtagFilter: params.hashtagFilter,
       typeFilter: params.typeFilter,
       direction: params.direction,
       parentId: params.parentId,

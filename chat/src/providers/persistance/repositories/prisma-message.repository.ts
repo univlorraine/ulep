@@ -140,7 +140,7 @@ export class PrismaMessageRepository implements MessageRepository {
     async findMessagesByConversationId(
         conversationId: string,
         pagination: MessagePagination,
-        contentFilter?: string,
+        hashtagFilter?: string,
         typeFilter?: MessageType,
     ): Promise<Message[]> {
         const messagesPagination = {};
@@ -153,9 +153,9 @@ export class PrismaMessageRepository implements MessageRepository {
             messagesPagination['take'] = pagination.limit;
         }
 
-        if (contentFilter) {
+        if (hashtagFilter) {
             where['content'] = {
-                contains: contentFilter,
+                contains: hashtagFilter,
             };
         }
 

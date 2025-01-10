@@ -455,6 +455,7 @@
         "goBackToConversation": "Revenir au salon",
         "numberOfReplies": "See reply",
         "numberOfReplies_plural": "See {{count}} replies",
+        "popularHashtags": "Popular hashtags",
         "reportMessageButton": "Report message",
         "likeMessageButton": "Like message",
         "unlikeMessageButton": "Unlike message",

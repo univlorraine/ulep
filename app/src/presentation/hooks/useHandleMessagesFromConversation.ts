@@ -4,10 +4,19 @@ import { useTranslation } from 'react-i18next';
 import { useConfig } from '../../context/ConfigurationContext';
 import { useSocket } from '../../context/SocketContext';
 import Conversation, { MessagePaginationDirection } from '../../domain/entities/chat/Conversation';
+import Hashtag from '../../domain/entities/chat/Hashtag';
 import { Message, MessageType, MessageWithConversationId } from '../../domain/entities/chat/Message';
 import { LogEntryType } from '../../domain/entities/LogEntry';
 import { UserChat } from '../../domain/entities/User';
 import { useStoreState } from '../../store/storeTypes';
+
+type LoadMessageProps = {
+    isFirstMessage: boolean;
+    direction?: MessagePaginationDirection;
+    messageId?: string;
+    messageToReplyId?: string;
+    hashtagToFilter?: Hashtag;
+};
 
 interface UseHandleMessagesFromConversationProps {
     conversationId: string;
@@ -61,12 +70,20 @@ const useHandleMessagesFromConversation = ({
             onCancelReply: () => {},
         };
 
-    const onLoadMessages = (
-        isFirstMessage = false,
-        direction: MessagePaginationDirection = MessagePaginationDirection.FORWARD,
-        messageId?: string
-    ) => {
-        loadMessages(isFirstMessage, direction, messageId, currentMessageReply?.id);
+    const onLoadMessages = (props: LoadMessageProps) => {
+        const {
+            isFirstMessage = false,
+            direction = MessagePaginationDirection.FORWARD,
+            messageId,
+            hashtagToFilter,
+        } = props;
+        loadMessages({
+            isFirstMessage,
+            direction,
+            messageId,
+            messageToReplyId: currentMessageReply?.id,
+            hashtagToFilter,
+        });
     };
 
     const onReplyToMessage = async (message: Message) => {
@@ -230,12 +247,8 @@ const useHandleMessagesFromConversation = ({
         }
     };
 
-    const loadMessages = async (
-        isFirstMessage = false,
-        direction: MessagePaginationDirection = MessagePaginationDirection.FORWARD,
-        messageId?: string,
-        messageToReplyId?: string
-    ) => {
+    const loadMessages = async (props: LoadMessageProps) => {
+        const { isFirstMessage, direction, messageId, messageToReplyId, hashtagToFilter } = props;
         if (
             (!isFirstMessage &&
                 direction === MessagePaginationDirection.FORWARD &&
@@ -265,6 +278,7 @@ const useHandleMessagesFromConversation = ({
             typeFilter,
             direction,
             parentId: messageToReplyId,
+            hashtagFilter: hashtagToFilter ? `${hashtagToFilter.name}` : undefined,
         });
 
         if (messagesConversationResult instanceof Error) {
@@ -335,7 +349,7 @@ const useHandleMessagesFromConversation = ({
 
     useEffect(() => {
         const fetchData = async () => {
-            await onLoadMessages(true);
+            await onLoadMessages({ isFirstMessage: true });
         };
 
         fetchData();

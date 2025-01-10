@@ -90,7 +90,9 @@ export class ConversationController {
                     direction:
                         params.direction ?? MessagePaginationDirection.FORWARD,
                 },
-                contentFilter: params.contentFilter,
+                hashtagFilter: params.hashtagFilter
+                    ? `#${params.hashtagFilter}`
+                    : undefined,
                 typeFilter: params.typeFilter,
                 parentId: params.parentId,
             });

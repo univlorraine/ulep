@@ -109,7 +109,7 @@ export class ChatService implements ChatServicePort {
     conversationId: string,
     limit: number,
     lastMessageId?: string,
-    contentFilter?: string,
+    hashtagFilter?: string,
     typeFilter?: string,
     direction?: ChatPaginationDirection,
     parentId?: string,
@@ -124,7 +124,7 @@ export class ChatService implements ChatServicePort {
           'CHAT_URL',
         )}/conversations/messages/${conversationId}?limit=${limit}${
           lastMessageId ? `&lastMessageId=${lastMessageId}` : ''
-        }${contentFilter ? `&contentFilter=${contentFilter}` : ''}${
+        }${hashtagFilter ? `&hashtagFilter=${hashtagFilter}` : ''}${
           typeFilter ? `&typeFilter=${typeFilter}` : ''
         }${direction ? `&direction=${direction}` : ''}${
           parentId ? `&parentId=${parentId}` : ''

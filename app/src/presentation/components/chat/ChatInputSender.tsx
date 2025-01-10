@@ -6,6 +6,7 @@ import { CloseBlackSvg, PaperclipSvg, PictureSvg } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
 import { Activity } from '../../../domain/entities/Activity';
 import Conversation from '../../../domain/entities/chat/Conversation';
+import Hashtag from '../../../domain/entities/chat/Hashtag';
 import { MessageType } from '../../../domain/entities/chat/Message';
 import Profile from '../../../domain/entities/Profile';
 import VocabularyList from '../../../domain/entities/VocabularyList';
@@ -16,8 +17,10 @@ import SelectActivitiesListModal from '../modals/SelectActivitiesListModal';
 import SelectVocabularyListModal from '../modals/SelectVocabularyListModal';
 import RecordingButton from '../RecordingButton';
 import styles from './ChatInputSender.module.css';
+import HashtagsHeader from './HashtagsHeader';
 
 interface ChatInputSenderProps {
+    hashtags: Hashtag[];
     isBlocked: boolean;
     isCommunity: boolean;
     conversation: Conversation;
@@ -25,6 +28,9 @@ interface ChatInputSenderProps {
     languageCode?: string;
     vocabularyLists: VocabularyList[];
     activities: Activity[];
+    isReplayMode: boolean;
+    searchHashtag: (hashtag?: Hashtag) => void;
+    isHastagsLoading: boolean;
     handleSendMessage: (
         conversation: Conversation,
         message: string,
@@ -36,6 +42,7 @@ interface ChatInputSenderProps {
 }
 
 const ChatInputSender: React.FC<ChatInputSenderProps> = ({
+    hashtags,
     isBlocked,
     isCommunity,
     conversation,
@@ -43,6 +50,9 @@ const ChatInputSender: React.FC<ChatInputSenderProps> = ({
     profile,
     vocabularyLists,
     activities,
+    searchHashtag,
+    isReplayMode,
+    isHastagsLoading,
 }) => {
     const { t } = useTranslation();
     const { cameraAdapter, fileAdapter, recorderAdapter } = useConfig();
@@ -231,6 +241,9 @@ const ChatInputSender: React.FC<ChatInputSenderProps> = ({
 
     return (
         <div className={styles.footer}>
+            {hashtags.length > 0 && !isHastagsLoading && !isReplayMode && (
+                <HashtagsHeader hashtags={hashtags} onSearchHashtag={searchHashtag} />
+            )}
             <div>
                 <IonButton
                     fill="clear"

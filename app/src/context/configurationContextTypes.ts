@@ -19,7 +19,7 @@ import GetInitialUrlUsecaseInterface from '../domain/interfaces/AuthStandardFlow
 import GetTokenFromCodeUsecaseInterface from '../domain/interfaces/AuthStandardFlow/GetTokenFromCodeUsecase.interface';
 import CancelSessionUsecaseInterface from '../domain/interfaces/CancelSessionUsecase.interface';
 import GetConversationsUsecaseInterface from '../domain/interfaces/chat/GetConversationsUsecase.interface';
-import GetHashtagsFromConversationUsecaseInterface from '../domain/interfaces/chat/GetHastagsFromConversationUsecase.interface';
+import GetHashtagsFromConversationUsecaseInterface from '../domain/interfaces/chat/GetHashtagsFromConversationUsecase.interface';
 import GetMessagesFromConversationUsecaseInterface from '../domain/interfaces/chat/GetMessagesFromConversationUsecase.interface';
 import SearchMessagesIdsFromConversationUsecaseInterface from '../domain/interfaces/chat/SearchMessagesIdsFromConversationUsecase.interface';
 import SendMessageUsecaseInterface from '../domain/interfaces/chat/SendMessageUsecase.interface';
