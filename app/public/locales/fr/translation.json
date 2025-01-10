@@ -499,6 +499,9 @@
         "vocabulary_list": {
             "close": "Fermer",
             "title": "Sélectionner la liste à partager"
+        },
+        "activity_list": {
+            "title": "Liste d'activité"
         }
     },
     "connection_page": {

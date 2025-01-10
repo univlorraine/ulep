@@ -17,7 +17,7 @@ const MessageActivity: React.FC<MessageProps> = ({ message, isCurrentUserMessage
     }
 
     return (
-        <div className={messageClass}>
+        <div className={`${messageClass} ${styles.messageActivity}`}>
             <SmallActivityCard activity={message.metadata.activity} onClick={handleActivityPressed} />
             <LikeButton message={message} isCurrentUserMessage={isCurrentUserMessage} />
         </div>

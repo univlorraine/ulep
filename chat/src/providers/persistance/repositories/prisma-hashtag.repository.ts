@@ -35,8 +35,8 @@ export class PrismaHashtagRepository implements HashtagRepository {
             return acc;
         }, {} as Record<string, number>);
 
-        return hashtags.map((hashtag) =>
-            hashtagMapper(hashtag.name, hashtagCount[hashtag.name]),
+        return Object.entries(hashtagCount).map(([name, count]) =>
+            hashtagMapper(name, count),
         );
     }
 }
