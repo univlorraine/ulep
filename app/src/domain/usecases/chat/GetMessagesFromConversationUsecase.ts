@@ -13,7 +13,6 @@ class GetMessagesFromConversationUsecase implements GetMessagesFromConversationU
 
     async execute(id: string, params: GetMessagesFromConversationUsecaseParams): Promise<Message[] | Error> {
         try {
-            console.warn('params', params);
             const direction = params.direction ?? MessagePaginationDirection.FORWARD;
             const httpResponse: HttpResponse<CollectionCommand<MessageCommand>> = await this.domainHttpAdapter.get(
                 `/chat/messages/${id}?${params.lastMessageId ? `lastMessageId=${params.lastMessageId}` : ''}&${
