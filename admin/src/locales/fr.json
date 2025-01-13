@@ -395,7 +395,13 @@
             "secondaryBackgroundColor": "Couleur secondaire de l'image de fond de l'application",
             "secondaryDarkColor": "Couleur secondaire nuancé en sombre utilisé pour le fond de l'application",
             "title": "Mise à jour de l'instance",
-            "defaultCertificateFile": "Modèle de certificat"
+            "defaultCertificateFile": "Modèle de certificat",
+            "editoMandatoryTranslations": "Langues obligatoires pour les éditos",
+            "edito": {
+                "CentralUniversityLanguage": "Langue de l'université centrale",
+                "English": "Anglais",
+                "PartnerUniversityLanguage": "Langue de l'universités partenaire"
+            }
         }
     },
     "interests": {

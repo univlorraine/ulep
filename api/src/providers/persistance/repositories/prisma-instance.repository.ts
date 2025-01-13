@@ -40,6 +40,7 @@ export class PrismaInstanceRepository implements InstanceRepository {
         is_in_maintenance: instance.isInMaintenance,
         days_before_closure_notification:
           instance.daysBeforeClosureNotification,
+        edito_mandatory_translations: instance.editoMandatoryTranslations,
       },
     });
 

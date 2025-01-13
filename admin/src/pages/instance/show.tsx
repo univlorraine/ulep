@@ -3,6 +3,7 @@ import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import { Box, CircularProgress, Modal, Switch, SwitchProps, Typography } from '@mui/material';
 import { useState } from 'react';
 import {
+    // ArrayField,
     Button,
     EditButton,
     EmailField,
@@ -10,6 +11,7 @@ import {
     NumberField,
     Show,
     SimpleShowLayout,
+    // SingleFieldList,
     TextField,
     TopToolbar,
     UrlField,
@@ -141,6 +143,14 @@ const InstanceShow = () => {
                         <ReferenceUploadFileField
                             label={translate('instance.defaultCertificateFile')}
                             source="defaultCertificateFile.id"
+                        />
+                        <FunctionField
+                            render={(record: Instance) =>
+                                record.editoMandatoryTranslations.map((translation) => (
+                                    <div key={translation}>{translate(`instance.edit.edito.${translation}`)}</div>
+                                ))
+                            }
+                            source="editoMandatoryTranslations"
                         />
                     </SimpleShowLayout>
                     <SimpleShowLayout sx={{ m: 3, flex: '1' }}>

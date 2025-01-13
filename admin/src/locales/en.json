@@ -395,7 +395,14 @@
             "secondaryColor": "Secondary color of the application",
             "secondaryBackgroundColor": "Secondary color of the application's background image",
             "secondaryDarkColor": "Secondary dark color used for the application background",
-            "title": "Instance update"
+            "title": "Instance update",
+            "defaultCertificateFile": "Default certificate file",
+            "editoMandatoryTranslations": "Mandatory translations for the Edito",
+            "edito": {
+                "CentralUniversityLanguage": "Central university language",
+                "English": "English",
+                "PartnerUniversityLanguage": "Partner university language"
+            }
         }
     },
     "interests": {

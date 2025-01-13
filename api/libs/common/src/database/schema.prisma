@@ -24,6 +24,7 @@ model Instance {
   days_before_closure_notification Int     @default(30)
   is_in_maintenance                Boolean @default(false)
   default_certificate_file_id      String? @unique
+  edito_mandatory_translations     String[]
 
   DefaultCertificateFile MediaObjects? @relation(fields: [default_certificate_file_id], references: [id])
 }
@@ -122,6 +123,7 @@ model Organizations {
   News                        News[]
   EventsConcernedUniversities Events[]            @relation("ConcernedUniversities")
   EventsAuthorUniversity      Events[]            @relation("AuthorUniversity")
+  Edito Editos?
 
   @@unique([name])
   @@map("organizations")
@@ -234,6 +236,7 @@ model MediaObjects {
   News                               News?
   LearningLanguageCertificateFile    LearningLanguages?  @relation("LearningLanguageCertificateFile")
   Event                              Events?
+  Edito                              Editos?
 
   @@unique([name, bucket])
   @@map("media_objects")
@@ -261,6 +264,7 @@ model TextContent {
   EventContent             Events[]                 @relation("EventContentTextContent")
   ActivityThemes           ActivityThemes?
   ActivityThemesCategories ActivityThemeCategories?
+  EditosContent        Editos?
 
   @@map("text_content")
 }
@@ -825,4 +829,23 @@ model CommunityChat {
   PartnerLanguage LanguageCodes @relation("PartnerLanguage", fields: [partner_language_id], references: [id], onDelete: Cascade)
 
   @@map("community_chat")
+}
+
+//  * ****************************************************
+//  * EDITO
+//  * ****************************************************
+
+model Editos {
+  id                      String   @id @default(uuid())
+  content_text_content_id String @unique
+  university_id           String @unique
+  image_id                String? @unique
+  created_at              DateTime @default(now())
+  updated_at              DateTime @updatedAt
+
+  University              Organizations @relation(fields: [university_id], references: [id], onDelete: Cascade)
+  Image                   MediaObjects? @relation(fields: [image_id], references: [id])
+  ContentTextContent      TextContent   @relation(fields: [content_text_content_id], references: [id], onDelete: Cascade)
+
+  @@map("editos")
 }
