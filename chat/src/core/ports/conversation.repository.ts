@@ -1,5 +1,4 @@
 import { Collection } from '@app/common';
-import { MediaObject } from '@prisma/client';
 import { Conversation } from 'src/core/models';
 
 export const CONVERSATION_REPOSITORY = 'conversation.repository';
