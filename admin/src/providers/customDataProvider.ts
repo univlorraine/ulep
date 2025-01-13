@@ -155,6 +155,9 @@ const customDataProvider = {
             case 'chat':
                 url = new URL(`${window.REACT_APP_API_URL}/chat/messages/${params.id}`);
                 break;
+            case 'events':
+                url = new URL(`${window.REACT_APP_API_URL}/events/admin/${params.id}`);
+                break;
             default:
                 break;
         }
@@ -424,6 +427,16 @@ const customDataProvider = {
     },
     exportUserPersonalData: async (userId: string): Promise<Response> => {
         const url = `${window.REACT_APP_API_URL}/users/${userId}/export`;
+        const response = await fetch(url, httpClientOptions({ method: 'GET' }));
+
+        if (!response.ok) {
+            await throwError(response);
+        }
+
+        return response;
+    },
+    exportLogEntries: async (learningLanguageId: string): Promise<Response> => {
+        const url = `${window.REACT_APP_API_URL}/log-entries/export/${learningLanguageId}`;
         const response = await fetch(url, httpClientOptions({ method: 'GET' }));
 
         if (!response.ok) {

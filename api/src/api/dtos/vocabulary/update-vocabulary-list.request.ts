@@ -1,4 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import { IsOptional } from 'class-validator';
 
 export class UpdateVocabularyListRequest {
@@ -11,6 +12,7 @@ export class UpdateVocabularyListRequest {
   symbol?: string;
 
   @ApiPropertyOptional({ type: 'string' })
+  @Transform(({ value }) => (Array.isArray(value) ? value : [value]))
   @IsOptional()
   profileIds?: string[];
 

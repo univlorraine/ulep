@@ -39,6 +39,7 @@ import { NewsController } from './controllers/news.controller';
 import { ActivityController } from 'src/api/controllers/activity.controller';
 import { SessionController } from './controllers/session.controller';
 import { EventsController } from './controllers/events.controller';
+import { LogEntryController } from 'src/api/controllers/log-entry.controller';
 
 @Module({
   imports: [CoreModule, TerminusModule, HttpModule, ConfigModule],
@@ -51,6 +52,7 @@ import { EventsController } from './controllers/events.controller';
     InterestController,
     InstanceController,
     LanguageController,
+    LogEntryController,
     NewsController,
     NotificationController,
     ObjectiveController,

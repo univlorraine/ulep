@@ -53,6 +53,12 @@ import GetQuizzByLevelUsecaseInterface from '../domain/interfaces/GetQuizzByLeve
 import GetUniversityInterface from '../domain/interfaces/GetUniversity.interface';
 import GetUniversityLanguagesUsecaseInterface from '../domain/interfaces/GetUniversityLanguagesUsecase.interface';
 import GetUserUsecaseInterface from '../domain/interfaces/GetUserUsecase.interface';
+import CreateLogEntryUsecaseInterface from '../domain/interfaces/log-entries/CreateLogEntryUsecase.interface';
+import ExportLogEntriesUsecaseInterface from '../domain/interfaces/log-entries/ExportLogEntriesUsecase.interface';
+import GetLogEntriesByDateUsecaseInterface from '../domain/interfaces/log-entries/GetLogEntriesByDateUsecase.interface';
+import GetLogEntriesUsecaseInterface from '../domain/interfaces/log-entries/GetLogEntriesUsecase.interface';
+import ShareLogEntriesUsecaseInterface from '../domain/interfaces/log-entries/ShareLogEntriesUsecase.interface';
+import UpdateCustomLogEntryUsecaseInterface from '../domain/interfaces/log-entries/UpdateCustomLogEntryUsecase.interface';
 import LoginUsecaseInterface from '../domain/interfaces/LoginUsecase.interface';
 import GetAllNewsUsecaseInterface from '../domain/interfaces/news/GetAllNewsUsecase.interface';
 import RefreshTokensUsecaseInterface from '../domain/interfaces/RefreshTokensUsecase.interface';
@@ -167,4 +173,11 @@ export interface ConfigContextValueType {
     createCustomLearningGoal: CreateCustomLearningGoalUsecaseInterface;
     updateCustomLearningGoal: UpdateCustomLearningGoalUsecaseInterface;
     deleteCustomLearningGoal: DeleteCustomLearningGoalUsecaseInterface;
+    // Log entries
+    createLogEntry: CreateLogEntryUsecaseInterface;
+    updateCustomLogEntry: UpdateCustomLogEntryUsecaseInterface;
+    getLogEntries: GetLogEntriesUsecaseInterface;
+    getLogEntriesByDate: GetLogEntriesByDateUsecaseInterface;
+    shareLogEntries: ShareLogEntriesUsecaseInterface;
+    exportLogEntries: ExportLogEntriesUsecaseInterface;
 }

@@ -1,7 +1,7 @@
 #syntax=docker/dockerfile:1.4
 
 # Base node image with pnpm enabled
-FROM node:18-alpine as admin_base
+FROM node:18-alpine3.20 as admin_base
 
 RUN apk add --no-cache libc6-compat
 

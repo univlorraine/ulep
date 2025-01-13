@@ -13,6 +13,10 @@ const Store = createStore<TokenStoreTypes>(
             language: '',
             refreshToken: '',
             refreshReports: false,
+            lastConnection: undefined,
+            setLastConnection: action((state, payload) => {
+                state.lastConnection = payload.lastConnection;
+            }),
             setRefreshReports: action((state) => {
                 state.refreshReports = !state.refreshReports;
             }),
@@ -48,6 +52,7 @@ const Store = createStore<TokenStoreTypes>(
                 state.apiUrl = '';
                 state.chatUrl = '';
                 state.socketChatUrl = '';
+                state.lastConnection = undefined;
             }),
             profile: undefined,
             profileSignUp: new ProfileSignUp(),

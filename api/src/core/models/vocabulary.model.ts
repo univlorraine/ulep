@@ -8,8 +8,7 @@ type VocabularyListProps = {
   profiles: Profile[];
   symbol: string;
   vocabularies: Vocabulary[];
-  creatorId: string;
-  creatorName: string;
+  creator: Profile;
   translationLanguage: Language;
   wordLanguage: Language;
 };
@@ -39,9 +38,7 @@ export class VocabularyList {
 
   readonly vocabularies: Vocabulary[];
 
-  readonly creatorId: string;
-
-  readonly creatorName: string;
+  readonly creator: Profile;
 
   constructor(props: VocabularyListProps) {
     this.id = props.id;
@@ -51,8 +48,7 @@ export class VocabularyList {
     this.vocabularies = props.vocabularies;
     this.translationLanguage = props.translationLanguage;
     this.wordLanguage = props.wordLanguage;
-    this.creatorId = props.creatorId;
-    this.creatorName = props.creatorName;
+    this.creator = props.creator;
   }
 }
 

@@ -1,9 +1,8 @@
 import { IonButton, IonIcon, IonText } from '@ionic/react';
-import { useTranslation } from 'react-i18next';
-import styles from './FlipcardsButtons.module.css';
-import Vocabulary from '../../../../domain/entities/Vocabulary';
 import { searchOutline } from 'ionicons/icons';
-
+import { useTranslation } from 'react-i18next';
+import Vocabulary from '../../../../domain/entities/Vocabulary';
+import styles from './FlipcardsButtons.module.css';
 
 interface FlipcardsButtonsProps {
     setShowAnswer: (boolean: boolean) => void;
@@ -26,76 +25,68 @@ const FlipcardsButtons: React.FC<FlipcardsButtonsProps> = ({
     setIsQuizFinished,
     setNumberRightAnswers,
     numberRightAnswers,
-    showAnswer
-}) => {    
+    showAnswer,
+}) => {
     const { t } = useTranslation();
 
-    const onRightOrWrongAnswerPressed = (isRight:boolean) => {
-        setShowAnswer(false)
-        setCurrentVocabulary(vocabularies[vocabulariesCount])
-        setVocabulariesCount(vocabulariesCount + 1)
+    const onRightOrWrongAnswerPressed = (isRight: boolean) => {
+        setShowAnswer(false);
+        setCurrentVocabulary(vocabularies[vocabulariesCount]);
+        setVocabulariesCount(vocabulariesCount + 1);
 
-        isRight && setNumberRightAnswers(numberRightAnswers + 1)
+        isRight && setNumberRightAnswers(numberRightAnswers + 1);
 
-        if(vocabulariesCount === vocabularies.length) {
-            setIsQuizFinished(true)
+        if (vocabulariesCount === vocabularies.length) {
+            setIsQuizFinished(isRight);
         }
-    }
+    };
 
     const buttonsIsRight = [
         {
             id: 1,
             text: 'flashcards.flipcards.buttons.rightAnswer',
-            isRight: true
+            isRight: true,
         },
         {
             id: 2,
             text: 'flashcards.flipcards.buttons.wrongAnswer',
-            isRight: false
+            isRight: false,
         },
-    ]
+    ];
 
     return (
         <>
             {!showAnswer && (
                 <div className={styles.buttonsContainer}>
-                    <IonButton 
-                        fill="clear" 
-                        className={"tertiary-button"} 
+                    <IonButton
+                        fill="clear"
+                        className={'tertiary-button'}
                         onClick={() => setShowAnswer(true)}
                         size="small"
                     >
-                        <IonIcon
-                            className={styles.icon}
-                            icon={searchOutline}
-                            slot="start"
-                        />
+                        <IonIcon className={styles.icon} icon={searchOutline} slot="start" />
                         <IonText>{t('flashcards.flipcards.buttons.showResponse')}</IonText>
                     </IonButton>
                 </div>
             )}
-            
+
             {showAnswer && (
                 <div className={styles.buttonsContainer}>
                     <p className={styles.description}>{t('flashcards.flipcards.rightAnswerQuestion')}</p>
                     <div className={styles.buttons}>
-                        {buttonsIsRight.map( button => {
-                            return(
-                                <IonButton 
+                        {buttonsIsRight.map((button) => {
+                            return (
+                                <IonButton
                                     fill="clear"
                                     size="small"
-                                    className={"tertiary-button"} 
+                                    className={'tertiary-button'}
                                     onClick={() => onRightOrWrongAnswerPressed(button.isRight)}
                                     key={button.id}
                                 >
-                                    <IonIcon
-                                        className={styles.icon}
-                                        icon={searchOutline}
-                                        slot="start"
-                                    />
+                                    <IonIcon className={styles.icon} icon={searchOutline} slot="start" />
                                     <IonText>{t(button.text)}</IonText>
                                 </IonButton>
-                            )
+                            );
                         })}
                     </div>
                 </div>

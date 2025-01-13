@@ -139,6 +139,17 @@ export class EventsController {
     return EventResponse.fromDomain(event, profile?.id);
   }
 
+  @Get('admin/:id')
+  @UseGuards(AuthenticationGuard)
+  @SerializeOptions({ groups: ['read', 'event:admin', 'event:front'] })
+  @Swagger.ApiOperation({ summary: 'Get an Event resource.' })
+  @Swagger.ApiOkResponse({ type: EventResponse })
+  async getEventAdmin(@Param('id', ParseUUIDPipe) id: string) {
+    const event = await this.getEventUsecase.execute(id);
+
+    return EventResponse.fromDomain(event);
+  }
+
   @Post()
   @UseGuards(AuthenticationGuard)
   @SerializeOptions({ groups: ['read'] })

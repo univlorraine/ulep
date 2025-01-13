@@ -97,6 +97,10 @@ export class LearningLanguageResponse {
   @Expose({ groups: ['read'] })
   customLearningGoals?: CustomLearningGoalResponse[];
 
+  @ApiProperty({ type: 'date' })
+  @Expose({ groups: ['read'] })
+  sharedLogsDate?: Date;
+
   constructor(partial: Partial<LearningLanguageResponse>) {
     Object.assign(this, partial);
   }
@@ -127,6 +131,7 @@ export class LearningLanguageResponse {
       sameAge: learningLanguage.sameAge,
       hasPriority: learningLanguage.hasPriority,
       sameTandemEmail: learningLanguage.sameTandemEmail,
+      sharedLogsDate: learningLanguage.sharedLogsDate,
       tandemLanguage:
         learningLanguage.tandemLanguage &&
         LanguageResponse.fromLanguage(learningLanguage.tandemLanguage),

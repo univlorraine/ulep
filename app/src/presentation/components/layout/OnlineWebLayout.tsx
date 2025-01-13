@@ -2,6 +2,7 @@ import { IonContent, IonPage } from '@ionic/react';
 import React, { useState } from 'react';
 import HomeHeader from '../HomeHeader';
 import NewActivityMenuModal from '../modals/NewActivityMenuModal';
+import NewLogEntryMenuModal from '../modals/NewLogEntryMenuModal';
 import NewSessionMenuModal from '../modals/NewSessionMenuModal';
 import NewVocabularyMenuModal from '../modals/NewVocabularyMenuModal';
 import ReportModal from '../modals/ReportModal';
@@ -16,6 +17,7 @@ const OnlineWebLayout: React.FC<OnlineLayoutProps> = ({ children, onRefresh }) =
     const [displayReport, setDisplayReport] = useState<boolean>(false);
     const [displayVocabularySidebar, setDisplayVocabularySidebar] = useState<boolean>(false);
     const [displayActivitySidebar, setDisplayActivitySidebar] = useState<boolean>(false);
+    const [displayLearningDiary, setDisplayLearningDiary] = useState<boolean>(false);
     const [displaySessionModal, setDisplaySessionModal] = useState<boolean>(false);
     return (
         <IonPage>
@@ -25,6 +27,7 @@ const OnlineWebLayout: React.FC<OnlineLayoutProps> = ({ children, onRefresh }) =
                     onDisplayReport={() => setDisplayReport(true)}
                     onDisplayVocabularySidebar={() => setDisplayVocabularySidebar(true)}
                     onDisplayActivitySidebar={() => setDisplayActivitySidebar(true)}
+                    onDisplayLearningDiary={() => setDisplayLearningDiary(true)}
                     onOpenActivitySidebar={() => setDisplayActivitySidebar(true)}
                     onDisplaySessionModal={() => setDisplaySessionModal(true)}
                 />
@@ -41,6 +44,7 @@ const OnlineWebLayout: React.FC<OnlineLayoutProps> = ({ children, onRefresh }) =
                 onClose={() => setDisplaySessionModal(false)}
                 setRefreshSessions={onRefresh}
             />
+            <NewLogEntryMenuModal isVisible={displayLearningDiary} onClose={() => setDisplayLearningDiary(false)} />
         </IonPage>
     );
 };

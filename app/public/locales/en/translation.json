@@ -83,6 +83,72 @@
     "credit": {
         "title": "Credit of the file"
     },
+    "learning_book": {
+        "list": {
+            "title": "Learning journal",
+            "load_more": "See more",
+            "share": {
+                "title": "Share the logs",
+                "success": "Logs have been shared"
+            },
+            "export": {
+                "title": "Export the logs",
+                "success": "Logs have been exported"
+            }
+        },
+        "entry": {
+            "connection": {
+                "title": "First connection of the day!"
+            },
+            "custom": {
+                "button": "Update"
+            },
+            "visio": {
+                "title": "Visio with {{firstname}} {{lastname}}",
+                "subtitle": "The call lasted {{minutes}} minutes and {{seconds}} seconds"
+            },
+            "tandem_chat": {
+                "title": "Conversation with {{firstname}} {{lastname}} started today"
+            },
+            "add_vocabulary": {
+                "title": "Add vocabulary to the list {{vocabularyListName}} : {{entryNumber}} entry(s)",
+                "button": "See the list"
+            },
+            "share_vocabulary": {
+                "title": "Share the list {{vocabularyListName}}",
+                "button": "See the list"
+            },
+            "edit_activity": {
+                "title": "Edited activity: {{activityTitle}}",
+                "button": "See the activity"
+            },
+            "submit_activity": {
+                "title": "Submitted activity: {{activityTitle}}",
+                "button": "See the activity"
+            },
+            "played_game": {
+                "title": "Played game: {{gameName}}",
+                "subtitle": "You scored {{percentage}}% of the questions right"
+            },
+            "sharing_logs": {
+                "title": "Logs have been shared"
+            },
+            "see_more": "See more",
+            "load_more": "See more",
+            "title": "Journal entries"
+        },
+        "create": {
+            "title": "New journal entry",
+            "title_label": "Title",
+            "description_label": "Description",
+            "cancel_button": "Cancel",
+            "validate_button": "Validate",
+            "date_label": "Date"
+        },
+        "update": {
+            "title": "Update journal entry"
+        }
+    },
     "activity": {
         "title": "Activity sheet",
         "status": {

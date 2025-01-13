@@ -1,12 +1,17 @@
 import * as Swagger from '@nestjs/swagger';
-import { IsArray, IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose, Transform } from 'class-transformer';
-import { UniversityResponse } from '../universities';
+import {
+  IsArray,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUUID,
+} from 'class-validator';
 import { News, NewsStatus, NewsTranslation } from 'src/core/models';
 import { MediaObjectResponse } from '../medias';
-import { ApiPropertyOptional } from '@nestjs/swagger';
 import { PaginationDto } from '../pagination';
-
+import { UniversityResponse } from '../universities';
 
 export class GetNewsQuery extends PaginationDto {
   @ApiPropertyOptional({ type: 'string' })
@@ -88,11 +93,6 @@ export class UpdateNewsRequest {
   @IsNotEmpty()
   @IsUUID()
   id: string;
-
-  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
-  @IsNotEmpty()
-  @IsUUID()
-  universityId: string;
 
   @Swagger.ApiProperty({ type: 'string' })
   @IsNotEmpty()

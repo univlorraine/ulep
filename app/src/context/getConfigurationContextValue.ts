@@ -51,6 +51,12 @@ import GetQuizzByLevelUsecase from '../domain/usecases/GetQuizzByLevelUsecase';
 import GetUniversityLanguagesUsecase from '../domain/usecases/GetUniversityLanguagesUsecase';
 import GetUniversityUsecase from '../domain/usecases/GetUniversityUsecase';
 import GetUserUsecase from '../domain/usecases/GetUserUsecase';
+import CreateLogEntryUsecase from '../domain/usecases/log-entries/CreateLogEntryUsecase';
+import ExportLogEntriesUsecase from '../domain/usecases/log-entries/ExportLogEntriesUsecase';
+import GetLogEntriesByDateUsecase from '../domain/usecases/log-entries/GetLogEntriesByDateUsecase';
+import GetLogEntriesUsecase from '../domain/usecases/log-entries/GetLogEntriesUsecase';
+import ShareLogEntriesUsecase from '../domain/usecases/log-entries/ShareLogEntriesUsecase';
+import UpdateCustomLogEntryUsecase from '../domain/usecases/log-entries/UpdateCustomLogEntryUsecase';
 import LoginUsecase from '../domain/usecases/LoginUsecase';
 import GetAllNewsUsecase from '../domain/usecases/news/GetAllNewsUsecase';
 import RefreshTokensUsecase from '../domain/usecases/RefreshTokensUsecase';
@@ -219,6 +225,13 @@ const getConfigContextValue = ({
     const updateCustomLearningGoal = new UpdateCustomLearningGoalUsecase(domainHttpAdapter);
     const deleteCustomLearningGoal = new DeleteCustomLearningGoalUsecase(domainHttpAdapter);
 
+    // Log entries
+    const createLogEntry = new CreateLogEntryUsecase(domainHttpAdapter);
+    const updateCustomLogEntry = new UpdateCustomLogEntryUsecase(domainHttpAdapter);
+    const getLogEntries = new GetLogEntriesUsecase(domainHttpAdapter);
+    const getLogEntriesByDate = new GetLogEntriesByDateUsecase(domainHttpAdapter);
+    const shareLogEntries = new ShareLogEntriesUsecase(domainHttpAdapter);
+    const exportLogEntries = new ExportLogEntriesUsecase(domainHttpAdapter, fileAdapter);
     return {
         accessToken,
         addDevice,
@@ -301,6 +314,12 @@ const getConfigContextValue = ({
         createCustomLearningGoal,
         updateCustomLearningGoal,
         deleteCustomLearningGoal,
+        createLogEntry,
+        updateCustomLogEntry,
+        getLogEntries,
+        getLogEntriesByDate,
+        shareLogEntries,
+        exportLogEntries,
     };
 };
 

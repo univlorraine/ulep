@@ -153,11 +153,6 @@ export class PrismaNewsRepository implements NewsRepository {
         id: command.id,
       },
       data: {
-        Organization: {
-          connect: {
-            id: command.universityId,
-          },
-        },
         TitleTextContent: {
           update: {
             text: command.title,

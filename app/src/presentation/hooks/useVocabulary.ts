@@ -10,7 +10,7 @@ import { CreateVocabularyListCommand } from '../../domain/interfaces/vocabulary/
 import { UpdateVocabularyListCommand } from '../../domain/interfaces/vocabulary/UpdateVocabularyListUsecase.interface';
 import { useStoreState } from '../../store/storeTypes';
 
-const useVocabulary = (learningLanguage?: LearningLanguage) => {
+const useVocabulary = (learningLanguage?: LearningLanguage, currentVocabularyListId?: string) => {
     const { t } = useTranslation();
     const [showToast] = useIonToast();
     const {
@@ -187,7 +187,6 @@ const useVocabulary = (learningLanguage?: LearningLanguage) => {
             }
 
             setRefreshVocabularies(!refreshVocabularies);
-
             setVocabularyResult({
                 ...vocabularyResult,
                 vocabularyLists: vocabularyListsResult,

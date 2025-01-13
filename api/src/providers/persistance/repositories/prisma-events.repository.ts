@@ -264,11 +264,6 @@ export class PrismaEventRepository implements EventRepository {
             },
           },
         },
-        AuthorUniversity: {
-          connect: {
-            id: props.authorUniversityId,
-          },
-        },
         status: props.status,
         type: props.type,
         image_credit: props.imageCredit,

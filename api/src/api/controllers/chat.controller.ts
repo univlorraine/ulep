@@ -33,7 +33,7 @@ export class ChatController {
   ) {}
 
   @Get(':id')
-  @SerializeOptions({ groups: ['chat'] })
+  @SerializeOptions({ groups: ['chat', 'read'] })
   @Swagger.ApiOperation({ summary: 'Get all conversations for user id.' })
   @Swagger.ApiOkResponse({ type: ConversationResponse, isArray: true })
   @UseGuards(AuthenticationGuard)

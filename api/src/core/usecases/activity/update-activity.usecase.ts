@@ -6,6 +6,7 @@ import {
   ActivityStatus,
   ActivityVocabulary,
 } from 'src/core/models/activity.model';
+import { LogEntryType } from 'src/core/models/log-entry.model';
 import {
   ActivityRepository,
   ACTIVITY_REPOSITORY,
@@ -19,6 +20,7 @@ import {
   StorageInterface,
   STORAGE_INTERFACE,
 } from 'src/core/ports/storage.interface';
+import { CreateOrUpdateLogEntryUsecase } from 'src/core/usecases/log-entry';
 import {
   DeleteAudioVocabularyActivityUsecase,
   UploadAudioVocabularyActivityUsecase,
@@ -53,6 +55,8 @@ export class UpdateActivityUsecase {
     private readonly uploadAudioVocabularyActivityUsecase: UploadAudioVocabularyActivityUsecase,
     @Inject(DeleteAudioVocabularyActivityUsecase)
     private readonly deleteAudioVocabularyActivityUsecase: DeleteAudioVocabularyActivityUsecase,
+    @Inject(CreateOrUpdateLogEntryUsecase)
+    private readonly createOrUpdateLogEntryUsecase: CreateOrUpdateLogEntryUsecase,
   ) {}
 
   async execute(command: UpdateActivityCommand) {
@@ -104,6 +108,18 @@ export class UpdateActivityUsecase {
           }
         : activity.metadata,
     });
+
+    const learningLanguage = activity.creator.findLearningLanguageByCode(
+      activity.language.code,
+    );
+
+    if (learningLanguage) {
+      await this.createOrUpdateLogEntryUsecase.execute({
+        learningLanguageId: learningLanguage.id,
+        type: LogEntryType.EDIT_ACTIVITY,
+        metadata: { activityId: command.id, activityTitle: command.title },
+      });
+    }
 
     // Remove vocabularies that are not in the command
     const vocabulariesToDelete = activity.activityVocabularies.filter(

@@ -4,14 +4,14 @@ import LearningCard from './LearningCard';
 import styles from './RessourcesCard.module.css';
 
 interface RessourcesCardProps {
-    onLearningJournalPressed: () => void;
+    onLearningBookPressed: () => void;
     onVocabularyPressed: () => void;
     onActivityPressed: () => void;
     onGamePressed: () => void;
 }
 
 const RessourcesCard: React.FC<RessourcesCardProps> = ({
-    onLearningJournalPressed,
+    onLearningBookPressed,
     onVocabularyPressed,
     onActivityPressed,
     onGamePressed,
@@ -21,7 +21,7 @@ const RessourcesCard: React.FC<RessourcesCardProps> = ({
     return (
         <LearningCard title={t('ressources.title')}>
             <div className={styles.container}>
-                <button className={styles.card} onClick={onLearningJournalPressed}>
+                <button className={styles.card} onClick={onLearningBookPressed}>
                     <img src={JournalSvg} alt="" />
                     <p className={styles.title}>{t('ressources.journal')}</p>
                 </button>

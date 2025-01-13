@@ -42,6 +42,17 @@ const Content: React.FC<ChatContentProps> = ({
     const [isSearchMode, setIsSearchMode] = useState<boolean>(false);
     const history = useHistory();
     const accessToken = useStoreState((state) => state.accessToken);
+
+    const findLearningLanguageConversation = () => {
+        const profileLearningLanguages = profile.learningLanguages;
+        const conversationLearningLanguages = conversation.learningLanguages;
+        for (const profileLearningLanguage of profileLearningLanguages) {
+            if (conversationLearningLanguages?.some((language) => language.id === profileLearningLanguage.id)) {
+                return profileLearningLanguage;
+            }
+        }
+    };
+
     const {
         messages,
         handleSendMessage,
@@ -53,6 +64,7 @@ const Content: React.FC<ChatContentProps> = ({
         clearMessages,
     } = useHandleMessagesFromConversation({
         conversationId: conversation.id,
+        learningLanguageId: findLearningLanguageConversation()?.id,
     });
     const partner = Conversation.getMainConversationPartner(conversation, profile.user.id);
     let disconnectInterval: NodeJS.Timeout;
@@ -74,9 +86,11 @@ const Content: React.FC<ChatContentProps> = ({
     };
 
     const onOpenVideoCall = () => {
+        const conversationLearningLanguage = findCommonLearningLanguage();
         history.push({
             pathname: '/jitsi',
             search: `?roomName=${conversation.id}`,
+            state: { tandemPartner: partner, learningLanguageId: conversationLearningLanguage?.id },
         });
     };
 
@@ -91,6 +105,15 @@ const Content: React.FC<ChatContentProps> = ({
 
         fileAdapter.saveBlob(response, 'export-medias.zip');
         setShowMenu(false);
+      }
+
+    const findCommonLearningLanguage = () => {
+        for (const profileLanguage of profile.learningLanguages) {
+            if (conversation.learningLanguages?.some((language) => language.id === profileLanguage.id)) {
+                return profileLanguage;
+            }
+        }
+        return null;    
     };
 
     useEffect(() => {

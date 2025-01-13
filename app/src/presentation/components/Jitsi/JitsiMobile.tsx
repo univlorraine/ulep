@@ -3,6 +3,7 @@ import { Jitsi } from 'capacitor-jitsi-meet';
 import { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useConfig } from '../../../context/ConfigurationContext';
+import Profile from '../../../domain/entities/Profile';
 import { useStoreState } from '../../../store/storeTypes';
 import { JitsiProps } from './VisioContainer';
 
@@ -19,8 +20,9 @@ interface ParticipantInfo {
     participantsInfo: string;
 }
 
-const JitsiMobile = ({ jitsiUrl, roomName, jitsiToken }: JitsiProps) => {
+const JitsiMobile = ({ jitsiUrl, roomName, jitsiToken, tandemPartner, learningLanguageId }: JitsiProps) => {
     const history = useHistory();
+    let startTime: number | null = null;
     const { deviceAdapter, sendMessage } = useConfig();
     const profile = useStoreState((state) => state.profile);
     const isJitsiInitializedRef = useRef(false);
@@ -59,6 +61,12 @@ const JitsiMobile = ({ jitsiUrl, roomName, jitsiToken }: JitsiProps) => {
                 prejoinConfigPage: false,
             },
         });
+        window.addEventListener('onConferenceLeft', onJitsiUnloaded);
+        startTime = Date.now();
+    };
+
+    const isProfile = (obj: any): obj is Profile => {
+        return obj && obj.user && typeof obj.user.firstname === 'string' && typeof obj.user.lastname === 'string';
     };
 
     const onJitsiUnloaded = async () => {
@@ -68,7 +76,23 @@ const JitsiMobile = ({ jitsiUrl, roomName, jitsiToken }: JitsiProps) => {
             window.removeEventListener('onParticipantsInfoRetrieved', (data: any) => onParticipantsInfoRetrieved(data));
         }
 
-        history.push('/end-session');
+        let duration;
+        if (startTime) {
+            const endTime = Date.now();
+            // Subtract 1 second to account for the delay in joining the conference - must be changed later
+            duration = Math.floor((endTime - startTime) / 1000) - 1;
+        }
+
+        const firstname = isProfile(tandemPartner) ? tandemPartner.user.firstname : tandemPartner?.firstname;
+        const lastname = isProfile(tandemPartner) ? tandemPartner.user.lastname : tandemPartner?.lastname;
+
+        history.push('/end-session', {
+            duration,
+            partnerTandemId: tandemPartner?.id,
+            tandemFirstname: firstname,
+            tandemLastname: lastname,
+            learningLanguageId,
+        });
     };
 
     const onChatMessageReceived = async (data: OnChatMessageReceivedProps) => {
