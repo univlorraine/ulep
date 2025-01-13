@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import * as _ from 'lodash';
 import { EventStatus, EventType } from 'src/core/models/event.model';
 import {
   EventRepository,
@@ -32,11 +33,7 @@ export class GetEventsAdminUsecase {
   ) {}
 
   async execute(command: GetEventsAdminCommand) {
-    // format the Capitalized orderBy field to snake_case
-    const formattedField = command.orderBy?.field?.replace(
-      /[A-Z]/g,
-      (letter) => `_${letter.toLowerCase()}`,
-    );
+    const formattedField = _.snakeCase(command.orderBy?.field);
 
     return this.eventRepository.findAll({
       ...command,

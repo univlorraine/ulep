@@ -81,7 +81,7 @@ export class PrismaEventRepository implements EventRepository {
     let order = { updated_at: 'desc' as SortOrder } as any;
 
     if (orderBy) {
-      if (orderBy.field === 'author_university.name') {
+      if (orderBy.field === 'author_university_name') {
         order = { AuthorUniversity: { name: orderBy.order } };
       } else if (orderBy.field === 'title') {
         order = { TitleTextContent: { text: orderBy.order } };

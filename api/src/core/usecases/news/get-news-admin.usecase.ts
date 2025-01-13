@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import * as _ from 'lodash';
 import { NewsStatus } from 'src/core/models';
 import {
   NewsRepository,
@@ -30,11 +31,7 @@ export class GetNewsAdminUsecase {
   async execute(query: GetNewsAdminCommand) {
     const { page, limit, where, orderBy } = query;
 
-    // format the Capitalized orderBy field to snake_case
-    const formattedField = orderBy?.field?.replace(
-      /[A-Z]/g,
-      (letter) => `_${letter.toLowerCase()}`,
-    );
+    const formattedField = _.snakeCase(orderBy?.field);
 
     const offset = (page - 1) * limit;
     return await this.newsRepository.findAll({

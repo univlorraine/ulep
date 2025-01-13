@@ -79,7 +79,7 @@ export class PrismaNewsRepository implements NewsRepository {
     let order = { updated_at: 'desc' as SortOrder } as any;
 
     if (orderBy) {
-      if (orderBy.field === 'university.name') {
+      if (orderBy.field === 'university_name') {
         order = { Organization: { name: orderBy.order } };
       } else if (orderBy.field === 'title') {
         order = { TitleTextContent: { text: orderBy.order } };
