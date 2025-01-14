@@ -138,6 +138,7 @@
             }
         },
         "create": {
+            "image_alt": "Image de la fiche d'activité",
             "up_excercise_button": "Déplacer l'exercice vers le haut",
             "down_excercise_button": "Déplacer l'exercice vers le bas",
             "delete_excercise_button": "Supprimer l'exercice",

@@ -178,7 +178,11 @@ export const CreateActivityInformationsContent = ({
                 </IonButton>
             ) : (
                 <div className={`${styles.imageContainer} margin-bottom`}>
-                    <IonImg className={styles.image} src={imageToDisplay} />
+                    <IonImg
+                        alt={t('activity.create.image_alt') as string}
+                        className={styles.image}
+                        src={imageToDisplay}
+                    />
                     <IonButton
                         fill="clear"
                         className="image"

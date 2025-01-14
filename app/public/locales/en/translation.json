@@ -129,6 +129,7 @@
             "ressource_file_downloaded": "File downloaded"
         },
         "create": {
+            "image_alt": "Activity image",
             "up_excercise_button": "Move the excercise up",
             "down_excercise_button": "Move the excercise down",
             "delete_excercise_button": "Delete the excercise",
