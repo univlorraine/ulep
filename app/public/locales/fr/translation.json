@@ -469,7 +469,8 @@
             "conversation_aria_label": "Liste des conversations",
             "user_aria_label": "Conversation avec {{name}}",
             "search": "Rechercher dans la conversation",
-            "medias": "Afficher les médias"
+            "medias": "Afficher les médias",
+            "export_medias": "Exporter les médias"
         },
         "medias": {
             "title": "Médias partagés",

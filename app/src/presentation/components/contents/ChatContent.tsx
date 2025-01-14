@@ -1,5 +1,5 @@
 import { IonButton, IonContent, IonIcon, IonItem, IonLabel, IonList, IonPage, IonPopover } from '@ionic/react';
-import { imageOutline, searchOutline, videocam } from 'ionicons/icons';
+import { downloadOutline, imageOutline, searchOutline, videocam } from 'ionicons/icons';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
@@ -35,7 +35,7 @@ const Content: React.FC<ChatContentProps> = ({
 }) => {
     const { t } = useTranslation();
     const { socket } = useSocket();
-    const { recorderAdapter, refreshTokensUsecase } = useConfig();
+    const { recorderAdapter, refreshTokensUsecase, exportMediasFromConversation, fileAdapter } = useConfig();
     const isBlocked = conversation.isBlocked;
     const [showMenu, setShowMenu] = useState(false);
     const [currentMessageSearchId, setCurrentMessageSearchId] = useState<string>();
@@ -94,13 +94,26 @@ const Content: React.FC<ChatContentProps> = ({
         });
     };
 
+    const handleExportMedias = async () => {
+        const response = await exportMediasFromConversation.execute(conversation.id);
+
+        if (response instanceof Error) {
+            console.error(response);
+            setShowMenu(false);
+            return;
+        }
+
+        fileAdapter.saveBlob(response, 'export-medias.zip');
+        setShowMenu(false);
+      }
+
     const findCommonLearningLanguage = () => {
         for (const profileLanguage of profile.learningLanguages) {
             if (conversation.learningLanguages?.some((language) => language.id === profileLanguage.id)) {
                 return profileLanguage;
             }
         }
-        return null;
+        return null;    
     };
 
     useEffect(() => {
@@ -191,6 +204,12 @@ const Content: React.FC<ChatContentProps> = ({
                                 <IonIcon icon={imageOutline} aria-hidden="true" />
                                 <IonLabel className={styles['chat-popover-label']}>
                                     {t('chat.conversation_menu.medias')}
+                                </IonLabel>
+                            </IonItem>
+                            <IonItem button={true} detail={false} onClick={handleExportMedias}>
+                                <IonIcon icon={downloadOutline} aria-hidden="true" />
+                                <IonLabel className={styles['chat-popover-label']}>
+                                    {t('chat.conversation_menu.export_medias')}
                                 </IonLabel>
                             </IonItem>
                             <IonItem button={true} detail={false} onClick={setSearchMode}>

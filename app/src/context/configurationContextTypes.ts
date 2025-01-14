@@ -18,6 +18,7 @@ import AskForLearningLanguageUsecaseInterface from '../domain/interfaces/AskForL
 import GetInitialUrlUsecaseInterface from '../domain/interfaces/AuthStandardFlow/GetInitialUrlUsecase.interface';
 import GetTokenFromCodeUsecaseInterface from '../domain/interfaces/AuthStandardFlow/GetTokenFromCodeUsecase.interface';
 import CancelSessionUsecaseInterface from '../domain/interfaces/CancelSessionUsecase.interface';
+import ExportMediasFromConversationUsecaseInterface from '../domain/interfaces/chat/ExportMediasFromConversationUsecase.interface';
 import GetConversationsUsecaseInterface from '../domain/interfaces/chat/GetConversationsUsecase.interface';
 import GetMessagesFromConversationUsecaseInterface from '../domain/interfaces/chat/GetMessagesFromConversationUsecase.interface';
 import SearchMessagesIdsFromConversationUsecaseInterface from '../domain/interfaces/chat/SearchMessagesIdsFromConversationUsecase.interface';
@@ -113,6 +114,7 @@ export interface ConfigContextValueType {
     getHistoricEmailPartner: GetHistoricEmailPartnerUsecaseInterface;
     getMediaObject: GetMediaObjectUsecaseInterface;
     getMessagesFromConversation: GetMessagesFromConversationUsecaseInterface;
+    exportMediasFromConversation: ExportMediasFromConversationUsecaseInterface;
     getPartnersToUniversity: GetPartnersToUniversityUsecaseInterface;
     getProfile: GetProfileUsecaseInterface;
     getJitsiToken: GetJitsiTokenUsecaseInterface;
