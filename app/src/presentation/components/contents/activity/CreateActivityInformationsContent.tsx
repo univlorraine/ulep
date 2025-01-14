@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useConfig } from '../../../../context/ConfigurationContext';
 import { Activity, ActivityTheme, ActivityThemeCategory } from '../../../../domain/entities/Activity';
 import Language from '../../../../domain/entities/Language';
+import { codeLanguageToFlag } from '../../../utils';
 import Dropdown, { DropDownItem } from '../../DropDown';
 import RequiredField from '../../forms/RequiredField';
 import TextInput from '../../TextInput';
@@ -44,16 +45,20 @@ export const CreateActivityInformationsContent = ({
     const [ressourceFile, setRessourceFile] = useState<File>();
     const [isRessourceUrl, setIsRessourceUrl] = useState<boolean>(!!activityToUpdate?.ressourceUrl);
     const [hideRessourceActivity, setHideRessourceActivity] = useState<boolean>(false);
+    const [isCategorySelectedFromActivityToUpdate, setIsCategorySelectedFromActivityToUpdate] =
+        useState<boolean>(false);
 
     useEffect(() => {
-        if (selectedThemeCategory) {
+        if (selectedThemeCategory && !isCategorySelectedFromActivityToUpdate) {
             setTheme(selectedThemeCategory.themes[0]);
             setSelectableThemesDropDown(
                 selectedThemeCategory.themes.map((theme) => ({
                     label: theme.content,
                     value: theme,
-                })),
+                }))
             );
+        } else if (isCategorySelectedFromActivityToUpdate) {
+            setIsCategorySelectedFromActivityToUpdate(false);
         }
     }, [selectedThemeCategory]);
 
@@ -66,6 +71,7 @@ export const CreateActivityInformationsContent = ({
 
         if (activityThemeCategory) {
             setSelectedThemeCategory(activityThemeCategory);
+            setIsCategorySelectedFromActivityToUpdate(true);
             setSelectableThemesDropDown(
                 activityThemeCategory.themes.map((theme) => ({
                     label: theme.content,
@@ -75,10 +81,21 @@ export const CreateActivityInformationsContent = ({
         }
     };
 
+    const findAndSetLanguage = (activityToUpdate: Activity | undefined) => {
+        if (!activityToUpdate) return;
+
+        const language = languagesDropDown.find((language) => language.value.code === activityToUpdate.language.code);
+
+        if (language) {
+            setLanguage(language.value);
+            setLevel(activityToUpdate.languageLevel);
+        }
+    };
+
     useEffect(() => {
         findAndSetActivityThemeCategory(activityToUpdate);
-    }, [activityToUpdate, activityThemesCategoryDropDown]);
-
+        findAndSetLanguage(activityToUpdate);
+    }, [activityToUpdate, activityThemesCategoryDropDown, languagesDropDown, cefrLevelsDropDown]);
 
     const onImagePressed = async () => {
         const image = await cameraAdapter.getPictureFromGallery();
@@ -148,7 +165,7 @@ export const CreateActivityInformationsContent = ({
                 onChange={(text) => setTitle(text)}
                 value={title}
                 placeholder={t('activity.create.title_input_placeholder') as string}
-                maxLength={50}
+                maxLength={150}
                 required
             />
 
@@ -189,7 +206,7 @@ export const CreateActivityInformationsContent = ({
                 value={description}
                 placeholder={t('activity.create.description_placeholder') as string}
                 type="text-area"
-                maxLength={100}
+                maxLength={1000}
                 showLimit
                 required
             />
@@ -199,7 +216,11 @@ export const CreateActivityInformationsContent = ({
                 options={languagesDropDown}
                 onChange={(text) => setLanguage(text)}
                 placeholder={t('activity.create.language_placeholder') as string}
-                value={language ? { label: language.name, value: language } : undefined}
+                value={
+                    language
+                        ? { label: `${codeLanguageToFlag(language.code)} ${language.name}`, value: language }
+                        : undefined
+                }
                 required
             />
 
@@ -217,9 +238,13 @@ export const CreateActivityInformationsContent = ({
                 onChange={(themeCategory) => setSelectedThemeCategory(themeCategory)}
                 options={activityThemesCategoryDropDown}
                 placeholder={t('activity.create.theme_category_placeholder') as string}
-                value={selectedThemeCategory ? { label: selectedThemeCategory.content, value: selectedThemeCategory } : undefined}
+                value={
+                    selectedThemeCategory
+                        ? { label: selectedThemeCategory.content, value: selectedThemeCategory }
+                        : undefined
+                }
                 required
-                />
+            />
 
             {selectedThemeCategory && (
                 <Dropdown<ActivityTheme>
