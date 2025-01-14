@@ -1,18 +1,18 @@
-import { Injectable } from '@nestjs/common';
 import { Collection, PrismaService } from '@app/common';
+import { Injectable } from '@nestjs/common';
 import { Language, LanguageStatus, SuggestedLanguage } from 'src/core/models';
 import {
-  LanguageStatusFilter,
   LanguageFilters,
   LanguagePagination,
   LanguageQueryOrderBy,
   LanguageRepository,
+  LanguageStatusFilter,
   SuggestedLanguageQueryOrderBy,
 } from 'src/core/ports/language.repository';
 import { languageMapper } from '../mappers/language.mapper';
 import {
-  SuggestedLanguageRelations,
   suggestedLanguageMapper,
+  SuggestedLanguageRelations,
 } from '../mappers/suggestedLanguage.mapper';
 
 type CountAllSuggestedLanguagesResult = {
@@ -129,16 +129,22 @@ export class PrismaLanguageRepository implements LanguageRepository {
     pagination: LanguagePagination,
     filters?: LanguageFilters,
   ): Promise<Collection<Language>> {
-    const where: any = {
-      code: {
+    const where: any = {};
+
+    if (filters?.code) {
+      where.code = {
         contains: filters.code,
         mode: 'insensitive',
-      },
-      name: {
+      };
+    }
+
+    if (filters?.name) {
+      where.name = {
         contains: filters.name,
         mode: 'insensitive',
-      },
-    };
+      };
+    }
+
     if (status === 'PARTNER') {
       where.secondaryUniversityActive = true;
     } else if (status) {

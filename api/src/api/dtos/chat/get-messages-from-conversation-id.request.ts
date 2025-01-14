@@ -5,7 +5,7 @@ import { ChatPaginationDirection } from 'src/core/ports/chat.service';
 export class GetMessagesQueryParams extends PaginationDto {
   @IsString()
   @IsOptional()
-  contentFilter: string;
+  hashtagFilter: string;
 
   @IsString()
   @IsOptional()
@@ -18,4 +18,8 @@ export class GetMessagesQueryParams extends PaginationDto {
   @IsString()
   @IsOptional()
   direction: ChatPaginationDirection;
+
+  @IsString()
+  @IsOptional()
+  parentId: string;
 }

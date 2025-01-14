@@ -50,6 +50,7 @@ export const VocabularyListInclude =
     TranslationLanguage: true,
     Creator: { include: ProfilesRelations },
     Editors: { include: ProfilesRelations },
+    Readers: { include: ProfilesRelations },
     Vocabulary: VocabularyRelations,
   });
 
@@ -66,7 +67,8 @@ export const vocabularyListMapper = (
     id: snapshot.id,
     name: snapshot.name,
     symbol: snapshot.symbol,
-    profiles: snapshot.Editors.map(profileMapper),
+    readers: snapshot.Readers.map(profileMapper),
+    editors: snapshot.Editors.map(profileMapper),
     vocabularies: snapshot.Vocabulary.map(vocabularyMapper),
     wordLanguage: languageMapper(snapshot.OriginalLanguage),
     translationLanguage: languageMapper(snapshot.TranslationLanguage),

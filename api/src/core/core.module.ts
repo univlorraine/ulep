@@ -7,6 +7,7 @@ import {
   GetCampusUsecase,
   UpdateCampusUsecase,
 } from 'src/core/usecases/campus';
+import { AddUserToCommunityChatUsecase } from 'src/core/usecases/chat/add-user-to-community-chat.usecase';
 import { FindAllSuggestedLanguageUsecase } from 'src/core/usecases/language/find-all-suggested-language.usecase';
 import {
   CreateOrUpdateLogEntryUsecase,
@@ -27,11 +28,13 @@ import { MatchScorer } from './services/MatchScorer';
 import {
   AddDeviceUsecase,
   AddLanguageRequestUsecase,
+  AddReaderToVocabularyListUsecase,
   CountAllSuggestedLanguageUsecase,
   CreateActivityThemeCategoryUsecase,
   CreateActivityThemeUsecase,
   CreateActivityUsecase,
   CreateAdministratorUsecase,
+  CreateCommunityChatUsecase,
   CreateInterestCategoryUsecase,
   CreateInterestUsecase,
   CreateLearningLanguageUseCase,
@@ -135,6 +138,7 @@ import {
   GetUsersUsecase,
   GetUserUsecase,
   RefuseTandemUsecase,
+  RemoveReaderToVocabularyListUsecase,
   UpdateActivityThemeCategoryUsecase,
   UpdateActivityThemeUsecase,
   UpdateActivityUsecase,
@@ -373,9 +377,11 @@ const usecases: Provider[] = [
   // Notifications
   SendMessageNotificationUsecase,
   // Chat
+  AddUserToCommunityChatUsecase,
   GenerateConversationsUsecase,
   GetAllConversationsFromUserIdUsecase,
   GetMessagesFromConversationUsecase,
+  CreateCommunityChatUsecase,
   // Vocabulary
   CreateVocabularyUsecase,
   CreateVocabularyListUsecase,
@@ -387,6 +393,8 @@ const usecases: Provider[] = [
   UpdateVocabularyUsecase,
   UpdateVocabularyListUsecase,
   GetVocabularyListPdfUsecase,
+  AddReaderToVocabularyListUsecase,
+  RemoveReaderToVocabularyListUsecase,
   // Session
   CancelSessionUsecase,
   CreateSessionUsecase,

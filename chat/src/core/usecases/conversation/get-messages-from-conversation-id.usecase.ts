@@ -1,5 +1,5 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { MessageType } from 'src/core/models';
+import { Message, MessageType } from 'src/core/models';
 import {
     CONVERSATION_REPOSITORY,
     ConversationRepository,
@@ -17,8 +17,9 @@ import {
 export class GetMessagesFromConversationIdCommand {
     id: string;
     pagination: MessagePagination;
-    contentFilter: string;
+    hashtagFilter: string;
     typeFilter: MessageType;
+    parentId?: string;
 }
 
 @Injectable()
@@ -41,41 +42,58 @@ export class GetMessagesFromConversationIdUsecase {
             throw new NotFoundException('Conversation not found');
         }
 
-        const messages =
-            await this.messageRepository.findMessagesByConversationId(
-                command.id,
-                command.pagination,
-                command.contentFilter,
-                command.typeFilter,
-            );
-        for (const message of messages) {
-            if (
-                (message.type === MessageType.Image ||
-                    message.type === MessageType.Audio ||
-                    message.type === MessageType.File) &&
-                message.content
-            ) {
-                message.metadata.filePath = message.content;
-                message.content = await this.storage.temporaryUrl(
-                    'chat',
-                    message.content,
-                    3600,
-                );
+        let messages: Message[];
 
-                if (
-                    message.type === MessageType.Image &&
-                    message.metadata.thumbnail
-                ) {
-                    message.metadata.thumbnail =
-                        await this.storage.temporaryUrl(
-                            'chat',
-                            message.metadata.thumbnail,
-                            3600,
-                        );
-                }
+        if (!command.parentId) {
+            messages =
+                await this.messageRepository.findMessagesByConversationId(
+                    command.id,
+                    command.pagination,
+                    command.hashtagFilter,
+                    command.typeFilter,
+                );
+        } else {
+            // If we are in a thread, we only want to get the messages from the thread
+            messages = await this.messageRepository.findResponsesByMessageId(
+                command.parentId,
+                command.pagination,
+            );
+        }
+
+        for (const message of messages) {
+            await this.handleMediaMessage(message);
+            if (message.parent) {
+                await this.handleMediaMessage(message.parent);
             }
         }
 
         return messages;
+    }
+
+    async handleMediaMessage(message: Message) {
+        if (
+            (message.type === MessageType.Image ||
+                message.type === MessageType.Audio ||
+                message.type === MessageType.File) &&
+            message.content
+        ) {
+            message.metadata.filePath = message.content;
+            message.content = await this.storage.temporaryUrl(
+                'chat',
+                message.content,
+                3600,
+            );
+
+            if (
+                message.type === MessageType.Image &&
+                message.metadata.thumbnail
+            ) {
+                message.metadata.thumbnail = await this.storage.temporaryUrl(
+                    'chat',
+                    message.metadata.thumbnail,
+                    3600,
+                );
+            }
+        }
     }
 }

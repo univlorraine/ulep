@@ -18,6 +18,11 @@ import AskForLanguageUsecase from '../domain/usecases/AskForLanguageUsecase';
 import AskForLearningLanguageUsecase from '../domain/usecases/AskForLearningLanguageUsecase';
 import { GetInitialUrlUsecase, GetTokenFromCodeUsecase } from '../domain/usecases/AuthStandardFlow';
 import CancelSessionUsecase from '../domain/usecases/CancelSessionUsecase';
+import GetConversationsUsecase from '../domain/usecases/chat/GetConversationsUsecase';
+import GetHashtagsFromConversationUsecase from '../domain/usecases/chat/GetHashtagsFromConversationUsecase';
+import GetMessagesFromConversationUsecase from '../domain/usecases/chat/GetMessagesFromConversationUsecase';
+import SearchMessagesIdsFromConversationUsecase from '../domain/usecases/chat/SearchMessagesIdsFromConversationUsecase';
+import SendMessageUsecase from '../domain/usecases/chat/SendMessageUsecase';
 import CreateCustomLearningGoalUsecase from '../domain/usecases/CreateCustomLearningGoalUsecase';
 import CreateOrUpdateTestedLanguageUsecase from '../domain/usecases/CreateOrUpdateTestedLanguageUsecase';
 import CreateProfileUsecase from '../domain/usecases/CreateProfileUsecase';
@@ -39,11 +44,9 @@ import GetAllLanguagesUsecase from '../domain/usecases/GetAllLanguagesUsecase';
 import GetAllSessionsUsecase from '../domain/usecases/GetAllSessionsUsecase';
 import GetAllTandemsUsecase from '../domain/usecases/GetAllTandemsUsecase';
 import GetAllUniversitiesUsecase from '../domain/usecases/GetAllUniversitiesUsecase';
-import GetConversationsUsecase from '../domain/usecases/GetConversationsUsecase';
 import GetHistoricEmailPartnerUsecase from '../domain/usecases/GetHistoricEmailPartnerUsecase';
 import GetJitsiTokenUsecase from '../domain/usecases/GetJitsiTokenUsecase';
 import GetMediaObjectUsecase from '../domain/usecases/GetMediaObjectUsecase';
-import GetMessagesFromConversationUsecase from '../domain/usecases/GetMessagesFromConversationUsecase';
 import GetPartnersToUniversityUsecase from '../domain/usecases/GetPartnersToUniversityUsecase';
 import GetProfileByUserIdUsecase from '../domain/usecases/GetProfileUsecase';
 import GetQuizzByLevelUsecase from '../domain/usecases/GetQuizzByLevelUsecase';
@@ -66,12 +69,11 @@ import UpdateReportStatusUsecase from '../domain/usecases/reports/UpdateReportSt
 import ResetPasswordUsecase from '../domain/usecases/ResetPasswordUsecase';
 import RetrievePersonInfoUsecase from '../domain/usecases/RetrievePersonInfoUsecase';
 import RevokeSessionsUsecase from '../domain/usecases/RevokeSessionsUsecase';
-import SearchMessagesIdsFromConversationUsecase from '../domain/usecases/SearchMessagesIdsFromConversationUsecase';
-import SendMessageUsecase from '../domain/usecases/SendMessageUsecase';
 import UpdateAvatarUsecase from '../domain/usecases/UpdateAvatarUsecase';
 import UpdateCustomLearningGoalUsecase from '../domain/usecases/UpdateCustomLearningGoalUsecase';
 import UpdateNotificationPermissionUsecase from '../domain/usecases/UpdateNotificationPermissionUsecase';
 import UpdateSessionUsecase from '../domain/usecases/UpdateSessionUsecase';
+import AddReaderToVocabularyListUsecase from '../domain/usecases/vocabulary/AddReaderToVocabularyListUsecase';
 import CreateVocabularyListUsecase from '../domain/usecases/vocabulary/CreateVocabularyListUsecase';
 import CreateVocabularyUsecase from '../domain/usecases/vocabulary/CreateVocabularyUsecase';
 import DeleteVocabularyListUsecase from '../domain/usecases/vocabulary/DeleteVocabularyListUsecase';
@@ -179,8 +181,10 @@ const getConfigContextValue = ({
     const getMessagesFromConversation = new GetMessagesFromConversationUsecase(domainHttpAdapter);
     const sendMessage = new SendMessageUsecase(chatHttpAdapter);
     const searchMessagesIdsFromConversation = new SearchMessagesIdsFromConversationUsecase(chatHttpAdapter);
+    const getHashtagsFromConversation = new GetHashtagsFromConversationUsecase(chatHttpAdapter);
 
     // Vocabulary
+    const addReaderToVocabularyList = new AddReaderToVocabularyListUsecase(domainHttpAdapter);
     const createVocabulary = new CreateVocabularyUsecase(domainHttpAdapter);
     const updateVocabulary = new UpdateVocabularyUsecase(domainHttpAdapter);
     const deleteVocabulary = new DeleteVocabularyUsecase(domainHttpAdapter);
@@ -317,6 +321,8 @@ const getConfigContextValue = ({
         getLogEntriesByDate,
         shareLogEntries,
         exportLogEntries,
+        addReaderToVocabularyList,
+        getHashtagsFromConversation,
     };
 };
 

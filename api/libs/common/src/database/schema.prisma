@@ -4,28 +4,28 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   // binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 model Instance {
-  id                         String  @id @default(uuid())
-  name                       String
-  email                      String
-  ressource_url              String
-  cgu_url                    String
-  confidentiality_url        String
-  primary_color              String
-  primary_background_color   String
-  primary_dark_color         String
-  secondary_color            String
-  secondary_background_color String
-  secondary_dark_color       String
-  days_before_closure_notification      Int       @default(30)
-  is_in_maintenance          Boolean @default(false)
-  default_certificate_file_id String? @unique
+  id                               String  @id @default(uuid())
+  name                             String
+  email                            String
+  ressource_url                    String
+  cgu_url                          String
+  confidentiality_url              String
+  primary_color                    String
+  primary_background_color         String
+  primary_dark_color               String
+  secondary_color                  String
+  secondary_background_color       String
+  secondary_dark_color             String
+  days_before_closure_notification Int     @default(30)
+  is_in_maintenance                Boolean @default(false)
+  default_certificate_file_id      String? @unique
 
-  DefaultCertificateFile          MediaObjects? @relation(fields: [default_certificate_file_id], references: [id])
+  DefaultCertificateFile MediaObjects? @relation(fields: [default_certificate_file_id], references: [id])
 }
 
 model CountryCodes {
@@ -55,22 +55,24 @@ model LanguageCodes {
   secondaryUniversityActive Boolean  @default(false)
   isDiscovery               Boolean  @default(false)
 
-  NativeLanguages        Profiles[]           @relation("NativeLanguage")
-  MasteredLanguages      MasteredLanguages[]
-  TestedLanguages        TestedLanguages[]
-  SuggestedLanguages     SuggestedLanguages[]
-  Translations           Translations[]
-  TextContents           TextContent[]
-  LearningLanguages      LearningLanguages[]  @relation("LearningLanguageLanguage")
-  JokerLearningLanguages LearningLanguages[]  @relation("TandemLanguage")
-  TandemHistory          TandemHistory[]
-  UnmatchedLearningLanguages UnmatchedLearningLanguages[]
-  SpecificLanguagesOrganizations          Organizations[]
-  NativeLanguageOrganizations          Organizations[]    @relation("NativeLanguageOrganizations")
-  OriginalVocabularyList VocabularyList[] @relation("OriginalLanguage")
-  TranslationVocabularyList VocabularyList[] @relation("TranslationLanguage")
-  Activities             Activity[]
-  Events                 Events[] @relation("DiffusionLanguages")
+  NativeLanguages                Profiles[]                   @relation("NativeLanguage")
+  MasteredLanguages              MasteredLanguages[]
+  TestedLanguages                TestedLanguages[]
+  SuggestedLanguages             SuggestedLanguages[]
+  Translations                   Translations[]
+  TextContents                   TextContent[]
+  LearningLanguages              LearningLanguages[]          @relation("LearningLanguageLanguage")
+  JokerLearningLanguages         LearningLanguages[]          @relation("TandemLanguage")
+  TandemHistory                  TandemHistory[]
+  UnmatchedLearningLanguages     UnmatchedLearningLanguages[]
+  SpecificLanguagesOrganizations Organizations[]
+  NativeLanguageOrganizations    Organizations[]              @relation("NativeLanguageOrganizations")
+  OriginalVocabularyList         VocabularyList[]             @relation("OriginalLanguage")
+  TranslationVocabularyList      VocabularyList[]             @relation("TranslationLanguage")
+  Activities                     Activity[]
+  Events                         Events[]                     @relation("DiffusionLanguages")
+  CommunityChatCentral           CommunityChat[]              @relation("CentralLanguage")
+  CommunityChatPartner           CommunityChat[]              @relation("PartnerLanguage")
 
   @@unique([name])
   @@unique([code])
@@ -82,44 +84,44 @@ model LanguageCodes {
 //  * Universities
 //  * ****************************************************
 model Organizations {
-  id                   String              @id @default(uuid())
-  parent_id            String?
-  country_code_id      String
-  language_code_id     String
-  name                 String
-  codes                String[]            @default([])
-  domains              String[]            @default([])
-  image_id             String?             @unique
-  default_certificate_file_id String?      @unique
-  timezone             String
-  admissionStartDate   DateTime
-  admissionEndDate     DateTime
-  openServiceDate      DateTime            @default(now())
-  closeServiceDate     DateTime            @default(now())
-  created_at           DateTime            @default(now())
-  updated_at           DateTime            @updatedAt
-  website              String?
-  pairing_mode         String              @default("MANUAL")
-  max_tandems_per_user Int                 @default(1)
-  notification_email   String?
-  default_contact_id   String?             @unique
-  Parent               Organizations?      @relation("Organizations", fields: [parent_id], references: [id], onDelete: Cascade)
-  Childrens            Organizations[]     @relation("Organizations")
-  Country              CountryCodes        @relation(fields: [country_code_id], references: [id])
-  Users                Users[]
-  Places               Places[]
-  RoutineExecutions    RoutineExecutions[]
-  ValidatedTandems     Tandems[]
-  RefusedTandems       RefusedTandems[]
-  SpecificLanguagesAvailable   LanguageCodes[]
-  NativeLanguage              LanguageCodes     @relation("NativeLanguageOrganizations", fields: [language_code_id], references: [id])
-  Image                 MediaObjects? @relation("UniversitiesImage", fields: [image_id], references: [id])
-  Contact               Contacts?      @relation(fields: [default_contact_id], references: [id])
-  DefaultCertificateFile MediaObjects? @relation("UniversitiesDefaultCertificateFile", fields: [default_certificate_file_id], references: [id])
-  Activities            Activity[]
-  News                  News[]
-  EventsConcernedUniversities   Events[] @relation("ConcernedUniversities")
-  EventsAuthorUniversity  Events[] @relation("AuthorUniversity")
+  id                          String              @id @default(uuid())
+  parent_id                   String?
+  country_code_id             String
+  language_code_id            String
+  name                        String
+  codes                       String[]            @default([])
+  domains                     String[]            @default([])
+  image_id                    String?             @unique
+  default_certificate_file_id String?             @unique
+  timezone                    String
+  admissionStartDate          DateTime
+  admissionEndDate            DateTime
+  openServiceDate             DateTime            @default(now())
+  closeServiceDate            DateTime            @default(now())
+  created_at                  DateTime            @default(now())
+  updated_at                  DateTime            @updatedAt
+  website                     String?
+  pairing_mode                String              @default("MANUAL")
+  max_tandems_per_user        Int                 @default(1)
+  notification_email          String?
+  default_contact_id          String?             @unique
+  Parent                      Organizations?      @relation("Organizations", fields: [parent_id], references: [id], onDelete: Cascade)
+  Childrens                   Organizations[]     @relation("Organizations")
+  Country                     CountryCodes        @relation(fields: [country_code_id], references: [id])
+  Users                       Users[]
+  Places                      Places[]
+  RoutineExecutions           RoutineExecutions[]
+  ValidatedTandems            Tandems[]
+  RefusedTandems              RefusedTandems[]
+  SpecificLanguagesAvailable  LanguageCodes[]
+  NativeLanguage              LanguageCodes       @relation("NativeLanguageOrganizations", fields: [language_code_id], references: [id])
+  Image                       MediaObjects?       @relation("UniversitiesImage", fields: [image_id], references: [id])
+  Contact                     Contacts?           @relation(fields: [default_contact_id], references: [id])
+  DefaultCertificateFile      MediaObjects?       @relation("UniversitiesDefaultCertificateFile", fields: [default_certificate_file_id], references: [id])
+  Activities                  Activity[]
+  News                        News[]
+  EventsConcernedUniversities Events[]            @relation("ConcernedUniversities")
+  EventsAuthorUniversity      Events[]            @relation("AuthorUniversity")
 
   @@unique([name])
   @@map("organizations")
@@ -152,10 +154,10 @@ model SuggestedLanguages {
 }
 
 model Contacts {
-  id                String          @id
-  organization_id   String?
-  User              Users[]
-  Organizations     Organizations?
+  id              String         @id
+  organization_id String?
+  User            Users[]
+  Organizations   Organizations?
 
   @@map("contacts")
 }
@@ -199,39 +201,39 @@ model Users {
 }
 
 model Device {
-    token        String          @id
-    is_android   Boolean         @default(false)
-    is_ios       Boolean         @default(false)
-    user_id      String
-    created_at   DateTime        @default(now())
-    updated_at   DateTime        @updatedAt
-    User         Users           @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  token      String   @id
+  is_android Boolean  @default(false)
+  is_ios     Boolean  @default(false)
+  user_id    String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  User       Users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
 
 //  * ****************************************************
 //  * Media Objects
 //  * ****************************************************
 model MediaObjects {
-  id         String              @id @default(uuid())
-  name       String
-  bucket     String
-  mime       String
-  size       Int
-  created_at DateTime            @default(now())
-  updated_at DateTime            @updatedAt
-  User       Users?
-  Goal       LearningObjectives?
-  University Organizations? @relation("UniversitiesImage")
-  PronunciationWord Vocabulary? @relation("PronunciationWord")
-  PronunciationTranslation Vocabulary? @relation("PronunciationTranslation")
-  Activity   Activity? @relation("Image")
-  ActivityRessourceFile Activity? @relation("RessourceFile")
-  ActivityVocabulary ActivityVocabulary?
-  InstanceDefaultCertificateFile Instance?
-  UniversitiesDefaultCertificateFile Organizations? @relation("UniversitiesDefaultCertificateFile")
-  News       News?
-  LearningLanguageCertificateFile LearningLanguages? @relation("LearningLanguageCertificateFile")
-  Event      Events?
+  id                                 String              @id @default(uuid())
+  name                               String
+  bucket                             String
+  mime                               String
+  size                               Int
+  created_at                         DateTime            @default(now())
+  updated_at                         DateTime            @updatedAt
+  User                               Users?
+  Goal                               LearningObjectives?
+  University                         Organizations?      @relation("UniversitiesImage")
+  PronunciationWord                  Vocabulary?         @relation("PronunciationWord")
+  PronunciationTranslation           Vocabulary?         @relation("PronunciationTranslation")
+  Activity                           Activity?           @relation("Image")
+  ActivityRessourceFile              Activity?           @relation("RessourceFile")
+  ActivityVocabulary                 ActivityVocabulary?
+  InstanceDefaultCertificateFile     Instance?
+  UniversitiesDefaultCertificateFile Organizations?      @relation("UniversitiesDefaultCertificateFile")
+  News                               News?
+  LearningLanguageCertificateFile    LearningLanguages?  @relation("LearningLanguageCertificateFile")
+  Event                              Events?
 
   @@unique([name, bucket])
   @@map("media_objects")
@@ -241,23 +243,23 @@ model MediaObjects {
 //  * Translations
 //  * ****************************************************
 model TextContent {
-  id                   String                @id @default(uuid())
-  text                 String
-  language_id          String
-  created_at           DateTime              @default(now())
-  updated_at           DateTime              @updatedAt
-  LanguageCode         LanguageCodes         @relation(fields: [language_id], references: [id], onDelete: Cascade)
-  ProficiencyQuestions ProficiencyQuestions?
-  ReportCategories     ReportCategories?
-  InterestCategories   InterestCategories?
-  Interests            Interests?
-  Goals                LearningObjectives?
-  Translations         Translations[]
-  NewsTitle            News[] @relation("NewsTitleTextContent")
-  NewsContent          News[] @relation("NewsContentTextContent")
-  EventTitle           Events[] @relation("EventTitleTextContent")
-  EventContent         Events[] @relation("EventContentTextContent")
-  ActivityThemes       ActivityThemes?
+  id                       String                   @id @default(uuid())
+  text                     String
+  language_id              String
+  created_at               DateTime                 @default(now())
+  updated_at               DateTime                 @updatedAt
+  LanguageCode             LanguageCodes            @relation(fields: [language_id], references: [id], onDelete: Cascade)
+  ProficiencyQuestions     ProficiencyQuestions?
+  ReportCategories         ReportCategories?
+  InterestCategories       InterestCategories?
+  Interests                Interests?
+  Goals                    LearningObjectives?
+  Translations             Translations[]
+  NewsTitle                News[]                   @relation("NewsTitleTextContent")
+  NewsContent              News[]                   @relation("NewsContentTextContent")
+  EventTitle               Events[]                 @relation("EventTitleTextContent")
+  EventContent             Events[]                 @relation("EventContentTextContent")
+  ActivityThemes           ActivityThemes?
   ActivityThemesCategories ActivityThemeCategories?
 
   @@map("text_content")
@@ -354,17 +356,18 @@ model Profiles {
   created_at                  DateTime @default(now())
   updated_at                  DateTime @updatedAt
 
-  User              Users                @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  NativeLanguage    LanguageCodes        @relation("NativeLanguage", fields: [native_language_code_id], references: [id])
-  LearningLanguages LearningLanguages[]
-  MasteredLanguages MasteredLanguages[]
-  TestedLanguages   TestedLanguages[]
-  Goals             LearningObjectives[]
-  Interests         Interests[]
-  CreatorVocabularyList    VocabularyList[] @relation("Creator")
-  EditorVocabularyList    VocabularyList[]  @relation("Editor")
-  Activities        Activity[]
-  Events            Events[]
+  User                  Users                @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  NativeLanguage        LanguageCodes        @relation("NativeLanguage", fields: [native_language_code_id], references: [id])
+  LearningLanguages     LearningLanguages[]
+  MasteredLanguages     MasteredLanguages[]
+  TestedLanguages       TestedLanguages[]
+  Goals                 LearningObjectives[]
+  Interests             Interests[]
+  CreatorVocabularyList VocabularyList[]     @relation("Creator")
+  EditorVocabularyList  VocabularyList[]     @relation("Editor")
+  ReadersVocabularyList VocabularyList[]     @relation("Reader")
+  Activities            Activity[]
+  Events                Events[]
 
   @@unique([user_id])
   @@index([native_language_code_id], name: "native_language_code")
@@ -412,7 +415,7 @@ model LearningObjectives {
 }
 
 model LearningLanguages {
-  id                      String   @id @default(uuid())
+  id                      String    @id @default(uuid())
   profile_id              String
   language_code_id        String
   level                   String
@@ -427,22 +430,22 @@ model LearningLanguages {
   consulting_interview    Boolean?
   shared_certificate      Boolean?
   shared_logs_date        DateTime?
-  certificate_file_id     String? @unique
+  certificate_file_id     String?   @unique
   campus_id               String?
   tandem_id               String?
   tandem_language_code_id String?
-  created_at              DateTime @default(now())
-  updated_at              DateTime @updatedAt
+  created_at              DateTime  @default(now())
+  updated_at              DateTime  @updatedAt
 
-  Profile        Profiles         @relation(fields: [profile_id], references: [id], onDelete: Cascade)
-  Tandem         Tandems?         @relation(fields: [tandem_id], references: [id])
-  TandemLanguage LanguageCodes?   @relation("TandemLanguage", fields: [tandem_language_code_id], references: [id])
-  LanguageCode   LanguageCodes    @relation("LearningLanguageLanguage", fields: [language_code_id], references: [id])
-  RefusedTandems RefusedTandems[]
-  Campus         Places?          @relation(fields: [campus_id], references: [id])
-  CertificateFile MediaObjects?   @relation("LearningLanguageCertificateFile", fields: [certificate_file_id], references: [id])
+  Profile             Profiles              @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+  Tandem              Tandems?              @relation(fields: [tandem_id], references: [id])
+  TandemLanguage      LanguageCodes?        @relation("TandemLanguage", fields: [tandem_language_code_id], references: [id])
+  LanguageCode        LanguageCodes         @relation("LearningLanguageLanguage", fields: [language_code_id], references: [id])
+  RefusedTandems      RefusedTandems[]
+  Campus              Places?               @relation(fields: [campus_id], references: [id])
+  CertificateFile     MediaObjects?         @relation("LearningLanguageCertificateFile", fields: [certificate_file_id], references: [id])
   CustomLearningGoals CustomLearningGoals[]
-  LogEntriesByDate LogEntry[]
+  LogEntriesByDate    LogEntry[]
 
   @@map("learning_languages")
 }
@@ -490,7 +493,7 @@ model Tandems {
   updated_at            DateTime            @updatedAt
   LearningLanguages     LearningLanguages[]
   UniversityValidations Organizations[]
-  Sessions Sessions[]
+  Sessions              Sessions[]
 
   @@index([status], name: "status")
   @@map("tandems")
@@ -518,10 +521,10 @@ model RefusedTandems {
 //  * Purges
 //  * ****************************************************
 model Purges {
-  id            String          @id @default(uuid())
-  author_id     String
-  created_at    DateTime        @default(now())
-  TandemHistory TandemHistory[]
+  id                         String                       @id @default(uuid())
+  author_id                  String
+  created_at                 DateTime                     @default(now())
+  TandemHistory              TandemHistory[]
   UnmatchedLearningLanguages UnmatchedLearningLanguages[]
 
   @@map("purges")
@@ -563,148 +566,147 @@ model UnmatchedLearningLanguages {
   @@unique([user_id, language_code_id])
   @@map("unmatched_learning_languages")
 }
+
 //  * ****************************************************
 //  * Vocabulary
 //  * ****************************************************
 model VocabularyList {
-  id                  String        @id @default(uuid())
-  name                String
-  symbol              String
-  created_at          DateTime      @default(now())
-  updated_at          DateTime      @updatedAt
-  creator_id          String?
-  original_language_code_id String
+  id                           String   @id @default(uuid())
+  name                         String
+  symbol                       String
+  created_at                   DateTime @default(now())
+  updated_at                   DateTime @updatedAt
+  creator_id                   String?
+  original_language_code_id    String
   translation_language_code_id String
 
-  OriginalLanguage    LanguageCodes         @relation("OriginalLanguage", fields: [original_language_code_id], references: [id], onDelete: Cascade)
-  TranslationLanguage    LanguageCodes      @relation("TranslationLanguage", fields: [translation_language_code_id], references: [id], onDelete: Cascade)
-  Creator               Profiles?            @relation("Creator", fields: [creator_id], references: [id])
-  Editors               Profiles[]          @relation("Editor")
+  OriginalLanguage    LanguageCodes @relation("OriginalLanguage", fields: [original_language_code_id], references: [id], onDelete: Cascade)
+  TranslationLanguage LanguageCodes @relation("TranslationLanguage", fields: [translation_language_code_id], references: [id], onDelete: Cascade)
+  Creator             Profiles?     @relation("Creator", fields: [creator_id], references: [id])
+  Editors             Profiles[]    @relation("Editor")
+  Readers             Profiles[]    @relation("Reader")
   Vocabulary          Vocabulary[]
 
   @@map("vocabulary_list")
 }
 
-model  Vocabulary {
-  id                String        @id @default(uuid())
-  word              String
-  translation       String
-  vocabulary_list_id String
-  pronunciation_word_id   String? @unique
-  pronunciation_translation_id   String? @unique
+model Vocabulary {
+  id                           String  @id @default(uuid())
+  word                         String
+  translation                  String
+  vocabulary_list_id           String
+  pronunciation_word_id        String? @unique
+  pronunciation_translation_id String? @unique
 
-  VocabularyList VocabularyList @relation(fields: [vocabulary_list_id], references: [id], onDelete: Cascade)
-  PronunciationWord MediaObjects? @relation("PronunciationWord", fields: [pronunciation_word_id], references: [id])
-  PronunciationTranslation MediaObjects? @relation("PronunciationTranslation", fields: [pronunciation_translation_id], references: [id])
+  VocabularyList           VocabularyList @relation(fields: [vocabulary_list_id], references: [id], onDelete: Cascade)
+  PronunciationWord        MediaObjects?  @relation("PronunciationWord", fields: [pronunciation_word_id], references: [id])
+  PronunciationTranslation MediaObjects?  @relation("PronunciationTranslation", fields: [pronunciation_translation_id], references: [id])
 
-    @@map("vocabulary")
+  @@map("vocabulary")
 }
-
-
 
 //  * ****************************************************
 //  * ACTIVITY
 //  * ****************************************************
 model Activity {
-  id                String        @id @default(uuid())
+  id                String   @id @default(uuid())
   title             String
   description       String
   university_id     String
   creator_id        String?
-  status            String       @default("DRAFT")
+  status            String   @default("DRAFT")
   credit_image      String?
-  image_id          String?       @unique
+  image_id          String?  @unique
   language_level    String
   language_code_id  String
   activity_theme_id String
   ressource_url     String?
-  ressource_file_id String?       @unique
-  created_at        DateTime      @default(now())
-  updated_at        DateTime      @updatedAt
+  ressource_file_id String?  @unique
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
   metadata          Json?
 
-  Image MediaObjects? @relation("Image", fields: [image_id], references: [id])
-  RessourceFile MediaObjects? @relation("RessourceFile", fields: [ressource_file_id], references: [id])
-  LanguageCode LanguageCodes @relation(fields: [language_code_id], references: [id])
-  Creator Profiles? @relation(fields: [creator_id], references: [id])
-  University Organizations @relation(fields: [university_id], references: [id])
+  Image              MediaObjects?        @relation("Image", fields: [image_id], references: [id])
+  RessourceFile      MediaObjects?        @relation("RessourceFile", fields: [ressource_file_id], references: [id])
+  LanguageCode       LanguageCodes        @relation(fields: [language_code_id], references: [id])
+  Creator            Profiles?            @relation(fields: [creator_id], references: [id])
+  University         Organizations        @relation(fields: [university_id], references: [id])
   ActivityVocabulary ActivityVocabulary[]
-  ActivityExercises ActivityExercises[]
-  ActivityThemes ActivityThemes @relation(fields: [activity_theme_id], references: [id], onDelete: Cascade)
+  ActivityExercises  ActivityExercises[]
+  ActivityThemes     ActivityThemes       @relation(fields: [activity_theme_id], references: [id], onDelete: Cascade)
 
   @@map("activity")
 }
 
 model ActivityThemes {
-  id              String             @id @default(uuid())
+  id              String                  @id @default(uuid())
   category_id     String
   text_content_id String
-  created_at      DateTime           @default(now())
-  updated_at      DateTime           @updatedAt
-  TextContent     TextContent        @relation(fields: [text_content_id], references: [id], onDelete: Cascade)
+  created_at      DateTime                @default(now())
+  updated_at      DateTime                @updatedAt
+  TextContent     TextContent             @relation(fields: [text_content_id], references: [id], onDelete: Cascade)
   Category        ActivityThemeCategories @relation(fields: [category_id], references: [id], onDelete: Cascade)
-  Activity Activity[]
+  Activity        Activity[]
 
   @@unique([text_content_id])
   @@map("activity_themes")
 }
 
 model ActivityThemeCategories {
-  id              String      @id @default(uuid())
+  id              String           @id @default(uuid())
   text_content_id String
-  created_at      DateTime    @default(now())
-  updated_at      DateTime    @updatedAt
-  TextContent     TextContent @relation(fields: [text_content_id], references: [id], onDelete: Cascade)
-  ActivityThemes       ActivityThemes[]
+  created_at      DateTime         @default(now())
+  updated_at      DateTime         @updatedAt
+  TextContent     TextContent      @relation(fields: [text_content_id], references: [id], onDelete: Cascade)
+  ActivityThemes  ActivityThemes[]
 
   @@unique([text_content_id])
   @@map("activity_themes_categories")
 }
 
 model ActivityVocabulary {
-  id                String        @id @default(uuid())
-  content           String
-  activity_id       String
-  pronunciation_activity_vocabulary_id String? @unique
-  created_at        DateTime      @default(now())
-  updated_at        DateTime      @updatedAt
+  id                                   String   @id @default(uuid())
+  content                              String
+  activity_id                          String
+  pronunciation_activity_vocabulary_id String?  @unique
+  created_at                           DateTime @default(now())
+  updated_at                           DateTime @updatedAt
 
   PronunciationActivityVocabulary MediaObjects? @relation(fields: [pronunciation_activity_vocabulary_id], references: [id])
-  Activity Activity @relation(fields: [activity_id], references: [id])
+  Activity                        Activity      @relation(fields: [activity_id], references: [id])
 
   @@map("activity_vocabulary")
 }
 
 model ActivityExercises {
-  id                String        @id @default(uuid())
-  content           String
-  order             Int
-  activity_id       String
-  created_at        DateTime      @default(now())
-  updated_at        DateTime      @updatedAt
+  id          String   @id @default(uuid())
+  content     String
+  order       Int
+  activity_id String
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
 
   Activity Activity @relation(fields: [activity_id], references: [id])
 
   @@map("activity_exercises")
 }
 
-
 //  * ****************************************************
 //  * News
 //  * ****************************************************
 
 model News {
-  id                      String   @id @default(uuid())
+  id                      String        @id @default(uuid())
   title_text_content_id   String
   content_text_content_id String
   university_id           String
-  image_id                String? @unique
+  image_id                String?       @unique
   credit_image            String?
-  status                  String  @default("DRAFT")
+  status                  String        @default("DRAFT")
   start_publication_date  DateTime
   end_publication_date    DateTime
-  created_at              DateTime @default(now())
-  updated_at              DateTime @updatedAt
+  created_at              DateTime      @default(now())
+  updated_at              DateTime      @updatedAt
   Organization            Organizations @relation(fields: [university_id], references: [id], onDelete: Cascade)
   Image                   MediaObjects? @relation(fields: [image_id], references: [id])
   TitleTextContent        TextContent   @relation("NewsTitleTextContent", fields: [title_text_content_id], references: [id], onDelete: Cascade)
@@ -737,9 +739,9 @@ model Events {
   title_text_content_id   String
   content_text_content_id String
   university_id           String
-  image_id                String? @unique
+  image_id                String?  @unique
   image_credit            String?
-  status                  String  @default("DRAFT")
+  status                  String   @default("DRAFT")
   start_date              DateTime
   end_date                DateTime
   type                    String
@@ -747,17 +749,17 @@ model Events {
   address                 String?
   address_name            String?
   deep_link               String?
-  with_subscription       Boolean @default(false)
+  with_subscription       Boolean  @default(false)
   created_at              DateTime @default(now())
   updated_at              DateTime @updatedAt
 
-  SubscribedProfiles      Profiles[]
-  DiffusionLanguages      LanguageCodes[] @relation("DiffusionLanguages")
-  ConcernedUniversities   Organizations[] @relation("ConcernedUniversities")
-  AuthorUniversity        Organizations @relation("AuthorUniversity", fields: [university_id], references: [id], onDelete: Cascade)
-  Image                   MediaObjects? @relation(fields: [image_id], references: [id])
-  TitleTextContent        TextContent   @relation("EventTitleTextContent", fields: [title_text_content_id], references: [id], onDelete: Cascade)
-  ContentTextContent      TextContent   @relation("EventContentTextContent", fields: [content_text_content_id], references: [id], onDelete: Cascade)
+  SubscribedProfiles    Profiles[]
+  DiffusionLanguages    LanguageCodes[] @relation("DiffusionLanguages")
+  ConcernedUniversities Organizations[] @relation("ConcernedUniversities")
+  AuthorUniversity      Organizations   @relation("AuthorUniversity", fields: [university_id], references: [id], onDelete: Cascade)
+  Image                 MediaObjects?   @relation(fields: [image_id], references: [id])
+  TitleTextContent      TextContent     @relation("EventTitleTextContent", fields: [title_text_content_id], references: [id], onDelete: Cascade)
+  ContentTextContent    TextContent     @relation("EventContentTextContent", fields: [content_text_content_id], references: [id], onDelete: Cascade)
 
   @@map("events")
 }
@@ -767,13 +769,13 @@ model Events {
 //  * ****************************************************
 
 model CustomLearningGoals {
-  id           String    @id @default(uuid())
-  learning_language_id    String
-  title String
-  description String
-  created_at   DateTime  @default(now())
-  updated_at   DateTime  @updatedAt
-  LearningLanguage LearningLanguages @relation(fields: [learning_language_id], references: [id], onDelete: Cascade)
+  id                   String            @id @default(uuid())
+  learning_language_id String
+  title                String
+  description          String
+  created_at           DateTime          @default(now())
+  updated_at           DateTime          @updatedAt
+  LearningLanguage     LearningLanguages @relation(fields: [learning_language_id], references: [id], onDelete: Cascade)
 
   @@map("learning_goals")
 }
@@ -782,12 +784,12 @@ model CustomLearningGoals {
 //  * Logbook
 //  * ****************************************************
 model LogEntry {
-  id                String @id @default(uuid())
-  type              LogEntryType
-  metadata          Json?
+  id                   String       @id @default(uuid())
+  type                 LogEntryType
+  metadata             Json?
   learning_language_id String
-  created_at        DateTime @default(now())
-  updated_at        DateTime @updatedAt
+  created_at           DateTime     @default(now())
+  updated_at           DateTime     @updatedAt
 
   LearningLanguage LearningLanguages @relation(fields: [learning_language_id], references: [id], onDelete: Cascade)
 
@@ -806,4 +808,21 @@ enum LogEntryType {
   EDIT_ACTIVITY
   SUBMIT_ACTIVITY
   PLAYED_GAME
+}
+
+//  * ****************************************************
+//  * Community chat
+//  * ****************************************************
+
+model CommunityChat {
+  id                  String   @id @default(uuid())
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
+  central_language_id String
+  partner_language_id String
+
+  CentralLanguage LanguageCodes @relation("CentralLanguage", fields: [central_language_id], references: [id], onDelete: Cascade)
+  PartnerLanguage LanguageCodes @relation("PartnerLanguage", fields: [partner_language_id], references: [id], onDelete: Cascade)
+
+  @@map("community_chat")
 }

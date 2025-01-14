@@ -50,6 +50,21 @@ export class InMemoryProfileRepository implements ProfileRepository {
     };
   }
 
+  async findAllWithMasteredLanguageAndLearningLanguage(
+    firstLanguageCode: string,
+    secondLanguageCode: string,
+  ): Promise<Profile[]> {
+    return Array.from(this.#profiles.values()).filter(
+      (profile) =>
+        profile.masteredLanguages.some(
+          (language) => language.code === firstLanguageCode,
+        ) ||
+        profile.learningLanguages.some(
+          (language) => language.language.code === secondLanguageCode,
+        ),
+    );
+  }
+
   async findAllWithTandemsProfiles(
     offset?: number,
     limit?: number,

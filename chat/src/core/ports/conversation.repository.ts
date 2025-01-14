@@ -28,7 +28,6 @@ export interface ConversationRepository {
         conversations: CreateConversations[],
     ) => Promise<void>;
     delete: (conversationId: string) => Promise<void>;
-    deleteUserFromConversations: (userId: string) => Promise<void>;
     deleteAll: () => Promise<void>;
     findById: (conversationId: string) => Promise<Conversation | undefined>;
     findByUserId: (

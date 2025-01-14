@@ -16,12 +16,13 @@ model Conversation {
   metadata          Json          @default("{}")
 
   Messages          Message[]
-
+  Hashtags          Hashtag[]
   @@map("conversations")
 }
 
 model Message {
   id                    String       @id @default(uuid()) @map("_id")
+  parentId              String?
   createdAt             DateTime     @default(now())
   conversationId        String
   content               String?
@@ -37,6 +38,9 @@ model Message {
   Conversation          Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   MediaObject           MediaObject?
   Thumbnail             Thumbnail?
+  MessageLikes          MessageLike[] @relation("MessageLikes")
+  Replies               Message[]    @relation("MessageReplies")
+  ParentMessage         Message?     @relation("MessageReplies", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("messages")
 }
@@ -57,6 +61,17 @@ model MediaObject {
   @@map("media_objects")
 }
 
+model MessageLike {
+  id         String              @id @default(uuid()) @map("_id")
+  messageId  String              @unique
+  userId     String
+
+  Message   Message?             @relation("MessageLikes", fields: [messageId], references: [id], onDelete: Cascade)
+
+  @@unique([messageId, userId])
+  @@map("message_likes")
+}
+
 model Thumbnail {
   id         String              @id @default(uuid()) @map("_id")
   name       String
@@ -71,4 +86,16 @@ model Thumbnail {
 
   @@unique([name, bucket])
   @@map("thumbnails")
+}
+
+model Hashtag {
+  id         String              @id @default(uuid()) @map("_id")
+  name       String
+  created_at DateTime            @default(now())
+  updated_at DateTime            @updatedAt
+  conversationId String
+
+  Conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@map("hashtags")
 }
