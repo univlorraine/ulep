@@ -35,8 +35,12 @@ export class PrismaHashtagRepository implements HashtagRepository {
             return acc;
         }, {} as Record<string, number>);
 
-        return Object.entries(hashtagCount).map(([name, count]) =>
-            hashtagMapper(name, count),
-        );
+        // Trier les hashtags par fréquence et prendre les 10 premiers
+        const topHashtags = Object.entries(hashtagCount)
+            .sort(([, countA], [, countB]) => countB - countA)
+            .slice(0, 10)
+            .map(([name, count]) => hashtagMapper(name, count));
+
+        return topHashtags;
     }
 }
