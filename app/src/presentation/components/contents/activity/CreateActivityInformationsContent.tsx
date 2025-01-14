@@ -45,9 +45,11 @@ export const CreateActivityInformationsContent = ({
     const [ressourceFile, setRessourceFile] = useState<File>();
     const [isRessourceUrl, setIsRessourceUrl] = useState<boolean>(!!activityToUpdate?.ressourceUrl);
     const [hideRessourceActivity, setHideRessourceActivity] = useState<boolean>(false);
+    const [isCategorySelectedFromActivityToUpdate, setIsCategorySelectedFromActivityToUpdate] =
+        useState<boolean>(false);
 
     useEffect(() => {
-        if (selectedThemeCategory) {
+        if (selectedThemeCategory && !isCategorySelectedFromActivityToUpdate) {
             setTheme(selectedThemeCategory.themes[0]);
             setSelectableThemesDropDown(
                 selectedThemeCategory.themes.map((theme) => ({
@@ -55,6 +57,8 @@ export const CreateActivityInformationsContent = ({
                     value: theme,
                 }))
             );
+        } else if (isCategorySelectedFromActivityToUpdate) {
+            setIsCategorySelectedFromActivityToUpdate(false);
         }
     }, [selectedThemeCategory]);
 
@@ -67,6 +71,7 @@ export const CreateActivityInformationsContent = ({
 
         if (activityThemeCategory) {
             setSelectedThemeCategory(activityThemeCategory);
+            setIsCategorySelectedFromActivityToUpdate(true);
             setSelectableThemesDropDown(
                 activityThemeCategory.themes.map((theme) => ({
                     label: theme.content,
@@ -83,6 +88,7 @@ export const CreateActivityInformationsContent = ({
 
         if (language) {
             setLanguage(language.value);
+            setLevel(activityToUpdate.languageLevel);
         }
     };
 
