@@ -3,8 +3,8 @@
 FROM node:18-alpine as api_base
 
 # install openssl - resolves the issue with the prisma client
-# RUN apk update && apk upgrade
-# RUN apk add --no-cache openssl
+RUN apk update && apk upgrade
+RUN apk add --no-cache openssl
 
 # https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine
 RUN apk add --no-cache libc6-compat
