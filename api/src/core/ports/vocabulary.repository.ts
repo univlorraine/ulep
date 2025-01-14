@@ -77,4 +77,14 @@ export interface VocabularyRepository {
   deleteVocabulary(id: string): Promise<void>;
 
   deleteVocabularyList(id: string): Promise<void>;
+
+  addReaderToVocabularyList(
+    vocabularyListId: string,
+    profileId: string,
+  ): Promise<void>;
+
+  removeReaderFromVocabularyList(
+    vocabularyListId: string,
+    profileId: string,
+  ): Promise<void>;
 }

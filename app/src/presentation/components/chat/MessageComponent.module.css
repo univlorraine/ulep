@@ -173,6 +173,34 @@
     color: black;
 }
 
+.reply {
+    color: black;
+    font-family: 'Maven Pro', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: none;
+    text-decoration: underline;
+}
+
+.replyWithLike {
+    margin-top: 12px;
+}
+
+.replyWithoutLike {
+    margin-top: 0px;
+}
+
+.rightReply {
+    margin-left: auto;
+    border-right: 1px dashed black;
+}
+
+.leftReply {
+    margin-right: auto;
+    border-left: 1px dashed black;
+    margin-left: 60px;
+}
+
 .avatarContainer {
     align-items: center;
     background-color: var(--primary-color);

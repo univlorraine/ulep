@@ -7,6 +7,8 @@ const MessagesInclude = Prisma.validator<Prisma.MessageInclude>()({
     MediaObject: true,
     Thumbnail: true,
     MessageLikes: true,
+    Replies: true,
+    ParentMessage: true,
 });
 
 export const MessagesRelations = { include: MessagesInclude };
@@ -37,6 +39,7 @@ export const messageMapper = (snapshot: MessagesSnapshot): Message => {
         isDeleted: snapshot.isDeleted,
         ownerId: snapshot.ownerId,
         type: snapshot.type as MessageType,
+        numberOfReplies: snapshot.Replies?.length ?? 0,
         metadata: {
             ...(snapshot.metadata as any),
             thumbnail: snapshot.Thumbnail?.id

@@ -1,3 +1,4 @@
+export * from './add-reader-to-vocabulary-list.usecase';
 export * from './create-vocabulary-list.usecase';
 export * from './create-vocabulary.usecase';
 export * from './delete-vocabulary-list.usecase';
@@ -6,5 +7,6 @@ export * from './find-all-vocabulary-from-list-id.usecase';
 export * from './find-all-vocabulary-from-selected-lists-id.usecase';
 export * from './find-all-vocabulary-list.usecase';
 export * from './get-vocabulary-list-pdf.usecase';
+export * from './remove-reader-to-vocabulary-list.usecase';
 export * from './update-vocabulary-list.usecase';
 export * from './update-vocabulary.usecase';

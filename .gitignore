@@ -25,3 +25,5 @@ docker/minio/*
 
 #helm values
 *.values.yaml
+
+.codegpt

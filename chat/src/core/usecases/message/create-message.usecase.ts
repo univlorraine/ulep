@@ -25,6 +25,8 @@ interface CreateMessageCommand {
     originalFilename?: string;
     mimetype?: string;
     filePath?: string;
+    type?: MessageType;
+    parentId?: string;
 }
 
 export class CreateMessageUsecase {
@@ -66,6 +68,11 @@ export class CreateMessageUsecase {
                 console.warn('Url not found for open graph', url);
             }
         }
+        const type =
+            command.type ??
+            (openGraphResult
+                ? MessageType.Link
+                : await Message.categorizeFileType(command.mimetype));
 
         const message = new Message({
             id: this.uuidProvider.generate(),
@@ -73,11 +80,10 @@ export class CreateMessageUsecase {
             ownerId: command.ownerId,
             conversationId: command.conversationId,
             usersLiked: [],
-            type: openGraphResult
-                ? MessageType.Link
-                : await Message.categorizeFileType(command.mimetype),
+            type,
             isReported: false,
             isDeleted: false,
+            numberOfReplies: 0,
             metadata: {
                 filePath: command.filePath,
                 originalFilename: command.originalFilename,
@@ -85,15 +91,31 @@ export class CreateMessageUsecase {
             },
         });
 
-        const createdMessage = await this.messageRepository.create(message);
+        const createdMessage = await this.messageRepository.create(
+            message,
+            command.parentId,
+        );
 
         await this.conversationRepository.updateLastActivityAt(conversation.id);
 
-        this.notificationService.sendNotification(
-            message.ownerId,
-            conversation.usersIds.filter((id) => id !== message.ownerId),
-            message.content,
-        );
+        if (command.parentId) {
+            const parentMessage = await this.messageRepository.findById(
+                command.parentId,
+            );
+            if (parentMessage?.ownerId !== message.ownerId) {
+                this.notificationService.sendNotification(
+                    message.ownerId,
+                    [parentMessage.ownerId],
+                    message.content,
+                );
+            }
+        } else {
+            this.notificationService.sendNotification(
+                message.ownerId,
+                conversation.usersIds.filter((id) => id !== message.ownerId),
+                message.content,
+            );
+        }
 
         return createdMessage;
     }

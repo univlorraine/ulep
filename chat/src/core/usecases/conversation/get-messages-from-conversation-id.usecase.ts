@@ -1,5 +1,5 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { MessageType } from 'src/core/models';
+import { Message, MessageType } from 'src/core/models';
 import {
     CONVERSATION_REPOSITORY,
     ConversationRepository,
@@ -19,6 +19,7 @@ export class GetMessagesFromConversationIdCommand {
     pagination: MessagePagination;
     contentFilter: string;
     typeFilter: MessageType;
+    parentId?: string;
 }
 
 @Injectable()
@@ -41,13 +42,23 @@ export class GetMessagesFromConversationIdUsecase {
             throw new NotFoundException('Conversation not found');
         }
 
-        const messages =
-            await this.messageRepository.findMessagesByConversationId(
-                command.id,
+        let messages: Message[];
+
+        if (!command.parentId) {
+            messages =
+                await this.messageRepository.findMessagesByConversationId(
+                    command.id,
+                    command.pagination,
+                    command.contentFilter,
+                    command.typeFilter,
+                );
+        } else {
+            messages = await this.messageRepository.findResponsesByMessageId(
+                command.parentId,
                 command.pagination,
-                command.contentFilter,
-                command.typeFilter,
             );
+        }
+
         for (const message of messages) {
             if (
                 (message.type === MessageType.Image ||

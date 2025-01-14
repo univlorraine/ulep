@@ -98,7 +98,11 @@ const JitsiMobile = ({ jitsiUrl, roomName, jitsiToken, tandemPartner, learningLa
     const onChatMessageReceived = async (data: OnChatMessageReceivedProps) => {
         const currentId = currentJitsiParticipantIdRef.current;
         if (roomName && data.senderId === currentId) {
-            const result = await sendMessage.execute(roomName, profile!.user.id, data.message);
+            const result = await sendMessage.execute({
+                conversationId: roomName,
+                senderId: profile!.user.id,
+                content: data.message,
+            });
 
             if (result instanceof Error) {
                 console.error(result);

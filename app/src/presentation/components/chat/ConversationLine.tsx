@@ -2,7 +2,7 @@ import { IonAvatar, IonItem } from '@ionic/react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import Conversation from '../../../domain/entities/chat/Conversation';
-import { Message } from '../../../domain/entities/chat/Message';
+import { Message, MessageType } from '../../../domain/entities/chat/Message';
 import Language from '../../../domain/entities/Language';
 import { codeLanguageToFlag } from '../../utils';
 import NetworkImage from '../NetworkImage';
@@ -58,12 +58,16 @@ const getPreviewMessage = (userId: string, translate: (key: string) => string, m
         return translate('message.type.noMessage');
     }
     switch (message.type) {
-        case 'image':
+        case MessageType.Image:
             return translate('message.type.image');
-        case 'audio':
+        case MessageType.Audio:
             return translate('message.type.audio');
-        case 'file':
+        case MessageType.File:
             return translate('message.type.file');
+        case MessageType.Vocabulary:
+            return translate('message.type.vocabulary');
+        case MessageType.Activity:
+            return translate('message.type.activity');
         default:
             if (message.isMine(userId)) {
                 return message.content;

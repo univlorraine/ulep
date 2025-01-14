@@ -67,6 +67,28 @@
     margin-left: 12px;
 }
 
+.replyHeader {
+    background-color: var(--primary-background-color);
+    padding: 20px;
+    width: 100%;
+}
+
+.replyHeaderText {
+    font-family: Maven Pro;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20px;
+    text-align: left;
+    text-decoration: underline;
+    text-transform: none;
+    margin-left: 8px;
+}
+
+.replyHeaderButton {
+    padding: 0;
+    color: black;
+}
+
 @media (min-width: 768px) {
     .header {
         padding: 12px;

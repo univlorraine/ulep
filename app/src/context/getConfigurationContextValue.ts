@@ -72,6 +72,7 @@ import UpdateAvatarUsecase from '../domain/usecases/UpdateAvatarUsecase';
 import UpdateCustomLearningGoalUsecase from '../domain/usecases/UpdateCustomLearningGoalUsecase';
 import UpdateNotificationPermissionUsecase from '../domain/usecases/UpdateNotificationPermissionUsecase';
 import UpdateSessionUsecase from '../domain/usecases/UpdateSessionUsecase';
+import AddReaderToVocabularyListUsecase from '../domain/usecases/vocabulary/AddReaderToVocabularyListUsecase';
 import CreateVocabularyListUsecase from '../domain/usecases/vocabulary/CreateVocabularyListUsecase';
 import CreateVocabularyUsecase from '../domain/usecases/vocabulary/CreateVocabularyUsecase';
 import DeleteVocabularyListUsecase from '../domain/usecases/vocabulary/DeleteVocabularyListUsecase';
@@ -181,6 +182,7 @@ const getConfigContextValue = ({
     const searchMessagesIdsFromConversation = new SearchMessagesIdsFromConversationUsecase(chatHttpAdapter);
 
     // Vocabulary
+    const addReaderToVocabularyList = new AddReaderToVocabularyListUsecase(domainHttpAdapter);
     const createVocabulary = new CreateVocabularyUsecase(domainHttpAdapter);
     const updateVocabulary = new UpdateVocabularyUsecase(domainHttpAdapter);
     const deleteVocabulary = new DeleteVocabularyUsecase(domainHttpAdapter);
@@ -317,6 +319,7 @@ const getConfigContextValue = ({
         getLogEntriesByDate,
         shareLogEntries,
         exportLogEntries,
+        addReaderToVocabularyList,
     };
 };
 

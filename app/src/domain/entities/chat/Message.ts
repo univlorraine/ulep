@@ -1,5 +1,7 @@
 import { differenceInCalendarDays, format, isToday, isYesterday } from 'date-fns';
+import { Activity } from '../Activity';
 import { UserChat } from '../User';
+import VocabularyList from '../VocabularyList';
 
 export enum MessageType {
     Text = 'text',
@@ -7,6 +9,8 @@ export enum MessageType {
     Audio = 'audio',
     File = 'file',
     Link = 'link',
+    Vocabulary = 'vocabulary',
+    Activity = 'activity',
 }
 
 interface MessageMetadata {
@@ -14,6 +18,8 @@ interface MessageMetadata {
     filePath?: string;
     openGraphResult: any;
     thumbnail?: string;
+    vocabularyList?: VocabularyList;
+    activity?: Activity;
 }
 
 export class MessageWithoutSender {
@@ -25,7 +31,8 @@ export class MessageWithoutSender {
         public readonly type: MessageType,
         public likes: number = 0,
         public didLike: boolean = false,
-        public readonly metadata: MessageMetadata
+        public readonly metadata: MessageMetadata,
+        public readonly numberOfReplies: number = 0
     ) {}
 
     public getMessageDate(): string {
@@ -73,9 +80,11 @@ export class Message extends MessageWithoutSender {
         public readonly type: MessageType,
         public likes: number = 0,
         public didLike: boolean = false,
-        public readonly metadata: MessageMetadata
+        public readonly metadata: MessageMetadata,
+        public readonly numberOfReplies: number = 0,
+        public readonly parentId?: string
     ) {
-        super(id, content, createdAt, sender.id, type, likes, didLike, metadata);
+        super(id, content, createdAt, sender.id, type, likes, didLike, metadata, numberOfReplies);
     }
 }
 
@@ -89,8 +98,10 @@ export class MessageWithConversationId extends Message {
         public readonly conversationId: string,
         public likes: number = 0,
         public didLike: boolean = false,
-        public readonly metadata: any
+        public readonly metadata: any,
+        public readonly numberOfReplies: number = 0,
+        public readonly parentId?: string
     ) {
-        super(id, content, createdAt, sender, type, likes, didLike, metadata);
+        super(id, content, createdAt, sender, type, likes, didLike, metadata, numberOfReplies);
     }
 }

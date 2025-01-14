@@ -1,6 +1,13 @@
 import { Message, MessageType, MessageWithoutSender } from '../domain/entities/chat/Message';
+import { ActivityCommand, activityCommandToDomain } from './ActivityCommand';
 import UserChatCommand, { userChatCommandToDomain } from './UserChatCommand';
+import VocabularyListCommand, { vocabularyListCommandToDomain } from './VocabularyListCommand';
 
+interface MessageMetadataCommand {
+    activity?: ActivityCommand;
+    vocabularyList?: VocabularyListCommand;
+    openGraphResult?: any;
+}
 //From Domain api
 export interface MessageCommand {
     id: string;
@@ -11,6 +18,7 @@ export interface MessageCommand {
     metadata: any;
     likes: number;
     didLike: boolean;
+    numberOfReplies: number;
 }
 
 // From Chat api
@@ -27,7 +35,14 @@ export const messageWithoutSenderCommandToDomain = (command: MessageWithoutSende
         command.type as MessageType,
         command.likes,
         command.didLike,
-        command.metadata
+        {
+            ...command.metadata,
+            activity: command.metadata.activity ? activityCommandToDomain(command.metadata.activity) : undefined,
+            vocabularyList: command.metadata.vocabularyList
+                ? vocabularyListCommandToDomain(command.metadata.vocabularyList)
+                : undefined,
+        },
+        command.numberOfReplies
     );
 };
 
@@ -40,6 +55,13 @@ export const messageCommandToDomain = (command: MessageCommand) => {
         command.type as MessageType,
         command.likes,
         command.didLike,
-        command.metadata
+        {
+            ...command.metadata,
+            activity: command.metadata.activity ? activityCommandToDomain(command.metadata.activity) : undefined,
+            vocabularyList: command.metadata.vocabularyList
+                ? vocabularyListCommandToDomain(command.metadata.vocabularyList)
+                : undefined,
+        },
+        command.numberOfReplies
     );
 };
