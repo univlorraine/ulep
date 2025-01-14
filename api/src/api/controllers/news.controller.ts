@@ -1,3 +1,5 @@
+import { Collection } from '@app/common';
+import { KeycloakUser } from '@app/keycloak';
 import {
   Body,
   Controller,
@@ -12,22 +14,9 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { AuthenticationGuard } from '../guards';
-import * as Swagger from '@nestjs/swagger';
-import { Role, Roles } from '../decorators/roles.decorator';
-import { CreateNewsUsecase } from 'src/core/usecases/news/create-news.usecase';
-import {
-  CreateNewsRequest,
-  GetNewsAdminQuery,
-  GetNewsQuery,
-  NewsResponse,
-  UpdateNewsRequest,
-} from '../dtos/news';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ImagesFilePipe } from '../validators';
+import * as Swagger from '@nestjs/swagger';
 import { News } from 'src/core/models';
-import { Collection } from '@app/common';
-import { CollectionResponse, CurrentUser } from '../decorators';
 import {
   DeleteNewsImageUsecase,
   DeleteNewsUsecase,
@@ -37,7 +26,18 @@ import {
   UpdateNewsUsecase,
   UploadNewsImageUsecase,
 } from 'src/core/usecases';
-import { KeycloakUser } from '@app/keycloak';
+import { CreateNewsUsecase } from 'src/core/usecases/news/create-news.usecase';
+import { CollectionResponse, CurrentUser } from '../decorators';
+import { Role, Roles } from '../decorators/roles.decorator';
+import {
+  CreateNewsRequest,
+  GetNewsAdminQuery,
+  GetNewsQuery,
+  NewsResponse,
+  UpdateNewsRequest,
+} from '../dtos/news';
+import { AuthenticationGuard } from '../guards';
+import { ImagesFilePipe } from '../validators';
 
 @Controller('news')
 @Swagger.ApiTags('News')
@@ -72,7 +72,7 @@ export class NewsController {
       limit: Number(limit),
       where: {
         title,
-        languageCodes
+        languageCodes,
       },
     });
 
@@ -92,7 +92,16 @@ export class NewsController {
   async getCollectionForUser(
     @Query() query: GetNewsAdminQuery,
   ): Promise<Collection<NewsResponse>> {
-    const { page, limit, title, universityIds, status, languageCodes } = query;
+    const {
+      page,
+      limit,
+      title,
+      universityIds,
+      status,
+      languageCodes,
+      field,
+      order,
+    } = query;
 
     const news = await this.getNewsAdminUsecase.execute({
       page,
@@ -104,6 +113,7 @@ export class NewsController {
         languageCodes:
           typeof languageCodes === 'string' ? [languageCodes] : languageCodes,
       },
+      orderBy: field && order && { field, order },
     });
 
     return new Collection<NewsResponse>({

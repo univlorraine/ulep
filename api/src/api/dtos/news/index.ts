@@ -40,6 +40,14 @@ export class GetNewsAdminQuery extends PaginationDto {
   @ApiPropertyOptional({ type: 'string' })
   @IsOptional()
   languageCodes?: string[];
+
+  @ApiPropertyOptional({ type: 'string' })
+  @IsOptional()
+  field?: string;
+
+  @ApiPropertyOptional({ type: 'string' })
+  @IsOptional()
+  order?: string;
 }
 
 export class CreateNewsRequest {

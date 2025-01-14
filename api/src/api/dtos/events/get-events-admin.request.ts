@@ -34,5 +34,16 @@ export class GetEventsAdminQuery extends PaginationDto {
 
   @ApiProperty()
   @IsOptional()
+  @IsString()
   languageCode: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  field?: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  order?: string;
 }

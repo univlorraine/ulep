@@ -61,6 +61,10 @@ export type FindEventsProps = {
     types?: EventType[];
     languageCode: string;
   };
+  orderBy?: {
+    field: string;
+    order: string;
+  };
 };
 
 export type FindEventsForAnUserProps = {
