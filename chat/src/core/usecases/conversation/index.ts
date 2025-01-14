@@ -6,3 +6,4 @@ export * from './get-conversation-from-user-id.usecase';
 export * from './get-messages-from-conversation-id.usecase';
 export * from './search-message-id-from-conversation-id.usecase';
 export * from './update-conversation.usecase';
+export * from './get-hashtags-from-conversation-id.usecase';

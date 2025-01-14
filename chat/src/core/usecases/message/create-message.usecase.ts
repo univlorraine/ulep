@@ -5,6 +5,10 @@ import {
     ConversationRepository,
 } from 'src/core/ports/conversation.repository';
 import {
+    HASHTAG_REPOSITORY,
+    HashtagRepository,
+} from 'src/core/ports/hastag.repository';
+import {
     MESSAGE_REPOSITORY,
     MessageRepository,
 } from 'src/core/ports/message.repository';
@@ -39,6 +43,8 @@ export class CreateMessageUsecase {
         private readonly uuidProvider: UuidProvider,
         @Inject(NOTIFICATION_SERVICE)
         private readonly notificationService: NotificationServicePort,
+        @Inject(HASHTAG_REPOSITORY)
+        private readonly hashtagRepository: HashtagRepository,
     ) {}
 
     async execute(command: CreateMessageCommand) {
@@ -96,6 +102,8 @@ export class CreateMessageUsecase {
             command.parentId,
         );
 
+        await this.extractHashtags(conversation.id, message.content);
+
         await this.conversationRepository.updateLastActivityAt(conversation.id);
 
         if (command.parentId) {
@@ -118,5 +126,19 @@ export class CreateMessageUsecase {
         }
 
         return createdMessage;
+    }
+
+    private async extractHashtags(
+        conversationId: string,
+        content: string,
+    ): Promise<void> {
+        const hashtags = content.match(/#\w+/g);
+        const allHashtags = hashtags
+            ? hashtags.map((hashtag) => hashtag.slice(1))
+            : [];
+
+        for (const hashtag of allHashtags) {
+            await this.hashtagRepository.create(conversationId, hashtag);
+        }
     }
 }

@@ -19,6 +19,7 @@ export interface MessageCommand {
     likes: number;
     didLike: boolean;
     numberOfReplies: number;
+    parent?: MessageCommand;
 }
 
 // From Chat api
@@ -62,6 +63,28 @@ export const messageCommandToDomain = (command: MessageCommand) => {
                 ? vocabularyListCommandToDomain(command.metadata.vocabularyList)
                 : undefined,
         },
-        command.numberOfReplies
+        command.numberOfReplies,
+        command.parent?.id,
+        command.parent
+            ? new Message(
+                  command.parent.id,
+                  command.parent.content,
+                  new Date(command.parent.createdAt),
+                  userChatCommandToDomain(command.parent.user),
+                  command.parent.type as MessageType,
+                  command.parent.likes,
+                  command.parent.didLike,
+                  {
+                      ...command.metadata,
+                      activity: command.parent.metadata.activity
+                          ? activityCommandToDomain(command.parent.metadata.activity)
+                          : undefined,
+                      vocabularyList: command.parent.metadata.vocabularyList
+                          ? vocabularyListCommandToDomain(command.parent.metadata.vocabularyList)
+                          : undefined,
+                  },
+                  command.parent.numberOfReplies
+              )
+            : undefined
     );
 };

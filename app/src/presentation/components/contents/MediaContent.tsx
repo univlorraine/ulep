@@ -103,7 +103,7 @@ const Content: React.FC<Omit<MediaContentProps, 'isHybrid'>> = ({
             ) : (
                 <MediasList
                     messages={messages}
-                    loadMessages={onLoadMessages}
+                    loadMessages={() => onLoadMessages({ isFirstMessage: false })}
                     isScrollOver={isScrollForwardOver}
                     selectedFilter={selectedFilter}
                     setImageToDisplay={setImageToDisplay}

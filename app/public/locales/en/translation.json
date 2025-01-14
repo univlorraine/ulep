@@ -455,6 +455,7 @@
         "goBackToConversation": "Revenir au salon",
         "numberOfReplies": "See reply",
         "numberOfReplies_plural": "See {{count}} replies",
+        "popularHashtags": "Popular hashtags",
         "reportMessageButton": "Report message",
         "likeMessageButton": "Like message",
         "unlikeMessageButton": "Unlike message",
@@ -466,6 +467,9 @@
         "vocabulary_list": {
             "close": "Close",
             "title": "Select the list to share"
+        },
+        "activity_list": {
+            "title": "Activity list"
         }
     },
     "connection_page": {

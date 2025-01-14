@@ -36,6 +36,7 @@ export interface Message {
   likes: string[];
   metadata: any;
   numberOfReplies: number;
+  parent?: Message;
 }
 
 export interface MessageWithUser {
@@ -47,6 +48,7 @@ export interface MessageWithUser {
   likes: string[];
   metadata: any;
   numberOfReplies: number;
+  parent?: MessageWithUser;
 }
 
 export enum ChatPaginationDirection {
@@ -67,7 +69,7 @@ export interface ChatServicePort {
     conversationId: string,
     limit: number,
     lastMessageId?: string,
-    contentFilter?: string,
+    hashtagFilter?: string,
     typeFilter?: string,
     direction?: ChatPaginationDirection,
     parentId?: string,

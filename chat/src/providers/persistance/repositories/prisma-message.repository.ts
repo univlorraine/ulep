@@ -131,7 +131,7 @@ export class PrismaMessageRepository implements MessageRepository {
             cursor,
             orderBy: { createdAt: 'desc' },
             ...messagesPagination,
-            ...MessagesRelations,
+            ...{ ...MessagesRelations, include: { ParentMessage: false } },
         });
 
         return messages.map(messageMapper);
@@ -140,7 +140,7 @@ export class PrismaMessageRepository implements MessageRepository {
     async findMessagesByConversationId(
         conversationId: string,
         pagination: MessagePagination,
-        contentFilter?: string,
+        hashtagFilter?: string,
         typeFilter?: MessageType,
     ): Promise<Message[]> {
         const messagesPagination = {};
@@ -153,10 +153,12 @@ export class PrismaMessageRepository implements MessageRepository {
             messagesPagination['take'] = pagination.limit;
         }
 
-        if (contentFilter) {
+        if (hashtagFilter) {
             where['content'] = {
-                contains: contentFilter,
+                contains: hashtagFilter,
             };
+            // If we filter from hastag, we need to take reply messages
+            where['ParentMessage'] = undefined;
         }
 
         if (typeFilter) {

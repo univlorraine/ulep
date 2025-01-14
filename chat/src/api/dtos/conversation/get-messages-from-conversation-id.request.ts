@@ -7,7 +7,7 @@ import { MessagePaginationDirection } from 'src/core/ports/message.repository';
 export class GetMessagesQueryParams {
     @IsString()
     @IsOptional()
-    contentFilter?: string;
+    hashtagFilter?: string;
 
     @IsString()
     @IsOptional()

@@ -131,6 +131,10 @@ export class MessageResponse {
     @Expose({ groups: ['read'] })
     numberOfReplies: number;
 
+    @Swagger.ApiProperty({ type: 'object' })
+    @Expose({ groups: ['read'] })
+    parent?: MessageResponse;
+
     constructor(partial: Partial<MessageResponse>) {
         Object.assign(this, partial);
     }
@@ -145,6 +149,9 @@ export class MessageResponse {
             metadata: MetadataMessageResponse.from(message.metadata),
             likes: message.usersLiked?.map((like) => like.userId) || [],
             numberOfReplies: message.numberOfReplies,
+            parent: message.parent
+                ? MessageResponse.from(message.parent)
+                : undefined,
         });
     }
 }

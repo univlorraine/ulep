@@ -7,6 +7,7 @@ export interface GetMessagesFromConversationUsecaseParams {
     typeFilter?: string;
     direction?: MessagePaginationDirection;
     parentId?: string;
+    hashtagFilter?: string;
 }
 
 interface GetMessagesFromConversationUsecaseInterface {

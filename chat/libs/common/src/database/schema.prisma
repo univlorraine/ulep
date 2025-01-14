@@ -16,7 +16,7 @@ model Conversation {
   metadata          Json          @default("{}")
 
   Messages          Message[]
-
+  Hashtags          Hashtag[]
   @@map("conversations")
 }
 
@@ -86,4 +86,16 @@ model Thumbnail {
 
   @@unique([name, bucket])
   @@map("thumbnails")
+}
+
+model Hashtag {
+  id         String              @id @default(uuid()) @map("_id")
+  name       String
+  created_at DateTime            @default(now())
+  updated_at DateTime            @updatedAt
+  conversationId String
+
+  Conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@map("hashtags")
 }

@@ -17,7 +17,7 @@ import {
 export class GetMessagesFromConversationIdCommand {
     id: string;
     pagination: MessagePagination;
-    contentFilter: string;
+    hashtagFilter: string;
     typeFilter: MessageType;
     parentId?: string;
 }
@@ -49,10 +49,11 @@ export class GetMessagesFromConversationIdUsecase {
                 await this.messageRepository.findMessagesByConversationId(
                     command.id,
                     command.pagination,
-                    command.contentFilter,
+                    command.hashtagFilter,
                     command.typeFilter,
                 );
         } else {
+            // If we are in a thread, we only want to get the messages from the thread
             messages = await this.messageRepository.findResponsesByMessageId(
                 command.parentId,
                 command.pagination,
@@ -60,33 +61,39 @@ export class GetMessagesFromConversationIdUsecase {
         }
 
         for (const message of messages) {
-            if (
-                (message.type === MessageType.Image ||
-                    message.type === MessageType.Audio ||
-                    message.type === MessageType.File) &&
-                message.content
-            ) {
-                message.metadata.filePath = message.content;
-                message.content = await this.storage.temporaryUrl(
-                    'chat',
-                    message.content,
-                    3600,
-                );
-
-                if (
-                    message.type === MessageType.Image &&
-                    message.metadata.thumbnail
-                ) {
-                    message.metadata.thumbnail =
-                        await this.storage.temporaryUrl(
-                            'chat',
-                            message.metadata.thumbnail,
-                            3600,
-                        );
-                }
+            await this.handleMediaMessage(message);
+            if (message.parent) {
+                await this.handleMediaMessage(message.parent);
             }
         }
 
         return messages;
+    }
+
+    async handleMediaMessage(message: Message) {
+        if (
+            (message.type === MessageType.Image ||
+                message.type === MessageType.Audio ||
+                message.type === MessageType.File) &&
+            message.content
+        ) {
+            message.metadata.filePath = message.content;
+            message.content = await this.storage.temporaryUrl(
+                'chat',
+                message.content,
+                3600,
+            );
+
+            if (
+                message.type === MessageType.Image &&
+                message.metadata.thumbnail
+            ) {
+                message.metadata.thumbnail = await this.storage.temporaryUrl(
+                    'chat',
+                    message.metadata.thumbnail,
+                    3600,
+                );
+            }
+        }
     }
 }

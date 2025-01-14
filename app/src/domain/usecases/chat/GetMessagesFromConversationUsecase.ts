@@ -1,12 +1,12 @@
-import { HttpResponse } from '../../adapter/BaseHttpAdapter';
-import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
-import { CollectionCommand } from '../../command/CollectionCommand';
-import { MessageCommand, messageCommandToDomain } from '../../command/MessageCommand';
-import { MessagePaginationDirection } from '../entities/chat/Conversation';
-import { Message } from '../entities/chat/Message';
+import { HttpResponse } from '../../../adapter/BaseHttpAdapter';
+import { HttpAdapterInterface } from '../../../adapter/DomainHttpAdapter';
+import { CollectionCommand } from '../../../command/CollectionCommand';
+import { MessageCommand, messageCommandToDomain } from '../../../command/MessageCommand';
+import { MessagePaginationDirection } from '../../entities/chat/Conversation';
+import { Message } from '../../entities/chat/Message';
 import GetMessagesFromConversationUsecaseInterface, {
     GetMessagesFromConversationUsecaseParams,
-} from '../interfaces/chat/GetMessagesFromConversationUsecase.interface';
+} from '../../interfaces/chat/GetMessagesFromConversationUsecase.interface';
 
 class GetMessagesFromConversationUsecase implements GetMessagesFromConversationUsecaseInterface {
     constructor(private readonly domainHttpAdapter: HttpAdapterInterface) {}
@@ -19,7 +19,9 @@ class GetMessagesFromConversationUsecase implements GetMessagesFromConversationU
                     params.limit ? `limit=${params.limit}` : ''
                 }&${params.typeFilter ? `typeFilter=${params.typeFilter}` : ''}&${
                     params.direction ? `direction=${direction}&` : ''
-                }${params.parentId ? `parentId=${params.parentId}` : ''}`
+                }${params.parentId ? `parentId=${params.parentId}&` : ''}${
+                    params.hashtagFilter ? `hashtagFilter=${params.hashtagFilter}` : ''
+                }`
             );
 
             if (!httpResponse.parsedBody || httpResponse.parsedBody.items === undefined) {
