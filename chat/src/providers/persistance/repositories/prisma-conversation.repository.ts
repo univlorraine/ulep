@@ -157,12 +157,6 @@ export class PrismaConversationRepository implements ConversationRepository {
         await this.prisma.conversation.delete({ where: { id } });
     }
 
-    async deleteUserFromConversations(userId: string): Promise<void> {
-        await this.prisma.conversation.deleteMany({
-            where: { participantIds: { has: userId } },
-        });
-    }
-
     async deleteAll(): Promise<void> {
         await this.prisma.conversation.deleteMany();
     }

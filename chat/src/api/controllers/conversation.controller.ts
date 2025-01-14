@@ -14,7 +14,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import * as Swagger from '@nestjs/swagger';
 import {
     CreateConversationRequest,
-    DeleteContactConversationRequest,
+    DeleteUserConversationRequest,
     GetConversationsQueryParams,
     GetMessagesQueryParams,
 } from 'src/api/dtos/conversation';
@@ -28,9 +28,8 @@ import {
     CreateConversationUsecase,
     CreateMessageUsecase,
     CreateMultipleConversationsUsecase,
-    DeleteContactConversationUsecase,
-    DeleteConversationUsecase,
     DeleteUserConversationUsecase,
+    DeleteConversationUsecase,
     GetConversationFromUserIdUsecase,
     GetMessagesFromConversationIdUsecase,
     SearchMessagesIdFromConversationIdUsecase,
@@ -49,7 +48,6 @@ export class ConversationController {
         private createMultipleConversationsUsecase: CreateMultipleConversationsUsecase,
         private createConversationUsecase: CreateConversationUsecase,
         private deleteConversationUsecase: DeleteConversationUsecase,
-        private deleteContactConversationUsecase: DeleteContactConversationUsecase,
         private deleteUserConversationUsecase: DeleteUserConversationUsecase,
         private getMessagesFromConversationIdUsecase: GetMessagesFromConversationIdUsecase,
         private getConversationFromUserIdUsecase: GetConversationFromUserIdUsecase,
@@ -167,25 +165,19 @@ export class ConversationController {
         await this.deleteConversationUsecase.execute({ id: conversationId });
     }
 
-    @Post('contact/:id')
-    @Swagger.ApiOperation({ summary: 'Delete a conversation' })
-    async deleteContactConversation(
-        @Param('id') conversationId: string,
-        @Body() body: DeleteContactConversationRequest,
-    ): Promise<void> {
-        await this.deleteContactConversationUsecase.execute({
-            id: conversationId,
-            chatIdsToIgnore: body.chatIdsToIgnore,
-        });
-    }
-
-    @Delete('user/:id')
-    @Swagger.ApiOperation({ summary: 'Delete a conversation' })
+    @Post('user/:id')
+    @Swagger.ApiOperation({
+        summary:
+            'Delete all conversations from user except the ones in chatIdsToIgnore',
+    })
     async deleteUserConversation(
-        @Param('id') conversationId: string,
+        @Param('id') userId: string,
+        @Body() body: DeleteUserConversationRequest,
     ): Promise<void> {
         await this.deleteUserConversationUsecase.execute({
-            id: conversationId,
+            id: userId,
+            chatIdsToIgnore: body.chatIdsToIgnore,
+            chatIdsToLeave: body.chatIdsToLeave,
         });
     }
 
