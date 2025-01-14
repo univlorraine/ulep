@@ -1,5 +1,5 @@
 import { IonButton, IonIcon } from '@ionic/react';
-import React from 'react';
+import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowRightSvg } from '../../../assets';
 import { Activity } from '../../../domain/entities/Activity';
@@ -22,10 +22,10 @@ const ActivityCard: React.FC<ActivityCardProps> = ({ activity, onClick, isHybrid
                 <p className={styles.title}>{activity.title}</p>
                 <span className={styles.subtitle}>
                     {activity.description.split('\n').map((line, index) => (
-                        <React.Fragment key={index}>
+                        <Fragment key={index}>
                             {line}
                             <br />
-                        </React.Fragment>
+                        </Fragment>
                     ))}
                 </span>
             </div>

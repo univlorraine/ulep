@@ -1,6 +1,6 @@
 import { IonButton, IonIcon, IonItem, IonLabel, IonList, useIonToast } from '@ionic/react';
 import { downloadOutline, helpOutline, pencilOutline } from 'ionicons/icons';
-import React, { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowRightSvg } from '../../../../assets';
 import { useConfig } from '../../../../context/ConfigurationContext';
@@ -122,10 +122,10 @@ export const ActivityContent: React.FC<ActivityContentProps> = ({
                         <h1 className={styles['primary-title']}>{activity.title}</h1>
                         <p className={styles['primary-subtitle']}>
                             {activity.description.split('\n').map((line, index) => (
-                                <React.Fragment key={index}>
+                                <Fragment key={index}>
                                     {line}
                                     <br />
-                                </React.Fragment>
+                                </Fragment>
                             ))}
                         </p>
                         <div className={styles['information-container']}>
