@@ -29,8 +29,6 @@ export const NewsContent: React.FC<NewsContentProps> = ({ news, profile, onBackP
         day: '2-digit',
         month: 'long',
         year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
     }).format(new Date(news.startPublicationDate));
 
     const changeLanguage = (languageCode: string) => {
