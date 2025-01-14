@@ -2,6 +2,7 @@ import { Collection, ModeQuery } from '@app/common';
 import {
   Controller,
   Get,
+  Headers,
   Param,
   ParseUUIDPipe,
   Post,
@@ -12,6 +13,8 @@ import {
 import * as Swagger from '@nestjs/swagger';
 import { AuthenticationGuard } from '../guards';
 
+import { KeycloakUser } from '@app/keycloak';
+import { CurrentUser } from 'src/api/decorators';
 import {
   ConversationResponse,
   GetConversationQuery,
@@ -39,6 +42,7 @@ export class ChatController {
   @UseGuards(AuthenticationGuard)
   async getAllConversations(
     @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() user: KeycloakUser,
     @Query() params: GetConversationQuery,
   ): Promise<Collection<ConversationResponse>> {
     const conversations =
@@ -61,37 +65,44 @@ export class ChatController {
       });
 
     return new Collection<ConversationResponse>({
-      items: conversations.items.map(ConversationResponse.from),
+      items: conversations.items.map((conversation) =>
+        ConversationResponse.from(conversation, user.sub),
+      ),
       totalItems: conversations.totalItems,
     });
   }
 
   @Get('messages/:id')
-  @SerializeOptions({ groups: ['chat'] })
+  @SerializeOptions({ groups: ['read'] })
   @Swagger.ApiOperation({ summary: 'Get messages from a conversation.' })
   @Swagger.ApiOkResponse({ type: MessageResponse, isArray: true })
   @UseGuards(AuthenticationGuard)
   async getMessagesFromConversation(
     @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() user: KeycloakUser,
     @Query() params: GetMessagesQueryParams,
+    @Headers('Language-code') languageCode?: string,
   ) {
     const messages = await this.getMessagesFromConversationUsecase.execute({
       conversationId: id,
       limit: params.limit,
       lastMessageId: params.lastMessageId,
-      contentFilter: params.contentFilter,
+      hashtagFilter: params.hashtagFilter,
       typeFilter: params.typeFilter,
       direction: params.direction,
+      parentId: params.parentId,
     });
 
     return new Collection<MessageResponse>({
-      items: messages.map(MessageResponse.from),
+      items: messages.map((message) =>
+        MessageResponse.from(message, user.sub, languageCode),
+      ),
       totalItems: messages.length,
     });
   }
 
   @Post('generate-conversation')
-  @SerializeOptions({ groups: ['chat'] })
+  @SerializeOptions({ groups: ['read'] })
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({
     summary: 'Generate all conversations for all tandems.',

@@ -5,6 +5,10 @@ import {
     ConversationRepository,
 } from 'src/core/ports/conversation.repository';
 import {
+    HASHTAG_REPOSITORY,
+    HashtagRepository,
+} from 'src/core/ports/hastag.repository';
+import {
     MESSAGE_REPOSITORY,
     MessageRepository,
 } from 'src/core/ports/message.repository';
@@ -25,6 +29,8 @@ interface CreateMessageCommand {
     originalFilename?: string;
     mimetype?: string;
     filePath?: string;
+    type?: MessageType;
+    parentId?: string;
 }
 
 export class CreateMessageUsecase {
@@ -37,6 +43,8 @@ export class CreateMessageUsecase {
         private readonly uuidProvider: UuidProvider,
         @Inject(NOTIFICATION_SERVICE)
         private readonly notificationService: NotificationServicePort,
+        @Inject(HASHTAG_REPOSITORY)
+        private readonly hashtagRepository: HashtagRepository,
     ) {}
 
     async execute(command: CreateMessageCommand) {
@@ -66,17 +74,22 @@ export class CreateMessageUsecase {
                 console.warn('Url not found for open graph', url);
             }
         }
+        const type =
+            command.type ??
+            (openGraphResult
+                ? MessageType.Link
+                : await Message.categorizeFileType(command.mimetype));
 
         const message = new Message({
             id: this.uuidProvider.generate(),
             content: command.content,
             ownerId: command.ownerId,
             conversationId: command.conversationId,
-            type: openGraphResult
-                ? MessageType.Link
-                : await Message.categorizeFileType(command.mimetype),
+            usersLiked: [],
+            type,
             isReported: false,
             isDeleted: false,
+            numberOfReplies: 0,
             metadata: {
                 filePath: command.filePath,
                 originalFilename: command.originalFilename,
@@ -84,16 +97,48 @@ export class CreateMessageUsecase {
             },
         });
 
-        const createdMessage = await this.messageRepository.create(message);
+        const createdMessage = await this.messageRepository.create(
+            message,
+            command.parentId,
+        );
+
+        await this.extractHashtags(conversation.id, message.content);
 
         await this.conversationRepository.updateLastActivityAt(conversation.id);
 
-        this.notificationService.sendNotification(
-            message.ownerId,
-            conversation.usersIds.filter((id) => id !== message.ownerId),
-            message.content,
-        );
+        if (command.parentId) {
+            const parentMessage = await this.messageRepository.findById(
+                command.parentId,
+            );
+            if (parentMessage?.ownerId !== message.ownerId) {
+                this.notificationService.sendNotification(
+                    message.ownerId,
+                    [parentMessage.ownerId],
+                    message.content,
+                );
+            }
+        } else {
+            this.notificationService.sendNotification(
+                message.ownerId,
+                conversation.usersIds.filter((id) => id !== message.ownerId),
+                message.content,
+            );
+        }
 
         return createdMessage;
+    }
+
+    private async extractHashtags(
+        conversationId: string,
+        content: string,
+    ): Promise<void> {
+        const hashtags = content.match(/#\w+/g);
+        const allHashtags = hashtags
+            ? hashtags.map((hashtag) => hashtag.slice(1))
+            : [];
+
+        for (const hashtag of allHashtags) {
+            await this.hashtagRepository.create(conversationId, hashtag);
+        }
     }
 }

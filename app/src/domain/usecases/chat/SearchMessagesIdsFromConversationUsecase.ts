@@ -1,6 +1,6 @@
-import { HttpResponse } from '../../adapter/BaseHttpAdapter';
-import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
-import SearchMessagesIdsFromConversationUsecaseInterface from '../interfaces/chat/SearchMessagesIdsFromConversationUsecase.interface';
+import { HttpResponse } from '../../../adapter/BaseHttpAdapter';
+import { HttpAdapterInterface } from '../../../adapter/DomainHttpAdapter';
+import SearchMessagesIdsFromConversationUsecaseInterface from '../../interfaces/chat/SearchMessagesIdsFromConversationUsecase.interface';
 
 class SearchMessagesIdsFromConversationUsecase implements SearchMessagesIdsFromConversationUsecaseInterface {
     constructor(private readonly domainHttpAdapter: HttpAdapterInterface) {}

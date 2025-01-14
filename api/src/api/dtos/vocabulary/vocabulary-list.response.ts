@@ -24,9 +24,14 @@ export class VocabularyListResponse {
   @Expose({ groups: ['read'] })
   translationLanguage: LanguageResponse;
 
+  //TODO: remove this property if useless
   @Swagger.ApiProperty({ type: 'string' })
   @Expose({ groups: ['read'] })
   editorsIds: string[];
+
+  @Swagger.ApiProperty({ type: 'boolean' })
+  @Expose({ groups: ['read'] })
+  isEditable: boolean;
 
   @Swagger.ApiProperty({ type: () => LanguageResponse })
   @Expose({ groups: ['read'] })
@@ -56,12 +61,18 @@ export class VocabularyListResponse {
     Object.assign(this, partial);
   }
 
-  static from(vocabularyList: VocabularyList): VocabularyListResponse {
+  static from(
+    vocabularyList: VocabularyList,
+    profileId?: string,
+  ): VocabularyListResponse {
     return new VocabularyListResponse({
       id: vocabularyList.id,
       name: vocabularyList.name,
       symbol: vocabularyList.symbol,
-      editorsIds: vocabularyList.profiles.map((profile) => profile.id),
+      editorsIds: vocabularyList.editors.map((profile) => profile.id),
+      isEditable:
+        vocabularyList.editors.some((editor) => editor.id === profileId) ||
+        vocabularyList.creator.id === profileId,
       wordLanguage: LanguageResponse.fromLanguage(vocabularyList.wordLanguage),
       translationLanguage: LanguageResponse.fromLanguage(
         vocabularyList.translationLanguage,

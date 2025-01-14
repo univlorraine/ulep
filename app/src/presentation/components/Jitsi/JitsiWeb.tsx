@@ -41,7 +41,11 @@ const JitsiWeb = ({ jitsiUrl, language, roomName, jitsiToken, tandemPartner, lea
             return;
         }
 
-        const result = sendMessage.execute(roomName, profile.user.id, payload.message);
+        const result = sendMessage.execute({
+            conversationId: roomName,
+            senderId: profile.user.id,
+            content: payload.message,
+        });
 
         if (result instanceof Error) {
             console.error(result);

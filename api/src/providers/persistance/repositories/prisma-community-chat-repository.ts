@@ -27,15 +27,44 @@ export class PrismaCommunityChatRepository implements CommunityChatRepository {
     return communityChatMapper(result);
   }
 
+  async all(): Promise<CommunityChat[]> {
+    const result = await this.prisma.communityChat.findMany({
+      ...CommunityChatRelations,
+    });
+
+    return result.map(communityChatMapper);
+  }
+
   async findByLanguageCodes(
-    centralLanguageCode: string,
-    partnerLanguageCode: string,
+    firstLanguageCode: string,
+    secondLanguageCode: string,
   ): Promise<CommunityChat | null> {
     const result = await this.prisma.communityChat.findFirst({
       where: {
-        CentralLanguage: { code: centralLanguageCode },
-        PartnerLanguage: { code: partnerLanguageCode },
+        OR: [
+          {
+            CentralLanguage: { code: firstLanguageCode },
+            PartnerLanguage: { code: secondLanguageCode },
+          },
+          {
+            CentralLanguage: { code: secondLanguageCode },
+            PartnerLanguage: { code: firstLanguageCode },
+          },
+        ],
       },
+      ...CommunityChatRelations,
+    });
+
+    if (!result) {
+      return null;
+    }
+
+    return communityChatMapper(result);
+  }
+
+  async ofId(id: string): Promise<CommunityChat | null> {
+    const result = await this.prisma.communityChat.findUnique({
+      where: { id },
       ...CommunityChatRelations,
     });
 

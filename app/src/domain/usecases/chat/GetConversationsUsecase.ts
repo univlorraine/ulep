@@ -1,9 +1,9 @@
-import { HttpResponse } from '../../adapter/BaseHttpAdapter';
-import { HttpAdapterInterface } from '../../adapter/DomainHttpAdapter';
-import { CollectionCommand } from '../../command/CollectionCommand';
-import ConversationCommand, { conversationCommandToDomain } from '../../command/ConversationCommand';
-import Conversation from '../entities/chat/Conversation';
-import GetConversationsUsecaseInterface from '../interfaces/chat/GetConversationsUsecase.interface';
+import { HttpResponse } from '../../../adapter/BaseHttpAdapter';
+import { HttpAdapterInterface } from '../../../adapter/DomainHttpAdapter';
+import { CollectionCommand } from '../../../command/CollectionCommand';
+import ConversationCommand, { conversationCommandToDomain } from '../../../command/ConversationCommand';
+import Conversation from '../../entities/chat/Conversation';
+import GetConversationsUsecaseInterface from '../../interfaces/chat/GetConversationsUsecase.interface';
 
 class GetConversationsUsecase implements GetConversationsUsecaseInterface {
     constructor(private readonly domainHttpAdapter: HttpAdapterInterface) {}

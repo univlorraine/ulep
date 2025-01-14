@@ -8,9 +8,15 @@ interface VocabularyListLineProps {
     onSelectVocabularyList: (vocabularyList: VocabularyList) => void;
     profile: Profile;
     vocabularyList: VocabularyList;
+    isEditable?: boolean;
 }
 
-const VocabularyListLine: React.FC<VocabularyListLineProps> = ({ vocabularyList, onSelectVocabularyList, profile }) => {
+const VocabularyListLine: React.FC<VocabularyListLineProps> = ({
+    vocabularyList,
+    onSelectVocabularyList,
+    profile,
+    isEditable,
+}) => {
     const { t } = useTranslation();
 
     const isCreatorMe = profile.id === vocabularyList.creatorId;
@@ -35,7 +41,7 @@ const VocabularyListLine: React.FC<VocabularyListLineProps> = ({ vocabularyList,
                     count: vocabularyList.numberOfVocabularies,
                 })}`}</span>
 
-                {numberOfMissingPronunciation > 0 && (
+                {numberOfMissingPronunciation > 0 && isEditable && (
                     <span className={styles.pronunciation}>{`${t('vocabulary.list.missing_pronunciation', {
                         count: numberOfMissingPronunciation,
                     })}`}</span>

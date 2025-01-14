@@ -1,7 +1,7 @@
 import { IonContent, useIonToast } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Redirect, useHistory } from 'react-router';
+import { Redirect, useHistory, useLocation } from 'react-router';
 import CustomLearningGoal from '../../domain/entities/CustomLearningGoal';
 import Tandem from '../../domain/entities/Tandem';
 import { useStoreState } from '../../store/storeTypes';
@@ -20,9 +20,15 @@ import useGetLearningData from '../hooks/useGetLearningData';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../utils';
 
+interface LearningPageLocationState {
+    activityId?: string;
+}
+
 const LearningPage = () => {
     const { t } = useTranslation();
     const history = useHistory();
+    const location = useLocation<LearningPageLocationState>();
+    const activityId = location.state?.activityId;
     const [showToast] = useIonToast();
     const { width } = useWindowDimensions();
     const isHybrid = width < HYBRID_MAX_WIDTH;
@@ -45,6 +51,12 @@ const LearningPage = () => {
             setCurrentTandem(tandem);
         }
     }, [tandems, currentTandem]);
+
+    useEffect(() => {
+        if (activityId) {
+            onActivitiesContentPressedFromLearningBook(activityId);
+        }
+    }, [activityId]);
 
     const onTandemPressed = (tandem: Tandem) =>
         !isHybrid ? setDisplaySelectedTandem(tandem) : history.push('/tandem-status', { tandem });
