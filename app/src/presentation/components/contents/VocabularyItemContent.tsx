@@ -44,6 +44,7 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
     const { getVocabularyListPdf } = useConfig();
     const [showDeleteVocabularyListModal, setShowDeleteVocabularyListModal] = useState(false);
     const [search, setSearch] = useState('');
+    const isVocabularyListMine = vocabularyList.isMine(profile);
 
     const exportToPdf = async () => {
         const result = await getVocabularyListPdf.execute(vocabularyList.id);
@@ -96,17 +97,21 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
                 onBackPressed={() => goBack?.()}
                 kebabContent={(closeMenu) => (
                     <IonList lines="none">
-                        <IonItem
-                            button={true}
-                            detail={false}
-                            onClick={() => {
-                                onShareVocabularyListPressed();
-                                closeMenu();
-                            }}
-                        >
-                            <IonIcon icon={arrowRedoOutline} aria-hidden="true" />
-                            <IonLabel className={styles['popover-label']}>{t('vocabulary.pair.share_button')}</IonLabel>
-                        </IonItem>
+                        {isVocabularyListMine && (
+                            <IonItem
+                                button={true}
+                                detail={false}
+                                onClick={() => {
+                                    onShareVocabularyListPressed();
+                                    closeMenu();
+                                }}
+                            >
+                                <IonIcon icon={arrowRedoOutline} aria-hidden="true" />
+                                <IonLabel className={styles['popover-label']}>
+                                    {t('vocabulary.pair.share_button')}
+                                </IonLabel>
+                            </IonItem>
+                        )}
                         <IonItem
                             button={true}
                             detail={false}
@@ -118,28 +123,36 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
                             <IonIcon icon={downloadOutline} aria-hidden="true" />
                             <IonLabel className={styles['popover-label']}>{t('vocabulary.pair.export')}</IonLabel>
                         </IonItem>
-                        <IonItem
-                            button={true}
-                            detail={false}
-                            onClick={() => {
-                                onUpdateVocabularyList();
-                                closeMenu();
-                            }}
-                        >
-                            <IonIcon icon={pencilOutline} aria-hidden="true" />
-                            <IonLabel className={styles['popover-label']}>{t('vocabulary.list.update.title')}</IonLabel>
-                        </IonItem>
-                        <IonItem
-                            button={true}
-                            detail={false}
-                            onClick={() => {
-                                setShowDeleteVocabularyListModal(true);
-                                closeMenu();
-                            }}
-                        >
-                            <IonIcon icon={trashOutline} aria-hidden="true" />
-                            <IonLabel className={styles['popover-label']}>{t('vocabulary.list.delete.title')}</IonLabel>
-                        </IonItem>
+                        {isVocabularyListMine && (
+                            <IonItem
+                                button={true}
+                                detail={false}
+                                onClick={() => {
+                                    onUpdateVocabularyList();
+                                    closeMenu();
+                                }}
+                            >
+                                <IonIcon icon={pencilOutline} aria-hidden="true" />
+                                <IonLabel className={styles['popover-label']}>
+                                    {t('vocabulary.list.update.title')}
+                                </IonLabel>
+                            </IonItem>
+                        )}
+                        {isVocabularyListMine && (
+                            <IonItem
+                                button={true}
+                                detail={false}
+                                onClick={() => {
+                                    setShowDeleteVocabularyListModal(true);
+                                    closeMenu();
+                                }}
+                            >
+                                <IonIcon icon={trashOutline} aria-hidden="true" />
+                                <IonLabel className={styles['popover-label']}>
+                                    {t('vocabulary.list.delete.title')}
+                                </IonLabel>
+                            </IonItem>
+                        )}
                         <IonItem
                             button={true}
                             detail={false}
@@ -179,23 +192,26 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
                     />
                 )}
 
-                {!isLoading && vocabulariesWithoutPronunciation && vocabulariesWithoutPronunciation.length > 0 && (
-                    <>
-                        <div className={styles.pronunciationTitle}>
-                            <span>{t('vocabulary.pair.without_pronunciation')}</span>
-                        </div>
-                        {vocabulariesWithoutPronunciation.map((vocabulary) => (
-                            <VocabularyLine
-                                key={vocabulary.id}
-                                onVocabularyClick={onAddVocabulary}
-                                vocabulary={vocabulary}
-                            />
-                        ))}
-                        <div className={styles.pronunciationTitle}>
-                            <span>{t('vocabulary.pair.every_pronunciation')}</span>
-                        </div>
-                    </>
-                )}
+                {!isLoading &&
+                    vocabulariesWithoutPronunciation &&
+                    vocabulariesWithoutPronunciation.length > 0 &&
+                    vocabularyList.isEditable && (
+                        <>
+                            <div className={styles.pronunciationTitle}>
+                                <span>{t('vocabulary.pair.without_pronunciation')}</span>
+                            </div>
+                            {vocabulariesWithoutPronunciation.map((vocabulary) => (
+                                <VocabularyLine
+                                    key={vocabulary.id}
+                                    onVocabularyClick={onAddVocabulary}
+                                    vocabulary={vocabulary}
+                                />
+                            ))}
+                            <div className={styles.pronunciationTitle}>
+                                <span>{t('vocabulary.pair.every_pronunciation')}</span>
+                            </div>
+                        </>
+                    )}
                 {!isLoading &&
                     vocabularyPairs.length > 0 &&
                     vocabularyPairs.map((vocabulary) => (
@@ -203,13 +219,16 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
                             key={vocabulary.id}
                             onVocabularyClick={onAddVocabulary}
                             vocabulary={vocabulary}
+                            isEditable={vocabularyList.isEditable}
                         />
                     ))}
             </div>
 
-            <IonButton fill="clear" className={styles.addButton} onClick={() => onAddVocabulary()}>
-                <IonImg aria-hidden className={styles.addIcon} src={AddSvg} />
-            </IonButton>
+            {vocabularyList.isEditable && (
+                <IonButton fill="clear" className={styles.addButton} onClick={() => onAddVocabulary()}>
+                    <IonImg aria-hidden className={styles.addIcon} src={AddSvg} />
+                </IonButton>
+            )}
 
             <ConfirmModal
                 isVisible={showDeleteVocabularyListModal}

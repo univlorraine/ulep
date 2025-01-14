@@ -7,7 +7,7 @@ import { MessagePaginationDirection } from 'src/core/ports/message.repository';
 export class GetMessagesQueryParams {
     @IsString()
     @IsOptional()
-    contentFilter?: string;
+    hashtagFilter?: string;
 
     @IsString()
     @IsOptional()
@@ -30,4 +30,9 @@ export class GetMessagesQueryParams {
     @IsOptional()
     @IsEnum(MessagePaginationDirection)
     readonly direction: MessagePaginationDirection;
+
+    @Swagger.ApiProperty({ type: String, required: false })
+    @IsOptional()
+    @IsString()
+    readonly parentId: string;
 }

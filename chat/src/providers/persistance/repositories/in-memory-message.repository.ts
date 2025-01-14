@@ -1,6 +1,6 @@
 import { Collection } from '@app/common';
 import { Injectable } from '@nestjs/common';
-import { Message } from 'src/core/models/message.model';
+import { Message, MessageLike } from 'src/core/models/message.model';
 import {
     MessagePagination,
     MessageRepository,
@@ -32,6 +32,14 @@ export class InMemoryMessageRepository implements MessageRepository {
     async findById(id: string): Promise<Message | null> {
         const message = this.#messages.find((message) => message.id === id);
         return message || null;
+    }
+
+    async like(id: string, userId: string): Promise<void> {
+        return Promise.resolve();
+    }
+
+    async unlike(id: string): Promise<void> {
+        return Promise.resolve();
     }
 
     async create(message: Message): Promise<Message> {
@@ -71,6 +79,13 @@ export class InMemoryMessageRepository implements MessageRepository {
         return this.#messages.filter(
             (message) => message.conversationId === conversationId,
         );
+    }
+
+    async findResponsesByMessageId(
+        messageId: string,
+        pagination?: MessagePagination,
+    ): Promise<Message[]> {
+        return [];
     }
 
     async searchMessagesIdByConversationId(

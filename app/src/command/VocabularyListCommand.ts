@@ -12,6 +12,7 @@ interface VocabularyListCommand {
     missingPronunciationOfWords: number;
     missingPronunciationOfTranslations: number;
     numberOfVocabularies: number;
+    isEditable: boolean;
     editorsIds: string[];
 }
 
@@ -27,7 +28,8 @@ export const vocabularyListCommandToDomain = (command: VocabularyListCommand) =>
         command.creatorName,
         command.missingPronunciationOfWords,
         command.missingPronunciationOfTranslations,
-        command.numberOfVocabularies
+        command.numberOfVocabularies,
+        command.isEditable
     );
 };
 

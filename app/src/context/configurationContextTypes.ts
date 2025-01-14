@@ -19,6 +19,7 @@ import GetInitialUrlUsecaseInterface from '../domain/interfaces/AuthStandardFlow
 import GetTokenFromCodeUsecaseInterface from '../domain/interfaces/AuthStandardFlow/GetTokenFromCodeUsecase.interface';
 import CancelSessionUsecaseInterface from '../domain/interfaces/CancelSessionUsecase.interface';
 import GetConversationsUsecaseInterface from '../domain/interfaces/chat/GetConversationsUsecase.interface';
+import GetHashtagsFromConversationUsecaseInterface from '../domain/interfaces/chat/GetHashtagsFromConversationUsecase.interface';
 import GetMessagesFromConversationUsecaseInterface from '../domain/interfaces/chat/GetMessagesFromConversationUsecase.interface';
 import SearchMessagesIdsFromConversationUsecaseInterface from '../domain/interfaces/chat/SearchMessagesIdsFromConversationUsecase.interface';
 import SendMessageUsecaseInterface from '../domain/interfaces/chat/SendMessageUsecase.interface';
@@ -72,6 +73,7 @@ import UpdateAvatarUsecaseInterface from '../domain/interfaces/UpdateAvatarUseca
 import UpdateCustomLearningGoalUsecaseInterface from '../domain/interfaces/UpdateCustomLearningGoal.interface';
 import UpdateNotificationPermissionUsecaseInterface from '../domain/interfaces/UpdateNotificationPermissionUsecase.interface';
 import UpdateSessionUsecaseInterface from '../domain/interfaces/UpdateSessionUsecase.interface';
+import AddReaderToVocabularyListUsecaseInterface from '../domain/interfaces/vocabulary/AddReaderToVocabularyListUsecase.interface';
 import CreateVocabularyListUsecaseInterface from '../domain/interfaces/vocabulary/CreateVocabularyListUsecase.interface';
 import CreateVocabularyUsecaseInterface from '../domain/interfaces/vocabulary/CreateVocabularyUsecase.interface';
 import DeleteVocabularyListUsecaseInterface from '../domain/interfaces/vocabulary/DeleteVocabularyListUsecase.interface';
@@ -82,7 +84,6 @@ import GetVocabularyListPdfUsecaseInterface from '../domain/interfaces/vocabular
 import GetVocabularyListsUsecaseInterface from '../domain/interfaces/vocabulary/GetVocabularyListsUsecase.interface';
 import UpdateVocabularyListUsecaseInterface from '../domain/interfaces/vocabulary/UpdateVocabularyListUsecase.interface';
 import UpdateVocabularyUsecaseInterface from '../domain/interfaces/vocabulary/UpdateVocabularyUsecase.interface';
-
 export interface ConfigContextValueType {
     accessToken: string;
     addDevice: AddDeviceUsecaseInterface;
@@ -124,6 +125,7 @@ export interface ConfigContextValueType {
     logoUrl: string;
     notificationAdapter: NotificationAdapterInterface;
     resetPassword: ResetPasswordUsecaseInterface;
+    getHashtagsFromConversation: GetHashtagsFromConversationUsecaseInterface;
     sendMessage: SendMessageUsecaseInterface;
     searchMessagesIdsFromConversation: SearchMessagesIdsFromConversationUsecaseInterface;
     updateAvatar: UpdateAvatarUsecaseInterface;
@@ -141,6 +143,7 @@ export interface ConfigContextValueType {
     updateActivity: UpdateActivityUsecaseInterface;
     updateActivityStatus: UpdateActivityStatusUsecaseInterface;
     // Vocabulary
+    addReaderToVocabularyList: AddReaderToVocabularyListUsecaseInterface;
     createVocabulary: CreateVocabularyUsecaseInterface;
     updateVocabulary: UpdateVocabularyUsecaseInterface;
     deleteVocabulary: DeleteVocabularyUsecaseInterface;

@@ -4,6 +4,23 @@ export enum MessageType {
     Audio = 'audio',
     File = 'file',
     Link = 'link',
+    Vocabulary = 'vocabulary',
+    Activity = 'activity',
+}
+
+interface MessageLikeProps {
+    messageId: string;
+    userId: string;
+}
+
+export class MessageLike {
+    readonly messageId: string;
+    readonly userId: string;
+
+    constructor(props: MessageLikeProps) {
+        this.messageId = props.messageId;
+        this.userId = props.userId;
+    }
 }
 
 interface MessageProps {
@@ -13,10 +30,13 @@ interface MessageProps {
     isReported: boolean;
     isDeleted: boolean;
     ownerId: string;
+    usersLiked: MessageLike[];
+    numberOfReplies: number;
     type: MessageType;
     createdAt?: Date;
     updatedAt?: Date;
     metadata?: any;
+    parent?: Message;
 }
 
 export class Message {
@@ -26,10 +46,13 @@ export class Message {
     readonly isReported: boolean;
     readonly isDeleted: boolean;
     readonly ownerId: string;
+    readonly usersLiked: MessageLike[];
+    readonly numberOfReplies: number;
     readonly type: MessageType;
     readonly createdAt?: Date;
     readonly updatedAt?: Date;
     readonly metadata?: any;
+    readonly parent?: Message;
 
     constructor(props: MessageProps) {
         this.id = props.id;
@@ -39,9 +62,12 @@ export class Message {
         this.isReported = props.isReported;
         this.isDeleted = props.isDeleted;
         this.ownerId = props.ownerId;
+        this.usersLiked = props.usersLiked;
+        this.numberOfReplies = props.numberOfReplies;
         this.type = props.type;
         this.updatedAt = props.updatedAt;
         this.metadata = props.metadata;
+        this.parent = props.parent;
     }
 
     public static categorizeFileType(mimeType?: string): MessageType {

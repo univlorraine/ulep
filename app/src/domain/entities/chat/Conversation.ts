@@ -1,3 +1,4 @@
+import Language from '../Language';
 import LearningLanguage from '../LearningLanguage';
 import { UserChat } from '../User';
 import { Message } from './Message';
@@ -14,8 +15,11 @@ class Conversation {
         public readonly participants: UserChat[],
         public readonly createdAt: Date,
         public readonly lastMessage?: Message,
+        public readonly isForCommunity: boolean = false,
         public readonly isBlocked: boolean = false,
-        public readonly learningLanguages?: LearningLanguage[]
+        public readonly learningLanguages?: LearningLanguage[],
+        public readonly centralLanguage?: Language,
+        public readonly partnerLanguage?: Language
     ) {}
 
     /**

@@ -10,6 +10,7 @@ interface RecordingButtonProps {
     handleStartRecord: () => void;
     handleStopRecord: () => void;
     hideSendButton?: boolean;
+    hideRecordButton?: boolean;
     isBlocked: boolean;
 }
 
@@ -20,6 +21,7 @@ const RecordingButton = ({
     handleStopRecord,
     isBlocked,
     hideSendButton = false,
+    hideRecordButton = false,
 }: RecordingButtonProps) => {
     const { t } = useTranslation();
     const [recording, setRecording] = useState(false);
@@ -64,21 +66,23 @@ const RecordingButton = ({
             {mode !== 'send' && (
                 <div className={styles['record-container']}>
                     {recording && <div className={styles['timer']}>{time}s</div>}
-                    <IonButton
-                        id="record-button"
-                        title={t('chat.send_button.record_aria_label') as string}
-                        aria-label={t('chat.send_button.record_aria_label') as string}
-                        fill="clear"
-                        className={styles['sender-button']}
-                        disabled={isBlocked}
-                        onClick={onSendPressed}
-                        onMouseDown={startRecording}
-                        onMouseUp={stopRecording}
-                        onTouchStart={startRecording}
-                        onTouchEnd={stopRecording}
-                    >
-                        <IonIcon className={styles['recorder']} icon={RecordSvg} />
-                    </IonButton>
+                    {!hideRecordButton && (
+                        <IonButton
+                            id="record-button"
+                            title={t('chat.send_button.record_aria_label') as string}
+                            aria-label={t('chat.send_button.record_aria_label') as string}
+                            fill="clear"
+                            className={styles['sender-button']}
+                            disabled={isBlocked}
+                            onClick={onSendPressed}
+                            onMouseDown={startRecording}
+                            onMouseUp={stopRecording}
+                            onTouchStart={startRecording}
+                            onTouchEnd={stopRecording}
+                        >
+                            <IonIcon className={styles['recorder']} icon={RecordSvg} />
+                        </IonButton>
+                    )}
                 </div>
             )}
             {!hideSendButton && (

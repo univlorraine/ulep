@@ -46,7 +46,8 @@ export class InMemoryVocabularyRepository implements VocabularyRepository {
   ): Promise<VocabularyList> {
     const vocabularyList = new VocabularyList({
       ...props,
-      profiles: [],
+      editors: [],
+      readers: [],
       vocabularies: [],
       translationLanguage: null,
       wordLanguage: null,
@@ -114,6 +115,19 @@ export class InMemoryVocabularyRepository implements VocabularyRepository {
 
   async findVocabularyById(id: string): Promise<Vocabulary> {
     return this.#vocabularies.find((v) => v.id === id);
+  }
+
+  addReaderToVocabularyList(
+    vocabularyListId: string,
+    profileId: string,
+  ): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+  removeReaderFromVocabularyList(
+    vocabularyListId: string,
+    profileId: string,
+  ): Promise<void> {
+    throw new Error('Method not implemented.');
   }
 
   async updateVocabulary(props: UpdateVocabularyProps): Promise<Vocabulary> {

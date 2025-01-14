@@ -3,6 +3,10 @@ import { RessourceDoesNotExist } from 'src/core/errors';
 import { PairingMode, University } from 'src/core/models';
 import { CHAT_SERVICE } from 'src/core/ports/chat.service';
 import {
+  CommunityChatRepository,
+  COMMUNITY_CHAT_REPOSITORY,
+} from 'src/core/ports/community-chat.repository';
+import {
   CountryRepository,
   COUNTRY_REPOSITORY,
 } from 'src/core/ports/country.repository';
@@ -61,6 +65,8 @@ export class UpdateUniversityUsecase {
     private readonly profileRepository: ProfileRepository,
     @Inject(CHAT_SERVICE)
     private readonly chatService: ChatService,
+    @Inject(COMMUNITY_CHAT_REPOSITORY)
+    private readonly communityChatRepository: CommunityChatRepository,
   ) {}
 
   async execute(command: UpdateUniversityCommand) {
@@ -149,16 +155,18 @@ export class UpdateUniversityUsecase {
           profileAdmin.id,
         );
       }
-      await this.chatService.deleteConversationByContactId(
-        oldContactId,
-        chatIdsToIgnore.map((tandem) => tandem.id),
-      );
+
+      const communityChats = await this.communityChatRepository.all();
+      await this.chatService.deleteConversationByUserId(oldContactId, [
+        ...chatIdsToIgnore.map((tandem) => tandem.id),
+        ...communityChats.map((chat) => chat.id),
+      ]);
       await this.chatService.createConversations(
         usersToUpdate
           .filter((userId) => userId !== university.defaultContactId)
-        .map((userId) => ({
-          participants: [userId, university.defaultContactId],
-        })),
+          .map((userId) => ({
+            participants: [userId, university.defaultContactId],
+          })),
       );
     }
   }
