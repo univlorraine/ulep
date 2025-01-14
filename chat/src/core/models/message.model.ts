@@ -36,6 +36,7 @@ interface MessageProps {
     createdAt?: Date;
     updatedAt?: Date;
     metadata?: any;
+    parent?: Message;
 }
 
 export class Message {
@@ -51,6 +52,7 @@ export class Message {
     readonly createdAt?: Date;
     readonly updatedAt?: Date;
     readonly metadata?: any;
+    readonly parent?: Message;
 
     constructor(props: MessageProps) {
         this.id = props.id;
@@ -65,6 +67,7 @@ export class Message {
         this.type = props.type;
         this.updatedAt = props.updatedAt;
         this.metadata = props.metadata;
+        this.parent = props.parent;
     }
 
     public static categorizeFileType(mimeType?: string): MessageType {

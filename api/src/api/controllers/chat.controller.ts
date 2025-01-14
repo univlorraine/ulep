@@ -2,6 +2,7 @@ import { Collection, ModeQuery } from '@app/common';
 import {
   Controller,
   Get,
+  Headers,
   Param,
   ParseUUIDPipe,
   Post,
@@ -80,6 +81,7 @@ export class ChatController {
     @Param('id', ParseUUIDPipe) id: string,
     @CurrentUser() user: KeycloakUser,
     @Query() params: GetMessagesQueryParams,
+    @Headers('Language-code') languageCode?: string,
   ) {
     const messages = await this.getMessagesFromConversationUsecase.execute({
       conversationId: id,
@@ -92,7 +94,9 @@ export class ChatController {
     });
 
     return new Collection<MessageResponse>({
-      items: messages.map((message) => MessageResponse.from(message, user.sub)),
+      items: messages.map((message) =>
+        MessageResponse.from(message, user.sub, languageCode),
+      ),
       totalItems: messages.length,
     });
   }

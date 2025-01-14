@@ -150,6 +150,7 @@ export class GetAllConversationsFromUserIdUsecase {
             ? ({
                 ...conversation.lastMessage,
                 user: userMap.get(conversation.lastMessage.ownerId),
+                parent: undefined,
               } as MessageWithUser)
             : undefined,
           lastActivityAt: conversation.lastActivity,

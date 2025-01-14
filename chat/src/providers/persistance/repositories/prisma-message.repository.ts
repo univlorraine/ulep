@@ -131,7 +131,7 @@ export class PrismaMessageRepository implements MessageRepository {
             cursor,
             orderBy: { createdAt: 'desc' },
             ...messagesPagination,
-            ...MessagesRelations,
+            ...{ ...MessagesRelations, include: { ParentMessage: false } },
         });
 
         return messages.map(messageMapper);
@@ -157,6 +157,8 @@ export class PrismaMessageRepository implements MessageRepository {
             where['content'] = {
                 contains: hashtagFilter,
             };
+            // If we filter from hastag, we need to take reply messages
+            where['ParentMessage'] = undefined;
         }
 
         if (typeFilter) {

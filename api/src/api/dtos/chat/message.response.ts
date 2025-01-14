@@ -97,7 +97,7 @@ class MetadataMessageResponse {
     Object.assign(this, partial);
   }
 
-  static from(metadata: any): MetadataMessageResponse {
+  static from(metadata: any, languageCode?: string): MetadataMessageResponse {
     return new MetadataMessageResponse({
       originalFilename: metadata.originalFilename,
       openGraphResult: metadata.openGraphResult
@@ -109,7 +109,7 @@ class MetadataMessageResponse {
         ? VocabularyListResponse.from(metadata.vocabularyList)
         : undefined,
       activity: metadata.activity
-        ? ActivityResponse.from(metadata.activity)
+        ? ActivityResponse.from(metadata.activity, languageCode)
         : undefined,
     });
   }
@@ -152,11 +152,19 @@ export class MessageResponse {
   @Expose({ groups: ['read'] })
   numberOfReplies: number;
 
+  @Swagger.ApiProperty({ type: MessageResponse })
+  @Expose({ groups: ['read'] })
+  parent?: MessageResponse;
+
   constructor(partial: Partial<MessageResponse>) {
     Object.assign(this, partial);
   }
 
-  static from(message: MessageWithUser, userId: string): MessageResponse {
+  static from(
+    message: MessageWithUser,
+    userId: string,
+    languageCode?: string,
+  ): MessageResponse {
     return new MessageResponse({
       id: message.id,
       createdAt: message.createdAt,
@@ -165,8 +173,11 @@ export class MessageResponse {
       didLike: message.likes.some((like) => like === userId),
       user: UserChatResponse.fromDomain(message.user),
       type: message.type,
-      metadata: MetadataMessageResponse.from(message.metadata),
+      metadata: MetadataMessageResponse.from(message.metadata, languageCode),
       numberOfReplies: message.numberOfReplies,
+      parent: message.parent
+        ? MessageResponse.from(message.parent, userId)
+        : undefined,
     });
   }
 }

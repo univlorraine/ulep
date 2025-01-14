@@ -12,6 +12,7 @@ import MessageAudio from './messages/MessageAudio';
 import MessageFile from './messages/MessageFile';
 import MessageImage from './messages/MessageImage';
 import MessageLink from './messages/MessageLink';
+import MessageParent from './messages/MessageParent';
 import MessageText from './messages/MessageText';
 import MessageVocabulary from './messages/MessageVocabulary';
 
@@ -126,7 +127,7 @@ const MessageComponent: React.FC<MessageProps> = ({
         setDisplayPopover(!displayPopover);
     };
 
-    const renderMessageContent = () => {
+    const renderMessageContent = (message: Message) => {
         switch (message.type) {
             case MessageType.Text:
                 return (
@@ -199,6 +200,7 @@ const MessageComponent: React.FC<MessageProps> = ({
                     <IonText className={styles.name}>{name}</IonText>
                     <IonText className={styles.date}>{date}</IonText>
                 </div>
+                {message.parent && <MessageParent>{renderMessageContent(message.parent)}</MessageParent>}
                 <div className={styles.messageContent}>
                     {isCommunity && !isCurrentUserMessage && (
                         <ChatAvatar
@@ -207,7 +209,7 @@ const MessageComponent: React.FC<MessageProps> = ({
                             lastname={message.sender.lastname}
                         />
                     )}
-                    {renderMessageContent()}
+                    {renderMessageContent(message)}
                     {!isCurrentUserMessage && !hideContextMenu && (
                         <IonButton
                             fill="clear"

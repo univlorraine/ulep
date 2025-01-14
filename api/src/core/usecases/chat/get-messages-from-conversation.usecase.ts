@@ -81,6 +81,10 @@ export class GetMessagesFromConversationUsecase {
           allUserIds.add(message.ownerId);
         }
 
+        if (message.parent) {
+          allUserIds.add(message.parent.ownerId);
+        }
+
         if (message.type === 'vocabulary') {
           message.metadata.vocabularyList =
             await this.enrichMessageWithVocabulary(message);
@@ -89,6 +93,16 @@ export class GetMessagesFromConversationUsecase {
         if (message.type === 'activity') {
           message.metadata.activity =
             await this.enrichMessageWithActivity(message);
+        }
+
+        if (message.parent && message.parent.type === 'vocabulary') {
+          message.parent.metadata.vocabularyList =
+            await this.enrichMessageWithVocabulary(message.parent);
+        }
+
+        if (message.parent && message.parent.type === 'activity') {
+          message.parent.metadata.activity =
+            await this.enrichMessageWithActivity(message.parent);
         }
       }),
     );
@@ -118,6 +132,20 @@ export class GetMessagesFromConversationUsecase {
       (message) =>
         ({
           ...message,
+          parent: message.parent
+            ? ({
+                ...message.parent,
+                metadata: {
+                  ...message.parent.metadata,
+                  openGraphResult: message.parent.metadata?.openGraphResult,
+                  originalFilename: message.parent.metadata?.originalFilename,
+                  thumbnail: message.parent.metadata?.thumbnail,
+                  filePath: message.parent.metadata?.filePath,
+                },
+                user: userMap.get(message.parent.ownerId),
+                parent: undefined,
+              } as MessageWithUser)
+            : undefined,
           metadata: {
             ...message.metadata,
             openGraphResult: message.metadata?.openGraphResult,

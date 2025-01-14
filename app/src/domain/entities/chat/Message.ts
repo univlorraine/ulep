@@ -82,7 +82,8 @@ export class Message extends MessageWithoutSender {
         public didLike: boolean = false,
         public readonly metadata: MessageMetadata,
         public readonly numberOfReplies: number = 0,
-        public readonly parentId?: string
+        public readonly parentId?: string,
+        public readonly parent?: Message
     ) {
         super(id, content, createdAt, sender.id, type, likes, didLike, metadata, numberOfReplies);
     }
@@ -100,7 +101,8 @@ export class MessageWithConversationId extends Message {
         public didLike: boolean = false,
         public readonly metadata: any,
         public readonly numberOfReplies: number = 0,
-        public readonly parentId?: string
+        public readonly parentId?: string,
+        public readonly parent?: Message
     ) {
         super(id, content, createdAt, sender, type, likes, didLike, metadata, numberOfReplies);
     }

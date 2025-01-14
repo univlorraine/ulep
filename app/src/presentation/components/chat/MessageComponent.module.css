@@ -257,6 +257,14 @@
     text-decoration-skip-ink: none;
 }
 
+.messageParent {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    opacity: 0.5;
+}
+
 ion-popover::part(backdrop) {
     height: 100vh;
     width: 100vw;

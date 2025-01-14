@@ -8,7 +8,15 @@ const MessagesInclude = Prisma.validator<Prisma.MessageInclude>()({
     Thumbnail: true,
     MessageLikes: true,
     Replies: true,
-    ParentMessage: true,
+    ParentMessage: {
+        include: {
+            Conversation: true,
+            MediaObject: true,
+            Thumbnail: true,
+            MessageLikes: true,
+            Replies: true,
+        },
+    },
 });
 
 export const MessagesRelations = { include: MessagesInclude };
@@ -17,7 +25,7 @@ export type MessagesSnapshot = Prisma.MessageGetPayload<
     typeof MessagesRelations
 >;
 
-export const messageMapper = (snapshot: MessagesSnapshot): Message => {
+export const messageMapper = (snapshot: Partial<MessagesSnapshot>): Message => {
     return new Message({
         id: snapshot.id,
         content: snapshot.MediaObject?.id
@@ -40,6 +48,9 @@ export const messageMapper = (snapshot: MessagesSnapshot): Message => {
         ownerId: snapshot.ownerId,
         type: snapshot.type as MessageType,
         numberOfReplies: snapshot.Replies?.length ?? 0,
+        parent: snapshot.ParentMessage
+            ? messageMapper(snapshot.ParentMessage)
+            : undefined,
         metadata: {
             ...(snapshot.metadata as any),
             thumbnail: snapshot.Thumbnail?.id
