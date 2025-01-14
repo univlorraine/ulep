@@ -20,6 +20,7 @@ import { Response } from 'express';
 import { CurrentUser } from 'src/api/decorators';
 import { AuthenticationGuard } from 'src/api/guards';
 import {
+  AddReaderToVocabularyListUsecase,
   CreateVocabularyListUsecase,
   CreateVocabularyUsecase,
   DeleteAudioVocabularyUsecase,
@@ -29,6 +30,7 @@ import {
   FindAllVocabularyFromSelectedListsIdUsecase,
   FindAllVocabularyListUsecase,
   GetVocabularyListPdfUsecase,
+  RemoveReaderToVocabularyListUsecase,
   UpdateVocabularyListUsecase,
   UpdateVocabularyUsecase,
   UploadAudioVocabularyUsecase,
@@ -61,6 +63,8 @@ export class VocabularyController {
     private readonly uploadAudioVocabularyUsecase: UploadAudioVocabularyUsecase,
     private readonly deleteAudioVocabularyUsecase: DeleteAudioVocabularyUsecase,
     private readonly getVocabularyListPdfUsecase: GetVocabularyListPdfUsecase,
+    private readonly addReaderToVocabularyListUsecase: AddReaderToVocabularyListUsecase,
+    private readonly removeReaderToVocabularyListUsecase: RemoveReaderToVocabularyListUsecase,
   ) {}
 
   @Post('list')
@@ -160,7 +164,9 @@ export class VocabularyController {
     });
 
     return new Collection<VocabularyListResponse>({
-      items: vocabularyLists.map(VocabularyListResponse.from),
+      items: vocabularyLists.map((vocabularyList) =>
+        VocabularyListResponse.from(vocabularyList, id),
+      ),
       totalItems: vocabularyLists.length,
     });
   }
@@ -289,6 +295,38 @@ export class VocabularyController {
     }
 
     return VocabularyResponse.from(vocabulary);
+  }
+
+  @Put('list/:id/reader/:profileId')
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({
+    summary: 'Add a reader to a Vocabulary List ressource.',
+  })
+  @Swagger.ApiOkResponse()
+  async addReaderToVocabularyList(
+    @Param('id') id: string,
+    @Param('profileId') profileId: string,
+  ) {
+    await this.addReaderToVocabularyListUsecase.execute({
+      vocabularyListId: id,
+      profileId,
+    });
+  }
+
+  @Delete('list/:id/reader/:profileId')
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({
+    summary: 'Remove a reader from a Vocabulary List ressource.',
+  })
+  @Swagger.ApiOkResponse()
+  async removeReaderToVocabularyList(
+    @Param('id') id: string,
+    @Param('profileId') profileId: string,
+  ) {
+    await this.removeReaderToVocabularyListUsecase.execute({
+      vocabularyListId: id,
+      profileId,
+    });
   }
 
   @Delete('list/:id')

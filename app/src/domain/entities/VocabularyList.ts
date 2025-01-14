@@ -1,4 +1,5 @@
 import Language from './Language';
+import Profile from './Profile';
 
 class VocabularyList {
     constructor(
@@ -12,8 +13,13 @@ class VocabularyList {
         public readonly creatorName: string,
         public readonly missingPronunciationOfWords: number,
         public readonly missingPronunciationOfTranslations: number,
-        public readonly numberOfVocabularies: number
+        public readonly numberOfVocabularies: number,
+        public readonly isEditable: boolean
     ) {}
+
+    public isMine(profile: Profile) {
+        return this.creatorId === profile.id;
+    }
 }
 
 export default VocabularyList;

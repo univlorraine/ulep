@@ -27,7 +27,12 @@
             "noMessage": "Aucun message",
             "image": "Image",
             "audio": "Audio",
-            "file": "Fichier"
+            "file": "Fichier",
+            "vocabulary": "Liste de vocabulaire partagée",
+            "activity": "Fiche d'activité partagée"
+        },
+        "vocabulary": {
+            "added": "Liste de vocabulaire ajoutée à votre profil"
         }
     },
     "date": {
@@ -478,12 +483,26 @@
             "audios": "Audios",
             "links": "Liens"
         },
+        "replyMessageButton": "Répondre au message",
+        "goBackToConversation": "Revenir au salon",
+        "numberOfReplies": "Voir la réponse",
+        "numberOfReplies_plural": "Voir {{count}} réponses",
+        "popularHashtags": "Thématiques populaires",
         "reportMessageButton": "Signaler le message",
         "likeMessageButton": "Liker le message",
+        "unlikeMessageButton": "Déliker le message",
         "no_messages": "Aucun message",
         "no_conversations": "Aucune conversation",
         "send_image_aria_label": "Envoyer une image",
-        "send_file_aria_label": "Envoyer un fichier"
+        "send_file_aria_label": "Envoyer un fichier",
+        "send_vocabulary_list_aria_label": "Envoyer une liste de vocabulaire",
+        "vocabulary_list": {
+            "close": "Fermer",
+            "title": "Sélectionner la liste à partager"
+        },
+        "activity_list": {
+            "title": "Liste d'activité"
+        }
     },
     "connection_page": {
         "connect_title": "As-tu déjà un compte ?",

@@ -33,6 +33,8 @@ const message1 = new Message({
     isReported: false,
     isDeleted: false,
     type: MessageType.Text,
+    usersLiked: [],
+    numberOfReplies: 0,
 });
 
 const message2 = new Message({
@@ -44,6 +46,8 @@ const message2 = new Message({
     isReported: false,
     isDeleted: false,
     type: MessageType.Text,
+    usersLiked: [],
+    numberOfReplies: 0,
 });
 
 const message3 = new Message({
@@ -55,6 +59,8 @@ const message3 = new Message({
     isReported: false,
     isDeleted: false,
     type: MessageType.Text,
+    usersLiked: [],
+    numberOfReplies: 0,
 });
 
 describe('GetConversationFromUserIdUsecase', () => {
@@ -78,7 +84,7 @@ describe('GetConversationFromUserIdUsecase', () => {
         const messages1 = await getMessagesFromConversationIdUsecase.execute({
             id: tandemId1,
             pagination: undefined,
-            contentFilter: undefined,
+            hashtagFilter: undefined,
             typeFilter: undefined,
         });
         expect(messages1).toHaveLength(2);
@@ -86,7 +92,7 @@ describe('GetConversationFromUserIdUsecase', () => {
         const messages2 = await getMessagesFromConversationIdUsecase.execute({
             id: tandemId2,
             pagination: undefined,
-            contentFilter: undefined,
+            hashtagFilter: undefined,
             typeFilter: undefined,
         });
         expect(messages2).toHaveLength(1);

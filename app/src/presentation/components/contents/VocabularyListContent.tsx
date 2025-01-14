@@ -56,6 +56,7 @@ const VocabularyListContent: React.FC<VocabularyListContentProps> = ({
                             profile={profile}
                             vocabularyList={vocabularyList}
                             onSelectVocabularyList={onSelectVocabularyList}
+                            isEditable={vocabularyList.isEditable}
                         />
                     ))}
 

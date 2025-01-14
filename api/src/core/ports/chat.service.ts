@@ -33,7 +33,10 @@ export interface Message {
   createdAt: Date;
   ownerId: string;
   type: string;
+  likes: string[];
   metadata: any;
+  numberOfReplies: number;
+  parent?: Message;
 }
 
 export interface MessageWithUser {
@@ -42,7 +45,10 @@ export interface MessageWithUser {
   createdAt: Date;
   user: User | UserRepresentation;
   type: string;
+  likes: string[];
   metadata: any;
+  numberOfReplies: number;
+  parent?: MessageWithUser;
 }
 
 export enum ChatPaginationDirection {
@@ -63,9 +69,10 @@ export interface ChatServicePort {
     conversationId: string,
     limit: number,
     lastMessageId?: string,
-    contentFilter?: string,
+    hashtagFilter?: string,
     typeFilter?: string,
     direction?: ChatPaginationDirection,
+    parentId?: string,
   ): Promise<Collection<Message>>;
   createConversation(
     users: string[],

@@ -3,16 +3,20 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Profile } from 'src/core/models';
 import { CHAT_SERVICE } from 'src/core/ports/chat.service';
 import {
-  CONTACT_REPOSITORY,
+  CommunityChatRepository,
+  COMMUNITY_CHAT_REPOSITORY,
+} from 'src/core/ports/community-chat.repository';
+import {
   ContactRepository,
+  CONTACT_REPOSITORY,
 } from 'src/core/ports/contact.repository';
 import {
-  PROFILE_REPOSITORY,
   ProfileRepository,
+  PROFILE_REPOSITORY,
 } from 'src/core/ports/profile.repository';
 import {
-  TANDEM_REPOSITORY,
   TandemRepository,
+  TANDEM_REPOSITORY,
 } from 'src/core/ports/tandem.repository';
 import { ChatService } from 'src/providers/services/chat.service';
 
@@ -31,6 +35,8 @@ export class DeleteAdministratorUsecase {
     private readonly chatService: ChatService,
     @Inject(TANDEM_REPOSITORY)
     private readonly tandemRepository: TandemRepository,
+    @Inject(COMMUNITY_CHAT_REPOSITORY)
+    private readonly communityChatRepository: CommunityChatRepository,
     private readonly keycloak: KeycloakClient,
   ) {}
 
@@ -46,9 +52,12 @@ export class DeleteAdministratorUsecase {
       chatIdsToIgnore = await this.getTandemFromProfile(profile);
     }
 
-    await this.chatService.deleteConversationByContactId(
+    const communityChats = await this.communityChatRepository.all();
+
+    await this.chatService.deleteConversationByUserId(
       command.id,
       chatIdsToIgnore,
+      communityChats.map((chat) => chat.id),
     );
 
     await this.keycloak.removeRealmRoleToUser(

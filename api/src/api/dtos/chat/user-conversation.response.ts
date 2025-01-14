@@ -6,27 +6,27 @@ import { User } from 'src/core/models';
 
 export class UserChatResponse {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
-  @Expose({ groups: ['chat'] })
+  @Expose({ groups: ['read'] })
   id: string;
 
   @Swagger.ApiProperty({ type: 'string', format: 'email' })
-  @Expose({ groups: ['chat'] })
+  @Expose({ groups: ['read'] })
   email: string;
 
   @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['chat'] })
+  @Expose({ groups: ['read'] })
   firstname: string;
 
   @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['chat'] })
+  @Expose({ groups: ['read'] })
   lastname: string;
 
   @Swagger.ApiProperty({ type: 'boolean' })
-  @Expose({ groups: ['chat'] })
+  @Expose({ groups: ['read'] })
   isAdministrator: boolean;
 
   @Swagger.ApiPropertyOptional({ type: () => MediaObjectResponse })
-  @Expose({ groups: ['chat'] })
+  @Expose({ groups: ['read'] })
   avatar?: MediaObjectResponse;
 
   constructor(partial: Partial<UserChatResponse>) {
