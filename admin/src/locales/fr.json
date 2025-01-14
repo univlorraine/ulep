@@ -76,7 +76,8 @@
         },
         "error": {
             "update": "Une erreur est survenue pendant la mise à jour de l'activité",
-            "create": "Une erreur est survenue pendant la création de l'activité"
+            "create": "Une erreur est survenue pendant la création de l'activité",
+            "alreadyPublished": "Vous ne pouvez pas mettre à jour une activité déjà publiée"
         }
     },
     "activities_categories": {
