@@ -9,13 +9,14 @@ import {
     IonPopover,
     useIonToast,
 } from '@ionic/react';
-import { imageOutline, searchOutline, videocam } from 'ionicons/icons';
+import { arrowBackOutline, imageOutline, searchOutline, videocam } from 'ionicons/icons';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
 import { KebabSvg, LeftChevronSvg } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
 import { useSocket } from '../../../context/SocketContext';
+import { Activity } from '../../../domain/entities/Activity';
 import Conversation, { MessagePaginationDirection } from '../../../domain/entities/chat/Conversation';
 import Profile from '../../../domain/entities/Profile';
 import VocabularyList from '../../../domain/entities/VocabularyList';
@@ -23,6 +24,7 @@ import { useStoreState } from '../../../store/storeTypes';
 import useHandleMessagesFromConversation from '../../hooks/useHandleMessagesFromConversation';
 import ChatInputSender from '../chat/ChatInputSender';
 import ConversationSearchBar from '../chat/ConversationSearchBar';
+import MessageComponent from '../chat/MessageComponent';
 import MessagesList from '../chat/MessagesList';
 import Loader from '../Loader';
 import styles from './ChatContent.module.css';
@@ -47,12 +49,13 @@ const Content: React.FC<ChatContentProps> = ({
     const { t } = useTranslation();
     const { socket } = useSocket();
     const [showToast] = useIonToast();
-    const { getVocabularyLists, recorderAdapter, refreshTokensUsecase } = useConfig();
+    const { getVocabularyLists, getActivities, recorderAdapter, refreshTokensUsecase } = useConfig();
     const isBlocked = conversation.isBlocked;
     const [showMenu, setShowMenu] = useState(false);
     const [currentMessageSearchId, setCurrentMessageSearchId] = useState<string>();
     const [isSearchMode, setIsSearchMode] = useState<boolean>(false);
     const [vocabularyLists, setVocabularyLists] = useState<VocabularyList[]>([]);
+    const [activities, setActivities] = useState<Activity[]>([]);
     const history = useHistory();
     const accessToken = useStoreState((state) => state.accessToken);
     const isCommunity = conversation.isForCommunity;
@@ -81,13 +84,16 @@ const Content: React.FC<ChatContentProps> = ({
         isScrollForwardOver,
         isScrollBackwardOver,
         isLoading,
-        loadMessages,
+        onLoadMessages,
         addNewMessage,
         clearMessages,
         onLikeMessage,
         onUnlikeMessage,
         onLikeMessageReceived,
         onUnlikeMessageReceived,
+        onReplyToMessage,
+        onCancelReply,
+        messageToReply,
     } = useHandleMessagesFromConversation({
         conversationId: conversation.id,
         learningLanguageId: findLearningLanguageConversation()?.id,
@@ -103,12 +109,12 @@ const Content: React.FC<ChatContentProps> = ({
     const unsetSearchMode = () => {
         setIsSearchMode(false);
         setCurrentMessageSearchId(undefined);
-        loadMessages(true, MessagePaginationDirection.FORWARD);
+        onLoadMessages(true, MessagePaginationDirection.FORWARD);
     };
 
     const loadMessageFromSearch = (messageId: string) => {
         setCurrentMessageSearchId(messageId);
-        loadMessages(true, MessagePaginationDirection.BOTH, messageId);
+        onLoadMessages(true, MessagePaginationDirection.BOTH, messageId);
     };
 
     const onOpenVideoCall = () => {
@@ -142,7 +148,7 @@ const Content: React.FC<ChatContentProps> = ({
                 if (!socket.isConnected()) {
                     refreshTokens();
                     socket.connect(accessToken);
-                    await loadMessages(true);
+                    await onLoadMessages(true);
                 } else {
                     clearInterval(disconnectInterval);
                 }
@@ -168,13 +174,35 @@ const Content: React.FC<ChatContentProps> = ({
         }
     };
 
+    const getAllActivities = async () => {
+        const learningLanguage = findLearningLanguageCommunityConversation();
+        if (!learningLanguage || !conversation.centralLanguage || !conversation.partnerLanguage) {
+            return;
+        }
+
+        const result = await getActivities.execute({
+            language: [conversation.centralLanguage, conversation.partnerLanguage],
+            shouldTakeAllMine: true,
+            page: 1,
+            proficiency: [],
+            activityTheme: [],
+        });
+        if (result instanceof Error) {
+            showToast(result.message, 3000);
+        } else {
+            setActivities(result);
+        }
+    };
+
     useEffect(() => {
         if (conversation.isForCommunity) {
             getAllVocabularyLists();
+            getAllActivities();
         }
 
         return () => {
             setVocabularyLists([]);
+            setActivities([]);
         };
     }, [conversation.id, profile.id]);
 
@@ -263,18 +291,36 @@ const Content: React.FC<ChatContentProps> = ({
                     clearSearch={unsetSearchMode}
                 />
             )}
+            {messageToReply && (
+                <div className={styles.replyHeader}>
+                    <IonButton fill="clear" onClick={onCancelReply} className={styles.replyHeaderButton}>
+                        <IonIcon color="black" icon={arrowBackOutline} />
+                        <span className={styles.replyHeaderText}>{t('chat.goBackToConversation')}</span>
+                    </IonButton>
+                    <MessageComponent
+                        message={messageToReply}
+                        isCurrentUserMessage={messageToReply.isMine(profile.user.id)}
+                        isCommunity
+                        isInReply
+                        hideContextMenu
+                    />
+                </div>
+            )}
             {!isLoading ? (
                 <MessagesList
                     currentMessageSearchId={currentMessageSearchId}
                     messages={messages}
-                    loadMessages={(direction) => loadMessages(false, direction)}
+                    loadMessages={(direction) => onLoadMessages(false, direction)}
                     onLikeMessage={onLikeMessage}
                     onUnlikeMessage={onUnlikeMessage}
+                    onReplyToMessage={onReplyToMessage}
                     userId={profile.user.id}
                     isScrollForwardOver={isScrollForwardOver}
                     isScrollBackwardOver={isScrollBackwardOver}
                     setImageToDisplay={setImageToDisplay}
                     isCommunity={isCommunity}
+                    messageToReply={messageToReply}
+                    onCancelReply={onCancelReply}
                 />
             ) : (
                 <div className={styles.loader}>
@@ -288,6 +334,7 @@ const Content: React.FC<ChatContentProps> = ({
                     conversation={conversation}
                     handleSendMessage={handleSendMessage}
                     vocabularyLists={vocabularyLists}
+                    activities={activities}
                     profile={profile}
                 />
             )}

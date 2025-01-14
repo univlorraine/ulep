@@ -30,4 +30,9 @@ export class GetMessagesQueryParams {
     @IsOptional()
     @IsEnum(MessagePaginationDirection)
     readonly direction: MessagePaginationDirection;
+
+    @Swagger.ApiProperty({ type: String, required: false })
+    @IsOptional()
+    @IsString()
+    readonly parentId: string;
 }

@@ -7,6 +7,7 @@ export interface SendMessageUsecasePayload {
     file?: File;
     filename?: string;
     type?: MessageType;
+    parentId?: string;
 }
 
 interface SendMessageUsecaseInterface {

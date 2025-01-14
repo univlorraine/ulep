@@ -5,6 +5,7 @@ export enum MessageType {
     File = 'file',
     Link = 'link',
     Vocabulary = 'vocabulary',
+    Activity = 'activity',
 }
 
 interface MessageLikeProps {
@@ -30,6 +31,7 @@ interface MessageProps {
     isDeleted: boolean;
     ownerId: string;
     usersLiked: MessageLike[];
+    numberOfReplies: number;
     type: MessageType;
     createdAt?: Date;
     updatedAt?: Date;
@@ -44,6 +46,7 @@ export class Message {
     readonly isDeleted: boolean;
     readonly ownerId: string;
     readonly usersLiked: MessageLike[];
+    readonly numberOfReplies: number;
     readonly type: MessageType;
     readonly createdAt?: Date;
     readonly updatedAt?: Date;
@@ -58,6 +61,7 @@ export class Message {
         this.isDeleted = props.isDeleted;
         this.ownerId = props.ownerId;
         this.usersLiked = props.usersLiked;
+        this.numberOfReplies = props.numberOfReplies;
         this.type = props.type;
         this.updatedAt = props.updatedAt;
         this.metadata = props.metadata;

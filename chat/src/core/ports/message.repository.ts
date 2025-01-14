@@ -15,13 +15,17 @@ export type MessagePagination = {
 };
 
 export interface MessageRepository {
-    create: (message: Message) => Promise<Message>;
+    create: (message: Message, parentId?: string) => Promise<Message>;
     findById: (id: string) => Promise<Message | null>;
     findMessagesByConversationId: (
         id: string,
         pagination?: MessagePagination,
         contentFilter?: string,
         typeFilter?: MessageType,
+    ) => Promise<Message[]>;
+    findResponsesByMessageId: (
+        messageId: string,
+        pagination?: MessagePagination,
     ) => Promise<Message[]>;
     searchMessagesIdByConversationId: (
         id: string,

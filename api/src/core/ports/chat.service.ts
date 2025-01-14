@@ -35,6 +35,7 @@ export interface Message {
   type: string;
   likes: string[];
   metadata: any;
+  numberOfReplies: number;
 }
 
 export interface MessageWithUser {
@@ -45,6 +46,7 @@ export interface MessageWithUser {
   type: string;
   likes: string[];
   metadata: any;
+  numberOfReplies: number;
 }
 
 export enum ChatPaginationDirection {
@@ -68,6 +70,7 @@ export interface ChatServicePort {
     contentFilter?: string,
     typeFilter?: string,
     direction?: ChatPaginationDirection,
+    parentId?: string,
   ): Promise<Collection<Message>>;
   createConversation(
     users: string[],

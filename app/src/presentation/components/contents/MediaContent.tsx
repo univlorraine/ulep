@@ -2,12 +2,12 @@ import { IonButton, IonIcon, IonItem, IonLabel, IonList, IonPage } from '@ionic/
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LeftChevronSvg } from '../../../assets';
-import Profile from '../../../domain/entities/Profile';
 import Conversation from '../../../domain/entities/chat/Conversation';
 import { MessageType } from '../../../domain/entities/chat/Message';
+import Profile from '../../../domain/entities/Profile';
 import useHandleMessagesFromConversation from '../../hooks/useHandleMessagesFromConversation';
-import Loader from '../Loader';
 import MediasList from '../chat/MediasList';
+import Loader from '../Loader';
 import styles from './MediaContent.module.css';
 
 interface MediaContentProps {
@@ -26,7 +26,7 @@ const Content: React.FC<Omit<MediaContentProps, 'isHybrid'>> = ({
 }) => {
     const { t } = useTranslation();
     const [selectedFilter, setSelectedFilter] = useState<MessageType>(MessageType.Image);
-    const { messages, isScrollForwardOver, isLoading, loadMessages } = useHandleMessagesFromConversation({
+    const { messages, isScrollForwardOver, isLoading, onLoadMessages } = useHandleMessagesFromConversation({
         conversationId: conversation.id,
         typeFilter: selectedFilter,
         limit: 30,
@@ -103,7 +103,7 @@ const Content: React.FC<Omit<MediaContentProps, 'isHybrid'>> = ({
             ) : (
                 <MediasList
                     messages={messages}
-                    loadMessages={loadMessages}
+                    loadMessages={onLoadMessages}
                     isScrollOver={isScrollForwardOver}
                     selectedFilter={selectedFilter}
                     setImageToDisplay={setImageToDisplay}

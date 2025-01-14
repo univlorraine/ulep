@@ -1,16 +1,17 @@
 import * as Swagger from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
+import { ActivityResponse } from 'src/api/dtos/activity';
 import { UserChatResponse } from 'src/api/dtos/chat/user-conversation.response';
 import { VocabularyListResponse } from 'src/api/dtos/vocabulary/vocabulary-list.response';
 import { MessageWithUser } from 'src/core/ports/chat.service';
 
 class OGImageResponse {
   @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['chat', 'read'] })
+  @Expose({ groups: ['read'] })
   url: string;
 
   @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['chat', 'read'] })
+  @Expose({ groups: ['read'] })
   type: string;
 
   constructor(partial: Partial<OGImageResponse>) {
@@ -26,27 +27,27 @@ class OGImageResponse {
 }
 export class OGResponse {
   @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['chat', 'read'] })
+  @Expose({ groups: ['read'] })
   ogSiteName?: string;
 
   @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['chat', 'read'] })
+  @Expose({ groups: ['read'] })
   ogUrl?: string;
 
   @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['chat', 'read'] })
+  @Expose({ groups: ['read'] })
   ogLocale?: string;
 
   @Swagger.ApiProperty({ type: 'array' })
-  @Expose({ groups: ['chat', 'read'] })
+  @Expose({ groups: ['read'] })
   ogImage?: OGImageResponse[];
 
   @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['chat', 'read'] })
+  @Expose({ groups: ['read'] })
   ogTitle?: string;
 
   @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['chat', 'read'] })
+  @Expose({ groups: ['read'] })
   ogDescription?: string;
 
   constructor(partial: Partial<OGResponse>) {
@@ -69,24 +70,28 @@ export class OGResponse {
 }
 class MetadataMessageResponse {
   @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['chat'] })
+  @Expose({ groups: ['read'] })
   originalFilename?: string;
 
   @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['chat'] })
+  @Expose({ groups: ['read'] })
   openGraphResult?: OGResponse;
 
   @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['chat'] })
+  @Expose({ groups: ['read'] })
   thumbnail?: string;
 
   @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['chat'] })
+  @Expose({ groups: ['read'] })
   filePath?: string;
 
   @Swagger.ApiProperty({ type: 'object' })
-  @Expose({ groups: ['chat'] })
+  @Expose({ groups: ['read'] })
   vocabularyList?: VocabularyListResponse;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @Expose({ groups: ['read'] })
+  activity?: ActivityResponse;
 
   constructor(partial: Partial<MetadataMessageResponse>) {
     Object.assign(this, partial);
@@ -103,42 +108,49 @@ class MetadataMessageResponse {
       vocabularyList: metadata.vocabularyList
         ? VocabularyListResponse.from(metadata.vocabularyList)
         : undefined,
+      activity: metadata.activity
+        ? ActivityResponse.from(metadata.activity)
+        : undefined,
     });
   }
 }
 
 export class MessageResponse {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
-  @Expose({ groups: ['chat'] })
+  @Expose({ groups: ['read'] })
   id: string;
 
   @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['chat'] })
+  @Expose({ groups: ['read'] })
   content: string;
 
   @Swagger.ApiProperty({ type: UserChatResponse })
-  @Expose({ groups: ['chat'] })
+  @Expose({ groups: ['read'] })
   user: UserChatResponse;
 
   @Swagger.ApiProperty({ type: 'string', format: 'date-time' })
-  @Expose({ groups: ['chat'] })
+  @Expose({ groups: ['read'] })
   createdAt: Date;
 
   @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['chat'] })
+  @Expose({ groups: ['read'] })
   type: string;
 
   @Swagger.ApiProperty({ type: 'number' })
-  @Expose({ groups: ['chat'] })
+  @Expose({ groups: ['read'] })
   likes: number;
 
   @Swagger.ApiProperty({ type: 'boolean' })
-  @Expose({ groups: ['chat'] })
+  @Expose({ groups: ['read'] })
   didLike: boolean;
 
   @Swagger.ApiProperty({ type: 'object' })
-  @Expose({ groups: ['chat'] })
+  @Expose({ groups: ['read'] })
   metadata: MetadataMessageResponse;
+
+  @Swagger.ApiProperty({ type: 'number' })
+  @Expose({ groups: ['read'] })
+  numberOfReplies: number;
 
   constructor(partial: Partial<MessageResponse>) {
     Object.assign(this, partial);
@@ -154,6 +166,7 @@ export class MessageResponse {
       user: UserChatResponse.fromDomain(message.user),
       type: message.type,
       metadata: MetadataMessageResponse.from(message.metadata),
+      numberOfReplies: message.numberOfReplies,
     });
   }
 }

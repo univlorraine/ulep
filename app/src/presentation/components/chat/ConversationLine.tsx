@@ -66,6 +66,8 @@ const getPreviewMessage = (userId: string, translate: (key: string) => string, m
             return translate('message.type.file');
         case MessageType.Vocabulary:
             return translate('message.type.vocabulary');
+        case MessageType.Activity:
+            return translate('message.type.activity');
         default:
             if (message.isMine(userId)) {
                 return message.content;

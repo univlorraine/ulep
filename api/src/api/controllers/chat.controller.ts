@@ -72,7 +72,7 @@ export class ChatController {
   }
 
   @Get('messages/:id')
-  @SerializeOptions({ groups: ['chat'] })
+  @SerializeOptions({ groups: ['read'] })
   @Swagger.ApiOperation({ summary: 'Get messages from a conversation.' })
   @Swagger.ApiOkResponse({ type: MessageResponse, isArray: true })
   @UseGuards(AuthenticationGuard)
@@ -88,6 +88,7 @@ export class ChatController {
       contentFilter: params.contentFilter,
       typeFilter: params.typeFilter,
       direction: params.direction,
+      parentId: params.parentId,
     });
 
     return new Collection<MessageResponse>({
@@ -97,7 +98,7 @@ export class ChatController {
   }
 
   @Post('generate-conversation')
-  @SerializeOptions({ groups: ['chat'] })
+  @SerializeOptions({ groups: ['read'] })
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({
     summary: 'Generate all conversations for all tandems.',

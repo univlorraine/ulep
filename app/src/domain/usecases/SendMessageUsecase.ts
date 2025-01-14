@@ -12,6 +12,7 @@ type MessagePayload = {
     file?: File;
     filename?: string;
     type?: MessageType;
+    parentId?: string;
 };
 
 class SendMessageUsecase implements SendMessageUsecaseInterface {
@@ -34,6 +35,10 @@ class SendMessageUsecase implements SendMessageUsecaseInterface {
 
             if (payload.type) {
                 body.type = payload.type;
+            }
+
+            if (payload.parentId) {
+                body.parentId = payload.parentId;
             }
 
             const httpResponse: HttpResponse<MessageWithoutSenderCommand> = await this.chatHttpAdapter.post(

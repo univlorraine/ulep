@@ -1,5 +1,5 @@
 import { IonAvatar, IonButton, IonIcon, IonPopover, IonText, useIonToast } from '@ionic/react';
-import { alertCircleOutline, thumbsUpOutline } from 'ionicons/icons';
+import { alertCircleOutline, arrowUndoOutline, thumbsUpOutline } from 'ionicons/icons';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { KebabSvg } from '../../../assets';
@@ -7,6 +7,7 @@ import { useConfig } from '../../../context/ConfigurationContext';
 import { Message, MessageType } from '../../../domain/entities/chat/Message';
 import NetworkImage from '../NetworkImage';
 import styles from './MessageComponent.module.css';
+import MessageActivity from './messages/MessageActivity';
 import MessageAudio from './messages/MessageAudio';
 import MessageFile from './messages/MessageFile';
 import MessageImage from './messages/MessageImage';
@@ -40,21 +41,27 @@ export interface MessageProps {
     isCurrentUserMessage: boolean;
     isCommunity: boolean;
     message: Message;
+    isInReply?: boolean;
+    hideContextMenu?: boolean;
     currentMessageSearchId?: string;
     onMessagePressed?: (e: React.MouseEvent<HTMLIonButtonElement>) => void;
     onLikeMessage?: (messageId: string) => void;
     onUnlikeMessage?: (messageId: string) => void;
     setImageToDisplay?: (imageUrl: string) => void;
+    onReplyToMessage?: (message: Message) => void;
 }
 
 const MessageComponent: React.FC<MessageProps> = ({
     message,
     isCurrentUserMessage,
     isCommunity,
+    isInReply,
+    hideContextMenu,
     currentMessageSearchId,
     setImageToDisplay,
     onLikeMessage,
     onUnlikeMessage,
+    onReplyToMessage,
 }) => {
     const { t } = useTranslation();
     const { createReportMessage } = useConfig();
@@ -104,6 +111,11 @@ const MessageComponent: React.FC<MessageProps> = ({
         } else {
             onLikeMessage?.(message.id);
         }
+        setDisplayPopover(false);
+    };
+
+    const replyToMessage = () => {
+        onReplyToMessage?.(message);
         setDisplayPopover(false);
     };
 
@@ -167,6 +179,14 @@ const MessageComponent: React.FC<MessageProps> = ({
                         isCommunity={isCommunity}
                     />
                 );
+            case MessageType.Activity:
+                return (
+                    <MessageActivity
+                        message={message}
+                        isCurrentUserMessage={isCurrentUserMessage}
+                        isCommunity={isCommunity}
+                    />
+                );
             default:
                 return null;
         }
@@ -188,7 +208,7 @@ const MessageComponent: React.FC<MessageProps> = ({
                         />
                     )}
                     {renderMessageContent()}
-                    {!isCurrentUserMessage && (
+                    {!isCurrentUserMessage && !hideContextMenu && (
                         <IonButton
                             fill="clear"
                             className={styles.rightMessageMenu}
@@ -199,6 +219,20 @@ const MessageComponent: React.FC<MessageProps> = ({
                         </IonButton>
                     )}
                 </div>
+                {!isInReply && message.numberOfReplies > 0 && (
+                    <IonButton
+                        fill="clear"
+                        className={`${styles.reply} ${isCurrentUserMessage ? styles.rightReply : styles.leftReply} ${
+                            message.likes > 0 ? styles.replyWithLike : styles.replyWithoutLike
+                        }`}
+                        size="small"
+                        onClick={() => onReplyToMessage?.(message)}
+                    >
+                        {t(message.numberOfReplies > 1 ? 'chat.numberOfReplies_plural' : 'chat.numberOfReplies', {
+                            count: message.numberOfReplies,
+                        })}
+                    </IonButton>
+                )}
             </div>
             <IonPopover
                 event={popoverEvent}
@@ -217,6 +251,12 @@ const MessageComponent: React.FC<MessageProps> = ({
                         <IonText className={styles.contextButtonText}>
                             {message.didLike ? t('chat.unlikeMessageButton') : t('chat.likeMessageButton')}
                         </IonText>
+                    </IonButton>
+                )}
+                {isCommunity && !isInReply && (
+                    <IonButton fill="clear" className={styles.contextButton} onClick={replyToMessage}>
+                        <IonIcon icon={arrowUndoOutline} className={styles.contextButtonIcon} />
+                        <IonText className={styles.contextButtonText}>{t('chat.replyMessageButton')}</IonText>
                     </IonButton>
                 )}
                 <IonButton fill="clear" className={styles.contextButton} onClick={reportMessage}>

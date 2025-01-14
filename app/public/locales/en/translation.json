@@ -28,7 +28,8 @@
             "image": "Image",
             "audio": "Audio",
             "file": "File",
-            "vocabulary": "Shared vocabulary list"
+            "vocabulary": "Shared vocabulary list",
+            "activity": "Shared activity"
         },
         "vocabulary": {
             "added": "Vocabulary list added to your profile"
@@ -450,6 +451,10 @@
             "audios": "Audios",
             "links": "Links"
         },
+        "replyMessageButton": "Reply to message",
+        "goBackToConversation": "Revenir au salon",
+        "numberOfReplies": "See reply",
+        "numberOfReplies_plural": "See {{count}} replies",
         "reportMessageButton": "Report message",
         "likeMessageButton": "Like message",
         "unlikeMessageButton": "Unlike message",

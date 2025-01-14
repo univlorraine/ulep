@@ -2,6 +2,10 @@ import { KeycloakClient, UserRepresentation } from '@app/keycloak';
 import { Inject, Injectable } from '@nestjs/common';
 import { User } from 'src/core/models';
 import {
+  ActivityRepository,
+  ACTIVITY_REPOSITORY,
+} from 'src/core/ports/activity.repository';
+import {
   ChatPaginationDirection,
   ChatServicePort,
   CHAT_SERVICE,
@@ -24,6 +28,7 @@ export class GetMessagesFromConversationCommand {
   contentFilter?: string;
   typeFilter?: string;
   direction?: ChatPaginationDirection;
+  parentId?: string;
 }
 
 @Injectable()
@@ -35,6 +40,8 @@ export class GetMessagesFromConversationUsecase {
     private readonly userRepository: UserRepository,
     @Inject(VOCABULARY_REPOSITORY)
     private readonly vocabularyRepository: VocabularyRepository,
+    @Inject(ACTIVITY_REPOSITORY)
+    private readonly activityRepository: ActivityRepository,
     private readonly keycloakClient: KeycloakClient,
   ) {}
 
@@ -47,6 +54,7 @@ export class GetMessagesFromConversationUsecase {
         command.contentFilter,
         command.typeFilter,
         command.direction,
+        command.parentId,
       );
 
     if (
@@ -76,6 +84,11 @@ export class GetMessagesFromConversationUsecase {
         if (message.type === 'vocabulary') {
           message.metadata.vocabularyList =
             await this.enrichMessageWithVocabulary(message);
+        }
+
+        if (message.type === 'activity') {
+          message.metadata.activity =
+            await this.enrichMessageWithActivity(message);
         }
       }),
     );
@@ -124,5 +137,11 @@ export class GetMessagesFromConversationUsecase {
       await this.vocabularyRepository.findVocabularyListById(message.content);
 
     return vocabularyList;
+  }
+
+  private async enrichMessageWithActivity(message: Message) {
+    const activity = await this.activityRepository.ofId(message.content);
+
+    return activity;
   }
 }
