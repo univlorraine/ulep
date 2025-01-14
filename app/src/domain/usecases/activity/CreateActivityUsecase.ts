@@ -1,6 +1,7 @@
 import { HttpResponse } from '../../../adapter/BaseHttpAdapter';
 import { HttpAdapterInterface } from '../../../adapter/DomainHttpAdapter';
 import { ActivityCommand, activityCommandToDomain } from '../../../command/ActivityCommand';
+import { normalizeString } from '../../../presentation/utils';
 import { Activity } from '../../entities/Activity';
 import CreateActivityUsecaseInterface, {
     CreateActivityCommand,
@@ -40,7 +41,9 @@ class CreateActivityUsecase implements CreateActivityUsecaseInterface {
             };
             command.vocabularies.forEach((vocabulary) => {
                 if (vocabulary.file) {
-                    const newFile = new File([vocabulary.file], `${vocabulary.content}.wav`, {
+                    const vocabularyNormalized = normalizeString(vocabulary.content);
+                    const newFileName = `${vocabularyNormalized}.wav`;
+                    const newFile = new File([vocabulary.file], newFileName, {
                         type: vocabulary.file.type,
                     });
                     formData.vocabulariesFiles.push(newFile);
