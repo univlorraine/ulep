@@ -16,7 +16,7 @@ export type CreateVocabularyListProps = {
 };
 
 export type CreateVocabularyProps = {
-  translation: string;
+  translation?: string;
   vocabularyListId: string;
   word: string;
 };

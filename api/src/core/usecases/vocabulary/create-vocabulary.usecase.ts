@@ -8,7 +8,7 @@ import {
 import { CreateOrUpdateLogEntryUsecase } from 'src/core/usecases/log-entry';
 
 export class CreateVocabularyCommand {
-  translation: string;
+  translation?: string;
   vocabularyListId: string;
   ownerId: string;
   word: string;

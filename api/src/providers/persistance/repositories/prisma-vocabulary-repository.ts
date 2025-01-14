@@ -22,16 +22,22 @@ export class PrismaVocabularyRepository implements VocabularyRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async createVocabulary(props: CreateVocabularyProps): Promise<Vocabulary> {
-    const vocabulary = await this.prisma.vocabulary.create({
-      data: {
-        word: props.word,
-        translation: props.translation,
-        VocabularyList: {
-          connect: {
-            id: props.vocabularyListId,
-          },
+    const data = {
+      word: props.word,
+      translation: props.translation,
+      VocabularyList: {
+        connect: {
+          id: props.vocabularyListId,
         },
       },
+    };
+
+    if (props.translation) {
+      data.translation = props.translation;
+    }
+
+    const vocabulary = await this.prisma.vocabulary.create({
+      data,
       ...VocabularyRelations,
     });
 
@@ -79,16 +85,38 @@ export class PrismaVocabularyRepository implements VocabularyRepository {
   ): Promise<VocabularyList[]> {
     const vocabularyLists = await this.prisma.vocabularyList.findMany({
       where: {
-        Editors: {
-          some: {
-            id: profileId,
+        OR: [
+          {
+            AND: [
+              {
+                Creator: {
+                  id: profileId,
+                },
+              },
+              {
+                OriginalLanguage: {
+                  code: languageCode,
+                },
+              },
+            ],
           },
-        },
-        ...(languageCode && {
-          TranslationLanguage: {
-            code: languageCode,
+          {
+            AND: [
+              {
+                Editors: {
+                  some: {
+                    id: profileId,
+                  },
+                },
+              },
+              {
+                TranslationLanguage: {
+                  code: languageCode,
+                },
+              },
+            ],
           },
-        }),
+        ],
       },
       skip: pagination?.page ? (pagination.page - 1) * pagination.limit : 0,
       take: pagination?.limit,

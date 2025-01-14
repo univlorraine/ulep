@@ -14,7 +14,7 @@ const PendingTandemCard: React.FC<PendingTandemCardProps> = ({ tandem, onTandemP
     const { t } = useTranslation();
     return (
         <LearningCard title={t('learning.card.pending_tandem')}>
-            <div className={styles.content}>
+            <div className={styles.content} style={{ backgroundColor: currentColor }}>
                 <TandemLine
                     language={tandem.learningLanguage}
                     onPressed={onTandemPressed}

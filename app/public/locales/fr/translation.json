@@ -390,7 +390,9 @@
             "share": {
                 "cancel": "Annuler",
                 "create": "Valider",
-                "title": "À qui souhaitez-vous partager ?"
+                "title": "À qui souhaitez-vous partager ?",
+                "no_tandem": "Tu n'as pas de tandem pour cette langue",
+                "success": "La liste de vocabulaire a été partagée"
             },
             "start_quiz": {
                 "title": "Sélectionne les listes sur lesquelles t’entrainer",
@@ -414,14 +416,15 @@
             "create": "Nouvelle pair de mots",
             "search": "Rechercher",
             "aria-pressed": "Mettre à jour le vocabulaire",
+            "no_translation": "Aucune traduction",
             "add": {
                 "cancel": "Annuler",
                 "save": "Enregistrer",
                 "pronunciation": "Prononciation",
                 "add_prounonciation": "Ajouter",
                 "delete_prounonciation": "Supprimer",
-                "default_translation": "Mot à apprendre",
-                "default_word": "Traduction",
+                "default_translation": "Traduction",
+                "default_word": "Mot à apprendre",
                 "title": "Nouvelle pair de mots",
                 "edit_title": "Editer la pair de mots"
             },

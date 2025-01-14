@@ -354,7 +354,9 @@
             "share": {
                 "cancel": "Cancel",
                 "create": "Validate",
-                "title": "With whom do you want to share?"
+                "title": "With whom do you want to share?",
+                "no_tandem": "You don't have a tandem for this language",
+                "success": "The vocabulary list has been shared"
             },
             "start_quiz": {
                 "title": "Select the lists to practice on",
@@ -378,14 +380,15 @@
             "aria-pressed": "Update vocabulary",
             "list_update": "Update the list",
             "search": "Search",
+            "no_translation": "No translation",
             "add": {
                 "cancel": "Cancel",
                 "save": "Save",
                 "pronunciation": "Pronunciation",
                 "add_prounonciation": "Add",
                 "delete_prounonciation": "Delete",
-                "default_word": "Translation",
-                "default_translation": "Word to learn",
+                "default_word": "Word to learn",
+                "default_translation": "Translation",
                 "title": "New word pair",
                 "edit_title": "Edit word pair"
             },
