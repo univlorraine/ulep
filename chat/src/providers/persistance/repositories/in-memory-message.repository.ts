@@ -81,6 +81,13 @@ export class InMemoryMessageRepository implements MessageRepository {
         );
     }
 
+    async findResponsesByMessageId(
+        messageId: string,
+        pagination?: MessagePagination,
+    ): Promise<Message[]> {
+        return [];
+    }
+
     async searchMessagesIdByConversationId(
         conversationId: string,
         search: string,

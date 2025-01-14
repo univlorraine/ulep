@@ -22,6 +22,7 @@ model Conversation {
 
 model Message {
   id                    String       @id @default(uuid()) @map("_id")
+  parentId              String?
   createdAt             DateTime     @default(now())
   conversationId        String
   content               String?
@@ -38,6 +39,8 @@ model Message {
   MediaObject           MediaObject?
   Thumbnail             Thumbnail?
   MessageLikes          MessageLike[] @relation("MessageLikes")
+  Replies               Message[]    @relation("MessageReplies")
+  ParentMessage         Message?     @relation("MessageReplies", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("messages")
 }

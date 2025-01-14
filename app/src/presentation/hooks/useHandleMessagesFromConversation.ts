@@ -26,6 +26,7 @@ const useHandleMessagesFromConversation = ({
     const { socket } = useSocket();
     const [lastMessageForwardId, setLastMessageForwardId] = useState<string>();
     const [lastMessageBackwardId, setLastMessageBackwardId] = useState<string>();
+    const [currentMessageReply, setCurrentMessageReply] = useState<Message>();
     const profile = useStoreState((state) => state.profile);
     const [showToast] = useIonToast();
     const { t } = useTranslation();
@@ -47,7 +48,8 @@ const useHandleMessagesFromConversation = ({
     if (!profile)
         return {
             ...messagesResult,
-            loadMessages: () => {},
+            messageToReply: undefined,
+            onLoadMessages: () => {},
             addNewMessage: () => {},
             clearMessages: () => {},
             handleSendMessage: () => {},
@@ -55,7 +57,25 @@ const useHandleMessagesFromConversation = ({
             onUnlikeMessage: () => {},
             onLikeMessageReceived: () => {},
             onUnlikeMessageReceived: () => {},
+            onReplyToMessage: () => {},
+            onCancelReply: () => {},
         };
+
+    const onLoadMessages = (
+        isFirstMessage = false,
+        direction: MessagePaginationDirection = MessagePaginationDirection.FORWARD,
+        messageId?: string
+    ) => {
+        loadMessages(isFirstMessage, direction, messageId, currentMessageReply?.id);
+    };
+
+    const onReplyToMessage = async (message: Message) => {
+        setCurrentMessageReply(message);
+    };
+
+    const onCancelReply = () => {
+        setCurrentMessageReply(undefined);
+    };
 
     const onLikeMessage = (messageId: string) => {
         const messageToLike = messagesResult.messages.find((message) => message.id === messageId);
@@ -136,13 +156,15 @@ const useHandleMessagesFromConversation = ({
     };
 
     const addNewMessage = (message: Message) => {
-        setMessagesResult((current) => ({
-            messages: [message, ...current.messages],
-            isScrollForwardOver: current.isScrollForwardOver,
-            isScrollBackwardOver: current.isScrollBackwardOver,
-            error: undefined,
-            isLoading: false,
-        }));
+        if (!currentMessageReply || message.parentId === currentMessageReply?.id) {
+            setMessagesResult((current) => ({
+                messages: [message, ...current.messages],
+                isScrollForwardOver: current.isScrollForwardOver,
+                isScrollBackwardOver: current.isScrollBackwardOver,
+                error: undefined,
+                isLoading: false,
+            }));
+        }
     };
 
     const handleSendMessage = async (
@@ -160,6 +182,7 @@ const useHandleMessagesFromConversation = ({
             file,
             filename,
             type,
+            parentId: currentMessageReply?.id,
         });
 
         if (messageResult instanceof Error) {
@@ -186,7 +209,9 @@ const useHandleMessagesFromConversation = ({
                 conversation.id,
                 0,
                 false,
-                { ...messageResult.metadata, ...metadata }
+                { ...messageResult.metadata, ...metadata },
+                0,
+                currentMessageReply?.id
             )
         );
 
@@ -208,7 +233,8 @@ const useHandleMessagesFromConversation = ({
     const loadMessages = async (
         isFirstMessage = false,
         direction: MessagePaginationDirection = MessagePaginationDirection.FORWARD,
-        messageId?: string
+        messageId?: string,
+        messageToReplyId?: string
     ) => {
         if (
             (!isFirstMessage &&
@@ -238,6 +264,7 @@ const useHandleMessagesFromConversation = ({
             limit,
             typeFilter,
             direction,
+            parentId: messageToReplyId,
         });
 
         if (messagesConversationResult instanceof Error) {
@@ -308,15 +335,16 @@ const useHandleMessagesFromConversation = ({
 
     useEffect(() => {
         const fetchData = async () => {
-            await loadMessages(true);
+            await onLoadMessages(true);
         };
 
         fetchData();
-    }, [profile, conversationId, typeFilter]);
+    }, [profile, conversationId, typeFilter, currentMessageReply]);
 
     return {
         ...messagesResult,
-        loadMessages,
+        messageToReply: currentMessageReply,
+        onLoadMessages,
         addNewMessage,
         clearMessages,
         handleSendMessage,
@@ -324,6 +352,8 @@ const useHandleMessagesFromConversation = ({
         onUnlikeMessage,
         onLikeMessageReceived,
         onUnlikeMessageReceived,
+        onReplyToMessage,
+        onCancelReply,
     };
 };
 

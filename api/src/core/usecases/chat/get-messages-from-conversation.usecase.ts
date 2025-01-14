@@ -28,6 +28,7 @@ export class GetMessagesFromConversationCommand {
   contentFilter?: string;
   typeFilter?: string;
   direction?: ChatPaginationDirection;
+  parentId?: string;
 }
 
 @Injectable()
@@ -53,6 +54,7 @@ export class GetMessagesFromConversationUsecase {
         command.contentFilter,
         command.typeFilter,
         command.direction,
+        command.parentId,
       );
 
     if (

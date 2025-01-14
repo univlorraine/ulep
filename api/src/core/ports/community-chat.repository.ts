@@ -9,6 +9,7 @@ export type CommunityChatCreationPayload = {
 };
 
 export interface CommunityChatRepository {
+  all(): Promise<CommunityChat[]>;
   create(payload: CommunityChatCreationPayload): Promise<CommunityChat>;
   ofId(id: string): Promise<CommunityChat | null>;
   findByLanguageCodes(

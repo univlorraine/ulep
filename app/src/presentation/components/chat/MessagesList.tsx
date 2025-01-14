@@ -11,19 +11,23 @@ import styles from './MessagesList.module.css';
 interface MessagesListProps {
     currentMessageSearchId?: string;
     messages: Message[];
+    messageToReply?: Message;
     isCommunity: boolean;
     isScrollForwardOver: boolean;
     isScrollBackwardOver: boolean;
     loadMessages: (direction: MessagePaginationDirection) => void;
     onLikeMessage: (messageId: string) => void;
     onUnlikeMessage: (messageId: string) => void;
+    onReplyToMessage: (message: Message) => void;
     userId: string;
     setImageToDisplay: (imageUrl: string) => void;
+    onCancelReply: () => void;
 }
 
 const MessagesList: React.FC<MessagesListProps> = ({
     currentMessageSearchId,
     messages,
+    messageToReply,
     isCommunity,
     isScrollForwardOver,
     isScrollBackwardOver,
@@ -32,6 +36,8 @@ const MessagesList: React.FC<MessagesListProps> = ({
     setImageToDisplay,
     onLikeMessage,
     onUnlikeMessage,
+    onReplyToMessage,
+    onCancelReply,
 }) => {
     const { t } = useTranslation();
     const { isLoading, messagesEndRef, handleScroll } = useMessages({
@@ -59,7 +65,7 @@ const MessagesList: React.FC<MessagesListProps> = ({
             const messageDate = new Date(message.createdAt);
             const isCurrentUserMessage = message.isMine(userId);
 
-            if (!lastDate || !isSameDay(lastDate, messageDate)) {
+            if (!Boolean(messageToReply) && (!lastDate || !isSameDay(lastDate, messageDate))) {
                 messageElements.push(
                     <div key={`id-${message.id}`} className={styles.dateSeparator}>
                         {t(message.getMessageDate())}
@@ -84,6 +90,8 @@ const MessagesList: React.FC<MessagesListProps> = ({
                             setImageToDisplay={message.type === MessageType.Image ? setImageToDisplay : undefined}
                             onLikeMessage={onLikeMessage}
                             onUnlikeMessage={onUnlikeMessage}
+                            onReplyToMessage={onReplyToMessage}
+                            isInReply={Boolean(messageToReply)}
                         />
                     </div>
                 );

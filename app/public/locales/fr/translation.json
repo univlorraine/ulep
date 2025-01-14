@@ -483,6 +483,10 @@
             "audios": "Audios",
             "links": "Liens"
         },
+        "replyMessageButton": "Répondre au message",
+        "goBackToConversation": "Revenir au salon",
+        "numberOfReplies": "Voir la réponse",
+        "numberOfReplies_plural": "Voir {{count}} réponses",
         "reportMessageButton": "Signaler le message",
         "likeMessageButton": "Liker le message",
         "unlikeMessageButton": "Déliker le message",

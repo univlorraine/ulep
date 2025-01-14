@@ -27,6 +27,14 @@ export class PrismaCommunityChatRepository implements CommunityChatRepository {
     return communityChatMapper(result);
   }
 
+  async all(): Promise<CommunityChat[]> {
+    const result = await this.prisma.communityChat.findMany({
+      ...CommunityChatRelations,
+    });
+
+    return result.map(communityChatMapper);
+  }
+
   async findByLanguageCodes(
     firstLanguageCode: string,
     secondLanguageCode: string,

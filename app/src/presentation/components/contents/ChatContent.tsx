@@ -9,7 +9,7 @@ import {
     IonPopover,
     useIonToast,
 } from '@ionic/react';
-import { imageOutline, searchOutline, videocam } from 'ionicons/icons';
+import { arrowBackOutline, imageOutline, searchOutline, videocam } from 'ionicons/icons';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
@@ -24,6 +24,7 @@ import { useStoreState } from '../../../store/storeTypes';
 import useHandleMessagesFromConversation from '../../hooks/useHandleMessagesFromConversation';
 import ChatInputSender from '../chat/ChatInputSender';
 import ConversationSearchBar from '../chat/ConversationSearchBar';
+import MessageComponent from '../chat/MessageComponent';
 import MessagesList from '../chat/MessagesList';
 import Loader from '../Loader';
 import styles from './ChatContent.module.css';
@@ -83,13 +84,16 @@ const Content: React.FC<ChatContentProps> = ({
         isScrollForwardOver,
         isScrollBackwardOver,
         isLoading,
-        loadMessages,
+        onLoadMessages,
         addNewMessage,
         clearMessages,
         onLikeMessage,
         onUnlikeMessage,
         onLikeMessageReceived,
         onUnlikeMessageReceived,
+        onReplyToMessage,
+        onCancelReply,
+        messageToReply,
     } = useHandleMessagesFromConversation({
         conversationId: conversation.id,
         learningLanguageId: findLearningLanguageConversation()?.id,
@@ -105,12 +109,12 @@ const Content: React.FC<ChatContentProps> = ({
     const unsetSearchMode = () => {
         setIsSearchMode(false);
         setCurrentMessageSearchId(undefined);
-        loadMessages(true, MessagePaginationDirection.FORWARD);
+        onLoadMessages(true, MessagePaginationDirection.FORWARD);
     };
 
     const loadMessageFromSearch = (messageId: string) => {
         setCurrentMessageSearchId(messageId);
-        loadMessages(true, MessagePaginationDirection.BOTH, messageId);
+        onLoadMessages(true, MessagePaginationDirection.BOTH, messageId);
     };
 
     const onOpenVideoCall = () => {
@@ -144,7 +148,7 @@ const Content: React.FC<ChatContentProps> = ({
                 if (!socket.isConnected()) {
                     refreshTokens();
                     socket.connect(accessToken);
-                    await loadMessages(true);
+                    await onLoadMessages(true);
                 } else {
                     clearInterval(disconnectInterval);
                 }
@@ -287,18 +291,36 @@ const Content: React.FC<ChatContentProps> = ({
                     clearSearch={unsetSearchMode}
                 />
             )}
+            {messageToReply && (
+                <div className={styles.replyHeader}>
+                    <IonButton fill="clear" onClick={onCancelReply} className={styles.replyHeaderButton}>
+                        <IonIcon color="black" icon={arrowBackOutline} />
+                        <span className={styles.replyHeaderText}>{t('chat.goBackToConversation')}</span>
+                    </IonButton>
+                    <MessageComponent
+                        message={messageToReply}
+                        isCurrentUserMessage={messageToReply.isMine(profile.user.id)}
+                        isCommunity
+                        isInReply
+                        hideContextMenu
+                    />
+                </div>
+            )}
             {!isLoading ? (
                 <MessagesList
                     currentMessageSearchId={currentMessageSearchId}
                     messages={messages}
-                    loadMessages={(direction) => loadMessages(false, direction)}
+                    loadMessages={(direction) => onLoadMessages(false, direction)}
                     onLikeMessage={onLikeMessage}
                     onUnlikeMessage={onUnlikeMessage}
+                    onReplyToMessage={onReplyToMessage}
                     userId={profile.user.id}
                     isScrollForwardOver={isScrollForwardOver}
                     isScrollBackwardOver={isScrollBackwardOver}
                     setImageToDisplay={setImageToDisplay}
                     isCommunity={isCommunity}
+                    messageToReply={messageToReply}
+                    onCancelReply={onCancelReply}
                 />
             ) : (
                 <div className={styles.loader}>

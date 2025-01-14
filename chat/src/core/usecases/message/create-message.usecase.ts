@@ -26,6 +26,7 @@ interface CreateMessageCommand {
     mimetype?: string;
     filePath?: string;
     type?: MessageType;
+    parentId?: string;
 }
 
 export class CreateMessageUsecase {
@@ -82,6 +83,7 @@ export class CreateMessageUsecase {
             type,
             isReported: false,
             isDeleted: false,
+            numberOfReplies: 0,
             metadata: {
                 filePath: command.filePath,
                 originalFilename: command.originalFilename,
@@ -89,15 +91,31 @@ export class CreateMessageUsecase {
             },
         });
 
-        const createdMessage = await this.messageRepository.create(message);
+        const createdMessage = await this.messageRepository.create(
+            message,
+            command.parentId,
+        );
 
         await this.conversationRepository.updateLastActivityAt(conversation.id);
 
-        this.notificationService.sendNotification(
-            message.ownerId,
-            conversation.usersIds.filter((id) => id !== message.ownerId),
-            message.content,
-        );
+        if (command.parentId) {
+            const parentMessage = await this.messageRepository.findById(
+                command.parentId,
+            );
+            if (parentMessage?.ownerId !== message.ownerId) {
+                this.notificationService.sendNotification(
+                    message.ownerId,
+                    [parentMessage.ownerId],
+                    message.content,
+                );
+            }
+        } else {
+            this.notificationService.sendNotification(
+                message.ownerId,
+                conversation.usersIds.filter((id) => id !== message.ownerId),
+                message.content,
+            );
+        }
 
         return createdMessage;
     }
