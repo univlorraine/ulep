@@ -78,8 +78,8 @@ const VocabularyListContent: React.FC<VocabularyListContentProps> = ({
                     )}
             </div>
 
-            <IonButton fill="clear" className={styles.addButton} onClick={onAddVocabularyList}>
-                <IonImg aria-hidden className={styles.addIcon} src={AddSvg} />
+            <IonButton fill="clear" className="add-button" onClick={onAddVocabularyList}>
+                <IonImg aria-hidden className="add-button-icon" src={AddSvg} />
             </IonButton>
         </div>
     );

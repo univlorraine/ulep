@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import initI18n from '../../i18n';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
 
+const RTL_LANGUAGES = ['ar', 'he', 'fa', 'ur'];
+
 const useFetchI18NBackend = (apiUrl: string): i18n => {
     const language = useStoreState((state) => state.language);
     const setLanguage = useStoreActions((state) => state.setLanguage);
@@ -11,6 +13,7 @@ const useFetchI18NBackend = (apiUrl: string): i18n => {
     useEffect(() => {
         const setDefaultLanguage = async () => {
             const deviceLanguage = await Device.getLanguageCode();
+
             setLanguage({ language: deviceLanguage.value });
         };
         setDefaultLanguage();
@@ -22,6 +25,12 @@ const useFetchI18NBackend = (apiUrl: string): i18n => {
                 setI18nInstance(initI18n(apiUrl, language));
             }
             document.documentElement.lang = language;
+
+            if (RTL_LANGUAGES.includes(language)) {
+                document.documentElement.dir = 'rtl';
+            } else {
+                document.documentElement.dir = 'ltr';
+            }
         };
         getLanguage();
     }, [apiUrl, language]);
