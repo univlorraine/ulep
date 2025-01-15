@@ -20,8 +20,7 @@ const EventDate: React.FC<EventDateProps> = ({ event, profile, showAddToCalendar
 
     const handleAddToCalendar = async (event: EventObject) => {
         const address = event.address || event.deepLink || ''; // Utilise une chaîne vide si l'adresse est nulle
-        const icsContent = `
-BEGIN:VCALENDAR
+        const icsContent = `BEGIN:VCALENDAR
 VERSION:2.0
 BEGIN:VEVENT
 UID:${event.id}
