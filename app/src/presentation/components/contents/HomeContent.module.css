@@ -95,7 +95,7 @@
     .content {
         background-color: #f4f5fe;
         --ion-background-color: #f4f5fe;
-        height: 100%;
+        min-height: 100%;
     }
 
     .masonery-content {

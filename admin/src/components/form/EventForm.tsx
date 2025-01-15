@@ -88,20 +88,11 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
 
     // Concerned universities
     const forcedConcernedUniversities: University[] = [];
-    if (universities) {
-        const centralUniversity = universities.filter((university: University) => university.parent === null)[0];
-        forcedConcernedUniversities.push(centralUniversity);
-
-        if (authorUniversityId !== centralUniversity.id) {
-            forcedConcernedUniversities.push(
-                universities.filter((university: University) => university.id === authorUniversityId)[0]
-            );
-        }
-    }
     const [concernedUniversities, setConcernedUniversities] = useState<University[]>(
-        record?.concernedUniversities ?? forcedConcernedUniversities
+        record?.concernedUniversities ?? []
     );
     const [newConcernedUniversity, setNewConcernedUniversity] = useState<University>();
+    const [availableConcernedUniversities, setAvailableConcernedUniversities] = useState<University[]>([]);
 
     useEffect(() => {
         async function fetchUniversityData(universityId: string) {
@@ -127,6 +118,25 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
         );
         setAvailableLanguages(filteredAvailableLanguages);
     }, [universitiesLanguages, translations, defaultLanguage]);
+
+    useEffect(() => {
+        if (!universities) return;
+
+        const centralUniversity = universities.filter((university: University) => university.parent === null)[0];
+
+        const authorIsFromCentralUniversity = authorUniversityId === centralUniversity.id;
+
+        const possibleConcernedUniversities = authorIsFromCentralUniversity ? universities : [centralUniversity];
+        setAvailableConcernedUniversities(possibleConcernedUniversities);
+
+        if (!authorIsFromCentralUniversity) {
+            forcedConcernedUniversities.push(
+                universities.filter((university: University) => university.id === authorUniversityId)[0]
+            );
+        }
+
+        setConcernedUniversities(record?.concernedUniversities ?? forcedConcernedUniversities);
+    }, [universities]);
 
     const onCreatePressed = () => {
         if (startDate && endDate && startDate > endDate) {
@@ -243,7 +253,7 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                                         sx={{ width: '300px' }}
                                         value={newConcernedUniversity}
                                     >
-                                        {universities
+                                        {availableConcernedUniversities
                                             ?.filter(
                                                 (university) =>
                                                     !concernedUniversities.some(
@@ -251,7 +261,7 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                                                             university.id === concernedUniversity.id
                                                     )
                                             )
-                                            .map((university) => (
+                                            .map((university: any) => (
                                                 <MenuItem key={university.id} value={university}>
                                                     {university.name}
                                                 </MenuItem>
@@ -279,7 +289,7 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
 
                             <Box>
                                 <Typography variant="subtitle1">
-                                    {translate(`events.form.diffusion_languages.label`)}
+                                    {translate(`events.form.diffusion_languages.label`)} *
                                 </Typography>
                                 <Table>
                                     <TableBody>
@@ -374,7 +384,7 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
 
                         {type === EventType.ONLINE && (
                             <Box sx={{ width: '100%' }}>
-                                <Typography variant="subtitle1">{translate('events.form.event_url')}</Typography>
+                                <Typography variant="subtitle1">{translate('events.form.event_url')} *</Typography>
                                 <OutlinedInput
                                     name="eventURL"
                                     onChange={(e: any) => setEventURL(e.target.value)}
@@ -389,7 +399,9 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                         {type === EventType.PRESENTIAL && (
                             <>
                                 <Box sx={{ width: '100%' }}>
-                                    <Typography variant="subtitle1">{translate('events.form.address_name')}</Typography>
+                                    <Typography variant="subtitle1">
+                                        {translate('events.form.address_name')} *
+                                    </Typography>
                                     <OutlinedInput
                                         name="addressName"
                                         onChange={(e: any) => setAddressName(e.target.value)}
@@ -401,7 +413,7 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                                 </Box>
 
                                 <Box sx={{ width: '100%' }}>
-                                    <Typography variant="subtitle1">{translate('events.form.address')}</Typography>
+                                    <Typography variant="subtitle1">{translate('events.form.address')} *</Typography>
                                     <OutlinedInput
                                         name="address"
                                         onChange={(e: any) => setAddress(e.target.value)}
@@ -416,7 +428,7 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
 
                         <Box display="flex" flexDirection="row" gap="50px">
                             <Box>
-                                <Typography variant="subtitle1">{translate('events.form.start_date')}</Typography>
+                                <Typography variant="subtitle1">{translate('events.form.start_date')} *</Typography>
                                 <DateTimePicker
                                     ampm={false}
                                     // @ts-ignore
@@ -431,7 +443,7 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                             </Box>
 
                             <Box>
-                                <Typography variant="subtitle1">{translate('events.form.end_date')}</Typography>
+                                <Typography variant="subtitle1">{translate('events.form.end_date')} *</Typography>
                                 <DateTimePicker
                                     ampm={false}
                                     // @ts-ignore
@@ -527,7 +539,7 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                                 )}
 
                                 <Box sx={{ width: '100%' }}>
-                                    <Typography variant="subtitle1">{translate('events.form.title')}</Typography>
+                                    <Typography variant="subtitle1">{translate('events.form.title')} *</Typography>
                                     <OutlinedInput
                                         name="Title"
                                         onChange={(e: any) => setTitle(e.target.value)}
@@ -539,7 +551,7 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                                 </Box>
 
                                 <Box sx={{ width: '100%', '& .RaLabeled-label': { display: 'none' } }}>
-                                    <Typography variant="subtitle1">{translate('events.form.content')}</Typography>
+                                    <Typography variant="subtitle1">{translate('events.form.content')} *</Typography>
                                     <RichTextInput
                                         defaultValue={content}
                                         onChange={(e: any) => setContent(e)}
@@ -613,6 +625,10 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                             ))}
                         </TabbedForm>
                     </Box>
+
+                    <Typography sx={{ marginTop: '20px', fontStyle: 'italic' }}>
+                        {translate('events.form.mandatory')}
+                    </Typography>
 
                     <Button
                         color="primary"

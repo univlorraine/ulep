@@ -37,6 +37,7 @@ import GetAllEventsUsecase from '../domain/usecases/event/GetAllEventsUsecase';
 import GetEventUsecase from '../domain/usecases/event/GetEventUsecase';
 import SubscribeToEventUsecase from '../domain/usecases/event/SubscribeToEventUsecase';
 import UnsubscribeToEventUsecase from '../domain/usecases/event/UnsubscribeToEventUsecase';
+import ExportMediasFromConversationUsecase from '../domain/usecases/ExportMediasFromConversationUsecase';
 import GetAllCountriesUsecase from '../domain/usecases/GetAllCountriesUsecase';
 import GetAllGoalsUsecase from '../domain/usecases/GetAllGoalsUsecase';
 import GetAllInterestCategoriesUsecase from '../domain/usecases/GetAllInterestCategoriesUsecase';
@@ -182,6 +183,7 @@ const getConfigContextValue = ({
     const sendMessage = new SendMessageUsecase(chatHttpAdapter);
     const searchMessagesIdsFromConversation = new SearchMessagesIdsFromConversationUsecase(chatHttpAdapter);
     const getHashtagsFromConversation = new GetHashtagsFromConversationUsecase(chatHttpAdapter);
+    const exportMediasFromConversation = new ExportMediasFromConversationUsecase(chatHttpAdapter);
 
     // Vocabulary
     const addReaderToVocabularyList = new AddReaderToVocabularyListUsecase(domainHttpAdapter);
@@ -281,6 +283,7 @@ const getConfigContextValue = ({
         notificationAdapter,
         resetPassword,
         searchMessagesIdsFromConversation,
+        exportMediasFromConversation,
         sendMessage,
         updateAvatar,
         updateNotificationPermission,

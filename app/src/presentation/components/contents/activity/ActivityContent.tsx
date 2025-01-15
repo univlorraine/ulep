@@ -1,6 +1,6 @@
 import { IonButton, IonIcon, IonItem, IonLabel, IonList, useIonToast } from '@ionic/react';
-import { downloadOutline, hammerOutline, helpOutline } from 'ionicons/icons';
-import { useState } from 'react';
+import { downloadOutline, helpOutline, pencilOutline } from 'ionicons/icons';
+import { Fragment, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowRightSvg } from '../../../../assets';
 import { useConfig } from '../../../../context/ConfigurationContext';
@@ -93,9 +93,9 @@ export const ActivityContent: React.FC<ActivityContentProps> = ({
             <HeaderSubContent
                 title={t('activity.show.title')}
                 onBackPressed={onBackPressed}
-                kebabContent={(closeMenu) => (
-                    <IonList lines="none">
-                        {activity.status !== ActivityStatus.PUBLISHED && activity.creator?.id === profile.id && (
+                kebabContent={(closeMenu) =>
+                    activity.status !== ActivityStatus.PUBLISHED && activity.creator?.id === profile.id ? (
+                        <IonList lines="none">
                             <IonItem
                                 button={true}
                                 detail={false}
@@ -104,12 +104,12 @@ export const ActivityContent: React.FC<ActivityContentProps> = ({
                                     closeMenu();
                                 }}
                             >
-                                <IonIcon icon={hammerOutline} aria-hidden="true" />
+                                <IonIcon icon={pencilOutline} aria-hidden="true" />
                                 <IonLabel className={styles['popover-label']}>{t('activity.show.update')}</IonLabel>
                             </IonItem>
-                        )}
-                    </IonList>
-                )}
+                        </IonList>
+                    ) : undefined
+                }
             />
             {isLoading ? (
                 <div className={styles.loader}>
@@ -120,7 +120,14 @@ export const ActivityContent: React.FC<ActivityContentProps> = ({
                     <img className={styles.image} src={activity.imageUrl} />
                     <div className={styles['primary-container']}>
                         <h1 className={styles['primary-title']}>{activity.title}</h1>
-                        <p className={styles['primary-subtitle']}>{activity.description}</p>
+                        <p className={styles['primary-subtitle']}>
+                            {activity.description.split('\n').map((line, index) => (
+                                <Fragment key={index}>
+                                    {line}
+                                    <br />
+                                </Fragment>
+                            ))}
+                        </p>
                         <div className={styles['information-container']}>
                             <div>
                                 <p className={styles['information-title']}>{t('activity.show.language')}</p>

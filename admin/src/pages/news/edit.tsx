@@ -30,7 +30,6 @@ const EditNews = () => {
         formData.append('content', payload.content);
         formData.append('languageCode', payload.languageCode);
         formData.append('status', payload.status);
-        formData.append('universityId', payload.universityId);
         formData.append('startPublicationDate', payload.startPublicationDate.toISOString());
         formData.append('endPublicationDate', payload.endPublicationDate.toISOString());
 

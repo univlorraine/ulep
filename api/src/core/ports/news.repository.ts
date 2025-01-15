@@ -11,6 +11,10 @@ export interface NewsRepository {
     limit?: number;
     onlyActiveNews?: boolean;
     where?: NewsQueryWhere;
+    orderBy?: {
+      field: string;
+      order: string;
+    };
   }): Promise<Collection<News>>;
   ofId(id: string): Promise<News | null>;
   create(command: CreateNewsCommand): Promise<News>;

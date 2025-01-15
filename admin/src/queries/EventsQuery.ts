@@ -13,6 +13,10 @@ export interface EventsParams {
         page: string;
         perPage: string;
     };
+    sort?: {
+        field: string;
+        order: string;
+    };
 }
 
 const EventsQuery = (params: EventsParams) => {
@@ -24,6 +28,8 @@ const EventsQuery = (params: EventsParams) => {
         types: [params.filter.type],
         page: params.pagination.page,
         limit: params.pagination.perPage,
+        field: params.sort?.field,
+        order: params.sort?.order.toLowerCase(),
     };
 
     return new URLSearchParams(qsAdapter().stringify(query)).toString();

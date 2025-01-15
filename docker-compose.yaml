@@ -1,4 +1,4 @@
-version: '3.4'
+version: "3.4"
 
 services:
   api:
@@ -63,7 +63,7 @@ services:
       WDS_SOCKET_PORT: 0
 
   auth:
-    image: quay.io/keycloak/keycloak:21.1.2
+    image: quay.io/keycloak/keycloak:26.0
     depends_on:
       - database
     volumes:
@@ -117,7 +117,7 @@ services:
   mongo:
     image: mongo:7-jammy
     command:
-      ['mongod', '--replSet', 'rs0', '--auth', '--keyFile', '/etc/keyfile.key']
+      ["mongod", "--replSet", "rs0", "--auth", "--keyFile", "/etc/keyfile.key"]
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-root}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-!ChangeMe!}
@@ -150,7 +150,7 @@ services:
   database:
     image: postgres:${POSTGRES_VERSION:-14}-alpine
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}']
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 5s
       retries: 5
       start_period: 5s

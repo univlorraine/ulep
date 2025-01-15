@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import * as _ from 'lodash';
 import { EventStatus, EventType } from 'src/core/models/event.model';
 import {
   EventRepository,
@@ -18,6 +19,10 @@ export type GetEventsAdminCommand = {
     types?: EventType[];
     languageCode: string;
   };
+  orderBy?: {
+    field: string;
+    order: string;
+  };
 };
 
 @Injectable()
@@ -28,6 +33,16 @@ export class GetEventsAdminUsecase {
   ) {}
 
   async execute(command: GetEventsAdminCommand) {
-    return this.eventRepository.findAll(command);
+    const formattedField = _.snakeCase(command.orderBy?.field);
+
+    return this.eventRepository.findAll({
+      ...command,
+      orderBy: command.orderBy
+        ? {
+            field: formattedField,
+            order: command.orderBy?.order,
+          }
+        : undefined,
+    });
   }
 }

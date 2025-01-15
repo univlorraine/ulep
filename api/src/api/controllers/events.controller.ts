@@ -85,6 +85,10 @@ export class EventsController {
         types: query.types,
         languageCode: query.languageCode,
       },
+      orderBy: {
+        field: query.field,
+        order: query.order,
+      },
     });
 
     return new Collection<EventResponse>({
@@ -137,6 +141,17 @@ export class EventsController {
     const profile = await this.getProfileFromUser.execute({ id: user.sub });
 
     return EventResponse.fromDomain(event, profile?.id);
+  }
+
+  @Get('admin/:id')
+  @UseGuards(AuthenticationGuard)
+  @SerializeOptions({ groups: ['read', 'event:admin', 'event:front'] })
+  @Swagger.ApiOperation({ summary: 'Get an Event resource.' })
+  @Swagger.ApiOkResponse({ type: EventResponse })
+  async getEventAdmin(@Param('id', ParseUUIDPipe) id: string) {
+    const event = await this.getEventUsecase.execute(id);
+
+    return EventResponse.fromDomain(event);
   }
 
   @Post()

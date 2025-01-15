@@ -1,5 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsOptional } from 'class-validator';
 
 export class CreateVocabularyRequest {
   @ApiPropertyOptional({ type: 'string' })
@@ -11,6 +11,6 @@ export class CreateVocabularyRequest {
   word: string;
 
   @ApiPropertyOptional({ type: 'string' })
-  @IsNotEmpty()
-  translation: string;
+  @IsOptional()
+  translation?: string;
 }

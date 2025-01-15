@@ -32,7 +32,6 @@ export type UpdateEventProps = {
   id: string;
   title: string;
   content: string;
-  authorUniversityId: string;
   translations: EventTranslation[];
   languageCode: string;
   status?: string;
@@ -61,6 +60,10 @@ export type FindEventsProps = {
     status?: EventStatus;
     types?: EventType[];
     languageCode: string;
+  };
+  orderBy?: {
+    field: string;
+    order: string;
   };
 };
 

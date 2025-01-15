@@ -73,6 +73,12 @@ const EditActivity = () => {
                         return redirect('/activities');
                     }
 
+                    if (error instanceof Error && error.message === 'Activity is already published') {
+                        return notify('activities.error.alreadyPublished', {
+                            type: 'error',
+                        });
+                    }
+
                     return notify('activities.error.update', {
                         type: 'error',
                     });

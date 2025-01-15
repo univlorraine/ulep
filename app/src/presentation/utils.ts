@@ -272,3 +272,18 @@ export const compareCEFR = (levelA: CEFR, levelB: CEFR) => {
     return CEFRlevels[levelB] - CEFRlevels[levelA];
 };
 
+export const normalizeString = (string: string) => {
+    return string
+        .replace('ꜳ', 'aa')
+        .replace('æ', 'ae')
+        .replace('ꜵ', 'ao')
+        .replace('ꜷ', 'au')
+        .replace('ꜹ', 'av')
+        .replace('ꜽ', 'ay')
+        .replace('ȸ', 'db')
+        .replace('ue', 'ue')
+        .replace('œ', 'oe')
+        .replace('ø', 'oe')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '');
+};

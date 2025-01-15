@@ -2,7 +2,7 @@ import Vocabulary from '../../entities/Vocabulary';
 
 export type CreateVocabularyCommand = {
     word: string;
-    translation: string;
+    translation?: string;
     vocabularyListId: string;
     wordPronunciation?: File;
     translationPronunciation?: File;

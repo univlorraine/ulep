@@ -1,4 +1,4 @@
-import { Collection, ModeQuery, PrismaService } from '@app/common';
+import { Collection, ModeQuery, PrismaService, SortOrder } from '@app/common';
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { endOfDay, startOfDay } from 'date-fns';
@@ -16,6 +16,7 @@ export class PrismaNewsRepository implements NewsRepository {
     offset,
     onlyActiveNews,
     where,
+    orderBy,
   }): Promise<Collection<News>> {
     const wherePayload: Prisma.NewsWhereInput = where
       ? {
@@ -75,12 +76,22 @@ export class PrismaNewsRepository implements NewsRepository {
       return { items: [], totalItems: count };
     }
 
+    let order = { updated_at: 'desc' as SortOrder } as any;
+
+    if (orderBy) {
+      if (orderBy.field === 'university_name') {
+        order = { Organization: { name: orderBy.order } };
+      } else if (orderBy.field === 'title') {
+        order = { TitleTextContent: { text: orderBy.order } };
+      } else if (orderBy.field === 'id') {
+        order = { updated_at: 'desc' };
+      }
+    }
+
     const news = await this.prisma.news.findMany({
       where: wherePayload,
       include: NewsRelations,
-      orderBy: {
-        updated_at: 'desc',
-      },
+      orderBy: order,
       skip: offset,
       take: limit,
     });
@@ -153,11 +164,6 @@ export class PrismaNewsRepository implements NewsRepository {
         id: command.id,
       },
       data: {
-        Organization: {
-          connect: {
-            id: command.universityId,
-          },
-        },
         TitleTextContent: {
           update: {
             text: command.title,

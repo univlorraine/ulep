@@ -22,15 +22,17 @@ const VocabularyLine: React.FC<VocabularyLineProps> = ({ vocabulary, onVocabular
         >
             <div className={styles.content}>
                 <div className={styles.player}>
-                    <span className={styles.translation}>{vocabulary.translation}</span>
-                    {vocabulary.pronunciationTranslationUrl && (
-                        <AudioLine audioFile={vocabulary.pronunciationTranslationUrl} hideProgressBar small />
-                    )}
-                </div>
-                <div className={styles.player}>
                     <span className={styles.word}>{vocabulary.word}</span>
                     {vocabulary.pronunciationWordUrl && (
                         <AudioLine audioFile={vocabulary.pronunciationWordUrl} hideProgressBar small />
+                    )}
+                </div>
+                <div className={styles.player}>
+                    <span className={styles.translation}>
+                        {vocabulary.translation ?? t('vocabulary.pair.no_translation')}
+                    </span>
+                    {vocabulary.pronunciationTranslationUrl && (
+                        <AudioLine audioFile={vocabulary.pronunciationTranslationUrl} hideProgressBar small />
                     )}
                 </div>
             </div>

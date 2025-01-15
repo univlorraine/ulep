@@ -9,7 +9,7 @@ import {
     IonPopover,
     useIonToast,
 } from '@ionic/react';
-import { arrowBackOutline, imageOutline, searchOutline, videocam } from 'ionicons/icons';
+import { arrowBackOutline, downloadOutline, imageOutline, searchOutline, videocam } from 'ionicons/icons';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
@@ -50,7 +50,14 @@ const Content: React.FC<ChatContentProps> = ({
     const { t } = useTranslation();
     const { socket } = useSocket();
     const [showToast] = useIonToast();
-    const { getVocabularyLists, getActivities, recorderAdapter, refreshTokensUsecase } = useConfig();
+    const {
+        getVocabularyLists,
+        getActivities,
+        recorderAdapter,
+        refreshTokensUsecase,
+        exportMediasFromConversation,
+        fileAdapter,
+    } = useConfig();
     const isBlocked = conversation.isBlocked;
     const [showMenu, setShowMenu] = useState(false);
     const [currentMessageSearchId, setCurrentMessageSearchId] = useState<string>();
@@ -136,6 +143,19 @@ const Content: React.FC<ChatContentProps> = ({
         });
     };
 
+    const handleExportMedias = async () => {
+        const response = await exportMediasFromConversation.execute(conversation.id);
+
+        if (response instanceof Error) {
+            console.error(response);
+            setShowMenu(false);
+            return;
+        }
+
+        fileAdapter.saveBlob(response, 'export-medias.zip');
+        setShowMenu(false);
+    };
+
     useEffect(() => {
         recorderAdapter.requestPermission();
         socket.connect(accessToken);
@@ -172,7 +192,12 @@ const Content: React.FC<ChatContentProps> = ({
     }, [conversation.id, accessToken]);
 
     const getAllVocabularyLists = async () => {
-        const result = await getVocabularyLists.execute(profile.id, findLearningLanguageCommunityConversation()?.code);
+        const learningLanguage = findLearningLanguageCommunityConversation();
+        if (!learningLanguage) {
+            return;
+        }
+
+        const result = await getVocabularyLists.execute(profile.id, learningLanguage.code);
         if (result instanceof Error) {
             showToast(result.message, 3000);
         } else {
@@ -278,6 +303,26 @@ const Content: React.FC<ChatContentProps> = ({
                                     </IonLabel>
                                 </IonItem>
                             )}
+                            <IonItem
+                                button={true}
+                                detail={false}
+                                onClick={() =>
+                                    setCurrentContent
+                                        ? setCurrentContent('media')
+                                        : history.push('/media', { conversation })
+                                }
+                            >
+                                <IonIcon icon={imageOutline} aria-hidden="true" />
+                                <IonLabel className={styles['chat-popover-label']}>
+                                    {t('chat.conversation_menu.medias')}
+                                </IonLabel>
+                            </IonItem>
+                            <IonItem button={true} detail={false} onClick={handleExportMedias}>
+                                <IonIcon icon={downloadOutline} aria-hidden="true" />
+                                <IonLabel className={styles['chat-popover-label']}>
+                                    {t('chat.conversation_menu.export_medias')}
+                                </IonLabel>
+                            </IonItem>
                             <IonItem button={true} detail={false} onClick={setSearchMode}>
                                 <IonIcon icon={searchOutline} aria-hidden="true" />
                                 <IonLabel className={styles['chat-popover-label']}>

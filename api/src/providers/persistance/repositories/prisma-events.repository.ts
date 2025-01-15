@@ -1,4 +1,4 @@
-import { Collection, PrismaService } from '@app/common';
+import { Collection, PrismaService, SortOrder } from '@app/common';
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { startOfDay } from 'date-fns';
@@ -21,6 +21,7 @@ export class PrismaEventRepository implements EventRepository {
   async findAll({
     pagination,
     filters,
+    orderBy,
   }: FindEventsProps): Promise<Collection<EventObject>> {
     const where: Prisma.EventsWhereInput = {
       TitleTextContent: {
@@ -77,13 +78,23 @@ export class PrismaEventRepository implements EventRepository {
       return { items: [], totalItems: count };
     }
 
+    let order = { updated_at: 'desc' as SortOrder } as any;
+
+    if (orderBy) {
+      if (orderBy.field === 'author_university_name') {
+        order = { AuthorUniversity: { name: orderBy.order } };
+      } else if (orderBy.field === 'title') {
+        order = { TitleTextContent: { text: orderBy.order } };
+      } else if (orderBy.field === 'id') {
+        order = { updated_at: 'desc' };
+      }
+    }
+
     const events = await this.prisma.events.findMany({
       skip: offset,
       take: limit,
       where,
-      orderBy: {
-        start_date: 'desc',
-      },
+      orderBy: order,
       include: EventRelations,
     });
 
@@ -262,11 +273,6 @@ export class PrismaEventRepository implements EventRepository {
                 LanguageCode: { connect: { code: translation.languageCode } },
               })),
             },
-          },
-        },
-        AuthorUniversity: {
-          connect: {
-            id: props.authorUniversityId,
           },
         },
         status: props.status,

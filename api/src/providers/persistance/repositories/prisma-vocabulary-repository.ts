@@ -22,16 +22,22 @@ export class PrismaVocabularyRepository implements VocabularyRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async createVocabulary(props: CreateVocabularyProps): Promise<Vocabulary> {
-    const vocabulary = await this.prisma.vocabulary.create({
-      data: {
-        word: props.word,
-        translation: props.translation,
-        VocabularyList: {
-          connect: {
-            id: props.vocabularyListId,
-          },
+    const data = {
+      word: props.word,
+      translation: props.translation,
+      VocabularyList: {
+        connect: {
+          id: props.vocabularyListId,
         },
       },
+    };
+
+    if (props.translation) {
+      data.translation = props.translation;
+    }
+
+    const vocabulary = await this.prisma.vocabulary.create({
+      data,
       ...VocabularyRelations,
     });
 

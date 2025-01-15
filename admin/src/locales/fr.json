@@ -76,7 +76,8 @@
         },
         "error": {
             "update": "Une erreur est survenue pendant la mise à jour de l'activité",
-            "create": "Une erreur est survenue pendant la création de l'activité"
+            "create": "Une erreur est survenue pendant la création de l'activité",
+            "alreadyPublished": "Vous ne pouvez pas mettre à jour une activité déjà publiée"
         }
     },
     "activities_categories": {
@@ -263,7 +264,8 @@
                 "required": "Tous les champs sont obligatoires",
                 "start_date_greater_than_end_date": "La date de début doit être avant la date de fin"
             },
-            "remove_translation": "Supprimer la traduction"
+            "remove_translation": "Supprimer la traduction",
+            "mandatory": "Les champs marqués d'un * sont obligatoires"
         },
         "create": {
             "cta": "Créer",

@@ -166,11 +166,13 @@ export class ActivityController {
     //TODO: Add Pipe files validators
     const vocabulariesWithFiles = body.vocabularies?.map((vocabulary) => ({
       content: vocabulary,
-      pronunciation: files?.find(
-        (file) =>
-          file.originalname.toLowerCase().includes(vocabulary.toLowerCase()) &&
-          file.fieldname.includes('vocabulariesFiles'),
-      ),
+      pronunciation: files?.find((file) => {
+        return (
+          file.originalname.toLowerCase().split('.wav')[0] ===
+            this.normalizeString(vocabulary) &&
+          file.fieldname.includes('vocabulariesFiles')
+        );
+      }),
     }));
 
     const activity = await this.createActivityUsecase.execute({
@@ -382,13 +384,13 @@ export class ActivityController {
       id: vocabulary.id,
       content: vocabulary.content,
       pronunciationUrl: vocabulary.pronunciationUrl,
-      pronunciation: files?.find(
-        (file) =>
-          file.originalname
-            .toLowerCase()
-            .includes(vocabulary.content.toLowerCase()) &&
-          file.fieldname.includes('vocabulariesFiles'),
-      ),
+      pronunciation: files?.find((file) => {
+        return (
+          file.originalname.toLowerCase().split('.wav')[0] ===
+            this.normalizeString(vocabulary.content) &&
+          file.fieldname.includes('vocabulariesFiles')
+        );
+      }),
     }));
 
     const activity = await this.updateActivityUsecase.execute({
@@ -419,5 +421,21 @@ export class ActivityController {
     }
 
     return ActivityResponse.from(activity);
+  }
+
+  private normalizeString(string: string) {
+    return string
+      .replace('ꜳ', 'aa')
+      .replace('æ', 'ae')
+      .replace('ꜵ', 'ao')
+      .replace('ꜷ', 'au')
+      .replace('ꜹ', 'av')
+      .replace('ꜽ', 'ay')
+      .replace('ȸ', 'db')
+      .replace('ue', 'ue')
+      .replace('œ', 'oe')
+      .replace('ø', 'oe')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
   }
 }

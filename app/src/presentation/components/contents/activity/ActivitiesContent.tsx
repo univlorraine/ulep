@@ -6,6 +6,8 @@ import { Activity, ActivityTheme, ActivityThemeCategory } from '../../../../doma
 import Language from '../../../../domain/entities/Language';
 import Profile from '../../../../domain/entities/Profile';
 import useGetActivities from '../../../hooks/useGetActivities';
+import useWindowDimensions from '../../../hooks/useWindowDimensions';
+import { HYBRID_MAX_WIDTH } from '../../../utils';
 import ActivityCard from '../../card/ActivityCard';
 import HeaderSubContent from '../../HeaderSubContent';
 import Loader from '../../Loader';
@@ -31,6 +33,8 @@ export const ActivitiesContent: React.FC<ActivitiesContentProps> = ({
     isModal,
 }) => {
     const { t } = useTranslation();
+    const { width } = useWindowDimensions();
+    const isHybrid = width < HYBRID_MAX_WIDTH;
     const [searchTitle, setSearchTitle] = useState<string>('');
     const [languageFilter, setLanguageFilter] = useState<Language[]>([]);
     const [proficiencyFilter, setProficiencyFilter] = useState<CEFR[]>([]);
@@ -151,8 +155,14 @@ export const ActivitiesContent: React.FC<ActivitiesContentProps> = ({
                 />
                 <div className={styles['activity-list-container']}>
                     {activities.map((activity) => (
-                        <ActivityCard key={activity.id} activity={activity} onClick={onActivityClick} />
+                        <ActivityCard
+                            key={activity.id}
+                            activity={activity}
+                            onClick={onActivityClick}
+                            isHybrid={isHybrid}
+                        />
                     ))}
+                    <div />
                 </div>
                 {isLoading && <Loader />}
             </div>

@@ -78,7 +78,7 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
         ).length > 0
     ) {
         vocabulariesWithoutPronunciation = vocabularyPairs.filter((vocabulary) => {
-            return !vocabulary.pronunciationWordUrl;
+            return !vocabulary.pronunciationTranslationUrl;
         });
     } else if (
         [profile.nativeLanguage, ...profile.masteredLanguages].filter(
@@ -86,7 +86,7 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
         ).length > 0
     ) {
         vocabulariesWithoutPronunciation = vocabularyPairs.filter((vocabulary) => {
-            return !vocabulary.pronunciationTranslationUrl;
+            return !vocabulary.pronunciationWordUrl;
         });
     }
 

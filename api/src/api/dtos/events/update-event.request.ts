@@ -25,10 +25,6 @@ export class UpdateEventRequest {
 
   @ApiProperty()
   @IsString()
-  authorUniversityId: string;
-
-  @ApiProperty()
-  @IsString()
   status: string;
 
   @ApiProperty()

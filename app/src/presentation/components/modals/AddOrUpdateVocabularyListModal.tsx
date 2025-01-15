@@ -35,7 +35,7 @@ const AddOrUpdateVocabularyListModal: React.FC<AddOrUpdateVocabularyListModalPro
     const { t } = useTranslation();
     const [name, setName] = useState<string>('');
     const [symbol, setSymbol] = useState<string>('');
-    const [originLanguage, setOriginLanguage] = useState<Language>(profile.nativeLanguage);
+    const [translationLanguage, setOriginLanguage] = useState<Language>(profile.nativeLanguage);
     const [targetLanguage, setTargetLanguage] = useState<Language>(
         currentLearningLanguage ?? profile.learningLanguages[0]
     );
@@ -67,16 +67,16 @@ const AddOrUpdateVocabularyListModal: React.FC<AddOrUpdateVocabularyListModalPro
                 name,
                 symbol,
                 profileIds: [profile.id],
-                wordLanguageCode: originLanguage?.code,
-                translationLanguageCode: targetLanguage?.code,
+                wordLanguageCode: targetLanguage?.code,
+                translationLanguageCode: translationLanguage?.code,
             });
         } else {
             onCreateVocabularyList({
                 name,
                 symbol,
                 profileId: profile.id,
-                wordLanguageCode: originLanguage?.code,
-                translationLanguageCode: targetLanguage?.code,
+                wordLanguageCode: targetLanguage?.code,
+                translationLanguageCode: translationLanguage?.code,
             });
         }
     };
@@ -125,7 +125,10 @@ const AddOrUpdateVocabularyListModal: React.FC<AddOrUpdateVocabularyListModalPro
                         title={t('vocabulary.list.add.target_language')}
                         ariaLabel={t('vocabulary.list.add.target_language') as string}
                         required={true}
-                        disabled={Boolean(currentLearningLanguage)}
+                        disabled={
+                            Boolean(currentLearningLanguage) ||
+                            (vocabularyList && vocabularyList?.numberOfVocabularies > 0)
+                        }
                     />
                 </div>
 
@@ -133,16 +136,17 @@ const AddOrUpdateVocabularyListModal: React.FC<AddOrUpdateVocabularyListModalPro
                     <Dropdown<Language>
                         onChange={(value) => setOriginLanguage(value)}
                         value={{
-                            label: `${codeLanguageToFlag(originLanguage.code)} ${t(
-                                `languages_code.${originLanguage.code}`
+                            label: `${codeLanguageToFlag(translationLanguage.code)} ${t(
+                                `languages_code.${translationLanguage.code}`
                             )}`,
-                            value: originLanguage,
+                            value: translationLanguage,
                         }}
                         options={masteredLanguages}
                         placeholder={t('vocabulary.list.add.origin_language')}
                         title={t('vocabulary.list.add.origin_language')}
                         ariaLabel={t('vocabulary.list.add.origin_language') as string}
                         required={true}
+                        disabled={vocabularyList && vocabularyList.numberOfVocabularies > 0}
                     />
                 </div>
 

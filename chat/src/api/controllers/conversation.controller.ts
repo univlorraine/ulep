@@ -6,6 +6,8 @@ import {
     Param,
     Post,
     Query,
+    Res,
+    StreamableFile,
     UploadedFile,
     UseGuards,
     UseInterceptors,
@@ -30,6 +32,7 @@ import {
     CreateMultipleConversationsUsecase,
     DeleteUserConversationUsecase,
     DeleteConversationUsecase,
+    ExportMediasFromConversationUsecase,
     GetConversationFromUserIdUsecase,
     GetMessagesFromConversationIdUsecase,
     SearchMessagesIdFromConversationIdUsecase,
@@ -57,6 +60,7 @@ export class ConversationController {
         private searchMessagesIdFromConversationIdUsecase: SearchMessagesIdFromConversationIdUsecase,
         private uploadMediaUsecase: UploadMediaUsecase,
         private updateConversationUsecase: UpdateConversationUsecase,
+        private exportMediasFromConversationUsecase: ExportMediasFromConversationUsecase,
     ) {}
 
     @Get('hashtags/:id')
@@ -235,5 +239,15 @@ export class ConversationController {
         }
 
         return MessageResponse.from(message);
+    }
+
+    @Get('/:id/export/medias')
+    @Swagger.ApiOperation({ summary: 'Export all medias from conversation id' })
+    async exportMediasFromConversationId(
+        @Param('id') conversationId: string,
+    ): Promise<StreamableFile> {
+        return await this.exportMediasFromConversationUsecase.execute({
+            id: conversationId,
+        });
     }
 }

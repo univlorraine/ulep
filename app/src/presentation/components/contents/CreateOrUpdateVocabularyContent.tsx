@@ -17,7 +17,7 @@ interface CreateOrUpdateVocabularyContentProps {
     onDelete: (id: string) => void;
     onSubmit: (
         word: string,
-        translation: string,
+        translation?: string,
         id?: string,
         wordPronunciation?: File,
         translationPronunciation?: File,
@@ -36,8 +36,8 @@ const CreateOrUpdateVocabularyContent: React.FC<CreateOrUpdateVocabularyContentP
 }) => {
     const { t } = useTranslation();
     const [showToast] = useIonToast();
-    const [word, setWord] = useState(vocabulary?.word || '');
     const { recorderAdapter } = useConfig();
+    const [word, setWord] = useState(vocabulary?.word || '');
     const [translation, setTranslation] = useState(vocabulary?.translation || '');
     const [isRecording, setIsRecording] = useState(false);
     const [translationPronunciation, setTranslationPronunciation] = useState<File>();
@@ -122,6 +122,45 @@ const CreateOrUpdateVocabularyContent: React.FC<CreateOrUpdateVocabularyContentP
                 onBackPressed={() => goBack?.()}
             />
             <div className={styles.container}>
+                <h1 className={styles.language}>{vocabularyList.wordLanguage.name}</h1>
+                <div className={styles.content}>
+                    <TextInput
+                        beforeInput={
+                            <span className={styles.flag}>{codeLanguageToFlag(vocabularyList.wordLanguage.code)}</span>
+                        }
+                        value={word}
+                        onChange={(value) => setWord(value)}
+                        placeholder={vocabulary?.word ?? t('vocabulary.pair.add.default_word')}
+                    />
+                    <div className={styles.pronunciationContainer}>
+                        <div className={styles.pronunciationContainer}>
+                            <span className={styles.pronunciation}>{t('vocabulary.pair.add.pronunciation')}</span>
+                            {(displayWordPronunciation || wordPronunciation) && (
+                                <AudioLine
+                                    audioFile={wordPronunciation || vocabulary?.pronunciationWordUrl || ''}
+                                    hideProgressBar
+                                />
+                            )}
+                        </div>
+                        {wordPronunciation || displayWordPronunciation ? (
+                            <IonButton
+                                className={styles.addPronunciation}
+                                fill="clear"
+                                onClick={onHideUploadedWordPronunciation}
+                            >
+                                {t('vocabulary.pair.add.delete_prounonciation')}
+                            </IonButton>
+                        ) : (
+                            <RecordingButton
+                                mode="record"
+                                handleStartRecord={onRecordWord}
+                                handleStopRecord={onStopRecordWord}
+                                isBlocked={false}
+                            />
+                        )}
+                    </div>
+                </div>
+
                 <h1 className={styles.language}>{vocabularyList.translationLanguage.name}</h1>
                 <div className={styles.content}>
                     <TextInput
@@ -164,45 +203,6 @@ const CreateOrUpdateVocabularyContent: React.FC<CreateOrUpdateVocabularyContentP
                         )}
                     </div>
                 </div>
-
-                <h1 className={styles.language}>{vocabularyList.wordLanguage.name}</h1>
-                <div className={styles.content}>
-                    <TextInput
-                        beforeInput={
-                            <span className={styles.flag}>{codeLanguageToFlag(vocabularyList.wordLanguage.code)}</span>
-                        }
-                        value={word}
-                        onChange={(value) => setWord(value)}
-                        placeholder={vocabulary?.word ?? t('vocabulary.pair.add.default_word')}
-                    />
-                    <div className={styles.pronunciationContainer}>
-                        <div className={styles.pronunciationContainer}>
-                            <span className={styles.pronunciation}>{t('vocabulary.pair.add.pronunciation')}</span>
-                            {(displayWordPronunciation || wordPronunciation) && (
-                                <AudioLine
-                                    audioFile={wordPronunciation || vocabulary?.pronunciationWordUrl || ''}
-                                    hideProgressBar
-                                />
-                            )}
-                        </div>
-                        {wordPronunciation || displayWordPronunciation ? (
-                            <IonButton
-                                className={styles.addPronunciation}
-                                fill="clear"
-                                onClick={onHideUploadedWordPronunciation}
-                            >
-                                {t('vocabulary.pair.add.delete_prounonciation')}
-                            </IonButton>
-                        ) : (
-                            <RecordingButton
-                                mode="record"
-                                handleStartRecord={onRecordWord}
-                                handleStopRecord={onStopRecordWord}
-                                isBlocked={false}
-                            />
-                        )}
-                    </div>
-                </div>
                 {!vocabulary ? (
                     <div className={`${styles.buttonContainer} ${styles.buttonCreateContainer}`}>
                         <IonButton fill="clear" className="tertiary-button no-padding" onClick={goBack}>
@@ -210,8 +210,8 @@ const CreateOrUpdateVocabularyContent: React.FC<CreateOrUpdateVocabularyContentP
                         </IonButton>
                         <IonButton
                             fill="clear"
-                            className={`primary-button no-padding ${!word && !translation ? 'disabled' : ''}`}
-                            disabled={!word || !translation}
+                            className={`primary-button no-padding ${!word ? 'disabled' : ''}`}
+                            disabled={!word}
                             onClick={() =>
                                 onSubmit(word, translation, undefined, wordPronunciation, translationPronunciation)
                             }
@@ -223,8 +223,8 @@ const CreateOrUpdateVocabularyContent: React.FC<CreateOrUpdateVocabularyContentP
                     <div className={styles.buttonContainer}>
                         <IonButton
                             fill="clear"
-                            className={`primary-button no-padding ${!word && !translation ? 'disabled' : ''}`}
-                            disabled={!word || !translation}
+                            className={`primary-button no-padding ${!word ? 'disabled' : ''}`}
+                            disabled={!word}
                             onClick={() =>
                                 onSubmit(
                                     word,
@@ -232,9 +232,9 @@ const CreateOrUpdateVocabularyContent: React.FC<CreateOrUpdateVocabularyContentP
                                     vocabulary.id,
                                     wordPronunciation,
                                     translationPronunciation,
+                                    Boolean(vocabulary.pronunciationWordUrl) && hideUploadedWordPronunciation,
                                     Boolean(vocabulary.pronunciationTranslationUrl) &&
-                                        hideUploadedTranslationPronunciation,
-                                    Boolean(vocabulary.pronunciationWordUrl) && hideUploadedWordPronunciation
+                                        hideUploadedTranslationPronunciation
                                 )
                             }
                         >
