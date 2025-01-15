@@ -25,8 +25,8 @@
     justify-content: center;
     width: 64px;
     height: 64px;
+    margin: 0px -24px;
     padding: 8px;
-    margin-left: -24px;
 }
 
 .image {
@@ -34,7 +34,11 @@
     height: 48px;
 }
 
-.imageContainer:first-child {
+:dir(ltr) .imageContainer:first-child {
+    margin-left: 0;
+}
+
+:dir(rtl) .imageContainer:last-child {
     margin-left: 0;
 }
 
@@ -59,7 +63,7 @@
     font-size: 20px;
     font-weight: 700;
     line-height: 25px;
-    text-align: left;
+    text-align: start;
     text-underline-position: from-font;
     text-decoration-skip-ink: none;
 }
@@ -69,7 +73,7 @@
     font-size: 16px;
     font-weight: 400;
     line-height: 20px;
-    text-align: left;
+    text-align: start;
 }
 
 .text-container {

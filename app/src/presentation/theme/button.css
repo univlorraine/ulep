@@ -51,7 +51,7 @@
     width: 100%;
 }
 
-.add-button {
+:dir(ltr) .add-button {
     background-color: #eeccff;
     border-radius: 50%;
     height: 48px;
@@ -59,6 +59,18 @@
     position: fixed;
     bottom: 20px;
     right: 20px;
+    z-index: 100;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+}
+
+:dir(rtl) .add-button {
+    background-color: #eeccff;
+    border-radius: 50%;
+    height: 48px;
+    width: 48px;
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
     z-index: 100;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
 }
