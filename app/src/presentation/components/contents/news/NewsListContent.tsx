@@ -4,12 +4,14 @@ import { useTranslation } from 'react-i18next';
 import Language from '../../../../domain/entities/Language';
 import News from '../../../../domain/entities/News';
 import Profile from '../../../../domain/entities/Profile';
+import { useStoreActions, useStoreState } from '../../../../store/storeTypes';
 import useGetNewsList from '../../../hooks/useGetNewsList';
 import HeaderSubContent from '../../HeaderSubContent';
 import FilterModal, { FiltersToDisplay } from '../../modals/FilterModal';
 import NewsLine from '../../news/NewsLine';
 import SearchAndFilter, { Filter, FilterType } from '../../SearchAndFilter';
 import styles from './NewsListContent.module.css';
+
 interface NewListContentProps {
     profile: Profile;
     onBackPressed: () => void;
@@ -19,17 +21,18 @@ interface NewListContentProps {
 export const NewsListContent: React.FC<NewListContentProps> = ({ profile, onBackPressed, onNewsPressed }) => {
     const { t } = useTranslation();
     const [showFiltersModal, setShowFiltersModal] = useState<boolean>(false);
-    const [languageFilter, setLanguageFilter] = useState<Language[]>([]);
+    const { setNewsFilter } = useStoreActions((state) => state);
+    const { newsFilter } = useStoreState((state) => state);
 
-    const { news, searchTitle, setSearchTitle, isNewsListEnded, onLoadMoreNews } = useGetNewsList(languageFilter);
+    const { news, searchTitle, setSearchTitle, isNewsListEnded, onLoadMoreNews } = useGetNewsList(newsFilter.language);
     const contentRef = useRef<HTMLDivElement>(null);
 
     const onFilterRemove = (filter: Filter) => {
-        setLanguageFilter(languageFilter.filter((lang) => lang.code !== filter.id));
+        setNewsFilter({ language: newsFilter.language.filter((lang) => lang.code !== filter.id) });
     };
 
     const onFilterClear = () => {
-        setLanguageFilter([]);
+        setNewsFilter({ language: [] });
     };
 
     const handleNewsPressed = (news: News) => {
@@ -37,7 +40,7 @@ export const NewsListContent: React.FC<NewListContentProps> = ({ profile, onBack
     };
 
     const onFilterApplied = (filters: { languages?: Language[] }) => {
-        setLanguageFilter(filters.languages ?? []);
+        setNewsFilter({ language: filters.languages ?? [] });
         setShowFiltersModal(false);
     };
 
@@ -45,7 +48,7 @@ export const NewsListContent: React.FC<NewListContentProps> = ({ profile, onBack
         <div className="subcontent-container content-wrapper" style={{ paddingTop: 0 }} ref={contentRef}>
             <HeaderSubContent title={t('news.list.title')} onBackPressed={onBackPressed} />
             <SearchAndFilter
-                allFilters={languageFilter.map((lang) => ({
+                allFilters={newsFilter.language?.map((lang) => ({
                     id: lang.code,
                     name: t(`languages_code.${lang.code}`),
                     type: FilterType.LANGUAGE,
@@ -77,7 +80,7 @@ export const NewsListContent: React.FC<NewListContentProps> = ({ profile, onBack
                 onClose={() => setShowFiltersModal(false)}
                 onFilterApplied={onFilterApplied}
                 profile={profile}
-                currentLanguagesFilter={languageFilter}
+                currentLanguagesFilter={newsFilter.language}
                 title="news.list.filter_title"
             />
         </div>
