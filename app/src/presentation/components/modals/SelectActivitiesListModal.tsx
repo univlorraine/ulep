@@ -36,7 +36,11 @@ const SelectActivitiesListModal: React.FC<SelectActivitiesListModalProps> = ({
 
                 <div className={styles.list}>
                     {activities.map((activity) => (
-                        <ActivityCard activity={activity} onClick={() => onValidate(activity)} />
+                        <ActivityCard
+                            activity={activity}
+                            onClick={() => onValidate(activity)}
+                            isHybrid={Boolean(isHybrid)}
+                        />
                     ))}
                 </div>
             </div>
