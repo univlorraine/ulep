@@ -59,7 +59,7 @@ const ProfileContent: React.FC<ProfileContentProps> = ({ onDisplaySettings, prof
     };
 
     const formattedDate = (date: Date): string => {
-        return new Intl.DateTimeFormat(language, {
+        return new Intl.DateTimeFormat(language || profile.nativeLanguage.code, {
             day: '2-digit',
             month: 'long',
             year: 'numeric',
