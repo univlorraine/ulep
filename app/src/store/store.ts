@@ -6,6 +6,9 @@ const Store = createStore<TokenStoreTypes>(
     persist(
         {
             accessToken: '',
+            newsFilter: {
+                language: [],
+            },
             apiUrl: '',
             chatUrl: '',
             socketChatUrl: '',
@@ -28,6 +31,9 @@ const Store = createStore<TokenStoreTypes>(
             }),
             setLanguage: action((state, payload) => {
                 state.language = payload.language;
+            }),
+            setNewsFilter: action((state, payload) => {
+                state.newsFilter.language = payload.language;
             }),
             setProfile: action((state, payload) => {
                 state.profile = payload.profile;
