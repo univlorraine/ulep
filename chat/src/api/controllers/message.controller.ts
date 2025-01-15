@@ -22,6 +22,6 @@ export class MessageController {
             isDeleted: command.isDeleted,
         });
 
-        return new MessageResponse(message);
+        return MessageResponse.from(message);
     }
 }
