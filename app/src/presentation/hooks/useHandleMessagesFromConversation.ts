@@ -4,25 +4,38 @@ import { useTranslation } from 'react-i18next';
 import { useConfig } from '../../context/ConfigurationContext';
 import { useSocket } from '../../context/SocketContext';
 import Conversation, { MessagePaginationDirection } from '../../domain/entities/chat/Conversation';
+import Hashtag from '../../domain/entities/chat/Hashtag';
 import { Message, MessageType, MessageWithConversationId } from '../../domain/entities/chat/Message';
+import { LogEntryType } from '../../domain/entities/LogEntry';
 import { UserChat } from '../../domain/entities/User';
 import { useStoreState } from '../../store/storeTypes';
+
+type LoadMessageProps = {
+    isFirstMessage: boolean;
+    direction?: MessagePaginationDirection;
+    messageId?: string;
+    messageToReplyId?: string;
+    hashtagToFilter?: Hashtag;
+};
 
 interface UseHandleMessagesFromConversationProps {
     conversationId: string;
     typeFilter?: MessageType;
     limit?: number;
+    learningLanguageId?: string;
 }
 
 const useHandleMessagesFromConversation = ({
     conversationId,
     typeFilter,
     limit = 10,
+    learningLanguageId,
 }: UseHandleMessagesFromConversationProps) => {
-    const { getMessagesFromConversation, sendMessage } = useConfig();
+    const { getMessagesFromConversation, sendMessage, createLogEntry } = useConfig();
     const { socket } = useSocket();
     const [lastMessageForwardId, setLastMessageForwardId] = useState<string>();
     const [lastMessageBackwardId, setLastMessageBackwardId] = useState<string>();
+    const [currentMessageReply, setCurrentMessageReply] = useState<Message>();
     const profile = useStoreState((state) => state.profile);
     const [showToast] = useIonToast();
     const { t } = useTranslation();
@@ -44,24 +57,150 @@ const useHandleMessagesFromConversation = ({
     if (!profile)
         return {
             ...messagesResult,
-            loadMessages: () => {},
+            messageToReply: undefined,
+            onLoadMessages: () => {},
             addNewMessage: () => {},
             clearMessages: () => {},
             handleSendMessage: () => {},
+            onLikeMessage: () => {},
+            onUnlikeMessage: () => {},
+            onLikeMessageReceived: () => {},
+            onUnlikeMessageReceived: () => {},
+            onReplyToMessage: () => {},
+            onCancelReply: () => {},
         };
 
-    const addNewMessage = (message: Message) => {
-        setMessagesResult((current) => ({
-            messages: [message, ...current.messages],
-            isScrollForwardOver: current.isScrollForwardOver,
-            isScrollBackwardOver: current.isScrollBackwardOver,
-            error: undefined,
-            isLoading: false,
-        }));
+    const onLoadMessages = (props: LoadMessageProps) => {
+        const {
+            isFirstMessage = false,
+            direction = MessagePaginationDirection.FORWARD,
+            messageId,
+            hashtagToFilter,
+        } = props;
+        loadMessages({
+            isFirstMessage,
+            direction,
+            messageId,
+            messageToReplyId: currentMessageReply?.id,
+            hashtagToFilter,
+        });
     };
 
-    const handleSendMessage = async (conversation: Conversation, message: string, file?: File, filename?: string) => {
-        const messageResult = await sendMessage.execute(conversation.id, profile.user.id, message, file, filename);
+    const onReplyToMessage = async (message: Message) => {
+        setCurrentMessageReply(message);
+    };
+
+    const onCancelReply = () => {
+        setCurrentMessageReply(undefined);
+    };
+
+    const onLikeMessage = (messageId: string) => {
+        const messageToLike = messagesResult.messages.find((message) => message.id === messageId);
+        if (!messageToLike) {
+            return;
+        }
+        messageToLike.likes++;
+        messageToLike.didLike = true;
+        socket.like(conversationId, messageId, profile.user.id);
+    };
+
+    const onUnlikeMessage = (messageId: string) => {
+        const messageToUnlike = messagesResult.messages.find((message) => message.id === messageId);
+        if (!messageToUnlike) {
+            return;
+        }
+        messageToUnlike.likes--;
+        messageToUnlike.didLike = false;
+        socket.unlike(conversationId, messageId, profile.user.id);
+    };
+
+    const onLikeMessageReceived = (messageId: string, userId: string) => {
+        if (userId === profile.user.id) {
+            return;
+        }
+
+        setMessagesResult((current: any) => {
+            const updatedMessages = current.messages.map((message: any) => {
+                if (message.id === messageId) {
+                    return new Message(
+                        message.id,
+                        message.content,
+                        message.createdAt,
+                        message.sender,
+                        message.type,
+                        message.likes + 1,
+                        message.didLike,
+                        message.metadata
+                    );
+                }
+                return message;
+            });
+
+            return {
+                ...current,
+                messages: updatedMessages,
+            };
+        });
+    };
+
+    const onUnlikeMessageReceived = (messageId: string, userId: string) => {
+        if (userId === profile.user.id) {
+            return;
+        }
+
+        setMessagesResult((current: any) => {
+            const updatedMessages = current.messages.map((message: any) => {
+                if (message.id === messageId) {
+                    return new Message(
+                        message.id,
+                        message.content,
+                        message.createdAt,
+                        message.sender,
+                        message.type,
+                        message.likes - 1,
+                        message.didLike,
+                        message.metadata
+                    );
+                }
+                return message;
+            });
+
+            return {
+                ...current,
+                messages: updatedMessages,
+            };
+        });
+    };
+
+    const addNewMessage = (message: Message) => {
+        if (!currentMessageReply || message.parentId === currentMessageReply?.id) {
+            setMessagesResult((current) => ({
+                messages: [message, ...current.messages],
+                isScrollForwardOver: current.isScrollForwardOver,
+                isScrollBackwardOver: current.isScrollBackwardOver,
+                error: undefined,
+                isLoading: false,
+            }));
+        }
+    };
+
+    const handleSendMessage = async (
+        conversation: Conversation,
+        message: string,
+        file?: File,
+        filename?: string,
+        type?: MessageType,
+        metadata?: any
+    ) => {
+        const messageResult = await sendMessage.execute({
+            conversationId: conversation.id,
+            senderId: profile.user.id,
+            content: message,
+            file,
+            filename,
+            type,
+            parentId: currentMessageReply?.id,
+        });
 
         if (messageResult instanceof Error) {
             return showToast({
@@ -85,16 +224,31 @@ const useHandleMessagesFromConversation = ({
                 ),
                 messageResult.type,
                 conversation.id,
-                messageResult.metadata
+                0,
+                false,
+                { ...messageResult.metadata, ...metadata },
+                0,
+                currentMessageReply?.id
             )
         );
+
+        const partner = Conversation.getMainConversationPartner(conversation, profile.user.id);
+
+        if (learningLanguageId) {
+            await createLogEntry.execute({
+                type: LogEntryType.TANDEM_CHAT,
+                learningLanguageId,
+                metadata: {
+                    partnerTandemId: conversation.id,
+                    tandemFirstname: partner.firstname,
+                    tandemLastname: partner.lastname,
+                },
+            });
+        }
     };
 
-    const loadMessages = async (
-        isFirstMessage = false,
-        direction: MessagePaginationDirection = MessagePaginationDirection.FORWARD,
-        messageId?: string
-    ) => {
+    const loadMessages = async (props: LoadMessageProps) => {
+        const { isFirstMessage, direction, messageId, messageToReplyId, hashtagToFilter } = props;
         if (
             (!isFirstMessage &&
                 direction === MessagePaginationDirection.FORWARD &&
@@ -123,6 +277,8 @@ const useHandleMessagesFromConversation = ({
             limit,
             typeFilter,
             direction,
+            parentId: messageToReplyId,
+            hashtagFilter: hashtagToFilter ? `${hashtagToFilter.name}` : undefined,
         });
 
         if (messagesConversationResult instanceof Error) {
@@ -193,13 +349,26 @@ const useHandleMessagesFromConversation = ({
 
     useEffect(() => {
         const fetchData = async () => {
-            await loadMessages(true);
+            await onLoadMessages({ isFirstMessage: true });
         };
 
         fetchData();
-    }, [profile, conversationId, typeFilter]);
+    }, [profile, conversationId, typeFilter, currentMessageReply]);
 
-    return { ...messagesResult, loadMessages, addNewMessage, clearMessages, handleSendMessage };
+    return {
+        ...messagesResult,
+        messageToReply: currentMessageReply,
+        onLoadMessages,
+        addNewMessage,
+        clearMessages,
+        handleSendMessage,
+        onLikeMessage,
+        onUnlikeMessage,
+        onLikeMessageReceived,
+        onUnlikeMessageReceived,
+        onReplyToMessage,
+        onCancelReply,
+    };
 };
 
 export default useHandleMessagesFromConversation;

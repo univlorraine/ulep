@@ -1,5 +1,4 @@
-import { TailSpin } from 'react-loader-spinner';
-import { Style } from 'react-loader-spinner/dist/type';
+import { Style, TailSpin } from 'react-loader-spinner';
 import { useConfig } from '../../context/ConfigurationContext';
 
 interface LoaderParams {

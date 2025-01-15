@@ -1,0 +1,54 @@
+.container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    flex: 1;
+    margin-bottom: 10px;
+}
+
+.card {
+    width: 100%;
+    max-height: 250px;
+    flex: 0.5;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0px 4px 4px 0px #00000040;
+    padding-inline: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.card:first-child {
+    margin-bottom: 10px;
+}
+
+.card:nth-child(2) {
+    background-color: #c4bad6;
+}
+
+.word {
+    font-family: 'Roboto';
+    font-size: 37px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 40px;
+    text-align: center;
+    color: #000;
+}
+
+.card > div {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 10;
+    height: 40px;
+    justify-content: flex-end;
+}
+
+.card > div button {
+    margin-right: 0;
+}

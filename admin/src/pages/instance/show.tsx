@@ -1,7 +1,7 @@
 import DeleteIcon from '@mui/icons-material/Delete';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import { Box, CircularProgress, Modal, Switch, SwitchProps, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
     Button,
     EditButton,
@@ -19,6 +19,7 @@ import {
     useUpdate,
 } from 'react-admin';
 import { ColorField } from 'react-admin-color-picker';
+import ReferenceUploadFileField from '../../components/field/ReferenceUploadFileField';
 import useGenerateConversation from '../../components/menu/useGenerateConversation';
 import usePurge from '../../components/menu/usePurge';
 import ConfigPagesHeader from '../../components/tabs/ConfigPagesHeader';
@@ -136,6 +137,10 @@ const InstanceShow = () => {
                                     </Button>
                                 </Box>
                             )}
+                        />
+                        <ReferenceUploadFileField
+                            label={translate('instance.defaultCertificateFile')}
+                            source="defaultCertificateFile.id"
                         />
                     </SimpleShowLayout>
                     <SimpleShowLayout sx={{ m: 3, flex: '1' }}>

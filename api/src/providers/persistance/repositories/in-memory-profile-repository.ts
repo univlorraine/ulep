@@ -1,6 +1,6 @@
 import { Collection } from '@app/common';
-import { ProfileRepository } from '../../../core/ports/profile.repository';
 import { Profile } from '../../../core/models/profile.model';
+import { ProfileRepository } from '../../../core/ports/profile.repository';
 
 export class InMemoryProfileRepository implements ProfileRepository {
   #profiles: Map<string, Profile> = new Map();
@@ -48,6 +48,21 @@ export class InMemoryProfileRepository implements ProfileRepository {
       items: allItems.slice(offset, offset + limit),
       totalItems: allItems.length,
     };
+  }
+
+  async findAllWithMasteredLanguageAndLearningLanguage(
+    firstLanguageCode: string,
+    secondLanguageCode: string,
+  ): Promise<Profile[]> {
+    return Array.from(this.#profiles.values()).filter(
+      (profile) =>
+        profile.masteredLanguages.some(
+          (language) => language.code === firstLanguageCode,
+        ) ||
+        profile.learningLanguages.some(
+          (language) => language.language.code === secondLanguageCode,
+        ),
+    );
   }
 
   async findAllWithTandemsProfiles(

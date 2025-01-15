@@ -58,6 +58,12 @@ export const subMenus: SubMenusType = {
             role: Role.SUPER_ADMIN,
         },
         {
+            resource: 'activities/categories',
+            type: 'list',
+            label: 'activities_categories.tabLabel',
+            role: Role.SUPER_ADMIN,
+        },
+        {
             resource: 'countries',
             type: 'list',
             label: 'countries.tabLabel',
@@ -93,11 +99,9 @@ export const subMenus: SubMenusType = {
 
 const RA_ACTIVE_CLASS = 'RaMenuItemLink-active';
 
-const manageSubMenusActiveClass = (ref: HTMLDivElement, currentPathname: string, subMenuName: string) => {
-    const aElement = ref.firstElementChild;
-
+const manageSubMenusActiveClass = (aElement: any, currentPathname: string, subMenuName: string) => {
     const resources = subMenus[subMenuName].map((link) => link.resource);
-    const currentResource = resources.filter((resource) => currentPathname.startsWith(resource.split('/')[0])); // The resource is split because of "interest" subpages
+    const currentResource = resources.filter((resource) => currentPathname.includes(resource));
 
     if (aElement && currentResource.length !== 0) {
         aElement.classList.add(RA_ACTIVE_CLASS);
@@ -106,12 +110,40 @@ const manageSubMenusActiveClass = (ref: HTMLDivElement, currentPathname: string,
     }
 };
 
-const manageCurrentPathActiveClass = (ref: HTMLDivElement, currentPathname: string) => {
-    const aElement = ref.firstElementChild;
+const manageUniversitySubMenuActiveClass = (
+    universityRef: HTMLDivElement,
+    currentPathname: string,
+    subMenuName: string
+) => {
+    const aElement = universityRef.firstElementChild;
+    manageSubMenusActiveClass(aElement, currentPathname, subMenuName);
+};
 
-    if (currentPathname.includes('profiles/with-tandem')) {
+const manageConfigSubMenuActiveClass = (configRef: HTMLDivElement, currentPathname: string, subMenuName: string) => {
+    const aElement = configRef.firstElementChild;
+    manageSubMenusActiveClass(aElement, currentPathname, subMenuName);
+
+    if (currentPathname.includes('activities/themes') || currentPathname.includes('interests/')) {
+        aElement?.classList.add(RA_ACTIVE_CLASS);
+    }
+};
+
+const manageProfilesPathActiveClass = (profilesRef: HTMLDivElement, currentPathname: string) => {
+    const aElement = profilesRef.firstElementChild;
+
+    if (currentPathname.includes('profiles/with-tandems')) {
         aElement?.classList.remove(RA_ACTIVE_CLASS);
     } else if (currentPathname.includes('profiles')) {
+        aElement?.classList.add(RA_ACTIVE_CLASS);
+    }
+};
+
+const manageActivitiesPathActiveClass = (activitiesRef: HTMLDivElement, currentPathname: string) => {
+    const aElement = activitiesRef.firstElementChild;
+
+    if (currentPathname.includes('activities/categories')) {
+        aElement?.classList.remove(RA_ACTIVE_CLASS);
+    } else if (currentPathname.includes('activities') && !currentPathname.includes('activities/themes')) {
         aElement?.classList.add(RA_ACTIVE_CLASS);
     }
 };
@@ -125,15 +157,19 @@ const CustomMenu = () => {
     const [universitiesRef, setUniversitiesRef] = useState<HTMLDivElement>();
     const [configurationRef, setConfigurationRef] = useState<HTMLDivElement>();
     const [profilesRef, setProfilesRef] = useState<HTMLDivElement>();
+    const [activitiesRef, setActivitiesRef] = useState<HTMLDivElement>();
 
     if (universitiesRef) {
-        manageSubMenusActiveClass(universitiesRef, currentPathname, 'universities');
+        manageUniversitySubMenuActiveClass(universitiesRef, currentPathname, 'universities');
     }
     if (configurationRef) {
-        manageSubMenusActiveClass(configurationRef, currentPathname, 'configuration');
+        manageConfigSubMenuActiveClass(configurationRef, currentPathname, 'configuration');
     }
     if (profilesRef) {
-        manageCurrentPathActiveClass(profilesRef, currentPathname);
+        manageProfilesPathActiveClass(profilesRef, currentPathname);
+    }
+    if (activitiesRef) {
+        manageActivitiesPathActiveClass(activitiesRef, currentPathname);
     }
 
     return (
@@ -143,6 +179,11 @@ const CustomMenu = () => {
             </Box>
             <Menu.ResourceItem name="profiles/with-tandems-profiles" />
             <Menu.ResourceItem name="chat" />
+            <Menu.ResourceItem name="news" />
+            <Menu.ResourceItem name="events" />
+            <Box ref={(newRef: HTMLDivElement) => setActivitiesRef(newRef)} sx={{ marginTop: 0 }}>
+                <Menu.ResourceItem name="activities" />
+            </Box>
             {permissions.checkRole(Role.MANAGER) && data && data.universityId && (
                 <Menu.Item
                     leftIcon={<SchoolIcon />}

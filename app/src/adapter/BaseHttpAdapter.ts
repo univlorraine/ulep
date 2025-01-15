@@ -22,11 +22,27 @@ class BaseHttpAdapter {
         if (contentType === 'multipart/form-data') {
             encodedBody = new FormData();
             Object.keys(body).forEach((key) => {
-                encodedBody.append(key, body[key]);
+                const value = body[key];
+                if (Array.isArray(value)) {
+                    value.forEach((item, index) => {
+                        if (item instanceof File) {
+                            encodedBody.append(`${key}[${index}]`, item);
+                        } else if (item instanceof Object) {
+                            Object.keys(item).forEach((subKey) => {
+                                encodedBody.append(`${key}[${index}][${subKey}]`, item[subKey]);
+                            });
+                        } else {
+                            encodedBody.append(`${key}[${index}]`, item);
+                        }
+                    });
+                } else if (value !== undefined || value !== null) {
+                    encodedBody.append(key, value);
+                }
             });
         } else {
             encodedBody = JSON.stringify(body);
         }
+
         return this.http(path, { ...args, method: 'POST', body: encodedBody }, contentType);
     }
 
@@ -49,7 +65,7 @@ class BaseHttpAdapter {
     async http<T>(path: string, args: RequestInit, contentType = 'application/json'): Promise<HttpResponse<T>> {
         const headers: Record<string, string> = {
             ...(args.headers as Record<string, string>),
-            Accept: 'application/json',
+            Accept: 'application/json, application/pdf, text/csv',
         };
 
         if (contentType !== 'multipart/form-data') {
@@ -79,6 +95,10 @@ class BaseHttpAdapter {
                     const responseContentType = res.headers.get('content-type');
                     if (responseContentType && responseContentType.indexOf('application/json') !== -1) {
                         return res.json();
+                    } else if (responseContentType && responseContentType.indexOf('application/pdf') !== -1) {
+                        return res.blob();
+                    } else if (responseContentType && responseContentType.indexOf('text/csv') !== -1) {
+                        return res.blob();
                     }
 
                     return { ok: true };

@@ -3,25 +3,29 @@ import { RessourceDoesNotExist } from 'src/core/errors';
 import { PairingMode, University } from 'src/core/models';
 import { CHAT_SERVICE } from 'src/core/ports/chat.service';
 import {
-  COUNTRY_REPOSITORY,
+  CommunityChatRepository,
+  COMMUNITY_CHAT_REPOSITORY,
+} from 'src/core/ports/community-chat.repository';
+import {
   CountryRepository,
+  COUNTRY_REPOSITORY,
 } from 'src/core/ports/country.repository';
 import {
-  LANGUAGE_REPOSITORY,
   LanguageRepository,
+  LANGUAGE_REPOSITORY,
 } from 'src/core/ports/language.repository';
 import {
-  PROFILE_REPOSITORY,
   ProfileRepository,
+  PROFILE_REPOSITORY,
 } from 'src/core/ports/profile.repository';
 import {
-  TANDEM_REPOSITORY,
   TandemRepository,
+  TANDEM_REPOSITORY,
 } from 'src/core/ports/tandem.repository';
 import { ChatService } from 'src/providers/services/chat.service';
 import {
-  UNIVERSITY_REPOSITORY,
   UniversityRepository,
+  UNIVERSITY_REPOSITORY,
 } from '../../ports/university.repository';
 
 export class UpdateUniversityCommand {
@@ -61,6 +65,8 @@ export class UpdateUniversityUsecase {
     private readonly profileRepository: ProfileRepository,
     @Inject(CHAT_SERVICE)
     private readonly chatService: ChatService,
+    @Inject(COMMUNITY_CHAT_REPOSITORY)
+    private readonly communityChatRepository: CommunityChatRepository,
   ) {}
 
   async execute(command: UpdateUniversityCommand) {
@@ -121,11 +127,16 @@ export class UpdateUniversityUsecase {
     const { university: updatedUniversity, usersId } =
       await this.universityRepository.update(universityToUpdate);
 
-    await this.handleConversation(
-      updatedUniversity,
-      university.defaultContactId,
-      usersId,
-    );
+    if (
+      university.defaultContactId &&
+      university.defaultContactId !== updatedUniversity.defaultContactId
+    ) {
+      await this.handleConversation(
+        updatedUniversity,
+        university.defaultContactId,
+        usersId,
+      );
+    }
 
     return new University(updatedUniversity);
   }
@@ -144,10 +155,12 @@ export class UpdateUniversityUsecase {
           profileAdmin.id,
         );
       }
-      await this.chatService.deleteConversationByContactId(
-        oldContactId,
-        chatIdsToIgnore.map((tandem) => tandem.id),
-      );
+
+      const communityChats = await this.communityChatRepository.all();
+      await this.chatService.deleteConversationByUserId(oldContactId, [
+        ...chatIdsToIgnore.map((tandem) => tandem.id),
+        ...communityChats.map((chat) => chat.id),
+      ]);
       await this.chatService.createConversations(
         usersToUpdate
           .filter((userId) => userId !== university.defaultContactId)

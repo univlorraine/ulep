@@ -52,7 +52,7 @@ const SignUpPage: React.FC = () => {
     // Force oauth if user is not logged in and university is central.
     // Should be part of the university entity with list of awailable / required auth providers (sso, email, etc.)
     // to be more modular.
-    const isFormValid: boolean = university?.isCentral ?? false ? isLoggedIn && !isAFieldEmpty : !isAFieldEmpty;
+    const isFormValid: boolean = (university?.isCentral ?? false) ? isLoggedIn && !isAFieldEmpty : !isAFieldEmpty;
 
     // Map list of University to list of DropDownItem.
     const universities: DropDownItem<University>[] = (country?.universities || []).map((university) => ({
@@ -199,6 +199,14 @@ const SignUpPage: React.FC = () => {
                                 ariaLabel={t('signup_page.country_aria_label') as string}
                                 aria-required={true}
                                 required={true}
+                                value={
+                                    country
+                                        ? {
+                                              label: `${country.emoji ? country.emoji + ' ' : ''}${country.name}`,
+                                              value: country,
+                                          }
+                                        : undefined
+                                }
                             />
                         </div>
                         {/* University selector */}
@@ -211,6 +219,7 @@ const SignUpPage: React.FC = () => {
                                     ariaLabel={t('signup_page.university_aria_label') as string}
                                     aria-required={true}
                                     required={true}
+                                    value={university ? { label: university.name, value: university } : undefined}
                                 />
                             </div>
                         )}
@@ -245,7 +254,7 @@ const SignUpPage: React.FC = () => {
                     <div className="large-margin-top">
                         <TextInput
                             onChange={setDepartment}
-                            title={t('signup_page.department_title')}
+                            title={t('signup_page.department_title') as string}
                             value={department}
                             maxLength={50}
                         />
@@ -255,7 +264,7 @@ const SignUpPage: React.FC = () => {
                 {university && selectedRole === 'STAFF' && (
                     <TextInput
                         onChange={setStaffFunction}
-                        title={t('signup_page.function_title')}
+                        title={t('signup_page.function_title') as string}
                         value={staffFunction}
                         maxLength={50}
                     />
@@ -264,7 +273,7 @@ const SignUpPage: React.FC = () => {
                 {university && selectedRole === 'STUDENT' && (
                     <TextInput
                         onChange={setDiploma}
-                        title={t('signup_page.diplome_title')}
+                        title={t('signup_page.diplome_title') as string}
                         value={diploma}
                         maxLength={50}
                     />

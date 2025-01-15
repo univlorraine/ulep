@@ -1,8 +1,11 @@
 import ChatIcon from '@mui/icons-material/Chat';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import EditNoteIcon from '@mui/icons-material/EditNote';
+import FeedIcon from '@mui/icons-material/Feed';
 import HelpIcon from '@mui/icons-material/Help';
 import InterestsIcon from '@mui/icons-material/Interests';
 import LanguageIcon from '@mui/icons-material/Language';
+import NewspaperIcon from '@mui/icons-material/Newspaper';
 import PeopleIcon from '@mui/icons-material/People';
 import PersonIcon from '@mui/icons-material/Person';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
@@ -15,6 +18,9 @@ import { Admin, CustomRoutes, Resource } from 'react-admin';
 import { Route } from 'react-router-dom';
 import CustomLayout from './components/layout/layout';
 import { Role } from './entities/Administrator';
+import activities from './pages/activities';
+import activityCategories from './pages/activity-categories';
+import activityThemes from './pages/activity-themes';
 import EditAdministratorProfile from './pages/admin-profile/edit';
 import administrators from './pages/administrators';
 import LoginPage from './pages/auth/login';
@@ -23,10 +29,13 @@ import categoryInterest from './pages/category-interest';
 import chat from './pages/chat';
 import countSuggestedLanguages from './pages/count-suggested-languages';
 import countries from './pages/countries';
+import events from './pages/events';
+import eventsSubscriptions from './pages/events/subscriptions';
 import instance from './pages/instance';
 import interests from './pages/interests';
 import JitsiPage from './pages/jitsi/JitsiPage';
 import languages from './pages/languages';
+import news from './pages/news';
 import objectives from './pages/objectives';
 import profiles from './pages/profiles';
 import profilesWithTandem from './pages/profiles-with-tandems-profiles';
@@ -72,6 +81,15 @@ const App = () => (
                     {...reports}
                 />
                 <Resource icon={ChatIcon} name="chat" options={{ label: 'chat.label' }} {...chat} />
+                <Resource icon={NewspaperIcon} name="news" options={{ label: 'news.label' }} {...news} />
+                <Resource icon={FeedIcon} name="events" options={{ label: 'events.label' }} {...events} />
+                <Resource name="events/subscriptions" {...eventsSubscriptions} />
+                <Resource
+                    icon={EditNoteIcon}
+                    name="activities"
+                    options={{ label: 'activities.label' }}
+                    {...activities}
+                />
                 {permissions.checkRole(Role.MANAGER) && (
                     <Resource
                         edit={universities.manager.edit}
@@ -133,6 +151,12 @@ const App = () => (
                             options={{ label: 'interest_categories.label' }}
                             {...categoryInterest}
                         />
+                        <Resource
+                            name="activities/categories"
+                            options={{ label: 'interest_categories.label' }}
+                            {...activityCategories}
+                        />
+                        <Resource name="activities/themes" {...activityThemes} />
                         <Resource
                             icon={CheckCircleIcon}
                             name="objectives"

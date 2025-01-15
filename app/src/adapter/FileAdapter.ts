@@ -10,17 +10,20 @@ class FileAdapter implements FileAdapterInterface {
         this.deviceAdapter = deviceAdapter;
     }
 
-    async getFile(): Promise<File | undefined> {
-        const pickedFiles = await FilePicker.pickFiles({
-            types: [
-                'application/pdf',
+    async getFile({ isTypeOnlyPdf }: { isTypeOnlyPdf?: boolean }): Promise<File | undefined> {
+        const types = ['application/pdf'];
+        if (!isTypeOnlyPdf) {
+            types.push(
                 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
                 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
                 'application/vnd.openxmlformats-officedocument.presentationml.presentation', // .pptx
                 'application/vnd.oasis.opendocument.text', // .odt
                 'application/vnd.oasis.opendocument.spreadsheet', // .ods
-                'application/vnd.oasis.opendocument.presentation', // .odp
-            ],
+                'application/vnd.oasis.opendocument.presentation' // .odp
+            );
+        }
+        const pickedFiles = await FilePicker.pickFiles({
+            types,
             readData: true,
         });
 
@@ -62,6 +65,11 @@ class FileAdapter implements FileAdapterInterface {
         }
     }
 
+    async saveBlob(blob: Blob, filename: string): Promise<void> {
+        const url = window.URL.createObjectURL(blob);
+        await this.saveFile(url, filename);
+    }
+
     private convertBlobToBase64 = (blob: Blob): Promise<string> => {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -69,7 +77,10 @@ class FileAdapter implements FileAdapterInterface {
                 const base64String = (reader.result as string).split(',')[1];
                 resolve(base64String);
             };
-            reader.onerror = reject;
+            reader.onerror = (error) => {
+                console.error(error);
+                reject(error);
+            };
             reader.readAsDataURL(blob);
         });
     };

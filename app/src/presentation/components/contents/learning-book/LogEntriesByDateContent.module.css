@@ -1,0 +1,23 @@
+.log-entries-list {
+    display: flex;
+    padding: 20px;
+    max-height: 100%;
+    overflow-y: auto;
+}
+
+.log-entries-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    overflow-y: auto;
+}
+
+.date {
+    font-family: Roboto;
+    font-size: 37px;
+    font-weight: 700;
+    line-height: 40px;
+    text-align: center;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+}

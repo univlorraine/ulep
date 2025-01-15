@@ -1,0 +1,22 @@
+.container {
+    width: 25%;
+    height: calc(100% - 87px);
+    min-width: 400px;
+    max-width: 550px;
+    .content {
+        overflow-y: scroll;
+        height: calc(100% - 50px);
+
+        .tandemContent {
+            padding: 20px;
+        }
+
+        .subcontent-container {
+            width: 100%;
+        }
+    }
+}
+
+.container .content .subcontent-container {
+    width: 100%;
+}

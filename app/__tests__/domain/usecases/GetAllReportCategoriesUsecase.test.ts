@@ -1,7 +1,7 @@
 import { CollectionCommand } from '../../../src/command/CollectionCommand';
 import ReportCategoryCommand from '../../../src/command/ReportCategoryCommand';
 import ReportCategory from '../../../src/domain/entities/ReportCategory';
-import GetAllReportCategoriesUsecase from '../../../src/domain/usecases/GetAllReportCategoriesUsecase';
+import GetAllReportCategoriesUsecase from '../../../src/domain/usecases/reports/GetAllReportCategoriesUsecase';
 import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 
 const httpCallResponse: CollectionCommand<ReportCategoryCommand> = {

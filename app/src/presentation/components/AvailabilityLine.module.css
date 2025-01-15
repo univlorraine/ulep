@@ -21,6 +21,19 @@
     margin-left: 8px;
 }
 
+.availability-text {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    border-right: 2px solid #000;
+    padding-right: 8px;
+}
+
+.availability-text:last-child {
+    border-right: 0;
+}
+
 .container {
     align-items: center;
     background-color: #f2f4f7;

@@ -5,6 +5,9 @@ import { useStoreState } from '../../store/storeTypes';
 import useIsUniversityOpen from '../hooks/useIsUniversityOpen';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import AuthFlowPage from '../pages/AuthFlowPage';
+import CEFRQuizzEndPage from '../pages/cefr-quizz/CEFRQuizzEndPage';
+import CEFRQuizzLanguagePage from '../pages/cefr-quizz/CEFRQuizzLanguagePage';
+import CEFRQuizzOtherLanguagesPage from '../pages/cefr-quizz/CEFRQuizzOtherLanguagesPage';
 import ConnectPage from '../pages/ConnectPage';
 import ConversationsPage from '../pages/ConversationsPage';
 import EditInformationsPage from '../pages/EditInformationsPage';
@@ -12,7 +15,31 @@ import ForgotPasswordPage from '../pages/ForgotPasswordPage';
 import ForgotPasswordSentPage from '../pages/ForgotPasswordSentPage';
 import HomePage from '../pages/HomePage';
 import JitsiPage from '../pages/Jitsi';
+import LearningPage from '../pages/LearningPage';
 import LoginPage from '../pages/LoginPage';
+import ActivitiesPage from '../pages/mobile/ActivitiesPage';
+import ChatPage from '../pages/mobile/ChatPage';
+import CreateCustomGoalPage from '../pages/mobile/CreateCustomGoalPage';
+import CreateSessionPage from '../pages/mobile/CreateSessionPage';
+import EndSessionPage from '../pages/mobile/EndSessionPage';
+import EventListPage from '../pages/mobile/EventListPage';
+import EventShowPage from '../pages/mobile/EventShowPage';
+import FlipcardsPage from '../pages/mobile/FlipcardsPage';
+import GoalsListPage from '../pages/mobile/GoalsListPage';
+import LearningBookPage from '../pages/mobile/LearningBookPage';
+import MediaPage from '../pages/mobile/MediaPage';
+import NewsListPage from '../pages/mobile/NewsListPage';
+import NewsShowPage from '../pages/mobile/NewsShowPage';
+import ReportPage from '../pages/mobile/ReportPage';
+import SessionListPage from '../pages/mobile/SessionListPage';
+import SettingsPage from '../pages/mobile/SettingsPage';
+import ShowCustomGoalPage from '../pages/mobile/ShowCustomGoal';
+import ShowSessionPage from '../pages/mobile/ShowSessionPage';
+import TandemProfilePage from '../pages/mobile/TandemProfilePage';
+import TandemStatusPage from '../pages/mobile/TandemStatusPage';
+import UpdateCustomGoalPage from '../pages/mobile/UpdateCustomGoalPage';
+import UpdateSessionPage from '../pages/mobile/UpdateSessionPage';
+import VocabulariesPage from '../pages/mobile/VocabulariesPage';
 import PairingConfirmLanguagePage from '../pages/PairingConfirmLanguagePage';
 import PairingFinalPage from '../pages/PairingFinalPage';
 import PairingLanguagesPage from '../pages/PairingLanguagesPage';
@@ -27,7 +54,9 @@ import PairingQuizzEndPage from '../pages/PairingQuizzEndPage';
 import PairingQuizzIntroductionPage from '../pages/PairingQuizzIntroductionPage';
 import PairingSelectCEFRPage from '../pages/PairingSelectCEFRPage';
 import PairingUnavailableLanguagePage from '../pages/PairingUnavailableLanguagePage';
+import ProfilePage from '../pages/ProfilePage';
 import QuizzPage from '../pages/QuizzPage';
+import ReportsPage from '../pages/ReportsPage';
 import ServiceClosePage from '../pages/ServiceClosePage';
 import SignUpAvailabilitiesPage from '../pages/SignUpAvailabilitiesPage';
 import SignUpBiographyPage from '../pages/SignUpBiographyPage';
@@ -39,17 +68,8 @@ import SignUpInterestsPage from '../pages/SignUpInterestsPage';
 import SignUpLanguagesPage from '../pages/SignUpLanguagesPage';
 import SignUpPage from '../pages/SignUpPage';
 import SuspendedPage from '../pages/SuspendedPage';
+import ViewReportPage from '../pages/ViewReportPage';
 import WelcomePage from '../pages/WelcomePage';
-import CEFRQuizzEndPage from '../pages/cefr-quizz/CEFRQuizzEndPage';
-import CEFRQuizzLanguagePage from '../pages/cefr-quizz/CEFRQuizzLanguagePage';
-import CEFRQuizzOtherLanguagesPage from '../pages/cefr-quizz/CEFRQuizzOtherLanguagesPage';
-import ChatPage from '../pages/mobile/ChatPage';
-import MediaPage from '../pages/mobile/MediaPage';
-import ProfilePage from '../pages/mobile/ProfilePage';
-import ReportPage from '../pages/mobile/ReportPage';
-import SettingsPage from '../pages/mobile/SettingsPage';
-import TandemProfilePage from '../pages/mobile/TandemProfilePage';
-import TandemStatusPage from '../pages/mobile/TandemStatusPage';
 import { HYBRID_MAX_WIDTH } from '../utils';
 import BottomBar from './BottomBar';
 import MobileRoute from './MobileRoute';
@@ -104,6 +124,12 @@ const OfflineRouter: React.FC = () => {
                 <MobileRoute exact path={'/report'}>
                     <ReportPage />
                 </MobileRoute>
+                <MobileRoute exact path={'/activities'}>
+                    <ActivitiesPage />
+                </MobileRoute>
+                <MobileRoute exact path={'/vocabularies'}>
+                    <VocabulariesPage />
+                </MobileRoute>
                 <MobileRoute exact path={'/settings'}>
                     <SettingsPage />
                 </MobileRoute>
@@ -115,6 +141,51 @@ const OfflineRouter: React.FC = () => {
                 </MobileRoute>
                 <MobileRoute exact path={'/media'}>
                     <MediaPage />
+                </MobileRoute>
+                <MobileRoute exact path={'/news'}>
+                    <NewsListPage />
+                </MobileRoute>
+                <MobileRoute exact path={'/show-news'}>
+                    <NewsShowPage />
+                </MobileRoute>
+                <MobileRoute exact path={'/events'}>
+                    <EventListPage />
+                </MobileRoute>
+                <MobileRoute exact path={'/show-event'}>
+                    <EventShowPage />
+                </MobileRoute>
+                <MobileRoute exact path={'/sessions'}>
+                    <SessionListPage />
+                </MobileRoute>
+                <MobileRoute exact path={'/create-session'}>
+                    <CreateSessionPage />
+                </MobileRoute>
+                <MobileRoute exact path={'/show-session'}>
+                    <ShowSessionPage />
+                </MobileRoute>
+                <MobileRoute exact path={'/update-session'}>
+                    <UpdateSessionPage />
+                </MobileRoute>
+                <MobileRoute exact path={'/end-session'}>
+                    <EndSessionPage />
+                </MobileRoute>
+                <MobileRoute exact path={'/flipcards'}>
+                    <FlipcardsPage />
+                </MobileRoute>
+                <MobileRoute exact path={'/learning-book'}>
+                    <LearningBookPage />
+                </MobileRoute>
+                <MobileRoute exact path={'/goals'}>
+                    <GoalsListPage />
+                </MobileRoute>
+                <MobileRoute exact path={'/create-custom-goal'}>
+                    <CreateCustomGoalPage />
+                </MobileRoute>
+                <MobileRoute exact path={'/update-custom-goal'}>
+                    <UpdateCustomGoalPage />
+                </MobileRoute>
+                <MobileRoute exact path={'/show-custom-goal'}>
+                    <ShowCustomGoalPage />
                 </MobileRoute>
                 <PrivateRoute exact path="/jitsi">
                     <JitsiPage />
@@ -204,6 +275,13 @@ const OfflineRouter: React.FC = () => {
                 <PrivateRoute exact path="/cefr/quizz/end">
                     <CEFRQuizzEndPage />
                 </PrivateRoute>
+                {/* Reports route */}
+                <PrivateRoute exact path="/reports">
+                    <ReportsPage />
+                </PrivateRoute>
+                <PrivateRoute exact path="/report-item">
+                    <ViewReportPage />
+                </PrivateRoute>
                 {isHybrid ? (
                     <BottomBar />
                 ) : (
@@ -211,8 +289,14 @@ const OfflineRouter: React.FC = () => {
                         <PrivateRoute exact path="/home">
                             <HomePage />
                         </PrivateRoute>
+                        <PrivateRoute exact path="/learning">
+                            <LearningPage />
+                        </PrivateRoute>
                         <PrivateRoute exact path="/conversations">
                             <ConversationsPage />
+                        </PrivateRoute>
+                        <PrivateRoute exact path="/profile">
+                            <ProfilePage />
                         </PrivateRoute>
                     </>
                 )}

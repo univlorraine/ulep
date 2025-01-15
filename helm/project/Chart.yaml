@@ -25,10 +25,10 @@ appVersion: '1.16.0'
 dependencies:
   - name: postgresql
     version: 13.2.3
-    repository: 'oci://registry-1.docker.io/bitnamicharts'
+    repository: https://charts.bitnami.com/bitnami
   - name: minio
-    version: 12.8.11
-    repository: 'oci://registry-1.docker.io/bitnamicharts'
+    version: 14.7.11
+    repository: https://charts.bitnami.com/bitnami
   - name: mongodb
     version: '15.6.2'
     repository: https://charts.bitnami.com/bitnami
@@ -38,3 +38,6 @@ dependencies:
   - name: jitsi-meet
     version: 1.3.8
     repository: 'https://jitsi-contrib.github.io/jitsi-helm/'
+  - name: glitchtip
+    version: 2.5.1
+    repository: https://gitlab.com/api/v4/projects/16325141/packages/helm/stable

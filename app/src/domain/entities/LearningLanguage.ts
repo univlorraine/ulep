@@ -1,3 +1,5 @@
+import CustomLearningGoal from "./CustomLearningGoal";
+import MediaObject from "./MediaObject";
 import Profile from "./Profile";
 
 class LearningLanguage {
@@ -12,6 +14,9 @@ class LearningLanguage {
         public certificateOption?: boolean,
         public specificProgram?: boolean,
         public profile?: Profile,
+        public customLearningGoals?: CustomLearningGoal[],
+        public certificateFile?: MediaObject,
+        public sharedCertificate?: boolean
     ) {}
 }
 

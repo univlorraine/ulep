@@ -254,7 +254,7 @@ const SignUpInformationsPage: React.FC = () => {
                     errorMessage={errorMessage?.type === 'firstname' ? errorMessage.message : undefined}
                     onChange={setFirstname}
                     placeholder={t('signup_informations_page.placeholder_firstname')}
-                    title={t('global.firstname')}
+                    title={t('global.firstname') as string}
                     type="text"
                     value={firstname}
                     required={true}
@@ -265,7 +265,7 @@ const SignUpInformationsPage: React.FC = () => {
                     errorMessage={errorMessage?.type === 'lastname' ? errorMessage.message : undefined}
                     onChange={setLastname}
                     placeholder={t('signup_informations_page.placeholder_name')}
-                    title={t('global.lastname')}
+                    title={t('global.lastname') as string}
                     type="text"
                     value={lastname}
                     required={true}
@@ -299,7 +299,7 @@ const SignUpInformationsPage: React.FC = () => {
                     errorMessage={errorMessage?.type === 'age' ? errorMessage.message : undefined}
                     onChange={(age: string) => setAge(Number(age))}
                     placeholder={t('signup_informations_page.placeholder_age')}
-                    title={t('global.age')}
+                    title={t('global.age') as string}
                     type="text"
                     value={age ? `${age}` : ''}
                     required={true}
@@ -315,7 +315,7 @@ const SignUpInformationsPage: React.FC = () => {
                     disabled={fromIdp}
                     onChange={(email) => setEmail(email.trim())}
                     placeholder={t('signup_informations_page.placeholder_email')}
-                    title={t('global.email')}
+                    title={t('global.email') as string}
                     type="email"
                     value={email}
                     required={true}
@@ -326,7 +326,7 @@ const SignUpInformationsPage: React.FC = () => {
                         errorMessage={errorMessage?.type === 'code' ? errorMessage.message : undefined}
                         onChange={setCode}
                         placeholder={t('signup_informations_page.placeholder_code')}
-                        title={t('signup_informations_page.code')}
+                        title={t('signup_informations_page.code') as string}
                         type="text"
                         value={code}
                         required={profileSignUp.university?.isCodeMandatory}
@@ -342,7 +342,7 @@ const SignUpInformationsPage: React.FC = () => {
                             }
                             onChange={setPassword}
                             placeholder={t('signup_informations_page.placeholder_password')}
-                            title={t('global.password')}
+                            title={t('global.password') as string}
                             type="password"
                             value={password}
                             fieldInfo={<PasswordInfo />}
@@ -353,7 +353,7 @@ const SignUpInformationsPage: React.FC = () => {
                             errorMessage={errorMessage?.type === 'confirm' ? errorMessage.message : undefined}
                             onChange={setConfirmPassword}
                             placeholder={t('signup_informations_page.placeholder_confirm_password')}
-                            title={t('signup_informations_page.confirm_password')}
+                            title={t('signup_informations_page.confirm_password') as string}
                             type="password"
                             value={confirmPassword}
                             required={true}

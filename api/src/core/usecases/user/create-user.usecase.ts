@@ -1,6 +1,6 @@
 import { KeycloakClient } from '@app/keycloak';
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
-import { utcToZonedTime } from 'date-fns-tz';
+import { toZonedTime } from 'date-fns-tz';
 import {
   RessourceAlreadyExists,
   RessourceDoesNotExist,
@@ -9,17 +9,17 @@ import {
 import { Gender, Role, User } from 'src/core/models';
 import { CHAT_SERVICE } from 'src/core/ports/chat.service';
 import {
-  COUNTRY_REPOSITORY,
   CountryRepository,
+  COUNTRY_REPOSITORY,
 } from 'src/core/ports/country.repository';
-import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
+import { EmailGateway, EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
 import {
-  UNIVERSITY_REPOSITORY,
   UniversityRepository,
+  UNIVERSITY_REPOSITORY,
 } from 'src/core/ports/university.repository';
 import {
-  USER_REPOSITORY,
   UserRepository,
+  USER_REPOSITORY,
 } from 'src/core/ports/user.repository';
 import { ChatService } from 'src/providers/services/chat.service';
 
@@ -79,20 +79,20 @@ export class CreateUserUsecase {
     }
 
     if (
-      (university.domains.length > 0 &&
-      !university.domains.some((domain) => command.email.includes(domain))) &&
-      (university.codes.length > 0 &&
-      !university.codes.some((codeToCheck) => codeToCheck === command.code))
+      university.domains.length > 0 &&
+      !university.domains.some((domain) => command.email.includes(domain)) &&
+      university.codes.length > 0 &&
+      !university.codes.some((codeToCheck) => codeToCheck === command.code)
     ) {
       throw new BadRequestException('Domain is invalid');
     }
 
-    const now = utcToZonedTime(new Date(), university.timezone);
-    const admissionEndTimezoned = utcToZonedTime(
+    const now = toZonedTime(new Date(), university.timezone);
+    const admissionEndTimezoned = toZonedTime(
       university.admissionEnd,
       university.timezone,
     );
-    const admissionStartTimezoned = utcToZonedTime(
+    const admissionStartTimezoned = toZonedTime(
       university.admissionStart,
       university.timezone,
     );

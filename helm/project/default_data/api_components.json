@@ -1,0 +1,12 @@
+{
+  "branch": "develop",
+  "file_format": "json-nested",
+  "filemask": "*/api.json",
+  "name": "api",
+  "slug": "api",
+  "repo": "ssh://git@%git_host%:2222/srv/git/locales.git",
+  "push": "ssh://git@%git_host%:2222/srv/git/locales.git",
+  "template": "en/api.json",
+  "new_base": "",
+  "vcs": "git"
+}

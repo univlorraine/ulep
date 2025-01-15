@@ -66,11 +66,19 @@ interface ProfileStorePayload {
     profile: Profile;
 }
 
+interface LastConnectionStorePayload {
+    lastConnection: Date;
+}
+
 interface UpdateProfile {
     acceptsEmail?: boolean;
     avatar?: MediaObject;
     learningLanguage?: LearningLanguage;
     university?: University;
+}
+
+interface NewsFilterPayload {
+    language: Language[];
 }
 
 interface UserStorePayload {
@@ -80,18 +88,26 @@ interface UserStorePayload {
 }
 interface StoreInterface {
     accessToken: string;
+    newsFilter: {
+        language: Language[];
+    };
     apiUrl: string;
     chatUrl: string;
     socketChatUrl: string;
     jitsiUrl: string;
     language: string;
+    lastConnection: Date | undefined;
     logout: Action<StoreInterface>;
     refreshToken: string;
+    refreshReports: boolean;
+    setRefreshReports: Action<StoreInterface>;
     setApiUrl: Action<StoreInterface, ApiUrlPayload>;
     setLanguage: Action<StoreInterface, LanguagePayload>;
+    setNewsFilter: Action<StoreInterface, NewsFilterPayload>;
     setProfile: Action<StoreInterface, ProfileStorePayload>;
     setTokens: Action<StoreInterface, TokenStorePayload>;
     setUser: Action<StoreInterface, UserStorePayload>;
+    setLastConnection: Action<StoreInterface, LastConnectionStorePayload>;
     profile: Profile | undefined;
     profileSignUp: ProfileSignUp;
     updateProfile: Action<StoreInterface, UpdateProfile>;

@@ -1,12 +1,32 @@
 import { JitsiMeeting } from '@jitsi/react-sdk';
 import IJitsiMeetExternalApi from '@jitsi/react-sdk/lib/types/IJitsiMeetExternalApi';
 import { useRef } from 'react';
-import { useHistory } from 'react-router';
+import { Redirect, useHistory } from 'react-router';
+import { useConfig } from '../../../context/ConfigurationContext';
+import Profile from '../../../domain/entities/Profile';
+import { useStoreState } from '../../../store/storeTypes';
+import useGetHomeData from '../../hooks/useGetHomeData';
+import useWindowDimensions from '../../hooks/useWindowDimensions';
+import { HYBRID_MAX_WIDTH } from '../../utils';
+import HomeHeader from '../HomeHeader';
+import styles from './JitsiWeb.module.css';
 import { JitsiProps } from './VisioContainer';
+import VisioInfoFrame from './VisioInfoFrame';
 
-const JitsiWeb = ({ jitsiUrl, language, roomName, jitsiToken }: JitsiProps) => {
+const JitsiWeb = ({ jitsiUrl, language, roomName, jitsiToken, tandemPartner, learningLanguageId }: JitsiProps) => {
     const history = useHistory();
     const apiRef = useRef<IJitsiMeetExternalApi>();
+    const { width } = useWindowDimensions();
+    const { sendMessage } = useConfig();
+    const profile = useStoreState((state) => state.profile);
+    const isHybrid = width < HYBRID_MAX_WIDTH;
+    const { tandems } = useGetHomeData();
+    const tandem = tandems.find((t) => t.id === roomName);
+    let startTime: number | null = null;
+
+    if (!profile) {
+        return <Redirect to={'/'} />;
+    }
 
     const handleApiReady = (apiObj: IJitsiMeetExternalApi) => {
         apiRef.current = apiObj;
@@ -17,62 +37,106 @@ const JitsiWeb = ({ jitsiUrl, language, roomName, jitsiToken }: JitsiProps) => {
         privateMessage: boolean; // whether this is a private or group message
         message: string; // the text of the message
     }) => {
-        // TODO: Message sent from jitsi chat to sync with our chat
-        console.log('handleOutgoingMessage', { payload });
+        if (!roomName) {
+            return;
+        }
+
+        const result = sendMessage.execute({
+            conversationId: roomName,
+            senderId: profile.user.id,
+            content: payload.message,
+        });
+
+        if (result instanceof Error) {
+            console.error(result);
+        }
     };
 
     return (
-        <div style={{ width: '100%', height: '100%' }}>
-            <JitsiMeeting
-                domain={jitsiUrl}
-                lang={language}
-                roomName={roomName}
-                jwt={jitsiToken}
-                configOverwrite={{
-                    // https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-configuration
-                    subject: 'ETANDEM',
-                    startWithAudioMuted: true,
-                    disableModeratorIndicator: true,
-                    startScreenSharing: true,
-                    enableEmailInStats: false,
-                    prejoinConfig: {
-                        enabled: false,
-                    },
-                    welcomePage: {
-                        enabled: false,
-                    },
-                    closePage: {
-                        enabled: false,
-                    },
-                }}
-                interfaceConfigOverwrite={{
-                    DISABLE_JOIN_LEAVE_NOTIFICATIONS: true,
-                    DEFAULT_LOCAL_DISPLAY_NAME: language.toUpperCase(),
-                    SHOW_CHROME_EXTENSION_BANNER: true,
-                    TOOLBAR_ALWAYS_VISIBLE: true,
-                    SETTINGS_SECTIONS: ['devices', 'language'],
-                    TOOLBAR_BUTTONS: [
-                        'microphone',
-                        'camera',
-                        'hangup',
-                        'desktop',
-                        'profile',
-                        'chat',
-                        'settings',
-                        'raisehand',
-                        'videoquality',
-                    ],
-                }}
-                onApiReady={(externalApi) => {
-                    // here you can attach custom event listeners to the Jitsi Meet External API
-                    // you can also store it locally to execute commands
-                    handleApiReady(externalApi);
-                }}
-                onReadyToClose={() => history.push('/home')}
-                getIFrameRef={(iframeRef) => {
-                    iframeRef.style.height = '100%';
-                }}
-            />
+        <div className={styles.container}>
+            {!isHybrid && <HomeHeader />}
+            <div className={styles.content}>
+                <JitsiMeeting
+                    domain={jitsiUrl}
+                    lang={language}
+                    roomName={roomName}
+                    jwt={jitsiToken}
+                    configOverwrite={{
+                        // https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-configuration
+                        subject: 'ETANDEM',
+                        startWithAudioMuted: true,
+                        disableModeratorIndicator: true,
+                        startScreenSharing: true,
+                        enableEmailInStats: false,
+                        prejoinConfig: {
+                            enabled: false,
+                        },
+                        welcomePage: {
+                            enabled: false,
+                        },
+                        closePage: {
+                            enabled: false,
+                        },
+                    }}
+                    interfaceConfigOverwrite={{
+                        DISABLE_JOIN_LEAVE_NOTIFICATIONS: true,
+                        DEFAULT_LOCAL_DISPLAY_NAME: language.toUpperCase(),
+                        SHOW_CHROME_EXTENSION_BANNER: true,
+                        TOOLBAR_ALWAYS_VISIBLE: true,
+                        SETTINGS_SECTIONS: ['devices', 'language'],
+                        TOOLBAR_BUTTONS: [
+                            'microphone',
+                            'camera',
+                            'hangup',
+                            'desktop',
+                            'profile',
+                            'chat',
+                            'settings',
+                            'raisehand',
+                            'videoquality',
+                        ],
+                    }}
+                    onApiReady={(externalApi) => {
+                        // here you can attach custom event listeners to the Jitsi Meet External API
+                        // you can also store it locally to execute commands
+                        handleApiReady(externalApi);
+                        startTime = Date.now();
+                    }}
+                    onReadyToClose={() => {
+                        const firstname =
+                            tandemPartner instanceof Profile ? tandemPartner.user.firstname : tandemPartner?.firstname;
+                        const lastname =
+                            tandemPartner instanceof Profile ? tandemPartner.user.lastname : tandemPartner?.lastname;
+                        let duration;
+                        if (startTime) {
+                            const endTime = Date.now();
+                            // Subtract 1 second to account for the delay in joining the conference - must be changed later
+                            duration = Math.floor((endTime - startTime) / 1000) - 1;
+                        }
+                        isHybrid
+                            ? history.push('/end-session', {
+                                  duration,
+                                  partnerTandemId: tandemPartner?.id,
+                                  tandemFirstname: firstname,
+                                  tandemLastname: lastname,
+                                  learningLanguageId,
+                              })
+                            : history.push('/home', {
+                                  endSession: true,
+                                  duration,
+                                  partnerTandemId: tandemPartner?.id,
+                                  tandemFirstname: firstname,
+                                  tandemLastname: lastname,
+                                  learningLanguageId,
+                              });
+                    }}
+                    getIFrameRef={(iframeRef) => {
+                        iframeRef.style.height = `calc(100vh - 80px)`;
+                        iframeRef.style.flex = '1';
+                    }}
+                />
+                {!isHybrid && <VisioInfoFrame tandem={tandem} />}
+            </div>
         </div>
     );
 };

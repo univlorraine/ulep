@@ -6,6 +6,8 @@ import {
     Param,
     Post,
     Query,
+    Res,
+    StreamableFile,
     UploadedFile,
     UseGuards,
     UseInterceptors,
@@ -14,7 +16,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import * as Swagger from '@nestjs/swagger';
 import {
     CreateConversationRequest,
-    DeleteContactConversationRequest,
+    DeleteUserConversationRequest,
     GetConversationsQueryParams,
     GetMessagesQueryParams,
 } from 'src/api/dtos/conversation';
@@ -28,15 +30,19 @@ import {
     CreateConversationUsecase,
     CreateMessageUsecase,
     CreateMultipleConversationsUsecase,
-    DeleteContactConversationUsecase,
-    DeleteConversationUsecase,
     DeleteUserConversationUsecase,
+    DeleteConversationUsecase,
+    ExportMediasFromConversationUsecase,
     GetConversationFromUserIdUsecase,
     GetMessagesFromConversationIdUsecase,
     SearchMessagesIdFromConversationIdUsecase,
+    UpdateConversationUsecase,
     UploadMediaUsecase,
+    GetHashtagsFromConversationIdUsecase,
 } from 'src/core/usecases';
 import { FilePipe } from '../validators/files.validator';
+import { AddUserToConversationRequest } from 'src/api/dtos/conversation/add-user-to-conversation.request';
+import { HashtagResponse } from 'src/api/dtos/hashtags';
 
 //TODO: Allow route only for rest api
 @Controller('conversations')
@@ -47,13 +53,31 @@ export class ConversationController {
         private createMultipleConversationsUsecase: CreateMultipleConversationsUsecase,
         private createConversationUsecase: CreateConversationUsecase,
         private deleteConversationUsecase: DeleteConversationUsecase,
-        private deleteContactConversationUsecase: DeleteContactConversationUsecase,
         private deleteUserConversationUsecase: DeleteUserConversationUsecase,
         private getMessagesFromConversationIdUsecase: GetMessagesFromConversationIdUsecase,
         private getConversationFromUserIdUsecase: GetConversationFromUserIdUsecase,
+        private getHashtagsFromConversationIdUsecase: GetHashtagsFromConversationIdUsecase,
         private searchMessagesIdFromConversationIdUsecase: SearchMessagesIdFromConversationIdUsecase,
         private uploadMediaUsecase: UploadMediaUsecase,
+        private updateConversationUsecase: UpdateConversationUsecase,
+        private exportMediasFromConversationUsecase: ExportMediasFromConversationUsecase,
     ) {}
+
+    @Get('hashtags/:id')
+    @Swagger.ApiOperation({ summary: 'Get all hashtags from conversation id' })
+    async getHashtagsByConversationId(
+        @Param('id') conversationId: string,
+    ): Promise<CollectionResponse<HashtagResponse>> {
+        const hashtags =
+            await this.getHashtagsFromConversationIdUsecase.execute({
+                id: conversationId,
+            });
+
+        return new CollectionResponse<HashtagResponse>({
+            items: hashtags.map(HashtagResponse.from),
+            totalItems: hashtags.length,
+        });
+    }
 
     @Get('messages/:id')
     @Swagger.ApiOperation({ summary: 'Get all messages from conversation id' })
@@ -70,8 +94,11 @@ export class ConversationController {
                     direction:
                         params.direction ?? MessagePaginationDirection.FORWARD,
                 },
-                contentFilter: params.contentFilter,
+                hashtagFilter: params.hashtagFilter
+                    ? `#${params.hashtagFilter}`
+                    : undefined,
                 typeFilter: params.typeFilter,
+                parentId: params.parentId,
             });
 
         return new CollectionResponse<MessageResponse>({
@@ -132,6 +159,19 @@ export class ConversationController {
         return ConversationResponse.from(conversation);
     }
 
+    @Post('/:id/add-user')
+    @Swagger.ApiOperation({ summary: 'Add a user to a conversation' })
+    async addUserToConversation(
+        @Param('id') conversationId: string,
+        @Body() body: AddUserToConversationRequest,
+    ) {
+        await this.updateConversationUsecase.execute({
+            id: conversationId,
+            usersToAdd: [body.userId],
+            metadata: {},
+        });
+    }
+
     @Post('/multi')
     @Swagger.ApiOperation({ summary: 'Create some conversations' })
     async createConversations(
@@ -150,25 +190,19 @@ export class ConversationController {
         await this.deleteConversationUsecase.execute({ id: conversationId });
     }
 
-    @Post('contact/:id')
-    @Swagger.ApiOperation({ summary: 'Delete a conversation' })
-    async deleteContactConversation(
-        @Param('id') conversationId: string,
-        @Body() body: DeleteContactConversationRequest,
-    ): Promise<void> {
-        await this.deleteContactConversationUsecase.execute({
-            id: conversationId,
-            chatIdsToIgnore: body.chatIdsToIgnore,
-        });
-    }
-
-    @Delete('user/:id')
-    @Swagger.ApiOperation({ summary: 'Delete a conversation' })
+    @Post('user/:id')
+    @Swagger.ApiOperation({
+        summary:
+            'Delete all conversations from user except the ones in chatIdsToIgnore',
+    })
     async deleteUserConversation(
-        @Param('id') conversationId: string,
+        @Param('id') userId: string,
+        @Body() body: DeleteUserConversationRequest,
     ): Promise<void> {
         await this.deleteUserConversationUsecase.execute({
-            id: conversationId,
+            id: userId,
+            chatIdsToIgnore: body.chatIdsToIgnore,
+            chatIdsToLeave: body.chatIdsToLeave,
         });
     }
 
@@ -187,6 +221,8 @@ export class ConversationController {
             ownerId: body.senderId,
             mimetype: file?.mimetype,
             originalFilename: body.filename,
+            type: body.type,
+            parentId: body.parentId,
         });
 
         if (file && body.filename) {
@@ -203,5 +239,15 @@ export class ConversationController {
         }
 
         return MessageResponse.from(message);
+    }
+
+    @Get('/:id/export/medias')
+    @Swagger.ApiOperation({ summary: 'Export all medias from conversation id' })
+    async exportMediasFromConversationId(
+        @Param('id') conversationId: string,
+    ): Promise<StreamableFile> {
+        return await this.exportMediasFromConversationUsecase.execute({
+            id: conversationId,
+        });
     }
 }

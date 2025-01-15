@@ -1,5 +1,7 @@
 import { Campus } from './campus.model';
+import { CustomLearningGoal } from './custom-learning-goal.model';
 import { Language } from './language.model';
+import { MediaObject } from './media.model';
 import { ProficiencyLevel } from './proficiency.model';
 import { LearningType, Profile } from './profile.model';
 import { Tandem } from './tandem.model';
@@ -18,9 +20,15 @@ interface LearningLanguageProps {
   hasPriority?: boolean;
   sameTandemEmail?: string;
   certificateOption?: boolean;
+  learningJournal?: boolean;
+  consultingInterview?: boolean;
+  sharedCertificate?: boolean;
+  certificateFile?: MediaObject;
   specificProgram?: boolean;
   campus?: Campus;
   tandemLanguage?: Language;
+  customLearningGoals?: CustomLearningGoal[];
+  sharedLogsDate?: Date;
 }
 
 export class LearningLanguage {
@@ -35,11 +43,16 @@ export class LearningLanguage {
   readonly sameAge: boolean;
   readonly hasPriority?: boolean;
   readonly certificateOption?: boolean;
+  readonly learningJournal?: boolean;
+  readonly consultingInterview?: boolean;
+  readonly sharedCertificate?: boolean;
+  readonly certificateFile?: MediaObject;
   readonly specificProgram?: boolean;
   readonly campus?: Campus;
   tandemLanguage?: Language;
   readonly sameTandemEmail?: string;
-
+  readonly customLearningGoals?: CustomLearningGoal[];
+  readonly sharedLogsDate?: Date;
   constructor({
     id,
     language,
@@ -51,11 +64,17 @@ export class LearningLanguage {
     sameGender,
     sameAge,
     certificateOption,
+    learningJournal,
+    consultingInterview,
+    sharedCertificate,
+    certificateFile,
     specificProgram,
     campus,
     tandemLanguage,
     hasPriority,
     sameTandemEmail,
+    customLearningGoals,
+    sharedLogsDate,
   }: LearningLanguageProps) {
     this.id = id;
     this.language = language;
@@ -67,11 +86,17 @@ export class LearningLanguage {
     this.sameGender = sameGender;
     this.sameAge = sameAge;
     this.certificateOption = certificateOption;
+    this.learningJournal = learningJournal;
+    this.consultingInterview = consultingInterview;
+    this.sharedCertificate = sharedCertificate;
+    this.certificateFile = certificateFile;
     this.specificProgram = specificProgram;
     this.campus = campus;
     this.tandemLanguage = tandemLanguage;
     this.hasPriority = hasPriority;
     this.sameTandemEmail = sameTandemEmail;
+    this.customLearningGoals = customLearningGoals;
+    this.sharedLogsDate = sharedLogsDate;
   }
 
   public isExclusive() {

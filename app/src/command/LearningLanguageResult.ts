@@ -1,4 +1,8 @@
+import CustomLearningGoal from '../domain/entities/CustomLearningGoal';
 import LearningLanguage from '../domain/entities/LearningLanguage';
+import MediaObject from '../domain/entities/MediaObject';
+import { customLearningGoalCommandToDomain } from './CustomLearningGoalCommand';
+import { mediaObjectCommandToDomain } from './MediaObjectCommand';
 import ProfileCommand, { profileCommandToDomain } from './ProfileCommand';
 
 export interface LearningLanguageResult {
@@ -11,9 +15,11 @@ export interface LearningLanguageResult {
     sameGender?: boolean;
     certificateOption?: boolean;
     specificProgram?: boolean;
-
+    customLearningGoals?: CustomLearningGoal[];
     // Profile can be included but not always
     profile?: ProfileCommand;
+    certificateFile?: MediaObject;
+    sharedCertificate?: boolean;
 }
 
 
@@ -27,7 +33,10 @@ export const learningLanguageResultToDomain = (result: LearningLanguageResult) =
     result.sameGender,
     result.certificateOption,
     result.specificProgram,
-    result.profile ? profileCommandToDomain(result.profile) : undefined
+    result.profile ? profileCommandToDomain(result.profile) : undefined,
+    result.customLearningGoals ? result.customLearningGoals.map(customLearningGoalCommandToDomain) : undefined,
+    result.certificateFile ? mediaObjectCommandToDomain(result.certificateFile) : undefined,
+    result.sharedCertificate
 );
 
 export default learningLanguageResultToDomain;

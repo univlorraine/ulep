@@ -1,8 +1,8 @@
 import { IonInput, IonItem } from '@ionic/react';
 import React, { useState } from 'react';
 import { EyeSvg } from '../../assets';
-import style from './TextInput.module.css';
 import RequiredField from './forms/RequiredField';
+import style from './TextInput.module.css';
 
 export type AutocompleteTypes =
     | 'on'
@@ -68,12 +68,14 @@ interface TextInputProps {
     errorMessage?: JSX.Element | string | null;
     placeholder?: string | null;
     onChange: (text: string) => void;
-    title: string;
+    title?: string;
     type?: 'email' | 'number' | 'password' | 'text' | 'text-area';
     value: string;
     maxLength?: number;
     fieldInfo?: JSX.Element;
     required?: boolean;
+    beforeInput?: React.ReactNode;
+    showLimit?: boolean;
 }
 
 const TextInput: React.FC<TextInputProps> = ({
@@ -89,20 +91,25 @@ const TextInput: React.FC<TextInputProps> = ({
     maxLength,
     fieldInfo = null,
     required = false,
+    beforeInput,
+    showLimit = false,
 }) => {
     const [showPasword, setShowPassword] = useState<boolean>(false);
     const inputId = `input-${title}}`;
     return (
         <div className={`${style.container} large-margin-bottom`}>
-            <span className={style['input-label']}>
-                {title} {required && <RequiredField />}
-            </span>
+            {title && (
+                <span className={style['input-label']}>
+                    {title} {required && <RequiredField />}
+                </span>
+            )}
             {fieldInfo}
             {type !== 'text-area' ? (
                 <IonItem
                     lines="none"
                     className={`${style['input-wrapper']} ${errorMessage ? style['input-error'] : style['input-text']}`}
                 >
+                    {beforeInput && <div>{beforeInput}</div>}
                     <IonInput
                         id={inputId}
                         aria-label={title}
@@ -142,6 +149,11 @@ const TextInput: React.FC<TextInputProps> = ({
                     value={value}
                     required
                 />
+            )}
+            {showLimit && (
+                <div className={style.limitContainer}>
+                    <span className={style.limit}>{`${value.length} / ${maxLength}`}</span>
+                </div>
             )}
             {errorMessage && <p className={style['input-label-error']}>{errorMessage}</p>}
         </div>

@@ -23,10 +23,13 @@ export class InMemoryChatService implements ChatServicePort {
     conversationId: string,
     limit: number,
     lastMessageId?: string,
-    contentFilter?: string,
+    hashtagFilter?: string,
     typeFilter?: string,
     direction?: ChatPaginationDirection,
   ): Promise<Collection<Message>> {
+    return;
+  }
+  addUserToConversation(conversationId: string, userId: string): Promise<any> {
     return;
   }
   deleteConversation(tandemId: string): Promise<any> {

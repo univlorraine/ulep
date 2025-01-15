@@ -250,6 +250,11 @@ const LearningLanguageList = () => {
                                                         .status === UserStatus.BANNED ? (
                                                         <ColoredChips color="error" label="Banned" />
                                                     ) : null}
+
+                                                    {learningLanguage.tandem.partnerLearningLanguage.profile.user
+                                                        .status === UserStatus.REPORTED ? (
+                                                        <ColoredChips color="warning" label="Reported" />
+                                                    ) : null}
                                                 </Box>
                                             </Box>
                                         );

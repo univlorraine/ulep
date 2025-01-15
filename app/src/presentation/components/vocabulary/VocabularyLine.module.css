@@ -1,0 +1,43 @@
+.container {
+    background: none;
+    color: black;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 12px;
+    border-bottom: 1px solid var(--ion-color-light-shade);
+    width: 100%;
+}
+
+.content {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 12px;
+}
+
+.player {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: row;
+    width: 100%;
+}
+
+.translation {
+    font-family: Maven Pro;
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 20px;
+    text-align: left;
+}
+
+.word {
+    font-family: Maven Pro;
+    font-size: 16px;
+    font-weight: 900;
+    line-height: 20px;
+    text-align: left;
+    margin-bottom: 4px;
+}

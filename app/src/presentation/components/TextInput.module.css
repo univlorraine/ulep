@@ -91,6 +91,21 @@
     width: 100%;
 }
 
+.limitContainer {
+    display: flex;
+    width: 100%;
+}
+
+.limit {
+    color: #000;
+    font-family: 'Maven Pro', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 16px;
+    text-align: right;
+    width: 100%;
+}
+
 input:focus {
     outline: none;
 }

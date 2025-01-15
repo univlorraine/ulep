@@ -1,4 +1,4 @@
-version: '3.4'
+version: "3.4"
 
 services:
   api:
@@ -60,19 +60,10 @@ services:
     depends_on:
       - api
     environment:
-      REACT_APP_API_URL: ${REACT_APP_API_URL:-http://0.0.0.0:3002}
-      REACT_APP_KEYCLOAK_URL: ${REACT_APP_KEYCLOAK_URL:-http://0.0.0.0:8080}
-      REACT_APP_KEYCLOAK_REALM: ${REACT_APP_KEYCLOAK_REALM:-etandem}
-      REACT_APP_KEYCLOAK_CLIENT_ID: ${REACT_APP_KEYCLOAK_CLIENT_ID:-react-admin}
-      REACT_APP_KEYCLOAK_CLIENT_SECRET: ${REACT_APP_KEYCLOAK_CLIENT_SECRET:-uKBywX2HlxfvKgxZoKZrbiBSx49CST6W}
-      REACT_APP_SENTRY_DSN: ${ADMIN_SENTRY_DSN:-}
-      REACT_APP_CHAT_URL: ${REACT_APP_CHAT_URL:-http://0.0.0.0:3003}
-      REACT_APP_SOCKET_CHAT_URL: ${REACT_APP_SOCKET_CHAT_URL:-ws://0.0.0.0:5001}
-      REACT_APP_JITSI_DOMAIN: ${REACT_APP_JITSI_DOMAIN:-jitsi.ulep.thestaging.io}
       WDS_SOCKET_PORT: 0
 
   auth:
-    image: quay.io/keycloak/keycloak:21.1.2
+    image: quay.io/keycloak/keycloak:26.0
     depends_on:
       - database
     volumes:

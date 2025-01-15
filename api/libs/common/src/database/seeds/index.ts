@@ -1,19 +1,22 @@
 import * as Prisma from '@prisma/client';
-import { insertUlData } from './ulDataSeed';
+import { parseArgs } from 'node:util';
+import { createActivityThemes } from './activity';
+import { createCountries } from './countries';
+import { createEvents } from './events';
+import { createInstance } from './instance';
+import { createInterests } from './interests';
 import { createLanguageCodes } from './languages';
+import { createNews } from './news';
+import { createLearningObjectives } from './objective';
+import { createProficiencyTests } from './proficiency';
+import { createProfiles } from './profiles';
+import { createReportCategories } from './report';
+import { insertUlData } from './ulDataSeed';
 import {
   createCentralUniversityPlaceholder,
   createUniversities,
 } from './universities';
 import { createUsers } from './users';
-import { createCountries } from './countries';
-import { createProficiencyTests } from './proficiency';
-import { createInterests } from './interests';
-import { createProfiles } from './profiles';
-import { createLearningObjectives } from './objective';
-import { createReportCategories } from './report';
-import { createInstance } from './instance';
-import { parseArgs } from 'node:util';
 
 const prisma = new Prisma.PrismaClient();
 
@@ -39,6 +42,11 @@ const load = async () => {
       await prisma.learningLanguages.deleteMany();
       await prisma.masteredLanguages.deleteMany();
       await prisma.testedLanguages.deleteMany();
+      await prisma.activityVocabulary.deleteMany();
+      await prisma.activityExercises.deleteMany();
+      await prisma.activity.deleteMany();
+      await prisma.activityThemeCategories.deleteMany();
+      await prisma.activityThemes.deleteMany();
       await prisma.users.deleteMany();
       await prisma.refusedTandems.deleteMany();
       await prisma.organizations.deleteMany();
@@ -54,6 +62,8 @@ const load = async () => {
       await prisma.routineExecutions.deleteMany();
       await prisma.tandems.deleteMany();
       await prisma.instance.deleteMany();
+      await prisma.events.deleteMany();
+      await prisma.news.deleteMany();
     }
 
     await createInstance(prisma);
@@ -63,6 +73,7 @@ const load = async () => {
     await createProficiencyTests(prisma);
     await createInterests(prisma);
     await createLearningObjectives(prisma);
+    await createActivityThemes(prisma);
 
     if (seedULDataset || seedRandomDataset) {
       await createUniversities(prisma);
@@ -76,6 +87,8 @@ const load = async () => {
       console.info('[DB seed] random dataset');
       await createUsers(200, 100, prisma);
       await createProfiles(prisma);
+      await createNews(20, prisma);
+      await createEvents(40, prisma);
     }
   } catch (e) {
     console.error(e);

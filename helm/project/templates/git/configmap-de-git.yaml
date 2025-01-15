@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-git-de-postinstall-configmap
+data:
+  data: |-
+{{- (.Files.Glob "default_data/locales/de/*.json").AsConfig | nindent 2 }}
+  
+  

@@ -1,25 +1,38 @@
 import { Box, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import React, { useRef, useState } from 'react';
-import { useTranslate } from 'react-admin';
-import ReferenceUploadField from './field/ReferenceUploadField';
+import { ImageField, useNotify, useTranslate } from 'react-admin';
+import ReferenceUploadImageField from './field/ReferenceUploadImageField';
 
 interface ImageUploaderProps {
     source?: string;
+    imageUrl?: string;
+    maxSize?: number;
     onImageSelect: (file: File) => void;
 }
 
-const ImageUploader: React.FC<ImageUploaderProps> = ({ source, onImageSelect }) => {
+const ImageUploader: React.FC<ImageUploaderProps> = ({
+    source,
+    imageUrl = 'imageURL',
+    maxSize = 1000000,
+    onImageSelect,
+}) => {
     const translate = useTranslate();
+    const notify = useNotify();
     const [isDragOver, setDragOver] = useState<boolean>(false);
     const [currentFile, setCurrentFile] = useState<File>();
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
+
         if (file) {
-            setCurrentFile(file);
-            onImageSelect(file);
+            if (file.size > maxSize) {
+                notify('uploader.maxSizeError', { messageArgs: { maxSize: maxSize / 1000000 }, type: 'error' });
+            } else {
+                setCurrentFile(file);
+                onImageSelect(file);
+            }
         }
     };
 
@@ -65,9 +78,15 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ source, onImageSelect }) 
                 type="file"
             />
 
+            {!source && !currentFile && (
+                <Button onClick={() => fileInputRef.current?.click()}>
+                    <ImageField source={imageUrl} />
+                </Button>
+            )}
+
             {source && !currentFile && (
                 <Button onClick={() => fileInputRef.current?.click()}>
-                    <ReferenceUploadField source={source} />
+                    <ReferenceUploadImageField source={source} />
                 </Button>
             )}
 
@@ -88,6 +107,8 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ source, onImageSelect }) 
                     <img alt="preview" src={URL.createObjectURL(currentFile)} style={{ height: 150, width: 150 }} />
                 </Button>
             )}
+
+            <Typography variant="body1">{translate('uploader.maxSize', { maxSize: maxSize / 1000000 })}</Typography>
         </Box>
     );
 };

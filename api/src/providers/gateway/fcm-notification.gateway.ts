@@ -1,12 +1,17 @@
+import { FCMService, I18nService } from '@app/common';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Env } from 'src/configuration';
-import { FCMService, I18nService } from '@app/common';
 import {
   NotificationGateway,
-  SendTandemClosureNoticeNotification,
   NotificationParams,
+  SendActivityStatusChangeNotification,
   SendMessageNotification,
+  SendSessionCanceledNotification,
+  SendSessionCreatedNotification,
+  SendSessionStartNotification,
+  SendSessionUpdatedNotification,
+  SendTandemClosureNoticeNotification,
 } from 'src/core/ports/notification.gateway';
 
 @Injectable()
@@ -145,6 +150,140 @@ export class FCMNotificationGateway implements NotificationGateway {
       };
     });
 
+    await this.sender.sendNotifications(notifications);
+  }
+  async sendActivityPublishedNotification(
+    props: SendActivityStatusChangeNotification,
+  ): Promise<void> {
+    const image = this.images.notification;
+    const notifications = props.to.map((notification) => {
+      const translation = this.translate(
+        'activityPublished',
+        notification.language,
+        {
+          ...props,
+        },
+      );
+      return {
+        token: notification.token,
+        title: translation.title,
+        body: translation.body,
+        image,
+      };
+    });
+
+    await this.sender.sendNotifications(notifications);
+  }
+
+  async sendActivityRejectedNotification(
+    props: SendActivityStatusChangeNotification,
+  ): Promise<void> {
+    const image = this.images.notification;
+    const notifications = props.to.map((notification) => {
+      const translation = this.translate(
+        'activityRejected',
+        notification.language,
+        {
+          ...props,
+        },
+      );
+      return {
+        token: notification.token,
+        title: translation.title,
+        body: translation.body,
+        image,
+      };
+    });
+
+    await this.sender.sendNotifications(notifications);
+  }
+
+  async sendSessionStartNotification(
+    props: SendSessionStartNotification,
+  ): Promise<void> {
+    const image = this.images.notification;
+    const notifications = props.to.map((notification) => {
+      const translation = this.translate(
+        `sessionStart${props.type}`,
+        notification.language,
+        {
+          ...props,
+        },
+      );
+      return {
+        token: notification.token,
+        title: translation.title,
+        body: translation.body,
+        image,
+      };
+    });
+
+    await this.sender.sendNotifications(notifications);
+  }
+
+  async sendSessionCanceledNotification(
+    props: SendSessionCanceledNotification,
+  ): Promise<void> {
+    const image = this.images.notification;
+    const notifications = props.to.map((notification) => {
+      const translation = this.translate(
+        'sessionCanceled',
+        notification.language,
+        {
+          ...props,
+        },
+      );
+      return {
+        token: notification.token,
+        title: translation.title,
+        body: translation.body,
+        image,
+      };
+    });
+    await this.sender.sendNotifications(notifications);
+  }
+
+  async sendSessionUpdatedNotification(
+    props: SendSessionUpdatedNotification,
+  ): Promise<void> {
+    const image = this.images.notification;
+    const notifications = props.to.map((notification) => {
+      const translation = this.translate(
+        'sessionUpdated',
+        notification.language,
+        {
+          ...props,
+        },
+      );
+      return {
+        token: notification.token,
+        title: translation.title,
+        body: translation.body,
+        image,
+      };
+    });
+    await this.sender.sendNotifications(notifications);
+  }
+
+  async sendSessionCreatedNotification(
+    props: SendSessionCreatedNotification,
+  ): Promise<void> {
+    const image = this.images.notification;
+    const notifications = props.to.map((notification) => {
+      const translation = this.translate(
+        'sessionCreated',
+        notification.language,
+        {
+          ...props,
+        },
+      );
+      return {
+        token: notification.token,
+        title: translation.title,
+        body: translation.body,
+        image,
+      };
+    });
     await this.sender.sendNotifications(notifications);
   }
 }

@@ -1,4 +1,99 @@
 {
+    "activities": {
+        "label": "Activities",
+        "tabLabel": "Activities",
+        "form": {
+            "mainInfos": "Main informations",
+            "title": "Title",
+            "image": "Illustration image",
+            "imageCredit": "Image credit",
+            "description": "Description",
+            "language": "Language",
+            "level": "Level",
+            "category": "Category",
+            "theme": "Theme",
+            "ressource": "Resource",
+            "url": "URL",
+            "file": "File",
+            "ressourceURL": "URL",
+            "ressourceFile": "File",
+            "exercices": "Exercices",
+            "exercice": "Exercice",
+            "addExercice": "Add an exercice",
+            "vocabulary": "Vocabulary",
+            "pronunciation": "Pronunciation",
+            "addVocabulary": "Add a vocabulary",
+            "vocabularyPlaceholder": "Enter a word or a sentence",
+            "deletePronunciation": "Delete the pronunciation"
+        },
+        "list": {
+            "language": "Language",
+            "level": "Level",
+            "category": "Category",
+            "theme": "Theme",
+            "university": "University",
+            "creator": "Author",
+            "title": "Title",
+            "status": "Status",
+            "admin": "Administrator"
+        },
+        "show": {
+            "mainInfos": {
+                "label": "Main informations",
+                "title": "Title",
+                "image": "Image",
+                "credit": "Credit",
+                "description": "Description",
+                "language": "Language",
+                "level": "Level",
+                "category": "Category",
+                "theme": "Theme",
+                "resource": "Resource (URL or file)",
+                "url": "URL",
+                "admin": "Administrator"
+            },
+            "exercices": {
+                "label": "Exercices",
+                "content": "Content",
+                "order": "Order"
+            },
+            "vocabulary": {
+                "label": "Vocabulary",
+                "pronunciation": "Pronunciation"
+            },
+            "actions": {
+                "validate": "Validate",
+                "refuse": "Refuse",
+                "unpublish": "Unpublish",
+                "publish": "Publish"
+            }
+        },
+        "status": {
+            "draft": "Draft",
+            "published": "Published",
+            "in_validation": "In validation",
+            "rejected": "Rejected"
+        },
+        "error": {
+            "update": "An error occurred while updating the activity",
+            "create": "An error occurred while creating the activity",
+            "alreadyPublished": "You cannot update an already published activity"
+        }
+    },
+    "activities_categories": {
+        "tabLabel": "Activities categories",
+        "name": "Name",
+        "themes": "Themes",
+        "create": {
+            "error": "An error occurred while creating the activity theme"
+        },
+        "update": {
+            "error": "An error occurred while updating the activity theme"
+        },
+        "show": {
+            "name": "Name"
+        }
+    },
     "administrators": {
         "all": "All",
         "create": {
@@ -108,6 +203,107 @@
         "saturday": "Saturday",
         "sunday": "Sunday"
     },
+    "events": {
+        "label": "Events",
+        "title": "Events",
+        "list": {
+            "title": "Title",
+            "university": "Author university",
+            "defaultLanguage": "Default language",
+            "translations": "Translations",
+            "status": "Status",
+            "startDate": "Start date",
+            "endDate": "End date",
+            "type": "Type",
+            "filters": {
+                "title": "Title",
+                "language": "Language",
+                "status": "Status",
+                "university": "University",
+                "type": "Type"
+            }
+        },
+        "status": {
+            "DRAFT": "Draft",
+            "READY": "Published"
+        },
+        "type": {
+            "ONLINE": "Online",
+            "PRESENTIAL": "Presential"
+        },
+        "form": {
+            "add_translation": "Add a translation",
+            "change_language": "Change the default language",
+            "type": {
+                "label": "Event type",
+                "online": "Online",
+                "presential": "Presential"
+            },
+            "author": "Author",
+            "status": "Status",
+            "start_date": "Start date",
+            "end_date": "End date",
+            "illustration": "Illustration",
+            "image_credit": "Image credit",
+            "title": "Title",
+            "content": "Content",
+            "subscriptions": "Subscriptions",
+            "with_subscriptions": "With subscriptions",
+            "concerned_universities": {
+                "label": "Concerned universities",
+                "button": "Add"
+            },
+            "diffusion_languages": {
+                "label": "Diffused languages",
+                "button": "Add"
+            },
+            "event_url": "Event URL",
+            "address": "Address",
+            "address_name": "Place name",
+            "error": {
+                "required": "All fields are required",
+                "start_date_greater_than_end_date": "The start date must be before the end date"
+            },
+            "remove_translation": "Remove translation",
+            "mandatory": "The fields marked with an * are mandatory"
+        },
+        "create": {
+            "cta": "Create",
+            "error": "An error occurred while creating the event"
+        },
+        "update": {
+            "cta": "Update",
+            "error": "An error occurred while updating the event"
+        },
+        "subscriptions": {
+            "title": "Subscriptions to the event : %{eventTitle}",
+            "author": "Author : %{universityName}",
+            "list": {
+                "firstname": "Firstname",
+                "lastname": "Lastname",
+                "university": "University",
+                "email": "Email",
+                "cta": "Actions"
+            },
+            "searchProfile": "Search a profile",
+            "search": {
+                "button": "Subscribe users",
+                "subscribe": "Subscribe"
+            },
+            "email": {
+                "button": "Send an email",
+                "title": "Send an email to the subscribers",
+                "form": {
+                    "title": "Title",
+                    "content": "Content"
+                },
+                "send": "Send",
+                "success": "The email has been sent to the subscribers",
+                "error": "An error occurred while sending the email"
+            },
+            "unsubscribe": "Unsubscribe"
+        }
+    },
     "global": {
         "all": "All",
         "age": "Age",
@@ -143,7 +339,7 @@
             "title": "Password reset request",
             "description": "To reset your password, please enter your email below.",
             "send_button": "Send"
-        },  
+        },
         "userStatus": {
             "active": "Active",
             "banned": "Banned",
@@ -272,6 +468,53 @@
         "domainError": "Central administrators must use SSO to login.",
         "loginError": "Wrong email / password",
         "password": "Password"
+    },
+    "news": {
+        "label": "News",
+        "title": "News",
+        "form": {
+            "title": "Title",
+            "content": "Content",
+            "illustration": "Illustration",
+            "author": "Author",
+            "change_language": "Change language",
+            "add_translation": "Add a translation",
+            "remove_translation": "Remove translation",
+            "error": {
+                "required": "The publication dates, title and content fields are required",
+                "notFound": "News not found",
+                "start_publication_date_greater_than_end_publication_date": "The start publication date must be before the end publication date"
+            },
+            "start_publication_date": "Start publication date",
+            "end_publication_date": "End publication date",
+            "credit_image": "Author of the image"
+        },
+        "status": {
+            "label": "Status",
+            "READY": "Ready",
+            "DRAFT": "Draft"
+        },
+        "create": {
+            "cta": "Create"
+        },
+        "update": {
+            "cta": "Update"
+        },
+        "list": {
+            "title": "Title",
+            "university": "University",
+            "defaultLanguage": "Default language",
+            "translations": "Translations",
+            "status": "Status",
+            "startPublicationDate": "Start publication date",
+            "endPublicationDate": "End publication date",
+            "filters": {
+                "university": "University",
+                "status": "Status",
+                "title": "Title",
+                "language": "Available language"
+            }
+        }
     },
     "objectives": {
         "edit": {
@@ -524,7 +767,13 @@
     "uploader": {
         "drag_drop": "Drag and drop your image or",
         "drop_image": "Drop iamge here",
-        "select_image": "Select an image"
+        "select_image": "Select an image",
+        "drag_drop_file": "Drag and drop a %{fileType} or",
+        "drop_file": "Drop file here",
+        "select_file": "Choose a %{fileType}",
+        "file": "file",
+        "maxSize": "Maximum size of %{maxSize} MB",
+        "maxSizeError": "The maximum size of the image is %{maxSize} MB"
     },
     "users": {
         "searchEmail": "Search email",
@@ -707,10 +956,19 @@
         "roles": {
             "STAFF": "Staff",
             "STUDENT": "Student"
+        },
+        "certificateDialog": {
+            "title": "Certificate generation",
+            "editCertificateBtn": "Edit certificate",
+            "generateCertificateBtn": "Generate certificate"
         }
     },
     "universitiesPicker": {
         "error": "An error occured while fetching universities"
+    },
+    "certificates": {
+        "error": "An error occured while generating the certificate",
+        "success": "The certificate has been generated successfully"
     },
     "languages_code": {
         "aa": "Afar",

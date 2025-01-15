@@ -2,19 +2,21 @@ import * as Prisma from '@prisma/client';
 import {
   LearningLanguage,
   LearningType,
+  MediaObject,
   MeetingFrequency,
   ProficiencyLevel,
   Profile,
 } from 'src/core/models';
 import { testedLanguageMapper } from 'src/providers/persistance/mappers/testedLanguage.mapper';
 import { campusMapper } from './campus.mapper';
+import { customLearningGoalMapper } from './customLearningGoal.mapper';
 import { languageMapper } from './language.mapper';
 import {
+  textContentMapper,
   TextContentRelations,
   TextContentSnapshot,
-  textContentMapper,
 } from './translation.mapper';
-import { UserRelations, UserSnapshot, userMapper } from './user.mapper';
+import { userMapper, UserRelations, UserSnapshot } from './user.mapper';
 
 export const ProfilesRelations = {
   User: {
@@ -41,8 +43,11 @@ export const ProfilesRelations = {
       LanguageCode: true,
       Tandem: true,
       Campus: true,
+      CertificateFile: true,
+      CustomLearningGoals: true,
     },
   },
+  Events: true,
 };
 
 export type ProfileSnapshot = Prisma.Profiles & {
@@ -59,6 +64,8 @@ export type ProfileSnapshot = Prisma.Profiles & {
     LanguageCode: Prisma.LanguageCodes;
     Campus: Prisma.Places;
     Tandem: Prisma.Tandems;
+    CertificateFile?: Prisma.MediaObjects;
+    CustomLearningGoals: Prisma.CustomLearningGoals[];
   })[];
   MasteredLanguages: (Prisma.MasteredLanguages & {
     LanguageCode: Prisma.LanguageCodes;
@@ -94,7 +101,25 @@ export const profileMapper = (instance: ProfileSnapshot): Profile => {
           campus:
             learningLanguage.Campus && campusMapper(learningLanguage.Campus),
           certificateOption: learningLanguage.certificate_option,
+          learningJournal: learningLanguage.learning_journal ?? false,
+          consultingInterview: learningLanguage.consulting_interview ?? false,
+          sharedCertificate: learningLanguage.shared_certificate ?? false,
+          sharedLogsDate: learningLanguage.shared_logs_date
+            ? new Date(learningLanguage.shared_logs_date)
+            : undefined,
+          certificateFile:
+            learningLanguage.CertificateFile &&
+            new MediaObject({
+              id: learningLanguage.CertificateFile.id,
+              name: learningLanguage.CertificateFile.name,
+              bucket: learningLanguage.CertificateFile.bucket,
+              mimetype: learningLanguage.CertificateFile.mime,
+              size: learningLanguage.CertificateFile.size,
+            }),
           specificProgram: learningLanguage.specific_program,
+          customLearningGoals:
+            learningLanguage.CustomLearningGoals &&
+            learningLanguage.CustomLearningGoals.map(customLearningGoalMapper),
         }),
     ),
     meetingFrequency: MeetingFrequency[instance.meeting_frequency],

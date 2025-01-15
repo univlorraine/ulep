@@ -1,0 +1,28 @@
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 30px;
+    border-radius: 30px;
+    background-color: #000;
+    padding: 4px;
+}
+
+.icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    height: 20px;
+    width: 20px;
+    margin-right: 4px;
+}
+
+.content {
+    font-family: Maven Pro;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 17px;
+    text-align: left;
+    color: white;
+}

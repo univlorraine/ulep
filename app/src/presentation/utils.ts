@@ -1,6 +1,8 @@
 import LearningLanguage from '../domain/entities/LearningLanguage';
 import TestedLanguage from '../domain/entities/TestedLanguage';
 
+export const CEFR_LEVELS: CEFR[] = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+
 const countriesCodeWithFlags: [string, string][] = [
     ['aa', '🇪🇹'], // Afar - Ethiopia
     ['ab', '🇬🇪'], // Abkhaz - Georgia
@@ -159,6 +161,12 @@ export const BACKGROUND_WEB_STYLE_INLINE = {
     backgroundSize: '100%',
 };
 
+export const BACKGROUND_PROFILE_STYLE_INLINE = {
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'contain',
+};
+
 export const isEmailCorrect = (email: string) => {
     const regex = /^[\w-\.+]+@([\w-]+\.)+[\w-]{2,4}$/;
 
@@ -228,7 +236,8 @@ export const isCodeValid = (code: string, codesToCheck: string[]) => {
 
 export const learningLanguagesToTestedLanguages = (
     learningLanguages: LearningLanguage[],
-    testedLanguages: TestedLanguage[]
+    testedLanguages: TestedLanguage[],
+    specificLanguage?: string
 ) => {
     const convertedLearningLanguages = learningLanguages.map(
         (learningLanguage) => new TestedLanguage(learningLanguage.code, learningLanguage.name, learningLanguage.level)
@@ -239,6 +248,11 @@ export const learningLanguagesToTestedLanguages = (
             convertedLearningLanguages.push(testedLanguage);
         }
     });
+
+    if (specificLanguage) {
+        return convertedLearningLanguages.filter((language) => language.code === specificLanguage);
+    }
+
     return convertedLearningLanguages;
 };
 
@@ -256,4 +270,20 @@ export const compareCEFR = (levelA: CEFR, levelB: CEFR) => {
     };
 
     return CEFRlevels[levelB] - CEFRlevels[levelA];
+};
+
+export const normalizeString = (string: string) => {
+    return string
+        .replace('ꜳ', 'aa')
+        .replace('æ', 'ae')
+        .replace('ꜵ', 'ao')
+        .replace('ꜷ', 'au')
+        .replace('ꜹ', 'av')
+        .replace('ꜽ', 'ay')
+        .replace('ȸ', 'db')
+        .replace('ue', 'ue')
+        .replace('œ', 'oe')
+        .replace('ø', 'oe')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '');
 };

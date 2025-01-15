@@ -1,0 +1,33 @@
+.item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    .item_title {
+        color: #000;
+        font-family: 'Maven Pro';
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 20px;
+    }
+    .item_content {
+        color: #737272;
+        font-family: 'Maven Pro';
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 20px;
+        padding: 12px 16px;
+        background-color: #fff;
+        border-radius: 5px;
+    }
+    .item_content_media {
+        padding: 0;
+        background-color: #fff;
+        border-radius: 5px;
+        width: fit-content;
+    }
+    .item_strong {
+        color: #000;
+    }
+}

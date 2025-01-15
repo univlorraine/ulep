@@ -1,0 +1,106 @@
+.container {
+    border-left: 1px solid #00000020;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    position: relative;
+    padding: 0 !important;
+}
+
+.header {
+    background-color: white;
+    height: 50px;
+    text-align: center;
+    border-bottom: 1px solid #00000020;
+}
+
+.title {
+    color: #000;
+    font-family: 'Roboto', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    margin: 0;
+    line-height: 30px;
+}
+
+.back_button {
+    position: absolute;
+    left: 10px;
+    top: 3px;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    padding: 0 16px;
+    gap: 10px;
+}
+
+.goalItem {
+    background-color: #F2F4F7;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+    width: 100%;
+}
+
+.customGoalButton {
+    color: #000;
+    background-color: #F2F4F7;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 10px 20px;
+    cursor: pointer;
+    width: 100%;
+    text-transform: none;
+}
+
+.customGoalButton:hover,
+.customGoalButton:focus {
+    background-color: #E4E7ED;
+    outline: none;
+}
+
+.goalTitleContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.goalTitle {
+    font-size: 17px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.goalDescription {
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.image {
+    height: 50px;
+    width: 50px;
+}
+
+.imageContainer {
+    display: flex;
+    justify-content: center;
+    margin: 20px;
+    min-width: 50px;
+}
+
+@media (min-width: 768px) {
+    .header {
+        padding: 12px;
+    }
+}

@@ -70,8 +70,10 @@ export class MinioStorage implements StorageInterface {
   }
 
   async delete(bucket: string, name: string): Promise<void> {
-    const bucketExists = await this.directoryExists(bucket);
-    if (!bucketExists) {
+    if (
+      !(await this.directoryExists(bucket)) ||
+      !(await this.fileExists(bucket, name))
+    ) {
       return;
     }
 

@@ -31,7 +31,8 @@ const EditUniversity = () => {
         notificationEmail?: string,
         specificLanguagesAvailable?: Language[],
         defaultContact?: Administrator,
-        file?: File
+        file?: File,
+        defaultCertificateFile?: File
     ) => {
         const formData = universityToFormData(
             name,
@@ -50,7 +51,8 @@ const EditUniversity = () => {
             notificationEmail,
             specificLanguagesAvailable,
             defaultContact,
-            file
+            file,
+            defaultCertificateFile
         );
 
         try {
@@ -107,7 +109,8 @@ const EditUniversity = () => {
                                 notificationEmail?: string,
                                 specificLanguagesAvailable?: Language[],
                                 defaultContact?: Administrator,
-                                file?: File
+                                file?: File,
+                                defaultCertificateFile?: File
                             ) =>
                                 handleSubmit(
                                     record.id,
@@ -127,7 +130,8 @@ const EditUniversity = () => {
                                     notificationEmail,
                                     specificLanguagesAvailable,
                                     defaultContact,
-                                    file
+                                    file,
+                                    defaultCertificateFile
                                 )
                             }
                             maxTandemsPerUser={record.maxTandemsPerUser}

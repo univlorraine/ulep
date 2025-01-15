@@ -4,6 +4,7 @@ import { useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreActions } from '../../store/storeTypes';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
+import { CEFR_LEVELS } from '../utils';
 import pairingSelectLevelStyles from './css/PairingSelectLevel.module.css';
 import styles from './css/SignUp.module.css';
 
@@ -13,8 +14,6 @@ const PairingSelectCEFRPage: React.FC = () => {
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const history = useHistory();
     const [selectedLevel, setSelectedLevel] = useState<CEFR>();
-
-    const levels: CEFR[] = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 
     const onValidateCefr = () => {
         updateProfileSignUp({ learningLanguageLevel: selectedLevel });
@@ -48,7 +47,7 @@ const PairingSelectCEFRPage: React.FC = () => {
                         {isNoKnoledgeSelected ? '✔️' : ''} {'A0'} <br /> {t('pairing_select_level_page.no_knowledge')}
                     </button>
                     <div className={pairingSelectLevelStyles['levels-container']} role="radiogroup">
-                        {levels.map((level) => {
+                        {CEFR_LEVELS.map((level) => {
                             const isSelected = selectedLevel === level;
                             return (
                                 <button

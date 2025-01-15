@@ -1,6 +1,10 @@
 #syntax=docker/dockerfile:1.4
 
-FROM node:18-alpine as api_base
+FROM node:18-alpine3.20 as api_base
+
+# install openssl - resolves the issue with the prisma client
+RUN apk update && apk upgrade
+RUN apk add --no-cache openssl
 
 # https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine
 RUN apk add --no-cache libc6-compat
@@ -52,6 +56,7 @@ USER nestjs
 EXPOSE 3000
 
 ENV PORT 3000
+
 
 CMD ["pnpm", "run", "start:prod"]
 

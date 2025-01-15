@@ -6,12 +6,23 @@ const Store = createStore<TokenStoreTypes>(
     persist(
         {
             accessToken: '',
+            newsFilter: {
+                language: [],
+            },
             apiUrl: '',
             chatUrl: '',
             socketChatUrl: '',
             jitsiUrl: import.meta.env.VITE_JITSI_URL,
             language: '',
             refreshToken: '',
+            refreshReports: false,
+            lastConnection: undefined,
+            setLastConnection: action((state, payload) => {
+                state.lastConnection = payload.lastConnection;
+            }),
+            setRefreshReports: action((state) => {
+                state.refreshReports = !state.refreshReports;
+            }),
             setApiUrl: action((state, payload) => {
                 state.apiUrl = payload.apiUrl;
                 state.chatUrl = payload.chatUrl;
@@ -20,6 +31,9 @@ const Store = createStore<TokenStoreTypes>(
             }),
             setLanguage: action((state, payload) => {
                 state.language = payload.language;
+            }),
+            setNewsFilter: action((state, payload) => {
+                state.newsFilter.language = payload.language;
             }),
             setProfile: action((state, payload) => {
                 state.profile = payload.profile;
@@ -44,6 +58,7 @@ const Store = createStore<TokenStoreTypes>(
                 state.apiUrl = '';
                 state.chatUrl = '';
                 state.socketChatUrl = '';
+                state.lastConnection = undefined;
             }),
             profile: undefined,
             profileSignUp: new ProfileSignUp(),

@@ -7,7 +7,7 @@ import styles from './FlagBubble.module.css';
 interface FlagBubbleProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     disabled?: boolean;
     language: Language;
-    isSelected: boolean;
+    isSelected?: boolean;
     onPressed?: (language: Language) => void;
     textColor?: string;
 }

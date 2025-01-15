@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import { Match } from 'src/core/models/matchs.model';
-import { LearningLanguageResponse } from '../learning-languages';
 import { LanguageResponse } from '../languages';
+import { LearningLanguageResponse } from '../learning-languages';
 
 class MatchScoreDto {
   @ApiProperty()

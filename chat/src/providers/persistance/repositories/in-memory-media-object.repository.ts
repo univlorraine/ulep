@@ -68,4 +68,8 @@ export class InMemoryMediaObjectRepository implements MediaObjectRepository {
         }
         return Promise.resolve();
     }
+
+    findAllByConversationId(conversationId: string): Promise<MediaObject[]> {
+        return Promise.resolve(this.#mediaObjects);
+    }
 }

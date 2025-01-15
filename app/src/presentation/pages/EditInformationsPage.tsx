@@ -85,9 +85,9 @@ const EditInformationsPage: React.FC = () => {
 
                 <button className="secondary-button" onClick={() => openGallery()}>
                     {!profilePicture && profile?.user.avatar && (
-                        <NetworkImage id={profile.user.avatar.id} className={styles.image} aria-hidden={true} />
+                        <NetworkImage id={profile.user.id} className={styles.image} aria-hidden={true} />
                     )}
-                    {(profilePicture || !profile?.user.avatar) && (
+                    {(profilePicture || !profile?.user) && (
                         <img
                             alt=""
                             className={styles.image}
@@ -108,7 +108,7 @@ const EditInformationsPage: React.FC = () => {
                     errorMessage={errorMessage?.type === 'firstname' ? errorMessage.message : undefined}
                     onChange={setFirstname}
                     placeholder={t('signup_informations_page.placeholder_firstname')}
-                    title={t('global.firstname')}
+                    title={t('global.firstname') as string}
                     type="text"
                     value={firstname}
                 />
@@ -118,7 +118,7 @@ const EditInformationsPage: React.FC = () => {
                     errorMessage={errorMessage?.type === 'lastname' ? errorMessage.message : undefined}
                     onChange={setLastname}
                     placeholder={t('signup_informations_page.placeholder_name')}
-                    title={t('global.lastname')}
+                    title={t('global.lastname') as string}
                     type="text"
                     value={lastname}
                 />
@@ -145,7 +145,7 @@ const EditInformationsPage: React.FC = () => {
                     errorMessage={errorMessage?.type === 'age' ? errorMessage.message : undefined}
                     onChange={(age: string) => setAge(Number(age))}
                     placeholder={t('signup_informations_page.placeholder_age')}
-                    title={t('global.age')}
+                    title={t('global.age') as string}
                     type="text"
                     value={age ? `${age}` : ''}
                 />
@@ -156,7 +156,7 @@ const EditInformationsPage: React.FC = () => {
                         errorMessage={errorMessage?.type === 'email' ? errorMessage.message : undefined}
                         onChange={setEmail}
                         placeholder={t('signup_informations_page.placeholder_email')}
-                        title={t('global.email')}
+                        title={t('global.email') as string}
                         type="email"
                         value={email}
                     />

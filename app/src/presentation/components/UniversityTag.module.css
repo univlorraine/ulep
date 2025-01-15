@@ -1,0 +1,26 @@
+.container {
+    display: inline-flex;
+    background-color: black;
+    padding: 4px 5px;
+    border-radius: 30px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.central {
+    background-color: var(--primary-color);
+}
+
+.partner {
+    background-color: var(--secondary-color);
+}
+
+.text {
+    color: black;
+    font-family: Maven Pro;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 16px;
+    text-align: left;
+}

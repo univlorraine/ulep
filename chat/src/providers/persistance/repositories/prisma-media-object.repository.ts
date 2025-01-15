@@ -54,4 +54,27 @@ export class PrismaMediaObjectRepository implements MediaObjectRepository {
     async remove(id: string): Promise<void> {
         await this.prisma.mediaObject.delete({ where: { id } });
     }
+
+    async findAllByConversationId(
+        conversationId: string,
+    ): Promise<MediaObject[]> {
+        const medias = await this.prisma.mediaObject.findMany({
+            where: { Message: { Conversation: { id: conversationId } } },
+        });
+
+        if (!medias) {
+            return [];
+        }
+
+        return medias.map(
+            (media) =>
+                new MediaObject({
+                    id: media.id,
+                    name: media.name,
+                    bucket: media.bucket,
+                    mimetype: media.mime,
+                    size: media.size,
+                }),
+        );
+    }
 }

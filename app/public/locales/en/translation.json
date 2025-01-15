@@ -27,7 +27,12 @@
             "noMessage": "No message",
             "image": "Image",
             "audio": "Audio",
-            "file": "File"
+            "file": "File",
+            "vocabulary": "Shared vocabulary list",
+            "activity": "Shared activity"
+        },
+        "vocabulary": {
+            "added": "Vocabulary list added to your profile"
         }
     },
     "date": {
@@ -40,17 +45,226 @@
             "unexpected": "Unexpected error"
         }
     },
+    "filter": {
+        "languages": "Languages",
+        "levels": "Levels",
+        "themes": "Themes",
+        "event_type": {
+            "title": "Format",
+            "online": "Online",
+            "presential": "Presential"
+        },
+        "apply": "Apply",
+        "cancel": "Cancel",
+        "is_mine": "My sheets"
+    },
+    "events": {
+        "online": "Online",
+        "open_maps": "Open maps",
+        "subscribe": "Subscribe",
+        "unsubscribe": "Unsubscribe",
+        "join": "Join",
+        "join_online": "Join online",
+        "add_to_calendar": "Add to calendar",
+        "load_more": "See more",
+        "add_to_calendar_success": "ICS file downloaded"
+    },
+    "news": {
+        "list": {
+            "filter_title": "Select news filters",
+            "title": "News",
+            "load_more": "See more"
+        },
+        "show": {
+            "change_language": "Change",
+            "language": "Language",
+            "author": "Author",
+            "change_language_modal": {
+                "title": "Choisir la langue",
+                "current": "Sélectionnée"
+            }
+        }
+    },
+    "credit": {
+        "title": "Credit of the file"
+    },
+    "learning_book": {
+        "list": {
+            "title": "Learning journal",
+            "load_more": "See more",
+            "share": {
+                "title": "Share the logs",
+                "success": "Logs have been shared"
+            },
+            "export": {
+                "title": "Export the logs",
+                "success": "Logs have been exported"
+            }
+        },
+        "entry": {
+            "connection": {
+                "title": "First connection of the day!"
+            },
+            "custom": {
+                "button": "Update"
+            },
+            "visio": {
+                "title": "Visio with {{firstname}} {{lastname}}",
+                "subtitle": "The call lasted {{minutes}} minutes and {{seconds}} seconds"
+            },
+            "tandem_chat": {
+                "title": "Conversation with {{firstname}} {{lastname}} started today"
+            },
+            "add_vocabulary": {
+                "title": "Add vocabulary to the list {{vocabularyListName}} : {{entryNumber}} entry(s)",
+                "button": "See the list"
+            },
+            "share_vocabulary": {
+                "title": "Share the list {{vocabularyListName}}",
+                "button": "See the list"
+            },
+            "edit_activity": {
+                "title": "Edited activity: {{activityTitle}}",
+                "button": "See the activity"
+            },
+            "submit_activity": {
+                "title": "Submitted activity: {{activityTitle}}",
+                "button": "See the activity"
+            },
+            "played_game": {
+                "title": "Played game: {{gameName}}",
+                "subtitle": "You scored {{percentage}}% of the questions right"
+            },
+            "sharing_logs": {
+                "title": "Logs have been shared"
+            },
+            "see_more": "See more",
+            "load_more": "See more",
+            "title": "Journal entries"
+        },
+        "create": {
+            "title": "New journal entry",
+            "title_label": "Title",
+            "description_label": "Description",
+            "cancel_button": "Cancel",
+            "validate_button": "Validate",
+            "date_label": "Date"
+        },
+        "update": {
+            "title": "Update journal entry"
+        }
+    },
+    "activity": {
+        "title": "Activity sheet",
+        "status": {
+            "in_validation": "In validation",
+            "rejected": "Rejected",
+            "published": "Published"
+        },
+        "list": {
+            "title": "Activity sheets",
+            "filter_title": "Filter",
+            "filter_clear": "Clear filters",
+            "language": "Language",
+            "level": "Level",
+            "theme": "Theme",
+            "search": "Search activity"
+        },
+        "show": {
+            "activity_shared": "Your sheet has been shared to your animator",
+            "status_rejected": "Show the reason for rejection",
+            "update": "Update my sheet",
+            "back_button": "Back",
+            "creator": "Created by {{name}}",
+            "title": "Activity sheet",
+            "language": "Language",
+            "level": "Level",
+            "theme": "Theme",
+            "created_by": "Created by",
+            "me": "me",
+            "share": "Share my sheet to the community",
+            "exercise": "Exercise {{index}}",
+            "vocabulary": "Vocabulary & expressions",
+            "modal_rejected_title": "Activity sheet rejected",
+            "modal_rejected_description1": "After study by your manager, your activity sheet has been rejected.",
+            "modal_rejected_description2": "There are modifications to be made, contact your manager to find out more.",
+            "modal_rejected_description3": "You can rework your sheet and submit it again",
+            "modal_rejected_close": "I understand",
+            "modal_share_title": "Share with the community",
+            "modal_share_description1": "Your activity sheet must be validated by your manager to check that it meets the needs of the community.",
+            "modal_share_description2": "If it is validated, it will then be accessible to other users (and you will be duly credited) !",
+            "modal_share_description3": "No matter what, you will always have access to your sheet in your personal space.",
+            "modal_share_submit": "Submit my sheet",
+            "modal_share_close": "Close",
+            "ressource_file": "Download the document",
+            "ressource_file_downloaded": "File downloaded"
+        },
+        "create": {
+            "image_alt": "Activity image",
+            "up_excercise_button": "Move the excercise up",
+            "down_excercise_button": "Move the excercise down",
+            "delete_excercise_button": "Delete the excercise",
+            "back_button": "Back",
+            "delete_image_button": "Delete image",
+            "close_ressource_url": "Close the ressource url",
+            "close_ressource_file": "Delete the PDF document",
+            "excercise": "Excercise",
+            "excercise_placeholder": "Enter the excercise content",
+            "add_excercise_button": "Add an excercise",
+            "add_vocabulary_button": "Add a vocabulary term",
+            "ressource_url_placeholder": "Enter the url",
+            "title_informations": "Informations",
+            "title_vocabulary": "Vocabulary & expression",
+            "subtitle_vocabulary": "You can list here the vocabulary elements related to the subject of your sheet",
+            "vocabulary_placeholder": "Enter the vocabulary",
+            "pronunciation": "Pronunciation",
+            "delete_pronunciation": "Delete pronunciation",
+            "delete_vocabulary_button": "Add a vocabulary term",
+            "title_excercise": "Excercise",
+            "subtitle_excercise": "You may propose between 3 and 6 excercises for this activity.",
+            "title_input": "Title",
+            "title_input_placeholder": "Title of the activity",
+            "image": "Image",
+            "image_button": "Add an image",
+            "credit_image_placeholder": "Image credit",
+            "description": "Description",
+            "description_placeholder": "Description of the activity",
+            "language": "Language",
+            "language_placeholder": "Choose a language",
+            "level": "Level",
+            "level_placeholder": "Select the language level",
+            "theme": "Theme",
+            "theme_placeholder": "Select a theme",
+            "ressource": "Main resource",
+            "ressource_infos": "The main resource can be a link (url) or a PDF document",
+            "ressource_url": "Enter the url",
+            "ressource_file": "Upload a PDF document",
+            "cancel_button": "Cancel",
+            "validate_button": "Validate",
+            "success_title": "Sheet created !",
+            "success_description": "Your sheet has been created !",
+            "success_description_2": "You can find it in your learning space, in the “My sheets” tab",
+            "success_navigate_button": "See my preparation sheet",
+            "success_close_button": "Close",
+            "theme_category": "Theme category",
+            "theme_category_placeholder": "Select a theme category"
+        }
+    },
     "navigation": {
         "bottom_bar": {
             "home": "Home",
             "conversations": "Conversations",
-            "disconnect": "Disconnect",
-            "profile": "Profile",
-            "settings": "Settings"
+            "learning": "Learning",
+            "profile": "Profile"
         },
         "sidebar": {
             "home": "Home",
-            "conversations": "Conversations"
+            "conversations": "Conversations",
+            "learning": "Learning",
+            "profile": "Profile",
+            "settings": "Settings",
+            "disconnect": "Disconnect",
+            "report": "Report"
         }
     },
     "maintenance_page": {
@@ -106,9 +320,100 @@
         "welcome_subtext": "le meilleur moyen de pratiquer une langue",
         "welcome_btn": "Apprends une nouvelle langue en tandem",
         "close": "Close",
-        "download": "Download"
+        "download": "Download",
+        "years_old": "years old"
+    },
+    "vocabulary": {
+        "list": {
+            "create": {
+                "title": "Create a new list"
+            },
+            "update": {
+                "title": "Update the list"
+            },
+            "delete": {
+                "title": "Delete the list",
+                "modal": "Are you sure you want to delete this list ?"
+            },
+            "empty": "You haven't created any vocabulary list for this language yet.",
+            "go_back": "Go back",
+            "menu": "Menu",
+            "start_quiz_menu": "Start a quiz",
+            "title": "Vocabulary lists",
+            "creator": "Created by {{name}}",
+            "missing_pronunciation": "{{count}} pronunciation to record",
+            "number_of_vocabularies": "{{count}} pairs",
+            "me": "me",
+            "add": {
+                "cancel": "Cancel",
+                "create": "Validate",
+                "origin_language": "Translation language",
+                "target_language": "Language to learn",
+                "title": "New vocabulary list",
+                "symbol": "List symbol",
+                "name": "List name",
+                "symbol_error": "The symbol is required",
+                "name_error": "The name is required",
+                "origin_language_error": "The translation language is required",
+                "target_language_error": "The language to learn is required"
+            },
+            "share": {
+                "cancel": "Cancel",
+                "create": "Validate",
+                "title": "With whom do you want to share?",
+                "no_tandem": "You don't have a tandem for this language",
+                "success": "The vocabulary list has been shared"
+            },
+            "start_quiz": {
+                "title": "Select the lists to practice on",
+                "create": "Let's go!",
+                "close": "Close",
+                "all_lists": "All lists"
+            },
+            "flashcard": {
+                "title": "Review your vocabulary with flashcards!",
+                "paragraph": "Find the equivalent translation of the word displayed and try to reach a 100% score",
+                "button": "Start the flashcards"
+            },
+            "card": {
+                "title": "Liste de vocabulaire",
+                "creator": "Créé par {{name}}"
+            }
+        },
+        "pair": {
+            "go_back": "Go back",
+            "menu": "Menu",
+            "share_button": "Share",
+            "export": "Export",
+            "empty": "You haven't created any vocabulary pair for this list yet.",
+            "create": "New word pair",
+            "aria-pressed": "Update vocabulary",
+            "list_update": "Update the list",
+            "search": "Search",
+            "no_translation": "No translation",
+            "add": {
+                "cancel": "Cancel",
+                "save": "Save",
+                "pronunciation": "Pronunciation",
+                "add_prounonciation": "Add",
+                "delete_prounonciation": "Delete",
+                "default_word": "Word to learn",
+                "default_translation": "Translation",
+                "title": "New word pair",
+                "edit_title": "Edit word pair"
+            },
+            "update": {
+                "delete": "Delete",
+                "save": "Save"
+            },
+            "without_pronunciation": "Pronunciation(s) to record",
+            "every_pronunciation": "Every pair"
+        }
     },
     "chat": {
+        "community": {
+            "name": "Room {{firstLanguage}} - {{secondLanguage}}"
+        },
         "ariaLabelFileDownloaded": "Downloading file : {{filename}}",
         "fileDownloaded": "File downloaded",
         "me": "Me",
@@ -150,11 +455,26 @@
             "audios": "Audios",
             "links": "Links"
         },
+        "replyMessageButton": "Reply to message",
+        "goBackToConversation": "Revenir au salon",
+        "numberOfReplies": "See reply",
+        "numberOfReplies_plural": "See {{count}} replies",
+        "popularHashtags": "Popular hashtags",
         "reportMessageButton": "Report message",
+        "likeMessageButton": "Like message",
+        "unlikeMessageButton": "Unlike message",
         "no_messages": "No messages",
         "no_conversations": "No conversations",
         "send_image_aria_label": "Send image",
-        "send_file_aria_label": "Send file"
+        "send_file_aria_label": "Send file",
+        "send_vocabulary_list_aria_label": "Send vocabulary list",
+        "vocabulary_list": {
+            "close": "Close",
+            "title": "Select the list to share"
+        },
+        "activity_list": {
+            "title": "Activity list"
+        }
     },
     "connection_page": {
         "connect_title": "Already have an account ?",
@@ -169,6 +489,39 @@
     },
     "conversations": {
         "title": "My messaging"
+    },
+    "proficiency_test": {
+        "button": "Take the test",
+        "subtitle": "My languages",
+        "title": "My level"
+    },
+    "create_learning_language": {
+        "button": "Add a language to learn",
+        "title": "Ready to learn a new language?"
+    },
+    "partner_university": {
+        "button": "See the fiche",
+        "title": "Partner university"
+    },
+    "ressources": {
+        "title": "Ressources & documents",
+        "journal": "Learning journal",
+        "vocabulary": "Vocabulary lists",
+        "activity": "Activity sheets",
+        "game": "Games & Quizzes"
+    },
+    "university_card": {
+        "button": "See the fiche",
+        "period": "Opening period"
+    },
+    "flashcards": {
+        "flipcards": {
+            "title": "Flash Cards",
+            "term": {
+                "term": "Term",
+                "of": "of"
+            }
+        }
     },
     "home_page": {
         "profile": {
@@ -236,6 +589,25 @@
             "tandem_unavailable": "Tandem unavailable",
             "tandem_paused": "Tandem paused",
             "title": "My pending requests"
+        },
+        "news": {
+            "title": "News",
+            "see_all": "See all news"
+        },
+        "events": {
+            "title": "Events",
+            "see_all": "See all events"
+        }
+    },
+    "learning": {
+        "title": "Learning space",
+        "add_language": "Add learning language",
+        "card": {
+            "my_tandem": {
+                "button": "See the profile",
+                "title": "My tandem"
+            },
+            "pending_tandem": "Pending tandem"
         }
     },
     "instance": {

@@ -13,7 +13,7 @@ const ForgotPassword = () => {
 
     const submitForgotPassword = async () => {
         handleCloseForgotPasswordModal();
-        await http('POST', `${process.env.REACT_APP_API_URL}/authentication/administrators/reset-password`, {
+        await http('POST', `${window.REACT_APP_API_URL}/authentication/administrators/reset-password`, {
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: new URLSearchParams({ email }),
         });

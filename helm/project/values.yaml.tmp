@@ -2,39 +2,68 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-name: "ulep"
-domain: ulep.thestaging.io
+# CLUSTER
+name: 'ulep'
+domain: &domain ulep.thestaging.io
 issuerName: letsencrypt
+ingressName: &ingressName traefik
 
+# API
 apiUrl: &apiUrl api
+firebaseProjectId: &firebaseProjectId ulep-notifications
+firebasePrivateKey: &firebasePrivateKey 'changeme'
+firebaseClientEmail: &firebaseClientEmail changeme
+
+# AUTH
+authUrl: &authUrl auth
+
+# JITSI
+jitsiUrl: &jitsiUrl jitsi
+
+# ADMIN
 adminUrl: &adminUrl admin
-keycloakUrl: &keycloakUrl auth
-webappUrl: &webappUrl webapp
-keycloakAdminPassword: &keycloakAdminPassword AZE123aze
-keycloakClientSecret: &keycloakClientSecret bN49BuApmmtAODeOWOG8iKOOuJdN3KE6
+
+# CHAT
+chatUrl: &chatUrl chat
+socketChatUrl: &socketChatUrl chat-ws
+
+# MINIO
+minioApiUrl: &minioApiUrl minio-api
+minioUrl: &minioUrl minio
 minioAccessKey: &minioAccessKey minio
 minioSecretKey: &minioSecretKey AZE123aze
-firebaseProjectId: &firebaseProjectId firebase-project-id ##CHANGE THIS
-firebasePrivateKey: &firebasePrivateKey firebase-private-key ##CHANGE THIS WITH -----BEGIN PRIVATE KEY-----\nPRIVATE KEY\n-----END PRIVATE KEY-----
-firebaseClientEmail: &firebaseClientEmail firebase-client-email ##CHANGE THIS
+
+# KEYCLOAK
+keycloakUrl: &keycloakUrl auth
+keycloakAdminPassword: &keycloakAdminPassword AZE123aze
+keycloakClientSecret: &keycloakClientSecret bN49BuApmmtAODeOWOG8iKOOuJdN3KE6
+
+# WEBAPP
+webappUrl: &webappUrl webapp
+
+#WEBLATE
+weblateApiUrl: &weblateApiUrl weblate
+
+#GLITCHTIP
+glitchtipUrl: &glitchtipUrl glitchtip
 
 api:
-  name: api
+  name: *apiUrl
   replicaCount: 1
   image:
     repository: rg.fr-par.scw.cloud/ulep/api-prod
-    tag: '1.0.1496'
-    pullPolicy: Always
+    tag: '1.0.3110'
+    pullPolicy: IfNotPresent
   initImage:
     repository: rg.fr-par.scw.cloud/ulep/api-init
-    tag: '1.0.1496'
-    pullPolicy: Always
+    tag: '1.0.3110'
+    pullPolicy: IfNotPresent
   env:
     adminUrl: *adminUrl
+    chatUrl: *chatUrl
     appUrl: *webappUrl
-    logLevel: warn
-    defaultTranslationLanguage: fr
-    webServiceLogoutToken: eOWOG8iKOOuJdN3KE6bN49BuApmmtAOD
+    logLevel: debug
+    defaultTranslationLanguage: en
     keycloakRealm: etandem
     keycloakAdmin: admin
     keycloakClientId: api
@@ -43,10 +72,9 @@ api:
     minioUrl: https://minio-api.ulep.thestaging.io
     minioAccessKey: *minioAccessKey
     minioSecretKey: *minioSecretKey
-    weblateApiUrl: https://weblate.ulep.thestaging.io/api # TO CHANGE
-    weblateApiToken: # required
-    connectorUrl: https://auth.ulep.thestaging.io
-    connectorToken: 5f8a2b8c-8b0a-4b9e-9b0a-4b9e9b0a4b9e
+    i18nReloadInterval: '3600000'
+    i18nMinioUrl: https://minio-api.ulep.thestaging.io/i18n
+    i18nDebug: true
     emailsAssetsBucket: assets
     notificationAssetsBucket: assets
     emailsTranslationsComponent: emails
@@ -64,14 +92,10 @@ api:
     firebasePrivateKey: *firebasePrivateKey
     firebaseClientEmail: *firebaseClientEmail
     firebaseParallelLimit: 3
-    sentryDsn: https://3306ec4562fb4cfab0be7feaf5bf136a@glitchtip.ulep.thestaging.io/1
+    sentryDsn: https://70f6871957074455870c9f1d0ab2ed24@glitchtip.ulep.thestaging.io/4
     cancelTresholdInMin: 15
     signedUrlExpirationInSeconds: 3600
-    notificationTranslationNamespace:
-    notificationAssetsBucket:
-    notificationAssetsPublicEndpoint:
-
-
+    weblateApiUrl: *weblateApiUrl
   autoscaling:
     enabled: false
     minReplicas: 1
@@ -92,11 +116,11 @@ api:
       failureThreshold: 5
   ingress:
     enabled: true
-    className: traefik
+    className: *ingressName
     annotations:
-      kubernetes.io/ingress.class: "traefik"
-      cert-manager.io/cluster-issuer: "letsencrypt"
+      kubernetes.io/ingress.class: *ingressName
       kubernetes.io/tls-acme: "true"
+      cert-manager.io/cluster-issuer: letsencrypt
     hosts:
       - host: *apiUrl
         paths: [/]
@@ -105,29 +129,27 @@ api:
           - *apiUrl
 
 auth:
-  name: "auth"
+  name: *authUrl
   replicaCount: 1
   image:
-    repository: "quay.io/keycloak/keycloak"
-    tag: "21.1"
+    repository: 'quay.io/keycloak/keycloak'
+    tag: '21.1'
     pullPolicy: IfNotPresent
   initImage:
-    repository: "rg.fr-par.scw.cloud/ulep/auth-prod"
-    tag: "1.0.1496"
+    repository: 'rg.fr-par.scw.cloud/ulep/auth-prod'
+    tag: '1.0.3110'
   env:
     keycloakAdmin: admin
     keycloakAdminPassword: *keycloakAdminPassword
     kcDB: postgres
     kcDBSchema: keycloak
     proxyAddressForwarding: true
-    logLevel: DEBUG
-    sentryDsn: https://f16c3018310045fe9a5fa2c47f437921@glitchtip.ulep.thestaging.io/5
+    logLevel: warn
   autoscaling:
     enabled: false
     minReplicas: 1
     maxReplicas: 100
     targetCPUUtilizationPercentage: 80
-    # targetMemoryUtilizationPercentage: 80
   service:
     type: ClusterIP
     port: 80
@@ -146,93 +168,130 @@ auth:
       failureThreshold: 5
   ingress:
     enabled: true
-    className: traefik
+    className: *ingressName
     annotations:
-      kubernetes.io/ingress.class: "traefik"
-      cert-manager.io/cluster-issuer: "letsencrypt"
+      kubernetes.io/ingress.class: *ingressName
       kubernetes.io/tls-acme: "true"
+      cert-manager.io/cluster-issuer: letsencrypt
     hosts:
-      - host: *keycloakUrl
+      - host: *authUrl
         paths: [/]
     tls:
       - hosts:
-          - *keycloakUrl
+          - *authUrl
 
 # Full configuration: https://github.com/bitnami/charts/tree/master/bitnami/postgresql
-postgresql:
-  global:
-    postgresql:
-      auth:
-        username: "ulep"
-        password: "AZE123aze"
-        database: "ulep"
+postgresql:  
   primary:
     initdb:
       scriptsConfigMap: ulep-init-database
     persistence:
       size: 8Gi
+  global:
+    postgresql:
+      auth:
+        username: 'ulep'
+        password: 'AZE123aze'
+        database: 'ulep'
+    redis:
+      password: AZE123aze
+
+mongodb:
+  image:
+    debug: true
+    pullPolicy: Always
+  architecture: replicaset
+  replicaCount: 1
+  persistence:
+    size: 8Gi
+  auth:
+    rootUser: 'root'
+    rootPassword: 'AZE123aze'
+    usernames: ['ulep']
+    passwords: ['AZE123aze']
+    databases: ['ulep']
+    replicaSetKey: KTGovXollW
+  initdbScriptsConfigMap: ulep-mongo-postinstall-configmap
+
+redis:
+  pullPolicy: IfNotPresent
+  master:
+    count: 1
+  replica:
+    replicaCount: 2
+  persistence:
+    size: 8Gi
+  auth:
+    enabled: false
+  sentinel:
+    masterService:
+      enabled: false
+
 
 minio:
+  name: *minioUrl
   global:
     storageClass: scw-bssd
+    storageClassName: scw-bssd
   image:
-    tag: 2023.9.30-debian-11-r0
+    tag: 2024.5.10-debian-12-r2
+    debug: yes
   clientImage:
-    tag: 2023.9.29-debian-11-r0
+    tag: 2024.5.10-debian-12-r2
   auth:
     rootUser: *minioAccessKey
     rootPassword: *minioSecretKey
   persistence:
-    size: 8Gi
+    size: 10Gi
+    storageClassName: scw-bssd
+    storageClass: scw-bssd
   # Distributed  mode is recommended for PROD
   mode: distributed
   statefulset:
     replicaCount: 2
     drivesPerNode: 2
-  defaultBuckets: "i18n,assets,objective:private,images:private"
   ingress:
     enabled: true
-    ingressClassName: traefik
+    ingressClassName: *ingressName
     hostname: minio.ulep.thestaging.io
     path: /
     pathType: Prefix
     servicePort: 9001
     annotations:
-      kubernetes.io/ingress.class: "traefik"
-      cert-manager.io/cluster-issuer: "letsencrypt"
+      kubernetes.io/ingress.class: *ingressName
       kubernetes.io/tls-acme: "true"
-    tls: true
+      cert-manager.io/cluster-issuer: letsencrypt
     extraTls:
       - hosts:
          - minio.ulep.thestaging.io
-        secretName: minio
+        secretName: minio-tls
   apiIngress:
     enabled: true
-    ingressClassName: traefik
+    ingressClassName: *ingressName
     hostname: minio-api.ulep.thestaging.io
     path: /
     pathType: Prefix
     servicePort: 9000
     annotations:
-      kubernetes.io/ingress.class: "traefik"
-      cert-manager.io/cluster-issuer: "letsencrypt"
+      kubernetes.io/ingress.class: *ingressName
       kubernetes.io/tls-acme: "true"
-    tls: true
+      cert-manager.io/cluster-issuer: letsencrypt
     extraTls:
       - hosts:
          - minio-api.ulep.thestaging.io
-        secretName: minio-api
+        secretName: minio-api-tls
+  #defaultBuckets: "i18n,assets,objective:private,images:private"
 
 admin:
-  name: "admin"
+  name: *adminUrl
   replicaCount: 1
   image:
-    repository: "rg.fr-par.scw.cloud/ulep/admin-prod"
-    tag: "1.0.1496"
+    repository: 'rg.fr-par.scw.cloud/ulep/admin-prod'
+    tag: '1.0.3110'
     pullPolicy: IfNotPresent
   env:
     keycloakClientSecret: *keycloakClientSecret
-    sentryDsn: https://56e3c8db64eb4dce8edd825a0ddd7a8c@glitchtip.ulep.thestaging.io/2
+    sentryDsn: https://11fe01856d4343feabbc1fc89bf5e1a8@glitchtip.ulep.thestaging.io/1
   autoscaling:
     enabled: false
     minReplicas: 1
@@ -257,11 +316,11 @@ admin:
       failureThreshold: 3
   ingress:
     enabled: true
-    className: traefik
+    className: *ingressName
     annotations:
-      kubernetes.io/ingress.class: "traefik"
-      cert-manager.io/cluster-issuer: "letsencrypt"
+      kubernetes.io/ingress.class: *ingressName
       kubernetes.io/tls-acme: "true"
+      cert-manager.io/cluster-issuer: letsencrypt
     hosts:
       - host: *adminUrl
         paths: [/]
@@ -269,20 +328,70 @@ admin:
       - hosts:
           - *adminUrl
 
+chat:
+  name: *chatUrl
+  replicaCount: 2
+  image:
+    repository: 'rg.fr-par.scw.cloud/ulep/chat-prod'
+    tag: '1.0.3110'
+    pullPolicy: IfNotPresent
+  env:
+    mongoInitUser: 'root'
+    mongoInitPassword: 'AZE123aze'
+    mongoInitDatabase: 'ulep'
+    mongoUser: 'ulep'
+    mongoPassword: 'AZE123aze'
+    mongoDatabase: 'ulep'
+    mongoLogLevel: 'debug'
+    logLevel: warn
+    sentryDsn: https://dcedcfca51fd41c7802454625b604d30@glitchtip.ulep.thestaging.io/2
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 2
+    targetCPUUtilizationPercentage: 80
+  service:
+    type: ClusterIP
+    port: 80
+    wsPort: 8080
+    appPort: 3000
+    appPortWs: 5000
+  probes:
+    readiness:
+      initialDelaySeconds: 0
+      periodSeconds: 10
+      failureThreshold: 6
+    liveness:
+      initialDelaySeconds: 0
+      periodSeconds: 5
+      failureThreshold: 5
+  ingress:
+    enabled: true
+    className: *ingressName
+    annotations:
+      kubernetes.io/ingress.class: *ingressName
+      kubernetes.io/tls-acme: "true"
+      cert-manager.io/cluster-issuer: letsencrypt
+    hosts:
+      - host: *chatUrl
+        paths: [/]
+
 webapp:
-  name: "webapp"
+  name: *webappUrl
   replicaCount: 1
   image:
     repository: nginx
     tag: '1.25.2-alpine'
     pullPolicy: IfNotPresent
   initImage:
-    repository: "rg.fr-par.scw.cloud/ulep/webapp"
-    tag: "1.0.1496"
+    repository: 'rg.fr-par.scw.cloud/ulep/webapp'
+    tag: '1.0.3110'
     pullPolicy: IfNotPresent
   env:
     viteEnv: staging
-    viteSentryDsn: https://e60e318600f44d14b015b9935ed0a793@glitchtip.ulep.thestaging.io/4
+    viteSentryDsn: https://114df01b27e242e8b59c5aaef9a1673e@glitchtip.ulep.thestaging.io/3
+    viteChatUrl: *chatUrl
+    viteSocketChatUrl: *socketChatUrl
   pv:
     storage: 4Gi
     storageClassName: scw-bssd
@@ -310,11 +419,11 @@ webapp:
       failureThreshold: 3
   ingress:
     enabled: true
-    className: traefik
+    className: *ingressName
     annotations:
-      kubernetes.io/ingress.class: "traefik"
-      cert-manager.io/cluster-issuer: "letsencrypt"
+      kubernetes.io/ingress.class: *ingressName
       kubernetes.io/tls-acme: "true"
+      cert-manager.io/cluster-issuer: letsencrypt
     hosts:
       - host: *webappUrl
         paths: [/]
@@ -322,83 +431,8 @@ webapp:
       - hosts:
           - *webappUrl
 
-chat:
-  name: 'chat'
-  replicaCount: 1
-  image:
-    repository: 'rg.fr-par.scw.cloud/ulep/chat-prod'
-    tag: '1.0.2397'
-    pullPolicy: IfNotPresent
-  env:
-    mongoInitUser: 'root'
-    mongoInitPassword: 'AZE123aze'
-    mongoInitDatabase: 'ulep'
-    mongoUser: 'ulep'
-    mongoPassword: 'AZE123aze'
-    mongoDatabase: 'ulep'
-    mongoLogLevel: 'debug'
-  autoscaling:
-    enabled: false
-    minReplicas: 1
-    maxReplicas: 2
-    targetCPUUtilizationPercentage: 80
-  service:
-    type: ClusterIP
-    port: 80
-    wsPort: 8080
-    appPort: 3000
-    appPortWs: 5000
-  probes:
-    readiness:
-      initialDelaySeconds: 0
-      periodSeconds: 10
-      failureThreshold: 6
-    liveness:
-      initialDelaySeconds: 0
-      periodSeconds: 5
-      failureThreshold: 5
-  ingress:
-    enabled: true
-    className: traefik
-    annotations:
-      kubernetes.io/ingress.class: 'traefik'
-      cert-manager.io/cluster-issuer: 'letsencrypt'
-      kubernetes.io/tls-acme: 'true'
-    hosts:
-      - host: chat
-        paths: [/]
-    tls:
-      - hosts:
-          - chat
-
-mongodb:
-  image:
-    debug: true
-    pullPolicy: Always
-  architecture: replicaset
-  replicaCount: 1
-  persistence:
-    size: 8Gi
-  auth:
-    rootUser: 'root'
-    rootPassword: 'AZE123aze'
-    usernames: ['ulep']
-    passwords: ['AZE123aze']
-    databases: ['ulep']
-  initdbScriptsConfigMap: ulep-mongo-postinstall-configmap
-
-redis:
-  pullPolicy: IfNotPresent
-  master:
-    count: 1
-  replica:
-    replicaCount: 0
-  persistence:
-    size: 8Gi
-  auth:
-    enabled: false
 jitsi-meet:
-  name: 'jitsi'
+  name: *jitsiUrl
   publicURL: 'https://jitsi.ulep.thestaging.io'
   enableAuth: true
   enableGuests: false
@@ -407,19 +441,18 @@ jitsi-meet:
   web:
     ingress:
       enabled: true
-      className: traefik
+      className: *ingressName
       annotations:
-        kubernetes.io/ingress.class: traefik
-        cert-manager.io/cluster-issuer: 'letsencrypt'
-        kubernetes.io/tls-acme: 'true'
-        traefik.ingress.kubernetes.io/router.entrypoints: 'websecure'
+        kubernetes.io/ingress.class: *ingressName
+        kubernetes.io/tls-acme: "true"
+      cert-manager.io/cluster-issuer: letsencrypt
       hosts:
-        - host: 'jitsi.ulep.thestaging.io'
+        - host: jitsi.ulep.thestaging.io
           paths: ['/']
       tls:
         - secretName: jitsi-tls
           hosts:
-            - 'jitsi.ulep.thestaging.io'
+            - jitsi.ulep.thestaging.io
     extraVolumes:
       - name: 'jitsi-meet-swp'
         configMap:
@@ -442,7 +475,6 @@ jitsi-meet:
     useHostPort: true
     publicIPs:
       - 51.159.157.213
-    # useNodeIP: true
     service:
       enabled: true
       type: LoadBalancer
@@ -452,6 +484,9 @@ jitsi-meet:
         type: 'RuntimeDefault'
       readOnlyRootFilesystem: false
       runAsNonRoot: false
+    xmpp:
+      user: 'ulep'
+      password: 'AZE123aze'
 
   prosody:
     persistence:
@@ -462,7 +497,9 @@ jitsi-meet:
       - name: 'JWT_APP_ID'
         value: 'api'
       - name: 'JWT_APP_SECRET'
-        value: 'bN49BuApmmtAODeOWOG8iKOOuJdN3KE6'
+        value: *keycloakClientSecret
+    annotations:
+      reloader.stakater.com/match: 'true'
     securityContext:
       allowPrivilegeEscalation: false
       seccompProfile:
@@ -470,8 +507,152 @@ jitsi-meet:
       readOnlyRootFilesystem: false
       runAsNonRoot: false
 
+  jicofo:
+    xmpp:
+      user: 'ulep'
+      password: 'AZE123aze'
+
   jibri:
     enable: false
+
+git:
+  name: 'git'
+  replicaCount: 1
+  image:
+    repository: 'rg.fr-par.scw.cloud/ulep/weblate-git-prod'
+    tag: 'latest' # REQUIRED
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 2222
+  pv:
+    storage: 5Gi # 5Gi recommandé
+    volumeMode: Filesystem
+    storageClassName: scw-bssd   
+  resources:
+    limits:
+      cpu: '3'
+      memory: 4000Mi
+    requests:
+      cpu: '2'
+      memory: 3000Mi
+  env:
+    minioHost: ulep-minio
+    minioAccessKey: minio #should be the same as used in project deployment
+    minioSecretKey: AZE123aze #should be the same as used in project deployment
+    gitPassword: "54321a"
+  ingress:
+    enabled: true
+    className: *ingressName
+    annotations:
+      kubernetes.io/ingress.class: *ingressName
+      kubernetes.io/tls-acme: "true"
+      cert-manager.io/cluster-issuer: letsencrypt
+    hosts:
+      - host: weblate-git
+        paths: [/] 
+
+weblate:
+  name: *weblateApiUrl
+  replicaCount: 1
+  redis:
+    nameOverride: "ulep-redis-weblate"
+  postgresql:    
+    nameOverride: "ulep-postgres-weblate"
+  image:
+    repository: 'weblate/weblate'
+    tag: '4.18' # REQUIRED
+    pullPolicy: IfNotPresent
+  env:
+    site: weblate
+    serverEmail: contact@ulep.fr
+    defaultFromEmail: contact@ulep.fr
+    emailHost: 'mailcatcher' # REQUIRED
+    adminEmail: 'matthieu.chaulet@thetribe.io' # REQUIRED
+    adminPassword: 'Pass@word1'
+    emailHostUser: 'admin'
+    emailHostPassword: 'AZE123aze' # REQUIRED
+    emailPort: 1025 # REQUIRED
+    allowedHost: '*' # OPTIONNEL
+  pv:
+    storage: 5Gi # 5Gi recommandé
+    volumeMode: Filesystem
+    storageClassName: scw-bssd    
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+  service:
+    type: ClusterIP
+    port: 80
+  resources:
+    limits:
+      cpu: '3'
+      memory: 4000Mi
+    requests:
+      cpu: '2'
+      memory: 3000Mi
+  ingress:
+    enabled: true
+    className: *ingressName
+    annotations:
+      kubernetes.io/ingress.class: *ingressName
+      kubernetes.io/tls-acme: "true"
+      cert-manager.io/cluster-issuer: letsencrypt
+    hosts:
+      - host: *weblateApiUrl
+        paths: [/]    
+
+glitchtip:
+  name: *glitchtipUrl
+  redis:
+    nameOverride: "ulep-redis-glitchtip"    
+    master:
+    count: 1
+    replica:
+      replicaCount: 2
+    persistence:
+      size: 8Gi    
+    sentinel:
+      masterService:
+        enabled: false
+  postgresql:    
+    nameOverride: "ulep-postgres-glitchtip"
+    fullnameOverride: "ulep-postgres-glitchtip"
+    enabled: true
+    auth:
+      postgresPassword: change_this
+    primary:
+      persistence:
+        size: 10Gi
+
+  image:
+    repository: glitchtip/glitchtip
+    tag: v3.4.4
+    pullPolicy: Always
+  env:
+    normal:
+      GLITCHTIP_DOMAIN: https://glitchtip.ulep.thestaging.io
+      EMAIL_URL: smtp://mailcatcher:1025
+      DEFAULT_FROM_EMAIL: info@example.com
+      ENABLE_USER_REGISTRATION: "True"
+    secret:
+      SECRET_KEY: "ThisMustBeChanged!" # run openssl rand -hex 32
+  web:
+    ingress:
+      enabled: true
+      className: *ingressName
+      annotations:
+        kubernetes.io/ingress.class: *ingressName        
+      hosts:
+        - host: *domain
+          paths:
+            - path: /
+              pathType: Prefix      
+
+  
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -480,32 +661,45 @@ serviceAccount:
   annotations: {}
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
-  name: ""
+  name: ''
 
 imagePullSecrets:
-  - name: "registrypullsecret"
+  - name: 'registrypullsecret'
 
-nameOverride: ""
-fullnameOverride: ""
+nameOverride: ''
+fullnameOverride: ''
 
 podAnnotations: {}
 
 podSecurityContext: {}
-  # fsGroup: 2000
+# fsGroup: 2000
 
 securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
-
+# capabilities:
+#   drop:
+#   - ALL
+# readOnlyRootFilesystem: true
+# runAsNonRoot: true
+# runAsUser: 1000
 
 resources: {}
 
 nodeSelector: {}
 
-tolerations: []
+tolerations:
+  - key: 'node.kubernetes.io/memory-pressure'
+    operator: 'Exists'
+    effect: 'NoSchedule'
 
 affinity: {}
+
+reloader:
+  reloader:
+    deployment:
+      resources:
+        limits:
+          cpu: 500m
+          memory: 256Mi
+        requests:
+          cpu: 10m
+          memory: 128Mi

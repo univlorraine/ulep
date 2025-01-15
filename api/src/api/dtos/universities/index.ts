@@ -1,26 +1,27 @@
 import * as Swagger from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import {
-    IsArray,
-    IsDate,
-    IsEmail,
-    IsNotEmpty,
-    IsOptional,
-    IsString,
-    IsTimeZone,
-    IsUrl,
-    Max,
-    Min,
+  IsArray,
+  IsDate,
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsTimeZone,
+  IsUrl,
+  Max,
+  Min,
 } from 'class-validator';
 import { AdministratorResponse, MediaObjectResponse } from 'src/api/dtos';
 import { CountryResponse } from 'src/api/dtos/countries';
 import { LanguageResponse } from 'src/api/dtos/languages';
 import { IsAfterThan } from 'src/api/validators';
+import { Instance } from 'src/core/models/Instance.model';
 import { PairingMode, University } from 'src/core/models/university.model';
 import {
-    CreatePartnerUniversityCommand,
-    CreateUniversityCommand,
-    UpdateUniversityCommand,
+  CreatePartnerUniversityCommand,
+  CreateUniversityCommand,
+  UpdateUniversityCommand,
 } from 'src/core/usecases/university';
 import { CampusResponse } from '../campus';
 
@@ -104,6 +105,11 @@ export class CreateUniversityRequest implements CreateUniversityCommand {
   @Swagger.ApiProperty({ type: 'string' })
   @IsString()
   nativeLanguageId: string;
+
+  @Swagger.ApiPropertyOptional({ type: 'string', format: 'uuid' })
+  @IsString()
+  @IsOptional()
+  defaultCertificateFileId?: string;
 }
 
 export class UpdateUniversityRequest
@@ -192,6 +198,11 @@ export class UpdateUniversityRequest
   @IsString()
   @IsOptional()
   defaultContactId: string;
+
+  @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
+  @IsString()
+  @IsOptional()
+  defaultCertificateFileId?: string;
 }
 
 export class CreateUniversityPartnerRequest
@@ -272,6 +283,11 @@ export class CreateUniversityPartnerRequest
   @Swagger.ApiProperty({ type: 'string' })
   @IsString()
   nativeLanguageId: string;
+
+  @Swagger.ApiPropertyOptional({ type: 'string', format: 'uuid' })
+  @IsString()
+  @IsOptional()
+  defaultCertificateFileId?: string;
 }
 
 export class UniversityResponse {
@@ -319,7 +335,7 @@ export class UniversityResponse {
   @Expose({ groups: ['read'] })
   hasCode: boolean;
 
- @Swagger.ApiProperty({ type: 'boolean' })
+  @Swagger.ApiProperty({ type: 'boolean' })
   @Expose({ groups: ['read'] })
   isCodeMandatory?: boolean;
 
@@ -367,11 +383,19 @@ export class UniversityResponse {
   @Expose({ groups: ['read'] })
   logo?: MediaObjectResponse;
 
+  @Swagger.ApiPropertyOptional({ type: () => MediaObjectResponse })
+  @Expose({ groups: ['read'] })
+  defaultCertificateFile?: MediaObjectResponse;
+
+  @Swagger.ApiPropertyOptional({ type: () => MediaObjectResponse })
+  @Expose({ groups: ['read'] })
+  exampleDefaultCertificateFile?: MediaObjectResponse;
+
   constructor(partial: Partial<UniversityResponse>) {
     Object.assign(this, partial);
   }
 
-  static fromUniversity(university: University) {
+  static fromUniversity(university: University, instance?: Instance) {
     return new UniversityResponse({
       id: university.id,
       logo: university.logo
@@ -388,7 +412,8 @@ export class UniversityResponse {
       admissionStart: university.admissionStart,
       admissionEnd: university.admissionEnd,
       openServiceDate: university.openServiceDate,
-      isCodeMandatory: university.domains?.length === 0 && university.codes?.length > 0,
+      isCodeMandatory:
+        university.domains?.length === 0 && university.codes?.length > 0,
       closeServiceDate: university.closeServiceDate,
       website: university.website,
       pairingMode: university.pairingMode,
@@ -399,6 +424,12 @@ export class UniversityResponse {
       ),
       nativeLanguage: LanguageResponse.fromLanguage(university.nativeLanguage),
       defaultContactId: university.defaultContactId,
+      defaultCertificateFile: university.defaultCertificateFile
+        ? MediaObjectResponse.fromMediaObject(university.defaultCertificateFile)
+        : undefined,
+      exampleDefaultCertificateFile: instance?.defaultCertificateFile
+        ? MediaObjectResponse.fromMediaObject(instance.defaultCertificateFile)
+        : undefined,
     });
   }
 }

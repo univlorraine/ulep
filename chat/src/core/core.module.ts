@@ -3,15 +3,16 @@ import {
     CreateConversationUsecase,
     CreateMessageUsecase,
     CreateMultipleConversationsUsecase,
-    DeleteContactConversationUsecase,
-    DeleteConversationUsecase,
     DeleteUserConversationUsecase,
+    DeleteConversationUsecase,
     GetConversationFromUserIdUsecase,
+    GetHashtagsFromConversationIdUsecase,
     GetMessagesFromConversationIdUsecase,
     SearchMessagesIdFromConversationIdUsecase,
     UpdateConversationUsecase,
     UpdateMessageUsecase,
     UploadMediaUsecase,
+    ExportMediasFromConversationUsecase,
 } from 'src/core/usecases';
 import { PurgeChatUsecase } from 'src/core/usecases/purge/purge-chat.usecase';
 import { ProvidersModule } from 'src/providers/providers.module';
@@ -21,15 +22,16 @@ const usecases: Provider[] = [
     CreateMessageUsecase,
     CreateMultipleConversationsUsecase,
     DeleteConversationUsecase,
-    DeleteContactConversationUsecase,
     DeleteUserConversationUsecase,
     GetConversationFromUserIdUsecase,
+    GetHashtagsFromConversationIdUsecase,
     GetMessagesFromConversationIdUsecase,
     PurgeChatUsecase,
     SearchMessagesIdFromConversationIdUsecase,
     UploadMediaUsecase,
     UpdateConversationUsecase,
     UpdateMessageUsecase,
+    ExportMediasFromConversationUsecase,
 ];
 
 const services: Provider[] = [];

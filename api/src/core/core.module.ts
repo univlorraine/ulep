@@ -7,22 +7,38 @@ import {
   GetCampusUsecase,
   UpdateCampusUsecase,
 } from 'src/core/usecases/campus';
+import { AddUserToCommunityChatUsecase } from 'src/core/usecases/chat/add-user-to-community-chat.usecase';
 import { FindAllSuggestedLanguageUsecase } from 'src/core/usecases/language/find-all-suggested-language.usecase';
+import {
+  CreateOrUpdateLogEntryUsecase,
+  ExportLogEntriesUsecase,
+  GetAllEntriesForUserByDateUsecase,
+  GetAllEntriesForUserGroupedByDatesUsecase,
+  ShareLogEntriesUsecase,
+} from 'src/core/usecases/log-entry';
+import { UpdateCustomLogEntryUsecase } from 'src/core/usecases/log-entry/update-custom-log-entry.usecase';
 import { DeleteObjectiveImageUsecase } from 'src/core/usecases/media/delete-objective-image.usecase';
 import { UploadObjectiveImageUsecase } from 'src/core/usecases/media/upload-objective-image.usecase';
 import { SendMessageNotificationUsecase } from 'src/core/usecases/notifications';
 import { UpdateObjectiveUsecase } from 'src/core/usecases/objective/update-objective.usecase';
 import { TokenForAdminUsecase } from 'src/core/usecases/security/token-for-admin.usecase';
+import { GetVocabularyListPdfUsecase } from 'src/core/usecases/vocabulary/get-vocabulary-list-pdf.usecase';
 import { ProvidersModule } from 'src/providers/providers.module';
 import { MatchScorer } from './services/MatchScorer';
 import {
   AddDeviceUsecase,
   AddLanguageRequestUsecase,
+  AddReaderToVocabularyListUsecase,
   CountAllSuggestedLanguageUsecase,
+  CreateActivityThemeCategoryUsecase,
+  CreateActivityThemeUsecase,
+  CreateActivityUsecase,
   CreateAdministratorUsecase,
+  CreateCommunityChatUsecase,
   CreateInterestCategoryUsecase,
   CreateInterestUsecase,
   CreateLearningLanguageUseCase,
+  CreateNewsUsecase,
   CreateObjectiveUsecase,
   CreateOrUpdateTestedLanguageUsecase,
   CreatePartnerUniversityUsecase,
@@ -36,10 +52,21 @@ import {
   CreateUniversityUsecase,
   CreateUnsubscribeReportUsecase,
   CreateUserUsecase,
+  CreateVocabularyListUsecase,
+  CreateVocabularyUsecase,
+  DeleteActivityThemeCategoryUsecase,
+  DeleteActivityThemeUsecase,
+  DeleteActivityUsecase,
   DeleteAdministratorUsecase,
+  DeleteAudioVocabularyActivityUsecase,
+  DeleteAudioVocabularyUsecase,
   DeleteAvatarUsecase,
+  DeleteImageActivityUsecase,
   DeleteInterestCategoryUsecase,
   DeleteInterestUsecase,
+  DeleteMediaActivityUsecase,
+  DeleteNewsImageUsecase,
+  DeleteNewsUsecase,
   DeleteObjectiveUsecase,
   DeleteProfileUsecase,
   DeleteQuestionUsecase,
@@ -48,21 +75,34 @@ import {
   DeleteTestUsecase,
   DeleteUniversityUsecase,
   DeleteUserUsecase,
+  DeleteVocabularyActivityUsecase,
+  DeleteVocabularyListUsecase,
+  DeleteVocabularyUsecase,
   FindAllLanguageCodeUsecase,
   FindAllObjectiveUsecase,
+  FindAllVocabularyFromListIdUsecase,
+  FindAllVocabularyFromSelectedListsIdUsecase,
+  FindAllVocabularyListUsecase,
   FindOneObjectiveUsecase,
+  GenerateCertificateUsecase,
   GenerateConversationsUsecase,
   GenerateTandemsUsecase,
-  GetAdministratorUsecase,
+  GetActivitiesUsecase,
+  GetActivityThemeCategoryUsecase,
+  GetActivityThemeUsecase,
+  GetActivityUsecase,
   GetAdministratorsUsecase,
+  GetAdministratorUsecase,
+  GetAllActivitiesByAdminUsecase,
+  GetAllActivityThemesUsecase,
   GetAllConversationsFromUserIdUsecase,
   GetCategoriesUsecase,
   GetCountriesUniversitiesUsecase,
   GetCountriesUsecase,
   GetInstanceUsecase,
   GetInterestCategoryUsecase,
-  GetInterestUsecase,
   GetInterestsByCategoriesUsecase,
+  GetInterestUsecase,
   GetLearningLanguageMatchesUsecase,
   GetLearningLanguageOfIdUsecase,
   GetLearningLanguageOfProfileUsecase,
@@ -70,37 +110,46 @@ import {
   GetLevelsUsecase,
   GetMediaObjectUsecase,
   GetMessagesFromConversationUsecase,
+  GetNewsAdminUsecase,
+  GetNewsUsecase,
+  GetOneNewsUsecase,
   GetOtherUserEmailInTandemUsecase,
   GetPartnersToUniversityUsecase,
   GetProfileByUserIdUsecase,
-  GetProfileUsecase,
-  GetProfileWithTandemsProfilesUsecase,
   GetProfilesUsecase,
   GetProfilesWithTandemsProfilesUsecase,
-  GetQuestionUsecase,
+  GetProfileUsecase,
+  GetProfileWithTandemsProfilesUsecase,
   GetQuestionsByLevelUsecase,
   GetQuestionsUsecase,
+  GetQuestionUsecase,
   GetReportCategoryByIdUsecase,
-  GetReportUsecase,
   GetReportsByStatusUsecase,
+  GetReportUsecase,
   GetTandemsByIdsUsecase,
   GetTandemsForProfileUsecase,
   GetTandemsUsecase,
-  GetTestUsecase,
   GetTestsUsecase,
+  GetTestUsecase,
   GetUniversitiesUsecase,
   GetUniversityDivisionsUsecase,
   GetUniversityUsecase,
   GetUserPersonalData,
-  GetUserUsecase,
   GetUsersUsecase,
+  GetUserUsecase,
   RefuseTandemUsecase,
+  RemoveReaderToVocabularyListUsecase,
+  UpdateActivityThemeCategoryUsecase,
+  UpdateActivityThemeUsecase,
+  UpdateActivityUsecase,
   UpdateAdministratorUsecase,
   UpdateCountryStatusUsecase,
   UpdateInstanceUsecase,
   UpdateInterestCategoryUsecase,
   UpdateInterestUsecase,
   UpdateLanguageCodeUsecase,
+  UpdateLearningLanguageUsecase,
+  UpdateNewsUsecase,
   UpdateProfileUsecase,
   UpdateQuestionUsecase,
   UpdateReportCategoryUsecase,
@@ -108,22 +157,71 @@ import {
   UpdateTandemUsecase,
   UpdateUniversityUsecase,
   UpdateUserUsecase,
+  UpdateVocabularyListUsecase,
+  UpdateVocabularyUsecase,
   UploadAdminAvatarUsecase,
+  UploadAudioVocabularyActivityUsecase,
+  UploadAudioVocabularyUsecase,
   UploadAvatarUsecase,
+  UploadEventImageUsecase,
+  UploadImageActivityUsecase,
+  UploadLearningLanguageCertificateUsecase,
+  UploadMediaActivityUsecase,
+  UploadNewsImageUsecase,
   UploadUniversityImageUsecase,
 } from './usecases';
+import { UpdateActivityStatusUsecase } from './usecases/activity/update-activity-status.usecase';
+import {
+  CreateEventUsecase,
+  DeleteEventUsecase,
+  GetEventsAdminUsecase,
+  GetEventsUsecase,
+  GetEventUsecase,
+  SendEmailToSubscribedUsersUsecase,
+  SubscribeToEventUsecase,
+  UnsubscribeToEventUsecase,
+  UpdateEventUsecase,
+} from './usecases/event';
 import { GetJitsiTokenUsecase } from './usecases/jitsi/get-jitsi-token.usecase';
 import { DeleteLearningLanguageUsecase } from './usecases/learningLanguage/delete-learning-langugage.usecase';
 import { GetLearningLanguageTandemUsecase } from './usecases/learningLanguage/getLearningLanguageTandem.usecase';
+import { UploadInstanceDefaultCertificateUsecase } from './usecases/media/upload-instance-default-certificate.usecase';
+import { UploadUniversityDefaultCertificateUsecase } from './usecases/media/upload-university-default-certificate.usecase';
+import { CreateCustomLearningGoalUsecase } from './usecases/objective/create-custom-learning-goals.usecase';
+import { DeleteCustomLearningGoalUsecase } from './usecases/objective/delete-custom-learning-goal.usecase';
+import { UpdateCustomLearningGoalUsecase } from './usecases/objective/update-custom-learning-goal.usecase';
 import { ArchiveTandemsAndDeleteUsersUsecase } from './usecases/purges/archive-tandems.usecase';
+import { GetReportsByUserUsecase } from './usecases/report/get-reports-by-user.usecase';
 import { LogoutAllSessionsUsecase } from './usecases/security/logout-all-sessions.usecase';
 import { ResetAdminPasswordUsecase } from './usecases/security/reset-admin-password.usecase';
 import { ResetPasswordUsecase } from './usecases/security/reset-password.usecase';
+import { CancelSessionUsecase } from './usecases/session/cancel-session.usecase';
+import { CreateSessionUsecase } from './usecases/session/create-session.usecase';
+import { GetSessionsForProfileUsecase } from './usecases/session/get-sessions-for-profile.usecase';
+import { UpdateSessionUsecase } from './usecases/session/update-session.usecase';
 import { ValidateTandemUsecase } from './usecases/tandem/validate-tandem.usecase';
 import { GetKeycloakAdminGroupsUsecase } from './usecases/user/get-keycloak-admin-groups.usecase';
 import { RevokeSessionsUsecase } from './usecases/user/revoke-sessions.usecase';
 
 const usecases: Provider[] = [
+  // Activity
+  CreateActivityUsecase,
+  GetAllActivityThemesUsecase,
+  GetActivityUsecase,
+  GetActivitiesUsecase,
+  GetActivityThemeCategoryUsecase,
+  CreateActivityThemeCategoryUsecase,
+  CreateActivityThemeUsecase,
+  GetActivityThemeUsecase,
+  DeleteActivityUsecase,
+  DeleteActivityThemeCategoryUsecase,
+  DeleteActivityThemeUsecase,
+  DeleteVocabularyActivityUsecase,
+  UpdateActivityThemeCategoryUsecase,
+  UpdateActivityThemeUsecase,
+  UpdateActivityUsecase,
+  UpdateActivityStatusUsecase,
+  GetAllActivitiesByAdminUsecase,
   //Campus
   CreateCampusUsecase,
   DeleteCampusUsecase,
@@ -152,11 +250,32 @@ const usecases: Provider[] = [
   UpdateLanguageCodeUsecase,
   // Media
   GetMediaObjectUsecase,
+  DeleteAudioVocabularyUsecase,
   DeleteObjectiveImageUsecase,
+  DeleteMediaActivityUsecase,
+  DeleteImageActivityUsecase,
+  DeleteAudioVocabularyActivityUsecase,
   UploadAvatarUsecase,
   UploadAdminAvatarUsecase,
   UploadObjectiveImageUsecase,
   UploadUniversityImageUsecase,
+  UploadAudioVocabularyUsecase,
+  UploadImageActivityUsecase,
+  UploadAudioVocabularyActivityUsecase,
+  UploadMediaActivityUsecase,
+  UploadInstanceDefaultCertificateUsecase,
+  UploadUniversityDefaultCertificateUsecase,
+  UploadLearningLanguageCertificateUsecase,
+  UploadEventImageUsecase,
+  // News
+  GetNewsAdminUsecase,
+  GetNewsUsecase,
+  GetOneNewsUsecase,
+  CreateNewsUsecase,
+  UpdateNewsUsecase,
+  DeleteNewsUsecase,
+  UploadNewsImageUsecase,
+  DeleteNewsImageUsecase,
   // Objectives
   CreateObjectiveUsecase,
   DeleteObjectiveUsecase,
@@ -186,6 +305,7 @@ const usecases: Provider[] = [
   GetReportCategoryByIdUsecase,
   GetReportUsecase,
   GetReportsByStatusUsecase,
+  GetReportsByUserUsecase,
   UpdateReportStatusUsecase,
   UpdateReportCategoryUsecase,
   // Profiles
@@ -207,6 +327,8 @@ const usecases: Provider[] = [
   GetLearningLanguageOfProfileUsecase,
   GetLearningLanguageTandemUsecase,
   DeleteLearningLanguageUsecase,
+  UpdateLearningLanguageUsecase,
+  GenerateCertificateUsecase,
   // History Tandem
   GetOtherUserEmailInTandemUsecase,
   // Tandems
@@ -255,9 +377,50 @@ const usecases: Provider[] = [
   // Notifications
   SendMessageNotificationUsecase,
   // Chat
+  AddUserToCommunityChatUsecase,
   GenerateConversationsUsecase,
   GetAllConversationsFromUserIdUsecase,
   GetMessagesFromConversationUsecase,
+  CreateCommunityChatUsecase,
+  // Vocabulary
+  CreateVocabularyUsecase,
+  CreateVocabularyListUsecase,
+  DeleteVocabularyUsecase,
+  DeleteVocabularyListUsecase,
+  FindAllVocabularyFromListIdUsecase,
+  FindAllVocabularyListUsecase,
+  FindAllVocabularyFromSelectedListsIdUsecase,
+  UpdateVocabularyUsecase,
+  UpdateVocabularyListUsecase,
+  GetVocabularyListPdfUsecase,
+  AddReaderToVocabularyListUsecase,
+  RemoveReaderToVocabularyListUsecase,
+  // Session
+  CancelSessionUsecase,
+  CreateSessionUsecase,
+  GetSessionsForProfileUsecase,
+  UpdateSessionUsecase,
+  // Event
+  CreateEventUsecase,
+  DeleteEventUsecase,
+  GetEventsAdminUsecase,
+  GetEventsUsecase,
+  GetEventUsecase,
+  UpdateEventUsecase,
+  SubscribeToEventUsecase,
+  UnsubscribeToEventUsecase,
+  SendEmailToSubscribedUsersUsecase,
+  // Custom Learning Goals
+  CreateCustomLearningGoalUsecase,
+  UpdateCustomLearningGoalUsecase,
+  DeleteCustomLearningGoalUsecase,
+  // Log Entry
+  CreateOrUpdateLogEntryUsecase,
+  GetAllEntriesForUserByDateUsecase,
+  GetAllEntriesForUserGroupedByDatesUsecase,
+  UpdateCustomLogEntryUsecase,
+  ShareLogEntriesUsecase,
+  ExportLogEntriesUsecase,
 ];
 
 const services: Provider[] = [MatchScorer, CronService];

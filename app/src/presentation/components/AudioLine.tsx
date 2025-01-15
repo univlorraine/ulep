@@ -4,9 +4,12 @@ import styles from './AudioLine.module.css';
 
 interface AudioLineProps {
     audioFile: File | string;
+    hideProgressBar?: boolean;
+    small?: boolean;
+    icon?: string;
 }
 
-const AudioLine: React.FC<AudioLineProps> = ({ audioFile }) => {
+const AudioLine: React.FC<AudioLineProps> = ({ audioFile, hideProgressBar = false, small = false, icon }) => {
     const [isPlaying, setIsPlaying] = useState(false);
     const [progress, setProgress] = useState(0);
     const [duration, setDuration] = useState(0);
@@ -70,12 +73,14 @@ const AudioLine: React.FC<AudioLineProps> = ({ audioFile }) => {
 
     return (
         <div className={styles.audioLine}>
-            <button className={styles.button} onClick={togglePlayPause}>
-                {isPlaying ? <img src={PauseSvg} alt="Pause" /> : <img src={PlaySvg} alt="Play" />}
+            <button className={`${styles.button} ${small ? styles.smallButton : ''}`} onClick={togglePlayPause}>
+                {isPlaying ? <img src={icon || PauseSvg} alt="Pause" /> : <img src={icon || PlaySvg} alt="Play" />}
             </button>
-            <div className={styles.progressBar}>
-                <div className={styles.progress} style={{ width: `${progress}%` }}></div>
-            </div>
+            {!hideProgressBar && (
+                <div className={styles.progressBar}>
+                    <div className={styles.progress} style={{ width: `${progress}%` }}></div>
+                </div>
+            )}
         </div>
     );
 };

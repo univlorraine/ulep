@@ -11,10 +11,15 @@
     padding: 10px 10px;
     text-transform: uppercase;
     width: 100%;
+    gap: 10px;
 }
 .primary-button {
     background-color: #000;
     color: white;
+}
+
+.tertiary-button .button-inner {
+    gap: 10px;
 }
 
 .center-button {
@@ -44,6 +49,29 @@
     text-decoration-line: underline;
     text-transform: uppercase;
     width: 100%;
+}
+
+.add-button {
+    background-color: #eeccff;
+    border-radius: 50%;
+    height: 48px;
+    width: 48px;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 100;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+}
+
+.little-button {
+    height: 40px;
+    width: auto;
+}
+
+.add-button-icon {
+    color: #c266ff;
+    height: 400px;
+    width: 400px;
 }
 
 .primary-selected-button {

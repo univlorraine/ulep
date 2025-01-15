@@ -1,3 +1,4 @@
+// organize-imports-ignore
 import { Module } from '@nestjs/common';
 import { TerminusModule } from '@nestjs/terminus';
 import { CoreModule } from 'src/core/core.module';
@@ -33,10 +34,17 @@ import { ConfigModule } from '@nestjs/config';
 import { TandemHistoryController } from 'src/api/controllers/tandemHistory.controller';
 import { NotificationController } from 'src/api/controllers/notification.controller';
 import { ChatController } from 'src/api/controllers/chat.controller';
+import { VocabularyController } from 'src/api/controllers/vocabulary.controller';
+import { NewsController } from './controllers/news.controller';
+import { ActivityController } from 'src/api/controllers/activity.controller';
+import { SessionController } from './controllers/session.controller';
+import { EventsController } from './controllers/events.controller';
+import { LogEntryController } from 'src/api/controllers/log-entry.controller';
 
 @Module({
   imports: [CoreModule, TerminusModule, HttpModule, ConfigModule],
   controllers: [
+    ActivityController,
     CampusController,
     ChatController,
     CountryController,
@@ -44,6 +52,8 @@ import { ChatController } from 'src/api/controllers/chat.controller';
     InterestController,
     InstanceController,
     LanguageController,
+    LogEntryController,
+    NewsController,
     NotificationController,
     ObjectiveController,
     ProficiencyController,
@@ -59,6 +69,9 @@ import { ChatController } from 'src/api/controllers/chat.controller';
     LearningLanguageController,
     RoutineExecutionController,
     UniversityConnectorController,
+    VocabularyController,
+    SessionController,
+    EventsController,
   ],
   providers: [
     PrismaService,

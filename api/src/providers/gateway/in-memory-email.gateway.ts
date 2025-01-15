@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   AccountBlockedEmailProps,
+  ActivityStatusChangeEmailProps,
   EmailGateway,
+  EventDeletedEmailProps,
   NewMessageEmailProps,
   NewPartnerEmail,
   NewReportEmailProps,
@@ -9,12 +11,19 @@ import {
   NewTandemNoticeEmailProps,
   NewUserRegistrationNoticeEmailProps,
   PasswordChangeDeniedEmailProps,
+  SendEmailToSubscribedToEventUserProps,
   SendWelcomeMailProps,
+  SessionCanceledEmailProps,
+  SessionCreatedEmailProps,
+  SessionStartEmailProps,
+  SessionUpdatedEmailProps,
+  SubscribedToEventEmailProps,
   TandemCanceledEmailProps,
   TandemCanceledNoticeEmailProps,
   TandemClosureNoticeEmailProps,
   TandemPausedUnpausedEmailProps,
   TandemValidationNoticeEmailProps,
+  UnsubscribedFromEventEmailProps,
 } from 'src/core/ports/email.gateway';
 
 export default class InMemoryEmailGateway implements EmailGateway {
@@ -99,6 +108,61 @@ export default class InMemoryEmailGateway implements EmailGateway {
   }
 
   sendNewReportMessageEmail(props: NewReportMessageEmailProps): Promise<void> {
+    return Promise.resolve();
+  }
+  sendNewActivityProposalEmail(
+    props: ActivityStatusChangeEmailProps,
+  ): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendActivityPublishedEmail(
+    props: ActivityStatusChangeEmailProps,
+  ): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendActivityRejectedEmail(
+    props: ActivityStatusChangeEmailProps,
+  ): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendSessionStartEmail(props: SessionStartEmailProps): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendSessionCanceledEmail(props: SessionCanceledEmailProps): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendSessionUpdatedEmail(props: SessionUpdatedEmailProps): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendSessionCreatedEmail(props: SessionCreatedEmailProps): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendSubscribedToEventEmail(
+    props: SubscribedToEventEmailProps,
+  ): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendUnsubscribedFromEventEmail(
+    props: UnsubscribedFromEventEmailProps,
+  ): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendEventDeletedEmail(props: EventDeletedEmailProps): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendEmailToSubscribedToEventUser(
+    props: SendEmailToSubscribedToEventUserProps,
+  ): Promise<void> {
     return Promise.resolve();
   }
 }

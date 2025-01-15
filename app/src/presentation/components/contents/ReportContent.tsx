@@ -3,7 +3,9 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeftSvg, CloseBlackSvg } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
+import { ReportCategoryName } from '../../../domain/entities/Report';
 import ReportCategory from '../../../domain/entities/ReportCategory';
+import { useStoreActions } from '../../../store/storeTypes';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../../utils';
 import Dropdown, { DropDownItem } from '../DropDown';
@@ -23,6 +25,7 @@ const ReportContent: React.FC<ReportContentProps> = ({ onClose }) => {
     const [note, setNote] = useState<string>('');
     const { width } = useWindowDimensions();
     const isHybrid = width < HYBRID_MAX_WIDTH;
+    const setRefreshReport = useStoreActions((state) => state.setRefreshReports);
 
     const buttonDisabled = !selectedCategory || note.length === 0;
 
@@ -33,9 +36,11 @@ const ReportContent: React.FC<ReportContentProps> = ({ onClose }) => {
             return await showToast({ message: t(result.message), duration: 1000 });
         }
 
-        setSelectedCategory(result[0]);
+        const categories = result.filter((category) => category.name !== ReportCategoryName.CONVERSATION);
+
+        setSelectedCategory(categories[0]);
         return setReportCategories(
-            result.map((reportCategory) => ({ label: reportCategory.name, value: reportCategory }))
+            categories.map((reportCategory) => ({ label: reportCategory.name, value: reportCategory }))
         );
     };
 
@@ -49,6 +54,7 @@ const ReportContent: React.FC<ReportContentProps> = ({ onClose }) => {
         }
 
         const result = await createReport.execute(selectedCategory.id, note);
+        setRefreshReport();
 
         if (result instanceof Error) {
             return await showToast({ message: t(result.message), duration: 1000 });
@@ -100,7 +106,7 @@ const ReportContent: React.FC<ReportContentProps> = ({ onClose }) => {
                 </div>
                 <TextInput
                     onChange={setNote}
-                    title={t('home_page.report.note')}
+                    title={t('home_page.report.note') as string}
                     type="text-area"
                     value={note}
                     maxLength={1000}

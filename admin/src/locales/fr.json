@@ -1,4 +1,99 @@
 {
+    "activities": {
+        "label": "Activités",
+        "tabLabel": "Activités",
+        "form": {
+            "mainInfos": "Informations principales",
+            "title": "Titre",
+            "image": "Image d'illustration",
+            "imageCredit": "Credit de l'image",
+            "description": "Description",
+            "language": "Langue",
+            "level": "Niveau",
+            "category": "Catégorie",
+            "theme": "Thème",
+            "ressource": "Ressource",
+            "url": "URL",
+            "file": "Fichier",
+            "ressourceURL": "URL",
+            "ressourceFile": "Fichier",
+            "exercices": "Exercices",
+            "exercice": "Exercice",
+            "addExercice": "Ajouter un exercice",
+            "vocabulary": "Vocabulaire",
+            "pronunciation": "Prononciation",
+            "addVocabulary": "Ajouter un vocabulaire",
+            "vocabularyPlaceholder": "Entrez un mot ou une phrase",
+            "deletePronunciation": "Supprimer la prononciation"
+        },
+        "list": {
+            "language": "Langue",
+            "level": "Niveau",
+            "category": "Catégorie",
+            "theme": "Thème",
+            "university": "Université",
+            "creator": "Auteur",
+            "title": "Titre",
+            "status": "Statut",
+            "admin": "Administrateur"
+        },
+        "show": {
+            "mainInfos": {
+                "label": "Informations principales",
+                "title": "Titre",
+                "image": "Image",
+                "credit": "Credit",
+                "description": "Description",
+                "language": "Langue",
+                "level": "Niveau",
+                "category": "Catégorie",
+                "theme": "Thème",
+                "resource": "Ressource (URL ou fichier)",
+                "url": "URL",
+                "admin": "Administrateur"
+            },
+            "exercices": {
+                "label": "Exercices",
+                "content": "Contenu",
+                "order": "Ordre"
+            },
+            "vocabulary": {
+                "label": "Vocabulaire",
+                "pronunciation": "Prononciation"
+            },
+            "actions": {
+                "validate": "Valider",
+                "refuse": "Refuser",
+                "unpublish": "Dépublier",
+                "publish": "Publier"
+            }
+        },
+        "status": {
+            "draft": "Brouillon",
+            "published": "Publié",
+            "in_validation": "En attente de validation",
+            "rejected": "Rejeté"
+        },
+        "error": {
+            "update": "Une erreur est survenue pendant la mise à jour de l'activité",
+            "create": "Une erreur est survenue pendant la création de l'activité",
+            "alreadyPublished": "Vous ne pouvez pas mettre à jour une activité déjà publiée"
+        }
+    },
+    "activities_categories": {
+        "tabLabel": "Catégories d'Activités",
+        "name": "Nom",
+        "themes": "Thèmes",
+        "create": {
+            "error": "Une erreur est survenue pendant la création du thème d'activité"
+        },
+        "update": {
+            "error": "Une erreur est survenue pendant la mise à jour du thème d'activité"
+        },
+        "show": {
+            "name": "Nom"
+        }
+    },
     "administrators": {
         "all": "Tout",
         "create": {
@@ -108,6 +203,107 @@
         "saturday": "Samedi",
         "sunday": "Dimanche"
     },
+    "events": {
+        "label": "Evènements",
+        "title": "Evènements",
+        "list": {
+            "title": "Titre",
+            "university": "Auteur",
+            "defaultLanguage": "Langue par défaut",
+            "translations": "Traductions",
+            "status": "Statut",
+            "startDate": "Date de début",
+            "endDate": "Date de fin",
+            "type": "Type",
+            "filters": {
+                "title": "Titre",
+                "language": "Langue",
+                "status": "Statut",
+                "university": "Université",
+                "type": "Type"
+            }
+        },
+        "status": {
+            "DRAFT": "Brouillon",
+            "READY": "Publié"
+        },
+        "type": {
+            "ONLINE": "En ligne",
+            "PRESENTIAL": "Présentiel"
+        },
+        "form": {
+            "add_translation": "Ajouter une traduction",
+            "change_language": "Changer la langue par défaut",
+            "type": {
+                "label": "Type d'évènement",
+                "online": "En ligne",
+                "presential": "Présentiel"
+            },
+            "author": "Auteur",
+            "status": "Statut",
+            "start_date": "Date de début",
+            "end_date": "Date de fin",
+            "illustration": "Illustration",
+            "image_credit": "Credit de l'image",
+            "title": "Titre",
+            "content": "Contenu",
+            "subscriptions": "Inscriptions",
+            "with_subscriptions": "Avec inscriptions",
+            "concerned_universities": {
+                "label": "Universités concernées",
+                "button": "Ajouter"
+            },
+            "diffusion_languages": {
+                "label": "Langues diffusées",
+                "button": "Ajouter"
+            },
+            "event_url": "URL de l'évènement",
+            "address": "Adresse",
+            "address_name": "Nom du lieu",
+            "error": {
+                "required": "Tous les champs sont obligatoires",
+                "start_date_greater_than_end_date": "La date de début doit être avant la date de fin"
+            },
+            "remove_translation": "Supprimer la traduction",
+            "mandatory": "Les champs marqués d'un * sont obligatoires"
+        },
+        "create": {
+            "cta": "Créer",
+            "error": "Une erreur est survenue pendant la création de l'évènement"
+        },
+        "update": {
+            "cta": "Mettre à jour",
+            "error": "Une erreur est survenue pendant la mise à jour de l'évènement"
+        },
+        "subscriptions": {
+            "title": "Inscrits à l'évènement : %{eventTitle}",
+            "author": "Auteur : %{universityName}",
+            "list": {
+                "firstname": "Prénom",
+                "lastname": "Nom",
+                "university": "Université",
+                "email": "Email",
+                "cta": "Actions"
+            },
+            "searchProfile": "Rechercher un profil",
+            "search": {
+                "button": "Inscrire des utilisateurs",
+                "subscribe": "Inscrire"
+            },
+            "email": {
+                "button": "Envoyer un email",
+                "title": "Envoyer un email aux inscrits",
+                "form": {
+                    "title": "Titre",
+                    "content": "Contenu"
+                },
+                "send": "Envoyer",
+                "success": "L'email a bien été envoyé aux inscrits",
+                "error": "Une erreur est survenue lors de l'envoi de l'email"
+            },
+            "unsubscribe": "Désinscrire"
+        }
+    },
     "global": {
         "all": "Tout",
         "age": "Age",
@@ -171,6 +367,7 @@
         "primaryColor": "Couleur primaire de l'application",
         "primaryBackgroundColor": "Couleur primaire de l'image de fond de l'application",
         "maintenance": "Mise en maintenance",
+        "defaultCertificateFile": "Modèle de certificat",
         "mainteance_update": "L'instance a bien été modifié",
         "primaryDarkColor": "Nuance sombre de la couleur primaire utilisé pour le fond de l'application",
         "secondaryColor": "Couleur secondaire de l'application",
@@ -197,7 +394,8 @@
             "secondaryColor": "Couleur secondaire de l'application",
             "secondaryBackgroundColor": "Couleur secondaire de l'image de fond de l'application",
             "secondaryDarkColor": "Couleur secondaire nuancé en sombre utilisé pour le fond de l'application",
-            "title": "Mise à jour de l'instance"
+            "title": "Mise à jour de l'instance",
+            "defaultCertificateFile": "Modèle de certificat"
         }
     },
     "interests": {
@@ -225,7 +423,7 @@
         },
         "interests": "Intérêts",
         "label": "Catégorie d'intérêts",
-        "tabLabel": "Catégorie d'intérêts",
+        "tabLabel": "Catégories d'intérêts",
         "name": "Nom",
         "update": {
             "name": "Nom de la catégorie",
@@ -272,6 +470,53 @@
         "domainError": "Les administrateurs centraux doivent utiliser SSO pour se connecter.",
         "loginError": "Mauvais email ou mot de passe",
         "password": "Mot de passe"
+    },
+    "news": {
+        "label": "Actualités",
+        "title": "Actualités",
+        "form": {
+            "title": "Titre",
+            "content": "Contenu",
+            "illustration": "Illustration",
+            "author": "Auteur",
+            "change_language": "Changer de langue",
+            "add_translation": "Ajouter une traduction",
+            "remove_translation": "Supprimer la traduction",
+            "error": {
+                "notFound": "Actualité non trouvée",
+                "required": "Les dates de publication, le titre et le contenu sont obligatoires",
+                "start_publication_date_greater_than_end_publication_date": "La date de début de publication doit être avant la date de fin de publication"
+            },
+            "start_publication_date": "Date de début de publication",
+            "end_publication_date": "Date de fin de publication",
+            "credit_image": "Auteur de l'image"
+        },
+        "status": {
+            "label": "Statut",
+            "READY": "Prêt",
+            "DRAFT": "Brouillon"
+        },
+        "create": {
+            "cta": "Créer"
+        },
+        "update": {
+            "cta": "Mettre à jour"
+        },
+        "list": {
+            "title": "Titre",
+            "university": "Université",
+            "defaultLanguage": "Langue par défaut",
+            "translations": "Traductions",
+            "status": "Statut",
+            "startPublicationDate": "Début de publication",
+            "endPublicationDate": "Fin de publication",
+            "filters": {
+                "university": "Université",
+                "status": "Statut",
+                "title": "Titre",
+                "language": "Langue disponible"
+            }
+        }
     },
     "objectives": {
         "edit": {
@@ -445,7 +690,9 @@
             "website": "Site web de la nouvelle université partenaire",
             "pairingMode": "Mode d'appariement",
             "max_tandems_per_user": "Nombre maximum de tandems par utilisateur",
-            "notificationEmail": "Email pour les notifications"
+            "notificationEmail": "Email pour les notifications",
+            "defaultCertificateFile": "Modèle de certificat",
+            "exampleDefaultCertificateFile": "Exemple de certificat"
         },
         "language": "Langue",
         "label": "Universités",
@@ -482,7 +729,8 @@
             "id": "ID",
             "pairingMode": "Mode d'appariement",
             "max_tandems_per_user": "Nombre maximum de tandems par utilisateur",
-            "notificationEmail": "Email pour les notifications"
+            "notificationEmail": "Email pour les notifications",
+            "defaultCertificateFile": "Modèle de certificat"
         },
         "specific_language": "Langues spécifiques",
         "status": {
@@ -524,7 +772,13 @@
     "uploader": {
         "drag_drop": "Glissez et déposez une image ou",
         "drop_image": "Lâche l'image ici",
-        "select_image": "Choisissez une image"
+        "select_image": "Choisissez une image",
+        "drag_drop_file": "Glissez et déposez un %{fileType} ou",
+        "drop_file": "Déposer le fichier ici",
+        "select_file": "Choisissez un %{fileType}",
+        "file": "fichier",
+        "maxSize": "Taille maximale de %{maxSize} MB",
+        "maxSizeError": "La taille maximale de l'image est de %{maxSize} MB"
     },
     "users": {
         "searchEmail": "Chercher par email",
@@ -637,6 +891,11 @@
                 "certificateOption": "Option certificat",
                 "specificProgram": "Option programme spécifique",
                 "hasPriority": "Langue prioritaire (sans réponse au cycle précedent)",
+                "learningJournal": "Journal d'apprentissage confirmé",
+                "consultingInterview": "Entretien conseil",
+                "sharedCertificate": "Certificat partagé",
+                "certificateFile": "Certificat",
+                "generateCertificate": "Générer un certificat",
                 "score": "Score",
                 "masteredLanguages": "Langues maîtrisées"
             },
@@ -706,10 +965,20 @@
         "roles": {
             "STAFF": "Personnel",
             "STUDENT": "Etudiant"
+        },
+        "certificateDialog": {
+            "title": "Générer le certificat de %{name}",
+            "editCertificateBtn": "Editer le certificat",
+            "generateCertificateBtn": "Générer le certificat",
+            "certificateGenerated": "Certificat généré"
         }
     },
     "universitiesPicker": {
         "error": "Une erreur est survenue lors de la récupération des universités"
+    },
+    "certificates": {
+        "error": "Une erreur est survenue lors de la génération du certificat",
+        "success": "Le certificat a été généré avec succès"
     },
     "languages_code": {
         "aa": "Afar",

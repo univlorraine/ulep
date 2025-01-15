@@ -215,7 +215,7 @@ export class AdministratorResponse {
   @Expose({ groups: ['read'] })
   group?: KeycloakGroupResponse;
 
-  @Swagger.ApiPropertyOptional({ type: MediaObjectResponse })
+  @Swagger.ApiPropertyOptional({ type: () => MediaObjectResponse })
   @Expose({ groups: ['read'] })
   image?: MediaObjectResponse;
 

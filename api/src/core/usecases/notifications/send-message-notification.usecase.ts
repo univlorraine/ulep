@@ -3,21 +3,28 @@ import { Inject, Injectable } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import { Profile } from 'src/core/models';
 import { User } from 'src/core/models/user.model';
-import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
-import { LANGUAGE_REPOSITORY, LanguageRepository } from 'src/core/ports/language.repository';
+import { EmailGateway, EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
 import {
-    NOTIFICATION_GATEWAY,
-    NotificationGateway,
+  LanguageRepository,
+  LANGUAGE_REPOSITORY,
+} from 'src/core/ports/language.repository';
+import {
+  NotificationGateway,
+  NOTIFICATION_GATEWAY,
 } from 'src/core/ports/notification.gateway';
 import {
-    PROFILE_REPOSITORY,
-    ProfileRepository,
+  ProfileRepository,
+  PROFILE_REPOSITORY,
 } from 'src/core/ports/profile.repository';
-import { UNIVERSITY_REPOSITORY, UniversityRepository } from 'src/core/ports/university.repository';
 import {
-    USER_REPOSITORY,
-    UserRepository,
+  UniversityRepository,
+  UNIVERSITY_REPOSITORY,
+} from 'src/core/ports/university.repository';
+import {
+  UserRepository,
+  USER_REPOSITORY,
 } from 'src/core/ports/user.repository';
+import { CreateOrUpdateLogEntryUsecase } from 'src/core/usecases/log-entry';
 
 export type SendMessageNotificationCommand = {
   senderId: string;
@@ -40,6 +47,8 @@ export class SendMessageNotificationUsecase {
     private readonly notificationGateway: NotificationGateway,
     @Inject(EMAIL_GATEWAY)
     private readonly emailGateway: EmailGateway,
+    @Inject(CreateOrUpdateLogEntryUsecase)
+    private readonly createOrUpdateLogEntryUsecase: CreateOrUpdateLogEntryUsecase,
     private readonly keycloakService: KeycloakClient,
   ) {}
 
@@ -61,19 +70,44 @@ export class SendMessageNotificationUsecase {
       sender instanceof User ? sender.firstname : sender.firstName;
     const lastname = sender instanceof User ? sender.lastname : sender.lastName;
 
-
     const profiles = [];
     for (const userId of command.usersId) {
       const profile = await this.profileRepository.ofUser(userId);
       if (profile !== null && profile.user.acceptsEmail) {
         profiles.push(profile);
-        await this.sendEmail(profile.user.email, profile.nativeLanguage.code, command.content, { firstname: profile.user.firstname, lastname: profile.user.lastname }, { firstname, lastname });
+        await this.sendEmail(
+          profile.user.email,
+          profile.nativeLanguage.code,
+          command.content,
+          {
+            firstname: profile.user.firstname,
+            lastname: profile.user.lastname,
+          },
+          { firstname, lastname },
+        );
       } else {
         const keycloakUser = await this.keycloakService.getUserById(userId);
-        if (keycloakUser && (keycloakUser.attributes?.['languageId'] || keycloakUser.attributes?.['universityId'])) {
-          const language = await this.languageRepository.ofId(keycloakUser.attributes['languageId'][0]);
-          const university = await this.universityRepository.ofId(keycloakUser.attributes['universityId'][0]);
-           await this.sendEmail(keycloakUser.email, language.code || university.nativeLanguage.code, command.content, { firstname: keycloakUser.firstName, lastname: keycloakUser.lastName }, { firstname, lastname });
+        if (
+          keycloakUser &&
+          (keycloakUser.attributes?.['languageId'] ||
+            keycloakUser.attributes?.['universityId'])
+        ) {
+          const language = await this.languageRepository.ofId(
+            keycloakUser.attributes['languageId'][0],
+          );
+          const university = await this.universityRepository.ofId(
+            keycloakUser.attributes['universityId'][0],
+          );
+          await this.sendEmail(
+            keycloakUser.email,
+            language.code || university.nativeLanguage.code,
+            command.content,
+            {
+              firstname: keycloakUser.firstName,
+              lastname: keycloakUser.lastName,
+            },
+            { firstname, lastname },
+          );
         }
       }
     }
@@ -117,7 +151,13 @@ export class SendMessageNotificationUsecase {
     });
   }
 
-  private async sendEmail(email: string, language: string, content: string, user: { firstname: string, lastname: string }, sender: { firstname: string, lastname: string }) {
+  private async sendEmail(
+    email: string,
+    language: string,
+    content: string,
+    user: { firstname: string; lastname: string },
+    sender: { firstname: string; lastname: string },
+  ) {
     await this.emailGateway.sendNewMessageEmail({
       to: email,
       language,

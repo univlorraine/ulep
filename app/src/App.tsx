@@ -19,8 +19,11 @@ import '@ionic/react/css/typography.css';
 
 /* Theme variables */
 import { polyfillCountryFlagEmojis } from 'country-flag-emoji-polyfill';
-import { SocketContext } from './context/SocketContext';
+import { isToday } from 'date-fns';
 import getSocketContextValue from './context/getSocketContextValue';
+import { SocketContext } from './context/SocketContext';
+import { LogEntryType } from './domain/entities/LogEntry';
+import Profile from './domain/entities/Profile';
 import Loader from './presentation/components/Loader';
 import useFetchConfiguration from './presentation/hooks/useFetchConfiguration';
 import useFetchI18NBackend from './presentation/hooks/useFetchI18NBackend';
@@ -50,8 +53,24 @@ if (import.meta.env.VITE_SENTRY_DSN) {
 }
 
 const AppCore = () => {
-    const { addDevice, deviceAdapter, notificationAdapter } = useConfig();
+    const { addDevice, deviceAdapter, notificationAdapter, createLogEntry } = useConfig();
     const profile = useStoreState((state) => state.profile);
+    const setLastConnection = useStoreActions((state) => state.setLastConnection);
+    const lastConnection = useStoreState((state) => state.lastConnection);
+
+    const createConnectionLogEntry = async (profile: Profile) => {
+        if (!profile) {
+            return;
+        }
+
+        profile.learningLanguages.forEach(async (learningLanguage) => {
+            await createLogEntry.execute({
+                learningLanguageId: learningLanguage.id,
+                type: LogEntryType.CONNECTION,
+                metadata: {},
+            });
+        });
+    };
 
     useEffect(() => {
         if (profile && deviceAdapter.isNativePlatform()) {
@@ -68,6 +87,11 @@ const AppCore = () => {
             notificationAdapter.notificationActionListener((notification: any) => {
                 console.info('Notification action performed:', notification);
             });
+        }
+
+        if (profile && (!lastConnection || !isToday(lastConnection))) {
+            createConnectionLogEntry(profile);
+            setLastConnection({ lastConnection: new Date() });
         }
 
         return () => {

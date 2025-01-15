@@ -1,0 +1,8 @@
+.container {
+    padding-top: 0;
+    overflow-y: auto;
+}
+
+.content {
+    padding: 20px;
+}

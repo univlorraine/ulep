@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useConfig } from '../../../context/ConfigurationContext';
+import Profile from '../../../domain/entities/Profile';
+import { UserChat } from '../../../domain/entities/User';
 import { useStoreState } from '../../../store/storeTypes';
 import JitsiMobile from './JitsiMobile';
 import JitsiWeb from './JitsiWeb';
@@ -12,17 +14,19 @@ export interface JitsiProps {
     language: string;
     roomName: string;
     jitsiToken: string;
+    tandemPartner?: Profile | UserChat;
+    learningLanguageId: string;
 }
 
 const VisioContainer = () => {
     const { i18n } = useTranslation();
-    const location = useLocation();
+    const location = useLocation<JitsiProps>();
     const { accessToken, getJitsiToken } = useConfig();
     const history = useHistory();
     const [jitsiToken, setJitsiToken] = useState<string>();
     const jitsiUrl = useStoreState((state) => state.jitsiUrl);
-
     const roomName = location.search ? location.search.split('roomName=')[1] : '';
+    const { tandemPartner, learningLanguageId } = location.state || {};
 
     const fetchJitsiToken = async () => {
         const response = await getJitsiToken.execute(accessToken);
@@ -44,9 +48,27 @@ const VisioContainer = () => {
 
     if (isPlatform('cordova')) {
         // native device, open jitsi capacitor plugin
-        return <JitsiMobile jitsiUrl={jitsiUrl} language={i18n.language} roomName={roomName} jitsiToken={jitsiToken} />;
+        return (
+            <JitsiMobile
+                jitsiUrl={jitsiUrl}
+                language={i18n.language}
+                roomName={roomName}
+                jitsiToken={jitsiToken}
+                tandemPartner={tandemPartner}
+                learningLanguageId={learningLanguageId}
+            />
+        );
     } else {
-        return <JitsiWeb jitsiUrl={jitsiUrl} language={i18n.language} roomName={roomName} jitsiToken={jitsiToken} />;
+        return (
+            <JitsiWeb
+                jitsiUrl={jitsiUrl}
+                language={i18n.language}
+                roomName={roomName}
+                jitsiToken={jitsiToken}
+                tandemPartner={tandemPartner}
+                learningLanguageId={learningLanguageId}
+            />
+        );
     }
 };
 

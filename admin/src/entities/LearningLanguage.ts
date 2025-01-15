@@ -1,4 +1,5 @@
 import Campus from './Campus';
+import MediaObject from './MediaObject';
 // eslint-disable-next-line import/no-cycle
 import { Profile } from './Profile';
 // eslint-disable-next-line import/no-cycle
@@ -25,7 +26,12 @@ export type LearningLanguage = {
     certificateOption?: boolean;
     specificProgram?: boolean;
     hasPriority?: boolean;
+    learningJournal?: boolean;
+    consultingInterview?: boolean;
+    sharedCertificate?: boolean;
+    certificateFile?: MediaObject;
     sameTandemEmail?: string;
+    sharedLogsDate?: Date;
 };
 
 export type LearningLanguageWithTandemWithPartnerProfile = {
@@ -53,6 +59,12 @@ export type LearningLanguageTandem = {
     partnerLearningLanguage: LearningLanguage;
     universityValidations: string[];
     compatibilityScore: number;
+};
+
+export type CertificateFormPayload = {
+    learningJournal?: boolean;
+    consultingInterview?: boolean;
+    sharedCertificate?: boolean;
 };
 
 /**

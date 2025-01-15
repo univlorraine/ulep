@@ -22,4 +22,28 @@ export default class InMemoryNotificaitonGateway
   sendMessageNotification(): Promise<void> {
     return Promise.resolve();
   }
+
+  sendActivityPublishedNotification(): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendActivityRejectedNotification(): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendSessionStartNotification(): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendSessionCanceledNotification(): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendSessionUpdatedNotification(): Promise<void> {
+    return Promise.resolve();
+  }
+
+  sendSessionCreatedNotification(): Promise<void> {
+    return Promise.resolve();
+  }
 }

@@ -1,0 +1,30 @@
+.modal {
+    --height: auto;
+}
+
+.container {
+    background: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+    border-radius: 10px;
+    color: black;
+}
+
+.filterContainer {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.languages {
+    color: black;
+    display: flex;
+    justify-content: space-between;
+    text-transform: none;
+}
+
+.selected {
+    background-color: var(--primary-color);
+}

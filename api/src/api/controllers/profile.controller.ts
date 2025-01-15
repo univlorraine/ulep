@@ -35,6 +35,7 @@ import {
   GetTandemsForProfileUsecase,
   UpdateProfileUsecase,
 } from 'src/core/usecases';
+import { GetSessionsForProfileUsecase } from 'src/core/usecases/session/get-sessions-for-profile.usecase';
 import { CollectionResponse, CurrentUser } from '../decorators';
 import { Role, Roles } from '../decorators/roles.decorator';
 import {
@@ -43,6 +44,7 @@ import {
   LearningLanguageResponse,
   ProfileQueryFilter,
   ProfileResponse,
+  SessionResponse,
   TestedLanguageProps,
   UpdateProfileRequest,
   UserTandemResponse,
@@ -70,13 +72,14 @@ export class ProfileController {
     private readonly updateProfileUsecase: UpdateProfileUsecase,
     private readonly createOrUpdateTestedLanguageUsecase: CreateOrUpdateTestedLanguageUsecase,
     private readonly getAdminUsecase: GetAdministratorUsecase,
+    private readonly getSessionsForProfileUsecase: GetSessionsForProfileUsecase,
   ) {}
 
   @Post()
   @UseGuards(AuthenticationGuard)
   @SerializeOptions({ groups: ['read', 'profile:read'] })
   @Swagger.ApiOperation({ summary: 'Creates a Profile ressource.' })
-  @Swagger.ApiCreatedResponse({ type: ProfileResponse })
+  @Swagger.ApiCreatedResponse({ type: () => ProfileResponse })
   @Swagger.ApiResponse({ status: 400, description: 'Invalid input' })
   async create(
     @CurrentUser() user: KeycloakUser,
@@ -92,7 +95,7 @@ export class ProfileController {
 
   @Post('edit/:id')
   @Swagger.ApiOperation({ summary: 'Edit profile ressource.' })
-  @Swagger.ApiCreatedResponse({ type: ProfileResponse })
+  @Swagger.ApiCreatedResponse({ type: () => ProfileResponse })
   async edit(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() body: UpdateProfileRequest,
@@ -126,6 +129,8 @@ export class ProfileController {
       status,
       masteredLanguageCode,
       nativeLanguageCode,
+      notSubscribedToEvent,
+      subscribedToEvent,
       field,
       order,
       page,
@@ -156,6 +161,8 @@ export class ProfileController {
         },
         masteredLanguageCode: masteredLanguageCode,
         nativeLanguageCode: nativeLanguageCode,
+        notSubscribedToEvent: notSubscribedToEvent,
+        subscribedToEvent: subscribedToEvent,
       },
     });
 
@@ -251,7 +258,7 @@ export class ProfileController {
   @Swagger.ApiOperation({
     summary: 'Retrieve the collection of Tandem ressource.',
   })
-  @Swagger.ApiOkResponse({ type: UserTandemResponse, isArray: true })
+  @Swagger.ApiOkResponse({ type: () => UserTandemResponse, isArray: true })
   async getTandems(
     @Param('id', ParseUUIDPipe) id: string,
     @Headers('Language-code') languageCode?: string,
@@ -265,13 +272,30 @@ export class ProfileController {
     );
   }
 
+  @Get(':id/sessions')
+  @UseGuards(AuthenticationGuard)
+  @SerializeOptions({ groups: ['read', 'learning-language:profile'] })
+  @Swagger.ApiOperation({
+    summary: 'Retrieve the collection of Session ressource.',
+  })
+  @Swagger.ApiOkResponse({ type: () => SessionResponse, isArray: true })
+  async getSessions(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<SessionResponse[]> {
+    const sessions = await this.getSessionsForProfileUsecase.execute({
+      profileId: id,
+    });
+
+    return sessions.map((tandem) => SessionResponse.from(tandem));
+  }
+
   @Get('me')
   @UseGuards(AuthenticationGuard)
   @SerializeOptions({ groups: ['read', 'profile:read'] })
   @Swagger.ApiOperation({
     summary: 'Retrieve a Profile from user id.',
   })
-  @Swagger.ApiOkResponse({ type: ProfileResponse })
+  @Swagger.ApiOkResponse({ type: () => ProfileResponse })
   @Swagger.ApiNotFoundResponse({ description: 'Resource not found' })
   async getItemByUserId(
     @CurrentUser() user: KeycloakUser,
@@ -289,7 +313,7 @@ export class ProfileController {
   @UseInterceptors(UserKeycloakContactInterceptor)
   @SerializeOptions({ groups: ['read', 'profile:read'] })
   @Swagger.ApiOperation({ summary: 'Retrieve a Profile ressource.' })
-  @Swagger.ApiOkResponse({ type: ProfileResponse })
+  @Swagger.ApiOkResponse({ type: () => ProfileResponse })
   @Swagger.ApiNotFoundResponse({ description: 'Resource not found' })
   async getItem(
     @Param('id', ParseUUIDPipe) id: string,
@@ -329,7 +353,7 @@ export class ProfileController {
   @UseGuards(AuthenticationGuard)
   @SerializeOptions({ groups: ['read', 'profile:read'] })
   @Swagger.ApiOperation({ summary: 'Add a learning languages to a Profile' })
-  @Swagger.ApiOkResponse({ type: LearningLanguageResponse })
+  @Swagger.ApiOkResponse({ type: () => LearningLanguageResponse })
   @Swagger.ApiNotFoundResponse({ description: 'Resource not found' })
   async addLearningLanguage(
     @Param('id', ParseUUIDPipe) id: string,
@@ -349,7 +373,10 @@ export class ProfileController {
   @Swagger.ApiOperation({
     summary: 'Retrieve the collection of learning languages ressource.',
   })
-  @Swagger.ApiOkResponse({ type: LearningLanguageResponse, isArray: true })
+  @Swagger.ApiOkResponse({
+    type: () => LearningLanguageResponse,
+    isArray: true,
+  })
   @Swagger.ApiNotFoundResponse({ description: 'Resource does not exist' })
   async getLearningLanguage(
     @Param('id', ParseUUIDPipe) id: string,
@@ -368,7 +395,7 @@ export class ProfileController {
   @Swagger.ApiOperation({
     summary: 'Create or update a tested language',
   })
-  @Swagger.ApiOkResponse({ type: ProfileResponse })
+  @Swagger.ApiOkResponse({ type: () => ProfileResponse })
   @Swagger.ApiNotFoundResponse({ description: 'Resource does not exist' })
   async createOrUpdateTestedLanguage(
     @Param('id', ParseUUIDPipe) id: string,

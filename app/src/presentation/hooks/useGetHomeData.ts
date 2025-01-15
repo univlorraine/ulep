@@ -1,22 +1,28 @@
-import { useState, useEffect } from 'react';
-import Tandem from '../../domain/entities/Tandem';
+import { useEffect, useState } from 'react';
 import { useConfig } from '../../context/ConfigurationContext';
+import EventObject from '../../domain/entities/Event';
+import News from '../../domain/entities/News';
+import Session from '../../domain/entities/Session';
+import Tandem from '../../domain/entities/Tandem';
 import { useStoreState } from '../../store/storeTypes';
 import { LearningType } from '../pages/PairingPedagogyPage';
-import University from '../../domain/entities/University';
 
 const useGetHomeData = (refresh?: boolean) => {
-    const { getAllTandems } = useConfig();
+    const { getAllTandems, getAllSessions, getAllNews, getAllEvents } = useConfig();
     const profile = useStoreState((state) => state.profile);
 
     const [homeResult, setHomeResult] = useState<{
         tandems: Tandem[];
-        partnerUniversities: University[];
+        sessions: Session[];
+        news: News[];
+        events: EventObject[];
         error: Error | undefined;
         isLoading: boolean;
     }>({
         tandems: [],
-        partnerUniversities: [],
+        sessions: [],
+        news: [],
+        events: [],
         error: undefined,
         isLoading: false,
     });
@@ -30,8 +36,23 @@ const useGetHomeData = (refresh?: boolean) => {
                 isLoading: true,
             });
             const tandemsResult = await getAllTandems.execute(profile.id);
+            const sessionsResult = await getAllSessions.execute(profile.id);
+            const newsResult = await getAllNews.execute({
+                limit: 3,
+                page: 1,
+            });
+            const eventsResult = await getAllEvents.execute({
+                limit: 3,
+                page: 1,
+            });
             if (tandemsResult instanceof Error) {
-                setHomeResult({ tandems: [], partnerUniversities: [], error: tandemsResult, isLoading: false });
+                setHomeResult({ ...homeResult, error: tandemsResult, isLoading: false });
+            } else if (sessionsResult instanceof Error) {
+                setHomeResult({ ...homeResult, error: sessionsResult, isLoading: false });
+            } else if (newsResult instanceof Error) {
+                setHomeResult({ ...homeResult, error: newsResult, isLoading: false });
+            } else if (eventsResult instanceof Error) {
+                setHomeResult({ ...homeResult, error: eventsResult, isLoading: false });
             } else {
                 const waitingLearningLanguages: Tandem[] = [];
                 profile?.learningLanguages.map((learningLanguage) => {
@@ -49,25 +70,11 @@ const useGetHomeData = (refresh?: boolean) => {
                         );
                     }
                 });
-
-                const uniquePartnerUniversitySet = new Set();
-                const uniquePartnerUniversities: University[] = [];
-
-                tandemsResult.forEach((tandem) => {
-                    const universityId = tandem.partner?.user.university.id;
-                    if (
-                        tandem.partner &&
-                        universityId !== profile.user.university.id &&
-                        !uniquePartnerUniversitySet.has(universityId)
-                    ) {
-                        uniquePartnerUniversitySet.add(universityId);
-                        uniquePartnerUniversities.push(tandem.partner.user.university);
-                    }
-                });
-
                 setHomeResult({
                     tandems: [...tandemsResult, ...waitingLearningLanguages],
-                    partnerUniversities: uniquePartnerUniversities,
+                    sessions: sessionsResult,
+                    news: newsResult,
+                    events: eventsResult,
                     error: undefined,
                     isLoading: false,
                 });

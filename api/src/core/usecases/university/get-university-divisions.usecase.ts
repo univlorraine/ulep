@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { RessourceDoesNotExist } from 'src/core/errors';
 import {
   UNIVERSITY_REPOSITORY,
   UniversityRepository,
-} from '../../ports/university.repository';
-import { RessourceDoesNotExist } from 'src/core/errors';
+} from 'src/core/ports/university.repository';
 import {
   USER_REPOSITORY,
   UserRepository,

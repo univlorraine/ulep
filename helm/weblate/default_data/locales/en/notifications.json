@@ -1,0 +1,10 @@
+{
+  "tandemClosureNotice": {
+    "title": "A tandem will be finished",
+    "body": "We regret to inform you that the {{university.name}} service will close the {{university.closeDate}} terminating sessions between tandems."
+  },
+  "welcome": {
+    "body": "Welcome to the ulep application! ",
+    "title": "Hello !"
+  }
+}

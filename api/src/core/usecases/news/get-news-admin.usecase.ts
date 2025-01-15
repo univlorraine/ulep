@@ -1,0 +1,49 @@
+import { Inject, Injectable } from '@nestjs/common';
+import * as _ from 'lodash';
+import { NewsStatus } from 'src/core/models';
+import {
+  NewsRepository,
+  NEWS_REPOSITORY,
+} from 'src/core/ports/news.repository';
+
+export type GetNewsAdminCommand = {
+  page: number;
+  limit: number;
+  where: {
+    title: string;
+    universityIds: string[];
+    status: NewsStatus;
+    languageCodes: string[];
+  };
+  orderBy?: {
+    field: string;
+    order: string;
+  };
+};
+
+@Injectable()
+export class GetNewsAdminUsecase {
+  constructor(
+    @Inject(NEWS_REPOSITORY)
+    private readonly newsRepository: NewsRepository,
+  ) {}
+
+  async execute(query: GetNewsAdminCommand) {
+    const { page, limit, where, orderBy } = query;
+
+    const formattedField = _.snakeCase(orderBy?.field);
+
+    const offset = (page - 1) * limit;
+    return await this.newsRepository.findAll({
+      offset,
+      limit,
+      where,
+      orderBy: orderBy
+        ? {
+            field: formattedField,
+            order: orderBy?.order,
+          }
+        : undefined,
+    });
+  }
+}

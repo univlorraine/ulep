@@ -97,6 +97,7 @@ class MetadataMessageResponse {
         });
     }
 }
+
 export class MessageResponse {
     @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
     @Expose({ groups: ['read'] })
@@ -118,9 +119,21 @@ export class MessageResponse {
     @Expose({ groups: ['read'] })
     type: MessageType;
 
+    @Swagger.ApiProperty({ type: 'array' })
+    @Expose({ groups: ['read'] })
+    likes: string[];
+
     @Swagger.ApiProperty({ type: 'object' })
     @Expose({ groups: ['read'] })
     metadata: MetadataMessageResponse;
+
+    @Swagger.ApiProperty({ type: 'number' })
+    @Expose({ groups: ['read'] })
+    numberOfReplies: number;
+
+    @Swagger.ApiProperty({ type: 'object' })
+    @Expose({ groups: ['read'] })
+    parent?: MessageResponse;
 
     constructor(partial: Partial<MessageResponse>) {
         Object.assign(this, partial);
@@ -134,6 +147,11 @@ export class MessageResponse {
             ownerId: message.ownerId,
             type: message.type,
             metadata: MetadataMessageResponse.from(message.metadata),
+            likes: message.usersLiked?.map((like) => like.userId) || [],
+            numberOfReplies: message.numberOfReplies,
+            parent: message.parent
+                ? MessageResponse.from(message.parent)
+                : undefined,
         });
     }
 }

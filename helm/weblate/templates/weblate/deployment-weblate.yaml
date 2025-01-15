@@ -35,13 +35,13 @@ spec:
           command: ["sh", "-c", "chown -R 1000:1000 /app/data"]
           volumeMounts:
           - name: "{{ .Values.weblate.name }}-data"
-            mountPath: /app/data
+            mountPath: /app/data          
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.weblate.image.repository }}:{{ .Values.weblate.image.tag }}"
-          imagePullPolicy: {{ .Values.weblate.image.pullPolicy }}
+          imagePullPolicy: {{ .Values.weblate.image.pullPolicy }}          
           ports:
             - name: http
               containerPort: 8080
@@ -88,16 +88,20 @@ spec:
               value: "{{ .Values.name }}-redis-master.{{ .Release.Namespace }}"
             - name: WEBLATE_REGISTRATION_OPEN
               value: "0"
+            - name: MINIO_HOST
+              value: "{{ .Values.git.env.minioHost }}"
+            - name: MINIO_ACCESS_KEY
+              value: "{{ .Values.git.env.minioAccessKey }}"
           envFrom: 
             - secretRef: 
                 name: "{{ .Values.name }}-secret-{{ .Values.weblate.name }}"
           volumeMounts:
           - name: "{{ .Values.weblate.name }}-data"
-            mountPath: /app/data
+            mountPath: /app/data          
       volumes:
       - name: "{{ .Values.weblate.name }}-data"
         persistentVolumeClaim:
-          claimName:  "{{ .Values.name }}-pvc-{{ .Values.weblate.name }}"
+          claimName:  "{{ .Values.name }}-pvc-{{ .Values.weblate.name }}"      
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

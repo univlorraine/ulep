@@ -1,6 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
 import { Instance } from 'src/core/models/Instance.model';
+import { MediaObjectResponse } from '../medias';
 
 export class InstanceResponse {
   @ApiPropertyOptional({ type: 'string', example: 'Université de Lorraine' })
@@ -49,15 +50,22 @@ export class InstanceResponse {
 
   @ApiProperty({ type: 'boolean' })
   @Expose({ groups: ['read'] })
+  @Type(() => Boolean)
   hasConnector: boolean;
 
   @ApiProperty({ type: 'boolean' })
   @Expose({ groups: ['read'] })
+  @Type(() => Boolean)
   isInMaintenance: boolean;
 
   @ApiProperty({ type: 'number' })
   @Expose({ groups: ['read'] })
+  @Type(() => Number)
   daysBeforeClosureNotification: number;
+
+  @ApiProperty({ type: () => MediaObjectResponse })
+  @Expose({ groups: ['read'] })
+  defaultCertificateFile?: MediaObjectResponse;
 
   @ApiProperty({ type: 'string', format: 'url' })
   @Expose({ groups: ['read'] })
@@ -82,6 +90,9 @@ export class InstanceResponse {
       secondaryDarkColor: instance.secondaryDarkColor,
       isInMaintenance: instance.isInMaintenance,
       daysBeforeClosureNotification: instance.daysBeforeClosureNotification,
+      defaultCertificateFile: instance.defaultCertificateFile
+        ? MediaObjectResponse.fromMediaObject(instance.defaultCertificateFile)
+        : null,
       logoURL: instance.logoURL,
     });
   }

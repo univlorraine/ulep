@@ -1,0 +1,59 @@
+.content {
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    background-color: #f4f5fe;
+    padding: 16px;
+}
+
+.learningLanguageContainer {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+}
+
+.learningLanguage {
+    color: #000;
+    font-family: 'Roboto';
+    font-size: 18px;
+    font-weight: 700;
+    opacity: 0.4;
+}
+
+.loaderContainer {
+    grid-column: 1 / 3;
+    display: flex;
+    justify-content: center;
+}
+
+.selectedLearningLanguage {
+    opacity: 1;
+}
+
+.separator {
+    width: 100%;
+    height: 1px;
+    background-color: black;
+    margin: 16px 0;
+    opacity: 0.4;
+}
+
+.title {
+    font-family: 'Roboto';
+    font-size: 48px;
+    font-weight: 700;
+    padding: 16px;
+}
+
+@media (min-width: 768px) {
+    .content {
+        background-color: #f4f5fe;
+        --ion-background-color: #f4f5fe;
+        min-height: 100%;
+    }
+    .learningLanguageContainer {
+        overflow-x: inherit;
+    }
+}

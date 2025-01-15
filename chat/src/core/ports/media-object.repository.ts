@@ -10,4 +10,6 @@ export interface MediaObjectRepository {
     findOne(id: string): Promise<MediaObject | null>;
 
     remove(id: string): Promise<void>;
+
+    findAllByConversationId(conversationId: string): Promise<MediaObject[]>;
 }

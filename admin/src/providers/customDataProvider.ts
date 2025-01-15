@@ -15,12 +15,16 @@ import { CONVERSATION_CATEGORY } from '../entities/Report';
 import { RoutineExecution } from '../entities/RoutineExecution';
 import { TandemStatus } from '../entities/Tandem';
 import User from '../entities/User';
+import ActivitiesCategoriesQuery from '../queries/ActivitiesCategoriesQuery';
+import ActivitiesQuery from '../queries/ActivitiesQuery';
 import AdministratorsQuery from '../queries/AdministratorsQuery';
 import ChatQuery from '../queries/ChatQuery';
 import CountriesQuery from '../queries/CountriesQuery';
+import EventsQuery from '../queries/EventsQuery';
 import InterestsQuery from '../queries/InterestsQuery';
 import LanguagesQuery from '../queries/LanguagesQuery';
 import { LearningLanguageMatchesQuery, LearningLanguagesQuery } from '../queries/LearningLanguagesQuery';
+import NewsQuery from '../queries/NewsQuery';
 import ProfilesQuery from '../queries/ProfilesQuery';
 import ProfilesWithTandemsQuery from '../queries/ProfilesWithTandemsQuery';
 import QuestionsQuery from '../queries/QuestionsQuery';
@@ -73,12 +77,12 @@ const httpClient = (url: string, options: any = {}) => {
     return fetchUtils.fetchJson(url, newOptions);
 };
 
-const dataProvider = simpleRestProvider(`${process.env.REACT_APP_API_URL}`, httpClient);
+const dataProvider = simpleRestProvider(`${window.REACT_APP_API_URL}`, httpClient);
 
 const customDataProvider = {
     ...dataProvider,
     create: async (resource: string, params: CreateParams) => {
-        const url = new URL(`${process.env.REACT_APP_API_URL}/${resource}`);
+        const url = new URL(`${window.REACT_APP_API_URL}/${resource}`);
         let body;
 
         if (params.data instanceof FormData) {
@@ -98,7 +102,7 @@ const customDataProvider = {
         return { data: result };
     },
     update: async (resource: string, params: UpdateParams) => {
-        let url = `${process.env.REACT_APP_API_URL}/${resource}`;
+        let url = `${window.REACT_APP_API_URL}/${resource}`;
         if (params.id) {
             url += `/${params.id}`;
         }
@@ -110,7 +114,23 @@ const customDataProvider = {
             body = JSON.stringify(params.data);
         }
 
-        const method = resource === 'users' ? 'POST' : 'PUT';
+        let method = 'PUT';
+
+        switch (resource) {
+            case 'users':
+                method = 'POST';
+                break;
+            case 'activities':
+                method = 'POST';
+                url = `${window.REACT_APP_API_URL}/activities/${params.id}/update`;
+                break;
+            case 'activities/status':
+                url = `${window.REACT_APP_API_URL}/activities/${params.id}/status`;
+                break;
+            default:
+                break;
+        }
+
         const response = await fetch(new URL(url), httpClientOptions({ method, body }));
 
         if (!response.ok) {
@@ -126,14 +146,17 @@ const customDataProvider = {
         return { data: result };
     },
     getOne: async (resource: string, params: GetOneParams) => {
-        let url = new URL(`${process.env.REACT_APP_API_URL}/${resource}/${params.id}`);
+        let url = new URL(`${window.REACT_APP_API_URL}/${resource}/${params.id}`);
 
         switch (resource) {
             case 'learning-languages/tandems':
-                url = new URL(`${process.env.REACT_APP_API_URL}/learning-languages/${params.id}/tandems`);
+                url = new URL(`${window.REACT_APP_API_URL}/learning-languages/${params.id}/tandems`);
                 break;
             case 'chat':
-                url = new URL(`${process.env.REACT_APP_API_URL}/chat/messages/${params.id}`);
+                url = new URL(`${window.REACT_APP_API_URL}/chat/messages/${params.id}`);
+                break;
+            case 'events':
+                url = new URL(`${window.REACT_APP_API_URL}/events/admin/${params.id}`);
                 break;
             default:
                 break;
@@ -147,18 +170,19 @@ const customDataProvider = {
 
         const data = await response.json();
 
-        if (resource === 'instance') {
-            return { data: { ...data, id: 'config' } };
-        }
-
-        if (resource === 'chat') {
-            return { data: { ...data, id: params.id } };
+        switch (resource) {
+            case 'instance':
+                return { data: { ...data, id: 'config' } };
+            case 'chat':
+                return { data: { ...data, id: params.id } };
+            default:
+                break;
         }
 
         return { data };
     },
     delete: async (resource: string, params: DeleteParams) => {
-        const url = new URL(`${process.env.REACT_APP_API_URL}/${resource}/${params.id}`);
+        const url = new URL(`${window.REACT_APP_API_URL}/${resource}/${params.id}`);
 
         const response = await fetch(url, httpClientOptions({ method: 'DELETE' }));
 
@@ -171,7 +195,7 @@ const customDataProvider = {
     deleteMany: async (resource: string, params: DeleteManyParams) => {
         const response = await Promise.all(
             params.ids.map(async (id: string) => {
-                const url = new URL(`${process.env.REACT_APP_API_URL}/${resource}/${id}`);
+                const url = new URL(`${window.REACT_APP_API_URL}/${resource}/${id}`);
 
                 const result = await fetch(url, httpClientOptions({ method: 'DELETE' }));
                 if (!result.ok) {
@@ -185,21 +209,36 @@ const customDataProvider = {
         return { data: response };
     },
     getList: async (resource: string, params: any) => {
-        let url = new URL(`${process.env.REACT_APP_API_URL}/${resource}`);
+        let url = new URL(`${window.REACT_APP_API_URL}/${resource}`);
 
         switch (resource) {
+            case 'activities':
+                url = new URL(`${window.REACT_APP_API_URL}/activities/admin`);
+                url.search = ActivitiesQuery(params);
+                break;
+            case 'activities/categories':
+                url.search = ActivitiesCategoriesQuery(params);
+                break;
             case 'users/administrators':
                 url.search = AdministratorsQuery(params);
                 break;
             case 'chat':
-                url = new URL(`${process.env.REACT_APP_API_URL}/chat/${params.filter.id}`);
+                url = new URL(`${window.REACT_APP_API_URL}/chat/${params.filter.id}`);
                 url.search = ChatQuery(params);
                 break;
             case 'chat/messages':
-                url = new URL(`${process.env.REACT_APP_API_URL}/chat/messages/${params.filter.conversationId}`);
+                url = new URL(`${window.REACT_APP_API_URL}/chat/messages/${params.filter.conversationId}`);
                 break;
             case 'countries':
                 url.search = CountriesQuery(params);
+                break;
+            case 'events':
+                url = new URL(`${window.REACT_APP_API_URL}/events/admin`);
+                url.search = EventsQuery(params);
+                break;
+            case 'events/subscriptions':
+                url = new URL(`${window.REACT_APP_API_URL}/profiles`);
+                url.search = ProfilesQuery(params);
                 break;
             case 'profiles':
                 url.search = ProfilesQuery(params);
@@ -223,8 +262,12 @@ const customDataProvider = {
                 url.search = LearningLanguagesQuery(params);
                 break;
             case 'learning-languages/matches':
-                url = new URL(`${process.env.REACT_APP_API_URL}/learning-languages/${params.filter.id}/matches`);
+                url = new URL(`${window.REACT_APP_API_URL}/learning-languages/${params.filter.id}/matches`);
                 url.search = LearningLanguageMatchesQuery(params);
+                break;
+            case 'news':
+                url = new URL(`${window.REACT_APP_API_URL}/news/admin`);
+                url.search = NewsQuery(params);
                 break;
             case 'universities':
                 url.search = UniversitiesQuery(params);
@@ -273,7 +316,7 @@ const customDataProvider = {
         };
     },
     getMany: async (resource: string) => {
-        const url = new URL(`${process.env.REACT_APP_API_URL}/${resource}`);
+        const url = new URL(`${window.REACT_APP_API_URL}/${resource}`);
         const response = await fetch(url, httpClientOptions());
 
         if (!response.ok) {
@@ -285,11 +328,7 @@ const customDataProvider = {
         return { data: result.items, total: result.totalItems };
     },
     getMatchs: async (profileId: string) => {
-        const response = await http(
-            'GET',
-            `${process.env.REACT_APP_API_URL}/matches?id=${profileId}`,
-            httpClientOptions()
-        );
+        const response = await http('GET', `${window.REACT_APP_API_URL}/matches?id=${profileId}`, httpClientOptions());
 
         if (!response.ok) {
             await throwError(response);
@@ -300,7 +339,7 @@ const customDataProvider = {
         return result.items;
     },
     launchGlobalRoutine: async (universityIds: string[]): Promise<void> => {
-        const url = `${process.env.REACT_APP_API_URL}/tandems/generate`;
+        const url = `${window.REACT_APP_API_URL}/tandems/generate`;
 
         const body = JSON.stringify({
             universityIds,
@@ -312,7 +351,7 @@ const customDataProvider = {
         }
     },
     getLastGlobalRoutineExecution: async (): Promise<RoutineExecution> => {
-        const url = `${process.env.REACT_APP_API_URL}/routine-executions/last`;
+        const url = `${window.REACT_APP_API_URL}/routine-executions/last`;
 
         const response = await fetch(url, httpClientOptions());
 
@@ -325,7 +364,7 @@ const customDataProvider = {
         return result;
     },
     validateTandem: async (tandemId: string, relaunchGlobalRoutine?: boolean): Promise<void> => {
-        const url = `${process.env.REACT_APP_API_URL}/tandems/${tandemId}/validate`;
+        const url = `${window.REACT_APP_API_URL}/tandems/${tandemId}/validate`;
         const body = JSON.stringify({
             relaunch: !!relaunchGlobalRoutine,
         });
@@ -336,7 +375,7 @@ const customDataProvider = {
         }
     },
     createTandem: async (learningLanguageIds: string[], relaunchGlobalRoutine?: boolean): Promise<void> => {
-        const url = `${process.env.REACT_APP_API_URL}/tandems`;
+        const url = `${window.REACT_APP_API_URL}/tandems`;
         const body = JSON.stringify({
             learningLanguageIds,
             relaunch: !!relaunchGlobalRoutine,
@@ -348,7 +387,7 @@ const customDataProvider = {
         }
     },
     updateTandem: async (tandemId: string, tandemStatus: TandemStatus): Promise<void> => {
-        const url = `${process.env.REACT_APP_API_URL}/tandems/${tandemId}`;
+        const url = `${window.REACT_APP_API_URL}/tandems/${tandemId}`;
         const body = JSON.stringify({
             status: tandemStatus,
         });
@@ -359,7 +398,7 @@ const customDataProvider = {
         }
     },
     refuseTandem: async (learningLanguageIds: string[], relaunchGlobalRoutine?: boolean): Promise<void> => {
-        const url = `${process.env.REACT_APP_API_URL}/tandems/refuse`;
+        const url = `${window.REACT_APP_API_URL}/tandems/refuse`;
         const body = JSON.stringify({
             learningLanguageIds,
             relaunch: !!relaunchGlobalRoutine,
@@ -371,7 +410,7 @@ const customDataProvider = {
         }
     },
     purge: async (): Promise<void> => {
-        const url = `${process.env.REACT_APP_API_URL}/purges`;
+        const url = `${window.REACT_APP_API_URL}/purges`;
         const response = await fetch(url, httpClientOptions({ method: 'POST' }));
 
         if (!response.ok) {
@@ -379,7 +418,7 @@ const customDataProvider = {
         }
     },
     generateConversations: async (): Promise<void> => {
-        const url = `${process.env.REACT_APP_API_URL}/chat/generate-conversation`;
+        const url = `${window.REACT_APP_API_URL}/chat/generate-conversation`;
         const response = await fetch(url, httpClientOptions({ method: 'POST' }));
 
         if (!response.ok) {
@@ -387,7 +426,17 @@ const customDataProvider = {
         }
     },
     exportUserPersonalData: async (userId: string): Promise<Response> => {
-        const url = `${process.env.REACT_APP_API_URL}/users/${userId}/export`;
+        const url = `${window.REACT_APP_API_URL}/users/${userId}/export`;
+        const response = await fetch(url, httpClientOptions({ method: 'GET' }));
+
+        if (!response.ok) {
+            await throwError(response);
+        }
+
+        return response;
+    },
+    exportLogEntries: async (learningLanguageId: string): Promise<Response> => {
+        const url = `${window.REACT_APP_API_URL}/log-entries/export/${learningLanguageId}`;
         const response = await fetch(url, httpClientOptions({ method: 'GET' }));
 
         if (!response.ok) {
@@ -397,7 +446,7 @@ const customDataProvider = {
         return response;
     },
     getKeycloackAdminGroups: async () => {
-        const url = `${process.env.REACT_APP_API_URL}/users/admin/groups`;
+        const url = `${window.REACT_APP_API_URL}/users/admin/groups`;
         const response = await fetch(url, httpClientOptions({ method: 'GET' }));
 
         if (!response.ok) {
@@ -421,7 +470,7 @@ const customDataProvider = {
         limit?: number;
         typeFilter?: MessageType;
     }): Promise<any> => {
-        const url = `${process.env.REACT_APP_API_URL}/chat/messages/${conversationId}?limit=${limit}${
+        const url = `${window.REACT_APP_API_URL}/chat/messages/${conversationId}?limit=${limit}${
             lastMessageId ? `&lastMessageId=${lastMessageId}` : ''
         }${direction ? `&direction=${direction}` : ''}${typeFilter ? `&typeFilter=${typeFilter}` : ''}`;
         const response = await fetch(url, httpClientOptions({ method: 'GET' }));
@@ -435,7 +484,7 @@ const customDataProvider = {
         return result.items;
     },
     getSocketIoProvider: (): SocketIoProvider | null => {
-        const socketUrl = process.env.REACT_APP_SOCKET_CHAT_URL;
+        const socketUrl = window.REACT_APP_SOCKET_CHAT_URL;
         if (!socketIoProviderInstance && socketUrl) {
             socketIoProviderInstance = new SocketIoProvider(socketUrl);
         }
@@ -449,7 +498,7 @@ const customDataProvider = {
         file?: File,
         filename?: string
     ): Promise<any> => {
-        const url = `${process.env.REACT_APP_CHAT_URL}/conversations/${conversationId}/message`;
+        const url = `${window.REACT_APP_CHAT_URL}/conversations/${conversationId}/message`;
         const body = new FormData();
         body.append('senderId', senderId);
 
@@ -474,7 +523,7 @@ const customDataProvider = {
         return { data: result };
     },
     getJitsiToken: async (): Promise<string> => {
-        const url = `${process.env.REACT_APP_API_URL}/authentication/jitsi/token`;
+        const url = `${window.REACT_APP_API_URL}/authentication/jitsi/token`;
         const response = await fetch(url, httpClientOptions({ method: 'GET' }));
 
         if (!response.ok) {
@@ -484,7 +533,7 @@ const customDataProvider = {
         return response.json();
     },
     getUniversityDivisions: async (universityId: string): Promise<string[]> => {
-        const url = `${process.env.REACT_APP_API_URL}/universities/${universityId}/divisions`;
+        const url = `${window.REACT_APP_API_URL}/universities/${universityId}/divisions`;
         const response = await fetch(url, httpClientOptions({ method: 'GET' }));
 
         if (!response.ok) {
@@ -492,6 +541,41 @@ const customDataProvider = {
         }
 
         return response.json();
+    },
+    unsubscribeToEvent: async (eventId: string, profilesIds: string[]): Promise<void> => {
+        const url = `${window.REACT_APP_API_URL}/events/${eventId}/unsubscribe`;
+
+        const body = JSON.stringify({
+            profilesIds,
+        });
+
+        const response = await fetch(url, httpClientOptions({ method: 'POST', body }));
+
+        if (!response.ok) {
+            await throwError(response);
+        }
+    },
+    subscribeToEvent: async (eventId: string, profilesIds: string[]): Promise<void> => {
+        const url = `${window.REACT_APP_API_URL}/events/${eventId}/subscribe`;
+
+        const body = JSON.stringify({
+            profilesIds,
+        });
+
+        const response = await fetch(url, httpClientOptions({ method: 'POST', body }));
+
+        if (!response.ok) {
+            await throwError(response);
+        }
+    },
+    sendEventUsersEmail: async (eventId: string, title: string, content: string): Promise<void> => {
+        const url = `${window.REACT_APP_API_URL}/events/${eventId}/send-email`;
+        const body = JSON.stringify({ title, content });
+        const response = await fetch(url, httpClientOptions({ method: 'POST', body }));
+
+        if (!response.ok) {
+            await throwError(response);
+        }
     },
 } as unknown as DataProvider;
 

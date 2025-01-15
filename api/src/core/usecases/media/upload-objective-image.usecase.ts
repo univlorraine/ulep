@@ -1,4 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { UnauthorizedOperation } from 'src/core/errors';
+import { LearningObjective, MediaObject } from 'src/core/models';
+import {
+  LearningObjectiveRepository,
+  OBJECTIVE_REPOSITORY,
+} from 'src/core/ports/objective.repository';
 import {
   MEDIA_OBJECT_REPOSITORY,
   MediaObjectRepository,
@@ -8,12 +14,6 @@ import {
   STORAGE_INTERFACE,
   StorageInterface,
 } from '../../ports/storage.interface';
-import { LearningObjective, MediaObject } from 'src/core/models';
-import { UnauthorizedOperation } from 'src/core/errors';
-import {
-  LearningObjectiveRepository,
-  OBJECTIVE_REPOSITORY,
-} from 'src/core/ports/objective.repository';
 
 export class UploadObjectiveImageCommand {
   id: string;
@@ -24,7 +24,7 @@ export class UploadObjectiveImageCommand {
 export class UploadObjectiveImageUsecase {
   constructor(
     @Inject(STORAGE_INTERFACE)
-    private readonly storageInterface: StorageInterface,
+    private readonly storage: StorageInterface,
     @Inject(MEDIA_OBJECT_REPOSITORY)
     private readonly mediaObjectRepository: MediaObjectRepository,
     @Inject(OBJECTIVE_REPOSITORY)
@@ -55,15 +55,17 @@ export class UploadObjectiveImageUsecase {
   private tryToFindTheImageOfObjective(
     objective: LearningObjective,
   ): Promise<MediaObject | null> {
-    return this.mediaObjectRepository.findOne(objective.id);
+    return objective.image?.id
+      ? this.mediaObjectRepository.findOne(objective.image.id)
+      : null;
   }
 
   private async upload(
     objective: LearningObjective,
     file: Express.Multer.File,
   ): Promise<MediaObject> {
-    const image = MediaObject.image(file, 'objective');
-    await this.storageInterface.write(image.bucket, image.name, file);
+    const image = MediaObject.generate(file, 'objective');
+    await this.storage.write(image.bucket, image.name, file);
     await this.mediaObjectRepository.saveObjectiveImage(objective, image);
 
     return image;
@@ -71,7 +73,7 @@ export class UploadObjectiveImageUsecase {
 
   private async deletePreviousObjectiveImage(image: MediaObject | null) {
     if (!image) return;
-    await this.storageInterface.delete(image.bucket, image.name);
+    await this.storage.delete(image.bucket, image.name);
     await this.mediaObjectRepository.remove(image.id);
   }
 }

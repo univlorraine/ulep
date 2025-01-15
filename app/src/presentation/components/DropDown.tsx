@@ -18,6 +18,7 @@ interface DropdownProps<T> {
     ariaLabel?: string | null;
     value?: DropDownItem<T>;
     required?: boolean;
+    disabled?: boolean;
 }
 
 const Dropdown = <T,>({
@@ -28,6 +29,7 @@ const Dropdown = <T,>({
     title,
     ariaLabel,
     required = false,
+    disabled = false,
     ...props
 }: DropdownProps<T>) => {
     const { deviceAdapter } = useConfig();
@@ -37,7 +39,7 @@ const Dropdown = <T,>({
     const prevOptions = useRef<DropDownItem<T>[]>(options);
 
     useEffect(() => {
-        if (!placeholder && options.length > 0 && !compareArrays(options, prevOptions.current)) {
+        if (options.length > 0 && !compareArrays(options, prevOptions.current) && selectedOption && !value) {
             setSelectedOption(options[0]);
             prevOptions.current = options;
         }
@@ -64,6 +66,7 @@ const Dropdown = <T,>({
                     labelPlacement="stacked"
                     onIonChange={(e) => handleOptionClick(e.detail.value)}
                     selectedText={selectedOption?.label ?? value?.label}
+                    disabled={disabled}
                     {...props}
                 >
                     {options.map((option) => (

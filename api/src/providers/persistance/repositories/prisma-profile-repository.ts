@@ -119,13 +119,13 @@ export class PrismaProfileRepository implements ProfileRepository {
     const wherePayload = where
       ? {
           User: {
-            Nationality: { code: where.user.country },
-            Organization: { id: where.user.university },
-            email: where.user.email,
-            firstname: where.user.firstname,
-            lastname: where.user.lastname,
-            role: where.user.role,
-            status: where.user.status,
+            Nationality: { code: where.user?.country },
+            Organization: { id: where.user?.university },
+            email: where.user?.email,
+            firstname: where.user?.firstname,
+            lastname: where.user?.lastname,
+            role: where.user?.role,
+            status: where.user?.status,
           },
           ...(where.masteredLanguageCode && {
             MasteredLanguages: {
@@ -135,6 +135,16 @@ export class PrismaProfileRepository implements ProfileRepository {
             },
           }),
           NativeLanguage: { code: where.nativeLanguageCode },
+          ...(where.notSubscribedToEvent && {
+            Events: {
+              none: { id: where.notSubscribedToEvent },
+            },
+          }),
+          ...(where.subscribedToEvent && {
+            Events: {
+              some: { id: where.subscribedToEvent },
+            },
+          }),
         }
       : {};
 
@@ -277,6 +287,52 @@ export class PrismaProfileRepository implements ProfileRepository {
       ),
       totalItems: count,
     };
+  }
+
+  async findAllWithMasteredLanguageAndLearningLanguage(
+    firstLanguageCode: string,
+    secondLanguageCode: string,
+  ): Promise<Profile[]> {
+    const masteredLanguageCondition = (languageCode: string) => ({
+      OR: [
+        {
+          MasteredLanguages: {
+            some: { LanguageCode: { code: languageCode } },
+          },
+        },
+        {
+          NativeLanguage: { code: languageCode },
+        },
+      ],
+    });
+
+    const learningLanguageCondition = (languageCode: string) => ({
+      LearningLanguages: {
+        some: { LanguageCode: { code: languageCode } },
+      },
+    });
+
+    const profiles = await this.prisma.profiles.findMany({
+      where: {
+        OR: [
+          {
+            AND: [
+              masteredLanguageCondition(firstLanguageCode),
+              learningLanguageCondition(secondLanguageCode),
+            ],
+          },
+          {
+            AND: [
+              masteredLanguageCondition(secondLanguageCode),
+              learningLanguageCondition(firstLanguageCode),
+            ],
+          },
+        ],
+      },
+      include: ProfilesRelations,
+    });
+
+    return profiles.map(profileMapper);
   }
 
   async update(profile: Profile): Promise<Profile> {
