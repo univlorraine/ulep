@@ -27,7 +27,12 @@
             "noMessage": "No message",
             "image": "Image",
             "audio": "Audio",
-            "file": "File"
+            "file": "File",
+            "vocabulary": "Shared vocabulary list",
+            "activity": "Shared activity"
+        },
+        "vocabulary": {
+            "added": "Vocabulary list added to your profile"
         }
     },
     "date": {
@@ -369,6 +374,10 @@
                 "title": "Review your vocabulary with flashcards!",
                 "paragraph": "Find the equivalent translation of the word displayed and try to reach a 100% score",
                 "button": "Start the flashcards"
+            },
+            "card": {
+                "title": "Liste de vocabulaire",
+                "creator": "Créé par {{name}}"
             }
         },
         "pair": {
@@ -402,6 +411,9 @@
         }
     },
     "chat": {
+        "community": {
+            "name": "Room {{firstLanguage}} - {{secondLanguage}}"
+        },
         "ariaLabelFileDownloaded": "Downloading file : {{filename}}",
         "fileDownloaded": "File downloaded",
         "me": "Me",
@@ -443,11 +455,26 @@
             "audios": "Audios",
             "links": "Links"
         },
+        "replyMessageButton": "Reply to message",
+        "goBackToConversation": "Revenir au salon",
+        "numberOfReplies": "See reply",
+        "numberOfReplies_plural": "See {{count}} replies",
+        "popularHashtags": "Popular hashtags",
         "reportMessageButton": "Report message",
+        "likeMessageButton": "Like message",
+        "unlikeMessageButton": "Unlike message",
         "no_messages": "No messages",
         "no_conversations": "No conversations",
         "send_image_aria_label": "Send image",
-        "send_file_aria_label": "Send file"
+        "send_file_aria_label": "Send file",
+        "send_vocabulary_list_aria_label": "Send vocabulary list",
+        "vocabulary_list": {
+            "close": "Close",
+            "title": "Select the list to share"
+        },
+        "activity_list": {
+            "title": "Activity list"
+        }
     },
     "connection_page": {
         "connect_title": "Already have an account ?",

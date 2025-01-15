@@ -89,9 +89,20 @@ export class PrismaVocabularyRepository implements VocabularyRepository {
           {
             AND: [
               {
-                Creator: {
-                  id: profileId,
-                },
+                OR: [
+                  {
+                    Creator: {
+                      id: profileId,
+                    },
+                  },
+                  {
+                    Readers: {
+                      some: {
+                        id: profileId,
+                      },
+                    },
+                  },
+                ],
               },
               {
                 OriginalLanguage: {
@@ -103,11 +114,22 @@ export class PrismaVocabularyRepository implements VocabularyRepository {
           {
             AND: [
               {
-                Editors: {
-                  some: {
-                    id: profileId,
+                OR: [
+                  {
+                    Editors: {
+                      some: {
+                        id: profileId,
+                      },
+                    },
                   },
-                },
+                  {
+                    Readers: {
+                      some: {
+                        id: profileId,
+                      },
+                    },
+                  },
+                ],
               },
               {
                 TranslationLanguage: {
@@ -253,6 +275,38 @@ export class PrismaVocabularyRepository implements VocabularyRepository {
     });
 
     return vocabularyListMapper(vocabularyList);
+  }
+
+  async addReaderToVocabularyList(
+    vocabularyListId: string,
+    profileId: string,
+  ): Promise<void> {
+    await this.prisma.vocabularyList.update({
+      where: { id: vocabularyListId },
+      data: {
+        Readers: {
+          connect: {
+            id: profileId,
+          },
+        },
+      },
+    });
+  }
+
+  async removeReaderFromVocabularyList(
+    vocabularyListId: string,
+    profileId: string,
+  ): Promise<void> {
+    await this.prisma.vocabularyList.update({
+      where: { id: vocabularyListId },
+      data: {
+        Readers: {
+          disconnect: {
+            id: profileId,
+          },
+        },
+      },
+    });
   }
 
   async deleteVocabulary(id: string): Promise<void> {

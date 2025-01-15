@@ -289,6 +289,52 @@ export class PrismaProfileRepository implements ProfileRepository {
     };
   }
 
+  async findAllWithMasteredLanguageAndLearningLanguage(
+    firstLanguageCode: string,
+    secondLanguageCode: string,
+  ): Promise<Profile[]> {
+    const masteredLanguageCondition = (languageCode: string) => ({
+      OR: [
+        {
+          MasteredLanguages: {
+            some: { LanguageCode: { code: languageCode } },
+          },
+        },
+        {
+          NativeLanguage: { code: languageCode },
+        },
+      ],
+    });
+
+    const learningLanguageCondition = (languageCode: string) => ({
+      LearningLanguages: {
+        some: { LanguageCode: { code: languageCode } },
+      },
+    });
+
+    const profiles = await this.prisma.profiles.findMany({
+      where: {
+        OR: [
+          {
+            AND: [
+              masteredLanguageCondition(firstLanguageCode),
+              learningLanguageCondition(secondLanguageCode),
+            ],
+          },
+          {
+            AND: [
+              masteredLanguageCondition(secondLanguageCode),
+              learningLanguageCondition(firstLanguageCode),
+            ],
+          },
+        ],
+      },
+      include: ProfilesRelations,
+    });
+
+    return profiles.map(profileMapper);
+  }
+
   async update(profile: Profile): Promise<Profile> {
     await this.prisma.profiles.update({
       where: { id: profile.id },

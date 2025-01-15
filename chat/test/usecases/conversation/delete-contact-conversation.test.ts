@@ -1,5 +1,5 @@
 import { Conversation } from 'src/core/models';
-import { DeleteContactConversationUsecase } from 'src/core/usecases';
+import { DeleteUserConversationUsecase } from 'src/core/usecases';
 import { InMemoryConversationRepository } from 'src/providers/persistance/repositories/in-memory-conversation.repository';
 
 const USER_ID1 = 'user1';
@@ -27,8 +27,9 @@ const conversation2 = new Conversation({
 describe('DeleteContactConversation', () => {
     const inMemoryConversationRepository = new InMemoryConversationRepository();
 
-    const deleteContactConversationUsecase =
-        new DeleteContactConversationUsecase(inMemoryConversationRepository);
+    const deleteContactConversationUsecase = new DeleteUserConversationUsecase(
+        inMemoryConversationRepository,
+    );
 
     beforeEach(() => {
         inMemoryConversationRepository.init([conversation1, conversation2]);
@@ -38,6 +39,8 @@ describe('DeleteContactConversation', () => {
         expect(inMemoryConversationRepository.conversations).toHaveLength(2);
         await deleteContactConversationUsecase.execute({
             id: USER_ID1,
+            chatIdsToIgnore: [],
+            chatIdsToLeave: [],
         });
         expect(inMemoryConversationRepository.conversations).toHaveLength(1);
     });
@@ -46,6 +49,8 @@ describe('DeleteContactConversation', () => {
         expect(inMemoryConversationRepository.conversations).toHaveLength(2);
         await deleteContactConversationUsecase.execute({
             id: USER_ID4,
+            chatIdsToIgnore: [],
+            chatIdsToLeave: [],
         });
         const updatedConversation =
             inMemoryConversationRepository.conversations.find(

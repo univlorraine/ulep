@@ -5,6 +5,10 @@ import { Env } from 'src/configuration';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import { Tandem, TandemStatus, User, UserStatus } from 'src/core/models';
 import { CHAT_SERVICE } from 'src/core/ports/chat.service';
+import {
+  CommunityChatRepository,
+  COMMUNITY_CHAT_REPOSITORY,
+} from 'src/core/ports/community-chat.repository';
 import { EmailGateway, EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
 import {
   ProfileRepository,
@@ -47,6 +51,8 @@ export class UpdateUserUsecase {
     private readonly tandemHistoryRepository: TandemHistoryRepository,
     @Inject(CHAT_SERVICE)
     private readonly chatService: ChatService,
+    @Inject(COMMUNITY_CHAT_REPOSITORY)
+    private readonly communityChatRepository: CommunityChatRepository,
     private readonly env: ConfigService<Env, true>,
     private readonly keycloakClient: KeycloakClient,
   ) {}
@@ -217,10 +223,12 @@ export class UpdateUserUsecase {
       if (user.contactId) {
         const chatToIgnore = await this.findUserTandems(user.id);
 
-        await this.chatService.deleteConversationByContactId(
-          user.id,
-          chatToIgnore.map((chat) => chat.id),
-        );
+        const communityChats = await this.communityChatRepository.all();
+
+        await this.chatService.deleteConversationByUserId(user.id, [
+          ...chatToIgnore.map((chat) => chat.id),
+          ...communityChats.map((chat) => chat.id),
+        ]);
       }
       await this.chatService.createConversation([newContactId, user.id]);
     }

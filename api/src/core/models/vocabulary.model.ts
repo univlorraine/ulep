@@ -5,7 +5,8 @@ import { Profile } from 'src/core/models/profile.model';
 type VocabularyListProps = {
   id: string;
   name: string;
-  profiles: Profile[];
+  editors: Profile[];
+  readers: Profile[];
   symbol: string;
   vocabularies: Vocabulary[];
   creator: Profile;
@@ -28,7 +29,9 @@ export class VocabularyList {
 
   readonly name: string;
 
-  readonly profiles: Profile[];
+  readonly editors: Profile[];
+
+  readonly readers: Profile[];
 
   readonly symbol: string;
 
@@ -44,7 +47,8 @@ export class VocabularyList {
     this.id = props.id;
     this.name = props.name;
     this.symbol = props.symbol;
-    this.profiles = props.profiles;
+    this.editors = props.editors;
+    this.readers = props.readers;
     this.vocabularies = props.vocabularies;
     this.translationLanguage = props.translationLanguage;
     this.wordLanguage = props.wordLanguage;

@@ -1,0 +1,79 @@
+.container {
+    background-color: var(--primary-color);
+    border: 1px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 12px;
+    border-radius: 0 0 12px 12px;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    justify-content: space-between;
+    padding: 4px 12px;
+}
+
+.header {
+    font-family: Maven Pro;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 16px;
+    text-align: left;
+    padding-left: 12px;
+}
+
+.title {
+    font-family: Roboto;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 25px;
+    text-align: left;
+    color: black;
+}
+
+.subtitle {
+    font-family: Maven Pro;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 17px;
+    text-align: left;
+    color: black;
+    white-space: break-spaces;
+    padding-bottom: 4px;
+}
+
+.information-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.information-title {
+    font-family: Maven Pro;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 17px;
+    text-align: left;
+    color: black;
+}
+
+.information-content {
+    font-family: Maven Pro;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 17px;
+    text-align: left;
+    color: black;
+}
+
+.information {
+    border-top: 1px solid #e0e0e0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 8px;
+    gap: 12px;
+    width: 100%;
+}

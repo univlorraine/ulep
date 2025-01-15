@@ -13,25 +13,26 @@ import {
   ProficiencyLevel,
 } from 'src/core/models';
 import {
-  LANGUAGE_REPOSITORY,
   LanguageRepository,
+  LANGUAGE_REPOSITORY,
 } from 'src/core/ports/language.repository';
 import {
-  LEARNING_LANGUAGE_REPOSITORY,
   LearningLanguageRepository,
+  LEARNING_LANGUAGE_REPOSITORY,
 } from 'src/core/ports/learning-language.repository';
 import {
-  PROFILE_REPOSITORY,
   ProfileRepository,
+  PROFILE_REPOSITORY,
 } from 'src/core/ports/profile.repository';
 import {
-  TANDEM_HISTORY_REPOSITORY,
   TandemHistoryRepository,
+  TANDEM_HISTORY_REPOSITORY,
 } from 'src/core/ports/tandem-history.repository';
 import {
-  UUID_PROVIDER,
   UuidProviderInterface,
+  UUID_PROVIDER,
 } from 'src/core/ports/uuid.provider';
+import { AddUserToCommunityChatUsecase } from 'src/core/usecases/chat/add-user-to-community-chat.usecase';
 
 export interface CreateLearningLanguageCommand {
   profileId: string;
@@ -61,6 +62,8 @@ export class CreateLearningLanguageUseCase {
     private readonly tandemHistoryRepository: TandemHistoryRepository,
     @Inject(UUID_PROVIDER)
     private readonly uuidProvider: UuidProviderInterface,
+    @Inject(AddUserToCommunityChatUsecase)
+    private readonly addUserToCommunityChatUsecase: AddUserToCommunityChatUsecase,
   ) {}
 
   async execute(
@@ -151,6 +154,11 @@ export class CreateLearningLanguageUseCase {
     });
 
     await this.learningLanguageRepository.create(item);
+
+    await this.addUserToCommunityChatUsecase.execute({
+      profileId: profile.id,
+      learningLanguageId: language.id,
+    });
 
     return item;
   }

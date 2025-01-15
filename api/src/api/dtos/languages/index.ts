@@ -4,15 +4,15 @@ import { Language, LanguageStatus } from 'src/core/models/language.model';
 
 export class LanguageResponse {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'chat'] })
   id: string;
 
   @Swagger.ApiProperty({ type: 'string', example: 'FR' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'chat'] })
   code: string;
 
   @Swagger.ApiPropertyOptional({ type: 'string', example: 'FR' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'chat'] })
   name?: string;
 
   @Swagger.ApiPropertyOptional({ type: 'string', example: 'FR' })

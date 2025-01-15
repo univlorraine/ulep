@@ -171,7 +171,7 @@ export const ActivityContent: React.FC<ActivityContentProps> = ({
                                 </div>
                             )}
                         </div>
-                        {activity.status === ActivityStatus.DRAFT && (
+                        {activity.status === ActivityStatus.DRAFT && activity.creator?.id === profile.id && (
                             <IonButton
                                 fill="clear"
                                 className="primary-button no-padding"

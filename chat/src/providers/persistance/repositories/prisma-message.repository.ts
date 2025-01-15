@@ -15,20 +15,54 @@ import {
 export class PrismaMessageRepository implements MessageRepository {
     constructor(private readonly prisma: PrismaService) {}
 
-    async create(message: Message): Promise<Message> {
+    async create(message: Message, parentId?: string): Promise<Message> {
+        const data = {
+            content: message.content,
+            isReported: message.isReported,
+            type: message.type,
+            ownerId: message.ownerId,
+            metadata: message.metadata,
+            Conversation: { connect: { id: message.conversationId } },
+        };
+
+        if (parentId) {
+            data['ParentMessage'] = { connect: { id: parentId } };
+        }
+
         const messageSent = await this.prisma.message.create({
-            data: {
-                content: message.content,
-                isReported: message.isReported,
-                type: message.type,
-                ownerId: message.ownerId,
-                metadata: message.metadata,
-                Conversation: { connect: { id: message.conversationId } },
-            },
+            data,
             ...MessagesRelations,
         });
 
         return messageMapper(messageSent);
+    }
+
+    async like(messageId: string, userId: string): Promise<void> {
+        await this.prisma.messageLike.create({
+            data: {
+                Message: { connect: { id: messageId } },
+                userId,
+            },
+        });
+    }
+
+    async unlike(messageId: string, userId: string): Promise<void> {
+        const messageLike = await this.prisma.messageLike.findFirst({
+            where: { messageId, userId },
+        });
+
+        if (messageLike) {
+            await this.prisma.message.update({
+                where: { id: messageId },
+                data: {
+                    MessageLikes: {
+                        delete: {
+                            id: messageLike.id,
+                        },
+                    },
+                },
+            });
+        }
     }
 
     async findById(id: string): Promise<Message | null> {
@@ -78,14 +112,12 @@ export class PrismaMessageRepository implements MessageRepository {
         return messagesIds.map((message) => message.id);
     }
 
-    async findMessagesByConversationId(
-        conversationId: string,
+    async findResponsesByMessageId(
+        messageId: string,
         pagination: MessagePagination,
-        contentFilter?: string,
-        typeFilter?: MessageType,
     ): Promise<Message[]> {
         const messagesPagination = {};
-        const where = { conversationId };
+        const where = { parentId: messageId };
         const cursor = pagination.lastMessageId
             ? { id: pagination.lastMessageId }
             : undefined;
@@ -94,10 +126,39 @@ export class PrismaMessageRepository implements MessageRepository {
             messagesPagination['take'] = pagination.limit;
         }
 
-        if (contentFilter) {
+        const messages = await this.prisma.message.findMany({
+            where,
+            cursor,
+            orderBy: { createdAt: 'desc' },
+            ...messagesPagination,
+            ...{ ...MessagesRelations, include: { ParentMessage: false } },
+        });
+
+        return messages.map(messageMapper);
+    }
+
+    async findMessagesByConversationId(
+        conversationId: string,
+        pagination: MessagePagination,
+        hashtagFilter?: string,
+        typeFilter?: MessageType,
+    ): Promise<Message[]> {
+        const messagesPagination = {};
+        const where = { conversationId, ParentMessage: { is: null } };
+        const cursor = pagination.lastMessageId
+            ? { id: pagination.lastMessageId }
+            : undefined;
+
+        if (pagination.limit !== undefined) {
+            messagesPagination['take'] = pagination.limit;
+        }
+
+        if (hashtagFilter) {
             where['content'] = {
-                contains: contentFilter,
+                contains: hashtagFilter,
             };
+            // If we filter from hastag, we need to take reply messages
+            where['ParentMessage'] = undefined;
         }
 
         if (typeFilter) {

@@ -1,4 +1,5 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsOptional, IsString } from 'class-validator';
+import { MessageType } from 'src/core/models';
 
 export class SendMessageRequest {
     @IsString()
@@ -11,4 +12,12 @@ export class SendMessageRequest {
     @IsString()
     @IsOptional()
     filename?: string;
+
+    @IsEnum(MessageType)
+    @IsOptional()
+    type?: MessageType;
+
+    @IsString()
+    @IsOptional()
+    parentId?: string;
 }

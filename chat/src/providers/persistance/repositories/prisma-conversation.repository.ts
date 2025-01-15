@@ -87,6 +87,9 @@ export class PrismaConversationRepository implements ConversationRepository {
                     orderBy: {
                         createdAt: 'desc',
                     },
+                    where: {
+                        ParentMessage: null,
+                    },
                 },
             },
             ...conversationPagination,
@@ -153,12 +156,6 @@ export class PrismaConversationRepository implements ConversationRepository {
 
     async delete(id: string): Promise<void> {
         await this.prisma.conversation.delete({ where: { id } });
-    }
-
-    async deleteUserFromConversations(userId: string): Promise<void> {
-        await this.prisma.conversation.deleteMany({
-            where: { participantIds: { has: userId } },
-        });
     }
 
     async deleteAll(): Promise<void> {

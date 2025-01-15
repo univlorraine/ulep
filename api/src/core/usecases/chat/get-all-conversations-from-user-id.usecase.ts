@@ -9,6 +9,10 @@ import {
   MessageWithUser,
 } from 'src/core/ports/chat.service';
 import {
+  CommunityChatRepository,
+  COMMUNITY_CHAT_REPOSITORY,
+} from 'src/core/ports/community-chat.repository';
+import {
   ProfileQueryWhere,
   ProfileRepository,
   PROFILE_REPOSITORY,
@@ -41,6 +45,8 @@ export class GetAllConversationsFromUserIdUsecase {
     private readonly keycloakClient: KeycloakClient,
     @Inject(PROFILE_REPOSITORY)
     private readonly profileRepository: ProfileRepository,
+    @Inject(COMMUNITY_CHAT_REPOSITORY)
+    private readonly communityChatRepository: CommunityChatRepository,
   ) {}
 
   async execute(command: GetAllConversationsFromUserIdCommand) {
@@ -123,36 +129,46 @@ export class GetAllConversationsFromUserIdUsecase {
     }
 
     // Replace userIds by user objects in conversations
-    const updatedConversations = conversations
-      .map(
-        (conversation) =>
-          ({
-            ...conversation,
-            users: conversation.usersIds.map((id) => userMap.get(id)),
-            metadata: {
-              isBlocked:
-                tandems.find((tandem) => tandem.id === conversation.id)
-                  ?.status === TandemStatus.PAUSED,
-              learningLanguages: tandems.find(
-                (tandem) => tandem.id === conversation.id,
-              )?.learningLanguages,
-            },
-            lastMessage: conversation.lastMessage
-              ? ({
-                  ...conversation.lastMessage,
-                  user: userMap.get(conversation.lastMessage.ownerId),
-                } as MessageWithUser)
-              : undefined,
-            lastActivityAt: conversation.lastActivity,
-          }) as ConversationWithUsers,
-      )
-      .filter((conversation) =>
-        conversation.users.every((user) => user !== undefined),
-      );
+    const updatedConversations = await Promise.all(
+      conversations.map(async (conversation) => {
+        const communityChat = await this.isCommunityChat(conversation.id);
+        return {
+          ...conversation,
+          users: conversation.usersIds.map((id) => userMap.get(id)),
+          isForCommunity: Boolean(communityChat),
+          metadata: {
+            centralLanguage: communityChat?.centralLanguage,
+            partnerLanguage: communityChat?.partnerLanguage,
+            isBlocked:
+              tandems.find((tandem) => tandem.id === conversation.id)
+                ?.status === TandemStatus.PAUSED,
+            learningLanguages: tandems.find(
+              (tandem) => tandem.id === conversation.id,
+            )?.learningLanguages,
+          },
+          lastMessage: conversation.lastMessage
+            ? ({
+                ...conversation.lastMessage,
+                user: userMap.get(conversation.lastMessage.ownerId),
+                parent: undefined,
+              } as MessageWithUser)
+            : undefined,
+          lastActivityAt: conversation.lastActivity,
+        };
+      }),
+    );
+
+    const filteredConversations = updatedConversations.filter((conversation) =>
+      conversation.users.every((user) => user !== undefined),
+    );
 
     return new Collection<ConversationWithUsers>({
-      items: updatedConversations,
+      items: filteredConversations,
       totalItems: conversationsCollection.totalItems,
     });
+  }
+
+  private async isCommunityChat(conversationId: string) {
+    return await this.communityChatRepository.ofId(conversationId);
   }
 }
