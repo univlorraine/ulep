@@ -45,7 +45,7 @@
     font-family: 'Maven Pro', sans-serif;
     font-size: 16px;
     font-weight: 500;
-    margin-left: 16px;
+    margin: 0px 16px;
 }
 
 @media (min-width: 768px) and (max-width: 1024px) {
