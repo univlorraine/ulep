@@ -164,7 +164,7 @@ const InstanceForm: React.FC<InstanceFormProps> = ({ handleSubmit, instance }) =
                                         key={translation}
                                         checked={newEditoMandatoryTranslations.includes(translation)}
                                         control={<Switch />}
-                                        label={translate(`instance.edit.edito.${translation}`)}
+                                        label={translate(`editos.languages.${translation}`)}
                                         onChange={() => {
                                             if (newEditoMandatoryTranslations.includes(translation)) {
                                                 setNewEditoMandatoryTranslations(

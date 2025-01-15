@@ -8,6 +8,7 @@ import { COMMUNITY_CHAT_REPOSITORY } from 'src/core/ports/community-chat.reposit
 import { CONTACT_REPOSITORY } from 'src/core/ports/contact.repository';
 import { COUNTRY_REPOSITORY } from 'src/core/ports/country.repository';
 import { CUSTOM_LEARNING_GOAL_REPOSITORY } from 'src/core/ports/custom-learning-goal.repository';
+import { EDITO_REPOSITORY } from 'src/core/ports/edito.repository';
 import { EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
 import { EVENT_REPOSITORY } from 'src/core/ports/event.repository';
 import { INSTANCE_REPOSITORY } from 'src/core/ports/instance.repository';
@@ -38,7 +39,6 @@ import { VOCABULARY_REPOSITORY } from 'src/core/ports/vocabulary.repository';
 import { FCMNotificationGateway } from 'src/providers/gateway/fcm-notification.gateway';
 import { PrismaActivityRepository } from 'src/providers/persistance/repositories/prisma-activity-repository';
 import { PrismaCampusRepository } from 'src/providers/persistance/repositories/prisma-campus.repository';
-import { PrismaCommunityChatRepository } from 'src/providers/persistance/repositories/prisma-community-chat-repository';
 import { PrismaContactRepository } from 'src/providers/persistance/repositories/prisma-contact-repository';
 import { PrismaInstanceRepository } from 'src/providers/persistance/repositories/prisma-instance.repository';
 import { PrismaLogEntryRepository } from 'src/providers/persistance/repositories/prisma-log-entry-repository';
@@ -48,8 +48,10 @@ import { PrismaVocabularyRepository } from 'src/providers/persistance/repositori
 import { ChatService } from 'src/providers/services/chat.service';
 import { PdfService } from 'src/providers/services/pdf.service';
 import { SmtpEmailGateway } from './gateway/smtp-email.gateway';
+import { PrismaCommunityChatRepository } from './persistance/repositories/prisma-community-chat-repository';
 import { PrismaCountryCodeRepository } from './persistance/repositories/prisma-country.repository';
 import { PrismaCustomLearningGoalRepository } from './persistance/repositories/prisma-custom-learning-goal-repository';
+import { PrismaEditoRepository } from './persistance/repositories/prisma-edito-repository';
 import { PrismaEventRepository } from './persistance/repositories/prisma-events.repository';
 import { PrismaInterestRepository } from './persistance/repositories/prisma-interest.repository';
 import { PrismaLanguageRepository } from './persistance/repositories/prisma-language.repository';
@@ -79,6 +81,10 @@ const providers: Provider[] = [
   {
     provide: COUNTRY_REPOSITORY,
     useClass: PrismaCountryCodeRepository,
+  },
+  {
+    provide: EDITO_REPOSITORY,
+    useClass: PrismaEditoRepository,
   },
   {
     provide: INTEREST_REPOSITORY,
@@ -204,6 +210,7 @@ const providers: Provider[] = [
     provide: COMMUNITY_CHAT_REPOSITORY,
     useClass: PrismaCommunityChatRepository,
   },
+  ,
 ];
 
 @Module({

@@ -203,6 +203,20 @@
         "saturday": "Saturday",
         "sunday": "Sunday"
     },
+    "editos": {
+        "label": "Editos",
+        "title": "Editos",
+        "list": {
+            "university": "University",
+            "translations": "Translations",
+            "updatedAt": "Updated at"
+        },
+        "languages": {
+            "CentralUniversityLanguage": "Central university language",
+            "English": "English",
+            "PartnerUniversityLanguage": "Partner university language"
+        }
+    },
     "events": {
         "label": "Events",
         "title": "Events",
@@ -381,6 +395,10 @@
             "message": "You are about to delete all data from the instance. This action is irreversible. Do you confirm?",
             "confirm": "Confirm"
         },
+        "generateEditos": {
+            "title": "Generate the editos",
+            "error": "An error occurred while generating the editos"
+        },
         "edit": {
             "error": "An error occurred while updating the instance",
             "name": "Instance name",
@@ -397,12 +415,7 @@
             "secondaryDarkColor": "Secondary dark color used for the application background",
             "title": "Instance update",
             "defaultCertificateFile": "Default certificate file",
-            "editoMandatoryTranslations": "Mandatory translations for the Edito",
-            "edito": {
-                "CentralUniversityLanguage": "Central university language",
-                "English": "English",
-                "PartnerUniversityLanguage": "Partner university language"
-            }
+            "editoMandatoryTranslations": "Mandatory translations for the Edito"
         }
     },
     "interests": {
@@ -603,6 +616,10 @@
     "generateConversation": {
         "error": "An error occurred while the conversation generation",
         "title": "Conversation generation"
+    },
+    "generateEditos": {
+        "title": "Générer les editos",
+        "error": "Une erreur est survenue lors de la génération des editos"
     },
     "questions": {
         "create": {

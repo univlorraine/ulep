@@ -181,6 +181,7 @@ const CustomMenu = () => {
             <Menu.ResourceItem name="chat" />
             <Menu.ResourceItem name="news" />
             <Menu.ResourceItem name="events" />
+            <Menu.ResourceItem name="editos" />
             <Box ref={(newRef: HTMLDivElement) => setActivitiesRef(newRef)} sx={{ marginTop: 0 }}>
                 <Menu.ResourceItem name="activities" />
             </Box>

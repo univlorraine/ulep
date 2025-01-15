@@ -2,20 +2,24 @@ import { Inject, Injectable } from '@nestjs/common';
 import { DomainError, RessourceDoesNotExist } from 'src/core/errors';
 import { PairingMode, University } from 'src/core/models';
 import {
-  COUNTRY_REPOSITORY,
   CountryRepository,
+  COUNTRY_REPOSITORY,
 } from 'src/core/ports/country.repository';
 import {
-  LANGUAGE_REPOSITORY,
+  EditoRepository,
+  EDITO_REPOSITORY,
+} from 'src/core/ports/edito.repository';
+import {
   LanguageRepository,
+  LANGUAGE_REPOSITORY,
 } from 'src/core/ports/language.repository';
 import {
-  UNIVERSITY_REPOSITORY,
   UniversityRepository,
+  UNIVERSITY_REPOSITORY,
 } from 'src/core/ports/university.repository';
 import {
-  UUID_PROVIDER,
   UuidProviderInterface,
+  UUID_PROVIDER,
 } from 'src/core/ports/uuid.provider';
 
 export class CreatePartnerUniversityCommand {
@@ -45,6 +49,8 @@ export class CreatePartnerUniversityUsecase {
     private readonly languageRepository: LanguageRepository,
     @Inject(UNIVERSITY_REPOSITORY)
     private readonly universityRepository: UniversityRepository,
+    @Inject(EDITO_REPOSITORY)
+    private readonly editoRepository: EditoRepository,
     @Inject(UUID_PROVIDER)
     private readonly uuidProvider: UuidProviderInterface,
   ) {}
@@ -114,6 +120,29 @@ export class CreatePartnerUniversityUsecase {
     });
 
     const newUniversity = await this.universityRepository.create(university);
+
+    const centralUniversity =
+      await this.universityRepository.findUniversityCentral();
+
+    const translationsLanguageCodes = [];
+    if (
+      newUniversity.nativeLanguage.code !==
+      centralUniversity.nativeLanguage.code
+    ) {
+      translationsLanguageCodes.push(newUniversity.nativeLanguage.code);
+    }
+    if (
+      newUniversity.nativeLanguage.code !== 'en' &&
+      centralUniversity.nativeLanguage.code !== 'en'
+    ) {
+      translationsLanguageCodes.push('en');
+    }
+
+    await this.editoRepository.create({
+      universityId: newUniversity.id,
+      defaultLanguageCode: centralUniversity.nativeLanguage.code,
+      translationsLanguageCodes: translationsLanguageCodes,
+    });
 
     return newUniversity;
   }

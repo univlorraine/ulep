@@ -2,6 +2,7 @@ import ChatIcon from '@mui/icons-material/Chat';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import FeedIcon from '@mui/icons-material/Feed';
+import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
 import HelpIcon from '@mui/icons-material/Help';
 import InterestsIcon from '@mui/icons-material/Interests';
 import LanguageIcon from '@mui/icons-material/Language';
@@ -29,6 +30,7 @@ import categoryInterest from './pages/category-interest';
 import chat from './pages/chat';
 import countSuggestedLanguages from './pages/count-suggested-languages';
 import countries from './pages/countries';
+import editos from './pages/editos';
 import events from './pages/events';
 import eventsSubscriptions from './pages/events/subscriptions';
 import instance from './pages/instance';
@@ -109,6 +111,12 @@ const App = () => (
                 )}
                 {permissions.checkRole(Role.SUPER_ADMIN) && (
                     <>
+                        <Resource
+                            icon={FormatQuoteIcon}
+                            name="editos"
+                            options={{ label: 'editos.label' }}
+                            {...editos}
+                        />
                         <Resource
                             icon={SettingsIcon}
                             name="instance"

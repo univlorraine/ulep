@@ -40,7 +40,7 @@ import { ActivityController } from 'src/api/controllers/activity.controller';
 import { SessionController } from './controllers/session.controller';
 import { EventsController } from './controllers/events.controller';
 import { LogEntryController } from 'src/api/controllers/log-entry.controller';
-
+import { EditoController } from 'src/api/controllers/edito.controller';
 @Module({
   imports: [CoreModule, TerminusModule, HttpModule, ConfigModule],
   controllers: [
@@ -72,6 +72,7 @@ import { LogEntryController } from 'src/api/controllers/log-entry.controller';
     VocabularyController,
     SessionController,
     EventsController,
+    EditoController,
   ],
   providers: [
     PrismaService,

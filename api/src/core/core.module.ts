@@ -86,6 +86,7 @@ import {
   FindOneObjectiveUsecase,
   GenerateCertificateUsecase,
   GenerateConversationsUsecase,
+  GenerateEditosUsecase,
   GenerateTandemsUsecase,
   GetActivitiesUsecase,
   GetActivityPdfUsecase,
@@ -100,6 +101,7 @@ import {
   GetCategoriesUsecase,
   GetCountriesUniversitiesUsecase,
   GetCountriesUsecase,
+  GetEditosUsecase,
   GetInstanceUsecase,
   GetInterestCategoryUsecase,
   GetInterestsByCategoriesUsecase,
@@ -234,6 +236,9 @@ const usecases: Provider[] = [
   GetCountriesUsecase,
   GetCountriesUniversitiesUsecase,
   UpdateCountryStatusUsecase,
+  // Edito
+  GenerateEditosUsecase,
+  GetEditosUsecase,
   // Interest
   CreateInterestCategoryUsecase,
   CreateInterestUsecase,

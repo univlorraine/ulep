@@ -1,9 +1,9 @@
 import DeleteIcon from '@mui/icons-material/Delete';
+import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import { Box, CircularProgress, Modal, Switch, SwitchProps, Typography } from '@mui/material';
 import { useState } from 'react';
 import {
-    // ArrayField,
     Button,
     EditButton,
     EmailField,
@@ -11,7 +11,6 @@ import {
     NumberField,
     Show,
     SimpleShowLayout,
-    // SingleFieldList,
     TextField,
     TopToolbar,
     UrlField,
@@ -23,6 +22,7 @@ import {
 import { ColorField } from 'react-admin-color-picker';
 import ReferenceUploadFileField from '../../components/field/ReferenceUploadFileField';
 import useGenerateConversation from '../../components/menu/useGenerateConversation';
+import useGenerateEditos from '../../components/menu/useGenerateEditos';
 import usePurge from '../../components/menu/usePurge';
 import ConfigPagesHeader from '../../components/tabs/ConfigPagesHeader';
 import Instance from '../../entities/Instance';
@@ -40,6 +40,7 @@ const InstanceShow = () => {
     const refresh = useRefresh();
     const { mutate: purge } = usePurge();
     const { mutate: generateConversations, isLoading: isGeneratingConversations } = useGenerateConversation();
+    const { mutate: generateEditos, isLoading: isGeneratingEditos } = useGenerateEditos();
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
     const handleToggle: SwitchProps['onChange'] = async (event) => {
@@ -64,6 +65,12 @@ const InstanceShow = () => {
         refresh();
     };
 
+    const handleGenerateEditos = async () => {
+        await generateEditos();
+        setIsModalOpen(false);
+        refresh();
+    };
+
     const handleCloseModal = () => {
         setIsModalOpen(false);
     };
@@ -83,6 +90,18 @@ const InstanceShow = () => {
                             label={translate('instance.daysBeforeClosureNotification')}
                             source="daysBeforeClosureNotification"
                         />
+                        <ReferenceUploadFileField
+                            label={translate('instance.defaultCertificateFile')}
+                            source="defaultCertificateFile.id"
+                        />
+                        <FunctionField
+                            render={(record: Instance) =>
+                                record.editoMandatoryTranslations.map((translation) => (
+                                    <div key={translation}>{translate(`editos.languages.${translation}`)}</div>
+                                ))
+                            }
+                            source="editoMandatoryTranslations"
+                        />
                         <FunctionField
                             label={translate('instance.maintenance')}
                             render={(record: Instance) => (
@@ -101,6 +120,7 @@ const InstanceShow = () => {
                                     sx={{
                                         display: 'flex',
                                         flexDirection: 'row',
+                                        flexWrap: 'wrap',
                                         alignItems: 'flex-start',
                                         gap: '20px',
                                     }}
@@ -137,20 +157,26 @@ const InstanceShow = () => {
                                             )}
                                         </div>
                                     </Button>
+                                    <Button color="secondary" onClick={handleGenerateEditos} variant="contained">
+                                        <div
+                                            style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                            }}
+                                        >
+                                            <FormatQuoteIcon />
+                                            {isGeneratingEditos ? (
+                                                <CircularProgress size={25} />
+                                            ) : (
+                                                <Typography style={{ marginLeft: 12 }}>
+                                                    {translate('generateEditos.title')}
+                                                </Typography>
+                                            )}
+                                        </div>
+                                    </Button>
                                 </Box>
                             )}
-                        />
-                        <ReferenceUploadFileField
-                            label={translate('instance.defaultCertificateFile')}
-                            source="defaultCertificateFile.id"
-                        />
-                        <FunctionField
-                            render={(record: Instance) =>
-                                record.editoMandatoryTranslations.map((translation) => (
-                                    <div key={translation}>{translate(`instance.edit.edito.${translation}`)}</div>
-                                ))
-                            }
-                            source="editoMandatoryTranslations"
                         />
                     </SimpleShowLayout>
                     <SimpleShowLayout sx={{ m: 3, flex: '1' }}>
