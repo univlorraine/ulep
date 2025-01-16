@@ -195,7 +195,7 @@ const useVocabulary = (learningLanguage?: LearningLanguage, currentVocabularyLis
 
     useEffect(() => {
         const fetchData = async () => {
-            if (!associatedTandem) {
+            if (!learningLanguage) {
                 return;
             }
 
@@ -204,7 +204,7 @@ const useVocabulary = (learningLanguage?: LearningLanguage, currentVocabularyLis
                 isLoading: true,
             });
 
-            const vocabularyListsResult = await getVocabularyLists.execute(profile.id, learningLanguage!.code);
+            const vocabularyListsResult = await getVocabularyLists.execute(profile.id, learningLanguage.code);
 
             if (vocabularyListsResult instanceof Error) {
                 return setVocabularyResult({
@@ -225,7 +225,7 @@ const useVocabulary = (learningLanguage?: LearningLanguage, currentVocabularyLis
         };
 
         fetchData();
-    }, [associatedTandem, refreshVocabularyLists, vocabularyListSelected]);
+    }, [learningLanguage, refreshVocabularyLists, vocabularyListSelected]);
 
     useEffect(() => {
         const fetchData = async () => {
