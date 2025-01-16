@@ -1,9 +1,9 @@
 .content {
-    margin-left: 12px;
+    margin: 0px 12px;
     display: flex;
     flex-direction: column;
     text-transform: none;
-    text-align: left;
+    text-align: start;
     width: 100%;
 }
 
@@ -40,7 +40,7 @@
     font-weight: 400;
     color: black;
     text-transform: none;
-    text-align: right;
+    text-align: end;
 }
 
 .image {
@@ -80,7 +80,7 @@
     justify-content: space-between;
     padding-top: 5px;
     padding-bottom: 10px;
-    text-align: left;
+    text-align: start;
     width: 100%;
 }
 
@@ -107,4 +107,5 @@
     word-wrap: break-word;
     max-height: 1.5em;
     inline-size: 100%;
+    text-align: start;
 }

@@ -87,7 +87,7 @@
 }
 
 .downloadIconContainer {
-    text-align: left;
+    text-align: start;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -143,7 +143,7 @@
 }
 
 .linkTextContainer {
-    text-align: left;
+    text-align: start;
     text-transform: none;
     display: flex;
     flex-direction: column;

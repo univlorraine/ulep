@@ -30,7 +30,7 @@
     font-size: 16px;
     font-weight: 300;
     line-height: 20px;
-    text-align: left;
+    text-align: start;
 }
 
 .word {
@@ -38,6 +38,6 @@
     font-size: 16px;
     font-weight: 900;
     line-height: 20px;
-    text-align: left;
+    text-align: start;
     margin-bottom: 4px;
 }
