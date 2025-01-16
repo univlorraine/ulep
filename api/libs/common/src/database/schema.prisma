@@ -593,7 +593,7 @@ model VocabularyList {
 model Vocabulary {
   id                           String  @id @default(uuid())
   word                         String
-  translation                  String
+  translation                  String?
   vocabulary_list_id           String
   pronunciation_word_id        String? @unique
   pronunciation_translation_id String? @unique
