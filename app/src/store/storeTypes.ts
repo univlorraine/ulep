@@ -77,6 +77,10 @@ interface UpdateProfile {
     university?: University;
 }
 
+interface SetRtlPayload {
+    isRtl: boolean;
+}
+
 interface NewsFilterPayload {
     language: Language[];
 }
@@ -95,6 +99,7 @@ interface StoreInterface {
     chatUrl: string;
     socketChatUrl: string;
     jitsiUrl: string;
+    isRtl?: boolean;
     language: string;
     lastConnection: Date | undefined;
     logout: Action<StoreInterface>;
@@ -103,6 +108,7 @@ interface StoreInterface {
     setRefreshReports: Action<StoreInterface>;
     setApiUrl: Action<StoreInterface, ApiUrlPayload>;
     setLanguage: Action<StoreInterface, LanguagePayload>;
+    setRtl: Action<StoreInterface, SetRtlPayload>;
     setNewsFilter: Action<StoreInterface, NewsFilterPayload>;
     setProfile: Action<StoreInterface, ProfileStorePayload>;
     setTokens: Action<StoreInterface, TokenStorePayload>;

@@ -17,8 +17,12 @@ const Store = createStore<TokenStoreTypes>(
             refreshToken: '',
             refreshReports: false,
             lastConnection: undefined,
+            isRtl: undefined,
             setLastConnection: action((state, payload) => {
                 state.lastConnection = payload.lastConnection;
+            }),
+            setRtl: action((state, payload) => {
+                state.isRtl = payload.isRtl;
             }),
             setRefreshReports: action((state) => {
                 state.refreshReports = !state.refreshReports;
