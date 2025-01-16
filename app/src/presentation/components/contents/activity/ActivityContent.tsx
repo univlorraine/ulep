@@ -28,7 +28,7 @@ export const ActivityContent: React.FC<ActivityContentProps> = ({
     profile,
 }) => {
     const { t } = useTranslation();
-    const { browserAdapter, fileAdapter, updateActivityStatus } = useConfig();
+    const { browserAdapter, fileAdapter, updateActivityStatus, getActivityPdf } = useConfig();
     const [showToast] = useIonToast();
     const [refreshActivity, setRefreshActivity] = useState(false);
     const [isModalShareVisible, setIsModalShareVisible] = useState(false);
@@ -70,6 +70,10 @@ export const ActivityContent: React.FC<ActivityContentProps> = ({
         });
     };
 
+    const handleGetActivityPdf = (activity: Activity) => {
+        getActivityPdf.execute(activity.id);
+    };
+
     const onShareActivity = async () => {
         const result = await updateActivityStatus.execute(activity.id, ActivityStatus.IN_VALIDATION);
 
@@ -93,9 +97,9 @@ export const ActivityContent: React.FC<ActivityContentProps> = ({
             <HeaderSubContent
                 title={t('activity.show.title')}
                 onBackPressed={onBackPressed}
-                kebabContent={(closeMenu) =>
-                    activity.status !== ActivityStatus.PUBLISHED && activity.creator?.id === profile.id ? (
-                        <IonList lines="none">
+                kebabContent={(closeMenu) => (
+                    <IonList lines="none">
+                        {activity.status !== ActivityStatus.PUBLISHED && activity.creator?.id === profile.id ? (
                             <IonItem
                                 button={true}
                                 detail={false}
@@ -107,9 +111,20 @@ export const ActivityContent: React.FC<ActivityContentProps> = ({
                                 <IonIcon icon={pencilOutline} aria-hidden="true" />
                                 <IonLabel className={styles['popover-label']}>{t('activity.show.update')}</IonLabel>
                             </IonItem>
-                        </IonList>
-                    ) : undefined
-                }
+                        ) : undefined}
+                        <IonItem
+                            button={true}
+                            detail={false}
+                            onClick={() => {
+                                handleGetActivityPdf(activity);
+                                closeMenu();
+                            }}
+                        >
+                            <IonIcon icon={downloadOutline} aria-hidden="true" />
+                            <IonLabel className={styles['popover-label']}>{t('activity.show.export')}</IonLabel>
+                        </IonItem>
+                    </IonList>
+                )}
             />
             {isLoading ? (
                 <div className={styles.loader}>

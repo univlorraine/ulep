@@ -5,6 +5,7 @@ export * from './delete-activity-theme-category.usecase';
 export * from './delete-activity-theme.usecase';
 export * from './delete-activity.usecase';
 export * from './delete-vocabulary-activity.usecase';
+export * from './get-activity-pdf.usecase';
 export * from './get-activity-theme-category.usecase';
 export * from './get-activity-theme.usecase';
 export * from './get-activity.usecase';

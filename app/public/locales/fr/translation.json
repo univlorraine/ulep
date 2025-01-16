@@ -177,6 +177,7 @@
             "creator": "Créé par {{name}}",
             "title": "Fiche d'activité",
             "update": "Mettre à jour ma fiche",
+            "export": "Exporter au format PDF",
             "language": "Langue",
             "level": "Niveau",
             "theme": "Thème",
