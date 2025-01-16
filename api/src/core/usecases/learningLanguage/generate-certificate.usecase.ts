@@ -126,96 +126,123 @@ export class GenerateCertificateUsecase {
 
     const form = pdfDoc.getForm();
 
-    const tandemTypeField = form.getTextField('TandemType');
-    tandemTypeField.setText(tandem.learningType);
-
-    const studentNameField = form.getTextField('StudentName');
-    studentNameField.setText(
-      `${learningLanguage.profile.user.firstname} ${learningLanguage.profile.user.lastname}`,
-    );
-
-    const studentEmailField = form.getTextField('LearningLanguageName');
-    studentEmailField.setText(language);
-
-    const universityOpenDateField = form.getTextField('UniversityOpenDate');
-    universityOpenDateField.setText(
-      formatInTimeZone(
-        learningLanguage.profile.user.university.openServiceDate,
-        learningLanguage.profile.user.university.timezone,
-        'dd/MM/yyyy',
-      ),
-    );
-
-    const universityClosedDateField = form.getTextField('UniversityClosedDate');
-    universityClosedDateField.setText(
-      formatInTimeZone(
-        learningLanguage.profile.user.university.closeServiceDate,
-        learningLanguage.profile.user.university.timezone,
-        'dd/MM/yyyy',
-      ),
-    );
-
-    const todayDateField = form.getTextField('TodayDate');
-    todayDateField.setText(
-      formatInTimeZone(
-        new Date(),
-        learningLanguage.profile.user.university.timezone,
-        'dd/MM/yyyy',
-      ),
-    );
-
-    if (learningLanguage.profile.user.contactId) {
-      const contactNameField = form.getTextField('ContactName');
-      const contact = await this.keycloakClient.getUserById(
-        learningLanguage.profile.user.contactId,
-      );
-      contactNameField.setText(`${contact.firstName} ${contact.lastName}`);
+    if (form.getFieldMaybe('TandemType')) {
+      const tandemTypeField = form.getTextField('TandemType');
+      tandemTypeField.setText(tandem.learningType);
     }
 
-    const goalName1Field = form.getTextField('GoalName1');
-    goalName1Field.setText(
-      learningLanguage.customLearningGoals[0]
-        ? learningLanguage.customLearningGoals[0].title
-        : '',
-    );
+    if (form.getFieldMaybe('StudentName')) {
+      const studentNameField = form.getTextField('StudentName');
+      studentNameField.setText(
+        `${learningLanguage.profile.user.firstname} ${learningLanguage.profile.user.lastname}`,
+      );
+    }
 
-    const goalName2Field = form.getTextField('GoalName2');
-    goalName2Field.setText(
-      learningLanguage.customLearningGoals[1]
-        ? learningLanguage.customLearningGoals[1].title
-        : '',
-    );
+    if (form.getFieldMaybe('LearningLanguageName')) {
+      const studentEmailField = form.getTextField('LearningLanguageName');
+      studentEmailField.setText(language);
+    }
 
-    const goalName3Field = form.getTextField('GoalName3');
-    goalName3Field.setText(
-      learningLanguage.customLearningGoals[2]
-        ? learningLanguage.customLearningGoals[2].title
-        : '',
-    );
+    if (form.getFieldMaybe('UniversityOpenDate')) {
+      const universityOpenDateField = form.getTextField('UniversityOpenDate');
+      universityOpenDateField.setText(
+        formatInTimeZone(
+          learningLanguage.profile.user.university.openServiceDate,
+          learningLanguage.profile.user.university.timezone,
+          'dd/MM/yyyy',
+        ),
+      );
+    }
 
-    const goalComment1Field = form.getTextField('GoalComment1');
-    goalComment1Field.setText(
-      learningLanguage.customLearningGoals[0]
-        ? learningLanguage.customLearningGoals[0].description
-        : '',
-    );
+    if (form.getFieldMaybe('UniversityClosedDate')) {
+      const universityClosedDateField = form.getTextField(
+        'UniversityClosedDate',
+      );
+      universityClosedDateField.setText(
+        formatInTimeZone(
+          learningLanguage.profile.user.university.closeServiceDate,
+          learningLanguage.profile.user.university.timezone,
+          'dd/MM/yyyy',
+        ),
+      );
+    }
 
-    const goalComment2Field = form.getTextField('GoalComment2');
-    goalComment2Field.setText(
-      learningLanguage.customLearningGoals[1]
-        ? learningLanguage.customLearningGoals[1].description
-        : '',
-    );
+    if (form.getFieldMaybe('TodayDate')) {
+      const todayDateField = form.getTextField('TodayDate');
+      todayDateField.setText(
+        formatInTimeZone(
+          new Date(),
+          learningLanguage.profile.user.university.timezone,
+          'dd/MM/yyyy',
+        ),
+      );
+    }
+    if (form.getFieldMaybe('ContactName')) {
+      if (learningLanguage.profile.user.contactId) {
+        const contactNameField = form.getTextField('ContactName');
+        const contact = await this.keycloakClient.getUserById(
+          learningLanguage.profile.user.contactId,
+        );
+        contactNameField.setText(`${contact.firstName} ${contact.lastName}`);
+      }
+    }
 
-    const goalComment3Field = form.getTextField('GoalComment3');
-    goalComment3Field.setText(
-      learningLanguage.customLearningGoals[2]
-        ? learningLanguage.customLearningGoals[2].description
-        : '',
-    );
+    if (form.getFieldMaybe('GoalName1')) {
+      const goalName1Field = form.getTextField('GoalName1');
+      goalName1Field.setText(
+        learningLanguage.customLearningGoals[0]
+          ? learningLanguage.customLearningGoals[0].title
+          : '',
+      );
+    }
+
+    if (form.getFieldMaybe('GoalName2')) {
+      const goalName2Field = form.getTextField('GoalName2');
+      goalName2Field.setText(
+        learningLanguage.customLearningGoals[1]
+          ? learningLanguage.customLearningGoals[1].title
+          : '',
+      );
+    }
+
+    if (form.getFieldMaybe('GoalName3')) {
+      const goalName3Field = form.getTextField('GoalName3');
+      goalName3Field.setText(
+        learningLanguage.customLearningGoals[2]
+          ? learningLanguage.customLearningGoals[2].title
+          : '',
+      );
+    }
+
+    if (form.getFieldMaybe('GoalComment1')) {
+      const goalComment1Field = form.getTextField('GoalComment1');
+      goalComment1Field.setText(
+        learningLanguage.customLearningGoals[0]
+          ? learningLanguage.customLearningGoals[0].description
+          : '',
+      );
+    }
+
+    if (form.getFieldMaybe('GoalComment2')) {
+      const goalComment2Field = form.getTextField('GoalComment2');
+      goalComment2Field.setText(
+        learningLanguage.customLearningGoals[1]
+          ? learningLanguage.customLearningGoals[1].description
+          : '',
+      );
+    }
+
+    if (form.getFieldMaybe('GoalComment3')) {
+      const goalComment3Field = form.getTextField('GoalComment3');
+      goalComment3Field.setText(
+        learningLanguage.customLearningGoals[2]
+          ? learningLanguage.customLearningGoals[2].description
+          : '',
+      );
+    }
 
     const checkboxYesValue: string = this.i18n.translate(
-      'certificate.boolean_no_value',
+      'certificate.boolean_yes_value',
       {
         lng: learningLanguage.profile.user.university.nativeLanguage.code,
         ns: this.translationNamespace,
@@ -230,25 +257,29 @@ export class GenerateCertificateUsecase {
       },
     ) as string;
 
-    const learningJournalBooleanField = form.getTextField(
-      'LearningJournalBoolean',
-    );
+    if (form.getFieldMaybe('LearningJournalBoolean')) {
+      const learningJournalBooleanField = form.getTextField(
+        'LearningJournalBoolean',
+      );
+      learningJournalBooleanField.setText(
+        learningJournal ? checkboxYesValue : checkboxNoValue,
+      );
+    }
 
-    learningJournalBooleanField.setText(
-      learningJournal ? checkboxYesValue : checkboxNoValue,
-    );
-
-    const consultingInterviewBooleanField = form.getTextField(
-      'ConsultingInterviewBoolean',
-    );
-
-    consultingInterviewBooleanField.setText(
-      consultingInterview ? checkboxYesValue : checkboxNoValue,
-    );
+    if (form.getFieldMaybe('ConsultingInterviewBoolean')) {
+      const consultingInterviewBooleanField = form.getTextField(
+        'ConsultingInterviewBoolean',
+      );
+      consultingInterviewBooleanField.setText(
+        consultingInterview ? checkboxYesValue : checkboxNoValue,
+      );
+    }
 
     // TODO: Add visio time from learningLanguage.visioTime with learningJournal
-    const visioTimeField = form.getTextField('VisioTime');
-    visioTimeField.setText('50');
+    if (form.getFieldMaybe('VisioTime')) {
+      const visioTimeField = form.getTextField('VisioTime');
+      visioTimeField.setText('50');
+    }
 
     form.flatten();
     return pdfDoc.save();
