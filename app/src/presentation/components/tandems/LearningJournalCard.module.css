@@ -10,7 +10,7 @@
     align-items: center;
     display: flex;
     flex-direction: row;
-    justify-content: left;
+    justify-content: start;
 }
 
 .image {
@@ -62,7 +62,6 @@
     justify-content: space-between;
     align-items: center;
     font-size: 16px;
-    
 }
 
 .activityTitle {
@@ -87,4 +86,3 @@
     font-weight: 400 !important;
     font-family: 'Maven Pro', sans-serif !important;
 }
-
