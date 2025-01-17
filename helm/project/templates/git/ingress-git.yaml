@@ -1,4 +1,3 @@
-{{- if .Values.git.ingress.enabled -}}
 {{- $svcPort := .Values.git.service.port -}}
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRouteTCP
@@ -18,4 +17,3 @@ spec:
     services:
     - name: "{{ $.Values.name }}-{{ $.Values.git.name }}"
       port: 2222
-{{- end }}
