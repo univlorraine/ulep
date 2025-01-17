@@ -1,18 +1,21 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: '{{ .Values.name }}'
+  name: "{{ .Values.name }}"
 spec:
   dnsNames:
-    - '{{ .Values.apiUrl }}.{{ .Values.domain }}'
-    - '{{ .Values.minioUrl }}.{{ .Values.domain }}'
-    - '{{ .Values.minioApiUrl }}.{{ .Values.domain }}'
-    - '{{ .Values.adminUrl }}.{{ .Values.domain }}'
-    - '{{ .Values.keycloakUrl }}.{{ .Values.domain }}'
-    - '{{ .Values.webappUrl }}.{{ .Values.domain }}'
-    - '{{ .Values.chatUrl }}.{{ .Values.domain }}'
-    - '{{ .Values.socketChatUrl }}.{{ .Values.domain }}'
+    - "{{ .Values.apiUrl }}.{{ .Values.domain }}"
+    - "{{ .Values.minioUrl }}.{{ .Values.domain }}"
+    - "{{ .Values.minioApiUrl }}.{{ .Values.domain }}"
+    - "{{ .Values.adminUrl }}.{{ .Values.domain }}"
+    - "{{ .Values.keycloakUrl }}.{{ .Values.domain }}"
+    - "{{ .Values.webappUrl }}.{{ .Values.domain }}"
+    - "{{ .Values.chatUrl }}.{{ .Values.domain }}"
+    - "{{ .Values.socketChatUrl }}.{{ .Values.domain }}"
+    - "{{ .Values.weblateApiUrl }}.{{ .Values.domain }}"
+    - "{{ .Values.glitchtipUrl }}.{{ .Values.domain }}"
+    - "{{ .Values.jitsiUrl }}.{{ .Values.domain }}"
   issuerRef:
-    name: '{{ .Values.issuerName }}'
+    name: "{{ .Values.issuerName }}"
     kind: ClusterIssuer
-  secretName: '{{ .Values.name }}-tls'
+  secretName: "{{ .Values.name }}-tls"
