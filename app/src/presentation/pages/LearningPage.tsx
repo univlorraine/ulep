@@ -204,6 +204,7 @@ const LearningPage = () => {
                 onClose={onActivitiesModalClosed}
                 profile={profile}
                 currentActivityId={currentActivityId}
+                currentLearningLanguage={currentTandem?.learningLanguage}
             />
             {currentTandem && (
                 <VocabularyContentModal

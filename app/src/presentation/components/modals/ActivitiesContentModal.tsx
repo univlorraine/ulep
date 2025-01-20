@@ -1,4 +1,5 @@
 import { IonModal } from '@ionic/react';
+import Language from '../../../domain/entities/Language';
 import Profile from '../../../domain/entities/Profile';
 import ActivitiesContainerContent from '../contents/activity/ActivitiesContainerContent';
 import styles from './ActivitiesContentModal.module.css';
@@ -8,6 +9,7 @@ interface ActivitiesContentModalProps {
     onClose: () => void;
     profile: Profile;
     currentActivityId?: string;
+    currentLearningLanguage?: Language;
 }
 
 const ActivitiesContentModal: React.FC<ActivitiesContentModalProps> = ({
@@ -15,6 +17,7 @@ const ActivitiesContentModal: React.FC<ActivitiesContentModalProps> = ({
     onClose,
     profile,
     currentActivityId,
+    currentLearningLanguage,
 }) => {
     return (
         <IonModal animated isOpen={isVisible} onDidDismiss={onClose} className={styles.modal}>
@@ -24,6 +27,7 @@ const ActivitiesContentModal: React.FC<ActivitiesContentModalProps> = ({
                     profile={profile}
                     isModal={true}
                     currentActivityId={currentActivityId}
+                    currentLearningLanguage={currentLearningLanguage}
                 />
             </div>
         </IonModal>

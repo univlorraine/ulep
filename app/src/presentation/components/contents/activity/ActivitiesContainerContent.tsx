@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Activity } from '../../../../domain/entities/Activity';
+import Language from '../../../../domain/entities/Language';
 import Profile from '../../../../domain/entities/Profile';
 import useGetActivityThemes from '../../../hooks/useGetActivityThemes';
 import ActivitiesContent from './ActivitiesContent';
@@ -11,6 +12,7 @@ interface ActivitiesContainerContentProps {
     profile: Profile;
     isModal?: boolean;
     currentActivityId?: string;
+    currentLearningLanguage?: Language;
 }
 
 const ActivitiesContainerContent: React.FC<ActivitiesContainerContentProps> = ({
@@ -18,6 +20,7 @@ const ActivitiesContainerContent: React.FC<ActivitiesContainerContentProps> = ({
     profile,
     isModal,
     currentActivityId,
+    currentLearningLanguage,
 }) => {
     const [displayCreateActivity, setDisplayCreateActivity] = useState<boolean>(false);
     const [activityIdToDisplay, setActivityIdToDisplay] = useState<string | undefined>();
@@ -57,6 +60,7 @@ const ActivitiesContainerContent: React.FC<ActivitiesContainerContentProps> = ({
                     onActivityClick={(activity) => setActivityIdToDisplay(activity.id)}
                     profile={profile}
                     isModal={isModal}
+                    currentLearningLanguage={currentLearningLanguage}
                 />
             )}
             {displayCreateActivity && (
