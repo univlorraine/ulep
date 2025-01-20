@@ -10,6 +10,7 @@
     flex-direction: column;
     gap: 24px;
     overflow-y: auto;
+    width: 100%;
 }
 
 .date {

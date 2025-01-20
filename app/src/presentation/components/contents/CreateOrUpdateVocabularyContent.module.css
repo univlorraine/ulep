@@ -25,7 +25,7 @@
     font-size: 20px;
     font-weight: 700;
     line-height: 25px;
-    text-align: left;
+    text-align: start;
     color: #000;
 }
 
@@ -41,7 +41,7 @@
     font-size: 16px;
     font-weight: 400;
     line-height: 20px;
-    text-align: left;
+    text-align: start;
 }
 
 .playerContainer {
@@ -61,7 +61,7 @@
     font-size: 16px;
     font-weight: 400;
     line-height: 20px;
-    text-align: left;
+    text-align: start;
     text-decoration: underline;
 }
 

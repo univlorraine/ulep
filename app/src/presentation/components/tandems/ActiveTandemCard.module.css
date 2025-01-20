@@ -50,7 +50,7 @@
     font-family: 'Roboto';
     font-size: 22px;
     font-weight: 700;
-    text-align: left;
+    text-align: start;
     margin: 0;
     text-transform: capitalize;
 }
@@ -60,7 +60,7 @@
     font-family: 'Maven Pro';
     font-size: 13px;
     font-weight: 400;
-    text-align: left;
+    text-align: start;
     margin: 8px 0;
     text-transform: capitalize;
 }

@@ -2,7 +2,7 @@
     color: #000;
     padding: 20px;
     .title {
-        text-align: left;
+        text-align: start;
         margin-bottom: 4px;
     }
     .subtitle {

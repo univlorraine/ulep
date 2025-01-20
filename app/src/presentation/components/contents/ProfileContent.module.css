@@ -15,7 +15,7 @@
             width: 100%;
             margin-bottom: 30px;
             .title {
-                text-align: left;
+                text-align: start;
                 margin: 0;
             }
         }

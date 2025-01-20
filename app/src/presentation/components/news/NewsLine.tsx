@@ -2,6 +2,7 @@ import { IonImg } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
 import News from '../../../domain/entities/News';
 import Profile from '../../../domain/entities/Profile';
+import { useStoreState } from '../../../store/storeTypes';
 import LanguageTag from '../LanguageTag';
 import UniversityTag from '../UniversityTag';
 import styles from './NewsLine.module.css';
@@ -14,7 +15,9 @@ interface NewsLineProps {
 
 const NewsLine: React.FC<NewsLineProps> = ({ news, profile, onClick }) => {
     const { t } = useTranslation();
-    const formattedDate = new Intl.DateTimeFormat(profile.nativeLanguage.code, {
+    const language = useStoreState((state) => state.language);
+
+    const formattedDate = new Intl.DateTimeFormat(language || profile.nativeLanguage.code, {
         day: '2-digit',
         month: 'long',
         year: 'numeric',

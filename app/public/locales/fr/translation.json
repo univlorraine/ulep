@@ -177,6 +177,7 @@
             "creator": "Créé par {{name}}",
             "title": "Fiche d'activité",
             "update": "Mettre à jour ma fiche",
+            "export": "Exporter au format PDF",
             "language": "Langue",
             "level": "Niveau",
             "theme": "Thème",
@@ -611,6 +612,8 @@
             "language": "Langue de l'application",
             "logout": "Se déconnecter",
             "notifications": "Notifications",
+            "rtl": "Changer la direction du texte",
+            "rtl_button": "Application de droite à gauche",
             "other": "Autres paramètres",
             "title": "Paramètres",
             "unsubscribe": "Se désinscrire"

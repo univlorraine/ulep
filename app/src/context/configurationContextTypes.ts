@@ -7,6 +7,7 @@ import RecorderAdapterInterface from '../adapter/interfaces/RecorderAdapter.inte
 import Configuration from '../domain/entities/Confirguration';
 import CreateActivityUsecaseInterface from '../domain/interfaces/activity/CreateActivityUsecase.interface';
 import GetActivitiesUsecaseInterface from '../domain/interfaces/activity/GetActivitiesUsecase.interface';
+import GetActivityPdfUsecaseInterface from '../domain/interfaces/activity/GetActivityPdfUsecase.interface';
 import GetActivityThemesUsecaseInterface from '../domain/interfaces/activity/GetActivityThemesUsecase.interface';
 import GetActivityUsecaseInterface from '../domain/interfaces/activity/GetActivityUsecase.interface';
 import UpdateActivityStatusUsecaseInterface from '../domain/interfaces/activity/UpdateActivityStatusUsecase.interface';
@@ -144,6 +145,7 @@ export interface ConfigContextValueType {
     getActivityThemes: GetActivityThemesUsecaseInterface;
     updateActivity: UpdateActivityUsecaseInterface;
     updateActivityStatus: UpdateActivityStatusUsecaseInterface;
+    getActivityPdf: GetActivityPdfUsecaseInterface;
     // Vocabulary
     addReaderToVocabularyList: AddReaderToVocabularyListUsecaseInterface;
     createVocabulary: CreateVocabularyUsecaseInterface;

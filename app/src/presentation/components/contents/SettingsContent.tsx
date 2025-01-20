@@ -21,7 +21,9 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
     const history = useHistory();
     const { askForAccountDeletion, browserAdapter, configuration, updateNotificationPermission } = useConfig();
     const setLanguage = useStoreActions((state) => state.setLanguage);
+    const setRtl = useStoreActions((state) => state.setRtl);
     const currentLanguage = useStoreState((state) => state.language);
+    const currentRtl = useStoreState((state) => state.isRtl);
     const setProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const [showToast] = useIonToast();
     const profile = useStoreState((state) => state.profile);
@@ -56,6 +58,10 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
             setEmailNotificationStatus(!emailNotificationStatus);
             return updateProfile({ acceptsEmail: result.acceptsEmail });
         }
+    };
+
+    const onUpdateRtl = async () => {
+        setRtl({ isRtl: !currentRtl });
     };
 
     const updateLanguage = (code: string) => {
@@ -112,6 +118,16 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
                     placeholder={LANGUAGES.find((language) => language.value === currentLanguage)?.label}
                 />
             </div>
+            <button aria-label={t('home_page.settings.rtl') as string} className={styles['setting-container']}>
+                <span>{t('home_page.settings.rtl_button')}</span>
+                <Switch
+                    onChange={() => onUpdateRtl()}
+                    checked={Boolean(currentRtl)}
+                    uncheckedIcon={false}
+                    checkedIcon={false}
+                />
+            </button>
+
             <span className={styles.subtitle}>{t('home_page.settings.other')}</span>
             <button
                 aria-label={t('home_page.settings.notifications') as string}

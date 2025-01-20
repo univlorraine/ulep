@@ -16,6 +16,7 @@ import {
     LogEntryVisio,
 } from '../../../domain/entities/LogEntry';
 import Profile from '../../../domain/entities/Profile';
+import { useStoreState } from '../../../store/storeTypes';
 import styles from './LogEntryCard.module.css';
 
 interface LogEntrySubComponentProps {
@@ -170,7 +171,9 @@ interface LogEntryCardProps {
 }
 
 const LogEntryCard: React.FC<LogEntryCardProps> = ({ logEntry, onClick, profile, shouldDisplayDate = true }) => {
-    const date = new Intl.DateTimeFormat(profile.nativeLanguage.code, {
+    const language = useStoreState((state) => state.language);
+
+    const date = new Intl.DateTimeFormat(language || profile.nativeLanguage.code, {
         day: '2-digit',
         month: '2-digit',
     }).format(new Date(logEntry.createdAt));
