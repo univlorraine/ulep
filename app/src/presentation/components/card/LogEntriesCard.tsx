@@ -2,6 +2,7 @@ import { IonButton } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
 import { LogEntry } from '../../../domain/entities/LogEntry';
 import Profile from '../../../domain/entities/Profile';
+import { useStoreState } from '../../../store/storeTypes';
 import { getLogEntryImage, LogEntrySubTitle, LogEntryTitle } from './LogEntryCard';
 import styles from './LogEntryCard.module.css';
 
@@ -15,7 +16,9 @@ interface LogEntriesCardProps {
 
 const LogEntriesCard: React.FC<LogEntriesCardProps> = ({ date, logEntries, count, onClick, profile }) => {
     const { t } = useTranslation();
-    const formattedDate = new Intl.DateTimeFormat(profile.nativeLanguage.code, {
+    const language = useStoreState((state) => state.language);
+
+    const formattedDate = new Intl.DateTimeFormat(language || profile.nativeLanguage.code, {
         day: '2-digit',
         month: '2-digit',
     }).format(date);

@@ -21,7 +21,7 @@
     font-size: 13px;
     font-weight: 400;
     line-height: 16px;
-    text-align: left;
+    text-align: start;
     padding-left: 12px;
 }
 
@@ -30,7 +30,7 @@
     font-size: 16px;
     font-weight: 500;
     line-height: 20px;
-    text-align: left;
+    text-align: start;
     color: #000000;
 }
 
@@ -39,7 +39,7 @@
     font-size: 13px;
     font-weight: 400;
     line-height: 16px;
-    text-align: left;
+    text-align: start;
     color: #767676;
 }
 

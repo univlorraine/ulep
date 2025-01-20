@@ -1,13 +1,12 @@
+import { IonButton } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
-import Tandem from '../../../domain/entities/Tandem';
-import LearningCard from '../card/LearningCard';
-import styles from './LearningGoalCard.module.css';
-import Profile from '../../../domain/entities/Profile';
-import Goal from '../../../domain/entities/Goal';
 import { WritingSkillPng } from '../../../assets';
-import NetworkImage from '../NetworkImage';
-import { IonButton, IonIcon } from '@ionic/react';
 import CustomLearningGoal from '../../../domain/entities/CustomLearningGoal';
+import Goal from '../../../domain/entities/Goal';
+import Profile from '../../../domain/entities/Profile';
+import LearningCard from '../card/LearningCard';
+import NetworkImage from '../NetworkImage';
+import styles from './LearningGoalCard.module.css';
 
 interface LearningGoalCardProps {
     profile: Profile;
@@ -15,11 +14,7 @@ interface LearningGoalCardProps {
     onShowAllGoalsPressed: () => void;
 }
 
-const LearningGoalCard: React.FC<LearningGoalCardProps> = ({
-    profile,
-    customLearningGoals,
-    onShowAllGoalsPressed,
-}) => {
+const LearningGoalCard: React.FC<LearningGoalCardProps> = ({ profile, customLearningGoals, onShowAllGoalsPressed }) => {
     const { t } = useTranslation();
     const goalsCount = profile.goals.length + (customLearningGoals?.length ?? 0);
 
@@ -38,7 +33,7 @@ const LearningGoalCard: React.FC<LearningGoalCardProps> = ({
                                     aria-hidden={true}
                                 />
                             </div>
-                            <p className={styles.goalName}>{goal.name}</p>
+                            <p>{goal.name}</p>
                         </li>
                     ))}
                     {customLearningGoals?.map((customLearningGoal: CustomLearningGoal) => (

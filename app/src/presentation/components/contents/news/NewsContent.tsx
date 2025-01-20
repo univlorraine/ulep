@@ -3,6 +3,7 @@ import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import News from '../../../../domain/entities/News';
 import Profile from '../../../../domain/entities/Profile';
+import { useStoreState } from '../../../../store/storeTypes';
 import HeaderSubContent from '../../HeaderSubContent';
 import LanguageTag from '../../LanguageTag';
 import ChangeLanguageModal from '../../modals/ChangeLanguageModal';
@@ -18,6 +19,7 @@ interface NewsContentProps {
 
 export const NewsContent: React.FC<NewsContentProps> = ({ news, profile, onBackPressed }) => {
     const { t } = useTranslation();
+    const language = useStoreState((state) => state.language);
     const [currentLanguage, setCurrentLanguage] = useState(news.languageCode);
     const [currentTitle, setCurrentTitle] = useState(news.title);
     const [currentContent, setCurrentContent] = useState(news.content);
@@ -25,7 +27,7 @@ export const NewsContent: React.FC<NewsContentProps> = ({ news, profile, onBackP
     const [showCreditModal, setShowCreditModal] = useState(false);
 
     const contentRef = useRef<HTMLDivElement>(null);
-    const formattedDate = new Intl.DateTimeFormat(profile.nativeLanguage.code, {
+    const formattedDate = new Intl.DateTimeFormat(language || profile.nativeLanguage.code, {
         day: '2-digit',
         month: 'long',
         year: 'numeric',

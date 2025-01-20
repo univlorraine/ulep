@@ -58,9 +58,16 @@
     width: 48px;
     position: fixed;
     bottom: 20px;
-    right: 20px;
     z-index: 100;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+}
+
+:dir(ltr) .add-button {
+    right: 20px;
+}
+
+:dir(rtl) .add-button {
+    left: 20px;
 }
 
 .little-button {

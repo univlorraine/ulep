@@ -2,6 +2,7 @@ import { IonImg } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
 import EventObject from '../../../domain/entities/Event';
 import Profile from '../../../domain/entities/Profile';
+import { useStoreState } from '../../../store/storeTypes';
 import LanguageTag from '../LanguageTag';
 import UniversityTag from '../UniversityTag';
 import EventAdress from './EventAdress';
@@ -15,7 +16,9 @@ interface EventLineProps {
 
 const EventLine: React.FC<EventLineProps> = ({ event, profile, onClick }) => {
     const { t } = useTranslation();
-    const formattedDate = new Intl.DateTimeFormat(profile.nativeLanguage.code, {
+    const language = useStoreState((state) => state.language);
+
+    const formattedDate = new Intl.DateTimeFormat(language || profile.nativeLanguage.code, {
         day: '2-digit',
         month: 'long',
         year: 'numeric',

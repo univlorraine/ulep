@@ -39,18 +39,17 @@
 }
 
 .goalItem {
-    background-color: #F2F4F7;
+    background-color: #f2f4f7;
     border-radius: 5px;
     display: flex;
     flex-direction: row;
-    justify-content: left;
     align-items: center;
     width: 100%;
 }
 
 .customGoalButton {
     color: #000;
-    background-color: #F2F4F7;
+    background-color: #f2f4f7;
     border-radius: 5px;
     display: flex;
     flex-direction: column;
@@ -63,7 +62,7 @@
 
 .customGoalButton:hover,
 .customGoalButton:focus {
-    background-color: #E4E7ED;
+    background-color: #e4e7ed;
     outline: none;
 }
 

@@ -546,6 +546,8 @@
             "confidentiality": "Privacy policy",
             "deletion": "Removal request sent",
             "language": "Language",
+            "rtl": "Change the text direction",
+            "rtl_button": "Right to left application",
             "logout": "Sign out",
             "notifications": "Notifications",
             "other": "Other settings",
