@@ -8,6 +8,7 @@ import { RecorderAdapter } from '../adapter/RecorderAdapter';
 import Configuration from '../domain/entities/Confirguration';
 import CreateActivityUsecase from '../domain/usecases/activity/CreateActivityUsecase';
 import GetActivitiesUsecase from '../domain/usecases/activity/GetActivitiesUsecase';
+import GetActivityPdfUsecase from '../domain/usecases/activity/GetActivityPdfUsecase';
 import GetActivityThemesUsecase from '../domain/usecases/activity/GetActivityThemesUsecase';
 import GetActivityUsecase from '../domain/usecases/activity/GetActivityUsecase';
 import UpdateActivityStatusUsecase from '../domain/usecases/activity/UpdateActivityStatusUsecase';
@@ -205,6 +206,7 @@ const getConfigContextValue = ({
     const getActivityThemes = new GetActivityThemesUsecase(domainHttpAdapter);
     const updateActivity = new UpdateActivityUsecase(domainHttpAdapter);
     const updateActivityStatus = new UpdateActivityStatusUsecase(domainHttpAdapter);
+    const getActivityPdf = new GetActivityPdfUsecase(domainHttpAdapter, fileAdapter);
 
     // Session
     const createSession = new CreateSessionUsecase(domainHttpAdapter);
@@ -258,6 +260,7 @@ const getConfigContextValue = ({
         getActivities,
         getActivity,
         getActivityThemes,
+        getActivityPdf,
         getAllInterestCategories,
         getAllCountries,
         getAllGoals,

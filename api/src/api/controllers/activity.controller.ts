@@ -11,6 +11,7 @@ import {
   Post,
   Put,
   Query,
+  Res,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -18,6 +19,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import * as Swagger from '@nestjs/swagger';
+import { Response } from 'express';
 import { CurrentUser } from 'src/api/decorators';
 import { Role, Roles } from 'src/api/decorators/roles.decorator';
 import {
@@ -44,6 +46,7 @@ import {
   DeleteActivityThemeUsecase,
   DeleteActivityUsecase,
   GetActivitiesUsecase,
+  GetActivityPdfUsecase,
   GetActivityThemeCategoryUsecase,
   GetActivityThemeUsecase,
   GetActivityUsecase,
@@ -86,6 +89,7 @@ export class ActivityController {
     private readonly updateActivityUsecase: UpdateActivityUsecase,
     private readonly updateActivityStatusUsecase: UpdateActivityStatusUsecase,
     private readonly getActivitiesByAdminUsecase: GetAllActivitiesByAdminUsecase,
+    private readonly getActivityPdfUsecase: GetActivityPdfUsecase,
     private readonly env: ConfigService<Env, true>,
   ) {
     this.defaultLanguageCode = env.get<string>('DEFAULT_TRANSLATION_LANGUAGE');
@@ -421,6 +425,24 @@ export class ActivityController {
     }
 
     return ActivityResponse.from(activity);
+  }
+
+  @Get('pdf/:id')
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Get Activity PDF ressource.' })
+  async getActivityPdf(
+    @Param('id') id: string,
+    @Res() res: Response,
+    @CurrentUser() user: KeycloakUser,
+  ) {
+    const pdfBuffer = await this.getActivityPdfUsecase.execute(id, user);
+
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader(
+      'Content-Disposition',
+      'attachment; filename=vocabulary-list.pdf',
+    );
+    res.send(pdfBuffer);
   }
 
   private normalizeString(string: string) {

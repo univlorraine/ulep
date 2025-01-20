@@ -88,6 +88,7 @@ import {
   GenerateConversationsUsecase,
   GenerateTandemsUsecase,
   GetActivitiesUsecase,
+  GetActivityPdfUsecase,
   GetActivityThemeCategoryUsecase,
   GetActivityThemeUsecase,
   GetActivityUsecase,
@@ -222,6 +223,7 @@ const usecases: Provider[] = [
   UpdateActivityUsecase,
   UpdateActivityStatusUsecase,
   GetAllActivitiesByAdminUsecase,
+  GetActivityPdfUsecase,
   //Campus
   CreateCampusUsecase,
   DeleteCampusUsecase,
