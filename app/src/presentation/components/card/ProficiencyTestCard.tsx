@@ -46,8 +46,6 @@ const ProficiencyTestCard: React.FC<ProficiencyTestCardProps> = ({ testedLanguag
 const TestedLanguageComponent: React.FC<ProficiencyTestCardProps> = ({ testedLanguages }) => {
     const { t } = useTranslation();
 
-    console.log('testedLanguages', testedLanguages);
-
     if (Array.isArray(testedLanguages) && testedLanguages.length > 1) {
         return (
             <div>

@@ -66,8 +66,6 @@ const LearningContent: React.FC<LearningContentProps> = ({
         setCurrentTandemColor(TANDEM_COLORS[index]);
     };
 
-    console.log(currentTandem);
-
     return (
         <div
             className={`${styles.content} content-wrapper`}
