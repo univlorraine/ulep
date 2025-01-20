@@ -9,6 +9,7 @@
     text-align: start;
     text-transform: none;
     min-height: 100px;
+    overflow: hidden;
 }
 
 .content {
