@@ -154,9 +154,7 @@ const InstanceForm: React.FC<InstanceFormProps> = ({ handleSubmit, instance }) =
                     </Box>
 
                     <Box>
-                        <Typography variant="subtitle1">
-                            {translate(`instance.edit.editoMandatoryTranslations`)}
-                        </Typography>
+                        <Typography variant="subtitle1">{translate(`instance.edito.mandatoryTranslations`)}</Typography>
                         <Box alignItems="center" display="flex" flexDirection="row">
                             <FormGroup>
                                 {Object.values(EditoMandatoryTranslations).map((translation) => (

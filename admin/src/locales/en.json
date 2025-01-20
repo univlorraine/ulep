@@ -204,6 +204,10 @@
         "sunday": "Sunday"
     },
     "editos": {
+        "form": {
+            "mandatoryLanguages": "Languages with a * are mandatory",
+            "update": "Update"
+        },
         "label": "Editos",
         "title": "Editos",
         "list": {
@@ -395,9 +399,9 @@
             "message": "You are about to delete all data from the instance. This action is irreversible. Do you confirm?",
             "confirm": "Confirm"
         },
-        "generateEditos": {
-            "title": "Generate the editos",
-            "error": "An error occurred while generating the editos"
+        "edito": {
+            "mandatoryTranslations": "Mandatory translations for the Edito",
+            "noMandatoryTranslations": "No mandatory translations"
         },
         "edit": {
             "error": "An error occurred while updating the instance",
@@ -414,8 +418,7 @@
             "secondaryBackgroundColor": "Secondary color of the application's background image",
             "secondaryDarkColor": "Secondary dark color used for the application background",
             "title": "Instance update",
-            "defaultCertificateFile": "Default certificate file",
-            "editoMandatoryTranslations": "Mandatory translations for the Edito"
+            "defaultCertificateFile": "Default certificate file"
         }
     },
     "interests": {

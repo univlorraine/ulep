@@ -102,6 +102,7 @@ import {
   GetCountriesUniversitiesUsecase,
   GetCountriesUsecase,
   GetEditosUsecase,
+  GetEditoUsecase,
   GetInstanceUsecase,
   GetInterestCategoryUsecase,
   GetInterestsByCategoriesUsecase,
@@ -147,6 +148,7 @@ import {
   UpdateActivityUsecase,
   UpdateAdministratorUsecase,
   UpdateCountryStatusUsecase,
+  UpdateEditoUsecase,
   UpdateInstanceUsecase,
   UpdateInterestCategoryUsecase,
   UpdateInterestUsecase,
@@ -239,6 +241,8 @@ const usecases: Provider[] = [
   // Edito
   GenerateEditosUsecase,
   GetEditosUsecase,
+  GetEditoUsecase,
+  UpdateEditoUsecase,
   // Interest
   CreateInterestCategoryUsecase,
   CreateInterestUsecase,

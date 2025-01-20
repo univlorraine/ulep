@@ -206,6 +206,10 @@
     "editos": {
         "label": "Editos",
         "title": "Editos",
+        "form": {
+            "mandatoryLanguages": "Les langues avec un * sont obligatoires",
+            "update": "Mettre à jour"
+        },
         "list": {
             "university": "Université",
             "translations": "Traductions",
@@ -395,9 +399,8 @@
             "confirm": "Confirmer"
         },
         "edito": {
-            "CentralUniversityLanguage": "Langue de l'université centrale",
-            "English": "Anglais",
-            "PartnerUniversityLanguage": "Langue de l'universités partenaire"
+            "mandatoryTranslations": "Langues obligatoires pour les éditos",
+            "noMandatoryTranslations": "Aucune langue obligatoire"
         },
         "edit": {
             "error": "Une erreur est survenue pendant la mise à jour de l'instance",

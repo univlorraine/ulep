@@ -8,7 +8,7 @@ const EditoList = () => (
     <>
         <PageTitle>Editos</PageTitle>
         <List exporter={false} pagination={false}>
-            <Datagrid>
+            <Datagrid rowClick="edit">
                 <TextField label="editos.list.university" source="university.name" />
                 <FunctionField
                     label="editos.list.translations"

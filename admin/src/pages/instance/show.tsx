@@ -95,11 +95,16 @@ const InstanceShow = () => {
                             source="defaultCertificateFile.id"
                         />
                         <FunctionField
-                            render={(record: Instance) =>
-                                record.editoMandatoryTranslations.map((translation) => (
-                                    <div key={translation}>{translate(`editos.languages.${translation}`)}</div>
-                                ))
-                            }
+                            label={translate('instance.edito.mandatoryTranslations')}
+                            render={(record: Instance) => {
+                                if (record.editoMandatoryTranslations.length > 0) {
+                                    return record.editoMandatoryTranslations.map((translation) => (
+                                        <div key={translation}>{translate(`editos.languages.${translation}`)}</div>
+                                    ));
+                                }
+
+                                return <div>{translate('instance.edito.noMandatoryTranslations')}</div>;
+                            }}
                             source="editoMandatoryTranslations"
                         />
                         <FunctionField
