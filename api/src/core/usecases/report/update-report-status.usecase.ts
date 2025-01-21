@@ -31,9 +31,6 @@ export class UpdateReportStatusUsecase {
       throw new RessourceDoesNotExist();
     }
 
-    console.log('instance', instance);
-    console.log('command', command);
-
     if (
       command.shouldDeleteMessage !== undefined &&
       command.shouldDeleteMessage !== instance.metadata.isMessageDeleted &&

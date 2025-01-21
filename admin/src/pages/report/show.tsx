@@ -56,8 +56,6 @@ const ReportData = () => {
     const translate = useTranslate();
     const recordContext = useRecordContext<Report>();
 
-    console.log(recordContext);
-
     return (
         <SimpleShowLayout sx={{ m: 3 }}>
             <TextField
