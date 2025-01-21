@@ -7,6 +7,7 @@ import {
   University,
   User,
 } from '../models';
+import { Edito } from '../models/edito.model';
 import { EventObject } from '../models/event.model';
 import { Instance } from '../models/Instance.model';
 
@@ -63,6 +64,8 @@ export interface MediaObjectRepository {
   saveNewsImage: (news: News, object: MediaObject) => Promise<void>;
 
   saveEventImage: (event: EventObject, object: MediaObject) => Promise<void>;
+
+  saveEditoImage: (edito: Edito, object: MediaObject) => Promise<void>;
 
   findOne(id: string): Promise<MediaObject | null>;
 

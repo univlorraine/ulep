@@ -13,6 +13,7 @@ import {
 
 export const EditoRelations = {
   University: { include: UniversityRelations },
+  Image: true,
   ContentTextContent: TextContentRelations,
 };
 

@@ -14,10 +14,12 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as Swagger from '@nestjs/swagger';
 import { ApiTags } from '@nestjs/swagger';
+import { Edito } from 'src/core/models/edito.model';
 import {
   GenerateEditosUsecase,
   GetEditoUsecase,
   UpdateEditoUsecase,
+  UploadEditoImageUsecase,
 } from 'src/core/usecases';
 import { GetEditosUsecase } from 'src/core/usecases/edito/get-editos.usecase';
 import { Role, Roles } from '../decorators/roles.decorator';
@@ -34,6 +36,7 @@ export class EditoController {
     private readonly getEditosUsecase: GetEditosUsecase,
     private readonly getEditoUsecase: GetEditoUsecase,
     private readonly updateEditoUsecase: UpdateEditoUsecase,
+    private readonly uploadEditoImageUsecase: UploadEditoImageUsecase,
   ) {}
 
   @Post('/generate')
@@ -87,11 +90,12 @@ export class EditoController {
     let edito = await this.updateEditoUsecase.execute({ id, ...body });
 
     if (file) {
-      /*       const uploadURL = await this.uploadEditoImageUsecase.execute({
+      const uploadURL = await this.uploadEditoImageUsecase.execute({
         id: edito.id,
         file,
-      }); */
-      // TODO: Implement image upload
+      });
+
+      edito = new Edito({ ...edito, imageURL: uploadURL });
     }
 
     return EditoResponse.fromDomain(edito);

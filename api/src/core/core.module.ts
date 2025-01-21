@@ -168,6 +168,7 @@ import {
   UploadAudioVocabularyActivityUsecase,
   UploadAudioVocabularyUsecase,
   UploadAvatarUsecase,
+  UploadEditoImageUsecase,
   UploadEventImageUsecase,
   UploadImageActivityUsecase,
   UploadLearningLanguageCertificateUsecase,
@@ -278,6 +279,7 @@ const usecases: Provider[] = [
   UploadUniversityDefaultCertificateUsecase,
   UploadLearningLanguageCertificateUsecase,
   UploadEventImageUsecase,
+  UploadEditoImageUsecase,
   // News
   GetNewsAdminUsecase,
   GetNewsUsecase,

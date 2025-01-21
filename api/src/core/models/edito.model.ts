@@ -24,6 +24,7 @@ export class Edito {
     this.languageCode = props.languageCode;
     this.translations = props.translations;
     this.image = props.image;
+    this.imageURL = props.imageURL;
     this.createdAt = props.createdAt;
     this.updatedAt = props.updatedAt;
   }
