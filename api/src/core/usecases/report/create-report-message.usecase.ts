@@ -28,6 +28,7 @@ export class CreateReportMessageCommand {
   filePath?: string;
   mediaType?: string;
   tandemId?: string;
+  messageId?: string;
   reportedUserId: string;
 }
 
@@ -90,6 +91,7 @@ export class CreateReportMessageUsecase {
           mediaType: command.mediaType,
           tandemUserName: `${reportedUser.firstname} ${reportedUser.lastname}`,
           tandemLanguage: tandem?.learningLanguages[0].language.code,
+          messageId: command.messageId,
         },
       }),
     );

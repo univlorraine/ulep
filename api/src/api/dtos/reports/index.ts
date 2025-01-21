@@ -2,6 +2,7 @@ import * as Swagger from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import {
   IsArray,
+  IsBoolean,
   IsEnum,
   IsNotEmpty,
   IsOptional,
@@ -89,6 +90,16 @@ export class CreateReportMessageRequest
   @IsOptional()
   @IsUUID()
   tandemId?: string;
+
+  @Swagger.ApiPropertyOptional({ type: 'string' })
+  @IsOptional()
+  @IsUUID()
+  messageId?: string;
+
+  @Swagger.ApiPropertyOptional({ type: 'boolean' })
+  @IsOptional()
+  @IsBoolean()
+  isMessageDeleted?: boolean;
 }
 
 export class UpdateReportStatusRequest
@@ -101,6 +112,11 @@ export class UpdateReportStatusRequest
   @Swagger.ApiProperty({ type: 'string' })
   @IsOptional()
   comment: string;
+
+  @Swagger.ApiPropertyOptional({ type: 'boolean' })
+  @IsOptional()
+  @IsBoolean()
+  shouldDeleteMessage?: boolean;
 }
 
 export class ReportCategoryResponse {
@@ -170,6 +186,14 @@ class ReportMetadataResponse {
   @Expose({ groups: ['read'] })
   tandemLanguage: string;
 
+  @Swagger.ApiProperty({ type: 'string' })
+  @Expose({ groups: ['read'] })
+  messageId: string;
+
+  @Swagger.ApiProperty({ type: 'boolean' })
+  @Expose({ groups: ['read'] })
+  isMessageDeleted: boolean;
+
   constructor(partial: Partial<ReportMetadataResponse>) {
     Object.assign(this, partial);
   }
@@ -180,6 +204,8 @@ class ReportMetadataResponse {
       mediaType: instance.mediaType,
       tandemUserName: instance.tandemUserName,
       tandemLanguage: instance.tandemLanguage,
+      messageId: instance.messageId,
+      isMessageDeleted: instance.isMessageDeleted,
     });
   }
 }

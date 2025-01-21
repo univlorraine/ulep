@@ -4,6 +4,8 @@ import User from './User';
 type MetadataReport = {
     filePath?: string;
     mediaType?: MessageType;
+    messageId?: string;
+    isMessageDeleted?: boolean;
 };
 
 type Report = {

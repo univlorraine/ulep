@@ -35,6 +35,7 @@ export interface Message {
   type: string;
   likes: string[];
   metadata: any;
+  isDeleted: boolean;
   numberOfReplies: number;
   parent?: Message;
 }
@@ -48,6 +49,7 @@ export interface MessageWithUser {
   likes: string[];
   metadata: any;
   numberOfReplies: number;
+  isDeleted: boolean;
   parent?: MessageWithUser;
 }
 
@@ -82,4 +84,5 @@ export interface ChatServicePort {
   createConversations(conversations: CreateConversations[]): Promise<any>;
   addUserToConversation(conversationId: string, userId: string): Promise<any>;
   deleteConversation(tandemId: string): Promise<any>;
+  deleteMessage(messageId: string, shouldDelete: boolean): Promise<any>;
 }

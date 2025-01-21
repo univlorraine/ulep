@@ -101,6 +101,8 @@ export class ConversationController {
                 parentId: params.parentId,
             });
 
+        console.log('messages', messages);
+
         return new CollectionResponse<MessageResponse>({
             items: messages.map(MessageResponse.from),
             totalItems: messages.length,

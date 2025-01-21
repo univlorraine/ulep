@@ -9,6 +9,7 @@ import NetworkImage from '../NetworkImage';
 import styles from './MessageComponent.module.css';
 import MessageActivity from './messages/MessageActivity';
 import MessageAudio from './messages/MessageAudio';
+import MessageDeleted from './messages/MessageDeleted';
 import MessageFile from './messages/MessageFile';
 import MessageImage from './messages/MessageImage';
 import MessageLink from './messages/MessageLink';
@@ -74,8 +75,8 @@ const MessageComponent: React.FC<MessageProps> = ({
     const [popoverEvent, setPopoverEvent] = useState<React.MouseEvent<HTMLIonButtonElement> | null>(null);
 
     const reportMessage = async () => {
-        const result = await createReportMessage.execute(
-            t(
+        const result = await createReportMessage.execute({
+            content: t(
                 message.type === MessageType.Text || message.type === MessageType.Link
                     ? 'chat.messageReport'
                     : 'chat.mediaReport',
@@ -86,10 +87,11 @@ const MessageComponent: React.FC<MessageProps> = ({
                     message: message.content,
                 }
             ),
-            message.sender.id,
-            message.metadata?.filePath,
-            message.type
-        );
+            reportedUserId: message.sender.id,
+            filePath: message.metadata?.filePath,
+            mediaType: message.type,
+            messageId: message.id,
+        });
 
         setDisplayPopover(false);
 
@@ -128,6 +130,16 @@ const MessageComponent: React.FC<MessageProps> = ({
     };
 
     const renderMessageContent = (message: Message) => {
+        if (message.isDeleted) {
+            return (
+                <MessageDeleted
+                    message={message}
+                    isCurrentUserMessage={isCurrentUserMessage}
+                    isCommunity={isCommunity}
+                />
+            );
+        }
+
         switch (message.type) {
             case MessageType.Text:
                 return (

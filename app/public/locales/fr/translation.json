@@ -29,7 +29,8 @@
             "audio": "Audio",
             "file": "Fichier",
             "vocabulary": "Liste de vocabulaire partagée",
-            "activity": "Fiche d'activité partagée"
+            "activity": "Fiche d'activité partagée",
+            "deleted": "Message supprimé"
         },
         "vocabulary": {
             "added": "Liste de vocabulaire ajoutée à votre profil"

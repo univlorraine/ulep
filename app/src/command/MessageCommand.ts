@@ -19,6 +19,7 @@ export interface MessageCommand {
     likes: number;
     didLike: boolean;
     numberOfReplies: number;
+    isDeleted: boolean;
     parent?: MessageCommand;
 }
 
@@ -43,7 +44,8 @@ export const messageWithoutSenderCommandToDomain = (command: MessageWithoutSende
                 ? vocabularyListCommandToDomain(command.metadata.vocabularyList)
                 : undefined,
         },
-        command.numberOfReplies
+        command.numberOfReplies,
+        command.isDeleted
     );
 };
 
@@ -64,6 +66,7 @@ export const messageCommandToDomain = (command: MessageCommand) => {
                 : undefined,
         },
         command.numberOfReplies,
+        command.isDeleted,
         command.parent?.id,
         command.parent
             ? new Message(

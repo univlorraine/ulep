@@ -628,15 +628,19 @@
         "title": "Reports",
         "OPEN": "Open",
         "status": "Status",
+        "isMessageDeleted": "Message deleted",
         "update": {
             "comment": "Update report comment",
             "error": "An error occurred while updating the alert",
             "status": "Update the status of the alert",
-            "title": "Report update"
+            "title": "Report update",
+            "deletion_status": "Do you want to delete the message from the conversation ?"
         },
         "error": {
             "unauthorized": "You are not authorized to edit this report"
-        }
+        },
+        "delete_message": "Delete message",
+        "undelete_message": "Undelete message"
     },
     "report_categories": {
         "create": {

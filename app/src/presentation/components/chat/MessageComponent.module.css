@@ -91,6 +91,10 @@
     padding: 8px;
 }
 
+.messageDeleted {
+    font-style: italic;
+}
+
 .messageLink {
     max-height: 20%;
     max-width: 50%;
