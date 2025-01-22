@@ -68,13 +68,9 @@
 }
 
 .replyHeader {
-    background-color: var(--primary-background-color);
+    background-color: #7db8b8;
     padding: 20px;
     width: 100%;
-}
-
-.replyHeaderCommunity {
-    background-color: var(--secondary-background-color);
 }
 
 .replyHeaderText {
