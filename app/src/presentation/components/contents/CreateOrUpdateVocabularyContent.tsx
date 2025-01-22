@@ -122,11 +122,11 @@ const CreateOrUpdateVocabularyContent: React.FC<CreateOrUpdateVocabularyContentP
                 onBackPressed={() => goBack?.()}
             />
             <div className={styles.container}>
-                <h1 className={styles.language}>{vocabularyList.wordLanguage.name}</h1>
+                <h1 className={styles.language}>{vocabularyList.targetLanguage.name}</h1>
                 <div className={styles.content}>
                     <TextInput
                         beforeInput={
-                            <span className={styles.flag}>{codeLanguageToFlag(vocabularyList.wordLanguage.code)}</span>
+                            <span className={styles.flag}>{codeLanguageToFlag(vocabularyList.targetLanguage.code)}</span>
                         }
                         value={word}
                         onChange={(value) => setWord(value)}
