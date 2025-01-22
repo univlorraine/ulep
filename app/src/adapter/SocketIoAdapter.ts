@@ -92,6 +92,7 @@ class SocketIoAdapter implements SocketIoAdapterInterface {
                     false,
                     message.metadata,
                     0,
+                    false,
                     message.parentId
                 )
             );
