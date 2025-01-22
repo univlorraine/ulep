@@ -284,6 +284,8 @@ export const normalizeString = (string: string) => {
         .replace('ue', 'ue')
         .replace('œ', 'oe')
         .replace('ø', 'oe')
+        .replace(/ /g, '_')
+        .toLowerCase()
         .normalize('NFD')
         .replace(/[\u0300-\u036f]/g, '');
 };

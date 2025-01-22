@@ -457,7 +457,9 @@ export class ActivityController {
       .replace('ue', 'ue')
       .replace('œ', 'oe')
       .replace('ø', 'oe')
+      .replace(/ /g, '_')
       .normalize('NFD')
+      .toLowerCase()
       .replace(/[\u0300-\u036f]/g, '');
   }
 }
