@@ -14,6 +14,7 @@ import { AUTHENTICATOR, InMemoryAuthenticator } from 'src/api/services';
 import { AppModule } from 'src/app.module';
 import { PairingMode } from 'src/core/models';
 import { COUNTRY_REPOSITORY } from 'src/core/ports/country.repository';
+import { EDITO_REPOSITORY } from 'src/core/ports/edito.repository';
 import { EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
 import { INSTANCE_REPOSITORY } from 'src/core/ports/instance.repository';
 import { LEARNING_LANGUAGE_REPOSITORY } from 'src/core/ports/learning-language.repository';
@@ -23,6 +24,7 @@ import { USER_REPOSITORY } from 'src/core/ports/user.repository';
 import InMemoryEmailGateway from 'src/providers/gateway/in-memory-email.gateway';
 import InMemoryNotificaitonGateway from 'src/providers/gateway/in-memory-notification.gateway';
 import { InMemoryCountryCodesRepository } from 'src/providers/persistance/repositories/in-memory-country-repository';
+import { InMemoryEditoRepository } from 'src/providers/persistance/repositories/in-memory-edito-repository';
 import { InMemoryInstanceRepository } from 'src/providers/persistance/repositories/in-memory-instance-repository';
 import { InMemoryLanguageRepository } from 'src/providers/persistance/repositories/in-memory-language-repository';
 import { InMemoryLearningLanguageRepository } from 'src/providers/persistance/repositories/in-memory-learning-language-repository';
@@ -63,6 +65,7 @@ describe('Universities', () => {
   const inMemoryEmail = new InMemoryEmailGateway();
   const inMemoryNotification = new InMemoryNotificaitonGateway();
   const inMemoryI18n = new InMemoryI18nService();
+  const inMemoryEdito = new InMemoryEditoRepository();
 
   beforeAll(async () => {
     userRepositoy.init([user]);
@@ -111,6 +114,8 @@ describe('Universities', () => {
       .useValue(instanceRepository)
       .overrideProvider(KeycloakClient)
       .useValue(keycloak)
+      .overrideProvider(EDITO_REPOSITORY)
+      .useValue(inMemoryEdito)
       .compile();
 
     app = TestServer.create(module.createNestApplication());
