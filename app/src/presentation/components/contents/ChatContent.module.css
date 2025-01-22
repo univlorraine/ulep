@@ -73,6 +73,10 @@
     width: 100%;
 }
 
+.replyHeaderCommunity {
+    background-color: var(--secondary-background-color);
+}
+
 .replyHeaderText {
     font-family: Maven Pro;
     font-size: 16px;

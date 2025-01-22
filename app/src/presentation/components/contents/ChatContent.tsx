@@ -343,7 +343,7 @@ const Content: React.FC<ChatContentProps> = ({
                 />
             )}
             {messageToReply && (
-                <div className={styles.replyHeader}>
+                <div className={`${styles.replyHeader} ${isCommunity ? styles.replyHeaderCommunity : ''}`}>
                     <IonButton fill="clear" onClick={onCancelReply} className={styles.replyHeaderButton}>
                         <IonIcon color="black" icon={arrowBackOutline} />
                         <span className={styles.replyHeaderText}>{t('chat.goBackToConversation')}</span>
