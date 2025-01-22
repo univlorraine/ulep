@@ -172,6 +172,7 @@ export const CreateActivityInformationsContent = ({
                 placeholder={t('activity.create.title_input_placeholder') as string}
                 maxLength={150}
                 required
+                showLimit
             />
 
             <span className={styles['input-label']}>
