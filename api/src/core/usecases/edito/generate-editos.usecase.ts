@@ -27,6 +27,14 @@ export class GenerateEditosUsecase {
     );
 
     const newEditos = universities.items.map((university) => {
+      const currentEdito = editos.find(
+        (edito) => edito.university.id === university.id,
+      );
+
+      if (currentEdito) {
+        return;
+      }
+
       const translationsLanguageCodes = [];
       if (
         university.nativeLanguage.code !== centralUniversity.nativeLanguage.code

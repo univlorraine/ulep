@@ -9,7 +9,7 @@ const EditoList = () => (
         <PageTitle>Editos</PageTitle>
         <List exporter={false} pagination={false}>
             <Datagrid rowClick="edit">
-                <TextField label="editos.list.university" source="university.name" />
+                <TextField label="editos.list.university" sortable={false} source="university.name" />
                 <FunctionField
                     label="editos.list.translations"
                     render={(record: Edito) => (
@@ -20,9 +20,10 @@ const EditoList = () => (
                             ))}
                         </>
                     )}
+                    sortable={false}
                     source="translations"
                 />
-                <DateField label="editos.list.updatedAt" source="updatedAt" />
+                <DateField label="editos.list.updatedAt" sortable={false} source="updatedAt" />
             </Datagrid>
         </List>
     </>

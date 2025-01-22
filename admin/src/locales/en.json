@@ -621,8 +621,8 @@
         "title": "Conversation generation"
     },
     "generateEditos": {
-        "title": "Générer les editos",
-        "error": "Une erreur est survenue lors de la génération des editos"
+        "title": "Editos generation",
+        "error": "An error occurred while the generation of the editos"
     },
     "questions": {
         "create": {

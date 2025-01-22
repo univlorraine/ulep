@@ -1,13 +1,13 @@
-import { Edit, useNotify, useRedirect, useTranslate, useUpdate, WithRecord } from 'react-admin';
-import EditoForm from '../../components/form/EditoForm';
-import PageTitle from '../../components/PageTitle';
-import { Edito, EditoFormPayload } from '../../entities/Edito';
+import { Edit, useNotify, useRefresh, useTranslate, useUpdate, WithRecord } from 'react-admin';
+import EditoForm from '../../../components/form/EditoForm';
+import PageTitle from '../../../components/PageTitle';
+import { Edito, EditoFormPayload } from '../../../entities/Edito';
 
 const EditEvent = () => {
     const translate = useTranslate();
     const [update] = useUpdate();
-    const redirect = useRedirect();
     const notify = useNotify();
+    const refresh = useRefresh();
 
     const handleSubmit = async (payload: EditoFormPayload) => {
         const formData = new FormData();
@@ -29,7 +29,7 @@ const EditEvent = () => {
                 {
                     onSettled: (_, error: any) => {
                         if (!error) {
-                            return redirect('/editos');
+                            return refresh();
                         }
 
                         return notify('editos.update.error', {

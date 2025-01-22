@@ -21,8 +21,6 @@ export class GetEditoUsecase {
   async execute(id: string) {
     const edito = await this.editoRepository.findById(id);
 
-    console.log({ edito });
-
     if (!edito) {
       throw new RessourceDoesNotExist();
     }

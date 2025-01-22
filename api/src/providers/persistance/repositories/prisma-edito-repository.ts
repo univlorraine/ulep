@@ -15,6 +15,7 @@ export class PrismaEditoRepository implements EditoRepository {
   async create(command: CreateEditoCommand): Promise<Edito> {
     const edito = await this.prisma.editos.create({
       data: {
+        id: command.universityId,
         ContentTextContent: {
           create: {
             text: '',

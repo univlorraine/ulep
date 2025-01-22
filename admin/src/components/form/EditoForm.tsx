@@ -1,20 +1,20 @@
 import { Box, Typography } from '@mui/material';
 import { RichTextInput } from 'ra-input-rich-text';
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Loading, TabbedForm, useGetIdentity, useRecordContext, useTranslate } from 'react-admin';
+import { Button, Form, Loading, TabbedForm, useGetIdentity, useTranslate } from 'react-admin';
 import { Edito, EditoFormPayload, EditoMandatoryTranslation, EditoTranslation } from '../../entities/Edito';
 import customDataProvider from '../../providers/customDataProvider';
 import ImageUploader from '../ImageUploader';
 
 interface EditoFormProps {
     handleSubmit: (payload: EditoFormPayload) => void;
+    record: Edito;
 }
 
-const EditoForm: React.FC<EditoFormProps> = ({ handleSubmit }) => {
+const EditoForm: React.FC<EditoFormProps> = ({ handleSubmit, record }) => {
     const dataProvider = customDataProvider;
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
     const translate = useTranslate();
-    const record: Edito = useRecordContext();
 
     const [mandatoryTranslationsConfig, setMandatoryTranslationsConfig] = useState<string[]>([]);
     const [mandatoryLanguages, setMandatoryLanguages] = useState<string[]>([]);

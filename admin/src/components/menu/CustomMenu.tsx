@@ -1,3 +1,4 @@
+import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
 import SchoolIcon from '@mui/icons-material/School';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Divider } from '@mui/material';
@@ -181,16 +182,22 @@ const CustomMenu = () => {
             <Menu.ResourceItem name="chat" />
             <Menu.ResourceItem name="news" />
             <Menu.ResourceItem name="events" />
-            <Menu.ResourceItem name="editos" />
             <Box ref={(newRef: HTMLDivElement) => setActivitiesRef(newRef)} sx={{ marginTop: 0 }}>
                 <Menu.ResourceItem name="activities" />
             </Box>
             {permissions.checkRole(Role.MANAGER) && data && data.universityId && (
-                <Menu.Item
-                    leftIcon={<SchoolIcon />}
-                    primaryText={translate('universities.label')}
-                    to={createPath({ resource: 'universities', id: data.universityId, type: 'show' })}
-                />
+                <div>
+                    <Menu.Item
+                        leftIcon={<SchoolIcon />}
+                        primaryText={translate('universities.label')}
+                        to={createPath({ resource: 'universities', id: data.universityId, type: 'show' })}
+                    />
+                    <Menu.Item
+                        leftIcon={<FormatQuoteIcon />}
+                        primaryText={translate('editos.label')}
+                        to={createPath({ resource: 'editos', id: data.universityId, type: 'show' })}
+                    />
+                </div>
             )}
             {permissions.checkRole(Role.SUPER_ADMIN) && (
                 // Note: div is mandatory to group these Menu.Item as Fragment throw an error from MUI component
@@ -198,6 +205,7 @@ const CustomMenu = () => {
                     <Box ref={(newRef: HTMLDivElement) => setUniversitiesRef(newRef)}>
                         <Menu.ResourceItem name="universities" />
                     </Box>
+                    <Menu.ResourceItem name="editos" />
                     <Menu.ResourceItem name="objectives" />
                     <Menu.ResourceItem name="proficiency/questions" />
                 </div>

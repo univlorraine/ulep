@@ -93,13 +93,22 @@ const App = () => (
                     {...activities}
                 />
                 {permissions.checkRole(Role.MANAGER) && (
-                    <Resource
-                        edit={universities.manager.edit}
-                        name="universities"
-                        options={{ label: 'universities.label' }}
-                        recordRepresentation="name"
-                        show={universities.manager.show}
-                    />
+                    <>
+                        <Resource
+                            edit={universities.manager.edit}
+                            name="universities"
+                            options={{ label: 'universities.label' }}
+                            recordRepresentation="name"
+                            show={universities.manager.show}
+                        />
+                        <Resource
+                            edit={editos.manager.edit}
+                            icon={FormatQuoteIcon}
+                            name="editos"
+                            options={{ label: 'editos.label' }}
+                            recordRepresentation="name"
+                        />
+                    </>
                 )}
                 {permissions.checkRoles([Role.MANAGER, Role.SUPER_ADMIN]) && (
                     <Resource
