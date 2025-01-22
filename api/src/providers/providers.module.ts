@@ -83,10 +83,6 @@ const providers: Provider[] = [
     useClass: PrismaCountryCodeRepository,
   },
   {
-    provide: EDITO_REPOSITORY,
-    useClass: PrismaEditoRepository,
-  },
-  {
     provide: INTEREST_REPOSITORY,
     useClass: PrismaInterestRepository,
   },
@@ -210,7 +206,10 @@ const providers: Provider[] = [
     provide: COMMUNITY_CHAT_REPOSITORY,
     useClass: PrismaCommunityChatRepository,
   },
-  ,
+  {
+    provide: EDITO_REPOSITORY,
+    useClass: PrismaEditoRepository,
+  },
 ];
 
 @Module({
