@@ -10,6 +10,7 @@
     text-transform: none;
     min-height: 110px;
     padding: 12px 0px;
+    overflow: hidden;
 }
 
 .content {
@@ -29,6 +30,9 @@
     font-weight: 500;
     line-height: 20px;
     text-align: start;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .image {

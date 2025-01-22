@@ -54,7 +54,10 @@
         "join": "M'y rendre",
         "join_online": "Rejoindre",
         "load_more": "Voir plus",
-        "add_to_calendar_success": "Fichier ics téléchargé"
+        "add_to_calendar_success": "Fichier ics téléchargé",
+        "list": {
+            "title": "Événements"
+        }
     },
     "news": {
         "list": {

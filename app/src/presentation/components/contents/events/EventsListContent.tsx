@@ -9,7 +9,7 @@ import EventLine from '../../events/EventLine';
 import HeaderSubContent from '../../HeaderSubContent';
 import FilterModal, { FiltersToDisplay } from '../../modals/FilterModal';
 import SearchAndFilter, { Filter, FilterType } from '../../SearchAndFilter';
-
+import styles from './EventsListContent.module.css';
 interface EventsListContentProps {
     profile: Profile;
     onBackPressed: () => void;
@@ -48,7 +48,7 @@ export const EventsListContent: React.FC<EventsListContentProps> = ({ profile, o
 
     return (
         <div className="subcontent-container content-wrapper" style={{ paddingTop: 0 }} ref={contentRef}>
-            <HeaderSubContent title={t('news.list.title')} onBackPressed={onBackPressed} />
+            <HeaderSubContent title={t('events.list.title')} onBackPressed={onBackPressed} />
             <SearchAndFilter
                 allFilters={languageFilter.map((lang) => ({
                     id: lang.code,
@@ -61,15 +61,17 @@ export const EventsListContent: React.FC<EventsListContentProps> = ({ profile, o
                 setSearchTitle={setSearchTitle}
                 setShowFiltersModal={setShowFiltersModal}
             />
-            {events.length > 0 &&
-                events.map((event) => (
-                    <EventLine
-                        key={event.id}
-                        event={event}
-                        onClick={() => handleEventPressed(event)}
-                        profile={profile}
-                    />
-                ))}
+            <div className={styles.list}>
+                {events.length > 0 &&
+                    events.map((event) => (
+                        <EventLine
+                            key={event.id}
+                            event={event}
+                            onClick={() => handleEventPressed(event)}
+                            profile={profile}
+                        />
+                    ))}
+            </div>
             {!isEventsListEnded && (
                 <IonButton fill="clear" className="secondary-button" onClick={onLoadMoreEvents}>
                     {t('events.load_more')}
