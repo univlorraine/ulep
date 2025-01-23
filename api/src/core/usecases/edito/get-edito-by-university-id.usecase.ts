@@ -11,7 +11,7 @@ import {
 } from 'src/core/ports/storage.interface';
 
 @Injectable()
-export class GetEditoUsecase {
+export class GetEditoByUniversityIdUsecase {
   constructor(
     @Inject(EDITO_REPOSITORY)
     private readonly editoRepository: EditoRepository,
@@ -19,8 +19,8 @@ export class GetEditoUsecase {
     private readonly storage: StorageInterface,
   ) {}
 
-  async execute(id: string): Promise<Edito> {
-    const edito = await this.editoRepository.findById(id);
+  async execute(universityId: string): Promise<Edito> {
+    const edito = await this.editoRepository.findByUniversityId(universityId);
 
     if (!edito) {
       throw new RessourceDoesNotExist();

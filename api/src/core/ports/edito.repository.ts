@@ -19,5 +19,6 @@ export interface EditoRepository {
   create(props: CreateEditoCommand): Promise<Edito>;
   findAll(): Promise<Edito[]>;
   findById(id: string): Promise<Edito>;
+  findByUniversityId(universityId: string): Promise<Edito>;
   update(props: UpdateEditoCommand): Promise<Edito>;
 }

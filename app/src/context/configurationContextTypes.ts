@@ -46,6 +46,7 @@ import GetAllLanguagesUsecaseInterface from '../domain/interfaces/GetAllLanguage
 import GetAllSessionsUsecaseInterface from '../domain/interfaces/GetAllSessionsUsecase.interface';
 import GetAllTandemsUsecaseInterface from '../domain/interfaces/GetAllTandemsUsecase.interface';
 import GetAllUniversitiesUsecaseInterface from '../domain/interfaces/GetAllUniversitiesUsecase.interface';
+import GetEditoByUniversityIdUsecaseInterface from '../domain/interfaces/GetEditoByUniversityIdUsecase.interface';
 import GetHistoricEmailPartnerUsecaseInterface from '../domain/interfaces/GetHistoricEmailPartnerUsecase.interface';
 import GetJitsiTokenUsecaseInterface from '../domain/interfaces/GetJitsiTokenUsecase.interface';
 import GetMediaObjectUsecaseInterface from '../domain/interfaces/GetMediaObjectUsecase.interface';
@@ -185,4 +186,6 @@ export interface ConfigContextValueType {
     getLogEntriesByDate: GetLogEntriesByDateUsecaseInterface;
     shareLogEntries: ShareLogEntriesUsecaseInterface;
     exportLogEntries: ExportLogEntriesUsecaseInterface;
+    // Edito
+    getEditoByUniversityId: GetEditoByUniversityIdUsecaseInterface;
 }

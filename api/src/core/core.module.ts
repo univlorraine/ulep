@@ -101,6 +101,7 @@ import {
   GetCategoriesUsecase,
   GetCountriesUniversitiesUsecase,
   GetCountriesUsecase,
+  GetEditoByUniversityIdUsecase,
   GetEditosUsecase,
   GetEditoUsecase,
   GetInstanceUsecase,
@@ -241,6 +242,7 @@ const usecases: Provider[] = [
   UpdateCountryStatusUsecase,
   // Edito
   GenerateEditosUsecase,
+  GetEditoByUniversityIdUsecase,
   GetEditosUsecase,
   GetEditoUsecase,
   UpdateEditoUsecase,

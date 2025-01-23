@@ -44,6 +44,10 @@ export class InMemoryEditoRepository implements EditoRepository {
     return Promise.resolve(this.#editos[0]);
   }
 
+  async findByUniversityId(universityId: string): Promise<Edito> {
+    return Promise.resolve(this.#editos[0]);
+  }
+
   async update(command: UpdateEditoCommand): Promise<Edito> {
     return Promise.resolve(this.#editos[0]);
   }
