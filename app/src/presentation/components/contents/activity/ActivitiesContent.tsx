@@ -22,6 +22,7 @@ interface ActivitiesContentProps {
     onActivityClick: (activity: Activity) => void;
     profile: Profile;
     isModal?: boolean;
+    currentLearningLanguage?: Language;
 }
 
 export const ActivitiesContent: React.FC<ActivitiesContentProps> = ({
@@ -31,12 +32,15 @@ export const ActivitiesContent: React.FC<ActivitiesContentProps> = ({
     profile,
     themes,
     isModal,
+    currentLearningLanguage,
 }) => {
     const { t } = useTranslation();
     const { width } = useWindowDimensions();
     const isHybrid = width < HYBRID_MAX_WIDTH;
     const [searchTitle, setSearchTitle] = useState<string>('');
-    const [languageFilter, setLanguageFilter] = useState<Language[]>([]);
+    const [languageFilter, setLanguageFilter] = useState<Language[]>(
+        currentLearningLanguage ? [currentLearningLanguage] : []
+    );
     const [proficiencyFilter, setProficiencyFilter] = useState<CEFR[]>([]);
     const [activityThemeFilter, setActivityThemeFilter] = useState<ActivityTheme[]>([]);
     const [shouldTakeAllMineFilter, setShouldTakeAllMineFilter] = useState<boolean>(false);
