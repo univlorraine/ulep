@@ -1,4 +1,5 @@
 import Campus from './Campus';
+import Language from './Language';
 
 class University {
     constructor(
@@ -14,6 +15,8 @@ class University {
         public readonly openServiceDate: Date,
         public readonly closeServiceDate: Date,
         public readonly maxTandemsPerUser: number,
+        public readonly nativeLanguage: Language,
+        public readonly website?: string,
         public readonly logo?: string
     ) {}
 }

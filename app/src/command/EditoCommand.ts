@@ -3,20 +3,13 @@ import UniversityCommand, { universityCommandToDomain } from './UniversityComman
 
 interface EditoCommand {
     id: string;
-    title: string;
-    description: string;
+    content: string;
     university: UniversityCommand;
-    image?: { id: string; mimeType: string };
+    imageURL?: string;
 }
 
 export const editoCommandToDomain = (command: EditoCommand) => {
-    return new Edito(
-        command.id,
-        command.title,
-        command.description,
-        universityCommandToDomain(command.university),
-        command.image?.id
-    );
+    return new Edito(command.id, command.content, universityCommandToDomain(command.university), command.imageURL);
 };
 
 export default EditoCommand;

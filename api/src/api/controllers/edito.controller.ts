@@ -3,6 +3,7 @@ import {
   Body,
   Controller,
   Get,
+  Headers,
   Param,
   Post,
   Put,
@@ -66,6 +67,20 @@ export class EditoController {
     });
   }
 
+  @Get('university/:id')
+  @UseGuards(AuthenticationGuard)
+  @SerializeOptions({ groups: ['read'] })
+  @Swagger.ApiOperation({ summary: 'Get an Edito resource by university id.' })
+  @Swagger.ApiOkResponse({ type: EditoResponse })
+  async getEditoByUniversityId(
+    @Param('id') id: string,
+    @Headers('Language-code') languageCode?: string,
+  ) {
+    const edito = await this.getEditoByUniversityIdUsecase.execute(id);
+
+    return EditoResponse.fromDomain(edito, languageCode);
+  }
+
   @Get(':id')
   @UseGuards(AuthenticationGuard)
   @SerializeOptions({ groups: ['read'] })
@@ -73,17 +88,6 @@ export class EditoController {
   @Swagger.ApiOkResponse({ type: EditoResponse })
   async getEdito(@Param('id') id: string) {
     const edito = await this.getEditoUsecase.execute(id);
-
-    return EditoResponse.fromDomain(edito);
-  }
-
-  @Get('university/:id')
-  @UseGuards(AuthenticationGuard)
-  @SerializeOptions({ groups: ['read'] })
-  @Swagger.ApiOperation({ summary: 'Get an Edito resource by university id.' })
-  @Swagger.ApiOkResponse({ type: EditoResponse })
-  async getEditoByUniversityId(@Param('id') id: string) {
-    const edito = await this.getEditoByUniversityIdUsecase.execute(id);
 
     return EditoResponse.fromDomain(edito);
   }

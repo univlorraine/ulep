@@ -10,9 +10,7 @@ class GetEditoByUniversityIdUsecase implements GetEditoByUniversityIdUsecaseInte
     async execute(universityId: string): Promise<Edito | Error> {
         try {
             const httpResponse: HttpResponse<EditoCommand> = await this.domainHttpAdapter.get(
-                `/editos/university/${universityId}`,
-                {},
-                false
+                `/editos/university/${universityId}`
             );
 
             if (!httpResponse.parsedBody) {

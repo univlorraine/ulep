@@ -49,10 +49,6 @@ export class InstanceController {
     @Body() body: UpdateInstanceRequest,
     @UploadedFile() defaultCertificateFile: Express.Multer.File,
   ): Promise<InstanceResponse> {
-    if (!body.editoMandatoryTranslations) {
-      body.editoMandatoryTranslations = [];
-    }
-
     const instance = await this.updateInstanceUsecase.execute(body);
 
     if (defaultCertificateFile) {

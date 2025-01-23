@@ -10,6 +10,7 @@ import { useStoreActions, useStoreState } from '../../../store/storeTypes';
 import useLogout from '../../hooks/useLogout';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 import { BACKGROUND_PROFILE_STYLE_INLINE, HYBRID_MAX_WIDTH } from '../../utils';
+import EditoContentModal from '../modals/EditoContentModal';
 import ProfileDetailsCard from '../profile/ProfileDetailsCard';
 import styles from './ProfileContent.module.css';
 
@@ -23,6 +24,7 @@ const ProfileContent: React.FC<ProfileContentProps> = ({ onDisplaySettings, prof
     const { t } = useTranslation();
     const [showToast] = useIonToast();
     const [loading, setLoading] = useState<boolean>(false);
+    const [universityId, setUniversityId] = useState<string | undefined>(undefined);
     const { updateProfile } = useStoreActions((store) => store);
     const { language } = useStoreState((store) => store);
     const { cameraAdapter, updateAvatar } = useConfig();
@@ -115,7 +117,7 @@ const ProfileContent: React.FC<ProfileContentProps> = ({ onDisplaySettings, prof
                     <ProfileDetailsCard
                         user={user}
                         title={t('profile_page.university_card.title')}
-                        onPress={() => {}}
+                        onPress={() => setUniversityId(user.university.id)}
                         textButton={t('profile_page.university_card.button')}
                         subtitle={user.university.name}
                         firstInfo={t('profile_page.university_card.semester_date') || ''}
@@ -136,6 +138,11 @@ const ProfileContent: React.FC<ProfileContentProps> = ({ onDisplaySettings, prof
                     ))}
                 </div>
             </div>
+            <EditoContentModal
+                universityId={universityId}
+                onClose={() => setUniversityId(undefined)}
+                profile={profile}
+            />
         </div>
     );
 };
