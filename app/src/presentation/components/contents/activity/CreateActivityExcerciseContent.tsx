@@ -125,6 +125,7 @@ export const CreateActivityExcerciseContent: React.FC<CreateActivityExcerciseCon
                             placeholder={t('activity.create.excercise_placeholder') as string}
                             type="text-area"
                             maxLength={250}
+                            showLimit
                         />
                     </div>
                 ))}
