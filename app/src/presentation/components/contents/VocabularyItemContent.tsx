@@ -74,7 +74,7 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
     let vocabulariesWithoutPronunciation;
     if (
         [profile.nativeLanguage, ...profile.masteredLanguages].filter(
-            (language) => language.code === vocabularyList.wordLanguage.code
+            (language) => language.code === vocabularyList.targetLanguage.code
         ).length > 0
     ) {
         vocabulariesWithoutPronunciation = vocabularyPairs.filter((vocabulary) => {
