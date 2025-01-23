@@ -102,7 +102,11 @@ const MessagesList: React.FC<MessagesListProps> = ({
     };
 
     return (
-        <div className={styles.messages} onScroll={handleScroll} role="list">
+        <div
+            className={`${styles.messages} ${isCommunity ? styles.messagesCommunity : ''}`}
+            onScroll={handleScroll}
+            role="list"
+        >
             {isLoading && (
                 <div className={styles.loader}>
                     {/* TODO: Upgrade to use a better loader */}

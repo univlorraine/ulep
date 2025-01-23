@@ -60,6 +60,7 @@ const useFetchConfiguration = (apiUrl: string) => {
             document.documentElement.style.setProperty('--primary-background-color', result.primaryBackgroundColor);
             document.documentElement.style.setProperty('--secondary-color', result.secondaryColor);
             document.documentElement.style.setProperty('--secondary-dark-color', result.secondaryDarkColor);
+            document.documentElement.style.setProperty('--secondary-background-color', result.secondaryBackgroundColor);
         } catch (error: any) {
             setError(error);
             showToast({ message: error.message, duration: 5000 });

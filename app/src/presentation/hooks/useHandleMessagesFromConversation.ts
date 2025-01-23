@@ -348,6 +348,10 @@ const useHandleMessagesFromConversation = ({
     };
 
     useEffect(() => {
+        setCurrentMessageReply(undefined);
+    }, [conversationId]);
+
+    useEffect(() => {
         const fetchData = async () => {
             await onLoadMessages({ isFirstMessage: true });
         };
