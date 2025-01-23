@@ -109,46 +109,67 @@ export class PrismaEventRepository implements EventRepository {
     filters,
   }: FindEventsForAnUserProps): Promise<Collection<EventObject>> {
     const where: Prisma.EventsWhereInput = {
-      TitleTextContent: {
-        text: {
-          contains: filters.title,
-          mode: 'insensitive',
+      AND: [
+        {
+          ...(filters.title && {
+            TitleTextContent: {
+              text: {
+                contains: filters.title,
+                mode: 'insensitive',
+              },
+            },
+          }),
         },
-      },
-      ...(filters.universityId && {
-        OR: [
-          {
-            ConcernedUniversities: {
-              some: {
-                id: filters.universityId,
+        {
+          ...(filters.universityId && {
+            OR: [
+              {
+                ConcernedUniversities: {
+                  some: {
+                    id: filters.universityId,
+                  },
+                },
               },
-            },
-          },
-          {
-            AuthorUniversity: {
-              id: filters.universityId,
-            },
-          },
-        ],
-      }),
-      ...(filters.allowedLanguages && {
-        OR: filters.allowedLanguages.map((languageList) => ({
-          DiffusionLanguages: {
-            every: {
-              code: {
-                in: languageList,
+              {
+                AuthorUniversity: {
+                  id: filters.universityId,
+                },
               },
-            },
+              {
+                ConcernedUniversities: {
+                  none: {},
+                },
+              },
+            ],
+          }),
+        },
+        {
+          ...(filters.allowedLanguages && {
+            OR: filters.allowedLanguages.map((languageList) => ({
+              DiffusionLanguages: {
+                every: {
+                  code: {
+                    in: languageList,
+                  },
+                },
+              },
+            })),
+          }),
+        },
+        { status: filters.status },
+        {
+          end_date: {
+            gte: startOfDay(new Date()),
           },
-        })),
-      }),
-      status: filters.status,
-      end_date: {
-        gte: startOfDay(new Date()),
-      },
-      type: {
-        in: filters.types,
-      },
+        },
+        {
+          ...(filters.types && {
+            type: {
+              in: filters.types,
+            },
+          }),
+        },
+      ],
     };
 
     const { page, limit } = pagination;
@@ -285,9 +306,12 @@ export class PrismaEventRepository implements EventRepository {
         with_subscription: props.withSubscription,
         ConcernedUniversities: {
           set: [],
-          connect: props.concernedUniversities.map((university) => ({
-            id: university,
-          })),
+          ...(props.concernedUniversities &&
+            props.concernedUniversities.length > 0 && {
+              connect: props.concernedUniversities.map((university) => ({
+                id: university,
+              })),
+            }),
         },
         DiffusionLanguages: {
           set: [],

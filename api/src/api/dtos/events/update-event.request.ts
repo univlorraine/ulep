@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import {
+  isArray,
   IsArray,
   IsBoolean,
   IsDate,
@@ -77,7 +78,6 @@ export class UpdateEventRequest {
   diffusionLanguages: string[];
 
   @ApiProperty()
-  @IsArray()
-  @IsString({ each: true })
+  @Transform(({ value }) => (isArray(value) ? value : []))
   concernedUniversities: string[];
 }

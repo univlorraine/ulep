@@ -67,7 +67,10 @@
         "join_online": "Join online",
         "add_to_calendar": "Add to calendar",
         "load_more": "See more",
-        "add_to_calendar_success": "ICS file downloaded"
+        "add_to_calendar_success": "ICS file downloaded",
+        "list": {
+            "title": "Events"
+        }
     },
     "news": {
         "list": {
