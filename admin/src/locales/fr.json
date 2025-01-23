@@ -629,16 +629,20 @@
         "tabLabel": "Liste des signalements",
         "title": "Signalements",
         "OPEN": "Ouvert",
+        "isMessageDeleted": "Message supprimé",
         "status": "État",
         "update": {
             "comment": "Mettez à jour le commentaire du signalement",
             "error": "Une erreur est survenue pendant la mise à jour du signalement",
             "status": "Mettez à jour l'état du signalement",
-            "title": "Mise à jour du signalement"
+            "title": "Mise à jour du signalement",
+            "deletion_status": "Voulez-vous supprimer le message de la conversation ?"
         },
         "error": {
             "unauthorized": "Vous n'êtes pas autorisé à modifier ce signalement"
-        }
+        },
+        "delete_message": "Supprimer le message",
+        "undelete_message": "Restaurer le message"
     },
     "report_categories": {
         "create": {

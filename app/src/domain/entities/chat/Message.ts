@@ -32,7 +32,8 @@ export class MessageWithoutSender {
         public likes: number = 0,
         public didLike: boolean = false,
         public readonly metadata: MessageMetadata,
-        public readonly numberOfReplies: number = 0
+        public readonly numberOfReplies: number = 0,
+        public readonly isDeleted: boolean = false
     ) {}
 
     public getMessageDate(): string {
@@ -82,10 +83,11 @@ export class Message extends MessageWithoutSender {
         public didLike: boolean = false,
         public readonly metadata: MessageMetadata,
         public readonly numberOfReplies: number = 0,
+        public readonly isDeleted: boolean = false,
         public readonly parentId?: string,
         public readonly parent?: Message
     ) {
-        super(id, content, createdAt, sender.id, type, likes, didLike, metadata, numberOfReplies);
+        super(id, content, createdAt, sender.id, type, likes, didLike, metadata, numberOfReplies, isDeleted);
     }
 }
 
@@ -101,9 +103,10 @@ export class MessageWithConversationId extends Message {
         public didLike: boolean = false,
         public readonly metadata: any,
         public readonly numberOfReplies: number = 0,
+        public readonly isDeleted: boolean = false,
         public readonly parentId?: string,
         public readonly parent?: Message
     ) {
-        super(id, content, createdAt, sender, type, likes, didLike, metadata, numberOfReplies);
+        super(id, content, createdAt, sender, type, likes, didLike, metadata, numberOfReplies, isDeleted);
     }
 }

@@ -81,6 +81,7 @@ export class PrismaMessageRepository implements MessageRepository {
                 content: message.content,
                 isReported: message.isReported,
                 type: message.type,
+                isDeleted: message.isDeleted,
             },
             ...MessagesRelations,
         });

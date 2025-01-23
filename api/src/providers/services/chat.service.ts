@@ -199,6 +199,24 @@ export class ChatService implements ChatServicePort {
     }
   }
 
+  async deleteMessage(messageId: string, shouldDelete: boolean): Promise<any> {
+    if (!this.env.get('CHAT_URL')) {
+      return;
+    }
+
+    try {
+      const response = await axios.put(
+        this.env.get('CHAT_URL') + '/messages/' + messageId,
+        { isDeleted: shouldDelete },
+        { headers: this.headers },
+      );
+
+      return response.data;
+    } catch (error) {
+      this.logger.error('Error while deleting message', { error });
+    }
+  }
+
   async addUserToConversation(
     conversationId: string,
     userId: string,

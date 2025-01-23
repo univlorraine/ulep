@@ -228,6 +228,7 @@ const useHandleMessagesFromConversation = ({
                 false,
                 { ...messageResult.metadata, ...metadata },
                 0,
+                false,
                 currentMessageReply?.id
             )
         );

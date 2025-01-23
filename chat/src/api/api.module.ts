@@ -7,10 +7,16 @@ import { HealthController } from 'src/api/controllers/health.controller';
 import { PrismaService } from '@app/common';
 import { CoreModule } from 'src/core/core.module';
 import { PurgeController } from 'src/api/controllers/purge.controller';
+import { MessageController } from 'src/api/controllers/message.controller';
 
 @Module({
     imports: [CoreModule, TerminusModule],
-    controllers: [ConversationController, HealthController, PurgeController],
+    controllers: [
+        ConversationController,
+        HealthController,
+        MessageController,
+        PurgeController,
+    ],
     providers: [
         {
             provide: AUTHENTICATOR,

@@ -1,5 +1,6 @@
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import {
+    BooleanField,
     Button,
     EditButton,
     FunctionField,
@@ -51,6 +52,42 @@ const ReportMedia = () => {
     }
 };
 
+const ReportData = () => {
+    const translate = useTranslate();
+    const recordContext = useRecordContext<Report>();
+
+    return (
+        <SimpleShowLayout sx={{ m: 3 }}>
+            <TextField
+                emptyText={translate('global.deleted_user')}
+                label={translate('global.firstname')}
+                source="user.firstname"
+            />
+            <TextField
+                emptyText={translate('global.deleted_user')}
+                label={translate('global.lastname')}
+                source="user.lastname"
+            />
+            <TextField
+                emptyText={translate('global.deleted_user')}
+                label={translate('global.email')}
+                source="user.email"
+            />
+            <FunctionField
+                label={translate('reports.status')}
+                render={(record: Report) => translate(`reports.${record.status}`)}
+                source="status"
+            />
+            <TextField label={translate('reports.category')} source="category.name" />
+            <FunctionField label={translate('global.content')} render={() => <ReportMedia />} />
+            <TextField component="pre" label={translate('reports.comment')} source="comment" />
+            {recordContext && recordContext.metadata && recordContext.metadata.messageId && (
+                <BooleanField label={translate('reports.isMessageDeleted')} source="metadata.isMessageDeleted" />
+            )}
+        </SimpleShowLayout>
+    );
+};
+
 const ReportShow = () => {
     const translate = useTranslate();
 
@@ -58,31 +95,7 @@ const ReportShow = () => {
         <>
             <ReportsPagesHeader />
             <Show actions={<ReportShowAction />} title={translate('reports.label')}>
-                <SimpleShowLayout sx={{ m: 3 }}>
-                    <TextField
-                        emptyText={translate('global.deleted_user')}
-                        label={translate('global.firstname')}
-                        source="user.firstname"
-                    />
-                    <TextField
-                        emptyText={translate('global.deleted_user')}
-                        label={translate('global.lastname')}
-                        source="user.lastname"
-                    />
-                    <TextField
-                        emptyText={translate('global.deleted_user')}
-                        label={translate('global.email')}
-                        source="user.email"
-                    />
-                    <FunctionField
-                        label={translate('reports.status')}
-                        render={(record: Report) => translate(`reports.${record.status}`)}
-                        source="status"
-                    />
-                    <TextField label={translate('reports.category')} source="category.name" />
-                    <FunctionField label={translate('global.content')} render={() => <ReportMedia />} />
-                    <TextField component="pre" label={translate('reports.comment')} source="comment" />
-                </SimpleShowLayout>
+                <ReportData />
             </Show>
         </>
     );

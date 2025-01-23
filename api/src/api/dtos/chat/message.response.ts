@@ -142,6 +142,10 @@ export class MessageResponse {
 
   @Swagger.ApiProperty({ type: 'boolean' })
   @Expose({ groups: ['read'] })
+  isDeleted: boolean;
+
+  @Swagger.ApiProperty({ type: 'boolean' })
+  @Expose({ groups: ['read'] })
   didLike: boolean;
 
   @Swagger.ApiProperty({ type: 'object' })
@@ -172,6 +176,7 @@ export class MessageResponse {
       likes: message.likes.length,
       didLike: message.likes.some((like) => like === userId),
       user: UserChatResponse.fromDomain(message.user),
+      isDeleted: message.isDeleted,
       type: message.type,
       metadata: MetadataMessageResponse.from(message.metadata, languageCode),
       numberOfReplies: message.numberOfReplies,
