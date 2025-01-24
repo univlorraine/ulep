@@ -45,6 +45,9 @@ describe('askForLearningLanguage', () => {
             sameGender: true,
             sameTandem: true,
             learningType: 'TANDEM',
+            visioDuration: 0,
+            countActivities: 0,
+            countVocabularies: 0,
         });
     });
 
