@@ -42,9 +42,9 @@ export const learningLanguageResultToDomain = (result: LearningLanguageResult) =
         result.certificateFile ? mediaObjectCommandToDomain(result.certificateFile) : undefined,
         result.sharedCertificate,
         result.sharedLogsDate,
-        result.visioDuration ?? 0,
-        result.countVocabularies ?? 0,
-        result.countActivities ?? 0
+        result.visioDuration,
+        result.countVocabularies,
+        result.countActivities
     );
 
 export default learningLanguageResultToDomain;
