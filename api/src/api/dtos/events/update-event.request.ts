@@ -78,6 +78,7 @@ export class UpdateEventRequest {
   diffusionLanguages: string[];
 
   @ApiProperty()
-  @Transform(({ value }) => (isArray(value) ? value : []))
+  @IsOptional()
+  @Transform(({ value }) => (isArray(value) ? value : [value]))
   concernedUniversities: string[];
 }
