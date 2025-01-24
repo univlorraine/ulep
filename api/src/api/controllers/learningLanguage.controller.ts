@@ -13,6 +13,7 @@ import {
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import { GetLearningLanguageMatchesUsecase } from 'src/core/usecases';
+import { CountActivitiesUsecase } from 'src/core/usecases/activity/count-activities.usecase';
 import {
   GenerateCertificateUsecase,
   GetLearningLanguageOfIdUsecase,
@@ -21,7 +22,9 @@ import {
 } from 'src/core/usecases/learningLanguage';
 import { DeleteLearningLanguageUsecase } from 'src/core/usecases/learningLanguage/delete-learning-langugage.usecase';
 import { GetLearningLanguageTandemUsecase } from 'src/core/usecases/learningLanguage/getLearningLanguageTandem.usecase';
+import { UpdateVisioDurationUsecase } from 'src/core/usecases/learningLanguage/update-visio-duration.usecase';
 import { UploadLearningLanguageCertificateUsecase } from 'src/core/usecases/media/upload-learning-language-certificate.usecase';
+import { CountVocabulariesUsecase } from 'src/core/usecases/vocabulary/count-vocabularies.usecase';
 import { CollectionResponse } from '../decorators';
 import { Role, Roles } from '../decorators/roles.decorator';
 import {
@@ -33,6 +36,7 @@ import {
 } from '../dtos';
 import { GenerateCertificateRequest } from '../dtos/learning-languages/generate-certificate.request';
 import { GetLearningLanguageMatchsRequest } from '../dtos/learning-languages/get-learning-language-matches.request';
+import { UpdateVisioDurationRequest } from '../dtos/learning-languages/update-visio-duration.request';
 import { AuthenticationGuard } from '../guards';
 
 @Controller('learning-languages')
@@ -47,6 +51,9 @@ export class LearningLanguageController {
     private updateLearningLanguageUsecase: UpdateLearningLanguageUsecase,
     private generateCertificateUsecase: GenerateCertificateUsecase,
     private uploadLearningLanguageCertificateUsecase: UploadLearningLanguageCertificateUsecase,
+    private updateVisioDurationUsecase: UpdateVisioDurationUsecase,
+    private countVocabulariesUsecase: CountVocabulariesUsecase,
+    private countActivitiesUsecase: CountActivitiesUsecase,
   ) {}
 
   @Get()
@@ -88,8 +95,8 @@ export class LearningLanguageController {
     });
 
     return new Collection<LearningLanguageWithTandemResponse>({
-      items: result.items.map((ll) =>
-        LearningLanguageWithTandemResponse.fromDomain(ll),
+      items: result.items.map((learningLanguage) =>
+        LearningLanguageWithTandemResponse.fromDomain({ learningLanguage }),
       ),
       totalItems: result.totalItems,
     });
@@ -108,7 +115,7 @@ export class LearningLanguageController {
       id,
     });
 
-    return LearningLanguageResponse.fromDomain(learningLanguage);
+    return LearningLanguageResponse.fromDomain({ learningLanguage });
   }
 
   @Get(':id/matches')
@@ -191,6 +198,24 @@ export class LearningLanguageController {
       },
     );
 
-    return LearningLanguageResponse.fromDomain(learningLanguage);
+    return LearningLanguageResponse.fromDomain({ learningLanguage });
+  }
+
+  @Put(':id/update-visio-duration')
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({
+    summary: 'Update visio duration learning language ressource.',
+  })
+  @Swagger.ApiCreatedResponse({ type: LearningLanguageResponse })
+  async updateVisioDuration(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() body: UpdateVisioDurationRequest,
+  ): Promise<void> {
+    await this.updateVisioDurationUsecase.execute({
+      learningLanguageId: id,
+      partnerTandemId: body.partnerTandemId,
+      partnerFirstname: body.partnerFirstname,
+      partnerLastname: body.partnerLastname,
+    });
   }
 }

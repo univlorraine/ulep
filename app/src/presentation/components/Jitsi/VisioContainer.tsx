@@ -14,14 +14,21 @@ export interface JitsiProps {
     language: string;
     roomName: string;
     jitsiToken: string;
+}
+
+interface VisioContainerProps {
     tandemPartner?: Profile | UserChat;
     learningLanguageId: string;
 }
 
+const isProfile = (obj: any): obj is Profile => {
+    return obj && obj.user && typeof obj.user.firstname === 'string' && typeof obj.user.lastname === 'string';
+};
+
 const VisioContainer = () => {
     const { i18n } = useTranslation();
-    const location = useLocation<JitsiProps>();
-    const { accessToken, getJitsiToken } = useConfig();
+    const location = useLocation<VisioContainerProps>();
+    const { accessToken, getJitsiToken, updateVisioDuration } = useConfig();
     const history = useHistory();
     const [jitsiToken, setJitsiToken] = useState<string>();
     const jitsiUrl = useStoreState((state) => state.jitsiUrl);
@@ -42,33 +49,35 @@ const VisioContainer = () => {
         fetchJitsiToken();
     }, []);
 
+    useEffect(() => {
+        if (!tandemPartner) {
+            return;
+        }
+
+        const firstname = isProfile(tandemPartner) ? tandemPartner.user.firstname : tandemPartner.firstname;
+        const lastname = isProfile(tandemPartner) ? tandemPartner.user.lastname : tandemPartner.lastname;
+
+        const interval = setInterval(() => {
+            updateVisioDuration.execute({
+                learningLanguageId,
+                partnerTandemId: tandemPartner.id,
+                partnerFirstname: firstname,
+                partnerLastname: lastname,
+            });
+        }, 60000);
+
+        return () => clearInterval(interval);
+    }, []);
+
     if (roomName === '' || !jitsiToken) {
         return <IonLoading isOpen={true} />;
     }
 
     if (isPlatform('cordova')) {
         // native device, open jitsi capacitor plugin
-        return (
-            <JitsiMobile
-                jitsiUrl={jitsiUrl}
-                language={i18n.language}
-                roomName={roomName}
-                jitsiToken={jitsiToken}
-                tandemPartner={tandemPartner}
-                learningLanguageId={learningLanguageId}
-            />
-        );
+        return <JitsiMobile jitsiUrl={jitsiUrl} language={i18n.language} roomName={roomName} jitsiToken={jitsiToken} />;
     } else {
-        return (
-            <JitsiWeb
-                jitsiUrl={jitsiUrl}
-                language={i18n.language}
-                roomName={roomName}
-                jitsiToken={jitsiToken}
-                tandemPartner={tandemPartner}
-                learningLanguageId={learningLanguageId}
-            />
-        );
+        return <JitsiWeb jitsiUrl={jitsiUrl} language={i18n.language} roomName={roomName} jitsiToken={jitsiToken} />;
     }
 };
 

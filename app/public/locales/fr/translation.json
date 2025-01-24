@@ -125,7 +125,11 @@
             },
             "visio": {
                 "title": "Visio avec {{firstname}} {{lastname}}",
-                "subtitle": "L'appel a duré {{minutes}} minutes et {{seconds}} secondes"
+                "subtitle": "L'appel a duré",
+                "duration_hour_one": "{{count}} heure",
+                "duration_hour_other": "{{count}} heures",
+                "duration_minute_one": "{{count}} minute",
+                "duration_minute_other": "{{count}} minutes"
             },
             "tandem_chat": {
                 "title": "Conversation avec {{firstname}} {{lastname}} démarrée aujourd'hui"

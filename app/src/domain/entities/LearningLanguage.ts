@@ -17,7 +17,10 @@ class LearningLanguage {
         public customLearningGoals?: CustomLearningGoal[],
         public certificateFile?: MediaObject,
         public sharedCertificate?: boolean,
-        public sharedLogsDate?: Date
+        public sharedLogsDate?: Date,
+        public visioDuration?: number,
+        public countVocabularies?: number,
+        public countActivities?: number
     ) {}
 }
 

@@ -21,6 +21,9 @@ export interface LearningLanguageResult {
     certificateFile?: MediaObject;
     sharedCertificate?: boolean;
     sharedLogsDate?: Date;
+    visioDuration?: number;
+    countVocabularies?: number;
+    countActivities?: number;
 }
 
 export const learningLanguageResultToDomain = (result: LearningLanguageResult) =>
@@ -38,7 +41,10 @@ export const learningLanguageResultToDomain = (result: LearningLanguageResult) =
         result.customLearningGoals ? result.customLearningGoals.map(customLearningGoalCommandToDomain) : undefined,
         result.certificateFile ? mediaObjectCommandToDomain(result.certificateFile) : undefined,
         result.sharedCertificate,
-        result.sharedLogsDate
+        result.sharedLogsDate,
+        result.visioDuration ?? 0,
+        result.countVocabularies ?? 0,
+        result.countActivities ?? 0
     );
 
 export default learningLanguageResultToDomain;

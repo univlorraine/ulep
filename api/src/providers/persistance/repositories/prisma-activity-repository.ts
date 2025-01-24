@@ -605,4 +605,13 @@ export class PrismaActivityRepository implements ActivityRepository {
       where: { id: vocabularyId },
     });
   }
+
+  async countActivitiesByProfileAndStatus(
+    profileId: string,
+    status: ActivityStatus,
+  ): Promise<number> {
+    return this.prisma.activity.count({
+      where: { Creator: { id: profileId }, status: status },
+    });
+  }
 }

@@ -1,9 +1,9 @@
+import { IonLoading } from '@ionic/react';
 import { JitsiMeeting } from '@jitsi/react-sdk';
 import IJitsiMeetExternalApi from '@jitsi/react-sdk/lib/types/IJitsiMeetExternalApi';
 import { useRef } from 'react';
 import { Redirect, useHistory } from 'react-router';
 import { useConfig } from '../../../context/ConfigurationContext';
-import Profile from '../../../domain/entities/Profile';
 import { useStoreState } from '../../../store/storeTypes';
 import useGetHomeData from '../../hooks/useGetHomeData';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
@@ -13,19 +13,22 @@ import styles from './JitsiWeb.module.css';
 import { JitsiProps } from './VisioContainer';
 import VisioInfoFrame from './VisioInfoFrame';
 
-const JitsiWeb = ({ jitsiUrl, language, roomName, jitsiToken, tandemPartner, learningLanguageId }: JitsiProps) => {
+const JitsiWeb = ({ jitsiUrl, language, roomName, jitsiToken }: JitsiProps) => {
     const history = useHistory();
     const apiRef = useRef<IJitsiMeetExternalApi>();
     const { width } = useWindowDimensions();
     const { sendMessage } = useConfig();
     const profile = useStoreState((state) => state.profile);
     const isHybrid = width < HYBRID_MAX_WIDTH;
-    const { tandems } = useGetHomeData();
+    const { tandems, isLoading } = useGetHomeData();
     const tandem = tandems.find((t) => t.id === roomName);
-    let startTime: number | null = null;
 
     if (!profile) {
         return <Redirect to={'/'} />;
+    }
+
+    if (isLoading) {
+        return <IonLoading isOpen={true} message="Loading..." />;
     }
 
     const handleApiReady = (apiObj: IJitsiMeetExternalApi) => {
@@ -100,38 +103,14 @@ const JitsiWeb = ({ jitsiUrl, language, roomName, jitsiToken, tandemPartner, lea
                         // here you can attach custom event listeners to the Jitsi Meet External API
                         // you can also store it locally to execute commands
                         handleApiReady(externalApi);
-                        startTime = Date.now();
                     }}
                     onReadyToClose={() => {
-                        const firstname =
-                            tandemPartner instanceof Profile ? tandemPartner.user.firstname : tandemPartner?.firstname;
-                        const lastname =
-                            tandemPartner instanceof Profile ? tandemPartner.user.lastname : tandemPartner?.lastname;
-                        let duration;
-                        if (startTime) {
-                            const endTime = Date.now();
-                            // Subtract 1 second to account for the delay in joining the conference - must be changed later
-                            duration = Math.floor((endTime - startTime) / 1000) - 1;
-                        }
                         isHybrid
-                            ? history.push('/end-session', {
-                                  duration,
-                                  partnerTandemId: tandemPartner?.id,
-                                  tandemFirstname: firstname,
-                                  tandemLastname: lastname,
-                                  learningLanguageId,
-                              })
-                            : history.push('/home', {
-                                  endSession: true,
-                                  duration,
-                                  partnerTandemId: tandemPartner?.id,
-                                  tandemFirstname: firstname,
-                                  tandemLastname: lastname,
-                                  learningLanguageId,
-                              });
+                            ? history.push('/end-session', { tandem })
+                            : history.push('/home', { tandem, endSession: true });
                     }}
                     getIFrameRef={(iframeRef) => {
-                        iframeRef.style.height = `calc(100vh - 80px)`;
+                        iframeRef.style.height = isHybrid ? '100%' : 'calc(100vh - 80px)';
                         iframeRef.style.flex = '1';
                     }}
                 />

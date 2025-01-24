@@ -1,15 +1,15 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose, Transform } from 'class-transformer';
+import { IsBoolean, IsObject, ValidateNested } from 'class-validator';
 import { InterestResponse } from 'src/api/dtos/interests';
-import { MeetingFrequency, Profile } from 'src/core/models/profile.model';
-import { UserResponse } from '../users';
-import { ObjectiveResponse } from '../objective';
-import { BiographyDto } from './biography';
-import { Language } from 'src/core/models';
-import { LearningLanguageResponse } from '../learning-languages';
-import { IsObject, ValidateNested, IsBoolean } from 'class-validator';
 import { AvailabilitesDto } from 'src/api/dtos/profiles/availabilities';
 import { TestedLanguageResponse } from 'src/api/dtos/tested-languages/tested-language.response';
+import { Language } from 'src/core/models';
+import { MeetingFrequency, Profile } from 'src/core/models/profile.model';
+import { LearningLanguageResponse } from '../learning-languages';
+import { ObjectiveResponse } from '../objective';
+import { UserResponse } from '../users';
+import { BiographyDto } from './biography';
 
 class NativeLanguageResponse {
   @ApiProperty({ type: 'string', example: 'FR' })
@@ -128,8 +128,8 @@ export class ProfileResponse {
       testedLanguages: profile.testedLanguages
         ? profile.testedLanguages.map(TestedLanguageResponse.fromDomain)
         : [],
-      learningLanguages: profile.learningLanguages.map((ll) =>
-        LearningLanguageResponse.fromDomain(ll),
+      learningLanguages: profile.learningLanguages.map((learningLanguage) =>
+        LearningLanguageResponse.fromDomain({ learningLanguage }),
       ),
       objectives: profile.objectives.map((objective) =>
         ObjectiveResponse.fromDomain(objective, languageCode),

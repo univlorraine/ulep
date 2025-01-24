@@ -325,4 +325,28 @@ export class PrismaVocabularyRepository implements VocabularyRepository {
       },
     });
   }
+
+  async countVocabulariesByProfileAndLanguage(
+    profileId: string,
+    language: string,
+  ): Promise<number> {
+    return await this.prisma.vocabulary.count({
+      where: {
+        VocabularyList: {
+          AND: [
+            {
+              Creator: {
+                id: profileId,
+              },
+            },
+            {
+              OriginalLanguage: {
+                code: language,
+              },
+            },
+          ],
+        },
+      },
+    });
+  }
 }

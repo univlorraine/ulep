@@ -35,7 +35,9 @@ import {
   GetTandemsForProfileUsecase,
   UpdateProfileUsecase,
 } from 'src/core/usecases';
+import { CountActivitiesUsecase } from 'src/core/usecases/activity/count-activities.usecase';
 import { GetSessionsForProfileUsecase } from 'src/core/usecases/session/get-sessions-for-profile.usecase';
+import { CountVocabulariesUsecase } from 'src/core/usecases/vocabulary/count-vocabularies.usecase';
 import { CollectionResponse, CurrentUser } from '../decorators';
 import { Role, Roles } from '../decorators/roles.decorator';
 import {
@@ -73,6 +75,8 @@ export class ProfileController {
     private readonly createOrUpdateTestedLanguageUsecase: CreateOrUpdateTestedLanguageUsecase,
     private readonly getAdminUsecase: GetAdministratorUsecase,
     private readonly getSessionsForProfileUsecase: GetSessionsForProfileUsecase,
+    private readonly countVocabulariesUsecase: CountVocabulariesUsecase,
+    private readonly countActivitiesUsecase: CountActivitiesUsecase,
   ) {}
 
   @Post()
@@ -267,8 +271,26 @@ export class ProfileController {
       profile: id,
     });
 
-    return tandems.map((tandem) =>
-      UserTandemResponse.fromDomain(id, tandem, languageCode),
+    return await Promise.all(
+      tandems.map(async (tandem): Promise<UserTandemResponse> => {
+        const countVocabularies = await this.countVocabulariesUsecase.execute({
+          profileId: id,
+          language: tandem.learningLanguages.find((ll) => ll.profile.id === id)
+            .language.code,
+        });
+
+        const countActivities = await this.countActivitiesUsecase.execute({
+          profileId: id,
+        });
+
+        return UserTandemResponse.fromDomain(
+          id,
+          tandem,
+          languageCode,
+          countVocabularies,
+          countActivities,
+        );
+      }),
     );
   }
 
@@ -364,7 +386,7 @@ export class ProfileController {
       profileId: id,
     });
 
-    return LearningLanguageResponse.fromDomain(learningLanguage);
+    return LearningLanguageResponse.fromDomain({ learningLanguage });
   }
 
   @Get(':id/learning-language')
@@ -381,12 +403,13 @@ export class ProfileController {
   async getLearningLanguage(
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<LearningLanguageResponse[]> {
-    const languages = await this.getLearningLanguageOfProfileUsecase.execute({
-      id,
-    });
+    const learningLanguages =
+      await this.getLearningLanguageOfProfileUsecase.execute({
+        id,
+      });
 
-    return languages.map((language) =>
-      LearningLanguageResponse.fromDomain(language),
+    return learningLanguages.map((learningLanguage) =>
+      LearningLanguageResponse.fromDomain({ learningLanguage }),
     );
   }
 

@@ -64,6 +64,7 @@ import GetLogEntriesUsecaseInterface from '../domain/interfaces/log-entries/GetL
 import ShareLogEntriesUsecaseInterface from '../domain/interfaces/log-entries/ShareLogEntriesUsecase.interface';
 import UnshareLogEntriesUsecaseInterface from '../domain/interfaces/log-entries/UnshareLogEntriesUsecase.interface';
 import UpdateCustomLogEntryUsecaseInterface from '../domain/interfaces/log-entries/UpdateCustomLogEntryUsecase.interface';
+import UpdateVisioDurationUsecaseInterface from '../domain/interfaces/log-entries/UpdateVisioDurationUsecase.interface';
 import LoginUsecaseInterface from '../domain/interfaces/LoginUsecase.interface';
 import GetAllNewsUsecaseInterface from '../domain/interfaces/news/GetAllNewsUsecase.interface';
 import RefreshTokensUsecaseInterface from '../domain/interfaces/RefreshTokensUsecase.interface';
@@ -190,6 +191,7 @@ export interface ConfigContextValueType {
     shareLogEntries: ShareLogEntriesUsecaseInterface;
     unshareLogEntries: UnshareLogEntriesUsecaseInterface;
     exportLogEntries: ExportLogEntriesUsecaseInterface;
+    updateVisioDuration: UpdateVisioDurationUsecaseInterface;
     // Edito
     getEditoByUniversityId: GetEditoByUniversityIdUsecaseInterface;
 }
