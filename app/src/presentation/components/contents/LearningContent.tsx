@@ -13,6 +13,7 @@ import PartnerUniversityCard from '../card/PartnerUniversityCard';
 import ProficiencyTestCard from '../card/ProficiencyTestCard';
 import RessourcesCard from '../card/RessourcesCard';
 import Loader from '../Loader';
+import EditoContentModal from '../modals/EditoContentModal';
 import ActiveTandemCard from '../tandems/ActiveTandemCard';
 import LearningGoalCard from '../tandems/LearningGoalCard';
 import LearningJournalCard from '../tandems/LearningJournalCard';
@@ -52,13 +53,17 @@ const LearningContent: React.FC<LearningContentProps> = ({
     const { deviceAdapter } = useConfig();
     const history = useHistory();
     const [currentTandemColor, setCurrentTandemColor] = useState<string>(TANDEM_COLORS[0]);
-
+    const [universityId, setUniversityId] = useState<string>();
     const openAddLearningLanguagePressed = () => {
         history.push('pairing/languages');
     };
 
-    const openUniversityInfos = () => {
-        console.log('openUniversityInfos');
+    const openUniversityInfos = (universityId?: string) => {
+        setUniversityId(universityId);
+    };
+
+    const closeUniversityInfos = () => {
+        setUniversityId(undefined);
     };
 
     const handleSetCurrentTandem = (tandem: Tandem, index: number) => {
@@ -139,7 +144,7 @@ const LearningContent: React.FC<LearningContentProps> = ({
                             {currentTandem && currentTandem.partner?.user.university && (
                                 <PartnerUniversityCard
                                     university={currentTandem.partner?.user.university}
-                                    onPress={openUniversityInfos}
+                                    onPress={() => openUniversityInfos(currentTandem.partner?.user.university.id)}
                                     currentColor={currentTandemColor}
                                 />
                             )}
@@ -158,6 +163,7 @@ const LearningContent: React.FC<LearningContentProps> = ({
                     </ResponsiveMasonry>
                 )}
             </div>
+            <EditoContentModal onClose={closeUniversityInfos} profile={profile} universityId={universityId} />
         </div>
     );
 };

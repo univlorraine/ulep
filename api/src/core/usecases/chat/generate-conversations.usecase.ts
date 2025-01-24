@@ -87,8 +87,6 @@ export class GenerateConversationsUsecase {
       (language) => language.code !== '*',
     );
 
-    console.log(filteredActiveLanguages);
-
     for (const language of filteredActiveLanguages) {
       await this.createCommunityChatUsecase.execute({
         centralLanguageCode: language.code,

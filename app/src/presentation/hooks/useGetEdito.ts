@@ -17,7 +17,6 @@ const useGetEdito = (universityId?: string) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            console.log('fetchData', universityId);
             if (!universityId) {
                 setEditoResult({
                     ...editoResult,
