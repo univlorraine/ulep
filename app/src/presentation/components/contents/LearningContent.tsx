@@ -127,7 +127,10 @@ const LearningContent: React.FC<LearningContentProps> = ({
                             )}
                             {currentTandem && currentTandem.learningLanguage.certificateOption && (
                                 <>
-                                    <LearningJournalCard tandem={currentTandem} />
+                                    <LearningJournalCard
+                                        tandem={currentTandem}
+                                        onOpenEdito={() => openUniversityInfos(profile.user.university.id)}
+                                    />
                                     <LearningGoalCard
                                         profile={profile}
                                         customLearningGoals={currentTandem.learningLanguage?.customLearningGoals}
