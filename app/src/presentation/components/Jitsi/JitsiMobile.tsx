@@ -19,7 +19,7 @@ interface ParticipantInfo {
     participantsInfo: string;
 }
 
-const JitsiMobile = ({ jitsiUrl, roomName, jitsiToken }: JitsiProps) => {
+const JitsiMobile = ({ jitsiUrl, roomName, jitsiToken, tandem }: JitsiProps) => {
     const history = useHistory();
     const { deviceAdapter, sendMessage } = useConfig();
     const profile = useStoreState((state) => state.profile);
@@ -69,7 +69,7 @@ const JitsiMobile = ({ jitsiUrl, roomName, jitsiToken }: JitsiProps) => {
             window.removeEventListener('onParticipantsInfoRetrieved', (data: any) => onParticipantsInfoRetrieved(data));
         }
 
-        history.push('/end-session');
+        history.push('/end-session', { tandem });
     };
 
     const onChatMessageReceived = async (data: OnChatMessageReceivedProps) => {

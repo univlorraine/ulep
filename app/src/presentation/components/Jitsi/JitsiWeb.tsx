@@ -1,11 +1,9 @@
-import { IonLoading } from '@ionic/react';
 import { JitsiMeeting } from '@jitsi/react-sdk';
 import IJitsiMeetExternalApi from '@jitsi/react-sdk/lib/types/IJitsiMeetExternalApi';
 import { useRef } from 'react';
 import { Redirect, useHistory } from 'react-router';
 import { useConfig } from '../../../context/ConfigurationContext';
 import { useStoreState } from '../../../store/storeTypes';
-import useGetHomeData from '../../hooks/useGetHomeData';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../../utils';
 import HomeHeader from '../HomeHeader';
@@ -13,22 +11,16 @@ import styles from './JitsiWeb.module.css';
 import { JitsiProps } from './VisioContainer';
 import VisioInfoFrame from './VisioInfoFrame';
 
-const JitsiWeb = ({ jitsiUrl, language, roomName, jitsiToken }: JitsiProps) => {
+const JitsiWeb = ({ jitsiUrl, language, roomName, jitsiToken, tandem }: JitsiProps) => {
     const history = useHistory();
     const apiRef = useRef<IJitsiMeetExternalApi>();
     const { width } = useWindowDimensions();
     const { sendMessage } = useConfig();
     const profile = useStoreState((state) => state.profile);
     const isHybrid = width < HYBRID_MAX_WIDTH;
-    const { tandems, isLoading } = useGetHomeData();
-    const tandem = tandems.find((t) => t.id === roomName);
 
     if (!profile) {
         return <Redirect to={'/'} />;
-    }
-
-    if (isLoading) {
-        return <IonLoading isOpen={true} message="Loading..." />;
     }
 
     const handleApiReady = (apiObj: IJitsiMeetExternalApi) => {
