@@ -44,6 +44,13 @@ export class UpdateLanguageCodeUsecase {
 
     await this.handleCommunityChatCreation(command);
 
+    if (
+      language.mainUniversityStatus === LanguageStatus.SECONDARY &&
+      command.mainUniversityStatus === LanguageStatus.PRIMARY
+    ) {
+      await this.deleteAskedLanguages(language);
+    }
+
     return updatedLanguage;
   }
 
@@ -61,5 +68,9 @@ export class UpdateLanguageCodeUsecase {
         partnerLanguageCode: command.code,
       });
     }
+  }
+
+  private async deleteAskedLanguages(language: Language) {
+    await this.languageRepository.deleteAllRequestFromLanguage(language.code);
   }
 }

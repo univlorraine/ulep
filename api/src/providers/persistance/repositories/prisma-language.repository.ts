@@ -251,4 +251,10 @@ export class PrismaLanguageRepository implements LanguageRepository {
 
     return res.map(suggestedLanguageMapper);
   }
+
+  async deleteAllRequestFromLanguage(code: string): Promise<void> {
+    await this.prisma.suggestedLanguages.deleteMany({
+      where: { LanguageCode: { code: code } },
+    });
+  }
 }
