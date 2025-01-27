@@ -134,7 +134,6 @@ const LearningContent: React.FC<LearningContentProps> = ({
                                 onLearningBookPressed={onLearningBookContentPressed}
                                 onVocabularyPressed={onVocabularyListPressed}
                                 onActivityPressed={onActivitiesContentPressed}
-                                onGamePressed={() => console.log('onGamePressed')}
                             />
                             {currentTandem && currentTandem.partner?.user.university && (
                                 <PartnerUniversityCard
