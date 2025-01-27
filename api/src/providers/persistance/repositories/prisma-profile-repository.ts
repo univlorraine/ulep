@@ -183,7 +183,7 @@ export class PrismaProfileRepository implements ProfileRepository {
     where?: ProfileWithTandemsProfilesQueryWhere,
   ): Promise<Collection<ProfileWithTandemsProfiles>> {
     const learningLanguageWhere = [];
-    if (where.learningLanguage) {
+    if (where.learningLanguage && !where.tandemStatus) {
       learningLanguageWhere.push({
         LearningLanguages: {
           some: {
@@ -197,7 +197,14 @@ export class PrismaProfileRepository implements ProfileRepository {
         learningLanguageWhere.push({
           LearningLanguages: {
             some: {
-              Tandem: null,
+              AND: [
+                {
+                  Tandem: null,
+                },
+                {
+                  LanguageCode: { id: where.learningLanguage },
+                },
+              ],
             },
           },
         });
@@ -205,9 +212,14 @@ export class PrismaProfileRepository implements ProfileRepository {
         learningLanguageWhere.push({
           LearningLanguages: {
             some: {
-              Tandem: {
-                status: where.tandemStatus,
-              },
+              AND: [
+                {
+                  Tandem: {
+                    status: where.tandemStatus,
+                  },
+                  LanguageCode: { id: where.learningLanguage },
+                },
+              ],
             },
           },
         });
