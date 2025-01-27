@@ -49,7 +49,7 @@ const ViewReportContent: React.FC<ViewReportContentProps> = ({ goBack, report, s
                     <h1 className={styles.title}>
                         {isConversationReport
                             ? t('report_item_page.conversation.title')
-                            : t('report_item_page.application.title')}
+                            : `${t('report_item_page.application.title')} :  ${report.category.name}`}
                     </h1>
                     <div className={styles.status_container}>
                         <ReportStatusTag status={report.status} isIcon={true} />
