@@ -3,6 +3,7 @@ import {
   Body,
   Controller,
   Get,
+  Headers,
   Param,
   Post,
   Put,
@@ -17,6 +18,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { Edito } from 'src/core/models/edito.model';
 import {
   GenerateEditosUsecase,
+  GetEditoByUniversityIdUsecase,
   GetEditoUsecase,
   UpdateEditoUsecase,
   UploadEditoImageUsecase,
@@ -35,6 +37,7 @@ export class EditoController {
     private readonly generateEditosUsecase: GenerateEditosUsecase,
     private readonly getEditosUsecase: GetEditosUsecase,
     private readonly getEditoUsecase: GetEditoUsecase,
+    private readonly getEditoByUniversityIdUsecase: GetEditoByUniversityIdUsecase,
     private readonly updateEditoUsecase: UpdateEditoUsecase,
     private readonly uploadEditoImageUsecase: UploadEditoImageUsecase,
   ) {}
@@ -62,6 +65,20 @@ export class EditoController {
       items: editos.map((edito) => EditoResponse.fromDomain(edito)),
       totalItems: editos.length,
     });
+  }
+
+  @Get('university/:id')
+  @UseGuards(AuthenticationGuard)
+  @SerializeOptions({ groups: ['read'] })
+  @Swagger.ApiOperation({ summary: 'Get an Edito resource by university id.' })
+  @Swagger.ApiOkResponse({ type: EditoResponse })
+  async getEditoByUniversityId(
+    @Param('id') id: string,
+    @Headers('Language-code') languageCode?: string,
+  ) {
+    const edito = await this.getEditoByUniversityIdUsecase.execute(id);
+
+    return EditoResponse.fromDomain(edito, languageCode);
   }
 
   @Get(':id')

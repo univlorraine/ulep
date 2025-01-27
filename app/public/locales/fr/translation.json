@@ -56,6 +56,12 @@
         "load_more": "Voir plus",
         "add_to_calendar_success": "Fichier ics téléchargé"
     },
+    "edito": {
+        "service_date": "Date d'ouverture du service",
+        "admission_date": "Date d'ouverture des inscriptions",
+        "website": "Site web",
+        "title": "Informations université"
+    },
     "news": {
         "list": {
             "title": "Actualités",

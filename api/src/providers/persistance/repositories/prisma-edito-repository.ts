@@ -60,6 +60,15 @@ export class PrismaEditoRepository implements EditoRepository {
     return editoMapper(edito);
   }
 
+  async findByUniversityId(universityId: string): Promise<Edito> {
+    const edito = await this.prisma.editos.findFirst({
+      where: { University: { id: universityId } },
+      include: EditoRelations,
+    });
+
+    return editoMapper(edito);
+  }
+
   async update(command: UpdateEditoCommand): Promise<Edito> {
     const edito = await this.prisma.editos.update({
       where: { id: command.id },

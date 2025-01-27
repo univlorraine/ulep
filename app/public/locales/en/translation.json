@@ -69,6 +69,12 @@
         "load_more": "See more",
         "add_to_calendar_success": "ICS file downloaded"
     },
+    "edito": {
+        "service_date": "Opening date of the service",
+        "admission_date": "Opening date of the admission",
+        "website": "Website",
+        "title": "University information"
+    },
     "news": {
         "list": {
             "filter_title": "Select news filters",

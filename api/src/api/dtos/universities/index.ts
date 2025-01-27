@@ -348,7 +348,7 @@ export class UniversityResponse {
   domains: string[];
 
   @Swagger.ApiPropertyOptional({ type: 'string', format: 'url' })
-  @Expose({ groups: ['university:read'] })
+  @Expose({ groups: ['university:read', 'read'] })
   website?: string;
 
   @Swagger.ApiPropertyOptional({ type: 'string' })

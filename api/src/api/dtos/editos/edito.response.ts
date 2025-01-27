@@ -64,10 +64,13 @@ export class EditoResponse {
     Object.assign(this, partial);
   }
 
-  static fromDomain(instance: Edito) {
+  static fromDomain(instance: Edito, languageCode?: string) {
+    const contentTranslated = instance.translations.find(
+      (translation) => translation.languageCode === languageCode,
+    );
     return new EditoResponse({
       id: instance.id,
-      content: instance.content,
+      content: contentTranslated?.content || instance.content,
       university: UniversityResponse.fromUniversity(instance.university),
       imageURL: instance.imageURL,
       languageCode: instance.languageCode,

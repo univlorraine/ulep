@@ -24,6 +24,7 @@ const httpCallResponse: CollectionCommand<UniversityCommand> = {
             openServiceDate: new Date('2023-01-01T00:00:00.000Z'),
             closeServiceDate: new Date('2023-01-01T00:00:00.000Z'),
             maxTandemsPerUser: 3,
+            nativeLanguage: { id: 'nativeLanguageId', name: 'nativeLanguageName', code: 'nc' },
         },
     ],
     totalItems: 1,
