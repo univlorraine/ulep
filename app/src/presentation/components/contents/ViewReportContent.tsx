@@ -59,7 +59,7 @@ const ViewReportContent: React.FC<ViewReportContentProps> = ({ goBack, report, s
                             isMediaReport ? (
                                 <div className={styles.item}>
                                     <p className={styles.item_title}>
-                                        {t('report_item_page.conversation.message')} {createdDate}
+                                        {`${t('report_item_page.conversation.message')} ${createdDate} - ${report.metadata.tandemUserName}`}
                                     </p>
                                     <div className={styles.item_content_media}>
                                         <MediaComponent message={messageMedia} setImageToDisplay={() => {}} />
@@ -67,7 +67,7 @@ const ViewReportContent: React.FC<ViewReportContentProps> = ({ goBack, report, s
                                 </div>
                             ) : (
                                 <ReportDetail
-                                    title={`${t('report_item_page.conversation.message')} ${createdDate}`}
+                                    title={`${t('report_item_page.conversation.message')} ${createdDate} - ${report.metadata.tandemUserName}`}
                                     text={messageContent}
                                 />
                             )
