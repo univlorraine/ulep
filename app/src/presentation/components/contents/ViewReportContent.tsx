@@ -21,6 +21,7 @@ const ViewReportContent: React.FC<ViewReportContentProps> = ({ goBack, report, s
     const isConversationReport = report.category.name === ReportCategoryName.CONVERSATION;
     const isMediaReport = report.metadata?.mediaType && report.metadata?.mediaType !== MessageType.Text;
     const isReportCancelled = report.status === ReportStatus.CANCELLED;
+    const isReportClosed = report.status === ReportStatus.CLOSED;
 
     const messageMedia = new MessageReport(
         report.id,
@@ -87,7 +88,7 @@ const ViewReportContent: React.FC<ViewReportContentProps> = ({ goBack, report, s
                         />
                     </div>
                 </div>
-                {!isReportCancelled && (
+                {!isReportCancelled && !isReportClosed && (
                     <IonButton
                         className={`tertiary-button no-padding ${styles.cancel_button}`}
                         fill="clear"
