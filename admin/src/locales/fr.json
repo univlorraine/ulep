@@ -203,6 +203,24 @@
         "saturday": "Samedi",
         "sunday": "Dimanche"
     },
+    "editos": {
+        "label": "Editos",
+        "title": "Editos",
+        "form": {
+            "mandatoryLanguages": "Les langues avec un * sont obligatoires",
+            "update": "Mettre à jour"
+        },
+        "list": {
+            "university": "Université",
+            "translations": "Traductions",
+            "updatedAt": "Date de mise à jour"
+        },
+        "languages": {
+            "CentralUniversityLanguage": "Langue de l'université centrale",
+            "English": "Anglais",
+            "PartnerUniversityLanguage": "Langue de l'universités partenaire"
+        }
+    },
     "events": {
         "label": "Evènements",
         "title": "Evènements",
@@ -380,6 +398,10 @@
             "message": "Voulez vous vraiment réinitialiser l'instance ?",
             "confirm": "Confirmer"
         },
+        "edito": {
+            "mandatoryTranslations": "Langues obligatoires pour les éditos",
+            "noMandatoryTranslations": "Aucune langue obligatoire"
+        },
         "edit": {
             "error": "Une erreur est survenue pendant la mise à jour de l'instance",
             "name": "Nom de l'instance",
@@ -395,7 +417,8 @@
             "secondaryBackgroundColor": "Couleur secondaire de l'image de fond de l'application",
             "secondaryDarkColor": "Couleur secondaire nuancé en sombre utilisé pour le fond de l'application",
             "title": "Mise à jour de l'instance",
-            "defaultCertificateFile": "Modèle de certificat"
+            "defaultCertificateFile": "Modèle de certificat",
+            "editoMandatoryTranslations": "Langues obligatoires pour les éditos"
         }
     },
     "interests": {
@@ -596,8 +619,12 @@
         "title": "Réinitialisation"
     },
     "generateConversation": {
-        "error": "Une erreur est survenue durant la génération des conversations",
+        "error": "Une erreur est survenue lors de la génération des conversations",
         "title": "Génération des conversations"
+    },
+    "generateEditos": {
+        "title": "Génération des editos",
+        "error": "Une erreur est survenue lors de la génération des editos"
     },
     "questions": {
         "create": {

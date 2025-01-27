@@ -1,6 +1,9 @@
 import * as Prisma from '@prisma/client';
 import { MediaObject } from 'src/core/models';
-import { Instance } from 'src/core/models/Instance.model';
+import {
+  EditoMandatoryTranslations,
+  Instance,
+} from 'src/core/models/Instance.model';
 
 export type InstanceSnapshot = Prisma.Instance & {
   DefaultCertificateFile: Prisma.MediaObjects;
@@ -32,5 +35,9 @@ export const instanceMapper = (instanceSnapshot: InstanceSnapshot) => {
         mimetype: instanceSnapshot.DefaultCertificateFile.mime,
         size: instanceSnapshot.DefaultCertificateFile.size,
       }),
+    editoMandatoryTranslations:
+      instanceSnapshot.edito_mandatory_translations.map(
+        (translation) => translation as EditoMandatoryTranslations,
+      ),
   });
 };

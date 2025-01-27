@@ -21,6 +21,7 @@ const userResult: UserResult = {
         timezone: 'timezone',
         website: 'site',
         maxTandemsPerUser: 3,
+        nativeLanguage: { id: 'nativeLanguageId', name: 'nativeLanguageName', code: 'nc' },
     },
     status: 'ACTIVE',
     staffFunction: 'some job',

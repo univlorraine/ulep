@@ -60,6 +60,12 @@
             "title": "Événements"
         }
     },
+    "edito": {
+        "service_date": "Date d'ouverture du service",
+        "admission_date": "Date d'ouverture des inscriptions",
+        "website": "Site web",
+        "title": "Informations université"
+    },
     "news": {
         "list": {
             "title": "Actualités",

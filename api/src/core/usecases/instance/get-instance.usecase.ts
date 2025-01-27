@@ -1,12 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import {
-  INSTANCE_REPOSITORY,
   InstanceRepository,
+  INSTANCE_REPOSITORY,
 } from 'src/core/ports/instance.repository';
 import {
-  STORAGE_INTERFACE,
   StorageInterface,
+  STORAGE_INTERFACE,
 } from 'src/core/ports/storage.interface';
 import {
   ASSETS_BUCKET,

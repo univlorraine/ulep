@@ -46,6 +46,7 @@ import GetAllLanguagesUsecase from '../domain/usecases/GetAllLanguagesUsecase';
 import GetAllSessionsUsecase from '../domain/usecases/GetAllSessionsUsecase';
 import GetAllTandemsUsecase from '../domain/usecases/GetAllTandemsUsecase';
 import GetAllUniversitiesUsecase from '../domain/usecases/GetAllUniversitiesUsecase';
+import GetEditoByUniversityIdUsecase from '../domain/usecases/GetEditoByUniversityIdUsecase';
 import GetHistoricEmailPartnerUsecase from '../domain/usecases/GetHistoricEmailPartnerUsecase';
 import GetJitsiTokenUsecase from '../domain/usecases/GetJitsiTokenUsecase';
 import GetMediaObjectUsecase from '../domain/usecases/GetMediaObjectUsecase';
@@ -238,6 +239,10 @@ const getConfigContextValue = ({
     const getLogEntriesByDate = new GetLogEntriesByDateUsecase(domainHttpAdapter);
     const shareLogEntries = new ShareLogEntriesUsecase(domainHttpAdapter);
     const exportLogEntries = new ExportLogEntriesUsecase(domainHttpAdapter, fileAdapter);
+
+    // Edito
+    const getEditoByUniversityId = new GetEditoByUniversityIdUsecase(domainHttpAdapter);
+
     return {
         accessToken,
         addDevice,
@@ -329,6 +334,7 @@ const getConfigContextValue = ({
         exportLogEntries,
         addReaderToVocabularyList,
         getHashtagsFromConversation,
+        getEditoByUniversityId,
     };
 };
 

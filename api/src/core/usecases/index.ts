@@ -1,6 +1,7 @@
 export * from './activity';
 export * from './chat';
 export * from './country';
+export * from './edito';
 export * from './event';
 export * from './instance';
 export * from './interest';

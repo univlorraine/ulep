@@ -1,3 +1,9 @@
+export enum EditoMandatoryTranslations {
+    CentralUniversityLanguage = 'CentralUniversityLanguage',
+    PartnerUniversityLanguage = 'PartnerUniversityLanguage',
+    English = 'English',
+}
+
 type Instance = {
     name: string;
     email: string;
@@ -12,6 +18,7 @@ type Instance = {
     secondaryDarkColor: string;
     isInMaintenance: boolean;
     daysBeforeClosureNotification: number;
+    editoMandatoryTranslations: EditoMandatoryTranslations[];
 };
 
 export interface InstanceFormPayload {
@@ -29,6 +36,7 @@ export interface InstanceFormPayload {
     isInMaintenance: boolean;
     daysBeforeClosureNotification: number;
     defaultCertificateFile: File | undefined;
+    editoMandatoryTranslations: EditoMandatoryTranslations[];
 }
 
 export default Instance;

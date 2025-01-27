@@ -1,8 +1,8 @@
-import { Box, OutlinedInput, Typography } from '@mui/material';
+import { Box, FormControlLabel, FormGroup, OutlinedInput, Switch, Typography } from '@mui/material';
 import { MuiColorInput } from 'mui-color-input';
 import React, { useState } from 'react';
 import { Button, useTranslate } from 'react-admin';
-import Instance, { InstanceFormPayload } from '../../entities/Instance';
+import Instance, { EditoMandatoryTranslations, InstanceFormPayload } from '../../entities/Instance';
 import FileUploader from '../FileUploader';
 
 interface InstanceFormProps {
@@ -29,6 +29,9 @@ const InstanceForm: React.FC<InstanceFormProps> = ({ handleSubmit, instance }) =
         instance.daysBeforeClosureNotification
     );
     const [newDefaultCertificateFile, setNewDefaultCertificateFile] = useState<File>();
+    const [newEditoMandatoryTranslations, setNewEditoMandatoryTranslations] = useState<EditoMandatoryTranslations[]>(
+        instance.editoMandatoryTranslations
+    );
 
     const allFieldsFilled =
         newName &&
@@ -59,6 +62,7 @@ const InstanceForm: React.FC<InstanceFormProps> = ({ handleSubmit, instance }) =
             isInMaintenance: instance.isInMaintenance,
             daysBeforeClosureNotification: newDaysBeforeClosureNotification,
             defaultCertificateFile: newDefaultCertificateFile,
+            editoMandatoryTranslations: newEditoMandatoryTranslations,
         });
 
     return (
@@ -147,6 +151,35 @@ const InstanceForm: React.FC<InstanceFormProps> = ({ handleSubmit, instance }) =
                             onFileSelect={setNewDefaultCertificateFile}
                             source="defaultCertificateFile.id"
                         />
+                    </Box>
+
+                    <Box>
+                        <Typography variant="subtitle1">{translate(`instance.edito.mandatoryTranslations`)}</Typography>
+                        <Box alignItems="center" display="flex" flexDirection="row">
+                            <FormGroup>
+                                {Object.values(EditoMandatoryTranslations).map((translation) => (
+                                    <FormControlLabel
+                                        key={translation}
+                                        checked={newEditoMandatoryTranslations.includes(translation)}
+                                        control={<Switch />}
+                                        label={translate(`editos.languages.${translation}`)}
+                                        onChange={() => {
+                                            if (newEditoMandatoryTranslations.includes(translation)) {
+                                                setNewEditoMandatoryTranslations(
+                                                    newEditoMandatoryTranslations.filter((t) => t !== translation)
+                                                );
+                                            } else {
+                                                setNewEditoMandatoryTranslations([
+                                                    ...newEditoMandatoryTranslations,
+                                                    translation,
+                                                ]);
+                                            }
+                                        }}
+                                        value={translation}
+                                    />
+                                ))}
+                            </FormGroup>
+                        </Box>
                     </Box>
                 </Box>
 

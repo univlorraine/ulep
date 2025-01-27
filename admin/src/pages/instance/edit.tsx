@@ -24,6 +24,10 @@ const EditInstance = () => {
         formData.append('secondaryDarkColor', payload.secondaryDarkColor);
         formData.append('isInMaintenance', payload.isInMaintenance.toString());
         formData.append('daysBeforeClosureNotification', payload.daysBeforeClosureNotification.toString());
+        payload.editoMandatoryTranslations.forEach((translation, index) => {
+            formData.append(`editoMandatoryTranslations[${index}]`, translation);
+        });
+
         if (payload.defaultCertificateFile) {
             formData.append('defaultCertificateFile', payload.defaultCertificateFile);
         }

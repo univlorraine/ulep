@@ -1,0 +1,82 @@
+.content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow-y: scroll;
+}
+
+.header {
+    align-items: center;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.body {
+    display: flex;
+    align-items: center;
+    background-color: var(--primary-color);
+    flex-direction: column;
+    gap: 10px;
+    padding: 24px;
+    height: 100%;
+    text-align: center;
+}
+
+.title {
+    font-family: Roboto;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 25px;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+}
+
+.flagContainer {
+    position: absolute;
+    top: 0px;
+    left: -30px;
+    width: 95px;
+    height: 95px;
+    background-color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flag {
+    font-family: Poppins;
+    font-size: 39.35px;
+    font-weight: 900;
+    line-height: 24.74px;
+    text-align: center;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+}
+
+.imageContainer {
+    position: relative;
+    border-radius: 50%;
+    background-color: white;
+    width: 225px;
+    height: 225px;
+    overflow: hidden;
+}
+
+.logoContainer {
+    position: relative;
+}
+
+.image {
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.website {
+    margin-top: auto;
+}
