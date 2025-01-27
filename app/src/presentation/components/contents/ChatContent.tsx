@@ -303,20 +303,6 @@ const Content: React.FC<ChatContentProps> = ({
                                     </IonLabel>
                                 </IonItem>
                             )}
-                            <IonItem
-                                button={true}
-                                detail={false}
-                                onClick={() =>
-                                    setCurrentContent
-                                        ? setCurrentContent('media')
-                                        : history.push('/media', { conversation })
-                                }
-                            >
-                                <IonIcon icon={imageOutline} aria-hidden="true" />
-                                <IonLabel className={styles['chat-popover-label']}>
-                                    {t('chat.conversation_menu.medias')}
-                                </IonLabel>
-                            </IonItem>
                             <IonItem button={true} detail={false} onClick={handleExportMedias}>
                                 <IonIcon icon={downloadOutline} aria-hidden="true" />
                                 <IonLabel className={styles['chat-popover-label']}>
