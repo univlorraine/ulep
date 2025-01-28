@@ -17,6 +17,10 @@ const UserStatusChips = ({ status }: UserStatusChipsProps) => {
         return <ColoredChips color="error" label={translate(`global.userStatus.${status.toLowerCase()}`)} />;
     }
 
+    if (status === UserStatus.REPORTED) {
+        return <ColoredChips color="warning" label={translate(`global.userStatus.${status.toLowerCase()}`)} />;
+    }
+
     return null;
 };
 
