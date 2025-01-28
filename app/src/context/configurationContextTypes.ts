@@ -6,6 +6,7 @@ import NotificationAdapterInterface from '../adapter/interfaces/NotificationAdap
 import RecorderAdapterInterface from '../adapter/interfaces/RecorderAdapter.interface';
 import Configuration from '../domain/entities/Confirguration';
 import CreateActivityUsecaseInterface from '../domain/interfaces/activity/CreateActivityUsecase.interface';
+import DeleteActivityUsecaseInterface from '../domain/interfaces/activity/DeleteActivityUsecase.interface';
 import GetActivitiesUsecaseInterface from '../domain/interfaces/activity/GetActivitiesUsecase.interface';
 import GetActivityPdfUsecaseInterface from '../domain/interfaces/activity/GetActivityPdfUsecase.interface';
 import GetActivityThemesUsecaseInterface from '../domain/interfaces/activity/GetActivityThemesUsecase.interface';
@@ -147,6 +148,7 @@ export interface ConfigContextValueType {
     updateActivity: UpdateActivityUsecaseInterface;
     updateActivityStatus: UpdateActivityStatusUsecaseInterface;
     getActivityPdf: GetActivityPdfUsecaseInterface;
+    deleteActivity: DeleteActivityUsecaseInterface;
     // Vocabulary
     addReaderToVocabularyList: AddReaderToVocabularyListUsecaseInterface;
     createVocabulary: CreateVocabularyUsecaseInterface;

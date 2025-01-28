@@ -184,6 +184,8 @@
             "activity_shared": "Your sheet has been shared to your animator",
             "status_rejected": "Show the reason for rejection",
             "update": "Update my sheet",
+            "delete": "Delete my sheet",
+            "delete_confirm": "Are you sure you want to delete this activity ?",
             "export": "Export to PDF",
             "back_button": "Back",
             "creator": "Created by {{name}}",
