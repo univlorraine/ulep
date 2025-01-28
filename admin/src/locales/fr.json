@@ -272,7 +272,8 @@
                 "button": "Ajouter"
             },
             "diffusion_languages": {
-                "label": "Langues diffusées",
+                "all": "Toutes les langues",
+                "label": "Langues cibles",
                 "button": "Ajouter"
             },
             "event_url": "URL de l'évènement",

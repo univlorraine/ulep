@@ -20,7 +20,7 @@ export interface EventFormPayload {
     addressName?: string;
     deepLink?: string;
     withSubscription: boolean;
-    diffusionLanguages?: string[];
+    diffusionLanguages: string[];
     concernedUniversities?: University[];
     translations: {
         title: string;

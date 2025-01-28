@@ -272,7 +272,8 @@
                 "button": "Add"
             },
             "diffusion_languages": {
-                "label": "Diffused languages",
+                "all": "All languages",
+                "label": "Target languages",
                 "button": "Add"
             },
             "event_url": "Event URL",

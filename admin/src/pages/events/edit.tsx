@@ -42,7 +42,7 @@ const EditEvent = () => {
             formData.append(`translations[${index}][languageCode]`, translation.languageCode);
         });
 
-        payload.diffusionLanguages?.forEach((language, index) => {
+        payload.diffusionLanguages.forEach((language, index) => {
             formData.append(`diffusionLanguages[${index}]`, language);
         });
 
