@@ -7,6 +7,7 @@ import NotificationAdapter from '../adapter/NotificationAdapter';
 import { RecorderAdapter } from '../adapter/RecorderAdapter';
 import Configuration from '../domain/entities/Confirguration';
 import CreateActivityUsecase from '../domain/usecases/activity/CreateActivityUsecase';
+import DeleteActivityUsecase from '../domain/usecases/activity/DeleteActivityUsecase';
 import GetActivitiesUsecase from '../domain/usecases/activity/GetActivitiesUsecase';
 import GetActivityPdfUsecase from '../domain/usecases/activity/GetActivityPdfUsecase';
 import GetActivityThemesUsecase from '../domain/usecases/activity/GetActivityThemesUsecase';
@@ -208,6 +209,7 @@ const getConfigContextValue = ({
     const updateActivity = new UpdateActivityUsecase(domainHttpAdapter);
     const updateActivityStatus = new UpdateActivityStatusUsecase(domainHttpAdapter);
     const getActivityPdf = new GetActivityPdfUsecase(domainHttpAdapter, fileAdapter);
+    const deleteActivity = new DeleteActivityUsecase(domainHttpAdapter);
 
     // Session
     const createSession = new CreateSessionUsecase(domainHttpAdapter);
@@ -335,6 +337,7 @@ const getConfigContextValue = ({
         addReaderToVocabularyList,
         getHashtagsFromConversation,
         getEditoByUniversityId,
+        deleteActivity,
     };
 };
 

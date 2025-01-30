@@ -348,9 +348,8 @@ export class ActivityController {
   }
 
   @Delete(':id')
-  @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
-  @Swagger.ApiOperation({ summary: 'Delete a Activity ressource.' })
+  @Swagger.ApiOperation({ summary: 'Delete an Activity ressource.' })
   @Swagger.ApiOkResponse({ type: () => ActivityResponse })
   async deleteActivity(@Param('id') id: string) {
     await this.deleteActivityUsecase.execute(id);

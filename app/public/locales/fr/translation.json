@@ -187,6 +187,8 @@
             "creator": "Créé par {{name}}",
             "title": "Fiche d'activité",
             "update": "Mettre à jour ma fiche",
+            "delete": "Supprimer ma fiche",
+            "delete_confirm": "Êtes-vous sûr de vouloir supprimer cette fiche ?",
             "export": "Exporter au format PDF",
             "language": "Langue",
             "level": "Niveau",
