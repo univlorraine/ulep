@@ -33,11 +33,11 @@ export class UpdateReportStatusUsecase {
 
     if (
       command.shouldDeleteMessage !== undefined &&
-      command.shouldDeleteMessage !== instance.metadata.isMessageDeleted &&
-      instance.metadata.messageId
+      command.shouldDeleteMessage !== instance.metadata?.isMessageDeleted &&
+      instance.metadata?.messageId
     ) {
       await this.chatService.deleteMessage(
-        instance.metadata.messageId,
+        instance.metadata?.messageId,
         command.shouldDeleteMessage,
       );
     }
@@ -48,7 +48,8 @@ export class UpdateReportStatusUsecase {
       command.comment,
       {
         ...instance.metadata,
-        isMessageDeleted: command.shouldDeleteMessage,
+        isMessageDeleted:
+          command.shouldDeleteMessage || instance.metadata?.isMessageDeleted,
       },
     );
   }

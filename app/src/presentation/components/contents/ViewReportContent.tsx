@@ -21,6 +21,7 @@ const ViewReportContent: React.FC<ViewReportContentProps> = ({ goBack, report, s
     const isConversationReport = report.category.name === ReportCategoryName.CONVERSATION;
     const isMediaReport = report.metadata?.mediaType && report.metadata?.mediaType !== MessageType.Text;
     const isReportCancelled = report.status === ReportStatus.CANCELLED;
+    const isReportClosed = report.status === ReportStatus.CLOSED;
 
     const messageMedia = new MessageReport(
         report.id,
@@ -49,7 +50,7 @@ const ViewReportContent: React.FC<ViewReportContentProps> = ({ goBack, report, s
                     <h1 className={styles.title}>
                         {isConversationReport
                             ? t('report_item_page.conversation.title')
-                            : t('report_item_page.application.title')}
+                            : `${t('report_item_page.application.title')} :  ${report.category.name}`}
                     </h1>
                     <div className={styles.status_container}>
                         <ReportStatusTag status={report.status} isIcon={true} />
@@ -59,7 +60,7 @@ const ViewReportContent: React.FC<ViewReportContentProps> = ({ goBack, report, s
                             isMediaReport ? (
                                 <div className={styles.item}>
                                     <p className={styles.item_title}>
-                                        {t('report_item_page.conversation.message')} {createdDate}
+                                        {`${t('report_item_page.conversation.message')} ${createdDate} - ${report.metadata.tandemUserName}`}
                                     </p>
                                     <div className={styles.item_content_media}>
                                         <MediaComponent message={messageMedia} setImageToDisplay={() => {}} />
@@ -67,7 +68,7 @@ const ViewReportContent: React.FC<ViewReportContentProps> = ({ goBack, report, s
                                 </div>
                             ) : (
                                 <ReportDetail
-                                    title={`${t('report_item_page.conversation.message')} ${createdDate}`}
+                                    title={`${t('report_item_page.conversation.message')} ${createdDate} - ${report.metadata.tandemUserName}`}
                                     text={messageContent}
                                 />
                             )
@@ -87,7 +88,7 @@ const ViewReportContent: React.FC<ViewReportContentProps> = ({ goBack, report, s
                         />
                     </div>
                 </div>
-                {!isReportCancelled && (
+                {!isReportCancelled && !isReportClosed && (
                     <IonButton
                         className={`tertiary-button no-padding ${styles.cancel_button}`}
                         fill="clear"

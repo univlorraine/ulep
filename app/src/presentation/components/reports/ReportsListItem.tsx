@@ -52,7 +52,7 @@ const ReportsListItem: React.FC<ReportsListItemProps> = ({ report, key }) => {
                     {isConversationReport ? getTandemInfo() : t('reports_page.list.application')}
                 </p>
                 <p className={styles.message}>
-                    {isConversationReport ? report.category.name : t('reports_page.list.report_message')}
+                    {!isConversationReport ? report.category.name : t('reports_page.list.report_message')}
                 </p>
             </div>
         </IonItem>

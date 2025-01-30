@@ -59,8 +59,8 @@ const EditReport = () => {
                             handleSubmit={(status: ReportStatus, comment?: string, shouldDeleteMessage?: boolean) =>
                                 handleSubmit(record.id, status, comment, shouldDeleteMessage)
                             }
-                            isMessageDeleted={record.metadata.isMessageDeleted}
-                            messageId={record.metadata.messageId}
+                            isMessageDeleted={record.metadata?.isMessageDeleted}
+                            messageId={record.metadata?.messageId}
                             status={record.status}
                             user={record.user}
                         />
