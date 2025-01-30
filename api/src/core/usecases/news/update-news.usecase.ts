@@ -20,6 +20,7 @@ export type UpdateNewsCommand = {
   startPublicationDate: Date;
   endPublicationDate: Date;
   creditImage?: string;
+  concernedUniversities?: string[];
 };
 
 @Injectable()

@@ -121,9 +121,10 @@ model Organizations {
   DefaultCertificateFile      MediaObjects?       @relation("UniversitiesDefaultCertificateFile", fields: [default_certificate_file_id], references: [id])
   Activities                  Activity[]
   News                        News[]
+  NewsConcernedUniversities   News[]              @relation("NewsConcernedUniversities")
   EventsConcernedUniversities Events[]            @relation("ConcernedUniversities")
   EventsAuthorUniversity      Events[]            @relation("AuthorUniversity")
-  Edito Editos?
+  Edito                       Editos?
 
   @@unique([name])
   @@map("organizations")
@@ -715,6 +716,7 @@ model News {
   Image                   MediaObjects? @relation(fields: [image_id], references: [id])
   TitleTextContent        TextContent   @relation("NewsTitleTextContent", fields: [title_text_content_id], references: [id], onDelete: Cascade)
   ContentTextContent      TextContent   @relation("NewsContentTextContent", fields: [content_text_content_id], references: [id], onDelete: Cascade)
+  ConcernedUniversities   Organizations[] @relation("NewsConcernedUniversities")
 }
 
 //  * ****************************************************

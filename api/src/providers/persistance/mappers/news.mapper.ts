@@ -1,14 +1,14 @@
 import * as Prisma from '@prisma/client';
 import {
+  MediaObject,
+  News,
+  NewsStatus,
+  NewsTranslation,
+} from 'src/core/models';
+import {
   TextContentRelations,
   TextContentSnapshot,
 } from './translation.mapper';
-import {
-  News,
-  MediaObject,
-  NewsTranslation,
-  NewsStatus,
-} from 'src/core/models';
 import {
   universityMapper,
   UniversityRelations,
@@ -20,6 +20,7 @@ export const NewsRelations = {
   Image: true,
   TitleTextContent: TextContentRelations,
   ContentTextContent: TextContentRelations,
+  ConcernedUniversities: { include: UniversityRelations },
 };
 
 export type NewsSnapshot = Prisma.News & {
@@ -27,6 +28,7 @@ export type NewsSnapshot = Prisma.News & {
   Image: Prisma.MediaObjects;
   TitleTextContent: TextContentSnapshot;
   ContentTextContent: TextContentSnapshot;
+  ConcernedUniversities: UniversitySnapshot[];
 };
 
 export const newsMapper = (snapshot: NewsSnapshot): News => {
@@ -52,6 +54,9 @@ export const newsMapper = (snapshot: NewsSnapshot): News => {
     createdAt: snapshot.created_at,
     updatedAt: snapshot.updated_at,
     creditImage: snapshot.credit_image,
+    concernedUniversities: snapshot.ConcernedUniversities.map((university) =>
+      universityMapper(university),
+    ),
   };
 };
 

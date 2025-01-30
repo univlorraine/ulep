@@ -17,7 +17,13 @@ const EditNews = () => {
             });
         }
 
-        if (!payload.title || !payload.content || !payload.startPublicationDate || !payload.endPublicationDate) {
+        if (
+            !payload.title ||
+            !payload.content ||
+            !payload.startPublicationDate ||
+            !payload.endPublicationDate ||
+            payload.concernedUniversities?.length === 0
+        ) {
             return notify('news.form.error.required', {
                 type: 'error',
             });
@@ -32,6 +38,10 @@ const EditNews = () => {
         formData.append('status', payload.status);
         formData.append('startPublicationDate', payload.startPublicationDate.toISOString());
         formData.append('endPublicationDate', payload.endPublicationDate.toISOString());
+
+        payload.concernedUniversities.forEach((university, index) => {
+            formData.append(`concernedUniversities[${index}]`, university.id);
+        });
 
         payload.translations.forEach((translation, index) => {
             formData.append(`translations[${index}][title]`, translation.title);
