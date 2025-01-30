@@ -81,7 +81,8 @@ const useVocabulary = (learningLanguage?: LearningLanguage, currentVocabularyLis
             return showToast({ message: t(result.message), duration: 5000 });
         }
 
-        showToast('vocabulary.list.share.success');
+        showToast(t('vocabulary.list.share.success'), 3000);
+        setVocabularyListSelected(result);
         setRefreshVocabularyLists(!refreshVocabularyLists);
     };
 

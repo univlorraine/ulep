@@ -373,7 +373,7 @@
                 "create": "Validate",
                 "title": "With whom do you want to share?",
                 "no_tandem": "You don't have a tandem for this language",
-                "success": "The vocabulary list has been shared"
+                "success": "The status of the list has been updated"
             },
             "start_quiz": {
                 "title": "Select the lists to practice on",
@@ -394,7 +394,8 @@
         "pair": {
             "go_back": "Go back",
             "menu": "Menu",
-            "share_button": "Share",
+            "share_button": "Share to your tandem",
+            "unshare_button": "Unshare from your tandem",
             "export": "Export",
             "empty": "You haven't created any vocabulary pair for this list yet.",
             "create": "New word pair",

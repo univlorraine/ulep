@@ -256,6 +256,7 @@ export class PrismaVocabularyRepository implements VocabularyRepository {
         name: props.name,
         symbol: props.symbol,
         Editors: {
+          set: [],
           connect: props.profileIds.map((profileId) => ({
             id: profileId,
           })),

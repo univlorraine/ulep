@@ -23,6 +23,7 @@ interface VocabularyContentProps {
     onDeleteVocabularyList: () => void;
     onSearch: (search: string) => void;
     onShareVocabularyList: () => void;
+    onUnshareVocabularyList: () => void;
     setQuizzSelectedListIds: (selectedListsIds: string[]) => void;
 }
 
@@ -37,6 +38,7 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
     onDeleteVocabularyList,
     onSearch,
     onShareVocabularyList,
+    onUnshareVocabularyList,
     setQuizzSelectedListIds,
 }) => {
     const { t } = useTranslation();
@@ -45,6 +47,7 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
     const [showDeleteVocabularyListModal, setShowDeleteVocabularyListModal] = useState(false);
     const [search, setSearch] = useState('');
     const isVocabularyListMine = vocabularyList.isMine(profile);
+    const isVocabularyListShared = vocabularyList.editorsIds.length > 1;
 
     const exportToPdf = async () => {
         const result = await getVocabularyListPdf.execute(vocabularyList.id);
@@ -64,6 +67,10 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
 
     const onShareVocabularyListPressed = () => {
         onShareVocabularyList();
+    };
+
+    const onUnshareVocabularyListPressed = () => {
+        onUnshareVocabularyList();
     };
 
     const onStartQuizzPressed = () => {
@@ -102,13 +109,17 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
                                 button={true}
                                 detail={false}
                                 onClick={() => {
-                                    onShareVocabularyListPressed();
+                                    isVocabularyListShared
+                                        ? onUnshareVocabularyListPressed()
+                                        : onShareVocabularyListPressed();
                                     closeMenu();
                                 }}
                             >
                                 <IonIcon icon={arrowRedoOutline} aria-hidden="true" />
                                 <IonLabel className={styles['popover-label']}>
-                                    {t('vocabulary.pair.share_button')}
+                                    {isVocabularyListShared
+                                        ? t('vocabulary.pair.unshare_button')
+                                        : t('vocabulary.pair.share_button')}
                                 </IonLabel>
                             </IonItem>
                         )}
