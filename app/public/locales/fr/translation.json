@@ -16,7 +16,8 @@
         "userDoesntExist": "L'utilisateur n'existe pas",
         "userWrongCredentials": "Authentification en erreur : mauvais email ou mauvais mot de passe.",
         "connecteur": "Erreur lors de la récupération des informations utilisateur",
-        "fileSizeExceed": "Le fichier est trop volumineux, il doit être inférieur à {{maxSize}}Mo"
+        "fileSizeExceed": "Le fichier est trop volumineux, il doit être inférieur à {{maxSize}}Mo",
+        "imageFormat": "Le format de l'image n'est pas autorisé"
     },
     "error_page": {
         "title": "Une erreur est survenue",

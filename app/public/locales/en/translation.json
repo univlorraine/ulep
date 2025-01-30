@@ -16,7 +16,8 @@
         "userDoesntExist": "This username does not exist",
         "userWrongCredentials": "Authentication error: Bad email or bad password.",
         "connecteur": "",
-        "fileSizeExceed": "The file is too big, it must be less than {{maxSize}}Mo"
+        "fileSizeExceed": "The file is too big, it must be less than {{maxSize}}Mo",
+        "imageFormat": "The image format is not allowed"
     },
     "error_page": {
         "title": "An error has occurred",

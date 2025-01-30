@@ -5,10 +5,10 @@ import { useHistory } from 'react-router';
 import { PlusPng } from '../../assets';
 import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreState } from '../../store/storeTypes';
+import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import NetworkImage from '../components/NetworkImage';
 import TextInput from '../components/TextInput';
-import WebLayoutCentered from '../components/layout/WebLayoutCentered';
-import { isEmailCorrect, isNameCorrect } from '../utils';
+import { isEmailCorrect, isImageFormatValid, isNameCorrect } from '../utils';
 import styles from './css/SignUp.module.css';
 
 const EditInformationsPage: React.FC = () => {
@@ -32,7 +32,16 @@ const EditInformationsPage: React.FC = () => {
     };
 
     const openGallery = async () => {
-        setProfilePicture(await cameraAdapter.getPictureFromGallery());
+        const image = await cameraAdapter.getPictureFromGallery();
+
+        if (image && !isImageFormatValid(image)) {
+            return showToast({
+                message: t('errors.imageFormat'),
+                duration: 3000,
+            });
+        }
+
+        setProfilePicture(image);
     };
 
     const nextStep = async () => {
