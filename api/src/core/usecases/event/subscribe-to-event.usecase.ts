@@ -51,7 +51,7 @@ export class SubscribeToEventUsecase {
         event: {
           title: event.title,
           authorUniversity: event.authorUniversity.name,
-          date: event.startDate.toLocaleDateString(),
+          date: event.startDate.toLocaleDateString(profile.nativeLanguage.code),
         },
         to: profile.user.email,
         user: profile.user,

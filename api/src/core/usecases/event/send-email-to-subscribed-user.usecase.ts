@@ -5,10 +5,6 @@ import {
   EventRepository,
   EVENT_REPOSITORY,
 } from 'src/core/ports/event.repository';
-import {
-  ProfileRepository,
-  PROFILE_REPOSITORY,
-} from 'src/core/ports/profile.repository';
 
 export type SendEmailToSubscribedUsersCommand = {
   eventId: string;
@@ -21,8 +17,6 @@ export class SendEmailToSubscribedUsersUsecase {
   constructor(
     @Inject(EVENT_REPOSITORY)
     private readonly eventRepository: EventRepository,
-    @Inject(PROFILE_REPOSITORY)
-    private readonly profileRepository: ProfileRepository,
     @Inject(EMAIL_GATEWAY)
     private readonly emailGateway: EmailGateway,
   ) {}
