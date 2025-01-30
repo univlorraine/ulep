@@ -109,7 +109,7 @@ export class UpdateActivityUsecase {
         : activity.metadata,
     });
 
-    const learningLanguage = activity.creator.findLearningLanguageByCode(
+    const learningLanguage = activity.creator?.findLearningLanguageByCode(
       activity.language.code,
     );
 
