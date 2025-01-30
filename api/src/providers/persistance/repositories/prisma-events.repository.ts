@@ -124,25 +124,11 @@ export class PrismaEventRepository implements EventRepository {
         },
         {
           ...(filters.universityId && {
-            OR: [
-              {
-                ConcernedUniversities: {
-                  some: {
-                    id: filters.universityId,
-                  },
-                },
+            ConcernedUniversities: {
+              some: {
+                id: filters.universityId,
               },
-              {
-                AuthorUniversity: {
-                  id: filters.universityId,
-                },
-              },
-              {
-                ConcernedUniversities: {
-                  none: {},
-                },
-              },
-            ],
+            },
           }),
         },
         {
