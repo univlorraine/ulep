@@ -25,11 +25,12 @@ const LearningBookContainerContent: React.FC<LearningBookContainerContentProps> 
     learningLanguage,
 }) => {
     const { t } = useTranslation();
-    const { createLogEntry, updateCustomLogEntry, shareLogEntries, exportLogEntries } = useConfig();
+    const { createLogEntry, updateCustomLogEntry, shareLogEntries, exportLogEntries, unshareLogEntries } = useConfig();
     const [showToast] = useIonToast();
     const [isCreateCustomLogEntry, setIsCreateCustomLogEntry] = useState<boolean>(false);
     const [logEntryToUpdate, setLogEntryToUpdate] = useState<LogEntryCustomEntry | undefined>();
     const [focusLogEntryForADay, setFocusLogEntryForADay] = useState<Date | undefined>();
+    const [isShared, setIsShared] = useState<boolean>(Boolean(learningLanguage.sharedLogsDate));
 
     const createOrUpdateCustomLogEntry = async ({
         date,
@@ -73,6 +74,17 @@ const LearningBookContainerContent: React.FC<LearningBookContainerContentProps> 
             showToast(t(result.message), 3000);
         } else {
             showToast(t('learning_book.list.share.success'), 3000);
+            setIsShared(true);
+        }
+    };
+
+    const handleUnshareLogEntries = async () => {
+        const result = await unshareLogEntries.execute(learningLanguage.id);
+        if (result instanceof Error) {
+            showToast(t(result.message), 3000);
+        } else {
+            showToast(t('learning_book.list.unshare.success'), 3000);
+            setIsShared(false);
         }
     };
 
@@ -137,10 +149,12 @@ const LearningBookContainerContent: React.FC<LearningBookContainerContentProps> 
             onBackPressed={handleOnClose}
             onFocusLogEntryForADay={setFocusLogEntryForADay}
             onShareLogEntries={handleShareLogEntries}
+            onUnshareLogEntries={handleUnshareLogEntries}
             onExportLogEntries={handleExportLogEntries}
             learningLanguage={learningLanguage}
             profile={profile}
             isModal={true}
+            isShared={isShared}
         />
     );
 };

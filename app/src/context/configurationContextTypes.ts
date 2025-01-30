@@ -62,6 +62,7 @@ import ExportLogEntriesUsecaseInterface from '../domain/interfaces/log-entries/E
 import GetLogEntriesByDateUsecaseInterface from '../domain/interfaces/log-entries/GetLogEntriesByDateUsecase.interface';
 import GetLogEntriesUsecaseInterface from '../domain/interfaces/log-entries/GetLogEntriesUsecase.interface';
 import ShareLogEntriesUsecaseInterface from '../domain/interfaces/log-entries/ShareLogEntriesUsecase.interface';
+import UnshareLogEntriesUsecaseInterface from '../domain/interfaces/log-entries/UnshareLogEntriesUsecase.interface';
 import UpdateCustomLogEntryUsecaseInterface from '../domain/interfaces/log-entries/UpdateCustomLogEntryUsecase.interface';
 import LoginUsecaseInterface from '../domain/interfaces/LoginUsecase.interface';
 import GetAllNewsUsecaseInterface from '../domain/interfaces/news/GetAllNewsUsecase.interface';
@@ -187,6 +188,7 @@ export interface ConfigContextValueType {
     getLogEntries: GetLogEntriesUsecaseInterface;
     getLogEntriesByDate: GetLogEntriesByDateUsecaseInterface;
     shareLogEntries: ShareLogEntriesUsecaseInterface;
+    unshareLogEntries: UnshareLogEntriesUsecaseInterface;
     exportLogEntries: ExportLogEntriesUsecaseInterface;
     // Edito
     getEditoByUniversityId: GetEditoByUniversityIdUsecaseInterface;

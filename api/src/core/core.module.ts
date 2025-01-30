@@ -15,6 +15,7 @@ import {
   GetAllEntriesForUserByDateUsecase,
   GetAllEntriesForUserGroupedByDatesUsecase,
   ShareLogEntriesUsecase,
+  UnshareLogEntriesUsecase,
 } from 'src/core/usecases/log-entry';
 import { UpdateCustomLogEntryUsecase } from 'src/core/usecases/log-entry/update-custom-log-entry.usecase';
 import { DeleteObjectiveImageUsecase } from 'src/core/usecases/media/delete-objective-image.usecase';
@@ -435,6 +436,7 @@ const usecases: Provider[] = [
   GetAllEntriesForUserGroupedByDatesUsecase,
   UpdateCustomLogEntryUsecase,
   ShareLogEntriesUsecase,
+  UnshareLogEntriesUsecase,
   ExportLogEntriesUsecase,
 ];
 

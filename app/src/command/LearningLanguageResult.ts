@@ -20,23 +20,25 @@ export interface LearningLanguageResult {
     profile?: ProfileCommand;
     certificateFile?: MediaObject;
     sharedCertificate?: boolean;
+    sharedLogsDate?: Date;
 }
 
-
-export const learningLanguageResultToDomain = (result: LearningLanguageResult) => new LearningLanguage(
-    result.id,
-    result.code,
-    result.name,
-    result.level,
-    result.learningType,
-    result.sameAge,
-    result.sameGender,
-    result.certificateOption,
-    result.specificProgram,
-    result.profile ? profileCommandToDomain(result.profile) : undefined,
-    result.customLearningGoals ? result.customLearningGoals.map(customLearningGoalCommandToDomain) : undefined,
-    result.certificateFile ? mediaObjectCommandToDomain(result.certificateFile) : undefined,
-    result.sharedCertificate
-);
+export const learningLanguageResultToDomain = (result: LearningLanguageResult) =>
+    new LearningLanguage(
+        result.id,
+        result.code,
+        result.name,
+        result.level,
+        result.learningType,
+        result.sameAge,
+        result.sameGender,
+        result.certificateOption,
+        result.specificProgram,
+        result.profile ? profileCommandToDomain(result.profile) : undefined,
+        result.customLearningGoals ? result.customLearningGoals.map(customLearningGoalCommandToDomain) : undefined,
+        result.certificateFile ? mediaObjectCommandToDomain(result.certificateFile) : undefined,
+        result.sharedCertificate,
+        result.sharedLogsDate
+    );
 
 export default learningLanguageResultToDomain;

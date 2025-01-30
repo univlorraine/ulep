@@ -28,10 +28,12 @@ interface LogEntriesContentProps {
     onFocusLogEntryForADay: (date: Date) => void;
     onBackPressed: () => void;
     onShareLogEntries: () => void;
+    onUnshareLogEntries: () => void;
     onExportLogEntries: () => void;
     profile: Profile;
     learningLanguage: LearningLanguage;
     isModal?: boolean;
+    isShared: boolean;
 }
 
 export const LogEntriesContent: React.FC<LogEntriesContentProps> = ({
@@ -43,9 +45,11 @@ export const LogEntriesContent: React.FC<LogEntriesContentProps> = ({
     onFocusLogEntryForADay,
     onExportLogEntries,
     onShareLogEntries,
+    onUnshareLogEntries,
     profile,
     learningLanguage,
     isModal,
+    isShared,
 }) => {
     const { t } = useTranslation();
     const [refresh, setRefresh] = useState<boolean>(false);
@@ -74,14 +78,18 @@ export const LogEntriesContent: React.FC<LogEntriesContentProps> = ({
                             button={true}
                             detail={false}
                             onClick={async () => {
-                                await onShareLogEntries();
+                                if (isShared) {
+                                    await onUnshareLogEntries();
+                                } else {
+                                    await onShareLogEntries();
+                                }
                                 setRefresh(!refresh);
                                 closeMenu();
                             }}
                         >
                             <IonIcon icon={arrowRedoOutline} aria-hidden="true" />
                             <IonLabel className={styles['popover-label']}>
-                                {t('learning_book.list.share.title')}
+                                {isShared ? t('learning_book.list.unshare.title') : t('learning_book.list.share.title')}
                             </IonLabel>
                         </IonItem>
                         <IonItem

@@ -103,8 +103,12 @@
             "title": "Learning journal",
             "load_more": "See more",
             "share": {
-                "title": "Share the logs",
+                "title": "Share the logs to your animator",
                 "success": "Logs have been shared"
+            },
+            "unshare": {
+                "title": "Unshare the logs to your animator",
+                "success": "Logs have been unshared"
             },
             "export": {
                 "title": "Export the logs",

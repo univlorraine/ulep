@@ -103,8 +103,12 @@
             "title": "Journal d'apprentissage",
             "load_more": "Voir plus",
             "share": {
-                "title": "Partager les entrées",
+                "title": "Partager les entrées à votre animateur",
                 "success": "Les entrées ont été partagées"
+            },
+            "unshare": {
+                "title": "Ne plus partager les entrées à votre animateur",
+                "success": "Les entrées ne sont plus partagées"
             },
             "export": {
                 "success": "Les entrées ont été exportées",

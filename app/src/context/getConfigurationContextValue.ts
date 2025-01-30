@@ -62,6 +62,7 @@ import ExportLogEntriesUsecase from '../domain/usecases/log-entries/ExportLogEnt
 import GetLogEntriesByDateUsecase from '../domain/usecases/log-entries/GetLogEntriesByDateUsecase';
 import GetLogEntriesUsecase from '../domain/usecases/log-entries/GetLogEntriesUsecase';
 import ShareLogEntriesUsecase from '../domain/usecases/log-entries/ShareLogEntriesUsecase';
+import UnshareLogEntriesUsecase from '../domain/usecases/log-entries/UnshareLogEntriesUsecase';
 import UpdateCustomLogEntryUsecase from '../domain/usecases/log-entries/UpdateCustomLogEntryUsecase';
 import LoginUsecase from '../domain/usecases/LoginUsecase';
 import GetAllNewsUsecase from '../domain/usecases/news/GetAllNewsUsecase';
@@ -240,6 +241,7 @@ const getConfigContextValue = ({
     const getLogEntries = new GetLogEntriesUsecase(domainHttpAdapter);
     const getLogEntriesByDate = new GetLogEntriesByDateUsecase(domainHttpAdapter);
     const shareLogEntries = new ShareLogEntriesUsecase(domainHttpAdapter);
+    const unshareLogEntries = new UnshareLogEntriesUsecase(domainHttpAdapter);
     const exportLogEntries = new ExportLogEntriesUsecase(domainHttpAdapter, fileAdapter);
 
     // Edito
@@ -333,6 +335,7 @@ const getConfigContextValue = ({
         getLogEntries,
         getLogEntriesByDate,
         shareLogEntries,
+        unshareLogEntries,
         exportLogEntries,
         addReaderToVocabularyList,
         getHashtagsFromConversation,

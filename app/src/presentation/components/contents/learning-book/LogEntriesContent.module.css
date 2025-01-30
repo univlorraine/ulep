@@ -8,3 +8,7 @@
     gap: 24px;
     overflow-y: auto;
 }
+
+.popover-label {
+    margin: 0px 8px;
+}
