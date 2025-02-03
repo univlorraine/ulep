@@ -24,6 +24,7 @@ RUN pnpm fetch
 
 COPY --link . .
 RUN pnpm install --offline --frozen-lockfile
+RUN pnpm i -g prisma@4.16.2
 RUN pnpm prisma generate
 
 # Development image
