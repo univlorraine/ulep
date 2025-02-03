@@ -108,6 +108,10 @@ const SessionCard: React.FC<SessionCardProps> = ({
             return <CreateSessionButton tandem={tandem} onCreateSessionPressed={onCreateSessionPressed} />;
         }
 
+        if (session.cancelledAt !== null) {
+            return <ShowSessionButton session={session} tandem={tandem} onShowSessionPressed={onShowSessionPressed} />;
+        }
+
         if (session.startAt.toDateString() === new Date().toDateString()) {
             return (
                 <>
@@ -115,10 +119,6 @@ const SessionCard: React.FC<SessionCardProps> = ({
                     <ShowSessionButton session={session} tandem={tandem} onShowSessionPressed={onShowSessionPressed} />
                 </>
             );
-        }
-
-        if (session.cancelledAt !== null) {
-            return <ShowSessionButton session={session} tandem={tandem} onShowSessionPressed={onShowSessionPressed} />;
         }
 
         return (
