@@ -24,6 +24,7 @@ COPY --link pnpm-lock.yaml ./
 RUN pnpm fetch
 
 COPY --link . .
+RUN pnpm i -g
 RUN pnpm install --offline --frozen-lockfile
 RUN pnpm prisma generate
 
