@@ -20,6 +20,7 @@ const PendingTandemCard: React.FC<PendingTandemCardProps> = ({ tandem, onTandemP
                     onPressed={onTandemPressed}
                     status={tandem.status}
                     currentColor={currentColor}
+                    profile={tandem.partner}
                 />
             </div>
         </LearningCard>
