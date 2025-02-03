@@ -268,11 +268,13 @@
             "subscriptions": "Subscriptions",
             "with_subscriptions": "With subscriptions",
             "concerned_universities": {
+                "all": "All universities",
                 "label": "Concerned universities",
                 "button": "Add"
             },
             "diffusion_languages": {
-                "label": "Diffused languages",
+                "all": "All languages",
+                "label": "Target languages",
                 "button": "Add"
             },
             "event_url": "Event URL",
