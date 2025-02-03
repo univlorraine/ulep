@@ -118,13 +118,14 @@ const LearningContent: React.FC<LearningContentProps> = ({
                                     currentColor={currentTandemColor}
                                 />
                             )}
-                            {currentTandem && currentTandem.status === 'DRAFT' && (
-                                <PendingTandemCard
-                                    tandem={currentTandem}
-                                    onTandemPressed={() => onTandemPressed(currentTandem)}
-                                    currentColor={currentTandemColor}
-                                />
-                            )}
+                            {currentTandem &&
+                                (currentTandem.status === 'DRAFT' || currentTandem.status === 'INACTIVE') && (
+                                    <PendingTandemCard
+                                        tandem={currentTandem}
+                                        onTandemPressed={() => onTandemPressed(currentTandem)}
+                                        currentColor={currentTandemColor}
+                                    />
+                                )}
                             {currentTandem && currentTandem.learningLanguage.certificateOption && (
                                 <>
                                     <LearningJournalCard
