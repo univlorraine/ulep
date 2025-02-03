@@ -11,10 +11,10 @@ RUN apk add --no-cache libc6-compat
 
 WORKDIR /srv/app
 
-ENV COREPACK_DEFAULT_TO_LATEST=0
-RUN corepack enable
-RUN corepack prepare --activate pnpm@9.15.0
-RUN pnpm config -g set store-dir /.pnpm-store
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH" 
+RUN corepack enable && \
+	corepack prepare pnpm@9.15.4 --activate
 
 # Deps stage, preserve dependencies in cache as long as the lockfile isn't changed
 FROM chat_base AS chat_deps
@@ -24,7 +24,6 @@ RUN pnpm fetch
 
 COPY --link . .
 RUN pnpm install --offline --frozen-lockfile
-RUN pnpm i -g prisma@4.16.2
 RUN pnpm prisma generate
 
 # Development image
