@@ -1,11 +1,11 @@
-import { IonButton, IonIcon, IonImg, IonText } from '@ionic/react';
+import { IonButton, IonIcon, IonImg, IonText, useIonToast } from '@ionic/react';
 import { addSharp, closeCircle, documentOutline, trashBinOutline } from 'ionicons/icons';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useConfig } from '../../../../context/ConfigurationContext';
 import { Activity, ActivityTheme, ActivityThemeCategory } from '../../../../domain/entities/Activity';
 import Language from '../../../../domain/entities/Language';
-import { codeLanguageToFlag } from '../../../utils';
+import { codeLanguageToFlag, isImageFormatValid } from '../../../utils';
 import Dropdown, { DropDownItem } from '../../DropDown';
 import RequiredField from '../../forms/RequiredField';
 import TextInput from '../../TextInput';
@@ -30,6 +30,7 @@ export const CreateActivityInformationsContent = ({
     activityToUpdate,
 }: CreateActivityInformationsContentProps) => {
     const { t } = useTranslation();
+    const [showToast] = useIonToast();
     const { cameraAdapter, fileAdapter } = useConfig();
     const [title, setTitle] = useState<string>(activityToUpdate?.title ?? '');
     const [image, setImage] = useState<File>();
@@ -101,6 +102,13 @@ export const CreateActivityInformationsContent = ({
 
     const onImagePressed = async () => {
         const image = await cameraAdapter.getPictureFromGallery();
+
+        if (image && !isImageFormatValid(image)) {
+            return showToast({
+                message: t('errors.imageFormat'),
+                duration: 3000,
+            });
+        }
 
         if (image) {
             setImage(image);

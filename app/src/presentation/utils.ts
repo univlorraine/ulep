@@ -272,6 +272,11 @@ export const compareCEFR = (levelA: CEFR, levelB: CEFR) => {
     return CEFRlevels[levelB] - CEFRlevels[levelA];
 };
 
+export const isImageFormatValid = (file: File): boolean => {
+    const imageRegex = /^(image\/(jpg|png|jpeg))$/;
+    return imageRegex.test(file.type);
+};
+
 export const normalizeString = (string: string) => {
     return string
         .replace('ꜳ', 'aa')

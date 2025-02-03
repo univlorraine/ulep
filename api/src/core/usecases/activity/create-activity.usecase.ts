@@ -1,5 +1,4 @@
 import { Inject, Injectable } from '@nestjs/common';
-import openGraphScraper from 'open-graph-scraper';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import { ProficiencyLevel } from 'src/core/models';
 import { ActivityVocabulary } from 'src/core/models/activity.model';
@@ -16,6 +15,7 @@ import {
   PROFILE_REPOSITORY,
 } from 'src/core/ports/profile.repository';
 import { UploadAudioVocabularyActivityUsecase } from 'src/core/usecases/media';
+const ogs = require('open-graph-scraper');
 
 export class CreateActivityCommand {
   title: string;
@@ -61,11 +61,12 @@ export class CreateActivityUsecase {
       : undefined;
     if (url) {
       try {
-        const result = await openGraphScraper({ url });
+        const result = await ogs({ url });
         if (result.result.success) {
           openGraphResult = result.result;
         }
       } catch (err) {
+        console.warn(err);
         console.warn('Url not found for open graph', url);
       }
     }

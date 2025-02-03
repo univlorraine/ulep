@@ -9,7 +9,7 @@ import { AvatarMaxSizeError } from '../../../domain/usecases/UpdateAvatarUsecase
 import { useStoreActions, useStoreState } from '../../../store/storeTypes';
 import useLogout from '../../hooks/useLogout';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
-import { BACKGROUND_PROFILE_STYLE_INLINE, HYBRID_MAX_WIDTH } from '../../utils';
+import { BACKGROUND_PROFILE_STYLE_INLINE, HYBRID_MAX_WIDTH, isImageFormatValid } from '../../utils';
 import EditoContentModal from '../modals/EditoContentModal';
 import ProfileDetailsCard from '../profile/ProfileDetailsCard';
 import styles from './ProfileContent.module.css';
@@ -38,6 +38,13 @@ const ProfileContent: React.FC<ProfileContentProps> = ({ onDisplaySettings, prof
 
     const changeAvatar = async () => {
         const avatarFile = await cameraAdapter.getPictureFromGallery();
+
+        if (avatarFile && !isImageFormatValid(avatarFile)) {
+            return showToast({
+                message: t('errors.imageFormat'),
+                duration: 3000,
+            });
+        }
 
         if (avatarFile) {
             setLoading(true);

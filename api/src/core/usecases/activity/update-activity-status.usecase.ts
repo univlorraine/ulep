@@ -144,6 +144,7 @@ export class UpdateActivityStatusUsecase {
     if (!activity) {
       throw new RessourceDoesNotExist('Activity does not exist');
     }
-    return activity.creator.findLearningLanguageByCode(activity.language.code);
+
+    return activity.creator?.findLearningLanguageByCode(activity.language.code);
   }
 }

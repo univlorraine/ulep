@@ -6,11 +6,11 @@ import { CloseBlackSvg, InfoSvg, PlusPng } from '../../assets';
 import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreState } from '../../store/storeTypes';
 import Checkbox from '../components/Checkbox';
-import TextInput from '../components/TextInput';
 import RequiredField from '../components/forms/RequiredField';
 import RequiredFieldsMention from '../components/forms/RequiredFieldsMention';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
-import { isEmailCorrect, isNameCorrect } from '../utils';
+import TextInput from '../components/TextInput';
+import { isEmailCorrect, isImageFormatValid, isNameCorrect } from '../utils';
 import styles from './css/SignUp.module.css';
 
 export interface SignUpInformationsParams {
@@ -111,7 +111,16 @@ const SignUpInformationsPage: React.FC = () => {
     };
 
     const openGallery = async () => {
-        setProfilePicture(await cameraAdapter.getPictureFromGallery());
+        const image = await cameraAdapter.getPictureFromGallery();
+
+        if (image && !isImageFormatValid(image)) {
+            return showToast({
+                message: t('errors.imageFormat'),
+                duration: 3000,
+            });
+        }
+
+        setProfilePicture(image);
     };
 
     const continueSignUp = async () => {

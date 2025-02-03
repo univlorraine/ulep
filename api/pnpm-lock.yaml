@@ -99,8 +99,8 @@ importers:
         specifier: ^6.9.15
         version: 6.9.16
       open-graph-scraper:
-        specifier: ^6.8.2
-        version: 6.8.3
+        specifier: ^6.9.0
+        version: 6.9.0
       openid-client:
         specifier: ^5.7.0
         version: 5.7.1
@@ -3608,8 +3608,8 @@ packages:
     resolution: {integrity: sha512-kbpaSSGJTWdAY5KPVeMOKXSrPtr8C8C7wodJbcsd51jRnmD+GZu8Y0VoU6Dm5Z4vWr0Ig/1NKuWRKf7j5aaYSg==}
     engines: {node: '>=6'}
 
-  open-graph-scraper@6.8.3:
-    resolution: {integrity: sha512-nzMlmvwoFOcFsghNxtrSMXayxiZKqEN373AbtTGKrOxw6LRXaTay8kBjGpUaTIAc0gsjpnGZloR2uQuNc7QoQA==}
+  open-graph-scraper@6.9.0:
+    resolution: {integrity: sha512-1KoV5v6GT0/MqlryrVGQROhEAD4u8wC3VjYOxsnhj3mWeGJ6N6nF/rbrcZREFr+kiYm9I5LMrzdK9t9hBMbL2Q==}
     engines: {node: '>=18.0.0'}
 
   openid-client@5.7.1:
@@ -9372,7 +9372,7 @@ snapshots:
     dependencies:
       mimic-fn: 2.1.0
 
-  open-graph-scraper@6.8.3:
+  open-graph-scraper@6.9.0:
     dependencies:
       chardet: 2.0.0
       cheerio: 1.0.0

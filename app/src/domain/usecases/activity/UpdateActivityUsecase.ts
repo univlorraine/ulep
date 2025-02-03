@@ -89,6 +89,10 @@ class UpdateActivityUsecase implements UpdateActivityUsecaseInterface {
 
             return activityCommandToDomain(httpResponse.parsedBody);
         } catch (error: any) {
+            if (error.error.statusCode === 400 && error.error.message.includes('Unallowed content type')) {
+                return new Error('errors.imageFormat');
+            }
+
             return new Error('errors.global');
         }
     }
