@@ -69,9 +69,9 @@
 .cancelled {
     padding: 0 10px;
     border: 1px solid red;
-    background-color: black;
+    background-color: white;
     border-radius: 10px;
-    color: white;
+    color: black;
     font-size: 16px;
     font-weight: 500;
 }
