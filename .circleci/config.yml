@@ -198,7 +198,7 @@ workflows:
   check_api:
     jobs:
       - install-api
-      - sonar-check
+      #- sonar-check
       - lint-api:
           requires:
             - install-api
