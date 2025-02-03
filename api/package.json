@@ -18,10 +18,11 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "migrate": "pnpx prisma@4.16.2 migrate dev",
-    "seed": "pnpx prisma@4.16.2 db seed -- --delete ",
-    "seed:ul": "pnpx prisma@4.16.2 db seed -- --delete --seed ul",
-    "seed:random": "pnpx prisma@4.16.2 db seed -- --seed random --delete"
+    "generate": "pnpm dlx prisma@4.16.2 generate",
+    "migrate": "pnpm dlx prisma@4.16.2 migrate dev",
+    "seed": "pnpm dlx prisma@4.16.2 db seed -- --delete ",
+    "seed:ul": "pnpm dlx prisma@4.16.2 db seed -- --delete --seed ul",
+    "seed:random": "pnpm dlx prisma@4.16.2 db seed -- --seed random --delete"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.673.0",

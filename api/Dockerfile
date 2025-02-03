@@ -23,7 +23,7 @@ RUN pnpm fetch
 
 COPY --link . .
 RUN pnpm install --offline --frozen-lockfile
-RUN pnpm prisma generate
+RUN pnpm run generate
 
 # Development image
 FROM api_deps as api_dev
@@ -65,4 +65,4 @@ FROM api_deps AS api_init
 
 RUN apk add --no-cache postgresql
 
-CMD ["sh", "-c", "set -x; while [ $(pg_isready -d $DB_NAME -h $HOST_NAME -p 5432 -U $DB_USER -q; echo $?) -ne 0 ]; do sleep 5; done; pnpx prisma migrate deploy; if [ $(psql -tA -d $DB_NAME -h $HOST_NAME -p 5432 -U $DB_USER -c \"SELECT COUNT(*) FROM language_codes;\") -ne 0 ]; then echo \"No need to seed\"; else pnpm seed; fi"]
+CMD ["sh", "-c", "set -x; while [ $(pg_isready -d $DB_NAME -h $HOST_NAME -p 5432 -U $DB_USER -q; echo $?) -ne 0 ]; do sleep 5; done; pnpm dlx prisma@4.16.2 migrate deploy; if [ $(psql -tA -d $DB_NAME -h $HOST_NAME -p 5432 -U $DB_USER -c \"SELECT COUNT(*) FROM language_codes;\") -ne 0 ]; then echo \"No need to seed\"; else pnpm seed; fi"]

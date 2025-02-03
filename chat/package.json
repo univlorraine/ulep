@@ -18,8 +18,9 @@
         "test:cov": "jest --coverage",
         "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
         "test:e2e": "jest --config ./test/jest-e2e.json",
-        "migrate": "pnpx prisma@4.16.2 db push",
-        "seed": "pnpx prisma@4.16.2 db seed -- --delete",
+        "generate": "pnpm dlx prisma@4.16.2 generate",
+        "migrate": "pnpm dlx prisma@4.16.2 db push",
+        "seed": "pnpm dlx prisma@4.16.2 db seed -- --delete",
         "reset-last-activity": "ts-node scripts/reset-last-activity-conversations.ts"
     },
     "dependencies": {

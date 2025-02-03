@@ -23,7 +23,7 @@ RUN pnpm fetch
 
 COPY --link . .
 RUN pnpm install --offline --frozen-lockfile
-RUN pnpm exec prisma generate
+RUN pnpm run generate
 
 # Development image
 FROM chat_deps as chat_dev
