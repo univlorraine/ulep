@@ -9,13 +9,20 @@ export interface NewsRepository {
   findAll(query: {
     offset?: number;
     limit?: number;
-    onlyActiveNews?: boolean;
     where?: NewsQueryWhere;
     orderBy?: {
       field: string;
       order: string;
     };
   }): Promise<Collection<News>>;
+
+  findAllForAnUser(query: {
+    offset?: number;
+    limit?: number;
+    onlyActiveNews?: boolean;
+    where?: NewsForAnUserQueryWhere;
+  }): Promise<Collection<News>>;
+
   ofId(id: string): Promise<News | null>;
   create(command: CreateNewsCommand): Promise<News>;
   update(command: UpdateNewsCommand): Promise<News>;
@@ -26,5 +33,11 @@ export type NewsQueryWhere = {
   title: string;
   universityIds: string[];
   status: NewsStatus;
+  languageCodes: string[];
+};
+
+export type NewsForAnUserQueryWhere = {
+  title: string;
+  universityId: string;
   languageCodes: string[];
 };

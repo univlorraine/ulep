@@ -10,6 +10,7 @@ import {
   Post,
   Put,
   Query,
+  SerializeOptions,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -124,6 +125,7 @@ export class NewsController {
 
   @Get(':id')
   @UseGuards(AuthenticationGuard)
+  @SerializeOptions({ groups: ['read'] })
   @Swagger.ApiOperation({ summary: 'Retreive one News ressource.' })
   @Swagger.ApiOkResponse({ type: NewsResponse })
   async findOne(@Param('id', ParseUUIDPipe) id: string) {

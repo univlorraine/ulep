@@ -27,6 +27,7 @@ export interface NewsProps {
   createdAt: Date;
   updatedAt: Date;
   status: NewsStatus;
+  concernedUniversities: University[];
 }
 
 export class News {
@@ -44,6 +45,7 @@ export class News {
   readonly createdAt: Date;
   readonly updatedAt: Date;
   readonly status: NewsStatus;
+  readonly concernedUniversities: University[];
 
   constructor({
     id,
@@ -60,6 +62,7 @@ export class News {
     updatedAt,
     status,
     creditImage,
+    concernedUniversities,
   }: NewsProps) {
     this.id = id;
     this.title = title;
@@ -75,5 +78,6 @@ export class News {
     this.updatedAt = updatedAt;
     this.status = status;
     this.creditImage = creditImage;
+    this.concernedUniversities = concernedUniversities;
   }
 }

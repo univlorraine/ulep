@@ -514,7 +514,13 @@
             },
             "start_publication_date": "Date de début de publication",
             "end_publication_date": "Date de fin de publication",
-            "credit_image": "Auteur de l'image"
+            "credit_image": "Auteur de l'image",
+            "concerned_universities": {
+                "all": "Toutes les universités",
+                "label": "Universités concernées",
+                "button": "Ajouter"
+            },
+            "mandatory": "Les champs marqués d'un * sont obligatoires"
         },
         "status": {
             "label": "Statut",

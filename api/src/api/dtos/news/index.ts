@@ -94,6 +94,12 @@ export class CreateNewsRequest {
   @IsOptional()
   @IsString()
   creditImage?: string;
+
+  @Swagger.ApiPropertyOptional({ type: 'array', items: { type: 'string' } })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  concernedUniversities?: string[];
 }
 
 export class UpdateNewsRequest {
@@ -140,6 +146,12 @@ export class UpdateNewsRequest {
   @IsOptional()
   @IsString()
   creditImage?: string;
+
+  @Swagger.ApiPropertyOptional({ type: 'array', items: { type: 'string' } })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  concernedUniversities?: string[];
 }
 
 export class NewsResponse {
@@ -195,6 +207,11 @@ export class NewsResponse {
   @Expose({ groups: ['read'] })
   endPublicationDate: Date;
 
+  @Swagger.ApiProperty({ type: [UniversityResponse] })
+  @Expose({ groups: ['read'] })
+  @IsArray()
+  concernedUniversities?: UniversityResponse[];
+
   constructor(partial: Partial<NewsResponse>) {
     Object.assign(this, partial);
   }
@@ -216,6 +233,9 @@ export class NewsResponse {
       createdAt: instance.createdAt,
       updatedAt: instance.updatedAt,
       creditImage: instance.creditImage,
+      concernedUniversities: instance.concernedUniversities?.map((university) =>
+        UniversityResponse.fromUniversity(university),
+      ),
     });
   }
 }
