@@ -1,4 +1,4 @@
-version: "3.4"
+version: '3.4'
 
 services:
   api:
@@ -52,6 +52,7 @@ services:
       SENTRY_DSN: ${API_SENTRY_DSN:-}
       CANCEL_TRESHOLD_IN_MINUTES: ${CANCEL_TRESHOLD_IN_MINUTES:-15}
       SIGNED_URL_EXPIRATION_IN_SECONDS: ${SIGNED_URL_EXPIRATION_IN_SECONDS:-600}
+      COREPACK_DEFAULT_TO_LATEST: 0
 
   admin:
     build:
@@ -117,7 +118,7 @@ services:
   mongo:
     image: mongo:7-jammy
     command:
-      ["mongod", "--replSet", "rs0", "--auth", "--keyFile", "/etc/keyfile.key"]
+      ['mongod', '--replSet', 'rs0', '--auth', '--keyFile', '/etc/keyfile.key']
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-root}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-!ChangeMe!}
@@ -150,7 +151,7 @@ services:
   database:
     image: postgres:${POSTGRES_VERSION:-14}-alpine
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}']
       interval: 5s
       retries: 5
       start_period: 5s
