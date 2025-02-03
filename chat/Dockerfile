@@ -11,8 +11,7 @@ RUN apk add --no-cache libc6-compat
 
 WORKDIR /srv/app
 
-RUN npm i -g corepack@latest
-
+ENV COREPACK_DEFAULT_TO_LATEST=0
 RUN corepack enable && \
 	corepack prepare --activate pnpm@latest && \
 	pnpm config -g set store-dir /.pnpm-store
@@ -24,7 +23,6 @@ COPY --link pnpm-lock.yaml ./
 RUN pnpm fetch
 
 COPY --link . .
-RUN pnpm i -g
 RUN pnpm install --offline --frozen-lockfile
 RUN pnpm prisma generate
 
