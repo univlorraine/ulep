@@ -11,8 +11,10 @@ RUN apk add --no-cache libc6-compat
 
 WORKDIR /srv/app
 
+RUN npm i -g corepack@latest
+
 RUN corepack enable && \
-	corepack prepare --activate pnpm@10.0.0 && \
+	corepack prepare --activate pnpm@latest && \
 	pnpm config -g set store-dir /.pnpm-store
 
 # Deps stage, preserve dependencies in cache as long as the lockfile isn't changed
@@ -23,7 +25,7 @@ RUN pnpm fetch
 
 COPY --link . .
 RUN pnpm install --offline --frozen-lockfile
-RUN pnpm run generate
+RUN pnpm prisma generate
 
 # Development image
 FROM api_deps as api_dev

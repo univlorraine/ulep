@@ -7,8 +7,10 @@ RUN apk add --no-cache libc6-compat
 
 WORKDIR /srv/app
 
+RUN npm i -g corepack@latest
+
 RUN corepack enable && \
-	corepack prepare --activate pnpm@10.0.0 && \
+	corepack prepare --activate pnpm@latest && \
 	pnpm config -g set store-dir /.pnpm-store
 
 # Deps stage
