@@ -275,10 +275,11 @@ export class GenerateCertificateUsecase {
       );
     }
 
-    // TODO: Add visio time from learningLanguage.visioTime with learningJournal
     if (form.getFieldMaybe('VisioTime')) {
       const visioTimeField = form.getTextField('VisioTime');
-      visioTimeField.setText('50');
+      visioTimeField.setText(
+        Math.round(learningLanguage.visioDuration / 60).toString(),
+      );
     }
 
     form.flatten();

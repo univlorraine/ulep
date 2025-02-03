@@ -178,6 +178,7 @@ import {
   UploadNewsImageUsecase,
   UploadUniversityImageUsecase,
 } from './usecases';
+import { CountActivitiesUsecase } from './usecases/activity/count-activities.usecase';
 import { UpdateActivityStatusUsecase } from './usecases/activity/update-activity-status.usecase';
 import {
   CreateEventUsecase,
@@ -193,6 +194,7 @@ import {
 import { GetJitsiTokenUsecase } from './usecases/jitsi/get-jitsi-token.usecase';
 import { DeleteLearningLanguageUsecase } from './usecases/learningLanguage/delete-learning-langugage.usecase';
 import { GetLearningLanguageTandemUsecase } from './usecases/learningLanguage/getLearningLanguageTandem.usecase';
+import { UpdateVisioDurationUsecase } from './usecases/learningLanguage/update-visio-duration.usecase';
 import { UploadInstanceDefaultCertificateUsecase } from './usecases/media/upload-instance-default-certificate.usecase';
 import { UploadUniversityDefaultCertificateUsecase } from './usecases/media/upload-university-default-certificate.usecase';
 import { CreateCustomLearningGoalUsecase } from './usecases/objective/create-custom-learning-goals.usecase';
@@ -210,6 +212,7 @@ import { UpdateSessionUsecase } from './usecases/session/update-session.usecase'
 import { ValidateTandemUsecase } from './usecases/tandem/validate-tandem.usecase';
 import { GetKeycloakAdminGroupsUsecase } from './usecases/user/get-keycloak-admin-groups.usecase';
 import { RevokeSessionsUsecase } from './usecases/user/revoke-sessions.usecase';
+import { CountVocabulariesUsecase } from './usecases/vocabulary/count-vocabularies.usecase';
 
 const usecases: Provider[] = [
   // Activity
@@ -231,6 +234,7 @@ const usecases: Provider[] = [
   UpdateActivityStatusUsecase,
   GetAllActivitiesByAdminUsecase,
   GetActivityPdfUsecase,
+  CountActivitiesUsecase,
   //Campus
   CreateCampusUsecase,
   DeleteCampusUsecase,
@@ -345,6 +349,7 @@ const usecases: Provider[] = [
   DeleteLearningLanguageUsecase,
   UpdateLearningLanguageUsecase,
   GenerateCertificateUsecase,
+  UpdateVisioDurationUsecase,
   // History Tandem
   GetOtherUserEmailInTandemUsecase,
   // Tandems
@@ -411,6 +416,7 @@ const usecases: Provider[] = [
   GetVocabularyListPdfUsecase,
   AddReaderToVocabularyListUsecase,
   RemoveReaderToVocabularyListUsecase,
+  CountVocabulariesUsecase,
   // Session
   CancelSessionUsecase,
   CreateSessionUsecase,

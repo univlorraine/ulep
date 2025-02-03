@@ -5,6 +5,7 @@ import { UserChatResponse } from 'src/api/dtos/chat/user-conversation.response';
 import { LanguageResponse } from 'src/api/dtos/languages';
 import { LearningLanguageResponse } from 'src/api/dtos/learning-languages';
 import { UserResponse } from 'src/api/dtos/users';
+import { LearningLanguage } from 'src/core/models';
 import { ConversationWithUsers } from 'src/core/ports/chat.service';
 
 class MetadataResponse {
@@ -31,8 +32,9 @@ class MetadataResponse {
   static from(metadata: any): MetadataResponse {
     return new MetadataResponse({
       isBlocked: metadata.isBlocked,
-      learningLanguages: metadata.learningLanguages?.map((learningLanguage) =>
-        LearningLanguageResponse.fromDomain(learningLanguage),
+      learningLanguages: metadata.learningLanguages?.map(
+        (learningLanguage: LearningLanguage) =>
+          LearningLanguageResponse.fromDomain({ learningLanguage }),
       ),
       centralLanguage: metadata.centralLanguage
         ? LanguageResponse.fromLanguage(metadata.centralLanguage)

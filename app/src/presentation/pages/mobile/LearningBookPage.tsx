@@ -6,6 +6,7 @@ import LearningBookContainerContent from '../../components/contents/learning-boo
 
 interface LearningBookPageState {
     tandem: Tandem;
+    openNewEntry?: boolean;
 }
 
 const LearningBookPage: React.FC = () => {
@@ -29,6 +30,7 @@ const LearningBookPage: React.FC = () => {
                     onOpenActivity={(activityId) => history.push('activities', { tandem, activityId })}
                     profile={profile}
                     learningLanguage={tandem.learningLanguage}
+                    openNewEntry={location.state?.openNewEntry}
                 />
             </div>
         </IonContent>

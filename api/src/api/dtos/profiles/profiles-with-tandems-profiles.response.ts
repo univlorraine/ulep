@@ -1,12 +1,12 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose, Transform } from 'class-transformer';
-import { UserResponse } from '../users';
 import {
   Language,
   LearningLanguageWithTandemWithPartnerLearningLanguage,
 } from 'src/core/models';
-import { LearningLanguageWithTandemsProfilesResponse } from '../learning-languages';
 import { ProfileWithTandemsProfiles } from 'src/core/models/profileWithTandemsProfiles.model';
+import { LearningLanguageWithTandemsProfilesResponse } from '../learning-languages';
+import { UserResponse } from '../users';
 
 class NativeLanguageResponse {
   @ApiProperty({ type: 'string', example: 'FR' })
@@ -58,7 +58,8 @@ export class ProfileWithTandemsProfilesResponse {
   @Expose({ groups: ['read'] })
   @Transform(({ value }) =>
     value.map(
-      (masteredLanguage) => new MasteredLanguageResponse(masteredLanguage),
+      (masteredLanguage: Language) =>
+        new MasteredLanguageResponse(masteredLanguage),
     ),
   )
   masteredLanguages: MasteredLanguageResponse[];
@@ -82,8 +83,12 @@ export class ProfileWithTandemsProfilesResponse {
         code: masteredLanguage.code,
       })),
       learningLanguages: profile.learningLanguages.map(
-        (ll: LearningLanguageWithTandemWithPartnerLearningLanguage) =>
-          LearningLanguageWithTandemsProfilesResponse.fromDomain(ll),
+        (
+          learningLanguage: LearningLanguageWithTandemWithPartnerLearningLanguage,
+        ) =>
+          LearningLanguageWithTandemsProfilesResponse.fromDomain({
+            learningLanguage,
+          }),
       ),
     });
   }

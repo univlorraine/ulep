@@ -5,34 +5,12 @@ type EndSessionModalProps = {
     isOpen: boolean;
     onClose: () => void;
     onCompleteLearningJournalPressed: () => void;
-    duration?: number;
-    partnerTandemId?: string;
-    tandemFirstname?: string;
-    tandemLastname?: string;
-    learningLanguageId: string;
 };
 
-const EndSessionModal: React.FC<EndSessionModalProps> = ({
-    isOpen,
-    onClose,
-    onCompleteLearningJournalPressed,
-    duration,
-    partnerTandemId,
-    tandemFirstname,
-    tandemLastname,
-    learningLanguageId,
-}) => {
+const EndSessionModal: React.FC<EndSessionModalProps> = ({ isOpen, onClose, onCompleteLearningJournalPressed }) => {
     return (
         <IonModal className="end-session-modal" isOpen={isOpen} onDidDismiss={onClose}>
-            <EndSessionContent
-                onClose={onClose}
-                onCompleteLearningJournalPressed={onCompleteLearningJournalPressed}
-                duration={duration}
-                partnerTandemId={partnerTandemId}
-                tandemFirstname={tandemFirstname}
-                tandemLastname={tandemLastname}
-                learningLanguageId={learningLanguageId}
-            />
+            <EndSessionContent onClose={onClose} onCompleteLearningJournalPressed={onCompleteLearningJournalPressed} />
         </IonModal>
     );
 };

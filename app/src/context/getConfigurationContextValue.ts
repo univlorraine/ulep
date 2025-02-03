@@ -64,6 +64,7 @@ import GetLogEntriesUsecase from '../domain/usecases/log-entries/GetLogEntriesUs
 import ShareLogEntriesUsecase from '../domain/usecases/log-entries/ShareLogEntriesUsecase';
 import UnshareLogEntriesUsecase from '../domain/usecases/log-entries/UnshareLogEntriesUsecase';
 import UpdateCustomLogEntryUsecase from '../domain/usecases/log-entries/UpdateCustomLogEntryUsecase';
+import UpdateVisioDurationUsecase from '../domain/usecases/log-entries/UpdateVisioDurationUsecase';
 import LoginUsecase from '../domain/usecases/LoginUsecase';
 import GetAllNewsUsecase from '../domain/usecases/news/GetAllNewsUsecase';
 import RefreshTokensUsecase from '../domain/usecases/RefreshTokensUsecase';
@@ -243,6 +244,7 @@ const getConfigContextValue = ({
     const shareLogEntries = new ShareLogEntriesUsecase(domainHttpAdapter);
     const unshareLogEntries = new UnshareLogEntriesUsecase(domainHttpAdapter);
     const exportLogEntries = new ExportLogEntriesUsecase(domainHttpAdapter, fileAdapter);
+    const updateVisioDuration = new UpdateVisioDurationUsecase(domainHttpAdapter);
 
     // Edito
     const getEditoByUniversityId = new GetEditoByUniversityIdUsecase(domainHttpAdapter);
@@ -297,6 +299,7 @@ const getConfigContextValue = ({
         searchMessagesIdsFromConversation,
         exportMediasFromConversation,
         sendMessage,
+        updateVisioDuration,
         updateAvatar,
         updateNotificationPermission,
         recorderAdapter,

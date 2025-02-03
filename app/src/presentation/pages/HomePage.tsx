@@ -30,11 +30,7 @@ import { HYBRID_MAX_WIDTH } from '../utils';
 
 interface HomePageLocationProps {
     endSession: boolean;
-    duration: number;
-    partnerTandemId: string;
-    tandemFirstname: string;
-    tandemLastname: string;
-    learningLanguageId: string;
+    tandem: Tandem;
 }
 
 const HomePage: React.FC = () => {
@@ -163,6 +159,14 @@ const HomePage: React.FC = () => {
         }
     };
 
+    const onCompleteLearningJournalPressed = () => {
+        if (isHybrid) {
+            history.push('learning-book', { tandem: location.state.tandem, openNewEntry: true });
+        } else {
+            history.push('learning', { tandem: location.state.tandem, openNewEntry: true });
+        }
+    };
+
     if (isHybrid) {
         return (
             <IonContent>
@@ -240,12 +244,7 @@ const HomePage: React.FC = () => {
             <EndSessionModal
                 isOpen={isEndSessionModalOpen}
                 onClose={onCloseEndSessionModal}
-                onCompleteLearningJournalPressed={onCloseEndSessionModal}
-                duration={location.state?.duration}
-                partnerTandemId={location.state?.partnerTandemId}
-                tandemFirstname={location.state?.tandemFirstname}
-                tandemLastname={location.state?.tandemLastname}
-                learningLanguageId={location.state?.learningLanguageId}
+                onCompleteLearningJournalPressed={onCompleteLearningJournalPressed}
             />
             <NewsContentModal
                 isVisible={displayNewsContent !== undefined}

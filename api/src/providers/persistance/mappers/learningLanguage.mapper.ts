@@ -82,6 +82,7 @@ export const learningLanguageMapper = (
     certificateOption: Boolean(instance.certificate_option),
     specificProgram: Boolean(instance.specific_program),
     hasPriority: Boolean(instance.has_priority),
+    visioDuration: Number(instance.visio_duration),
     learningJournal: instance.learning_journal ?? false,
     consultingInterview: instance.consulting_interview ?? false,
     sharedCertificate: instance.shared_certificate ?? false,

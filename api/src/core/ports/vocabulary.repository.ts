@@ -87,4 +87,9 @@ export interface VocabularyRepository {
     vocabularyListId: string,
     profileId: string,
   ): Promise<void>;
+
+  countVocabulariesByProfileAndLanguage(
+    profileId: string,
+    language: string,
+  ): Promise<number>;
 }

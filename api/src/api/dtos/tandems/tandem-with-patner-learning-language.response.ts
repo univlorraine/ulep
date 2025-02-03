@@ -1,9 +1,9 @@
 import * as Swagger from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { TandemStatus } from '../../../core/models/tandem.model';
 import { LearningType } from 'src/core/models';
-import { LearningLanguageResponse } from '../learning-languages';
 import { TandemWithPartnerLearningLanguage } from 'src/core/models/tandemWithPartnerLearningLanguage.model';
+import { TandemStatus } from '../../../core/models/tandem.model';
+import { LearningLanguageResponse } from '../learning-languages';
 
 export class TandemWithPartnerLearningLanguageResponse {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid', nullable: true })
@@ -47,9 +47,9 @@ export class TandemWithPartnerLearningLanguageResponse {
   ): TandemWithPartnerLearningLanguageResponse {
     return new TandemWithPartnerLearningLanguageResponse({
       id: tandem.id,
-      partnerLearningLanguage: LearningLanguageResponse.fromDomain(
-        tandem.partnerLearningLanguage,
-      ),
+      partnerLearningLanguage: LearningLanguageResponse.fromDomain({
+        learningLanguage: tandem.partnerLearningLanguage,
+      }),
       status: tandem.status,
       learningType: tandem.learningType,
       compatibilityScore: tandem.compatibilityScore,

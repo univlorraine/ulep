@@ -22,6 +22,8 @@ import { HYBRID_MAX_WIDTH } from '../utils';
 
 interface LearningPageLocationState {
     activityId?: string;
+    tandem?: Tandem;
+    openNewEntry?: boolean;
 }
 
 const LearningPage = () => {
@@ -33,7 +35,7 @@ const LearningPage = () => {
     const { width } = useWindowDimensions();
     const isHybrid = width < HYBRID_MAX_WIDTH;
     const [refresh, setRefresh] = useState<boolean>(false);
-    const [currentTandem, setCurrentTandem] = useState<Tandem>();
+    const [currentTandem, setCurrentTandem] = useState<Tandem | undefined>(location.state?.tandem);
     const [displaySelectedTandem, setDisplaySelectedTandem] = useState<Tandem>();
     const [displayActivitiesContent, setDisplayActivitiesContent] = useState<boolean>(false);
     const [displayVocabularyContent, setDisplayVocabularyContent] = useState<boolean>(false);
@@ -57,6 +59,12 @@ const LearningPage = () => {
             onActivitiesContentPressedFromLearningBook(activityId);
         }
     }, [activityId]);
+
+    useEffect(() => {
+        if (location.state?.openNewEntry) {
+            setDisplayLearningBookContent(true);
+        }
+    }, [location.state?.openNewEntry]);
 
     const onTandemPressed = (tandem: Tandem) =>
         !isHybrid ? setDisplaySelectedTandem(tandem) : history.push('/tandem-status', { tandem });
@@ -198,6 +206,7 @@ const LearningPage = () => {
                 onOpenVocabularyList={onVocabularyContentPressedFromLearningBook}
                 onOpenActivity={onActivitiesContentPressedFromLearningBook}
                 profile={profile}
+                openNewEntry={location.state?.openNewEntry}
             />
             <ActivitiesContentModal
                 isVisible={displayActivitiesContent}
