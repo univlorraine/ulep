@@ -18,6 +18,7 @@ import {
 import { MediaObject } from 'src/core/models';
 import {
   AdminGroup,
+  Administrator,
   Gender,
   Role,
   User,
@@ -207,6 +208,10 @@ export class AdministratorResponse {
   @Expose({ groups: ['read'] })
   universityId?: string;
 
+  @Swagger.ApiProperty({ type: UniversityResponse })
+  @Expose({ groups: ['read'] })
+  university?: UniversityResponse;
+
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
   @Expose({ groups: ['read'] })
   languageId?: string;
@@ -227,25 +232,30 @@ export class AdministratorResponse {
     Object.assign(this, partial);
   }
 
-  static fromDomain(user: UserRepresentationWithAvatar) {
+  static fromDomain(administrator: Administrator) {
     const adminGroupNames = Object.values(AdminGroup) as string[];
 
     return new AdministratorResponse({
-      id: user.id,
-      email: user.email,
-      universityId: user.attributes?.universityId?.[0],
-      languageId: user.attributes?.languageId?.[0],
-      language: user.language
-        ? LanguageResponse.fromLanguage(user.language)
+      id: administrator.id,
+      email: administrator.email,
+      universityId: administrator.attributes?.universityId?.[0],
+      university: administrator.university
+        ? UniversityResponse.fromUniversity(administrator.university)
         : null,
-      firstname: user.firstName,
-      lastname: user.lastName,
-      image: user.image
-        ? MediaObjectResponse.fromMediaObject(user.image)
+      languageId: administrator.attributes?.languageId?.[0],
+      language: administrator.language
+        ? LanguageResponse.fromLanguage(administrator.language)
         : null,
-      group: user.groups
+      firstname: administrator.firstName,
+      lastname: administrator.lastName,
+      image: administrator.avatar
+        ? MediaObjectResponse.fromMediaObject(administrator.avatar)
+        : null,
+      group: administrator.groups
         ? KeycloakGroupResponse.fromDomain(
-            user.groups.find((group) => adminGroupNames.includes(group.name)),
+            administrator.groups.find((group) =>
+              adminGroupNames.includes(group.name),
+            ),
           )
         : null,
     });

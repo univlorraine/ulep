@@ -12,13 +12,14 @@ import {
     useGetIdentity,
     useGetList,
     useLogout,
+    usePermissions,
     useRecordContext,
     UserIdentity,
     useTranslate,
 } from 'react-admin';
 import useGetAdminGroups from '../../components/adminGroups/useGetAdminGroups';
 import ConfigPagesHeader from '../../components/tabs/ConfigPagesHeader';
-import Administrator from '../../entities/Administrator';
+import Administrator, { AdminGroup, Role } from '../../entities/Administrator';
 import University, { isCentralUniversity } from '../../entities/University';
 
 interface DeleteAdministratorButtonProps {
@@ -27,8 +28,16 @@ interface DeleteAdministratorButtonProps {
 
 const DeleteAdministratorButton = ({ identity }: DeleteAdministratorButtonProps) => {
     const record = useRecordContext();
+    const { permissions } = usePermissions();
     const logout = useLogout();
     const translate = useTranslate();
+
+    if (
+        !permissions.checkRole(Role.SUPER_ADMIN) &&
+        (record.universityId !== identity.universityId || record.group.name === AdminGroup.SUPER_ADMIN)
+    ) {
+        return null;
+    }
 
     const disconnect = () => {
         window.setTimeout(logout, 600);
@@ -124,7 +133,7 @@ const AdministratorList = (props: ListProps<Administrator>) => {
                 {...props}
                 filters={filters}
             >
-                <Datagrid bulkActionButtons={false} rowClick="edit">
+                <Datagrid bulkActionButtons={false} rowClick="show">
                     <TextField label={translate('global.email')} sortable={false} source="email" />
                     <TextField label={translate('global.firstname')} sortable={false} source="firstname" />
                     <TextField label={translate('global.lastname')} sortable={false} source="lastname" />
