@@ -108,6 +108,7 @@ import {
   GetInterestCategoryUsecase,
   GetInterestsByCategoriesUsecase,
   GetInterestUsecase,
+  GetLanguageUsecase,
   GetLearningLanguageMatchesUsecase,
   GetLearningLanguageOfIdUsecase,
   GetLearningLanguageOfProfileUsecase,
@@ -262,6 +263,7 @@ const usecases: Provider[] = [
   FindAllLanguageCodeUsecase,
   FindAllSuggestedLanguageUsecase,
   UpdateLanguageCodeUsecase,
+  GetLanguageUsecase,
   // Media
   GetMediaObjectUsecase,
   DeleteAudioVocabularyUsecase,
