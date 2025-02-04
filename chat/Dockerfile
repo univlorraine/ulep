@@ -12,9 +12,10 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /srv/app
 
 ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH" 
+ENV PATH="$PNPM_HOME:$PATH"
+ENV COREPACK_DEFAULT_TO_LATEST=0
 RUN corepack enable && \
-	corepack prepare pnpm@9.15.4 --activate
+	corepack prepare pnpm@10.0.0 --activate
 
 # Deps stage, preserve dependencies in cache as long as the lockfile isn't changed
 FROM chat_base AS chat_deps
