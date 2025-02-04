@@ -24,19 +24,24 @@ const useFetchI18NBackend = (apiUrl: string): i18n => {
     }, []);
 
     useEffect(() => {
-        const getLanguage = async () => {
-            if (import.meta.env.VITE_ENV !== 'dev') {
-                setI18nInstance(initI18n(apiUrl, language));
+        const checkApiHealthAndSetLanguage = async () => {
+            try {
+                const response = await fetch(`${apiUrl}/health`);
+                if (response.ok) {
+                    setI18nInstance(initI18n(apiUrl, language));
+                } else {
+                    throw new Error('API health check failed');
+                }
+            } catch (error) {
+                console.error('API is not reachable, using local translations', error);
+                setI18nInstance(initI18n(undefined, language));
             }
-            document.documentElement.lang = language;
 
-            if (isRtl) {
-                document.documentElement.dir = 'rtl';
-            } else {
-                document.documentElement.dir = 'ltr';
-            }
+            document.documentElement.lang = language;
+            document.documentElement.dir = isRtl ? 'rtl' : 'ltr';
         };
-        getLanguage();
+
+        checkApiHealthAndSetLanguage();
     }, [apiUrl, language, isRtl]);
 
     return i18nInstance;
