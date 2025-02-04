@@ -152,8 +152,12 @@ const Content: React.FC<ChatContentProps> = ({
             return;
         }
 
-        fileAdapter.saveBlob(response, 'export-medias.zip');
+        await fileAdapter.saveBlob(response, 'export-medias.zip');
         setShowMenu(false);
+        showToast({
+            message: t('chat.fileDownloaded'),
+            duration: 2000,
+        });
     };
 
     useEffect(() => {
