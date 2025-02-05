@@ -164,19 +164,21 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
                                 </IonLabel>
                             </IonItem>
                         )}
-                        <IonItem
-                            button={true}
-                            detail={false}
-                            onClick={() => {
-                                onStartQuizzPressed();
-                                closeMenu();
-                            }}
-                        >
-                            <IonIcon icon={arrowRedoOutline} aria-hidden="true" />
-                            <IonLabel className={styles['popover-label']}>
-                                {t('vocabulary.list.start_quiz_menu')}
-                            </IonLabel>
-                        </IonItem>
+                        {vocabularyList.numberOfVocabularies > 0 && (
+                            <IonItem
+                                button={true}
+                                detail={false}
+                                onClick={() => {
+                                    onStartQuizzPressed();
+                                    closeMenu();
+                                }}
+                            >
+                                <IonIcon icon={arrowRedoOutline} aria-hidden="true" />
+                                <IonLabel className={styles['popover-label']}>
+                                    {t('vocabulary.list.start_quiz_menu')}
+                                </IonLabel>
+                            </IonItem>
+                        )}
                     </IonList>
                 )}
             />
