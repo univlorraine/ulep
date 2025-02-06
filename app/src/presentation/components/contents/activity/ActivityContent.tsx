@@ -72,8 +72,18 @@ export const ActivityContent: React.FC<ActivityContentProps> = ({
         });
     };
 
-    const handleGetActivityPdf = (activity: Activity) => {
-        getActivityPdf.execute(activity.id);
+    const handleGetActivityPdf = async (activity: Activity) => {
+        const result = await getActivityPdf.execute(activity);
+        if (result instanceof Error) {
+            return showToast({
+                message: result.message,
+                duration: 2000,
+            });
+        }
+        showToast({
+            message: t('activity.show.ressource_file_downloaded'),
+            duration: 2000,
+        });
     };
 
     const onDeleteActivity = async () => {
