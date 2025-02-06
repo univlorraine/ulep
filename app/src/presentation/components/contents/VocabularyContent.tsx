@@ -158,6 +158,7 @@ const VocabularyContent: React.FC<VocabularyContentProps> = ({
                     onUpdateVocabularyList={() => setShowAddVocabularyListModal(true)}
                     onDeleteVocabularyList={onDeleteVocabularyList}
                     onSearch={setSearchVocabularies}
+                    associatedTandem={associatedTandem}
                     onShareVocabularyList={handleShareVocabularyList}
                     onUnshareVocabularyList={handleUnshareVocabularyList}
                     setQuizzSelectedListIds={setQuizzSelectedListIds}
