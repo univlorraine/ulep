@@ -214,16 +214,16 @@ export const ActivityContent: React.FC<ActivityContentProps> = ({
                                 </div>
                             )}
                         </div>
-                        {activity.status === ActivityStatus.DRAFT && activity.creator?.id === profile.id && (
-                            <IonButton
-                                fill="clear"
-                                className="primary-button no-padding"
-                                onClick={() => setIsModalShareVisible(true)}
-                            >
-                                {t('activity.show.share')}
-                            </IonButton>
-                        )}
-
+                        {(activity.status === ActivityStatus.DRAFT || activity.status === ActivityStatus.REJECTED) &&
+                            activity.creator?.id === profile.id && (
+                                <IonButton
+                                    fill="clear"
+                                    className="primary-button no-padding"
+                                    onClick={() => setIsModalShareVisible(true)}
+                                >
+                                    {t('activity.show.share')}
+                                </IonButton>
+                            )}
                         {activity.ressourceUrl && !activity.ressourceFileUrl && (
                             <div className={styles['ressource-line']}>
                                 <div className={styles['ressource-container']}>
