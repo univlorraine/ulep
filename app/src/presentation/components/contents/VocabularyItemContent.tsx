@@ -18,6 +18,7 @@ interface VocabularyContentProps {
     vocabularyList: VocabularyList;
     vocabularyPairs: Vocabulary[];
     isLoading: boolean;
+    searchVocabularies: string;
     onAddVocabulary: (vocabulary?: Vocabulary) => void;
     onUpdateVocabularyList: () => void;
     onDeleteVocabularyList: () => void;
@@ -36,6 +37,7 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
     onAddVocabulary,
     onUpdateVocabularyList,
     onDeleteVocabularyList,
+    searchVocabularies,
     onSearch,
     onShareVocabularyList,
     onUnshareVocabularyList,
@@ -45,7 +47,6 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
     const [showToast] = useIonToast();
     const { getVocabularyListPdf } = useConfig();
     const [showDeleteVocabularyListModal, setShowDeleteVocabularyListModal] = useState(false);
-    const [search, setSearch] = useState('');
     const isVocabularyListMine = vocabularyList.isMine(profile);
     const isVocabularyListShared = vocabularyList.editorsIds.length > 1;
 
@@ -58,11 +59,6 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
                 duration: 3000,
             });
         }
-    };
-
-    const onSearchChange = (search: string) => {
-        setSearch(search);
-        onSearch(search);
     };
 
     const onShareVocabularyListPressed = () => {
@@ -183,7 +179,7 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
                 )}
             />
             <div className={styles.content}>
-                {!isLoading && !search && vocabularyPairs.length === 0 && (
+                {!isLoading && !searchVocabularies && vocabularyPairs.length === 0 && (
                     <div className={styles.emptyContainer}>
                         <IonImg alt="" aria-hidden className={styles.emptyImage} src={VocabularyPng} />
                         <p className={styles.emptyText}>{t('vocabulary.pair.empty')}</p>
@@ -197,11 +193,13 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
                         </IonButton>
                     </div>
                 )}
-                {!isLoading && (vocabularyPairs.length > 0 || search) && (
+                {!isLoading && (vocabularyPairs.length > 0 || searchVocabularies) && (
                     <IonSearchbar
                         placeholder={t('vocabulary.pair.search') as string}
-                        onIonChange={(e) => onSearchChange(e.detail.value as string)}
-                        value={search}
+                        onIonClear={() => onSearch('')}
+                        onIonCancel={() => onSearch('')}
+                        onIonChange={(e) => onSearch(e.detail.value as string)}
+                        value={searchVocabularies}
                     />
                 )}
 
