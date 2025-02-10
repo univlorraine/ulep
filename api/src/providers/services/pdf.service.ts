@@ -1,7 +1,8 @@
 import { I18nService } from '@app/common';
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import * as PDFDocument from 'pdfkit';
+import { PDFDocument } from 'pdf-lib';
+import * as PDFKitDocument from 'pdfkit';
 import { Env } from 'src/configuration';
 import { MediaObject } from 'src/core/models';
 import { Activity } from 'src/core/models/activity.model';
@@ -25,7 +26,7 @@ export class PdfService implements PdfServicePort {
     vocabularies?: Vocabulary[],
   ): Promise<Buffer> {
     this.logger.log('Creating vocabulary list PDF');
-    const doc = new PDFDocument();
+    const doc = new PDFKitDocument();
     const buffers = [];
     doc.on('data', buffers.push.bind(buffers));
 
@@ -53,7 +54,7 @@ export class PdfService implements PdfServicePort {
     language: string,
   ): Promise<Buffer> {
     this.logger.log('Creating activity PDF');
-    const doc = new PDFDocument({
+    const doc = new PDFKitDocument({
       margin: 30,
     });
     const buffers = [];
@@ -176,17 +177,31 @@ export class PdfService implements PdfServicePort {
 
     doc.moveDown(3);
 
-    activity.activityExercises.forEach((exercise, index) => {
-      doc.font('Helvetica-Bold').text(
-        this.translate('activity.show.exercise', 'Exercise', {
-          index: index + 1,
-        }),
-        doc.x,
-        doc.y,
-        {
+    if (activity.ressourceUrl) {
+      doc
+        .font('Helvetica')
+        .fillColor('blue')
+        .text(activity.ressourceUrl, doc.x, doc.y, {
           align: 'left',
-        },
-      );
+          link: activity.ressourceUrl,
+        });
+      doc.moveDown(2);
+    }
+
+    activity.activityExercises.forEach((exercise, index) => {
+      doc
+        .font('Helvetica-Bold')
+        .fillColor('#000')
+        .text(
+          this.translate('activity.show.exercise', 'Exercise', {
+            index: index + 1,
+          }),
+          doc.x,
+          doc.y,
+          {
+            align: 'left',
+          },
+        );
       doc.font('Helvetica').text(exercise.content, doc.x, doc.y, {
         align: 'left',
       });
@@ -204,6 +219,7 @@ export class PdfService implements PdfServicePort {
     doc
       .font('Helvetica-Bold')
       .fontSize(20)
+      .fillColor('#000')
       .text(
         this.translate(
           'activity.show.vocabulary',
@@ -236,6 +252,47 @@ export class PdfService implements PdfServicePort {
 
     doc.end();
 
+    const pdfData = await this.getPdfByDoc(doc, buffers);
+
+    let resourceFileBuffer: Buffer | undefined;
+    if (activity.ressourceFile) {
+      resourceFileBuffer = await this.getImageByMediaObject(
+        activity.ressourceFile,
+        storage,
+      );
+    }
+
+    if (resourceFileBuffer) {
+      return this.mergePdf(pdfData, resourceFileBuffer);
+    }
+
+    return pdfData;
+  }
+
+  private async mergePdf(
+    pdfABuffer: Buffer,
+    pdfBBuffer: Buffer,
+  ): Promise<Buffer> {
+    const mergedPdf = await PDFDocument.create();
+
+    const pdfA = await PDFDocument.load(pdfABuffer);
+    const pdfB = await PDFDocument.load(pdfBBuffer);
+
+    const copiedPagesA = await mergedPdf.copyPages(pdfA, pdfA.getPageIndices());
+    copiedPagesA.forEach((page) => mergedPdf.addPage(page));
+
+    const copiedPagesB = await mergedPdf.copyPages(pdfB, pdfB.getPageIndices());
+    copiedPagesB.forEach((page) => mergedPdf.addPage(page));
+
+    const mergedPdfFile = await mergedPdf.save();
+
+    return Buffer.concat([mergedPdfFile]);
+  }
+
+  private async getPdfByDoc(
+    doc: PDFKit.PDFDocument,
+    buffers: Buffer[],
+  ): Promise<Buffer> {
     return new Promise((resolve) => {
       doc.on('end', () => {
         const pdfData = Buffer.concat(buffers);
