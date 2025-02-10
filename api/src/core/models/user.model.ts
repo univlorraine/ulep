@@ -1,3 +1,4 @@
+import { KeycloakGroup } from '@app/keycloak';
 import { CountryCode } from './country-code.model';
 import Device from './device.model';
 import { Language } from './language.model';
@@ -117,5 +118,50 @@ export class User {
       : languages.filter((language) =>
           language.canBeLearntInPartnerUniversity(),
         );
+  }
+}
+
+export type AdministratorProps = {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  attributes: any;
+  university: University;
+  language: Language;
+  groups?: KeycloakGroup[];
+  avatar?: MediaObject;
+  status?: UserStatus;
+  createdAt?: Date;
+  updatedAt?: Date;
+};
+
+export class Administrator {
+  readonly id: string;
+  readonly email: string;
+  readonly firstName: string;
+  readonly lastName: string;
+  readonly university?: University;
+  readonly language?: Language;
+  readonly attributes: any;
+  readonly groups?: KeycloakGroup[];
+  readonly avatar?: MediaObject;
+  readonly status?: UserStatus;
+  readonly createdAt?: Date;
+  readonly updatedAt?: Date;
+
+  constructor(props: AdministratorProps) {
+    this.id = props.id;
+    this.email = props.email;
+    this.firstName = props.firstName;
+    this.lastName = props.lastName;
+    this.university = props.university;
+    this.language = props.language;
+    this.attributes = props.attributes;
+    this.groups = props.groups;
+    this.avatar = props.avatar;
+    this.status = props.status;
+    this.createdAt = props.createdAt;
+    this.updatedAt = props.updatedAt;
   }
 }

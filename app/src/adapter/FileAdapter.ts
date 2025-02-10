@@ -40,11 +40,10 @@ class FileAdapter implements FileAdapterInterface {
         const blob = await response.blob();
 
         if (this.deviceAdapter.isNativePlatform()) {
-            const filePath = `${Directory.Documents}/${filename}`;
             const base64Data = await this.convertBlobToBase64(blob);
             try {
                 await Filesystem.writeFile({
-                    path: filePath,
+                    path: filename,
                     data: base64Data,
                     directory: Directory.Documents,
                     recursive: true,

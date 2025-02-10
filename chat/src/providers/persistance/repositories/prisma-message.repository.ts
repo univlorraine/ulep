@@ -74,6 +74,19 @@ export class PrismaMessageRepository implements MessageRepository {
         return message ? messageMapper(message) : null;
     }
 
+    async findByMediaId(mediaId: string): Promise<Message | null> {
+        const message = await this.prisma.message.findFirst({
+            where: {
+                MediaObject: {
+                    id: mediaId,
+                },
+            },
+            ...MessagesRelations,
+        });
+
+        return message ? messageMapper(message) : null;
+    }
+
     async update(message: Message): Promise<Message> {
         await this.prisma.message.update({
             where: { id: message.id },

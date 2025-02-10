@@ -116,6 +116,23 @@
                 "user_email": "Email"
             }
         },
+        "show": {
+            "image": "Image",
+            "university": "Université",
+            "lastname": "Nom",
+            "firstname": "Prénom",
+            "email": "Email",
+            "group": {
+                "label": "Rôle",
+                "Administrator": "Administrateur",
+                "Manager": "Manageur",
+                "Animator": "Animateur"
+            },
+            "language": {
+                "label": "Langue",
+                "noLanguage": "Pas de langue"
+            }
+        },
         "errors": {
             "email": "L'email n'est pas valide, vous devez utiliser l'adresse email de l'université"
         },

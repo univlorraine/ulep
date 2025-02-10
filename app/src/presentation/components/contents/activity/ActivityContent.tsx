@@ -12,6 +12,7 @@ import ActivityStatusCard from '../../card/ActivityStatusCard';
 import HeaderSubContent from '../../HeaderSubContent';
 import Loader from '../../Loader';
 import ConfirmModal from '../../modals/ConfirmModal';
+import CreditModal from '../../modals/CreditModal';
 import Modal from '../../modals/Modal';
 import styles from './ActivityContent.module.css';
 
@@ -36,6 +37,7 @@ export const ActivityContent: React.FC<ActivityContentProps> = ({
     const [isModalShareVisible, setIsModalShareVisible] = useState(false);
     const [isModalRejectedVisible, setIsModalRejectedVisible] = useState(false);
     const { activity, error, isLoading } = useGetActivity(activityId, refreshActivity);
+    const [showCreditModal, setShowCreditModal] = useState(false);
     let name: string = '';
 
     if (profile.id === activity?.creator?.id) {
@@ -72,8 +74,18 @@ export const ActivityContent: React.FC<ActivityContentProps> = ({
         });
     };
 
-    const handleGetActivityPdf = (activity: Activity) => {
-        getActivityPdf.execute(activity.id);
+    const handleGetActivityPdf = async (activity: Activity) => {
+        const result = await getActivityPdf.execute(activity);
+        if (result instanceof Error) {
+            return showToast({
+                message: result.message,
+                duration: 2000,
+            });
+        }
+        showToast({
+            message: t('activity.show.ressource_file_downloaded'),
+            duration: 2000,
+        });
     };
 
     const onDeleteActivity = async () => {
@@ -161,6 +173,15 @@ export const ActivityContent: React.FC<ActivityContentProps> = ({
             ) : (
                 <div className={styles.content}>
                     <img className={styles.image} src={activity.imageUrl} />
+                    {activity.creditImage && (
+                        <IonButton
+                            fill="clear"
+                            className={styles['credit-view']}
+                            onClick={() => setShowCreditModal(true)}
+                        >
+                            <span className={styles.credit}>©</span>
+                        </IonButton>
+                    )}
                     <div className={styles['primary-container']}>
                         <h1 className={styles['primary-title']}>{activity.title}</h1>
                         <p className={styles['primary-subtitle']}>
@@ -214,16 +235,16 @@ export const ActivityContent: React.FC<ActivityContentProps> = ({
                                 </div>
                             )}
                         </div>
-                        {activity.status === ActivityStatus.DRAFT && activity.creator?.id === profile.id && (
-                            <IonButton
-                                fill="clear"
-                                className="primary-button no-padding"
-                                onClick={() => setIsModalShareVisible(true)}
-                            >
-                                {t('activity.show.share')}
-                            </IonButton>
-                        )}
-
+                        {(activity.status === ActivityStatus.DRAFT || activity.status === ActivityStatus.REJECTED) &&
+                            activity.creator?.id === profile.id && (
+                                <IonButton
+                                    fill="clear"
+                                    className="primary-button no-padding"
+                                    onClick={() => setIsModalShareVisible(true)}
+                                >
+                                    {t('activity.show.share')}
+                                </IonButton>
+                            )}
                         {activity.ressourceUrl && !activity.ressourceFileUrl && (
                             <div className={styles['ressource-line']}>
                                 <div className={styles['ressource-container']}>
@@ -346,6 +367,13 @@ export const ActivityContent: React.FC<ActivityContentProps> = ({
                 onValidate={onDeleteActivity}
                 title={t('activity.show.delete_confirm')}
             />
+            {activity.creditImage && (
+                <CreditModal
+                    isVisible={showCreditModal}
+                    onClose={() => setShowCreditModal(false)}
+                    credit={activity.creditImage}
+                />
+            )}
         </div>
     );
 };

@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { AddSvg, VocabularyPng } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
 import Profile from '../../../domain/entities/Profile';
+import Tandem from '../../../domain/entities/Tandem';
 import Vocabulary from '../../../domain/entities/Vocabulary';
 import VocabularyList from '../../../domain/entities/VocabularyList';
 import HeaderSubContent from '../HeaderSubContent';
@@ -18,6 +19,8 @@ interface VocabularyContentProps {
     vocabularyList: VocabularyList;
     vocabularyPairs: Vocabulary[];
     isLoading: boolean;
+    associatedTandem?: Tandem;
+    searchVocabularies: string;
     onAddVocabulary: (vocabulary?: Vocabulary) => void;
     onUpdateVocabularyList: () => void;
     onDeleteVocabularyList: () => void;
@@ -36,7 +39,9 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
     onAddVocabulary,
     onUpdateVocabularyList,
     onDeleteVocabularyList,
+    searchVocabularies,
     onSearch,
+    associatedTandem,
     onShareVocabularyList,
     onUnshareVocabularyList,
     setQuizzSelectedListIds,
@@ -46,8 +51,8 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
     const { getVocabularyListPdf } = useConfig();
     const [showDeleteVocabularyListModal, setShowDeleteVocabularyListModal] = useState(false);
     const [search, setSearch] = useState('');
-    const isVocabularyListMine = vocabularyList.isMine(profile);
     const isVocabularyListShared = vocabularyList.editorsIds.length > 1;
+    const isVocabularyListMine = vocabularyList.isMine(profile);
 
     const exportToPdf = async () => {
         const result = await getVocabularyListPdf.execute(vocabularyList.id);
@@ -58,11 +63,6 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
                 duration: 3000,
             });
         }
-    };
-
-    const onSearchChange = (search: string) => {
-        setSearch(search);
-        onSearch(search);
     };
 
     const onShareVocabularyListPressed = () => {
@@ -77,6 +77,8 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
         const selectedListsId = [vocabularyList.id];
         setQuizzSelectedListIds(selectedListsId);
     };
+
+    const isSharable = isVocabularyListMine && associatedTandem && associatedTandem.partner;
 
     let vocabulariesWithoutPronunciation;
     if (
@@ -104,7 +106,7 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
                 onBackPressed={() => goBack?.()}
                 kebabContent={(closeMenu) => (
                     <IonList lines="none">
-                        {isVocabularyListMine && (
+                        {isSharable && (
                             <IonItem
                                 button={true}
                                 detail={false}
@@ -164,24 +166,26 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
                                 </IonLabel>
                             </IonItem>
                         )}
-                        <IonItem
-                            button={true}
-                            detail={false}
-                            onClick={() => {
-                                onStartQuizzPressed();
-                                closeMenu();
-                            }}
-                        >
-                            <IonIcon icon={arrowRedoOutline} aria-hidden="true" />
-                            <IonLabel className={styles['popover-label']}>
-                                {t('vocabulary.list.start_quiz_menu')}
-                            </IonLabel>
-                        </IonItem>
+                        {vocabularyList.numberOfVocabularies > 0 && (
+                            <IonItem
+                                button={true}
+                                detail={false}
+                                onClick={() => {
+                                    onStartQuizzPressed();
+                                    closeMenu();
+                                }}
+                            >
+                                <IonIcon icon={arrowRedoOutline} aria-hidden="true" />
+                                <IonLabel className={styles['popover-label']}>
+                                    {t('vocabulary.list.start_quiz_menu')}
+                                </IonLabel>
+                            </IonItem>
+                        )}
                     </IonList>
                 )}
             />
             <div className={styles.content}>
-                {!isLoading && !search && vocabularyPairs.length === 0 && (
+                {!isLoading && !searchVocabularies && vocabularyPairs.length === 0 && (
                     <div className={styles.emptyContainer}>
                         <IonImg alt="" aria-hidden className={styles.emptyImage} src={VocabularyPng} />
                         <p className={styles.emptyText}>{t('vocabulary.pair.empty')}</p>
@@ -195,11 +199,13 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
                         </IonButton>
                     </div>
                 )}
-                {!isLoading && (vocabularyPairs.length > 0 || search) && (
+                {!isLoading && (vocabularyPairs.length > 0 || searchVocabularies) && (
                     <IonSearchbar
                         placeholder={t('vocabulary.pair.search') as string}
-                        onIonChange={(e) => onSearchChange(e.detail.value as string)}
-                        value={search}
+                        onIonClear={() => onSearch('')}
+                        onIonCancel={() => onSearch('')}
+                        onIonChange={(e) => onSearch(e.detail.value as string)}
+                        value={searchVocabularies}
                     />
                 )}
 

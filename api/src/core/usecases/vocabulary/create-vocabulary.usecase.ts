@@ -35,7 +35,7 @@ export class CreateVocabularyUsecase {
     });
 
     const learningLanguage = vocabularyList.creator?.findLearningLanguageByCode(
-      vocabularyList.translationLanguage.code,
+      vocabularyList.wordLanguage.code,
     );
 
     if (learningLanguage) {

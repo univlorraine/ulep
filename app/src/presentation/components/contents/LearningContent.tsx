@@ -94,14 +94,16 @@ const LearningContent: React.FC<LearningContentProps> = ({
                             </IonButton>
                         );
                     })}
-                    <IonButton
-                        fill="clear"
-                        className={styles.addLearningLanguageButton}
-                        onClick={openAddLearningLanguagePressed}
-                        aria-label={t('learning.add_language') as string}
-                    >
-                        <IonIcon icon={AddSvg} aria-hidden="true" />
-                    </IonButton>
+                    {profile.user.university.maxTandemsPerUser > tandems.length && (
+                        <IonButton
+                            fill="clear"
+                            className={styles.addLearningLanguageButton}
+                            onClick={openAddLearningLanguagePressed}
+                            aria-label={t('learning.add_language') as string}
+                        >
+                            <IonIcon icon={AddSvg} aria-hidden="true" />
+                        </IonButton>
+                    )}
                 </div>
 
                 {isLoading ? (

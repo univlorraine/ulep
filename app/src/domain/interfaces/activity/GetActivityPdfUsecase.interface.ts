@@ -1,5 +1,7 @@
+import { Activity } from '../../entities/Activity';
+
 interface GetActivityPdfUsecaseInterface {
-    execute: (id: string) => Promise<void | Error>;
+    execute: (activity: Activity) => Promise<void | Error>;
 }
 
 export default GetActivityPdfUsecaseInterface;
