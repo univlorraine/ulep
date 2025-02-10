@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { AddSvg, VocabularyPng } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
 import Profile from '../../../domain/entities/Profile';
+import Tandem from '../../../domain/entities/Tandem';
 import Vocabulary from '../../../domain/entities/Vocabulary';
 import VocabularyList from '../../../domain/entities/VocabularyList';
 import HeaderSubContent from '../HeaderSubContent';
@@ -18,6 +19,7 @@ interface VocabularyContentProps {
     vocabularyList: VocabularyList;
     vocabularyPairs: Vocabulary[];
     isLoading: boolean;
+    associatedTandem?: Tandem;
     searchVocabularies: string;
     onAddVocabulary: (vocabulary?: Vocabulary) => void;
     onUpdateVocabularyList: () => void;
@@ -39,6 +41,7 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
     onDeleteVocabularyList,
     searchVocabularies,
     onSearch,
+    associatedTandem,
     onShareVocabularyList,
     onUnshareVocabularyList,
     setQuizzSelectedListIds,
@@ -47,8 +50,9 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
     const [showToast] = useIonToast();
     const { getVocabularyListPdf } = useConfig();
     const [showDeleteVocabularyListModal, setShowDeleteVocabularyListModal] = useState(false);
-    const isVocabularyListMine = vocabularyList.isMine(profile);
+    const [search, setSearch] = useState('');
     const isVocabularyListShared = vocabularyList.editorsIds.length > 1;
+    const isVocabularyListMine = vocabularyList.isMine(profile);
 
     const exportToPdf = async () => {
         const result = await getVocabularyListPdf.execute(vocabularyList.id);
@@ -73,6 +77,8 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
         const selectedListsId = [vocabularyList.id];
         setQuizzSelectedListIds(selectedListsId);
     };
+
+    const isSharable = isVocabularyListMine && associatedTandem && associatedTandem.partner;
 
     let vocabulariesWithoutPronunciation;
     if (
@@ -100,7 +106,7 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
                 onBackPressed={() => goBack?.()}
                 kebabContent={(closeMenu) => (
                     <IonList lines="none">
-                        {isVocabularyListMine && (
+                        {isSharable && (
                             <IonItem
                                 button={true}
                                 detail={false}
