@@ -51,7 +51,6 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
     const { getVocabularyListPdf } = useConfig();
     const [showDeleteVocabularyListModal, setShowDeleteVocabularyListModal] = useState(false);
     const [search, setSearch] = useState('');
-    const isVocabularyListMine = vocabularyList.isMine(profile);
     const isVocabularyListShared = vocabularyList.editorsIds.length > 1;
     const isVocabularyListMine = vocabularyList.isMine(profile);
 
