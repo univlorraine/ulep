@@ -50,7 +50,9 @@ export class PrismaLogEntryRepository implements LogEntryRepository {
       results.push({
         date,
         count: Number(count),
-        entries: logEntries.map(logEntryMapper),
+        entries: logEntries
+          .map(logEntryMapper)
+          .filter((entry) => entry !== undefined),
       });
     }
 
@@ -88,7 +90,9 @@ export class PrismaLogEntryRepository implements LogEntryRepository {
     });
 
     return new Collection({
-      items: logEntries.map(logEntryMapper),
+      items: logEntries
+        .map(logEntryMapper)
+        .filter((entry) => entry !== undefined),
       totalItems: count,
     });
   }
@@ -110,7 +114,9 @@ export class PrismaLogEntryRepository implements LogEntryRepository {
       ...LogEntryRelations,
     });
 
-    return logEntries.map(logEntryMapper);
+    return logEntries
+      .map(logEntryMapper)
+      .filter((entry) => entry !== undefined);
   }
 
   async ofId(id: string): Promise<LogEntry | null> {
@@ -144,7 +150,9 @@ export class PrismaLogEntryRepository implements LogEntryRepository {
       return null;
     }
 
-    return logEntries.map(logEntryMapper);
+    return logEntries
+      .map(logEntryMapper)
+      .filter((entry) => entry !== undefined);
   }
 
   async create(command: CreateLogEntryCommand): Promise<LogEntry> {
