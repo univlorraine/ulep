@@ -16,7 +16,6 @@ export type LogEntries =
     | LogEntryCommunityChat
     | LogEntryPlayedGame
     | LogEntryEditActivity
-    | LogEntryConnection
     | LogEntryCustomEntry
     | LogEntryShareVocabulary
     | LogEntrySubmitActivity
@@ -40,12 +39,6 @@ export class LogEntry {
         this.id = data.id;
         this.createdAt = data.createdAt;
         this.type = data.type;
-    }
-}
-
-export class LogEntryConnection extends LogEntry {
-    constructor(data: LogEntryProps) {
-        super(data);
     }
 }
 
