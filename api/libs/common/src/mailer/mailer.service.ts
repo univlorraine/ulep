@@ -1,5 +1,3 @@
-import * as fs from 'fs';
-import * as path from 'path';
 import {
   Inject,
   Injectable,
@@ -7,9 +5,12 @@ import {
   OnModuleDestroy,
   OnModuleInit,
 } from '@nestjs/common';
-import { Transporter, createTransport } from 'nodemailer';
+import * as fs from 'fs';
+import { decode } from 'html-entities';
 import * as mjml2html from 'mjml';
 import { render } from 'mustache';
+import { createTransport, Transporter } from 'nodemailer';
+import * as path from 'path';
 
 export const MAILER_CONFIGURATION = 'MAILER_CONFIGURATION';
 
@@ -98,7 +99,7 @@ export class MailerService implements OnModuleInit, OnModuleDestroy {
     const mailOptions = {
       from: this.config.emailFrom,
       to,
-      subject,
+      subject: decode(subject),
       html: htmlContent,
     };
 

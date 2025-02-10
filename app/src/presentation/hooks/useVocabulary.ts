@@ -11,7 +11,7 @@ import { CreateVocabularyListCommand } from '../../domain/interfaces/vocabulary/
 import { UpdateVocabularyListCommand } from '../../domain/interfaces/vocabulary/UpdateVocabularyListUsecase.interface';
 import { useStoreState } from '../../store/storeTypes';
 
-const useVocabulary = (learningLanguage?: LearningLanguage, currentVocabularyListId?: string) => {
+const useVocabulary = (learningLanguage?: LearningLanguage) => {
     const { t } = useTranslation();
     const [showToast] = useIonToast();
     const {
@@ -49,6 +49,7 @@ const useVocabulary = (learningLanguage?: LearningLanguage, currentVocabularyLis
             ...vocabularyResult,
             vocabularyListSelected,
             associatedTandem,
+            searchVocabularies,
             setSearchVocabularies,
             setVocabularyListSelected,
             onShareVocabularyList: () => {},
@@ -258,10 +259,15 @@ const useVocabulary = (learningLanguage?: LearningLanguage, currentVocabularyLis
         fetchData();
     }, [vocabularyListSelected, refreshVocabularies, searchVocabularies]);
 
+    useEffect(() => {
+        setSearchVocabularies('');
+    }, [vocabularyListSelected]);
+
     return {
         ...vocabularyResult,
         vocabularyListSelected,
         associatedTandem,
+        searchVocabularies,
         setSearchVocabularies,
         setVocabularyListSelected,
         onShareVocabularyList,
