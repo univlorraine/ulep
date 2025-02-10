@@ -20,6 +20,10 @@ import {
 } from 'src/core/ports/storage.interface';
 import { createReadStream, createWriteStream } from 'fs';
 import { create } from 'archiver';
+import {
+    MESSAGE_REPOSITORY,
+    MessageRepository,
+} from 'src/core/ports/message.repository';
 
 type ExportMediasFromConversationParams = {
     id: string;
@@ -34,6 +38,8 @@ export class ExportMediasFromConversationUsecase {
         private readonly mediaObjectRepository: MediaObjectRepository,
         @Inject(STORAGE_INTERFACE)
         private readonly storage: StorageInterface,
+        @Inject(MESSAGE_REPOSITORY)
+        private readonly messageRepository: MessageRepository,
     ) {}
 
     async execute(
@@ -91,8 +97,12 @@ export class ExportMediasFromConversationUsecase {
 
         for (const media of medias) {
             const file = await this.storage.read('chat', media.name);
+            const message = await this.messageRepository.findByMediaId(
+                media.id,
+            );
+
             archive.append(file, {
-                name: media.name.replace(conversationId, ''),
+                name: message.metadata.originalFilename,
             });
         }
 
