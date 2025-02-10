@@ -20,15 +20,15 @@ const RessourcesCard: React.FC<RessourcesCardProps> = ({
         <LearningCard title={t('ressources.title')}>
             <div className={styles.container}>
                 <button className={styles.card} onClick={onLearningBookPressed}>
-                    <img src={JournalSvg} alt="" />
+                    <img src={JournalSvg} alt="" className={styles.image} />
                     <p className={styles.title}>{t('ressources.journal')}</p>
                 </button>
                 <button className={styles.card} onClick={onVocabularyPressed}>
-                    <img src={VocabularyPng} alt="" />
+                    <img src={VocabularyPng} alt="" className={styles.image} />
                     <p className={styles.title}>{t('ressources.vocabulary')}</p>
                 </button>
                 <button className={styles.card} onClick={onActivityPressed}>
-                    <img src={FicheSvg} alt="" />
+                    <img src={FicheSvg} alt="" className={styles.image} />
                     <p className={styles.title}>{t('ressources.activity')}</p>
                 </button>
             </div>
