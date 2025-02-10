@@ -152,8 +152,12 @@ const Content: React.FC<ChatContentProps> = ({
             return;
         }
 
-        fileAdapter.saveBlob(response, 'export-medias.zip');
+        await fileAdapter.saveBlob(response, 'export-medias.zip');
         setShowMenu(false);
+        showToast({
+            message: t('chat.fileDownloaded'),
+            duration: 2000,
+        });
     };
 
     useEffect(() => {
@@ -303,20 +307,6 @@ const Content: React.FC<ChatContentProps> = ({
                                     </IonLabel>
                                 </IonItem>
                             )}
-                            <IonItem
-                                button={true}
-                                detail={false}
-                                onClick={() =>
-                                    setCurrentContent
-                                        ? setCurrentContent('media')
-                                        : history.push('/media', { conversation })
-                                }
-                            >
-                                <IonIcon icon={imageOutline} aria-hidden="true" />
-                                <IonLabel className={styles['chat-popover-label']}>
-                                    {t('chat.conversation_menu.medias')}
-                                </IonLabel>
-                            </IonItem>
                             <IonItem button={true} detail={false} onClick={handleExportMedias}>
                                 <IonIcon icon={downloadOutline} aria-hidden="true" />
                                 <IonLabel className={styles['chat-popover-label']}>

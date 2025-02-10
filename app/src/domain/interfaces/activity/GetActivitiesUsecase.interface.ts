@@ -5,10 +5,10 @@ export const DEFAULT_ACTIVITIES_PAGE_SIZE = 10;
 
 export type GetActivitiesFilters = {
     language: Language[];
-    proficiency: CEFR[];
-    activityTheme: ActivityTheme[];
-    shouldTakeAllMine: boolean;
-    page: number;
+    proficiency?: CEFR[];
+    activityTheme?: ActivityTheme[];
+    shouldTakeAllMine?: boolean;
+    page?: number;
     searchTitle?: string;
 };
 

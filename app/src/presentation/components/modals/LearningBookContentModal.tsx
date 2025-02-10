@@ -11,6 +11,7 @@ interface LearningBookContentModalProps {
     onOpenVocabularyList: (vocabularyListId: string) => void;
     onOpenActivity: (activityId: string) => void;
     learningLanguage?: LearningLanguage;
+    openNewEntry?: boolean;
 }
 
 const LearningBookContentModal: React.FC<LearningBookContentModalProps> = ({
@@ -20,6 +21,7 @@ const LearningBookContentModal: React.FC<LearningBookContentModalProps> = ({
     onOpenActivity,
     profile,
     learningLanguage,
+    openNewEntry,
 }) => {
     if (!learningLanguage) {
         return null;
@@ -34,6 +36,7 @@ const LearningBookContentModal: React.FC<LearningBookContentModalProps> = ({
                     onOpenActivity={onOpenActivity}
                     profile={profile}
                     learningLanguage={learningLanguage}
+                    openNewEntry={openNewEntry}
                 />
             </div>
         </IonModal>

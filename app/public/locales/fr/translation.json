@@ -16,7 +16,8 @@
         "userDoesntExist": "L'utilisateur n'existe pas",
         "userWrongCredentials": "Authentification en erreur : mauvais email ou mauvais mot de passe.",
         "connecteur": "Erreur lors de la récupération des informations utilisateur",
-        "fileSizeExceed": "Le fichier est trop volumineux, il doit être inférieur à {{maxSize}}Mo"
+        "fileSizeExceed": "Le fichier est trop volumineux, il doit être inférieur à {{maxSize}}Mo",
+        "imageFormat": "Le format de l'image n'est pas autorisé"
     },
     "error_page": {
         "title": "Une erreur est survenue",
@@ -29,7 +30,8 @@
             "audio": "Audio",
             "file": "Fichier",
             "vocabulary": "Liste de vocabulaire partagée",
-            "activity": "Fiche d'activité partagée"
+            "activity": "Fiche d'activité partagée",
+            "deleted": "Message supprimé"
         },
         "vocabulary": {
             "added": "Liste de vocabulaire ajoutée à votre profil"
@@ -54,7 +56,16 @@
         "join": "M'y rendre",
         "join_online": "Rejoindre",
         "load_more": "Voir plus",
-        "add_to_calendar_success": "Fichier ics téléchargé"
+        "add_to_calendar_success": "Fichier ics téléchargé",
+        "list": {
+            "title": "Événements"
+        }
+    },
+    "edito": {
+        "service_date": "Date d'ouverture du service",
+        "admission_date": "Date d'ouverture des inscriptions",
+        "website": "Site web",
+        "title": "Informations université"
     },
     "news": {
         "list": {
@@ -93,8 +104,12 @@
             "title": "Journal d'apprentissage",
             "load_more": "Voir plus",
             "share": {
-                "title": "Partager les entrées",
+                "title": "Partager les entrées à votre animateur",
                 "success": "Les entrées ont été partagées"
+            },
+            "unshare": {
+                "title": "Ne plus partager les entrées à votre animateur",
+                "success": "Les entrées ne sont plus partagées"
             },
             "export": {
                 "success": "Les entrées ont été exportées",
@@ -110,7 +125,11 @@
             },
             "visio": {
                 "title": "Visio avec {{firstname}} {{lastname}}",
-                "subtitle": "L'appel a duré {{minutes}} minutes et {{seconds}} secondes"
+                "subtitle": "L'appel a duré",
+                "duration_hour_one": "{{count}} heure",
+                "duration_hour_other": "{{count}} heures",
+                "duration_minute_one": "{{count}} minute",
+                "duration_minute_other": "{{count}} minutes"
             },
             "tandem_chat": {
                 "title": "Conversation avec {{firstname}} {{lastname}} démarrée aujourd'hui"
@@ -177,6 +196,8 @@
             "creator": "Créé par {{name}}",
             "title": "Fiche d'activité",
             "update": "Mettre à jour ma fiche",
+            "delete": "Supprimer ma fiche",
+            "delete_confirm": "Êtes-vous sûr de vouloir supprimer cette fiche ?",
             "export": "Exporter au format PDF",
             "language": "Langue",
             "level": "Niveau",
@@ -399,7 +420,7 @@
                 "create": "Valider",
                 "title": "À qui souhaitez-vous partager ?",
                 "no_tandem": "Tu n'as pas de tandem pour cette langue",
-                "success": "La liste de vocabulaire a été partagée"
+                "success": "La statut de la liste a été mis à jour"
             },
             "start_quiz": {
                 "title": "Sélectionne les listes sur lesquelles t’entrainer",
@@ -417,7 +438,8 @@
             "go_back": "Retour",
             "menu": "Menu",
             "list_update": "Modifier la liste",
-            "share_button": "Partager",
+            "share_button": "Partager à votre tandem",
+            "unshare_button": "Ne plus partager à votre tandem",
             "export": "Exporter",
             "empty": "Tu n’as pas encore créé de de paire de vocabulaire pour cette liste",
             "create": "Nouvelle pair de mots",

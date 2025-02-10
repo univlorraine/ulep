@@ -16,6 +16,7 @@ export interface NewsFormPayload {
         languageCode: string;
     }[];
     creditImage?: string;
+    concernedUniversities: University[];
 }
 
 export type NewsTranslation = {
@@ -37,6 +38,7 @@ export type News = {
     translations: NewsTranslation[];
     creditImage?: string;
     imageURL?: string;
+    concernedUniversities: University[];
 };
 
 export enum NewsStatus {

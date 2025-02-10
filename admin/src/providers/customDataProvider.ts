@@ -425,6 +425,14 @@ const customDataProvider = {
             await throwError(response);
         }
     },
+    generateEditos: async (): Promise<void> => {
+        const url = `${window.REACT_APP_API_URL}/editos/generate`;
+        const response = await fetch(url, httpClientOptions({ method: 'POST' }));
+
+        if (!response.ok) {
+            await throwError(response);
+        }
+    },
     exportUserPersonalData: async (userId: string): Promise<Response> => {
         const url = `${window.REACT_APP_API_URL}/users/${userId}/export`;
         const response = await fetch(url, httpClientOptions({ method: 'GET' }));

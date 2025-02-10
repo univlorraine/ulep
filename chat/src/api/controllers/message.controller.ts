@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Put } from '@nestjs/common';
+import { Body, Controller, Param, Post, Put } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import { MessageResponse } from 'src/api/dtos/message';
 import { UpdateMessageRequest } from 'src/api/dtos/message/update-message.request';
@@ -11,7 +11,7 @@ export class MessageController {
 
     @Put('/:id')
     @Swagger.ApiOperation({ summary: 'Update a message' })
-    async getConversations(
+    async updateMessage(
         @Param('id') messageId: string,
         @Body() command: UpdateMessageRequest,
     ): Promise<MessageResponse> {

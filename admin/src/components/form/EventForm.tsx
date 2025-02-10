@@ -38,6 +38,8 @@ import i18nProvider from '../../providers/i18nProvider';
 import ImageUploader from '../ImageUploader';
 import useGetUniversitiesLanguages from './useGetUniversitiesLanguages';
 
+const ALL_OPTION = 'all';
+
 interface EventFormProps {
     handleSubmit: (payload: EventFormPayload) => void;
 }
@@ -52,6 +54,9 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
     const universitiesLanguages = useGetUniversitiesLanguages();
     const notify = useNotify();
     const record: EventObject = useRecordContext();
+
+    const [centralUniversity, setCentralUniversity] = useState<University>();
+    const [authorUniversity, setAuthorUniversity] = useState<University>();
 
     const [universityData, setUniversityData] = useState<University>(record?.authorUniversity || undefined);
     const [title, setTitle] = useState<string>(record?.title || '');
@@ -72,13 +77,12 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
         record?.endDate ? new Date(record.endDate) : new Date(new Date().setHours(23, 59, 0, 0))
     );
 
-    const authorUniversityId = record?.authorUniversity?.id ?? identity?.universityId;
-
     // Diffusion languages
     const [diffusionLanguages, setDiffusionLanguages] = useState<string[]>(
         record?.diffusionLanguages?.map((language) => language.code) || []
     );
     const [newDiffusionLanguage, setNewDiffusionLanguage] = useState<string>();
+    const [availableDiffusionLanguages, setAvailableDiffusionLanguages] = useState<string[]>([]);
 
     // Translations
     const [availableLanguages, setAvailableLanguages] = useState<string[]>([]);
@@ -91,7 +95,7 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
     const [concernedUniversities, setConcernedUniversities] = useState<University[]>(
         record?.concernedUniversities ?? []
     );
-    const [newConcernedUniversity, setNewConcernedUniversity] = useState<University>();
+    const [newConcernedUniversity, setNewConcernedUniversity] = useState<University | string>();
     const [availableConcernedUniversities, setAvailableConcernedUniversities] = useState<University[]>([]);
 
     useEffect(() => {
@@ -122,21 +126,33 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
     useEffect(() => {
         if (!universities) return;
 
-        const centralUniversity = universities.filter((university: University) => university.parent === null)[0];
+        setCentralUniversity(universities.filter((university: University) => university.parent === null)[0]);
+        const authorUniversityId = record?.authorUniversity?.id ?? identity?.universityId;
+        setAuthorUniversity(universities.find((university: University) => university.id === authorUniversityId));
+    }, [universities, record, identity]);
 
-        const authorIsFromCentralUniversity = authorUniversityId === centralUniversity.id;
+    useEffect(() => {
+        if (!universities || !centralUniversity || !authorUniversity) return;
+
+        const authorIsFromCentralUniversity = centralUniversity.id === authorUniversity.id;
 
         const possibleConcernedUniversities = authorIsFromCentralUniversity ? universities : [centralUniversity];
         setAvailableConcernedUniversities(possibleConcernedUniversities);
 
-        if (!authorIsFromCentralUniversity) {
-            forcedConcernedUniversities.push(
-                universities.filter((university: University) => university.id === authorUniversityId)[0]
-            );
-        }
+        const partnerUniversityLanguages = new Set([
+            centralUniversity.nativeLanguage.code,
+            authorUniversity.nativeLanguage.code,
+        ]);
+        const possibleDiffusionLanguages = authorIsFromCentralUniversity
+            ? universitiesLanguages
+            : Array.from(partnerUniversityLanguages);
+        setAvailableDiffusionLanguages(possibleDiffusionLanguages);
 
+        if (!authorIsFromCentralUniversity) {
+            forcedConcernedUniversities.push(authorUniversity);
+        }
         setConcernedUniversities(record?.concernedUniversities ?? forcedConcernedUniversities);
-    }, [universities]);
+    }, [universities, universitiesLanguages, record, centralUniversity, authorUniversity]);
 
     const onCreatePressed = () => {
         if (startDate && endDate && startDate > endDate) {
@@ -153,7 +169,7 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                 status,
                 type,
                 withSubscription,
-                authorUniversityId,
+                authorUniversityId: record?.authorUniversity?.id ?? identity?.universityId,
                 startDate,
                 endDate,
                 image,
@@ -161,7 +177,9 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                 eventURL: type === EventType.ONLINE ? eventURL : undefined,
                 address: type === EventType.PRESENTIAL ? address : undefined,
                 addressName: type === EventType.PRESENTIAL ? addressName : undefined,
-                diffusionLanguages,
+                diffusionLanguages: diffusionLanguages.includes(ALL_OPTION)
+                    ? universitiesLanguages
+                    : diffusionLanguages,
                 concernedUniversities,
             });
         }
@@ -209,7 +227,7 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                         <Box sx={{ display: 'flex', flexDirection: 'row', gap: '50px' }}>
                             <Box>
                                 <Typography variant="subtitle1">
-                                    {translate(`events.form.concerned_universities.label`)}
+                                    {translate(`events.form.concerned_universities.label`)} *
                                 </Typography>
                                 <Table>
                                     <TableBody>
@@ -253,6 +271,11 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                                         sx={{ width: '300px' }}
                                         value={newConcernedUniversity}
                                     >
+                                        {centralUniversity?.id === authorUniversity?.id && (
+                                            <MenuItem value={ALL_OPTION}>
+                                                {translate('events.form.concerned_universities.all')}
+                                            </MenuItem>
+                                        )}
                                         {availableConcernedUniversities
                                             ?.filter(
                                                 (university) =>
@@ -272,10 +295,14 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                                         disabled={!newConcernedUniversity}
                                         onClick={() => {
                                             if (newConcernedUniversity) {
-                                                setConcernedUniversities([
-                                                    ...concernedUniversities,
-                                                    newConcernedUniversity,
-                                                ]);
+                                                if (newConcernedUniversity === ALL_OPTION) {
+                                                    setConcernedUniversities(availableConcernedUniversities);
+                                                } else {
+                                                    setConcernedUniversities([
+                                                        ...concernedUniversities,
+                                                        newConcernedUniversity as University,
+                                                    ]);
+                                                }
                                                 setNewConcernedUniversity(undefined);
                                             }
                                         }}
@@ -328,7 +355,12 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                                         sx={{ width: '300px' }}
                                         value={newDiffusionLanguage}
                                     >
-                                        {universitiesLanguages
+                                        {centralUniversity?.id === authorUniversity?.id && (
+                                            <MenuItem value={ALL_OPTION}>
+                                                {translate('events.form.diffusion_languages.all')}
+                                            </MenuItem>
+                                        )}
+                                        {availableDiffusionLanguages
                                             ?.filter((language) => !diffusionLanguages.includes(language))
                                             .map((language) => (
                                                 <MenuItem key={language} value={language}>
@@ -341,7 +373,14 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                                         disabled={!newDiffusionLanguage}
                                         onClick={() => {
                                             if (newDiffusionLanguage) {
-                                                setDiffusionLanguages([...diffusionLanguages, newDiffusionLanguage]);
+                                                if (newDiffusionLanguage === ALL_OPTION) {
+                                                    setDiffusionLanguages(availableDiffusionLanguages);
+                                                } else {
+                                                    setDiffusionLanguages([
+                                                        ...diffusionLanguages,
+                                                        newDiffusionLanguage,
+                                                    ]);
+                                                }
                                                 setNewDiffusionLanguage(undefined);
                                             }
                                         }}
@@ -638,6 +677,7 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                             !startDate ||
                             !endDate ||
                             diffusionLanguages?.length === 0 ||
+                            concernedUniversities?.length === 0 ||
                             (type === EventType.ONLINE && !eventURL) ||
                             (type === EventType.PRESENTIAL && (!address || !addressName))
                         }

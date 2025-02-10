@@ -116,6 +116,23 @@
                 "user_email": "Email"
             }
         },
+        "show": {
+            "image": "Image",
+            "university": "Université",
+            "lastname": "Nom",
+            "firstname": "Prénom",
+            "email": "Email",
+            "group": {
+                "label": "Rôle",
+                "Administrator": "Administrateur",
+                "Manager": "Manageur",
+                "Animator": "Animateur"
+            },
+            "language": {
+                "label": "Langue",
+                "noLanguage": "Pas de langue"
+            }
+        },
         "errors": {
             "email": "L'email n'est pas valide, vous devez utiliser l'adresse email de l'université"
         },
@@ -203,6 +220,24 @@
         "saturday": "Samedi",
         "sunday": "Dimanche"
     },
+    "editos": {
+        "label": "Editos",
+        "title": "Editos",
+        "form": {
+            "mandatoryLanguages": "Les langues avec un * sont obligatoires",
+            "update": "Mettre à jour"
+        },
+        "list": {
+            "university": "Université",
+            "translations": "Traductions",
+            "updatedAt": "Date de mise à jour"
+        },
+        "languages": {
+            "CentralUniversityLanguage": "Langue de l'université centrale",
+            "English": "Anglais",
+            "PartnerUniversityLanguage": "Langue de l'universités partenaire"
+        }
+    },
     "events": {
         "label": "Evènements",
         "title": "Evènements",
@@ -250,11 +285,13 @@
             "subscriptions": "Inscriptions",
             "with_subscriptions": "Avec inscriptions",
             "concerned_universities": {
+                "all": "Toutes les universités",
                 "label": "Universités concernées",
                 "button": "Ajouter"
             },
             "diffusion_languages": {
-                "label": "Langues diffusées",
+                "all": "Toutes les langues",
+                "label": "Langues cibles",
                 "button": "Ajouter"
             },
             "event_url": "URL de l'évènement",
@@ -380,6 +417,10 @@
             "message": "Voulez vous vraiment réinitialiser l'instance ?",
             "confirm": "Confirmer"
         },
+        "edito": {
+            "mandatoryTranslations": "Langues obligatoires pour les éditos",
+            "noMandatoryTranslations": "Aucune langue obligatoire"
+        },
         "edit": {
             "error": "Une erreur est survenue pendant la mise à jour de l'instance",
             "name": "Nom de l'instance",
@@ -395,7 +436,8 @@
             "secondaryBackgroundColor": "Couleur secondaire de l'image de fond de l'application",
             "secondaryDarkColor": "Couleur secondaire nuancé en sombre utilisé pour le fond de l'application",
             "title": "Mise à jour de l'instance",
-            "defaultCertificateFile": "Modèle de certificat"
+            "defaultCertificateFile": "Modèle de certificat",
+            "editoMandatoryTranslations": "Langues obligatoires pour les éditos"
         }
     },
     "interests": {
@@ -489,7 +531,13 @@
             },
             "start_publication_date": "Date de début de publication",
             "end_publication_date": "Date de fin de publication",
-            "credit_image": "Auteur de l'image"
+            "credit_image": "Auteur de l'image",
+            "concerned_universities": {
+                "all": "Toutes les universités",
+                "label": "Universités concernées",
+                "button": "Ajouter"
+            },
+            "mandatory": "Les champs marqués d'un * sont obligatoires"
         },
         "status": {
             "label": "Statut",
@@ -596,8 +644,12 @@
         "title": "Réinitialisation"
     },
     "generateConversation": {
-        "error": "Une erreur est survenue durant la génération des conversations",
+        "error": "Une erreur est survenue lors de la génération des conversations",
         "title": "Génération des conversations"
+    },
+    "generateEditos": {
+        "title": "Génération des editos",
+        "error": "Une erreur est survenue lors de la génération des editos"
     },
     "questions": {
         "create": {
@@ -629,16 +681,20 @@
         "tabLabel": "Liste des signalements",
         "title": "Signalements",
         "OPEN": "Ouvert",
+        "isMessageDeleted": "Message supprimé",
         "status": "État",
         "update": {
             "comment": "Mettez à jour le commentaire du signalement",
             "error": "Une erreur est survenue pendant la mise à jour du signalement",
             "status": "Mettez à jour l'état du signalement",
-            "title": "Mise à jour du signalement"
+            "title": "Mise à jour du signalement",
+            "deletion_status": "Voulez-vous supprimer le message de la conversation ?"
         },
         "error": {
             "unauthorized": "Vous n'êtes pas autorisé à modifier ce signalement"
-        }
+        },
+        "delete_message": "Supprimer le message",
+        "undelete_message": "Restaurer le message"
     },
     "report_categories": {
         "create": {

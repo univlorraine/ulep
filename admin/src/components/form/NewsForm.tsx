@@ -1,3 +1,4 @@
+import DeleteIcon from '@mui/icons-material/Delete';
 import {
     Box,
     Divider,
@@ -7,6 +8,10 @@ import {
     OutlinedInput,
     Select,
     Switch,
+    Table,
+    TableBody,
+    TableCell,
+    TableRow,
     Typography,
 } from '@mui/material';
 import { DateTimePicker } from '@mui/x-date-pickers';
@@ -21,6 +26,7 @@ import {
     Loading,
     TabbedForm,
     useGetIdentity,
+    useGetList,
     useNotify,
     useRecordContext,
     useTranslate,
@@ -32,6 +38,8 @@ import i18nProvider from '../../providers/i18nProvider';
 import ImageUploader from '../ImageUploader';
 import useGetUniversitiesLanguages from './useGetUniversitiesLanguages';
 
+const ALL_OPTION = 'all';
+
 interface NewsFormProps {
     handleSubmit: (payload: NewsFormPayload) => void;
 }
@@ -41,9 +49,15 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
     const translate = useTranslate();
     const universitiesLanguages = useGetUniversitiesLanguages();
+    const { data: universities, isLoading: isLoadingUniversities } = useGetList('universities', {
+        sort: { field: 'name', order: 'ASC' },
+    });
     const notify = useNotify();
 
     const record: News = useRecordContext();
+
+    const [centralUniversity, setCentralUniversity] = useState<University>();
+    const [authorUniversity, setAuthorUniversity] = useState<University>();
 
     const [universityData, setUniversityData] = useState<University>(record?.university || undefined);
     const [title, setTitle] = useState<string>(record?.title || '');
@@ -59,10 +73,19 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
         record?.endPublicationDate ? new Date(record.endPublicationDate) : new Date(new Date().setHours(23, 59, 0, 0))
     );
 
+    // Translations
     const [availableLanguages, setAvailableLanguages] = useState<string[]>([]);
     const [defaultLanguage, setDefaultLanguage] = useState<string>(record?.languageCode || 'en');
     const [newTranslationLanguage, setNewTranslationLanguage] = useState<string>('');
     const [translations, setTranslations] = useState<NewsTranslation[]>(record?.translations || []);
+
+    // Concerned universities
+    const forcedConcernedUniversities: University[] = [];
+    const [concernedUniversities, setConcernedUniversities] = useState<University[]>(
+        record?.concernedUniversities ?? []
+    );
+    const [newConcernedUniversity, setNewConcernedUniversity] = useState<University | string>();
+    const [availableConcernedUniversities, setAvailableConcernedUniversities] = useState<University[]>([]);
 
     useEffect(() => {
         async function fetchUniversityData(universityId: string) {
@@ -89,6 +112,28 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
         setAvailableLanguages(filteredAvailableLanguages);
     }, [universitiesLanguages, translations, defaultLanguage]);
 
+    useEffect(() => {
+        if (!universities) return;
+
+        setCentralUniversity(universities.filter((university: University) => university.parent === null)[0]);
+        const authorUniversityId = record?.university?.id ?? identity?.universityId;
+        setAuthorUniversity(universities.find((university: University) => university.id === authorUniversityId));
+    }, [universities, record, identity]);
+
+    useEffect(() => {
+        if (!universities || !centralUniversity || !authorUniversity) return;
+
+        const authorIsFromCentralUniversity = centralUniversity.id === authorUniversity.id;
+
+        const possibleConcernedUniversities = authorIsFromCentralUniversity ? universities : [centralUniversity];
+        setAvailableConcernedUniversities(possibleConcernedUniversities);
+
+        if (!authorIsFromCentralUniversity) {
+            forcedConcernedUniversities.push(authorUniversity);
+        }
+        setConcernedUniversities(record?.concernedUniversities ?? forcedConcernedUniversities);
+    }, [universities, universitiesLanguages, record, centralUniversity, authorUniversity]);
+
     const onCreatePressed = () => {
         if (startPublicationDate && endPublicationDate && startPublicationDate > endPublicationDate) {
             notify('news.form.error.start_publication_date_greater_than_end_publication_date', {
@@ -107,11 +152,12 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                 endPublicationDate,
                 image,
                 creditImage,
+                concernedUniversities,
             });
         }
     };
 
-    if (isLoadingIdentity || !identity) {
+    if (isLoadingIdentity || !identity || isLoadingUniversities) {
         return <Loading />;
     }
 
@@ -150,10 +196,98 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                             <Typography>{universityData?.name}</Typography>
                         </Box>
 
+                        <Box>
+                            <Typography variant="subtitle1">
+                                {translate(`news.form.concerned_universities.label`)} *
+                            </Typography>
+                            <Table>
+                                <TableBody>
+                                    {concernedUniversities.map((university) => (
+                                        <TableRow key={university.id}>
+                                            <TableCell sx={{ width: '60px', padding: '0' }}>
+                                                {!forcedConcernedUniversities.some(
+                                                    (forcedUniversity) => university.id === forcedUniversity.id
+                                                ) && (
+                                                    <Button
+                                                        onClick={() =>
+                                                            setConcernedUniversities(
+                                                                concernedUniversities.filter(
+                                                                    (concernedUniversity) =>
+                                                                        university.id !== concernedUniversity.id
+                                                                )
+                                                            )
+                                                        }
+                                                        sx={{ '& span': { margin: 0 } }}
+                                                    >
+                                                        <DeleteIcon />
+                                                    </Button>
+                                                )}
+                                            </TableCell>
+                                            <TableCell sx={{ padding: '10px' }}>{university.name}</TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    gap: '10px',
+                                    marginTop: '5px',
+                                }}
+                            >
+                                <Select
+                                    onChange={(e: any) => setNewConcernedUniversity(e.target.value as University)}
+                                    sx={{ width: '300px' }}
+                                    value={newConcernedUniversity}
+                                >
+                                    {centralUniversity?.id === authorUniversity?.id && (
+                                        <MenuItem value={ALL_OPTION}>
+                                            {translate('news.form.concerned_universities.all')}
+                                        </MenuItem>
+                                    )}
+                                    {availableConcernedUniversities
+                                        ?.filter(
+                                            (university) =>
+                                                !concernedUniversities.some(
+                                                    (concernedUniversity) => university.id === concernedUniversity.id
+                                                )
+                                        )
+                                        .map((university: any) => (
+                                            <MenuItem key={university.id} value={university}>
+                                                {university.name}
+                                            </MenuItem>
+                                        ))}
+                                </Select>
+                                <Button
+                                    color="primary"
+                                    disabled={!newConcernedUniversity}
+                                    onClick={() => {
+                                        if (newConcernedUniversity) {
+                                            if (newConcernedUniversity === ALL_OPTION) {
+                                                setConcernedUniversities(availableConcernedUniversities);
+                                            } else {
+                                                setConcernedUniversities([
+                                                    ...concernedUniversities,
+                                                    newConcernedUniversity as University,
+                                                ]);
+                                            }
+                                            setNewConcernedUniversity(undefined);
+                                        }
+                                    }}
+                                    sx={{ padding: '8px 30px' }}
+                                    variant="contained"
+                                >
+                                    <span> {translate('news.form.concerned_universities.button')}</span>
+                                </Button>
+                            </Box>
+                        </Box>
+
                         <Box display="flex" flexDirection="row" gap="50px">
                             <Box>
                                 <Typography variant="subtitle1">
-                                    {translate('news.form.start_publication_date')}
+                                    {translate('news.form.start_publication_date')} *
                                 </Typography>
                                 <DateTimePicker
                                     ampm={false}
@@ -171,7 +305,7 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
 
                             <Box>
                                 <Typography variant="subtitle1">
-                                    {translate('news.form.end_publication_date')}
+                                    {translate('news.form.end_publication_date')} *
                                 </Typography>
                                 <DateTimePicker
                                     ampm={false}
@@ -269,7 +403,7 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                                 )}
 
                                 <Box sx={{ width: '100%' }}>
-                                    <Typography variant="subtitle1">{translate('news.form.title')}</Typography>
+                                    <Typography variant="subtitle1">{translate('news.form.title')} *</Typography>
                                     <OutlinedInput
                                         name="Title"
                                         onChange={(e: any) => setTitle(e.target.value)}
@@ -282,7 +416,7 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                                 </Box>
 
                                 <Box sx={{ width: '100%', '& .RaLabeled-label': { display: 'none' } }}>
-                                    <Typography variant="subtitle1">{translate('news.form.content')}</Typography>
+                                    <Typography variant="subtitle1">{translate('news.form.content')} *</Typography>
                                     <RichTextInput
                                         defaultValue={content}
                                         onChange={(e: any) => setContent(e)}
@@ -334,7 +468,7 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                                     </Box>
 
                                     <Box sx={{ width: '100%', '& .RaLabeled-label': { display: 'none' } }}>
-                                        <Typography variant="subtitle1">{translate('news.form.content')}</Typography>
+                                        <Typography variant="subtitle1">{translate('news.form.content')} *</Typography>
                                         <RichTextInput
                                             defaultValue={translation.content || ''}
                                             onChange={(e: any) => {
@@ -357,9 +491,19 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                         </TabbedForm>
                     </Box>
 
+                    <Typography sx={{ marginTop: '20px', fontStyle: 'italic' }}>
+                        {translate('news.form.mandatory')}
+                    </Typography>
+
                     <Button
                         color="primary"
-                        disabled={!title || !content || !startPublicationDate || !endPublicationDate}
+                        disabled={
+                            !title ||
+                            !content ||
+                            !startPublicationDate ||
+                            !endPublicationDate ||
+                            concernedUniversities?.length === 0
+                        }
                         onClick={onCreatePressed}
                         sx={{ mt: 4, width: '100%' }}
                         type="button"

@@ -1,28 +1,30 @@
+import { IonButton } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
+import { TrophiePng } from '../../../assets';
+import { useConfig } from '../../../context/ConfigurationContext';
 import Tandem from '../../../domain/entities/Tandem';
+import useGetMediaObject from '../../hooks/useGetMediaObject';
+import useOnOpenChat from '../../hooks/useOnOpenChat';
 import LearningCard from '../card/LearningCard';
 import styles from './LearningJournalCard.module.css';
-import { TrophiePng } from '../../../assets';
-import { IonButton } from '@ionic/react';
-import useOnOpenChat from '../../hooks/useOnOpenChat';
-import useGetMediaObject from '../../hooks/useGetMediaObject';
-import { useConfig } from '../../../context/ConfigurationContext';
 
 interface LearningJournalCardProps {
     tandem: Tandem;
+    onOpenEdito: () => void;
 }
 
-const LearningJournalCard: React.FC<LearningJournalCardProps> = ({ tandem }) => {
+const LearningJournalCard: React.FC<LearningJournalCardProps> = ({ tandem, onOpenEdito }) => {
     const { t } = useTranslation();
     const { fileAdapter } = useConfig();
     const onOpenChat = useOnOpenChat({ tandemId: tandem.id, withAdministrator: true });
     const {
         loading: loadingCertificate,
         image: certificateFile,
-        error: certificateError
+        error: certificateError,
     } = useGetMediaObject({ id: tandem.learningLanguage.certificateFile?.id || '' });
 
-    const downloadableCertificate = tandem.learningLanguage.sharedCertificate &&
+    const downloadableCertificate =
+        tandem.learningLanguage.sharedCertificate &&
         tandem.learningLanguage.certificateFile &&
         !loadingCertificate &&
         !certificateError;
@@ -32,7 +34,7 @@ const LearningJournalCard: React.FC<LearningJournalCardProps> = ({ tandem }) => 
             const certificateFileName: string = [
                 t('learning_journal.certificate_file_name'),
                 t(`languages_code.${tandem.learningLanguage.code}`),
-                `${tandem.learningLanguage.profile?.user.firstname} ${tandem.learningLanguage.profile?.user.lastname}`
+                `${tandem.learningLanguage.profile?.user.firstname} ${tandem.learningLanguage.profile?.user.lastname}`,
             ].join(' - ');
             fileAdapter.saveFile(certificateFile, certificateFileName);
         }
@@ -53,15 +55,15 @@ const LearningJournalCard: React.FC<LearningJournalCardProps> = ({ tandem }) => 
                 <ul className={styles.activities}>
                     <li className={styles.activity}>
                         <h3 className={styles.activityTitle}>{t('learning_journal.sessions_duration_title')}</h3>
-                        <span className={styles.activityValue}>{50}</span>
+                        <span className={styles.activityValue}>{tandem.learningLanguage.visioDuration}</span>
                     </li>
                     <li className={styles.activity}>
                         <h3 className={styles.activityTitle}>{t('learning_journal.vocabulary_title')}</h3>
-                        <span className={styles.activityValue}>{26}</span>
+                        <span className={styles.activityValue}>{tandem.learningLanguage.countVocabularies}</span>
                     </li>
                     <li className={styles.activity}>
                         <h3 className={styles.activityTitle}>{t('learning_journal.activities_title')}</h3>
-                        <span className={styles.activityValue}>{3}</span>
+                        <span className={styles.activityValue}>{tandem.learningLanguage.countActivities}</span>
                     </li>
                 </ul>
                 <div className={styles.buttons}>
@@ -69,12 +71,16 @@ const LearningJournalCard: React.FC<LearningJournalCardProps> = ({ tandem }) => 
                         <IonButton fill="clear" className="primary-button no-padding" onClick={onDownloadCertificate}>
                             {t('learning_journal.download_certificate_button')}
                         </IonButton>
-                    ): (
+                    ) : (
                         <IonButton fill="clear" className="primary-button no-padding" onClick={onOpenChat}>
                             {t('learning_journal.ask_for_certificate_button')}
                         </IonButton>
                     )}
-                    <IonButton fill="clear" className={`secondary-button no-padding ${styles.link}`}>
+                    <IonButton
+                        fill="clear"
+                        className={`secondary-button no-padding ${styles.link}`}
+                        onClick={onOpenEdito}
+                    >
                         {t('learning_journal.how_to_get_certificate_button')}
                     </IonButton>
                 </div>
@@ -84,4 +90,3 @@ const LearningJournalCard: React.FC<LearningJournalCardProps> = ({ tandem }) => 
 };
 
 export default LearningJournalCard;
-

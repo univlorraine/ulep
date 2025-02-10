@@ -1,9 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
-import { Instance } from 'src/core/models/Instance.model';
 import {
-  INSTANCE_REPOSITORY,
+  EditoMandatoryTranslations,
+  Instance,
+} from 'src/core/models/Instance.model';
+import {
   InstanceRepository,
+  INSTANCE_REPOSITORY,
 } from 'src/core/ports/instance.repository';
 
 export class UpdateInstanceCommand {
@@ -18,6 +21,7 @@ export class UpdateInstanceCommand {
   secondaryColor?: string;
   secondaryBackgroundColor?: string;
   secondaryDarkColor?: string;
+  editoMandatoryTranslations?: EditoMandatoryTranslations[];
 }
 
 @Injectable()

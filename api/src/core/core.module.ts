@@ -15,6 +15,7 @@ import {
   GetAllEntriesForUserByDateUsecase,
   GetAllEntriesForUserGroupedByDatesUsecase,
   ShareLogEntriesUsecase,
+  UnshareLogEntriesUsecase,
 } from 'src/core/usecases/log-entry';
 import { UpdateCustomLogEntryUsecase } from 'src/core/usecases/log-entry/update-custom-log-entry.usecase';
 import { DeleteObjectiveImageUsecase } from 'src/core/usecases/media/delete-objective-image.usecase';
@@ -86,6 +87,7 @@ import {
   FindOneObjectiveUsecase,
   GenerateCertificateUsecase,
   GenerateConversationsUsecase,
+  GenerateEditosUsecase,
   GenerateTandemsUsecase,
   GetActivitiesUsecase,
   GetActivityPdfUsecase,
@@ -100,10 +102,14 @@ import {
   GetCategoriesUsecase,
   GetCountriesUniversitiesUsecase,
   GetCountriesUsecase,
+  GetEditoByUniversityIdUsecase,
+  GetEditosUsecase,
+  GetEditoUsecase,
   GetInstanceUsecase,
   GetInterestCategoryUsecase,
   GetInterestsByCategoriesUsecase,
   GetInterestUsecase,
+  GetLanguageUsecase,
   GetLearningLanguageMatchesUsecase,
   GetLearningLanguageOfIdUsecase,
   GetLearningLanguageOfProfileUsecase,
@@ -145,6 +151,7 @@ import {
   UpdateActivityUsecase,
   UpdateAdministratorUsecase,
   UpdateCountryStatusUsecase,
+  UpdateEditoUsecase,
   UpdateInstanceUsecase,
   UpdateInterestCategoryUsecase,
   UpdateInterestUsecase,
@@ -164,6 +171,7 @@ import {
   UploadAudioVocabularyActivityUsecase,
   UploadAudioVocabularyUsecase,
   UploadAvatarUsecase,
+  UploadEditoImageUsecase,
   UploadEventImageUsecase,
   UploadImageActivityUsecase,
   UploadLearningLanguageCertificateUsecase,
@@ -171,6 +179,7 @@ import {
   UploadNewsImageUsecase,
   UploadUniversityImageUsecase,
 } from './usecases';
+import { CountActivitiesUsecase } from './usecases/activity/count-activities.usecase';
 import { UpdateActivityStatusUsecase } from './usecases/activity/update-activity-status.usecase';
 import {
   CreateEventUsecase,
@@ -186,6 +195,7 @@ import {
 import { GetJitsiTokenUsecase } from './usecases/jitsi/get-jitsi-token.usecase';
 import { DeleteLearningLanguageUsecase } from './usecases/learningLanguage/delete-learning-langugage.usecase';
 import { GetLearningLanguageTandemUsecase } from './usecases/learningLanguage/getLearningLanguageTandem.usecase';
+import { UpdateVisioDurationUsecase } from './usecases/learningLanguage/update-visio-duration.usecase';
 import { UploadInstanceDefaultCertificateUsecase } from './usecases/media/upload-instance-default-certificate.usecase';
 import { UploadUniversityDefaultCertificateUsecase } from './usecases/media/upload-university-default-certificate.usecase';
 import { CreateCustomLearningGoalUsecase } from './usecases/objective/create-custom-learning-goals.usecase';
@@ -203,6 +213,7 @@ import { UpdateSessionUsecase } from './usecases/session/update-session.usecase'
 import { ValidateTandemUsecase } from './usecases/tandem/validate-tandem.usecase';
 import { GetKeycloakAdminGroupsUsecase } from './usecases/user/get-keycloak-admin-groups.usecase';
 import { RevokeSessionsUsecase } from './usecases/user/revoke-sessions.usecase';
+import { CountVocabulariesUsecase } from './usecases/vocabulary/count-vocabularies.usecase';
 
 const usecases: Provider[] = [
   // Activity
@@ -224,6 +235,7 @@ const usecases: Provider[] = [
   UpdateActivityStatusUsecase,
   GetAllActivitiesByAdminUsecase,
   GetActivityPdfUsecase,
+  CountActivitiesUsecase,
   //Campus
   CreateCampusUsecase,
   DeleteCampusUsecase,
@@ -234,6 +246,12 @@ const usecases: Provider[] = [
   GetCountriesUsecase,
   GetCountriesUniversitiesUsecase,
   UpdateCountryStatusUsecase,
+  // Edito
+  GenerateEditosUsecase,
+  GetEditoByUniversityIdUsecase,
+  GetEditosUsecase,
+  GetEditoUsecase,
+  UpdateEditoUsecase,
   // Interest
   CreateInterestCategoryUsecase,
   CreateInterestUsecase,
@@ -250,6 +268,7 @@ const usecases: Provider[] = [
   FindAllLanguageCodeUsecase,
   FindAllSuggestedLanguageUsecase,
   UpdateLanguageCodeUsecase,
+  GetLanguageUsecase,
   // Media
   GetMediaObjectUsecase,
   DeleteAudioVocabularyUsecase,
@@ -269,6 +288,7 @@ const usecases: Provider[] = [
   UploadUniversityDefaultCertificateUsecase,
   UploadLearningLanguageCertificateUsecase,
   UploadEventImageUsecase,
+  UploadEditoImageUsecase,
   // News
   GetNewsAdminUsecase,
   GetNewsUsecase,
@@ -331,6 +351,7 @@ const usecases: Provider[] = [
   DeleteLearningLanguageUsecase,
   UpdateLearningLanguageUsecase,
   GenerateCertificateUsecase,
+  UpdateVisioDurationUsecase,
   // History Tandem
   GetOtherUserEmailInTandemUsecase,
   // Tandems
@@ -397,6 +418,7 @@ const usecases: Provider[] = [
   GetVocabularyListPdfUsecase,
   AddReaderToVocabularyListUsecase,
   RemoveReaderToVocabularyListUsecase,
+  CountVocabulariesUsecase,
   // Session
   CancelSessionUsecase,
   CreateSessionUsecase,
@@ -422,6 +444,7 @@ const usecases: Provider[] = [
   GetAllEntriesForUserGroupedByDatesUsecase,
   UpdateCustomLogEntryUsecase,
   ShareLogEntriesUsecase,
+  UnshareLogEntriesUsecase,
   ExportLogEntriesUsecase,
 ];
 

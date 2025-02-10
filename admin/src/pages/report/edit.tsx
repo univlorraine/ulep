@@ -18,10 +18,11 @@ const EditReport = () => {
     const redirect = useRedirect();
     const notify = useNotify();
 
-    const handleSubmit = async (id: string, status: ReportStatus, comment?: string) => {
+    const handleSubmit = async (id: string, status: ReportStatus, comment?: string, shouldDeleteMessage?: boolean) => {
         const payload = {
             status,
             comment,
+            shouldDeleteMessage,
         };
         try {
             return await update(
@@ -55,9 +56,11 @@ const EditReport = () => {
                             category={record.category.name}
                             comment={record.comment}
                             content={record.content}
-                            handleSubmit={(status: ReportStatus, comment?: string) =>
-                                handleSubmit(record.id, status, comment)
+                            handleSubmit={(status: ReportStatus, comment?: string, shouldDeleteMessage?: boolean) =>
+                                handleSubmit(record.id, status, comment, shouldDeleteMessage)
                             }
+                            isMessageDeleted={record.metadata?.isMessageDeleted}
+                            messageId={record.metadata?.messageId}
                             status={record.status}
                             user={record.user}
                         />

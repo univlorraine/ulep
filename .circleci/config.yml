@@ -22,25 +22,25 @@ commands:
 
 jobs:
   ##### Code Quality #####
-  sonar-check:
-    docker:
-      - image: cimg/node:18.16.1
-    working_directory: ~/api
-    steps:
-      - checkout
-      - run:
-          name: Install Sonar Runner
-          command: |
-            export SONAR_SCANNER_VERSION=5.0.1.3006
-            export SONAR_SCANNER_HOME=$HOME/.sonar/sonar-scanner-$SONAR_SCANNER_VERSION-linux
-            curl --create-dirs -sSLo $HOME/.sonar/sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-$SONAR_SCANNER_VERSION-linux.zip
-            unzip -o $HOME/.sonar/sonar-scanner.zip -d $HOME/.sonar/
-            export PATH=$SONAR_SCANNER_HOME/bin:$PATH
-            export SONAR_SCANNER_OPTS="-server"
-            sonar-scanner \
-              -Dsonar.projectKey=thetribeio_etandem_AY2OFcz_UJJxCOVDfrTu \
-              -Dsonar.sources=.  \
-              -Dsonar.host.url=https://ecocode.thetribe.dev
+  # sonar-check:
+  #   docker:
+  #     - image: cimg/node:18.16.1
+  #   working_directory: ~/api
+  #   steps:
+  #     - checkout
+  #     - run:
+  #         name: Install Sonar Runner
+  #         command: |
+  #           export SONAR_SCANNER_VERSION=5.0.1.3006
+  #           export SONAR_SCANNER_HOME=$HOME/.sonar/sonar-scanner-$SONAR_SCANNER_VERSION-linux
+  #           curl --create-dirs -sSLo $HOME/.sonar/sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-$SONAR_SCANNER_VERSION-linux.zip
+  #           unzip -o $HOME/.sonar/sonar-scanner.zip -d $HOME/.sonar/
+  #           export PATH=$SONAR_SCANNER_HOME/bin:$PATH
+  #           export SONAR_SCANNER_OPTS="-server"
+  #           sonar-scanner \
+  #             -Dsonar.projectKey=thetribeio_etandem_AY2OFcz_UJJxCOVDfrTu \
+  #             -Dsonar.sources=.  \
+  #             -Dsonar.host.url=https://ecocode.thetribe.dev
   ##### API #####
   install-api:
     executor: node-executor
@@ -198,7 +198,7 @@ workflows:
   check_api:
     jobs:
       - install-api
-      - sonar-check
+      #- sonar-check
       - lint-api:
           requires:
             - install-api

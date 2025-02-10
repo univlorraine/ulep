@@ -2,7 +2,7 @@ import { Collection, ModeQuery, PrismaService, SortOrder } from '@app/common';
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { endOfDay, startOfDay } from 'date-fns';
-import { News } from 'src/core/models';
+import { News, NewsStatus } from 'src/core/models';
 import { NewsRepository } from 'src/core/ports/news.repository';
 import { CreateNewsCommand } from 'src/core/usecases/news/create-news.usecase';
 import { UpdateNewsCommand } from 'src/core/usecases/news/update-news.usecase';
@@ -11,13 +11,7 @@ import { newsMapper, NewsRelations } from '../mappers/news.mapper';
 @Injectable()
 export class PrismaNewsRepository implements NewsRepository {
   constructor(private readonly prisma: PrismaService) {}
-  async findAll({
-    limit,
-    offset,
-    onlyActiveNews,
-    where,
-    orderBy,
-  }): Promise<Collection<News>> {
+  async findAll({ limit, offset, where, orderBy }): Promise<Collection<News>> {
     const wherePayload: Prisma.NewsWhereInput = where
       ? {
           Organization: {
@@ -53,20 +47,6 @@ export class PrismaNewsRepository implements NewsRepository {
         }
       : {};
 
-    if (onlyActiveNews) {
-      const todayStart = startOfDay(new Date());
-      const todayEnd = endOfDay(new Date());
-
-      // Start publication date is before end of today
-      wherePayload.start_publication_date = {
-        lte: todayEnd,
-      };
-      // End publication date is after today
-      wherePayload.end_publication_date = {
-        gte: todayStart,
-      };
-    }
-
     const count = await this.prisma.news.count({
       where: wherePayload,
     });
@@ -85,8 +65,83 @@ export class PrismaNewsRepository implements NewsRepository {
         order = { TitleTextContent: { text: orderBy.order } };
       } else if (orderBy.field === 'id') {
         order = { updated_at: 'desc' };
+      } else {
+        order = { [orderBy.field]: orderBy.order };
       }
     }
+
+    const news = await this.prisma.news.findMany({
+      where: wherePayload,
+      include: NewsRelations,
+      orderBy: order,
+      skip: offset,
+      take: limit,
+    });
+
+    return new Collection<News>({
+      items: news.map(newsMapper),
+      totalItems: count,
+    });
+  }
+
+  async findAllForAnUser({ limit, offset, where }): Promise<Collection<News>> {
+    const wherePayload: Prisma.NewsWhereInput = where
+      ? {
+          ConcernedUniversities: {
+            some: {
+              id: where.universityId,
+            },
+          },
+          TitleTextContent: {
+            text: {
+              contains: where.title,
+              mode: ModeQuery.INSENSITIVE,
+            },
+            ...(where.languageCodes && {
+              OR: [
+                {
+                  LanguageCode: {
+                    code: {
+                      in: where.languageCodes,
+                    },
+                  },
+                },
+                {
+                  Translations: {
+                    some: {
+                      LanguageCode: { code: { in: where.languageCodes } },
+                    },
+                  },
+                },
+              ],
+            }),
+          },
+          status: NewsStatus.READY,
+        }
+      : {};
+
+    const todayStart = startOfDay(new Date());
+    const todayEnd = endOfDay(new Date());
+
+    // Start publication date is before end of today
+    wherePayload.start_publication_date = {
+      lte: todayEnd,
+    };
+    // End publication date is after today
+    wherePayload.end_publication_date = {
+      gte: todayStart,
+    };
+
+    const count = await this.prisma.news.count({
+      where: wherePayload,
+    });
+
+    // If skip is out of range, return an empty array
+    if (offset >= count) {
+      return { items: [], totalItems: count };
+    }
+
+    let order = { updated_at: 'desc' as SortOrder } as any;
 
     const news = await this.prisma.news.findMany({
       where: wherePayload,
@@ -151,6 +206,11 @@ export class PrismaNewsRepository implements NewsRepository {
         status: command.status,
         start_publication_date: command.startPublicationDate,
         end_publication_date: command.endPublicationDate,
+        ConcernedUniversities: {
+          connect: command.concernedUniversities?.map((university) => ({
+            id: university,
+          })),
+        },
       },
       include: NewsRelations,
     });
@@ -194,6 +254,15 @@ export class PrismaNewsRepository implements NewsRepository {
         status: command.status,
         start_publication_date: command.startPublicationDate,
         end_publication_date: command.endPublicationDate,
+        ConcernedUniversities: {
+          set: [],
+          ...(command.concernedUniversities &&
+            command.concernedUniversities.length > 0 && {
+              connect: command.concernedUniversities.map((university) => ({
+                id: university,
+              })),
+            }),
+        },
       },
       include: NewsRelations,
     });

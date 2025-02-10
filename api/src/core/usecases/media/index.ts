@@ -10,6 +10,7 @@ export * from './upload-admin-avatar.usecase';
 export * from './upload-audio-vocabulary-activity.usecase';
 export * from './upload-audio-vocabulary.usecase';
 export * from './upload-avatar.usecase';
+export * from './upload-edito-image.usecase';
 export * from './upload-event-image.usecase';
 export * from './upload-image-activity.usecase';
 export * from './upload-learning-language-certificate.usecase';

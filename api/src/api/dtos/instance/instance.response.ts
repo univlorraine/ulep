@@ -71,6 +71,10 @@ export class InstanceResponse {
   @Expose({ groups: ['read'] })
   logoURL: string;
 
+  @ApiProperty({ type: 'array', items: { type: 'string' } })
+  @Expose({ groups: ['read'] })
+  editoMandatoryTranslations: string[];
+
   constructor(partial: Partial<InstanceResponse>) {
     Object.assign(this, partial);
   }
@@ -94,6 +98,7 @@ export class InstanceResponse {
         ? MediaObjectResponse.fromMediaObject(instance.defaultCertificateFile)
         : null,
       logoURL: instance.logoURL,
+      editoMandatoryTranslations: instance.editoMandatoryTranslations,
     });
   }
 }

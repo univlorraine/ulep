@@ -17,13 +17,8 @@
     width: 100%;
 }
 
-.container {
-    background-color: #fff8b7;
-    flex: 1;
-    max-height: 100%;
-    overflow: hidden;
-    overflow-y: auto;
-    width: 100%;
+.messagesCommunity {
+    background-color: #8bc4c4;
 }
 
 .currentUser,

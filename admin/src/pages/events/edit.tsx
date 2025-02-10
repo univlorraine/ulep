@@ -17,6 +17,7 @@ const EditEvent = () => {
             !payload.startDate ||
             !payload.endDate ||
             payload.diffusionLanguages?.length === 0 ||
+            payload.concernedUniversities?.length === 0 ||
             (payload.type === EventType.ONLINE && !payload.eventURL) ||
             (payload.type === EventType.PRESENTIAL && (!payload.address || !payload.addressName))
         ) {
@@ -42,7 +43,7 @@ const EditEvent = () => {
             formData.append(`translations[${index}][languageCode]`, translation.languageCode);
         });
 
-        payload.diffusionLanguages?.forEach((language, index) => {
+        payload.diffusionLanguages.forEach((language, index) => {
             formData.append(`diffusionLanguages[${index}]`, language);
         });
 

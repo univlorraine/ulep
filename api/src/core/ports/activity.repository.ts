@@ -143,4 +143,8 @@ export interface ActivityRepository {
   updateTheme(props: UpdateActivityThemeProps): Promise<ActivityTheme>;
   deleteCategoryTheme(id: string): Promise<void>;
   deleteTheme(id: string): Promise<void>;
+  countActivitiesByProfileAndStatus(
+    profileId: string,
+    status: ActivityStatus,
+  ): Promise<number>;
 }

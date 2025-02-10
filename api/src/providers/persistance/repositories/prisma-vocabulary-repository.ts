@@ -256,6 +256,7 @@ export class PrismaVocabularyRepository implements VocabularyRepository {
         name: props.name,
         symbol: props.symbol,
         Editors: {
+          set: [],
           connect: props.profileIds.map((profileId) => ({
             id: profileId,
           })),
@@ -321,6 +322,30 @@ export class PrismaVocabularyRepository implements VocabularyRepository {
     await this.prisma.vocabularyList.delete({
       where: {
         id,
+      },
+    });
+  }
+
+  async countVocabulariesByProfileAndLanguage(
+    profileId: string,
+    language: string,
+  ): Promise<number> {
+    return await this.prisma.vocabulary.count({
+      where: {
+        VocabularyList: {
+          AND: [
+            {
+              Creator: {
+                id: profileId,
+              },
+            },
+            {
+              OriginalLanguage: {
+                code: language,
+              },
+            },
+          ],
+        },
       },
     });
   }

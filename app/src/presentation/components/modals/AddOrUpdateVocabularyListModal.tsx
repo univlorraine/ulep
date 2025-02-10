@@ -35,7 +35,7 @@ const AddOrUpdateVocabularyListModal: React.FC<AddOrUpdateVocabularyListModalPro
     const { t } = useTranslation();
     const [name, setName] = useState<string>('');
     const [symbol, setSymbol] = useState<string>('');
-    const [translationLanguage, setOriginLanguage] = useState<Language>(profile.nativeLanguage);
+    const [translationLanguage, setTranslationLanguage] = useState<Language>(profile.nativeLanguage);
     const [targetLanguage, setTargetLanguage] = useState<Language>(
         currentLearningLanguage ?? profile.learningLanguages[0]
     );
@@ -85,10 +85,8 @@ const AddOrUpdateVocabularyListModal: React.FC<AddOrUpdateVocabularyListModalPro
         setErrorMessage(undefined);
         setName(vocabularyList?.name ?? '');
         setSymbol(vocabularyList?.symbol ?? '');
-        setOriginLanguage(vocabularyList?.wordLanguage ?? profile.nativeLanguage);
-        setTargetLanguage(
-            vocabularyList?.translationLanguage ?? currentLearningLanguage ?? profile.learningLanguages[0]
-        );
+        setTranslationLanguage(vocabularyList?.translationLanguage ?? profile.nativeLanguage);
+        setTargetLanguage(vocabularyList?.targetLanguage ?? currentLearningLanguage ?? profile.learningLanguages[0]);
     }, [isVisible, vocabularyList]);
 
     return (
@@ -134,7 +132,7 @@ const AddOrUpdateVocabularyListModal: React.FC<AddOrUpdateVocabularyListModalPro
 
                 <div className="large-margin-bottom">
                     <Dropdown<Language>
-                        onChange={(value) => setOriginLanguage(value)}
+                        onChange={(value) => setTranslationLanguage(value)}
                         value={{
                             label: `${codeLanguageToFlag(translationLanguage.code)} ${t(
                                 `languages_code.${translationLanguage.code}`

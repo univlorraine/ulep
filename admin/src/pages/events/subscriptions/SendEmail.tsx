@@ -63,7 +63,7 @@ const SendEmail = ({ setIsModalOpen, eventId }: SendEmailProps) => {
                         />
                     </SimpleForm>
                 </Box>
-                <Button onClick={handleSubmit} variant="contained">
+                <Button disabled={!title || !content} onClick={handleSubmit} variant="contained">
                     <span>{translate('events.subscriptions.email.send')}</span>
                 </Button>
             </Box>

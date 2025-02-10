@@ -1,7 +1,7 @@
 import * as Swagger from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { Tandem, TandemStatus } from '../../../core/models/tandem.model';
 import { LearningLanguage, LearningType } from 'src/core/models';
+import { Tandem, TandemStatus } from '../../../core/models/tandem.model';
 import { LearningLanguageResponse } from '../learning-languages';
 
 export class TandemResponse {
@@ -45,8 +45,8 @@ export class TandemResponse {
     return new TandemResponse({
       id: tandem.id,
       learningLanguages:
-        tandem.learningLanguages?.map((ll) =>
-          LearningLanguageResponse.fromDomain(ll),
+        tandem.learningLanguages?.map((learningLanguage) =>
+          LearningLanguageResponse.fromDomain({ learningLanguage }),
         ) || [],
       status: tandem.status,
       learningType: tandem.learningType,
@@ -91,6 +91,8 @@ export class UserTandemResponse {
     profileId: string,
     tandem: Tandem,
     languageCode?: string,
+    countVocabularies?: number,
+    countActivities?: number,
   ): UserTandemResponse {
     const { learningLanguageProfile, learningLanguagePartner } =
       tandem.learningLanguages.reduce<{
@@ -117,14 +119,17 @@ export class UserTandemResponse {
 
     return new UserTandemResponse({
       id: tandem.id,
-      partnerLearningLanguage: LearningLanguageResponse.fromDomain(
-        learningLanguagePartner,
+      partnerLearningLanguage: LearningLanguageResponse.fromDomain({
+        learningLanguage: learningLanguagePartner,
         languageCode,
-      ),
+      }),
       status: tandem.status,
-      userLearningLanguage: LearningLanguageResponse.fromDomain(
-        learningLanguageProfile,
-      ),
+      userLearningLanguage: LearningLanguageResponse.fromDomain({
+        learningLanguage: learningLanguageProfile,
+        countVocabularies: countVocabularies,
+        countActivities: countActivities,
+      }),
+
       universityValidations: tandem.universityValidations,
       compatibilityScore: tandem.compatibilityScore,
     });

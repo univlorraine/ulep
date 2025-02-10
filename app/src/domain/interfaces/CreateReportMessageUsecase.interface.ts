@@ -1,6 +1,14 @@
 import { MessageType } from '../entities/chat/Message';
 
+export type CreateReportMessageParams = {
+    content: string;
+    reportedUserId: string;
+    filePath?: string;
+    mediaType?: MessageType;
+    messageId?: string;
+};
+
 interface CreateReportMessageUsecaseInterface {
-    execute(content: string, reportedUserId: string, filePath?: string, mediaType?: MessageType): Promise<void | Error>;
+    execute(params: CreateReportMessageParams): Promise<void | Error>;
 }
 export default CreateReportMessageUsecaseInterface;

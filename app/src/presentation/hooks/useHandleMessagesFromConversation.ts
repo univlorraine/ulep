@@ -228,6 +228,7 @@ const useHandleMessagesFromConversation = ({
                 false,
                 { ...messageResult.metadata, ...metadata },
                 0,
+                false,
                 currentMessageReply?.id
             )
         );
@@ -346,6 +347,10 @@ const useHandleMessagesFromConversation = ({
             isScrollBackwardOver: false,
         });
     };
+
+    useEffect(() => {
+        setCurrentMessageReply(undefined);
+    }, [conversationId]);
 
     useEffect(() => {
         const fetchData = async () => {

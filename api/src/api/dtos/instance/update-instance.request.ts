@@ -1,6 +1,7 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import {
+  IsArray,
   IsEmail,
   IsHexColor,
   IsNumber,
@@ -8,6 +9,7 @@ import {
   IsString,
   IsUrl,
 } from 'class-validator';
+import { EditoMandatoryTranslations } from 'src/core/models/Instance.model';
 
 export class UpdateInstanceRequest {
   @ApiPropertyOptional({ type: 'string', example: 'Université de Lorraine' })
@@ -75,4 +77,10 @@ export class UpdateInstanceRequest {
   @IsNumber()
   @Type(() => Number)
   daysBeforeClosureNotification?: number;
+
+  @ApiPropertyOptional({ type: 'array', items: { type: 'string' } })
+  @IsOptional()
+  @Transform(({ value }) => (value === undefined ? [] : value))
+  @IsArray()
+  editoMandatoryTranslations?: EditoMandatoryTranslations[];
 }

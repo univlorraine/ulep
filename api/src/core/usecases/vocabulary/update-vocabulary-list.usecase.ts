@@ -71,7 +71,7 @@ export class UpdateVocabularyListUsecase {
 
     if (command.profileIds && command.profileIds.length > 0) {
       const learningLanguage =
-        vocabularyList.creator.findLearningLanguageByCode(
+        vocabularyList.creator?.findLearningLanguageByCode(
           vocabularyList.translationLanguage.code,
         );
       if (learningLanguage) {

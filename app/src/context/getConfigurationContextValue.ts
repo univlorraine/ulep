@@ -7,6 +7,7 @@ import NotificationAdapter from '../adapter/NotificationAdapter';
 import { RecorderAdapter } from '../adapter/RecorderAdapter';
 import Configuration from '../domain/entities/Confirguration';
 import CreateActivityUsecase from '../domain/usecases/activity/CreateActivityUsecase';
+import DeleteActivityUsecase from '../domain/usecases/activity/DeleteActivityUsecase';
 import GetActivitiesUsecase from '../domain/usecases/activity/GetActivitiesUsecase';
 import GetActivityPdfUsecase from '../domain/usecases/activity/GetActivityPdfUsecase';
 import GetActivityThemesUsecase from '../domain/usecases/activity/GetActivityThemesUsecase';
@@ -46,6 +47,7 @@ import GetAllLanguagesUsecase from '../domain/usecases/GetAllLanguagesUsecase';
 import GetAllSessionsUsecase from '../domain/usecases/GetAllSessionsUsecase';
 import GetAllTandemsUsecase from '../domain/usecases/GetAllTandemsUsecase';
 import GetAllUniversitiesUsecase from '../domain/usecases/GetAllUniversitiesUsecase';
+import GetEditoByUniversityIdUsecase from '../domain/usecases/GetEditoByUniversityIdUsecase';
 import GetHistoricEmailPartnerUsecase from '../domain/usecases/GetHistoricEmailPartnerUsecase';
 import GetJitsiTokenUsecase from '../domain/usecases/GetJitsiTokenUsecase';
 import GetMediaObjectUsecase from '../domain/usecases/GetMediaObjectUsecase';
@@ -60,7 +62,9 @@ import ExportLogEntriesUsecase from '../domain/usecases/log-entries/ExportLogEnt
 import GetLogEntriesByDateUsecase from '../domain/usecases/log-entries/GetLogEntriesByDateUsecase';
 import GetLogEntriesUsecase from '../domain/usecases/log-entries/GetLogEntriesUsecase';
 import ShareLogEntriesUsecase from '../domain/usecases/log-entries/ShareLogEntriesUsecase';
+import UnshareLogEntriesUsecase from '../domain/usecases/log-entries/UnshareLogEntriesUsecase';
 import UpdateCustomLogEntryUsecase from '../domain/usecases/log-entries/UpdateCustomLogEntryUsecase';
+import UpdateVisioDurationUsecase from '../domain/usecases/log-entries/UpdateVisioDurationUsecase';
 import LoginUsecase from '../domain/usecases/LoginUsecase';
 import GetAllNewsUsecase from '../domain/usecases/news/GetAllNewsUsecase';
 import RefreshTokensUsecase from '../domain/usecases/RefreshTokensUsecase';
@@ -207,6 +211,7 @@ const getConfigContextValue = ({
     const updateActivity = new UpdateActivityUsecase(domainHttpAdapter);
     const updateActivityStatus = new UpdateActivityStatusUsecase(domainHttpAdapter);
     const getActivityPdf = new GetActivityPdfUsecase(domainHttpAdapter, fileAdapter);
+    const deleteActivity = new DeleteActivityUsecase(domainHttpAdapter);
 
     // Session
     const createSession = new CreateSessionUsecase(domainHttpAdapter);
@@ -237,7 +242,13 @@ const getConfigContextValue = ({
     const getLogEntries = new GetLogEntriesUsecase(domainHttpAdapter);
     const getLogEntriesByDate = new GetLogEntriesByDateUsecase(domainHttpAdapter);
     const shareLogEntries = new ShareLogEntriesUsecase(domainHttpAdapter);
+    const unshareLogEntries = new UnshareLogEntriesUsecase(domainHttpAdapter);
     const exportLogEntries = new ExportLogEntriesUsecase(domainHttpAdapter, fileAdapter);
+    const updateVisioDuration = new UpdateVisioDurationUsecase(domainHttpAdapter);
+
+    // Edito
+    const getEditoByUniversityId = new GetEditoByUniversityIdUsecase(domainHttpAdapter);
+
     return {
         accessToken,
         addDevice,
@@ -288,6 +299,7 @@ const getConfigContextValue = ({
         searchMessagesIdsFromConversation,
         exportMediasFromConversation,
         sendMessage,
+        updateVisioDuration,
         updateAvatar,
         updateNotificationPermission,
         recorderAdapter,
@@ -326,9 +338,12 @@ const getConfigContextValue = ({
         getLogEntries,
         getLogEntriesByDate,
         shareLogEntries,
+        unshareLogEntries,
         exportLogEntries,
         addReaderToVocabularyList,
         getHashtagsFromConversation,
+        getEditoByUniversityId,
+        deleteActivity,
     };
 };
 

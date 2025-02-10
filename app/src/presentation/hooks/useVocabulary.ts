@@ -11,7 +11,7 @@ import { CreateVocabularyListCommand } from '../../domain/interfaces/vocabulary/
 import { UpdateVocabularyListCommand } from '../../domain/interfaces/vocabulary/UpdateVocabularyListUsecase.interface';
 import { useStoreState } from '../../store/storeTypes';
 
-const useVocabulary = (learningLanguage?: LearningLanguage, currentVocabularyListId?: string) => {
+const useVocabulary = (learningLanguage?: LearningLanguage) => {
     const { t } = useTranslation();
     const [showToast] = useIonToast();
     const {
@@ -49,6 +49,7 @@ const useVocabulary = (learningLanguage?: LearningLanguage, currentVocabularyLis
             ...vocabularyResult,
             vocabularyListSelected,
             associatedTandem,
+            searchVocabularies,
             setSearchVocabularies,
             setVocabularyListSelected,
             onShareVocabularyList: () => {},
@@ -81,7 +82,8 @@ const useVocabulary = (learningLanguage?: LearningLanguage, currentVocabularyLis
             return showToast({ message: t(result.message), duration: 5000 });
         }
 
-        showToast('vocabulary.list.share.success');
+        showToast(t('vocabulary.list.share.success'), 3000);
+        setVocabularyListSelected(result);
         setRefreshVocabularyLists(!refreshVocabularyLists);
     };
 
@@ -257,10 +259,15 @@ const useVocabulary = (learningLanguage?: LearningLanguage, currentVocabularyLis
         fetchData();
     }, [vocabularyListSelected, refreshVocabularies, searchVocabularies]);
 
+    useEffect(() => {
+        setSearchVocabularies('');
+    }, [vocabularyListSelected]);
+
     return {
         ...vocabularyResult,
         vocabularyListSelected,
         associatedTandem,
+        searchVocabularies,
         setSearchVocabularies,
         setVocabularyListSelected,
         onShareVocabularyList,

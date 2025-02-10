@@ -134,7 +134,11 @@ const ActivityShow = () => {
                         <TextField label={translate('activities.show.mainInfos.title')} source="title" />
                         <ImageField label={translate('activities.show.mainInfos.image')} source="imageUrl" />
                         <TextField label={translate('activities.show.mainInfos.credit')} source="creditImage" />
-                        <TextField label={translate('activities.show.mainInfos.description')} source="description" />
+                        <TextField
+                            component="pre"
+                            label={translate('activities.show.mainInfos.description')}
+                            source="description"
+                        />
                         <TextField label={translate('activities.show.mainInfos.level')} source="languageLevel" />
                         <FunctionField
                             label={translate('activities.show.mainInfos.language')}

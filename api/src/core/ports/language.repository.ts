@@ -62,6 +62,8 @@ export interface LanguageRepository {
 
   countRequests(code: string): Promise<number>;
 
+  deleteAllRequestFromLanguage(code: string): Promise<void>;
+
   ofId(id: string): Promise<Language>;
 
   ofCode(code: string): Promise<Language>;

@@ -1,6 +1,6 @@
-import CustomLearningGoal from "./CustomLearningGoal";
-import MediaObject from "./MediaObject";
-import Profile from "./Profile";
+import CustomLearningGoal from './CustomLearningGoal';
+import MediaObject from './MediaObject';
+import Profile from './Profile';
 
 class LearningLanguage {
     constructor(
@@ -16,7 +16,11 @@ class LearningLanguage {
         public profile?: Profile,
         public customLearningGoals?: CustomLearningGoal[],
         public certificateFile?: MediaObject,
-        public sharedCertificate?: boolean
+        public sharedCertificate?: boolean,
+        public sharedLogsDate?: Date,
+        public visioDuration?: number,
+        public countVocabularies?: number,
+        public countActivities?: number
     ) {}
 }
 

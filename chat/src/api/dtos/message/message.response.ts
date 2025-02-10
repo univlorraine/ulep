@@ -115,6 +115,10 @@ export class MessageResponse {
     @Expose({ groups: ['read'] })
     createdAt: Date;
 
+    @Swagger.ApiProperty({ type: 'boolean' })
+    @Expose({ groups: ['read'] })
+    isDeleted?: boolean;
+
     @Swagger.ApiProperty({ type: 'string' })
     @Expose({ groups: ['read'] })
     type: MessageType;
@@ -146,6 +150,7 @@ export class MessageResponse {
             content: message.content,
             ownerId: message.ownerId,
             type: message.type,
+            isDeleted: message.isDeleted,
             metadata: MetadataMessageResponse.from(message.metadata),
             likes: message.usersLiked?.map((like) => like.userId) || [],
             numberOfReplies: message.numberOfReplies,

@@ -121,4 +121,8 @@ export class InMemoryLanguageRepository implements LanguageRepository {
   getLanguagesSuggestedByUser(): Promise<SuggestedLanguage[]> {
     throw new Error('Not implemented');
   }
+
+  deleteAllRequestFromLanguage(code: string): Promise<void> {
+    throw new Error('Not implemented');
+  }
 }

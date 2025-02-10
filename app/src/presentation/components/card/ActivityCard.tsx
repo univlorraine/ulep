@@ -1,8 +1,10 @@
 import { IonButton, IonIcon } from '@ionic/react';
+import { alertCircle, checkmarkCircle, closeCircle } from 'ionicons/icons';
 import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowRightSvg } from '../../../assets';
-import { Activity } from '../../../domain/entities/Activity';
+import { Activity, ActivityStatus } from '../../../domain/entities/Activity';
+import { useStoreState } from '../../../store/storeTypes';
 import { codeLanguageToFlag } from '../../utils';
 import styles from './ActivityCard.module.css';
 
@@ -14,10 +16,23 @@ interface ActivityCardProps {
 
 const ActivityCard: React.FC<ActivityCardProps> = ({ activity, onClick, isHybrid }) => {
     const { t } = useTranslation();
+    const profile = useStoreState((state) => state.profile);
+    const isMine = activity.creator?.id === profile?.id;
 
     return (
         <button className={styles.container} onClick={() => onClick(activity)}>
-            <img className={styles.image} src={activity.imageUrl} alt={activity.title} />
+            <div className={styles.imageContainer}>
+                <img className={styles.image} src={activity.imageUrl} alt={activity.title} />
+                {isMine && activity.status === ActivityStatus.PUBLISHED && (
+                    <IonIcon className={styles.status} icon={checkmarkCircle} color="success" aria-hidden="true" />
+                )}
+                {isMine && activity.status === ActivityStatus.IN_VALIDATION && (
+                    <IonIcon className={styles.status} icon={alertCircle} color="warning" aria-hidden="true" />
+                )}
+                {isMine && activity.status === ActivityStatus.REJECTED && (
+                    <IonIcon className={styles.status} icon={closeCircle} color="danger" aria-hidden="true" />
+                )}
+            </div>
             <div className={styles.content}>
                 <p className={styles.title}>{activity.title}</p>
                 <span className={styles.subtitle}>

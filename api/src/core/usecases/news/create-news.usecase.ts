@@ -2,16 +2,16 @@ import { Inject, Injectable } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import { NewsStatus, NewsTranslation } from 'src/core/models';
 import {
-  LANGUAGE_REPOSITORY,
   LanguageRepository,
+  LANGUAGE_REPOSITORY,
 } from 'src/core/ports/language.repository';
 import {
-  NEWS_REPOSITORY,
   NewsRepository,
+  NEWS_REPOSITORY,
 } from 'src/core/ports/news.repository';
 import {
-  UNIVERSITY_REPOSITORY,
   UniversityRepository,
+  UNIVERSITY_REPOSITORY,
 } from 'src/core/ports/university.repository';
 
 export type CreateNewsCommand = {
@@ -24,6 +24,7 @@ export type CreateNewsCommand = {
   startPublicationDate: Date;
   endPublicationDate: Date;
   creditImage?: string;
+  concernedUniversities?: string[];
 };
 
 @Injectable()

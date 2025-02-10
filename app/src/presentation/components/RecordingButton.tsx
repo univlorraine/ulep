@@ -92,7 +92,6 @@ const RecordingButton = ({
                     aria-label={t('chat.send_button.send_aria_label') as string}
                     fill="clear"
                     className={styles['sender-button']}
-                    disabled={isBlocked}
                     onClick={onSendPressed}
                 >
                     <IonIcon className={styles['sender']} icon={SenderSvg} />

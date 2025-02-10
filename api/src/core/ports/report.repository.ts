@@ -56,6 +56,7 @@ export interface ReportRepository {
     id: string,
     status: ReportStatus,
     comment?: string,
+    metadata?: any,
   ): Promise<Report>;
 
   updateCategoryReport(category: ReportCategory): Promise<ReportCategory>;

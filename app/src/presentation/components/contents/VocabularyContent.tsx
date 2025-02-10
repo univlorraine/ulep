@@ -52,6 +52,7 @@ const VocabularyContent: React.FC<VocabularyContentProps> = ({
         onDeleteVocabulary,
         onDeleteVocabularyList,
         setVocabularyListSelected,
+        searchVocabularies,
         setSearchVocabularies,
     } = useVocabulary(currentLearningLanguage);
 
@@ -104,10 +105,14 @@ const VocabularyContent: React.FC<VocabularyContentProps> = ({
 
     const handleShareVocabularyList = async () => {
         if (associatedTandem && associatedTandem.partner) {
-            await onShareVocabularyList([associatedTandem.partner]);
+            await onShareVocabularyList([profile, associatedTandem.partner]);
         } else {
             showToast('vocabulary.list.share.no_tandem');
         }
+    };
+
+    const handleUnshareVocabularyList = async () => {
+        await onShareVocabularyList([profile]);
     };
 
     const onSelectedVocabularyListsIdsForQuiz = (selectedListsIds: string[]) => {
@@ -153,8 +158,11 @@ const VocabularyContent: React.FC<VocabularyContentProps> = ({
                     onAddVocabulary={onAddOrUpdateVocabulary}
                     onUpdateVocabularyList={() => setShowAddVocabularyListModal(true)}
                     onDeleteVocabularyList={onDeleteVocabularyList}
+                    searchVocabularies={searchVocabularies}
                     onSearch={setSearchVocabularies}
+                    associatedTandem={associatedTandem}
                     onShareVocabularyList={handleShareVocabularyList}
+                    onUnshareVocabularyList={handleUnshareVocabularyList}
                     setQuizzSelectedListIds={setQuizzSelectedListIds}
                 />
             )}

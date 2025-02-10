@@ -16,7 +16,8 @@
         "userDoesntExist": "This username does not exist",
         "userWrongCredentials": "Authentication error: Bad email or bad password.",
         "connecteur": "",
-        "fileSizeExceed": "The file is too big, it must be less than {{maxSize}}Mo"
+        "fileSizeExceed": "The file is too big, it must be less than {{maxSize}}Mo",
+        "imageFormat": "The image format is not allowed"
     },
     "error_page": {
         "title": "An error has occurred",
@@ -29,7 +30,8 @@
             "audio": "Audio",
             "file": "File",
             "vocabulary": "Shared vocabulary list",
-            "activity": "Shared activity"
+            "activity": "Shared activity",
+            "deleted": "Deleted message"
         },
         "vocabulary": {
             "added": "Vocabulary list added to your profile"
@@ -67,7 +69,16 @@
         "join_online": "Join online",
         "add_to_calendar": "Add to calendar",
         "load_more": "See more",
-        "add_to_calendar_success": "ICS file downloaded"
+        "add_to_calendar_success": "ICS file downloaded",
+        "list": {
+            "title": "Events"
+        }
+    },
+    "edito": {
+        "service_date": "Opening date of the service",
+        "admission_date": "Opening date of the admission",
+        "website": "Website",
+        "title": "University information"
     },
     "news": {
         "list": {
@@ -93,8 +104,12 @@
             "title": "Learning journal",
             "load_more": "See more",
             "share": {
-                "title": "Share the logs",
+                "title": "Share the logs to your animator",
                 "success": "Logs have been shared"
+            },
+            "unshare": {
+                "title": "Unshare the logs to your animator",
+                "success": "Logs have been unshared"
             },
             "export": {
                 "title": "Export the logs",
@@ -174,6 +189,8 @@
             "activity_shared": "Your sheet has been shared to your animator",
             "status_rejected": "Show the reason for rejection",
             "update": "Update my sheet",
+            "delete": "Delete my sheet",
+            "delete_confirm": "Are you sure you want to delete this activity ?",
             "export": "Export to PDF",
             "back_button": "Back",
             "creator": "Created by {{name}}",
@@ -363,7 +380,7 @@
                 "create": "Validate",
                 "title": "With whom do you want to share?",
                 "no_tandem": "You don't have a tandem for this language",
-                "success": "The vocabulary list has been shared"
+                "success": "The status of the list has been updated"
             },
             "start_quiz": {
                 "title": "Select the lists to practice on",
@@ -384,7 +401,8 @@
         "pair": {
             "go_back": "Go back",
             "menu": "Menu",
-            "share_button": "Share",
+            "share_button": "Share to your tandem",
+            "unshare_button": "Unshare from your tandem",
             "export": "Export",
             "empty": "You haven't created any vocabulary pair for this list yet.",
             "create": "New word pair",

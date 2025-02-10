@@ -30,6 +30,7 @@ import {
   GetAllEntriesForUserByDateUsecase,
   GetAllEntriesForUserGroupedByDatesUsecase,
   ShareLogEntriesUsecase,
+  UnshareLogEntriesUsecase,
   UpdateCustomLogEntryUsecase,
 } from 'src/core/usecases/log-entry';
 
@@ -44,6 +45,7 @@ export class LogEntryController {
     private readonly getAllEntriesForUserByDateUsecase: GetAllEntriesForUserByDateUsecase,
     private readonly getAllEntriesForUserGroupedByDatesUsecase: GetAllEntriesForUserGroupedByDatesUsecase,
     private readonly shareLogEntriesUsecase: ShareLogEntriesUsecase,
+    private readonly unshareLogEntriesUsecase: UnshareLogEntriesUsecase,
     private readonly exportLogEntriesUsecase: ExportLogEntriesUsecase,
   ) {}
 
@@ -143,6 +145,16 @@ export class LogEntryController {
   @Swagger.ApiOkResponse({ type: () => LogEntryResponse })
   async shareLogEntry(@Param('id') id: string) {
     await this.shareLogEntriesUsecase.execute({
+      learningLanguageId: id,
+    });
+  }
+
+  @Post('unshare/:id')
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({ summary: 'Unshare a Learning Language Log Entry.' })
+  @Swagger.ApiOkResponse({ type: () => LogEntryResponse })
+  async unshareLogEntry(@Param('id') id: string) {
+    await this.unshareLogEntriesUsecase.execute({
       learningLanguageId: id,
     });
   }

@@ -166,4 +166,11 @@ export class InMemoryVocabularyRepository implements VocabularyRepository {
       this.#vocabularyLists.splice(index, 1);
     }
   }
+
+  async countVocabulariesByProfileAndLanguage(
+    profileId: string,
+    language: string,
+  ): Promise<number> {
+    return 0;
+  }
 }

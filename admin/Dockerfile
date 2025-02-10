@@ -7,8 +7,9 @@ RUN apk add --no-cache libc6-compat
 
 WORKDIR /srv/app
 
+ENV COREPACK_DEFAULT_TO_LATEST=0
 RUN corepack enable && \
-	corepack prepare --activate pnpm@latest && \
+	corepack prepare --activate pnpm@10.0.0 && \
 	pnpm config -g set store-dir /.pnpm-store
 
 # Deps stage

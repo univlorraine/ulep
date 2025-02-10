@@ -1,3 +1,5 @@
+import { Collection } from '@app/common';
+import { KeycloakUser } from '@app/keycloak';
 import {
   Body,
   Controller,
@@ -10,6 +12,18 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
+import { Role, Roles } from 'src/api/decorators/roles.decorator';
+import { FindAllLanguageParams } from 'src/api/dtos/language-code/language-filters';
+import { FindAllSuggestedLanguageParams } from 'src/api/dtos/language-code/suggested-language-filters';
+import {
+  AddLanguageRequestUsecase,
+  FindAllLanguageCodeUsecase,
+  GetLanguageUsecase,
+  UpdateLanguageCodeUsecase,
+} from 'src/core/usecases/language';
+import { CountAllSuggestedLanguageUsecase } from 'src/core/usecases/language/count-all-suggested-language.usecase';
+import { FindAllSuggestedLanguageUsecase } from 'src/core/usecases/language/find-all-suggested-language.usecase';
+import { CollectionResponse, CurrentUser } from '../decorators';
 import {
   AllSuggestedLanguageCountResponse,
   LanguageRequestsCountResponse,
@@ -18,20 +32,7 @@ import {
   SuggestedLanguageResponse,
   UpdateLanguageCodeRequest,
 } from '../dtos';
-import {
-  AddLanguageRequestUsecase,
-  FindAllLanguageCodeUsecase,
-  UpdateLanguageCodeUsecase,
-} from 'src/core/usecases/language';
 import { AuthenticationGuard } from '../guards';
-import { CollectionResponse, CurrentUser } from '../decorators';
-import { KeycloakUser } from '@app/keycloak';
-import { Collection } from '@app/common';
-import { FindAllSuggestedLanguageParams } from 'src/api/dtos/language-code/suggested-language-filters';
-import { FindAllSuggestedLanguageUsecase } from 'src/core/usecases/language/find-all-suggested-language.usecase';
-import { Role, Roles } from 'src/api/decorators/roles.decorator';
-import { CountAllSuggestedLanguageUsecase } from 'src/core/usecases/language/count-all-suggested-language.usecase';
-import { FindAllLanguageParams } from 'src/api/dtos/language-code/language-filters';
 
 @Controller('languages')
 @Swagger.ApiTags('Languages')
@@ -42,6 +43,7 @@ export class LanguageController {
     private readonly findAllSuggestedLanguageUsecase: FindAllSuggestedLanguageUsecase,
     private readonly addLanguageRequestUsecase: AddLanguageRequestUsecase,
     private readonly updateLangaugeUsecase: UpdateLanguageCodeUsecase,
+    private readonly getLanguageUsecase: GetLanguageUsecase,
   ) {}
 
   @Get()
@@ -83,6 +85,17 @@ export class LanguageController {
       ),
       totalItems: languages.totalItems,
     });
+  }
+
+  @Get(':id')
+  @UseGuards(AuthenticationGuard)
+  @CollectionResponse(LanguageResponse)
+  @Swagger.ApiOperation({ summary: 'Get Language ressource.' })
+  @Swagger.ApiOkResponse({ type: LanguageResponse })
+  async findOne(@Param('id') id: string) {
+    const language = await this.getLanguageUsecase.execute({ id });
+
+    return LanguageResponse.fromLanguage(language);
   }
 
   @Put()

@@ -1,5 +1,11 @@
 import { MediaObject } from 'src/core/models/media.model';
 
+export enum EditoMandatoryTranslations {
+  CentralUniversityLanguage = 'CentralUniversityLanguage',
+  PartnerUniversityLanguage = 'PartnerUniversityLanguage',
+  English = 'English',
+}
+
 interface InstanceProps {
   id: string;
   name: string;
@@ -16,6 +22,7 @@ interface InstanceProps {
   isInMaintenance: boolean;
   daysBeforeClosureNotification: number;
   defaultCertificateFile?: MediaObject;
+  editoMandatoryTranslations: EditoMandatoryTranslations[];
 }
 
 export class Instance {
@@ -35,6 +42,7 @@ export class Instance {
   readonly daysBeforeClosureNotification: number;
   readonly defaultCertificateFile?: MediaObject;
   logoURL: string;
+  editoMandatoryTranslations: EditoMandatoryTranslations[];
 
   constructor(instance: InstanceProps) {
     this.id = instance.id;
@@ -52,5 +60,6 @@ export class Instance {
     this.isInMaintenance = instance.isInMaintenance;
     this.daysBeforeClosureNotification = instance.daysBeforeClosureNotification;
     this.defaultCertificateFile = instance.defaultCertificateFile;
+    this.editoMandatoryTranslations = instance.editoMandatoryTranslations;
   }
 }

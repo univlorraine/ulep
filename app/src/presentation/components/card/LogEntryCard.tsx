@@ -127,12 +127,14 @@ export const LogEntrySubTitle: React.FC<LogEntrySubComponentProps> = ({ logEntry
         if (logEntry instanceof LogEntryCustomEntry) {
             return logEntry.content;
         } else if (logEntry instanceof LogEntryVisio) {
+            const hours = Math.floor(logEntry.duration / 60);
+            const minutes = logEntry.duration % 60;
             return (
                 <>
-                    {t('learning_book.entry.visio.subtitle', {
-                        minutes: Math.floor(logEntry.duration / 60),
-                        seconds: logEntry.duration % 60,
-                    })}
+                    {t('learning_book.entry.visio.subtitle')}&nbsp;
+                    {hours > 0 &&
+                        t('learning_book.entry.visio.duration_hour', { count: hours }) + (minutes > 0 ? ' et ' : '')}
+                    {minutes > 0 && t('learning_book.entry.visio.duration_minute', { count: minutes })}
                 </>
             );
         } else if (logEntry instanceof LogEntryPlayedGame) {

@@ -6,6 +6,7 @@ import NotificationAdapterInterface from '../adapter/interfaces/NotificationAdap
 import RecorderAdapterInterface from '../adapter/interfaces/RecorderAdapter.interface';
 import Configuration from '../domain/entities/Confirguration';
 import CreateActivityUsecaseInterface from '../domain/interfaces/activity/CreateActivityUsecase.interface';
+import DeleteActivityUsecaseInterface from '../domain/interfaces/activity/DeleteActivityUsecase.interface';
 import GetActivitiesUsecaseInterface from '../domain/interfaces/activity/GetActivitiesUsecase.interface';
 import GetActivityPdfUsecaseInterface from '../domain/interfaces/activity/GetActivityPdfUsecase.interface';
 import GetActivityThemesUsecaseInterface from '../domain/interfaces/activity/GetActivityThemesUsecase.interface';
@@ -46,6 +47,7 @@ import GetAllLanguagesUsecaseInterface from '../domain/interfaces/GetAllLanguage
 import GetAllSessionsUsecaseInterface from '../domain/interfaces/GetAllSessionsUsecase.interface';
 import GetAllTandemsUsecaseInterface from '../domain/interfaces/GetAllTandemsUsecase.interface';
 import GetAllUniversitiesUsecaseInterface from '../domain/interfaces/GetAllUniversitiesUsecase.interface';
+import GetEditoByUniversityIdUsecaseInterface from '../domain/interfaces/GetEditoByUniversityIdUsecase.interface';
 import GetHistoricEmailPartnerUsecaseInterface from '../domain/interfaces/GetHistoricEmailPartnerUsecase.interface';
 import GetJitsiTokenUsecaseInterface from '../domain/interfaces/GetJitsiTokenUsecase.interface';
 import GetMediaObjectUsecaseInterface from '../domain/interfaces/GetMediaObjectUsecase.interface';
@@ -60,7 +62,9 @@ import ExportLogEntriesUsecaseInterface from '../domain/interfaces/log-entries/E
 import GetLogEntriesByDateUsecaseInterface from '../domain/interfaces/log-entries/GetLogEntriesByDateUsecase.interface';
 import GetLogEntriesUsecaseInterface from '../domain/interfaces/log-entries/GetLogEntriesUsecase.interface';
 import ShareLogEntriesUsecaseInterface from '../domain/interfaces/log-entries/ShareLogEntriesUsecase.interface';
+import UnshareLogEntriesUsecaseInterface from '../domain/interfaces/log-entries/UnshareLogEntriesUsecase.interface';
 import UpdateCustomLogEntryUsecaseInterface from '../domain/interfaces/log-entries/UpdateCustomLogEntryUsecase.interface';
+import UpdateVisioDurationUsecaseInterface from '../domain/interfaces/log-entries/UpdateVisioDurationUsecase.interface';
 import LoginUsecaseInterface from '../domain/interfaces/LoginUsecase.interface';
 import GetAllNewsUsecaseInterface from '../domain/interfaces/news/GetAllNewsUsecase.interface';
 import RefreshTokensUsecaseInterface from '../domain/interfaces/RefreshTokensUsecase.interface';
@@ -146,6 +150,7 @@ export interface ConfigContextValueType {
     updateActivity: UpdateActivityUsecaseInterface;
     updateActivityStatus: UpdateActivityStatusUsecaseInterface;
     getActivityPdf: GetActivityPdfUsecaseInterface;
+    deleteActivity: DeleteActivityUsecaseInterface;
     // Vocabulary
     addReaderToVocabularyList: AddReaderToVocabularyListUsecaseInterface;
     createVocabulary: CreateVocabularyUsecaseInterface;
@@ -184,5 +189,9 @@ export interface ConfigContextValueType {
     getLogEntries: GetLogEntriesUsecaseInterface;
     getLogEntriesByDate: GetLogEntriesByDateUsecaseInterface;
     shareLogEntries: ShareLogEntriesUsecaseInterface;
+    unshareLogEntries: UnshareLogEntriesUsecaseInterface;
     exportLogEntries: ExportLogEntriesUsecaseInterface;
+    updateVisioDuration: UpdateVisioDurationUsecaseInterface;
+    // Edito
+    getEditoByUniversityId: GetEditoByUniversityIdUsecaseInterface;
 }

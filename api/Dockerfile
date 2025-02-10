@@ -11,8 +11,9 @@ RUN apk add --no-cache libc6-compat
 
 WORKDIR /srv/app
 
+ENV COREPACK_DEFAULT_TO_LATEST=0
 RUN corepack enable && \
-	corepack prepare --activate pnpm@latest && \
+	corepack prepare --activate pnpm@10.0.0 && \
 	pnpm config -g set store-dir /.pnpm-store
 
 # Deps stage, preserve dependencies in cache as long as the lockfile isn't changed
@@ -65,4 +66,4 @@ FROM api_deps AS api_init
 
 RUN apk add --no-cache postgresql
 
-CMD ["sh", "-c", "set -x; while [ $(pg_isready -d $DB_NAME -h $HOST_NAME -p 5432 -U $DB_USER -q; echo $?) -ne 0 ]; do sleep 5; done; pnpx prisma migrate deploy; if [ $(psql -tA -d $DB_NAME -h $HOST_NAME -p 5432 -U $DB_USER -c \"SELECT COUNT(*) FROM language_codes;\") -ne 0 ]; then echo \"No need to seed\"; else pnpm seed; fi"]
+CMD ["sh", "-c", "set -x; while [ $(pg_isready -d $DB_NAME -h $HOST_NAME -p 5432 -U $DB_USER -q; echo $?) -ne 0 ]; do sleep 5; done; pnpm dlx prisma@4.16.2 migrate deploy; if [ $(psql -tA -d $DB_NAME -h $HOST_NAME -p 5432 -U $DB_USER -c \"SELECT COUNT(*) FROM language_codes;\") -ne 0 ]; then echo \"No need to seed\"; else pnpm seed; fi"]

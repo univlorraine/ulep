@@ -116,6 +116,23 @@
                 "user_email": "Email"
             }
         },
+        "show": {
+            "image": "Image",
+            "university": "University",
+            "lastname": "Lastname",
+            "firstname": "Firstname",
+            "email": "Email",
+            "group": {
+                "label": "Role",
+                "Administrator": "Administrator",
+                "Manager": "Manager",
+                "Animator": "Animator"
+            },
+            "language": {
+                "label": "Language",
+                "noLanguage": "No language"
+            }
+        },
         "errors": {
             "email": "The email is not valid, you must use the university email address"
         },
@@ -203,6 +220,24 @@
         "saturday": "Saturday",
         "sunday": "Sunday"
     },
+    "editos": {
+        "form": {
+            "mandatoryLanguages": "Languages with a * are mandatory",
+            "update": "Update"
+        },
+        "label": "Editos",
+        "title": "Editos",
+        "list": {
+            "university": "University",
+            "translations": "Translations",
+            "updatedAt": "Updated at"
+        },
+        "languages": {
+            "CentralUniversityLanguage": "Central university language",
+            "English": "English",
+            "PartnerUniversityLanguage": "Partner university language"
+        }
+    },
     "events": {
         "label": "Events",
         "title": "Events",
@@ -250,11 +285,13 @@
             "subscriptions": "Subscriptions",
             "with_subscriptions": "With subscriptions",
             "concerned_universities": {
+                "all": "All universities",
                 "label": "Concerned universities",
                 "button": "Add"
             },
             "diffusion_languages": {
-                "label": "Diffused languages",
+                "all": "All languages",
+                "label": "Target languages",
                 "button": "Add"
             },
             "event_url": "Event URL",
@@ -381,6 +418,10 @@
             "message": "You are about to delete all data from the instance. This action is irreversible. Do you confirm?",
             "confirm": "Confirm"
         },
+        "edito": {
+            "mandatoryTranslations": "Mandatory translations for the Edito",
+            "noMandatoryTranslations": "No mandatory translations"
+        },
         "edit": {
             "error": "An error occurred while updating the instance",
             "name": "Instance name",
@@ -395,7 +436,8 @@
             "secondaryColor": "Secondary color of the application",
             "secondaryBackgroundColor": "Secondary color of the application's background image",
             "secondaryDarkColor": "Secondary dark color used for the application background",
-            "title": "Instance update"
+            "title": "Instance update",
+            "defaultCertificateFile": "Default certificate file"
         }
     },
     "interests": {
@@ -487,7 +529,13 @@
             },
             "start_publication_date": "Start publication date",
             "end_publication_date": "End publication date",
-            "credit_image": "Author of the image"
+            "credit_image": "Author of the image",
+            "concerned_universities": {
+                "all": "All universities",
+                "label": "Universities concerned",
+                "button": "Add"
+            },
+            "mandatory": "The fields marked with an * are mandatory"
         },
         "status": {
             "label": "Status",
@@ -597,6 +645,10 @@
         "error": "An error occurred while the conversation generation",
         "title": "Conversation generation"
     },
+    "generateEditos": {
+        "title": "Editos generation",
+        "error": "An error occurred while the generation of the editos"
+    },
     "questions": {
         "create": {
             "error": "Error on question creation",
@@ -628,15 +680,19 @@
         "title": "Reports",
         "OPEN": "Open",
         "status": "Status",
+        "isMessageDeleted": "Message deleted",
         "update": {
             "comment": "Update report comment",
             "error": "An error occurred while updating the alert",
             "status": "Update the status of the alert",
-            "title": "Report update"
+            "title": "Report update",
+            "deletion_status": "Do you want to delete the message from the conversation ?"
         },
         "error": {
             "unauthorized": "You are not authorized to edit this report"
-        }
+        },
+        "delete_message": "Delete message",
+        "undelete_message": "Undelete message"
     },
     "report_categories": {
         "create": {

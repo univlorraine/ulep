@@ -16,6 +16,7 @@ const CreateEvent = () => {
             !payload.startDate ||
             !payload.endDate ||
             payload.diffusionLanguages?.length === 0 ||
+            payload.concernedUniversities?.length === 0 ||
             (payload.type === EventType.ONLINE && !payload.eventURL) ||
             (payload.type === EventType.PRESENTIAL && (!payload.address || !payload.addressName))
         ) {
@@ -46,7 +47,7 @@ const CreateEvent = () => {
             formData.append(`diffusionLanguages[${index}]`, language);
         });
 
-        payload.concernedUniversities?.forEach((university, index) => {
+        payload.concernedUniversities.forEach((university, index) => {
             formData.append(`concernedUniversities[${index}]`, university.id);
         });
 

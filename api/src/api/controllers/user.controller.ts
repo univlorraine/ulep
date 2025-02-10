@@ -23,8 +23,8 @@ import * as Swagger from '@nestjs/swagger';
 import { Env } from 'src/configuration';
 import { MediaObject, User } from 'src/core/models';
 import {
-  STORAGE_INTERFACE,
   StorageInterface,
+  STORAGE_INTERFACE,
 } from 'src/core/ports/storage.interface';
 import {
   UploadAdminAvatarUsecase,
@@ -37,11 +37,11 @@ import {
   CreateUserUsecase,
   DeleteAdministratorUsecase,
   DeleteUserUsecase,
-  GetAdministratorUsecase,
   GetAdministratorsUsecase,
+  GetAdministratorUsecase,
   GetUserPersonalData,
-  GetUserUsecase,
   GetUsersUsecase,
+  GetUserUsecase,
   UpdateAdministratorUsecase,
   UpdateUserUsecase,
 } from '../../core/usecases/user';
@@ -152,7 +152,6 @@ export class UserController {
   @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Get an Administrator ressource.' })
-  @CollectionResponse(UserResponse)
   async findAnAdministrator(@Param('id', ParseUUIDPipe) id: string) {
     const administrator = await this.getAdministratorUsecase.execute(id);
 

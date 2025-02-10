@@ -13,6 +13,7 @@ import PartnerUniversityCard from '../card/PartnerUniversityCard';
 import ProficiencyTestCard from '../card/ProficiencyTestCard';
 import RessourcesCard from '../card/RessourcesCard';
 import Loader from '../Loader';
+import EditoContentModal from '../modals/EditoContentModal';
 import ActiveTandemCard from '../tandems/ActiveTandemCard';
 import LearningGoalCard from '../tandems/LearningGoalCard';
 import LearningJournalCard from '../tandems/LearningJournalCard';
@@ -52,13 +53,17 @@ const LearningContent: React.FC<LearningContentProps> = ({
     const { deviceAdapter } = useConfig();
     const history = useHistory();
     const [currentTandemColor, setCurrentTandemColor] = useState<string>(TANDEM_COLORS[0]);
-
+    const [universityId, setUniversityId] = useState<string>();
     const openAddLearningLanguagePressed = () => {
         history.push('pairing/languages');
     };
 
-    const openUniversityInfos = () => {
-        console.log('openUniversityInfos');
+    const openUniversityInfos = (universityId?: string) => {
+        setUniversityId(universityId);
+    };
+
+    const closeUniversityInfos = () => {
+        setUniversityId(undefined);
     };
 
     const handleSetCurrentTandem = (tandem: Tandem, index: number) => {
@@ -89,14 +94,16 @@ const LearningContent: React.FC<LearningContentProps> = ({
                             </IonButton>
                         );
                     })}
-                    <IonButton
-                        fill="clear"
-                        className={styles.addLearningLanguageButton}
-                        onClick={openAddLearningLanguagePressed}
-                        aria-label={t('learning.add_language') as string}
-                    >
-                        <IonIcon icon={AddSvg} aria-hidden="true" />
-                    </IonButton>
+                    {profile.user.university.maxTandemsPerUser > tandems.length && (
+                        <IonButton
+                            fill="clear"
+                            className={styles.addLearningLanguageButton}
+                            onClick={openAddLearningLanguagePressed}
+                            aria-label={t('learning.add_language') as string}
+                        >
+                            <IonIcon icon={AddSvg} aria-hidden="true" />
+                        </IonButton>
+                    )}
                 </div>
 
                 {isLoading ? (
@@ -113,16 +120,20 @@ const LearningContent: React.FC<LearningContentProps> = ({
                                     currentColor={currentTandemColor}
                                 />
                             )}
-                            {currentTandem && currentTandem.status === 'DRAFT' && (
-                                <PendingTandemCard
-                                    tandem={currentTandem}
-                                    onTandemPressed={() => onTandemPressed(currentTandem)}
-                                    currentColor={currentTandemColor}
-                                />
-                            )}
+                            {currentTandem &&
+                                (currentTandem.status === 'DRAFT' || currentTandem.status === 'INACTIVE') && (
+                                    <PendingTandemCard
+                                        tandem={currentTandem}
+                                        onTandemPressed={() => onTandemPressed(currentTandem)}
+                                        currentColor={currentTandemColor}
+                                    />
+                                )}
                             {currentTandem && currentTandem.learningLanguage.certificateOption && (
                                 <>
-                                    <LearningJournalCard tandem={currentTandem} />
+                                    <LearningJournalCard
+                                        tandem={currentTandem}
+                                        onOpenEdito={() => openUniversityInfos(profile.user.university.id)}
+                                    />
                                     <LearningGoalCard
                                         profile={profile}
                                         customLearningGoals={currentTandem.learningLanguage?.customLearningGoals}
@@ -134,12 +145,11 @@ const LearningContent: React.FC<LearningContentProps> = ({
                                 onLearningBookPressed={onLearningBookContentPressed}
                                 onVocabularyPressed={onVocabularyListPressed}
                                 onActivityPressed={onActivitiesContentPressed}
-                                onGamePressed={() => console.log('onGamePressed')}
                             />
                             {currentTandem && currentTandem.partner?.user.university && (
                                 <PartnerUniversityCard
                                     university={currentTandem.partner?.user.university}
-                                    onPress={openUniversityInfos}
+                                    onPress={() => openUniversityInfos(currentTandem.partner?.user.university.id)}
                                     currentColor={currentTandemColor}
                                 />
                             )}
@@ -158,6 +168,7 @@ const LearningContent: React.FC<LearningContentProps> = ({
                     </ResponsiveMasonry>
                 )}
             </div>
+            <EditoContentModal onClose={closeUniversityInfos} profile={profile} universityId={universityId} />
         </div>
     );
 };

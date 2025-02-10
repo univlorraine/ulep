@@ -9,6 +9,7 @@ import {
   User,
 } from 'src/core/models';
 import { Activity } from 'src/core/models/activity.model';
+import { Edito } from 'src/core/models/edito.model';
 import { EventObject } from 'src/core/models/event.model';
 import { Instance } from 'src/core/models/Instance.model';
 import { MediaObjectRepository } from 'src/core/ports/media-object.repository';
@@ -362,14 +363,28 @@ export class PrismaMediaObjectRepository implements MediaObjectRepository {
     });
   }
 
+  async saveEditoImage(edito: Edito, object: MediaObject): Promise<void> {
+    await this.prisma.mediaObjects.create({
+      data: {
+        id: object.id,
+        name: object.name,
+        bucket: object.bucket,
+        mime: object.mimetype,
+        size: object.size,
+        Edito: {
+          connect: {
+            id: edito.id,
+          },
+        },
+      },
+    });
+  }
+
   async avatarOfUser(userId: string): Promise<MediaObject | null> {
     // Get User or Administrator avatar
     const mediaObject = await this.prisma.mediaObjects.findFirst({
       where: {
-        OR: [
-          { User: { id: userId } },
-          { id: userId },
-        ],
+        OR: [{ User: { id: userId } }, { id: userId }],
       },
     });
 

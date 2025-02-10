@@ -42,4 +42,8 @@ export class InMemoryChatService implements ChatServicePort {
   ): Promise<any> {
     return;
   }
+
+  deleteMessage(messageId: string, shouldDelete: boolean): Promise<any> {
+    return;
+  }
 }

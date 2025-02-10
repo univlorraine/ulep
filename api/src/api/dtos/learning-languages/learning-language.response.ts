@@ -15,6 +15,12 @@ import { TandemResponse } from '../tandems';
 import { TandemWithPartnerLearningLanguageResponse } from '../tandems/tandem-with-patner-learning-language.response';
 import { LanguageResponse } from './../languages/index';
 
+interface LearningLanguageResponseProps {
+  learningLanguage: LearningLanguage;
+  languageCode?: string;
+  countVocabularies?: number;
+  countActivities?: number;
+}
 export class LearningLanguageResponse {
   @ApiProperty({ type: 'string', format: 'uuid' })
   @Expose({ groups: ['read'] })
@@ -101,14 +107,28 @@ export class LearningLanguageResponse {
   @Expose({ groups: ['read'] })
   sharedLogsDate?: Date;
 
+  @ApiProperty({ type: 'number' })
+  @Expose({ groups: ['read'] })
+  visioDuration?: number;
+
+  @ApiProperty({ type: 'number' })
+  @Expose({ groups: ['read'] })
+  countVocabularies?: number;
+
+  @ApiProperty({ type: 'number' })
+  @Expose({ groups: ['read'] })
+  countActivities?: number;
+
   constructor(partial: Partial<LearningLanguageResponse>) {
     Object.assign(this, partial);
   }
 
-  static fromDomain(
-    learningLanguage: LearningLanguage,
-    languageCode?: string,
-  ): LearningLanguageResponse {
+  static fromDomain({
+    learningLanguage,
+    languageCode,
+    countVocabularies,
+    countActivities,
+  }: LearningLanguageResponseProps): LearningLanguageResponse {
     const response = new LearningLanguageResponse({
       id: learningLanguage.id,
       name: learningLanguage.language.name,
@@ -143,10 +163,17 @@ export class LearningLanguageResponse {
         learningLanguage.customLearningGoals.map((customLearningGoal) =>
           CustomLearningGoalResponse.fromDomain(customLearningGoal),
         ),
+      visioDuration: learningLanguage.visioDuration,
+      countVocabularies: countVocabularies,
+      countActivities: countActivities,
     });
 
     return response;
   }
+}
+
+interface LearningLanguageWithTandemResponseProps {
+  learningLanguage: LearningLanguageWithTandem;
 }
 
 export class LearningLanguageWithTandemResponse extends LearningLanguageResponse {
@@ -160,16 +187,20 @@ export class LearningLanguageWithTandemResponse extends LearningLanguageResponse
     Object.assign(this, partial);
   }
 
-  static fromDomain(
-    learningLanguage: LearningLanguageWithTandem,
-  ): LearningLanguageWithTandemResponse {
+  static fromDomain({
+    learningLanguage,
+  }: LearningLanguageWithTandemResponseProps): LearningLanguageWithTandemResponse {
     return new LearningLanguageWithTandemResponse({
-      ...LearningLanguageResponse.fromDomain(learningLanguage),
+      ...LearningLanguageResponse.fromDomain({ learningLanguage }),
       tandem:
         learningLanguage.tandem &&
         TandemResponse.fromDomain(learningLanguage.tandem),
     });
   }
+}
+
+interface LearningLanguageWithTandemsProfilesResponseProps {
+  learningLanguage: LearningLanguageWithTandemWithPartnerLearningLanguage;
 }
 
 export class LearningLanguageWithTandemsProfilesResponse extends LearningLanguageResponse {
@@ -182,11 +213,11 @@ export class LearningLanguageWithTandemsProfilesResponse extends LearningLanguag
     Object.assign(this, partial);
   }
 
-  static fromDomain(
-    learningLanguage: LearningLanguageWithTandemWithPartnerLearningLanguage,
-  ): LearningLanguageWithTandemsProfilesResponse {
+  static fromDomain({
+    learningLanguage,
+  }: LearningLanguageWithTandemsProfilesResponseProps): LearningLanguageWithTandemsProfilesResponse {
     return new LearningLanguageWithTandemsProfilesResponse({
-      ...LearningLanguageResponse.fromDomain(learningLanguage),
+      ...LearningLanguageResponse.fromDomain({ learningLanguage }),
       tandem:
         learningLanguage.tandem &&
         TandemWithPartnerLearningLanguageResponse.fromDomain(

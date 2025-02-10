@@ -97,4 +97,12 @@ export class InMemoryMessageRepository implements MessageRepository {
             .filter((message) => message.content.includes(search))
             .map((message) => message.id);
     }
+
+    async findByMediaId(mediaId: string): Promise<Message | null> {
+        return (
+            this.#messages.find(
+                (message) => message.metadata.mediaId === mediaId,
+            ) || null
+        );
+    }
 }
