@@ -235,7 +235,7 @@ export class CreateOrUpdateLogEntryUsecase {
         }
         break;
       case LogEntryType.CUSTOM_ENTRY:
-        if (!metadata.content && !metadata.title) {
+        if (!metadata.title) {
           throw new LogEntryMissingMetadataException();
         }
         break;
