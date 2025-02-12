@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ActivityTheme, ActivityThemeCategory } from '../../domain/entities/Activity';
+import { ActivityThemeCategory } from '../../domain/entities/Activity';
 import Language from '../../domain/entities/Language';
 import Profile from '../../domain/entities/Profile';
 import { DropDownItem } from '../components/DropDown';
@@ -41,11 +41,7 @@ const useGetDataForActivityCreation = (themes: ActivityThemeCategory[], profile:
                 value: cefr,
             }));
 
-            const languagesDropDown = [
-                ...profile.learningLanguages,
-                ...profile.masteredLanguages,
-                profile.nativeLanguage,
-            ].map((language) => ({
+            const languagesDropDown = [...profile.masteredLanguages, profile.nativeLanguage].map((language) => ({
                 label: `${codeLanguageToFlag(language.code)} ${language.name}`,
                 value: language,
             }));
