@@ -1,6 +1,6 @@
 import { Collection } from '@app/common';
 import { KeycloakUser } from '@app/keycloak';
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { News } from 'src/core/models';
 import {
   NewsRepository,
@@ -10,6 +10,10 @@ import {
   StorageInterface,
   STORAGE_INTERFACE,
 } from 'src/core/ports/storage.interface';
+import {
+  UserRepository,
+  USER_REPOSITORY,
+} from 'src/core/ports/user.repository';
 
 export type GetNewsCommand = {
   user: KeycloakUser;
@@ -28,18 +32,22 @@ export class GetNewsUsecase {
     private readonly newsRepository: NewsRepository,
     @Inject(STORAGE_INTERFACE)
     private readonly storage: StorageInterface,
+    @Inject(USER_REPOSITORY)
+    private readonly userRepository: UserRepository,
   ) {}
 
   async execute(query: GetNewsCommand) {
     const { page, limit, where } = query;
     const offset = (page - 1) * limit;
 
+    const user = await this.getUser(query.user.sub);
+
     let news = await this.newsRepository.findAllForAnUser({
       offset,
       limit,
       where: {
         ...where,
-        universityId: query.user.universityId,
+        universityId: user.university.id,
       },
     });
 
@@ -49,6 +57,16 @@ export class GetNewsUsecase {
     });
 
     return news;
+  }
+
+  private async getUser(userId: string) {
+    const user = await this.userRepository.ofId(userId);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return user;
   }
 
   private async fillNewsImageUrl(news: News[]) {
