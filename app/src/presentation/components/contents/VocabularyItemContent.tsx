@@ -136,7 +136,7 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
                             <IonIcon icon={downloadOutline} aria-hidden="true" />
                             <IonLabel className={styles['popover-label']}>{t('vocabulary.pair.export')}</IonLabel>
                         </IonItem>
-                        {isVocabularyListMine && (
+                        {isVocabularyListMine && vocabularyPairs.length === 0 && (
                             <IonItem
                                 button={true}
                                 detail={false}
