@@ -34,7 +34,6 @@ class UpdateActivityUsecase implements UpdateActivityUsecaseInterface {
                 languageCode: command.languageCode,
                 themeId: command.themeId,
                 creditImage: command.creditImage,
-                ressourceUrl: command.ressourceUrl,
                 exercises: command.exercises,
                 vocabularies: [],
             };

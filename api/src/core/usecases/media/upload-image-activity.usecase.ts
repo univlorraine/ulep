@@ -3,17 +3,17 @@ import { UnauthorizedOperation } from 'src/core/errors';
 import { MediaObject } from 'src/core/models';
 import { Activity } from 'src/core/models/activity.model';
 import {
-  ACTIVITY_REPOSITORY,
   ActivityRepository,
+  ACTIVITY_REPOSITORY,
 } from '../../ports/activity.repository';
 import {
-  MEDIA_OBJECT_REPOSITORY,
   MediaObjectRepository,
+  MEDIA_OBJECT_REPOSITORY,
 } from '../../ports/media-object.repository';
 import {
   File,
-  STORAGE_INTERFACE,
   StorageInterface,
+  STORAGE_INTERFACE,
 } from '../../ports/storage.interface';
 
 export class UploadImageActivityCommand {
@@ -36,6 +36,8 @@ export class UploadImageActivityUsecase {
     const activity = await this.tryToFindTheActivityOfId(command.activityId);
 
     const previousImage = await this.tryToFindTheImageOfActivity(activity);
+
+    console.log('previousImage', previousImage);
 
     if (previousImage) {
       await this.deletePreviousActivityImage(previousImage);
@@ -64,7 +66,11 @@ export class UploadImageActivityUsecase {
   private tryToFindTheImageOfActivity(
     activity: Activity,
   ): Promise<MediaObject | null> {
-    return this.mediaObjectRepository.imageOfActivity(activity.id);
+    if (activity.image) {
+      return this.mediaObjectRepository.findOne(activity.image.id);
+    }
+
+    return null;
   }
 
   private async upload(
