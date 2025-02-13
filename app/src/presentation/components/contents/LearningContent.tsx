@@ -163,7 +163,9 @@ const LearningContent: React.FC<LearningContentProps> = ({
                                     currentColor={currentTandemColor}
                                 />
                             )}
-                            <CreateLearningLanguageCard onPress={openAddLearningLanguagePressed} />
+                            {profile.user.university.maxTandemsPerUser > tandems.length && (
+                                <CreateLearningLanguageCard onPress={openAddLearningLanguagePressed} />
+                            )}
                         </Masonry>
                     </ResponsiveMasonry>
                 )}
