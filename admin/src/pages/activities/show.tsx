@@ -138,6 +138,7 @@ const ActivityShow = () => {
                             component="pre"
                             label={translate('activities.show.mainInfos.description')}
                             source="description"
+                            sx={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}
                         />
                         <TextField label={translate('activities.show.mainInfos.level')} source="languageLevel" />
                         <FunctionField
