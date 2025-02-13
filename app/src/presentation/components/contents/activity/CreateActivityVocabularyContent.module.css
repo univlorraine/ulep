@@ -48,3 +48,10 @@
     line-height: 20px;
     text-align: start;
 }
+
+.loader-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}

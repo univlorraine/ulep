@@ -127,7 +127,7 @@ export const CreateActivityContent: React.FC<CreateActivityContentProps> = ({
         setMode(CreateActivityMode.VOCABULARY);
     };
 
-    const handleVocabularySubmit = (
+    const handleVocabularySubmit = async (
         data: {
             id?: string;
             content: string;
@@ -139,7 +139,7 @@ export const CreateActivityContent: React.FC<CreateActivityContentProps> = ({
             return;
         }
         if (!activityToUpdate) {
-            onCreateActivity({
+            await onCreateActivity({
                 title: informations.title,
                 description: informations.description,
                 languageLevel: informations.level,
@@ -154,7 +154,7 @@ export const CreateActivityContent: React.FC<CreateActivityContentProps> = ({
                 vocabularies: data,
             } as CreateActivityCommand);
         } else {
-            onUpdateActivity({
+            await onUpdateActivity({
                 title: informations.title,
                 description: informations.description,
                 languageLevel: informations.level,
