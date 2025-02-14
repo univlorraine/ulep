@@ -25,6 +25,9 @@ const ActivitiesContainerContent: React.FC<ActivitiesContainerContentProps> = ({
     const [displayCreateActivity, setDisplayCreateActivity] = useState<boolean>(false);
     const [activityIdToDisplay, setActivityIdToDisplay] = useState<string | undefined>();
     const [activityToUpdate, setActivityToUpdate] = useState<Activity | undefined>();
+    const [languageFilter, setLanguageFilter] = useState<Language[]>(
+        currentLearningLanguage ? [currentLearningLanguage] : []
+    );
     const { activityThemes } = useGetActivityThemes();
 
     const handleNavigateAfterCreate = (activityId: string) => {
@@ -60,7 +63,8 @@ const ActivitiesContainerContent: React.FC<ActivitiesContainerContentProps> = ({
                     onActivityClick={(activity) => setActivityIdToDisplay(activity.id)}
                     profile={profile}
                     isModal={isModal}
-                    currentLearningLanguage={currentLearningLanguage}
+                    languageFilter={languageFilter}
+                    setLanguageFilter={setLanguageFilter}
                 />
             )}
             {displayCreateActivity && (

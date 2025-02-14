@@ -109,7 +109,9 @@ const LearningPage = () => {
         !isHybrid ? setDisplayLearningBookContent(true) : history.push('/learning-book', { tandem: currentTandem });
 
     const onActivitiesContentPressed = () =>
-        !isHybrid ? setDisplayActivitiesContent(true) : history.push('/activities');
+        !isHybrid
+            ? setDisplayActivitiesContent(true)
+            : history.push('/activities', { learningLanguage: currentTandem?.learningLanguage });
 
     const onShowAllGoalsPressed = (customLearningGoals?: CustomLearningGoal[]) => {
         setRefresh(!refresh);
