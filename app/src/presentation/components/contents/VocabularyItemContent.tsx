@@ -213,6 +213,7 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
                                     key={vocabulary.id}
                                     onVocabularyClick={onAddVocabulary}
                                     vocabulary={vocabulary}
+                                    isEditable={vocabularyList.isEditable}
                                 />
                             ))}
                             <div className={styles.pronunciationTitle}>
