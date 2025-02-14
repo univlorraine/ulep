@@ -309,10 +309,25 @@ const theme: RaThemeOptions = {
                 },
             },
         },
-    },
-    sidebar: {
-        width: 260,
-        closedWidth: 55,
+        MuiPickersPopper: {
+            styleOverrides: {
+                paper: {
+                    backgroundColor: '#EEEEEE',
+                    border: '1px solid #000',
+                },
+            },
+        },
+        MuiDateCalendar: {
+            styleOverrides: {
+                root: {
+                    backgroundColor: '#EEEEEE',
+                },
+            },
+        },
+        sidebar: {
+            width: 260,
+            closedWidth: 55,
+        },
     },
 };
 
