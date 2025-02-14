@@ -60,6 +60,18 @@ const ActivityStatusComponent = () => {
     return (
         <Box display="flex" flexDirection="row" gap="50px">
             <ActivityStatusChips status={record.status} />
+
+            {record?.status === ActivityStatus.REJECTED && (
+                <Box display="flex" flexDirection="row" gap="10px">
+                    <Button
+                        color="success"
+                        label={translate('activities.show.actions.publish')}
+                        onClick={() => handleChangeStatus(ActivityStatus.PUBLISHED)}
+                        variant="contained"
+                    />
+                </Box>
+            )}
+
             {record?.status === ActivityStatus.IN_VALIDATION && (
                 <Box display="flex" flexDirection="row" gap="10px">
                     <Button
