@@ -12,6 +12,7 @@ export interface LanguagesParams {
     filter: {
         code: string;
         name: string;
+        status: string;
     };
 }
 
@@ -23,6 +24,7 @@ const LanguagesQuery = (params: LanguagesParams): string => {
         order: params.sort.order.toLowerCase(),
         code: params.filter.code,
         name: params.filter.name,
+        status: params.filter.status,
     };
 
     return new URLSearchParams(qsAdapter().stringify(query)).toString();
