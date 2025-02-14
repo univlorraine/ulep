@@ -9,12 +9,18 @@ interface ReportDetailProps {
 }
 
 const ReportDetail: React.FC<ReportDetailProps> = ({ title, text, isTextStrong, isUrl }) => {
+    const extractUrl = (content: string) => {
+        const urlRegex = /(https?:\/\/[^\s]+)/;
+        const match = content.match(urlRegex);
+        return match ? match[0] : content;
+    };
+
     return (
         <div className={styles.item}>
             <p className={styles.item_title}>{title}</p>
             {isUrl ? (
                 <a
-                    href={text}
+                    href={extractUrl(text)}
                     className={`${styles.item_content} ${isTextStrong ? styles.item_strong : ''}`}
                     target="_blank"
                     rel="noopener noreferrer"
