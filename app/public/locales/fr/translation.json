@@ -17,7 +17,8 @@
         "userWrongCredentials": "Authentification en erreur : mauvais email ou mauvais mot de passe.",
         "connecteur": "Erreur lors de la récupération des informations utilisateur",
         "fileSizeExceed": "Le fichier est trop volumineux, il doit être inférieur à {{maxSize}}Mo",
-        "imageFormat": "Le format de l'image n'est pas autorisé"
+        "imageFormat": "Le format de l'image n'est pas autorisé",
+        "invalidUrl": "L'url n'est pas valide"
     },
     "error_page": {
         "title": "Une erreur est survenue",
