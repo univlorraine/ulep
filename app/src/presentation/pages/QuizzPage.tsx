@@ -11,9 +11,9 @@ import QuizzSelectionContent from '../components/contents/QuizzSelectionContent'
 import QuizzValidatedContent from '../components/contents/QuizzValidatedContent';
 import SuccessLayout from '../components/layout/SuccessLayout';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
+import Loader from '../components/Loader';
 import { getNextLevel, getPreviousLevel } from '../utils';
 import styles from './css/SignUp.module.css';
-import Loader from '../components/Loader';
 
 type QuizzPageProps = {
     initialCefr?: CEFR;
@@ -22,7 +22,7 @@ type QuizzPageProps = {
 };
 
 const QuizzPage: React.FC = () => {
-    const { configuration, getQuizzByLevel } = useConfig();
+    const { configuration, getQuizzByLevel, deviceAdapter } = useConfig();
     const history = useHistory();
     const [showToast] = useIonToast();
     const { t } = useTranslation();
@@ -100,7 +100,7 @@ const QuizzPage: React.FC = () => {
                 backgroundIconColor={configuration.secondaryBackgroundImageColor}
                 colorCode={configuration.secondaryColor}
             >
-                <div className={styles.body}>
+                <div className={`${styles.body} ${deviceAdapter.isNativePlatform() ? styles['native-platform'] : ''}`}>
                     <QuizzValidatedContent
                         language={profileSignUp.learningLanguage || language!}
                         onNextQuizz={() => askQuizz(getNextLevel(currentQuizz))}
@@ -118,7 +118,7 @@ const QuizzPage: React.FC = () => {
             headerPercentage={initialCefr ? 100 : 60}
             headerTitle={initialCefr ? t('global.cefr_quizz_title') : t('global.pairing_title')}
         >
-            <div className={styles.body}>
+            <div className={`${styles.body} ${deviceAdapter.isNativePlatform() ? styles['native-platform'] : ''}`}>
                 {isLoading ? (
                     <div className={styles.loader}>
                         <Loader />

@@ -18,7 +18,7 @@ const frequencies: MeetFrequency[] = [
 
 const SignUpFrequencyPage: React.FC = () => {
     const { t } = useTranslation();
-    const { configuration } = useConfig();
+    const { configuration, deviceAdapter } = useConfig();
     const history = useHistory();
     const profileEdit = useStoreState((store) => store.profileSignUp);
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
@@ -37,7 +37,7 @@ const SignUpFrequencyPage: React.FC = () => {
             headerPercentage={97}
             headerTitle={t('global.create_account_title')}
         >
-            <div className={styles.body}>
+            <div className={`${styles.body} ${deviceAdapter.isNativePlatform() ? styles['native-platform'] : ''}`}>
                 <div className={frequencyStyle.container}>
                     <h1 className="title">{t('signup_frequency_page.title')}</h1>
                     <span className="subtitle large-margin-bottom">{t('signup_frequency_page.subtitle')}</span>

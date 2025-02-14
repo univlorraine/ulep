@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory, useLocation } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreState } from '../../store/storeTypes';
-import FlagBubble from '../components/FlagBubble';
 import LanguageSelectedContent from '../components/contents/LanguageSelectedContent';
+import FlagBubble from '../components/FlagBubble';
 import SuccessLayout from '../components/layout/SuccessLayout';
 import styles from './css/PairingUnavailableLanguage.module.css';
 
@@ -14,7 +14,7 @@ interface PairingUnavailableLanguageState {
 
 const PairingUnavailableLanguagePage: React.FC = () => {
     const { t } = useTranslation();
-    const { configuration } = useConfig();
+    const { configuration, deviceAdapter } = useConfig();
     const history = useHistory();
     const location = useLocation<PairingUnavailableLanguageState>();
     const { askingStudents } = location.state || {};
@@ -38,7 +38,7 @@ const PairingUnavailableLanguagePage: React.FC = () => {
             backgroundColorCode={configuration.secondaryDarkColor}
             colorCode={configuration.secondaryColor}
         >
-            <div className={styles.container}>
+            <div className={`${styles.container} ${deviceAdapter.isNativePlatform() ? styles['native-platform'] : ''}`}>
                 {askingStudents > 0 && !isLastStep && (
                     <LanguageSelectedContent
                         language={language}

@@ -23,6 +23,10 @@
     background-color: #f8f9fa;
     height: 70px;
     width: 70px;
+    max-height: 70px;
+    max-width: 70px;
+    min-height: 70px;
+    min-width: 70px;
 }
 
 .main-content {
@@ -30,6 +34,9 @@
     flex-direction: column;
     height: 100%;
     padding: 20px;
+    overflow-y: auto;
+    padding-top: 60px;
+    padding-bottom: 80px;
 }
 
 .separator {
@@ -73,6 +80,11 @@
 .update-instance {
     padding: 0px 0px 20px 0px;
     text-decoration: underline;
+}
+
+.native-platform {
+    padding-top: 0px;
+    padding-bottom: 0px;
 }
 
 @media (min-width: 768px) {

@@ -11,7 +11,7 @@ import interestStyle from './css/SignUpInterests.module.css';
 
 const SignUpInterestsPage: React.FC = () => {
     const { t } = useTranslation();
-    const { configuration, getAllInterestCategories } = useConfig();
+    const { configuration, getAllInterestCategories, deviceAdapter } = useConfig();
     const [showToast] = useIonToast();
     const history = useHistory();
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
@@ -68,7 +68,7 @@ const SignUpInterestsPage: React.FC = () => {
             headerPercentage={60}
             headerTitle={t('global.create_account_title')}
         >
-            <div className={styles.body}>
+            <div className={`${styles.body} ${deviceAdapter.isNativePlatform() ? styles['native-platform'] : ''}`}>
                 <div>
                     <h1 className="title">{t('signup_interests_page.title')}</h1>
                     <h2 className="subtitle">{t('signup_interests_page.subtitle')}</h2>
