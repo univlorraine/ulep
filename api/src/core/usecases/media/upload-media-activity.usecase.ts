@@ -3,17 +3,17 @@ import { UnauthorizedOperation } from 'src/core/errors';
 import { MediaObject } from 'src/core/models';
 import { Activity } from 'src/core/models/activity.model';
 import {
-  ACTIVITY_REPOSITORY,
   ActivityRepository,
+  ACTIVITY_REPOSITORY,
 } from '../../ports/activity.repository';
 import {
-  MEDIA_OBJECT_REPOSITORY,
   MediaObjectRepository,
+  MEDIA_OBJECT_REPOSITORY,
 } from '../../ports/media-object.repository';
 import {
   File,
-  STORAGE_INTERFACE,
   StorageInterface,
+  STORAGE_INTERFACE,
 } from '../../ports/storage.interface';
 
 export class UploadMediaActivityCommand {
@@ -64,7 +64,11 @@ export class UploadMediaActivityUsecase {
   private tryToFindTheMediaOfActivity(
     activity: Activity,
   ): Promise<MediaObject | null> {
-    return this.mediaObjectRepository.ressourceOfActivity(activity.id);
+    if (activity.ressourceFile) {
+      return this.mediaObjectRepository.findOne(activity.ressourceFile.id);
+    }
+
+    return null;
   }
 
   private async upload(

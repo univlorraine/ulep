@@ -79,7 +79,7 @@ export const activityCommandToDomain = (command: ActivityCommand) => {
         languageLevel: command.languageLevel,
         imageUrl: command.imageUrl,
         creditImage: command.creditImage,
-        ressourceUrl: command.ressourceUrl,
+        ressourceUrl: command.ressourceUrl ? command.ressourceUrl : undefined,
         ressourceOgUrl: command.ressourceOgUrl,
         ressourceFileUrl: command.ressourceFileUrl,
         activityTheme: activityThemeCommandToDomain(command.theme),

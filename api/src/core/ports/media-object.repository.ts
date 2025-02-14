@@ -16,11 +16,7 @@ export const MEDIA_OBJECT_REPOSITORY = 'media-object.repository';
 export interface MediaObjectRepository {
   avatarOfUser(userId: string): Promise<MediaObject | null>;
 
-  imageOfActivity(activityId: string): Promise<MediaObject | null>;
-
   saveImageOfActivity(activity: Activity, object: MediaObject): Promise<void>;
-
-  ressourceOfActivity(activityId: string): Promise<MediaObject | null>;
 
   saveRessourceOfActivity(
     activity: Activity,

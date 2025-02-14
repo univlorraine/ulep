@@ -5,12 +5,13 @@ import { useTranslation } from 'react-i18next';
 import { useConfig } from '../../../../context/ConfigurationContext';
 import { Activity } from '../../../../domain/entities/Activity';
 import AudioLine from '../../AudioLine';
+import Loader from '../../Loader';
 import RecordingButton from '../../RecordingButton';
 import TextInput from '../../TextInput';
 import styles from './CreateActivityVocabularyContent.module.css';
 
 interface CreateActivityVocabularyContentProps {
-    onSubmit: (vocabularies: { content: string; file?: File }[], vocabulariesToDelete?: string[]) => void;
+    onSubmit: (vocabularies: { content: string; file?: File }[], vocabulariesToDelete?: string[]) => Promise<void>;
     onBackPressed: () => void;
     activityToUpdate?: Activity;
 }
@@ -27,14 +28,16 @@ export const CreateActivityVocabularyContent: React.FC<CreateActivityVocabularyC
         { id?: string; content: string; file?: File; pronunciationUrl?: string }[]
     >(activityToUpdate?.vocabularies ?? []);
     const [isRecording, setIsRecording] = useState<boolean>(false);
-
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const handleDeleteVocabulary = (index: number) => {
         const newVocabularies = vocabularies.filter((_, i) => i !== index);
         setVocabularies(newVocabularies);
     };
 
-    const handleSubmit = () => {
-        onSubmit(vocabularies);
+    const handleSubmit = async () => {
+        setIsLoading(true);
+        await onSubmit(vocabularies);
+        setIsLoading(false);
     };
 
     const onAddVocabularyPressed = () => {
@@ -155,19 +158,25 @@ export const CreateActivityVocabularyContent: React.FC<CreateActivityVocabularyC
                 <IonIcon icon={addSharp} aria-hidden />
                 {t('activity.create.add_vocabulary_button')}
             </IonButton>
-            <div className={`${styles['button-container']} large-margin-top`}>
-                <IonButton fill="clear" className="tertiary-button no-padding" onClick={onBackPressed}>
-                    {t('activity.create.cancel_button')}
-                </IonButton>
-                <IonButton
-                    fill="clear"
-                    className={`primary-button no-paddin ${allVocabulariesAreFilled ? '' : 'disabled'}`}
-                    onClick={handleSubmit}
-                    disabled={!allVocabulariesAreFilled}
-                >
-                    {t('activity.create.validate_button')}
-                </IonButton>
-            </div>
+            {!isLoading ? (
+                <div className="large-margin-top">
+                    <IonButton fill="clear" className="tertiary-button no-padding" onClick={onBackPressed}>
+                        {t('activity.create.cancel_button')}
+                    </IonButton>
+                    <IonButton
+                        fill="clear"
+                        className={`primary-button no-paddin ${allVocabulariesAreFilled ? '' : 'disabled'}`}
+                        onClick={handleSubmit}
+                        disabled={!allVocabulariesAreFilled}
+                    >
+                        {t('activity.create.validate_button')}
+                    </IonButton>
+                </div>
+            ) : (
+                <div className={styles['loader-container']}>
+                    <Loader />
+                </div>
+            )}
         </div>
     );
 };

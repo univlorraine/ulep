@@ -165,17 +165,18 @@ const ActivityShow = () => {
                         <FunctionField
                             label={translate('activities.show.mainInfos.resource')}
                             render={(record: Activity) => {
-                                if (record.ressourceUrl) {
-                                    return (
-                                        <a href={record.ressourceUrl} rel="noreferrer" target="_blank">
-                                            {record.ressourceUrl}
-                                        </a>
-                                    );
-                                }
                                 if (record.ressourceFileUrl) {
                                     return (
                                         <a href={record.ressourceFileUrl} rel="noreferrer" target="_blank">
                                             <UploadFileIcon />
+                                        </a>
+                                    );
+                                }
+
+                                if (record.ressourceUrl) {
+                                    return (
+                                        <a href={record.ressourceUrl} rel="noreferrer" target="_blank">
+                                            {record.ressourceUrl}
                                         </a>
                                     );
                                 }
