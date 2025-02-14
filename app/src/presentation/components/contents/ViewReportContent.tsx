@@ -19,7 +19,10 @@ const ViewReportContent: React.FC<ViewReportContentProps> = ({ goBack, report, s
     const { t } = useTranslation();
 
     const isConversationReport = report.category.name === ReportCategoryName.CONVERSATION;
-    const isMediaReport = report.metadata?.mediaType && report.metadata?.mediaType !== MessageType.Text;
+    const isMediaReport =
+        report.metadata?.mediaType &&
+        report.metadata?.mediaType !== MessageType.Text &&
+        report.metadata?.mediaType !== MessageType.Link;
     const isReportCancelled = report.status === ReportStatus.CANCELLED;
     const isReportClosed = report.status === ReportStatus.CLOSED;
 
@@ -70,6 +73,7 @@ const ViewReportContent: React.FC<ViewReportContentProps> = ({ goBack, report, s
                                 <ReportDetail
                                     title={`${t('report_item_page.conversation.message')} ${createdDate} - ${report.metadata.tandemUserName}`}
                                     text={messageContent}
+                                    isUrl={messageMedia.metadata?.mediaType === MessageType.Link}
                                 />
                             )
                         ) : (
