@@ -51,10 +51,14 @@ const LearningBookContainerContent: React.FC<LearningBookContainerContentProps> 
     }) => {
         let result;
         if (logEntryToUpdate) {
-            result = await updateCustomLogEntry.execute(logEntryToUpdate.id, {
-                date,
-                title,
-                content: description,
+            result = await updateCustomLogEntry.execute({
+                id: logEntryToUpdate.id,
+                learningLanguageId: learningLanguage.id,
+                metadata: {
+                    date,
+                    title,
+                    content: description,
+                },
             });
         } else {
             result = await createLogEntry.execute({
