@@ -66,10 +66,6 @@ interface ProfileStorePayload {
     profile: Profile;
 }
 
-interface LastConnectionStorePayload {
-    lastConnection: Date;
-}
-
 interface UpdateProfile {
     acceptsEmail?: boolean;
     avatar?: MediaObject;
@@ -101,7 +97,6 @@ interface StoreInterface {
     jitsiUrl: string;
     isRtl?: boolean;
     language: string;
-    lastConnection: Date | undefined;
     logout: Action<StoreInterface>;
     refreshToken: string;
     refreshReports: boolean;
@@ -113,7 +108,6 @@ interface StoreInterface {
     setProfile: Action<StoreInterface, ProfileStorePayload>;
     setTokens: Action<StoreInterface, TokenStorePayload>;
     setUser: Action<StoreInterface, UserStorePayload>;
-    setLastConnection: Action<StoreInterface, LastConnectionStorePayload>;
     profile: Profile | undefined;
     profileSignUp: ProfileSignUp;
     updateProfile: Action<StoreInterface, UpdateProfile>;

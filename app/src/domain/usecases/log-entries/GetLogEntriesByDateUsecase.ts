@@ -21,7 +21,9 @@ class GetLogEntriesByDateUsecase implements GetLogEntriesByDateUsecaseInterface 
                 return new Error('errors.global');
             }
 
-            return httpResponse.parsedBody.items.map(logEntryCommandToDomain);
+            return httpResponse.parsedBody.items
+                .map(logEntryCommandToDomain)
+                .filter((entry): entry is LogEntry => entry !== undefined);
         } catch (error: any) {
             return new Error('errors.global');
         }

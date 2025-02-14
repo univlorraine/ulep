@@ -4,7 +4,6 @@ import { LogEntryMissingMetadataException } from 'src/core/errors/logs-entry.exc
 import {
   LogEntryAddVocabulary,
   LogEntryCommunityChat,
-  LogEntryConnection,
   LogEntryEditActivity,
   LogEntryPlayedGame,
   LogEntryShareVocabulary,
@@ -175,16 +174,7 @@ export class CreateOrUpdateLogEntryUsecase {
           shouldCreate: !sharingLogsEntryExistsToday,
           shouldIgnore: Boolean(sharingLogsEntryExistsToday),
         };
-      case LogEntryType.CONNECTION:
-        const connectionEntryExistsToday = entries.find(
-          (entry) => entry instanceof LogEntryConnection,
-        );
 
-        return {
-          entryToUpdate: undefined,
-          shouldCreate: !connectionEntryExistsToday,
-          shouldIgnore: Boolean(connectionEntryExistsToday),
-        };
       case LogEntryType.PLAYED_GAME:
         const playedGameEntryExistsToday = entries.find(
           (entry) =>
@@ -279,7 +269,6 @@ export class CreateOrUpdateLogEntryUsecase {
         }
         break;
       case LogEntryType.SHARING_LOGS:
-      case LogEntryType.CONNECTION:
         break;
       default:
         break;
