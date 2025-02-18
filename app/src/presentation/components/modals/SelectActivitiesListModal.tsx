@@ -24,13 +24,15 @@ const SelectActivitiesListModal: React.FC<SelectActivitiesListModalProps> = ({
     return (
         <IonModal animated isOpen={isVisible} onDidDismiss={onClose} className={styles.modal}>
             <div className={`${styles.container} ${isHybrid && styles.mobileContainer}`}>
-                <IonButton size="small" fill="clear" color="dark" className={styles.close} onClick={onClose}>
-                    <IonIcon
-                        aria-label={t('chat.activity_list.close') as string}
-                        icon={closeCircle}
-                        slot="icon-only"
-                        className={styles.close_icon}
-                    />
+                <IonButton
+                    aria-label={t('chat.activity_list.close') as string}
+                    size="small"
+                    fill="clear"
+                    color="dark"
+                    className={styles.close}
+                    onClick={onClose}
+                >
+                    <IonIcon icon={closeCircle} slot="icon-only" className={styles.close_icon} />
                 </IonButton>
                 <p className={styles.title}>{t('chat.activity_list.title')}</p>
 

@@ -525,6 +525,11 @@
         "send_image_aria_label": "Envoyer une image",
         "send_file_aria_label": "Envoyer un fichier",
         "send_vocabulary_list_aria_label": "Envoyer une liste de vocabulaire",
+        "open_replies": "Ouvrir les réponses",
+        "open_message_menu": "Ouvrir le menu du message",
+        "cancel_image_aria_label": "Annuler l'envoi de l'image",
+        "cancel_audio_aria_label": "Annuler l'envoi de l'audio",
+        "cancel_file_aria_label": "Annuler l'envoi du fichier",
         "vocabulary_list": {
             "close": "Fermer",
             "title": "Sélectionner la liste à partager"
