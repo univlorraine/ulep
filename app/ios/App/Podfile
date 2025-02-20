@@ -1,6 +1,6 @@
 require_relative '../../node_modules/.pnpm/@capacitor+ios@7.0.1_@capacitor+core@7.0.1/node_modules/@capacitor/ios/scripts/pods_helpers'
 
-platform :ios, '14.0'
+platform :ios, '15.1'
 use_frameworks!
 
 # workaround to avoid Xcode caching of Pods that requires
@@ -11,7 +11,7 @@ install! 'cocoapods', :disable_input_output_paths => true
 def capacitor_pods
   pod 'Capacitor', :path => '../../node_modules/.pnpm/@capacitor+ios@7.0.1_@capacitor+core@7.0.1/node_modules/@capacitor/ios'
   pod 'CapacitorCordova', :path => '../../node_modules/.pnpm/@capacitor+ios@7.0.1_@capacitor+core@7.0.1/node_modules/@capacitor/ios'
-  pod 'CapacitorCommunityFcm', :path => '../../node_modules/.pnpm/@capacitor-community+fcm@6.0.1_@capacitor+core@7.0.1/node_modules/@capacitor-community/fcm'
+  pod 'CapacitorCommunityFcm', :path => '../../node_modules/.pnpm/@capacitor-community+fcm@7.0.0_@capacitor+core@7.0.1/node_modules/@capacitor-community/fcm'
   pod 'CapacitorApp', :path => '../../node_modules/.pnpm/@capacitor+app@7.0.0_@capacitor+core@7.0.1/node_modules/@capacitor/app'
   pod 'CapacitorBrowser', :path => '../../node_modules/.pnpm/@capacitor+browser@7.0.0_@capacitor+core@7.0.1/node_modules/@capacitor/browser'
   pod 'CapacitorCamera', :path => '../../node_modules/.pnpm/@capacitor+camera@7.0.0_@capacitor+core@7.0.1/node_modules/@capacitor/camera'
@@ -23,10 +23,10 @@ def capacitor_pods
   pod 'CapacitorPushNotifications', :path => '../../node_modules/.pnpm/@capacitor+push-notifications@7.0.0_@capacitor+core@7.0.1/node_modules/@capacitor/push-notifications'
   pod 'CapacitorSplashScreen', :path => '../../node_modules/.pnpm/@capacitor+splash-screen@7.0.0_@capacitor+core@7.0.1/node_modules/@capacitor/splash-screen'
   pod 'CapacitorStatusBar', :path => '../../node_modules/.pnpm/@capacitor+status-bar@7.0.0_@capacitor+core@7.0.1/node_modules/@capacitor/status-bar'
-  pod 'CapawesomeCapacitorFilePicker', :path => '../../node_modules/.pnpm/@capawesome+capacitor-file-picker@6.2.0_@capacitor+core@7.0.1/node_modules/@capawesome/capacitor-file-picker'
+  pod 'CapawesomeCapacitorFilePicker', :path => '../../node_modules/.pnpm/@capawesome+capacitor-file-picker@6.1.0_@capacitor+core@7.0.1/node_modules/@capawesome/capacitor-file-picker'
   pod 'SentryCapacitor', :path => '../../node_modules/.pnpm/@sentry+capacitor@0.14.0_@capacitor+core@7.0.1_@sentry+react@7.73.0_react@18.3.1_/node_modules/@sentry/capacitor'
-  pod 'CapacitorJitsiMeet', :path => '../../node_modules/.pnpm/capacitor-jitsi-meet@6.2.1/node_modules/capacitor-jitsi-meet'
-  pod 'CapacitorVoiceRecorder', :path => '../../node_modules/.pnpm/capacitor-voice-recorder@6.0.3_@capacitor+core@7.0.1/node_modules/capacitor-voice-recorder'
+  pod 'CapacitorJitsiMeet', :path => '../../node_modules/.pnpm/capacitor-jitsi-meet@7.0.0/node_modules/capacitor-jitsi-meet'
+  pod 'CapacitorVoiceRecorder', :path => '../../node_modules/.pnpm/capacitor-voice-recorder@6.1.0_@capacitor+core@7.0.1_@capacitor+filesystem@7.0.0_@capacitor+core@7.0.1_/node_modules/capacitor-voice-recorder'
 end
 
 target 'dev' do
@@ -47,9 +47,11 @@ target 'staging' do
   post_install do |installer|
     installer.pods_project.targets.each do |target|
         target.build_configurations.each do |config|
-        xcconfig_path = config.base_configuration_reference.real_path
-        xcconfig = File.read(xcconfig_path)
-        xcconfig_mod = xcconfig.gsub(/DT_TOOLCHAIN_DIR/, "TOOLCHAIN_DIR")
+            config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
+            config.build_settings['SWIFT_VERSION'] = '5.0'
+            xcconfig_path = config.base_configuration_reference.real_path
+            xcconfig = File.read(xcconfig_path)
+            xcconfig_mod = xcconfig.gsub(/DT_TOOLCHAIN_DIR/, "TOOLCHAIN_DIR")
         File.open(xcconfig_path, "w") { |file| file << xcconfig_mod }
         end
     end

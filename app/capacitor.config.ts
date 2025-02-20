@@ -56,7 +56,7 @@ const baseConfig: CapacitorConfig = {
             presentationOptions: ['badge', 'sound', 'alert'],
         },
         Keyboard: {
-            resize: KeyboardResize.Native,
+            resize: KeyboardResize.Ionic,
             style: KeyboardStyle.Dark,
             resizeOnFullScreen: true,
         },

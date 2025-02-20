@@ -68,6 +68,7 @@ button.buttonFocused .container {
     margin-bottom: 8px;
     flex-wrap: wrap;
     white-space: nowrap;
+    max-width: 100%;
 }
 
 .title {

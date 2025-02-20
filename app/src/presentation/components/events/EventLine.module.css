@@ -56,7 +56,6 @@
 
 .content {
     width: 100%;
-    margin: 0px 16px;
 }
 
 .tags {
@@ -65,6 +64,8 @@
     gap: 8px;
     margin-bottom: 8px;
     white-space: nowrap;
+    flex-wrap: wrap;
+    max-width: 100%;
 }
 
 .title {
