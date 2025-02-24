@@ -13,7 +13,7 @@ class VocabularyList {
         public readonly creatorName: string,
         public readonly missingPronunciationOfWords: number,
         public readonly missingPronunciationOfTranslations: number,
-        public readonly numberOfVocabularies: number,
+        public numberOfVocabularies: number,
         public readonly isEditable: boolean
     ) {}
 

@@ -3,7 +3,6 @@ import {
   LogEntry,
   LogEntryAddVocabulary,
   LogEntryCommunityChat,
-  LogEntryConnection,
   LogEntryCustomEntry,
   LogEntryEditActivity,
   LogEntryPlayedGame,
@@ -34,7 +33,9 @@ export type LogEntrySnapshot = Prisma.LogEntryGetPayload<
   LearningLanguage: LearningLanguageSnapshot;
 };
 
-export const logEntryMapper = (snapshot: LogEntrySnapshot): LogEntry => {
+export const logEntryMapper = (
+  snapshot: LogEntrySnapshot,
+): LogEntry | undefined => {
   const data = snapshot.metadata as {
     activityId: string;
     activityTitle: string;
@@ -53,13 +54,6 @@ export const logEntryMapper = (snapshot: LogEntrySnapshot): LogEntry => {
     title: string;
   };
   switch (snapshot.type) {
-    case LogEntryType.CONNECTION:
-      return new LogEntryConnection({
-        id: snapshot.id,
-        type: LogEntryType.CONNECTION,
-        createdAt: snapshot.created_at,
-        learningLanguage: learningLanguageMapper(snapshot.LearningLanguage),
-      });
     case LogEntryType.VISIO:
       return new LogEntryVisio({
         id: snapshot.id,
@@ -155,6 +149,6 @@ export const logEntryMapper = (snapshot: LogEntrySnapshot): LogEntry => {
         learningLanguage: learningLanguageMapper(snapshot.LearningLanguage),
       });
     default:
-      throw new Error(`Unknown log entry type: ${snapshot.type}`);
+      return undefined;
   }
 };

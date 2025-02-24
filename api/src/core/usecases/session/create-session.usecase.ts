@@ -1,6 +1,5 @@
 import { KeycloakUser } from '@app/keycloak';
 import { Inject, Injectable } from '@nestjs/common';
-import { formatInTimeZone } from 'date-fns-tz';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import { Session } from 'src/core/models/session.model';
 import { EmailGateway, EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
@@ -85,16 +84,17 @@ export class CreateSessionUsecase {
     await this.notificationGateway.sendSessionCreatedNotification({
       to: devices,
       session: {
-        date: formatInTimeZone(
-          session.startAt,
-          userPartner.university.timezone,
-          'dd/MM/yyyy',
-        ),
-        hour: formatInTimeZone(
-          session.startAt,
-          userPartner.university.timezone,
-          'HH:mm',
-        ),
+        date: new Intl.DateTimeFormat(language, {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          timeZone: userPartner.university.timezone,
+        }).format(session.startAt),
+        hour: new Intl.DateTimeFormat(language, {
+          hour: '2-digit',
+          minute: '2-digit',
+          timeZone: userPartner.university.timezone,
+        }).format(session.startAt),
         partnerName: learningLanguageUser.profile.user.firstname,
       },
     });
@@ -107,16 +107,17 @@ export class CreateSessionUsecase {
         lastname: userPartner.lastname,
       },
       session: {
-        date: formatInTimeZone(
-          session.startAt,
-          userPartner.university.timezone,
-          'dd/MM/yyyy',
-        ),
-        hour: formatInTimeZone(
-          session.startAt,
-          userPartner.university.timezone,
-          'HH:mm',
-        ),
+        date: new Intl.DateTimeFormat(language, {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          timeZone: userPartner.university.timezone,
+        }).format(session.startAt),
+        hour: new Intl.DateTimeFormat(language, {
+          hour: '2-digit',
+          minute: '2-digit',
+          timeZone: userPartner.university.timezone,
+        }).format(session.startAt),
         partnerName: learningLanguageUser.profile.user.firstname,
         comment: session.comment,
       },

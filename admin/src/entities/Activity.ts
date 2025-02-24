@@ -7,6 +7,7 @@ import User from './User';
 export type Activity = {
     id?: string;
     creator?: {
+        id: string;
         user: User;
     };
     title: string;

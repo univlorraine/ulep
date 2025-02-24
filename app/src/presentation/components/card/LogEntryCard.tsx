@@ -4,7 +4,6 @@ import { AvatarPng, DicesPng, FicheSvg, JournalSvg, Star2Png, VocabularyPng } fr
 import {
     LogEntry,
     LogEntryAddVocabulary,
-    LogEntryConnection,
     LogEntryCustomEntry,
     LogEntryEditActivity,
     LogEntryPlayedGame,
@@ -22,15 +21,11 @@ import styles from './LogEntryCard.module.css';
 interface LogEntrySubComponentProps {
     logEntry: LogEntry;
 }
-interface LogEntryButtonProps {
-    logEntry: LogEntry;
-    onClick: (logEntry: LogEntry) => void;
-}
 
 export const getLogEntryImage = (logEntry: LogEntry): string | undefined => {
     if (logEntry instanceof LogEntryCustomEntry) {
         return JournalSvg;
-    } else if (logEntry instanceof LogEntryConnection || logEntry instanceof LogEntrySharingLogs) {
+    } else if (logEntry instanceof LogEntrySharingLogs) {
         return Star2Png;
     } else if (logEntry instanceof LogEntryAddVocabulary || logEntry instanceof LogEntryShareVocabulary) {
         return VocabularyPng;
@@ -50,8 +45,6 @@ export const LogEntryTitle: React.FC<LogEntrySubComponentProps> = ({ logEntry })
     const getTitle = () => {
         if (logEntry instanceof LogEntryCustomEntry) {
             return logEntry.title;
-        } else if (logEntry instanceof LogEntryConnection) {
-            return <>{t('learning_book.entry.connection.title')}</>;
         } else if (logEntry instanceof LogEntryAddVocabulary) {
             return (
                 <>

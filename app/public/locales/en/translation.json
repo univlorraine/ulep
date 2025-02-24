@@ -17,7 +17,8 @@
         "userWrongCredentials": "Authentication error: Bad email or bad password.",
         "connecteur": "",
         "fileSizeExceed": "The file is too big, it must be less than {{maxSize}}Mo",
-        "imageFormat": "The image format is not allowed"
+        "imageFormat": "The image format is not allowed",
+        "invalidUrl": "The url is not valid"
     },
     "error_page": {
         "title": "An error has occurred",

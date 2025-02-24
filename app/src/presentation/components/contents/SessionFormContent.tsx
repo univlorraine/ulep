@@ -1,4 +1,3 @@
-import { IonPage } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
 import { useConfig } from '../../../context/ConfigurationContext';
 import Profile from '../../../domain/entities/Profile';
@@ -24,7 +23,13 @@ export interface SessionFormData {
     comment: string;
 }
 
-const Content: React.FC<SessionFormContentProps> = ({ goBack, tandem, session, profile, onShowSessionPressed }) => {
+const SessionFormContent: React.FC<SessionFormContentProps> = ({
+    goBack,
+    tandem,
+    session,
+    profile,
+    onShowSessionPressed,
+}) => {
     const { t } = useTranslation();
     const { createSession, updateSession } = useConfig();
 
@@ -75,41 +80,6 @@ const Content: React.FC<SessionFormContentProps> = ({ goBack, tandem, session, p
                 />
             </div>
         </div>
-    );
-};
-
-const SessionFormContent: React.FC<SessionFormContentProps> = ({
-    isHybrid,
-    goBack,
-    profile,
-    tandem,
-    session,
-    onShowSessionPressed,
-}) => {
-    if (!isHybrid) {
-        return (
-            <Content
-                goBack={goBack}
-                isHybrid={isHybrid}
-                profile={profile}
-                tandem={tandem}
-                session={session}
-                onShowSessionPressed={onShowSessionPressed}
-            />
-        );
-    }
-
-    return (
-        <IonPage className={styles.content}>
-            <Content
-                goBack={goBack}
-                isHybrid={isHybrid}
-                profile={profile}
-                tandem={tandem}
-                session={session}
-                onShowSessionPressed={onShowSessionPressed}
-            />
-        </IonPage>
     );
 };
 

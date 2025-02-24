@@ -6,7 +6,7 @@ import SuccessLayout from '../components/layout/SuccessLayout';
 import styles from './css/SignUp.module.css';
 
 const PairingLevelStartPage: React.FC = () => {
-    const { configuration } = useConfig();
+    const { configuration, deviceAdapter } = useConfig();
     const history = useHistory();
     const profileSignUp = useStoreState((state) => state.profileSignUp);
     const profile = useStoreState((state) => state.profile);
@@ -29,7 +29,7 @@ const PairingLevelStartPage: React.FC = () => {
             backgroundIconColor={configuration.secondaryBackgroundImageColor}
             colorCode={configuration.secondaryColor}
         >
-            <div className={styles.body}>
+            <div className={`${styles.body} ${deviceAdapter.isNativePlatform() ? styles['native-platform'] : ''}`}>
                 <LanguageSelectedContent
                     language={profileSignUp.learningLanguage}
                     mode="confirm"

@@ -7,7 +7,7 @@ import styles from './css/SignUp.module.css';
 
 const PairingLevelPage: React.FC = () => {
     const { t } = useTranslation();
-    const { configuration } = useConfig();
+    const { configuration, deviceAdapter } = useConfig();
     const history = useHistory();
 
     return (
@@ -17,7 +17,7 @@ const PairingLevelPage: React.FC = () => {
             headerPercentage={48}
             headerTitle={t('global.pairing_title')}
         >
-            <div className={styles.body}>
+            <div className={`${styles.body} ${deviceAdapter.isNativePlatform() ? styles['native-platform'] : ''}`}>
                 <div>
                     <h1 className="title">{t('pairing_level_page.title')}</h1>
                     <p className="subtitle">{t('pairing_level_page.subtitle')}</p>

@@ -36,7 +36,7 @@ import University from '../../entities/University';
 import customDataProvider from '../../providers/customDataProvider';
 import i18nProvider from '../../providers/i18nProvider';
 import ImageUploader from '../ImageUploader';
-import useGetUniversitiesLanguages from './useGetUniversitiesLanguages';
+import useGetLanguages from './useGetLanguages';
 
 const ALL_OPTION = 'all';
 
@@ -51,12 +51,28 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
     const { data: universities, isLoading: isLoadingUniversities } = useGetList('universities', {
         sort: { field: 'name', order: 'ASC' },
     });
-    const universitiesLanguages = useGetUniversitiesLanguages();
+    const { primaryLanguages, suggestedLanguages, partnerLanguages } = useGetLanguages();
+
     const notify = useNotify();
     const record: EventObject = useRecordContext();
 
     const [centralUniversity, setCentralUniversity] = useState<University>();
     const [authorUniversity, setAuthorUniversity] = useState<University>();
+
+    const removeDuplicatesAndNulls = (arr: (string | undefined)[]) => [...new Set(arr)].filter(Boolean) as string[];
+
+    const universityLanguages =
+        centralUniversity?.id === authorUniversity?.id
+            ? removeDuplicatesAndNulls([
+                  ...primaryLanguages,
+                  ...suggestedLanguages,
+                  centralUniversity?.nativeLanguage.code,
+              ]).sort()
+            : removeDuplicatesAndNulls([
+                  ...partnerLanguages,
+                  authorUniversity?.nativeLanguage.code,
+                  ...(authorUniversity?.specificLanguagesAvailable || []).map((lang) => lang.code),
+              ]).sort();
 
     const [universityData, setUniversityData] = useState<University>(record?.authorUniversity || undefined);
     const [title, setTitle] = useState<string>(record?.title || '');
@@ -115,13 +131,13 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
     }, [identity]);
 
     useEffect(() => {
-        const filteredAvailableLanguages = universitiesLanguages.filter(
+        const filteredAvailableLanguages = universityLanguages.filter(
             (language) =>
                 !translations?.some((translation) => translation?.languageCode === language) &&
                 language !== defaultLanguage
         );
         setAvailableLanguages(filteredAvailableLanguages);
-    }, [universitiesLanguages, translations, defaultLanguage]);
+    }, [universityLanguages, translations, defaultLanguage]);
 
     useEffect(() => {
         if (!universities) return;
@@ -139,20 +155,14 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
         const possibleConcernedUniversities = authorIsFromCentralUniversity ? universities : [centralUniversity];
         setAvailableConcernedUniversities(possibleConcernedUniversities);
 
-        const partnerUniversityLanguages = new Set([
-            centralUniversity.nativeLanguage.code,
-            authorUniversity.nativeLanguage.code,
-        ]);
-        const possibleDiffusionLanguages = authorIsFromCentralUniversity
-            ? universitiesLanguages
-            : Array.from(partnerUniversityLanguages);
+        const possibleDiffusionLanguages = universityLanguages;
         setAvailableDiffusionLanguages(possibleDiffusionLanguages);
 
         if (!authorIsFromCentralUniversity) {
             forcedConcernedUniversities.push(authorUniversity);
         }
         setConcernedUniversities(record?.concernedUniversities ?? forcedConcernedUniversities);
-    }, [universities, universitiesLanguages, record, centralUniversity, authorUniversity]);
+    }, [universities, universityLanguages, record, centralUniversity, authorUniversity]);
 
     const onCreatePressed = () => {
         if (startDate && endDate && startDate > endDate) {
@@ -177,9 +187,7 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                 eventURL: type === EventType.ONLINE ? eventURL : undefined,
                 address: type === EventType.PRESENTIAL ? address : undefined,
                 addressName: type === EventType.PRESENTIAL ? addressName : undefined,
-                diffusionLanguages: diffusionLanguages.includes(ALL_OPTION)
-                    ? universitiesLanguages
-                    : diffusionLanguages,
+                diffusionLanguages: diffusionLanguages.includes(ALL_OPTION) ? universityLanguages : diffusionLanguages,
                 concernedUniversities,
             });
         }

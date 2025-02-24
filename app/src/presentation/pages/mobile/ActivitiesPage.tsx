@@ -2,6 +2,7 @@ import { IonContent } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { Redirect, useHistory, useLocation } from 'react-router';
 import { Activity } from '../../../domain/entities/Activity';
+import Language from '../../../domain/entities/Language';
 import { useStoreState } from '../../../store/storeTypes';
 import ActivitiesContent from '../../components/contents/activity/ActivitiesContent';
 import { ActivityContent } from '../../components/contents/activity/ActivityContent';
@@ -10,16 +11,18 @@ import useGetActivityThemes from '../../hooks/useGetActivityThemes';
 
 interface ActivitiesPageProps {
     activityId?: string;
+    learningLanguage?: Language;
 }
 
 const ActivitiesPage = () => {
     const history = useHistory();
     const location = useLocation<ActivitiesPageProps>();
-    const { activityId } = location.state || {};
+    const { activityId, learningLanguage } = location.state || {};
     const profile = useStoreState((state) => state.profile);
     const [displayCreateActivity, setDisplayCreateActivity] = useState<boolean>(false);
     const [activityIdToDisplay, setActivityIdToDisplay] = useState<string | undefined>();
     const [activityToUpdate, setActivityToUpdate] = useState<Activity | undefined>();
+    const [languageFilter, setLanguageFilter] = useState<Language[]>(learningLanguage ? [learningLanguage] : []);
     const { activityThemes } = useGetActivityThemes();
 
     const handleNavigateAfterCreate = (activityId: string) => {
@@ -53,6 +56,12 @@ const ActivitiesPage = () => {
         }
     }, [activityId]);
 
+    useEffect(() => {
+        if (learningLanguage) {
+            setLanguageFilter([learningLanguage]);
+        }
+    }, [learningLanguage]);
+
     return (
         <IonContent>
             <>
@@ -63,6 +72,8 @@ const ActivitiesPage = () => {
                         themes={activityThemes}
                         onActivityClick={(activity) => setActivityIdToDisplay(activity.id)}
                         profile={profile}
+                        languageFilter={languageFilter}
+                        setLanguageFilter={setLanguageFilter}
                     />
                 )}
                 {displayCreateActivity && (

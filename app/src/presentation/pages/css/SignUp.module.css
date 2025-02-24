@@ -5,6 +5,8 @@
     flex-grow: 1;
     justify-content: space-between;
     padding: 0px 20px;
+    overflow-y: auto;
+    padding-bottom: 80px;
 }
 
 .bottom-container {
@@ -86,6 +88,10 @@
 
 .web-content {
     height: 100%;
+}
+
+.native-platform {
+    padding-bottom: 0px;
 }
 
 @media (min-width: 768px) {

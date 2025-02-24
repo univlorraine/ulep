@@ -17,6 +17,10 @@
     width: 24px;
 }
 
+.imageActive {
+    filter: invert(1);
+}
+
 .line {
     align-items: center;
     background: none;
@@ -46,6 +50,20 @@
     font-size: 16px;
     font-weight: 500;
     margin: 0px 16px;
+}
+
+.active {
+    background-color: black;
+    color: white;
+    border-radius: 60px;
+}
+
+.light {
+    background-color: green;
+    border-radius: 50%;
+    height: 10px;
+    width: 10px;
+    margin-left: auto;
 }
 
 @media (min-width: 768px) and (max-width: 1024px) {

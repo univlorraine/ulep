@@ -3,15 +3,15 @@ import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
-import TextInput from '../components/TextInput';
 import RequiredFieldsMention from '../components/forms/RequiredFieldsMention';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
+import TextInput from '../components/TextInput';
 import styles from './css/SignUp.module.css';
 import biographyStyles from './css/SignUpBiography.module.css';
 
 const SignUpBiographyPage: React.FC = () => {
     const { t } = useTranslation();
-    const { configuration } = useConfig();
+    const { configuration, deviceAdapter } = useConfig();
     const history = useHistory();
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const profileEdit = useStoreState((store) => store.profileSignUp);
@@ -68,7 +68,7 @@ const SignUpBiographyPage: React.FC = () => {
             headerPercentage={72}
             headerTitle={t('global.create_account_title')}
         >
-            <div className={styles.body}>
+            <div className={`${styles.body} ${deviceAdapter.isNativePlatform() ? styles['native-platform'] : ''}`}>
                 <div>
                     <h1 className="title">{t('signup_biography_page.title')}</h1>
                     <h2 className="subtitle">{t('signup_biography_page.subtitle')}</h2>

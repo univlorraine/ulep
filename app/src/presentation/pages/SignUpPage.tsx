@@ -165,7 +165,7 @@ const SignUpPage: React.FC = () => {
             headerPercentage={12}
             headerTitle={t('global.create_account_title')}
         >
-            <div className={styles.body}>
+            <div className={`${styles.body} ${deviceAdapter.isNativePlatform() ? styles['native-platform'] : ''}`}>
                 <h1 className={styles.title}>{t('signup_page.title')}</h1>
                 <RequiredFieldsMention />
 

@@ -1,5 +1,5 @@
 import UploadFileIcon from '@mui/icons-material/UploadFile';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import React from 'react';
 import {
     useTranslate,
@@ -18,6 +18,7 @@ import {
     useUpdate,
     useNotify,
     useRefresh,
+    useRedirect,
 } from 'react-admin';
 import ActivityStatusChips from '../../components/ActivityStatusChipsProps';
 import AudioLine from '../../components/chat/AudioLine';
@@ -60,6 +61,18 @@ const ActivityStatusComponent = () => {
     return (
         <Box display="flex" flexDirection="row" gap="50px">
             <ActivityStatusChips status={record.status} />
+
+            {record?.status === ActivityStatus.REJECTED && (
+                <Box display="flex" flexDirection="row" gap="10px">
+                    <Button
+                        color="success"
+                        label={translate('activities.show.actions.publish')}
+                        onClick={() => handleChangeStatus(ActivityStatus.PUBLISHED)}
+                        variant="contained"
+                    />
+                </Box>
+            )}
+
             {record?.status === ActivityStatus.IN_VALIDATION && (
                 <Box display="flex" flexDirection="row" gap="10px">
                     <Button
@@ -102,6 +115,7 @@ const ActivityStatusComponent = () => {
 
 const ActivityShow = () => {
     const translate = useTranslate();
+    const redirect = useRedirect();
 
     return (
         <>
@@ -122,7 +136,18 @@ const ActivityShow = () => {
                                     return translate('activities.show.mainInfos.admin');
                                 }
 
-                                return `${record.creator.user.firstname} ${record.creator.user.lastname}`;
+                                return (
+                                    <Typography
+                                        onClick={() => {
+                                            if (record.creator) {
+                                                redirect('show', 'profiles', record.creator.id);
+                                            }
+                                        }}
+                                        sx={{ cursor: 'pointer', color: '#3737d5' }}
+                                    >
+                                        {record.creator.user.lastname} {record.creator.user.firstname}
+                                    </Typography>
+                                );
                             }}
                             sortable={false}
                         />
@@ -138,6 +163,7 @@ const ActivityShow = () => {
                             component="pre"
                             label={translate('activities.show.mainInfos.description')}
                             source="description"
+                            sx={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}
                         />
                         <TextField label={translate('activities.show.mainInfos.level')} source="languageLevel" />
                         <FunctionField
@@ -152,17 +178,18 @@ const ActivityShow = () => {
                         <FunctionField
                             label={translate('activities.show.mainInfos.resource')}
                             render={(record: Activity) => {
-                                if (record.ressourceUrl) {
-                                    return (
-                                        <a href={record.ressourceUrl} rel="noreferrer" target="_blank">
-                                            {record.ressourceUrl}
-                                        </a>
-                                    );
-                                }
                                 if (record.ressourceFileUrl) {
                                     return (
                                         <a href={record.ressourceFileUrl} rel="noreferrer" target="_blank">
                                             <UploadFileIcon />
+                                        </a>
+                                    );
+                                }
+
+                                if (record.ressourceUrl) {
+                                    return (
+                                        <a href={record.ressourceUrl} rel="noreferrer" target="_blank">
+                                            {record.ressourceUrl}
                                         </a>
                                     );
                                 }

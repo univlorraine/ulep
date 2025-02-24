@@ -285,7 +285,11 @@ const ChatInputSender: React.FC<ChatInputSenderProps> = ({
             <div className={styles['sender-view']}>
                 {imageToSend && (
                     <div className={styles['preview-container']}>
-                        <button className={styles['cancel-image-button']} onClick={() => setImageToSend(undefined)}>
+                        <button
+                            aria-label={t('chat.cancel_image_aria_label') as string}
+                            className={styles['cancel-image-button']}
+                            onClick={() => setImageToSend(undefined)}
+                        >
                             <img src={CloseBlackSvg} />
                         </button>
                         <img className={styles['preview-image']} src={URL.createObjectURL(imageToSend)} />
@@ -293,7 +297,11 @@ const ChatInputSender: React.FC<ChatInputSenderProps> = ({
                 )}
                 {audioFile && (
                     <div className={styles['preview-audio-container']}>
-                        <button className={styles['cancel-audio-button']} onClick={() => setAudioFile(undefined)}>
+                        <button
+                            aria-label={t('chat.cancel_audio_aria_label') as string}
+                            className={styles['cancel-audio-button']}
+                            onClick={() => setAudioFile(undefined)}
+                        >
                             <img src={CloseBlackSvg} style={{ filter: 'invert(1)' }} />
                         </button>
                         <AudioLine audioFile={audioFile} />
@@ -301,7 +309,11 @@ const ChatInputSender: React.FC<ChatInputSenderProps> = ({
                 )}
                 {fileToSend && (
                     <div className={styles['preview-file-container']}>
-                        <button className={styles['cancel-audio-button']} onClick={() => setFileToSend(undefined)}>
+                        <button
+                            aria-label={t('chat.cancel_file_aria_label') as string}
+                            className={styles['cancel-audio-button']}
+                            onClick={() => setFileToSend(undefined)}
+                        >
                             <img src={CloseBlackSvg} style={{ filter: 'invert(1)' }} />
                         </button>
                         <span>{fileToSend.name}</span>

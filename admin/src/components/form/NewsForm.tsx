@@ -242,11 +242,12 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                                     sx={{ width: '300px' }}
                                     value={newConcernedUniversity}
                                 >
-                                    {centralUniversity?.id === authorUniversity?.id && (
-                                        <MenuItem value={ALL_OPTION}>
-                                            {translate('news.form.concerned_universities.all')}
-                                        </MenuItem>
-                                    )}
+                                    {centralUniversity?.id === authorUniversity?.id &&
+                                        availableConcernedUniversities.length !== concernedUniversities.length && (
+                                            <MenuItem value={ALL_OPTION}>
+                                                {translate('news.form.concerned_universities.all')}
+                                            </MenuItem>
+                                        )}
                                     {availableConcernedUniversities
                                         ?.filter(
                                             (university) =>

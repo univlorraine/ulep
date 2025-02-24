@@ -11,7 +11,7 @@ import { LearningType } from './PairingPedagogyPage';
 
 const PairingConfirmLanguagePage: React.FC = () => {
     const { t } = useTranslation();
-    const { configuration } = useConfig();
+    const { configuration, deviceAdapter } = useConfig();
     const history = useHistory();
     const profileSignUp = useStoreState((state) => state.profileSignUp);
     const profile = useStoreState((state) => state.profile);
@@ -47,7 +47,7 @@ const PairingConfirmLanguagePage: React.FC = () => {
             headerPercentage={36}
             headerTitle={t('global.pairing_title')}
         >
-            <div className={styles.body}>
+            <div className={`${styles.body} ${deviceAdapter.isNativePlatform() ? styles['native-platform'] : ''}`}>
                 <div>
                     <h1 className="title">{t('pairing_confirm_language_page.title')}</h1>
                     <p className="subtitle">{t('pairing_confirm_language_page.subtitle')}</p>

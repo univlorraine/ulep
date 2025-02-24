@@ -31,7 +31,11 @@ const Content: React.FC<SessionListContentProps> = ({
     const { t } = useTranslation();
     const [showSelectTandemModal, setShowSelectTandemModal] = useState(false);
     const onAddSession = () => {
-        setShowSelectTandemModal(true);
+        if (tandems.length === 1) {
+            onCreateSessionPressed(tandems[0]);
+        } else {
+            setShowSelectTandemModal(true);
+        }
     };
 
     const onSelectTandem = (tandems: Tandem[]) => {

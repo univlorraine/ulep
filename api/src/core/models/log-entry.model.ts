@@ -1,7 +1,6 @@
 import { LearningLanguage } from 'src/core/models/learning-language.model';
 
 export enum LogEntryType {
-  CONNECTION = 'CONNECTION',
   VISIO = 'VISIO',
   TANDEM_CHAT = 'TANDEM_CHAT',
   COMMUNITY_CHAT = 'COMMUNITY_CHAT',
@@ -18,7 +17,6 @@ export type LogEntries =
   | LogEntryCommunityChat
   | LogEntryPlayedGame
   | LogEntryEditActivity
-  | LogEntryConnection
   | LogEntryCustomEntry
   | LogEntryShareVocabulary
   | LogEntrySubmitActivity
@@ -45,12 +43,6 @@ export class LogEntry {
     this.createdAt = data.createdAt;
     this.type = data.type;
     this.learningLanguage = data.learningLanguage;
-  }
-}
-
-export class LogEntryConnection extends LogEntry {
-  constructor(data: LogEntryProps) {
-    super(data);
   }
 }
 
@@ -110,12 +102,12 @@ export class LogEntryCommunityChat extends LogEntry {
 }
 
 export type LogEntryCustomEntryProps = LogEntryProps & {
-  content: string;
+  content?: string;
   title: string;
 };
 
 export class LogEntryCustomEntry extends LogEntry {
-  content: string;
+  content?: string;
   title: string;
   constructor(data: LogEntryCustomEntryProps) {
     super(data);

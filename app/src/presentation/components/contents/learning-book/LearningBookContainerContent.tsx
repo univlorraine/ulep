@@ -51,10 +51,14 @@ const LearningBookContainerContent: React.FC<LearningBookContainerContentProps> 
     }) => {
         let result;
         if (logEntryToUpdate) {
-            result = await updateCustomLogEntry.execute(logEntryToUpdate.id, {
-                date,
-                title,
-                content: description,
+            result = await updateCustomLogEntry.execute({
+                id: logEntryToUpdate.id,
+                learningLanguageId: learningLanguage.id,
+                metadata: {
+                    date,
+                    title,
+                    content: description,
+                },
             });
         } else {
             result = await createLogEntry.execute({
@@ -113,14 +117,25 @@ const LearningBookContainerContent: React.FC<LearningBookContainerContentProps> 
     };
 
     const handleOnClose = () => {
-        if (focusLogEntryForADay) {
-            setFocusLogEntryForADay(undefined);
-        } else if (isCreateCustomLogEntry) {
-            setIsCreateCustomLogEntry(false);
+        if (isCreateCustomLogEntry) {
+            return setIsCreateCustomLogEntry(false);
+        } else if (focusLogEntryForADay) {
+            return setFocusLogEntryForADay(undefined);
         } else {
-            onClose();
+            return onClose();
         }
     };
+
+    if (isCreateCustomLogEntry) {
+        return (
+            <CreateCustomLogEntryContent
+                onBackPressed={handleOnClose}
+                onSubmit={createOrUpdateCustomLogEntry}
+                profile={profile}
+                logEntryToUpdate={logEntryToUpdate}
+            />
+        );
+    }
 
     if (focusLogEntryForADay) {
         return (
@@ -133,17 +148,6 @@ const LearningBookContainerContent: React.FC<LearningBookContainerContentProps> 
                 onOpenActivity={onOpenActivity}
                 learningLanguage={learningLanguage}
                 isModal
-            />
-        );
-    }
-
-    if (isCreateCustomLogEntry) {
-        return (
-            <CreateCustomLogEntryContent
-                onBackPressed={handleOnClose}
-                onSubmit={createOrUpdateCustomLogEntry}
-                profile={profile}
-                logEntryToUpdate={logEntryToUpdate}
             />
         );
     }

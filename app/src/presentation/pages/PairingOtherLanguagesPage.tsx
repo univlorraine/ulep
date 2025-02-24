@@ -6,12 +6,12 @@ import Language from '../../domain/entities/Language';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import OtherLanguageContent from '../components/contents/OtherLanguageContent';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
-import styles from './css/SignUp.module.css';
 import useGetSuggestedLanguages from '../hooks/useGetSuggestedLanguages';
+import styles from './css/SignUp.module.css';
 
 const PairingOtherLanguagesPage: React.FC = () => {
     const { t } = useTranslation();
-    const { configuration } = useConfig();
+    const { configuration, deviceAdapter } = useConfig();
     const [showToast] = useIonToast();
     const profile = useStoreState((state) => state.profile);
     const university = profile?.user.university;
@@ -45,7 +45,7 @@ const PairingOtherLanguagesPage: React.FC = () => {
             headerPercentage={12}
             headerTitle={t('global.pairing_title')}
         >
-            <div className={styles.body}>
+            <div className={`${styles.body} ${deviceAdapter.isNativePlatform() ? styles['native-platform'] : ''}`}>
                 <OtherLanguageContent languages={languages} onLanguageSelected={onOtherLanguageSelected} displayJoker />
             </div>
         </WebLayoutCentered>

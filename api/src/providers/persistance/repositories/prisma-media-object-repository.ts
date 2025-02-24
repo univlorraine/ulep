@@ -66,42 +66,6 @@ export class PrismaMediaObjectRepository implements MediaObjectRepository {
     });
   }
 
-  async imageOfActivity(activityId: string): Promise<MediaObject | null> {
-    const mediaObject = await this.prisma.mediaObjects.findFirst({
-      where: { Activity: { id: activityId } },
-    });
-
-    if (!mediaObject) {
-      return null;
-    }
-
-    return new MediaObject({
-      id: mediaObject.id,
-      name: mediaObject.name,
-      bucket: mediaObject.bucket,
-      mimetype: mediaObject.mime,
-      size: mediaObject.size,
-    });
-  }
-
-  async ressourceOfActivity(activityId: string): Promise<MediaObject | null> {
-    const mediaObject = await this.prisma.mediaObjects.findFirst({
-      where: { Activity: { id: activityId } },
-    });
-
-    if (!mediaObject) {
-      return null;
-    }
-
-    return new MediaObject({
-      id: mediaObject.id,
-      name: mediaObject.name,
-      bucket: mediaObject.bucket,
-      mimetype: mediaObject.mime,
-      size: mediaObject.size,
-    });
-  }
-
   async saveAudioVocabulary(
     vocabularyId: string,
     isTranslation: boolean,

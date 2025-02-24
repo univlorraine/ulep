@@ -7,7 +7,7 @@ import quizzIntroductionStyle from './css/PairingQuizzIntroduction.module.css';
 import styles from './css/SignUp.module.css';
 
 const PairingQuizzIntroductionPage: React.FC = ({}) => {
-    const { configuration } = useConfig();
+    const { configuration, deviceAdapter } = useConfig();
     const history = useHistory();
     const { t } = useTranslation();
 
@@ -18,7 +18,7 @@ const PairingQuizzIntroductionPage: React.FC = ({}) => {
             headerPercentage={60}
             headerTitle={t('global.pairing_title')}
         >
-            <div className={styles.body}>
+            <div className={`${styles.body} ${deviceAdapter.isNativePlatform() ? styles['native-platform'] : ''}`}>
                 <div className={quizzIntroductionStyle.container}>
                     <h1 className="title">{t('pairing_quizz_introduction_page.title')}</h1>
                     <p className="subtitle">{t('pairing_quizz_introduction_page.subtitle')}</p>

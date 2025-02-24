@@ -1,5 +1,5 @@
-import { IonButton, IonIcon, IonText, useIonToast } from '@ionic/react';
-import { documentOutline, linkOutline, musicalNoteOutline } from 'ionicons/icons';
+import { IonButton, IonIcon, useIonToast } from '@ionic/react';
+import { documentOutline, musicalNoteOutline } from 'ionicons/icons';
 import { useTranslation } from 'react-i18next';
 import { DownloadSvg } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
@@ -22,9 +22,6 @@ const MediaComponent = <T extends Message | MessageReport>({ message, setImageTo
                 return <MessageFile message={message} />;
             case MessageType.Audio:
                 return <MessageAudio message={message} />;
-            case MessageType.Link:
-                return <MessageLink message={message} />;
-            default:
                 return null;
         }
     };
@@ -60,40 +57,6 @@ const MessageAudio: React.FC<MessageProps<Message | MessageReport>> = ({ message
             <IonIcon icon={musicalNoteOutline} size="large" />
             <AudioLine audioFile={message.content} />
         </div>
-    );
-};
-
-const MessageLink: React.FC<MessageProps<Message | MessageReport>> = ({ message }) => {
-    const { browserAdapter } = useConfig();
-    const og = message.metadata?.openGraphResult;
-
-    const openLink = async () => {
-        await browserAdapter.open(message.content);
-    };
-
-    return (
-        <IonButton
-            id={`message-container-${message.id}`}
-            fill="clear"
-            className={styles.messageLink}
-            onClick={openLink}
-        >
-            <div className={styles.linkContainer}>
-                <div className={styles.linkImageContainer}>
-                    {og?.ogImage?.[0]?.url ? (
-                        <div className={styles.linkImage}>
-                            <img src={og?.ogImage?.[0]?.url} alt={og?.ogTitle} className={styles.linkImageImg} />
-                        </div>
-                    ) : (
-                        <IonIcon icon={linkOutline} size="medium" className={styles.linkIcon} />
-                    )}
-                </div>
-                <div className={styles.linkTextContainer}>
-                    <IonText className={styles.linkText}>{og?.ogTitle}</IonText>
-                    <IonText className={styles.linkTextUrl}>{og?.ogUrl}</IonText>
-                </div>
-            </div>
-        </IonButton>
     );
 };
 

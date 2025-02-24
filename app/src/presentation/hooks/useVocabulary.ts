@@ -147,16 +147,21 @@ const useVocabulary = (learningLanguage?: LearningLanguage) => {
             return showToast({ message: t(result.message), duration: 5000 });
         }
 
+        vocabularyListSelected.numberOfVocabularies++;
         setRefreshVocabularies(!refreshVocabularies);
     };
 
     const onDeleteVocabulary = async (id: string) => {
+        if (!vocabularyListSelected) {
+            return;
+        }
         const result = await deleteVocabulary.execute(id);
 
         if (result instanceof Error) {
             return showToast({ message: t(result.message), duration: 5000 });
         }
 
+        vocabularyListSelected.numberOfVocabularies--;
         setRefreshVocabularies(!refreshVocabularies);
     };
 

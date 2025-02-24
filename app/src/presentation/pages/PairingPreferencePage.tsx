@@ -10,7 +10,7 @@ import styles from './css/SignUp.module.css';
 
 const PairingPreferencePage: React.FC = () => {
     const { t } = useTranslation();
-    const { configuration } = useConfig();
+    const { configuration, deviceAdapter } = useConfig();
     const updateProfileSignUp = useStoreActions((store) => store.updateProfileSignUp);
     const history = useHistory();
     const [sameAge, setSameAge] = useState<boolean>(false);
@@ -33,7 +33,7 @@ const PairingPreferencePage: React.FC = () => {
             headerPercentage={72}
             headerTitle={t('global.pairing_title')}
         >
-            <div className={styles.body}>
+            <div className={`${styles.body} ${deviceAdapter.isNativePlatform() ? styles['native-platform'] : ''}`}>
                 <div>
                     <h1 className="title">{t('pairing_preference_page.title')}</h1>
                     <div className={pairingPreferenceStyles.content}>

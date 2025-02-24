@@ -25,7 +25,7 @@ interface PedagogieData {
 
 const PairingPedagogyPage: React.FC = () => {
     const { t } = useTranslation();
-    const { configuration } = useConfig();
+    const { configuration, deviceAdapter } = useConfig();
     const history = useHistory();
     const profileSignUp = useStoreState((state) => state.profileSignUp);
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
@@ -92,7 +92,7 @@ const PairingPedagogyPage: React.FC = () => {
             headerPercentage={24}
             headerTitle={t('global.pairing_title')}
         >
-            <div className={styles.body}>
+            <div className={`${styles.body} ${deviceAdapter.isNativePlatform() ? styles['native-platform'] : ''}`}>
                 <div>
                     <h1 className="title">{t('pairing_pedagogy_page.title')}</h1>
                     <p className="subtitle">{t('pairing_pedagogy_page.subtitle')}</p>

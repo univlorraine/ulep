@@ -80,8 +80,6 @@ const HomeContent: React.FC<HomeContentProps> = ({
                                 {tandems.find((tandem) => tandem.status === 'ACTIVE') && (
                                     <TandemList onTandemPressed={onValidatedTandemPressed} tandems={tandems} />
                                 )}
-                            </Masonry>
-                            <Masonry className={styles.masonery} gutter="20px">
                                 {tandems.find((tandem) => tandem.status === 'ACTIVE') && (
                                     <SessionListHome
                                         tandems={tandems}
@@ -93,8 +91,6 @@ const HomeContent: React.FC<HomeContentProps> = ({
                                         isHybrid={isHybrid}
                                     />
                                 )}
-                            </Masonry>
-                            <Masonry className={styles.masonery} gutter="20px">
                                 {news.length > 0 && (
                                     <NewsList news={news} profile={profile} onNewsPressed={onShowNewsPressed} />
                                 )}

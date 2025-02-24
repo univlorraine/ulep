@@ -1,9 +1,7 @@
 import { useIonToast } from '@ionic/react';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Redirect, useHistory, useLocation } from 'react-router';
+import { Redirect, useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
-import Language from '../../domain/entities/Language';
 import { useStoreState } from '../../store/storeTypes';
 import OtherLanguageSelectedContent from '../components/contents/OtherLanguageSelectedContent';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
@@ -11,7 +9,7 @@ import styles from './css/SignUp.module.css';
 
 const PairingOtherLanguageSelectedPage: React.FC = () => {
     const { t } = useTranslation();
-    const { askForLanguage, configuration } = useConfig();
+    const { askForLanguage, configuration, deviceAdapter } = useConfig();
     const [showToast] = useIonToast();
     const profileSignUp = useStoreState((state) => state.profileSignUp);
     const profile = useStoreState((state) => state.profile);
@@ -50,7 +48,7 @@ const PairingOtherLanguageSelectedPage: React.FC = () => {
             headerPercentage={12}
             headerTitle={t('global.pairing_title')}
         >
-            <div className={styles.body}>
+            <div className={`${styles.body} ${deviceAdapter.isNativePlatform() ? styles['native-platform'] : ''}`}>
                 <OtherLanguageSelectedContent language={language} onNextStep={onLanguageAsked} />
             </div>
         </WebLayoutCentered>

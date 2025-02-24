@@ -16,11 +16,7 @@ const Store = createStore<TokenStoreTypes>(
             language: '',
             refreshToken: '',
             refreshReports: false,
-            lastConnection: undefined,
             isRtl: undefined,
-            setLastConnection: action((state, payload) => {
-                state.lastConnection = payload.lastConnection;
-            }),
             setRtl: action((state, payload) => {
                 state.isRtl = payload.isRtl;
             }),
@@ -62,7 +58,6 @@ const Store = createStore<TokenStoreTypes>(
                 state.apiUrl = '';
                 state.chatUrl = '';
                 state.socketChatUrl = '';
-                state.lastConnection = undefined;
             }),
             profile: undefined,
             profileSignUp: new ProfileSignUp(),

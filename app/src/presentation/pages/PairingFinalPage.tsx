@@ -1,14 +1,14 @@
 import { useIonToast } from '@ionic/react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
+import Avatar from '../components/Avatar';
 import FlagBubble from '../components/FlagBubble';
 import SuccessLayout from '../components/layout/SuccessLayout';
 import { codeLanguageToFlag } from '../utils';
 import styles from './css/PairingFinalPage.module.css';
-import { useState } from 'react';
-import Avatar from '../components/Avatar';
 
 const PairingFinalPage: React.FC = () => {
     const { t } = useTranslation();

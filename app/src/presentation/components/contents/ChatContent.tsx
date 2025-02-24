@@ -293,6 +293,7 @@ const Content: React.FC<ChatContentProps> = ({
                         <IonList lines="none">
                             {!isCommunity && (
                                 <IonItem
+                                    aria-label={t('chat.conversation_menu.medias') as string}
                                     button={true}
                                     detail={false}
                                     onClick={() =>
@@ -307,13 +308,23 @@ const Content: React.FC<ChatContentProps> = ({
                                     </IonLabel>
                                 </IonItem>
                             )}
-                            <IonItem button={true} detail={false} onClick={handleExportMedias}>
+                            <IonItem
+                                aria-label={t('chat.conversation_menu.export_medias') as string}
+                                button={true}
+                                detail={false}
+                                onClick={handleExportMedias}
+                            >
                                 <IonIcon icon={downloadOutline} aria-hidden="true" />
                                 <IonLabel className={styles['chat-popover-label']}>
                                     {t('chat.conversation_menu.export_medias')}
                                 </IonLabel>
                             </IonItem>
-                            <IonItem button={true} detail={false} onClick={setSearchMode}>
+                            <IonItem
+                                aria-label={t('chat.conversation_menu.search') as string}
+                                button={true}
+                                detail={false}
+                                onClick={setSearchMode}
+                            >
                                 <IonIcon icon={searchOutline} aria-hidden="true" />
                                 <IonLabel className={styles['chat-popover-label']}>
                                     {t('chat.conversation_menu.search')}
@@ -334,7 +345,12 @@ const Content: React.FC<ChatContentProps> = ({
             )}
             {messageToReply && (
                 <div className={styles.replyHeader}>
-                    <IonButton fill="clear" onClick={onCancelReply} className={styles.replyHeaderButton}>
+                    <IonButton
+                        aria-label={t('chat.goBackToConversation') as string}
+                        fill="clear"
+                        onClick={onCancelReply}
+                        className={styles.replyHeaderButton}
+                    >
                         <IonIcon color="black" icon={arrowBackOutline} />
                         <span className={styles.replyHeaderText}>{t('chat.goBackToConversation')}</span>
                     </IonButton>
