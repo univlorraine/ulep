@@ -1,5 +1,5 @@
 import { Box, Button, Modal, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
     List,
     Datagrid,
@@ -14,6 +14,7 @@ import {
     TextInput,
     ReferenceInput,
     FunctionField,
+    useGetList,
 } from 'react-admin';
 import PageTitle from '../../../components/PageTitle';
 import { EventObject } from '../../../entities/Event';
@@ -51,6 +52,22 @@ const EventsSubscriptionsList = () => {
     const [isSubscriptionsModalOpen, setIsSubscriptionsModalOpen] = useState<boolean>(false);
     const [isEmailModalOpen, setIsEmailModalOpen] = useState<boolean>(false);
 
+    const { data: languages } = useGetList('languages', {
+        pagination: { page: 1, perPage: 250 },
+        sort: { field: 'name', order: 'ASC' },
+    });
+
+    const sortedLanguages = useMemo(() => {
+        if (!languages) return [];
+
+        return languages.sort((a, b) => {
+            const nameA = translate(`languages_code.${a.code}`);
+            const nameB = translate(`languages_code.${b.code}`);
+
+            return nameA.localeCompare(nameB);
+        });
+    }, [languages]);
+
     const eventId = window.location.hash.split('/').slice(-1)[0].split('?')[0];
 
     const filters = [
@@ -68,6 +85,30 @@ const EventsSubscriptionsList = () => {
         <TextInput key="lastname" label={translate('global.lastname')} source="user.lastname" alwaysOn />,
         <TextInput key="email" label={translate('global.email')} source="user.email" alwaysOn />,
     ];
+
+    if (sortedLanguages) {
+        filters.push(
+            <SelectInput
+                choices={sortedLanguages}
+                label={translate('profiles.native_language')}
+                optionText={(option) => translate(`languages_code.${option.code}`)}
+                optionValue="code"
+                source="nativeLanguageCode"
+                alwaysOn
+            />
+        );
+
+        filters.push(
+            <SelectInput
+                choices={sortedLanguages}
+                label={translate('profiles.mastered_languages')}
+                optionText={(option) => translate(`languages_code.${option.code}`)}
+                optionValue="code"
+                source="masteredLanguageCode"
+                alwaysOn
+            />
+        );
+    }
 
     if (identity?.isCentralUniversity) {
         filters.push(
