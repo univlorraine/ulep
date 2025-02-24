@@ -1,5 +1,5 @@
 import UploadFileIcon from '@mui/icons-material/UploadFile';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import React from 'react';
 import {
     useTranslate,
@@ -18,6 +18,7 @@ import {
     useUpdate,
     useNotify,
     useRefresh,
+    useRedirect,
 } from 'react-admin';
 import ActivityStatusChips from '../../components/ActivityStatusChipsProps';
 import AudioLine from '../../components/chat/AudioLine';
@@ -114,6 +115,7 @@ const ActivityStatusComponent = () => {
 
 const ActivityShow = () => {
     const translate = useTranslate();
+    const redirect = useRedirect();
 
     return (
         <>
@@ -134,7 +136,18 @@ const ActivityShow = () => {
                                     return translate('activities.show.mainInfos.admin');
                                 }
 
-                                return `${record.creator.user.firstname} ${record.creator.user.lastname}`;
+                                return (
+                                    <Typography
+                                        onClick={() => {
+                                            if (record.creator) {
+                                                redirect('show', 'profiles', record.creator.id);
+                                            }
+                                        }}
+                                        sx={{ cursor: 'pointer', color: '#3737d5' }}
+                                    >
+                                        {record.creator.user.lastname} {record.creator.user.firstname}
+                                    </Typography>
+                                );
                             }}
                             sortable={false}
                         />
