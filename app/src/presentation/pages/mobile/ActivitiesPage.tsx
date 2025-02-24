@@ -56,6 +56,12 @@ const ActivitiesPage = () => {
         }
     }, [activityId]);
 
+    useEffect(() => {
+        if (learningLanguage) {
+            setLanguageFilter([learningLanguage]);
+        }
+    }, [learningLanguage]);
+
     return (
         <IonContent>
             <>
