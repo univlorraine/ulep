@@ -40,12 +40,12 @@
             .image {
                 width: 95px;
                 height: 95px;
-                border-radius: 90px;
                 background-color: white;
                 object-fit: cover;
             }
             .logo {
                 object-fit: contain;
+                border-radius: 50%;
             }
             .details {
                 .subtitle {
