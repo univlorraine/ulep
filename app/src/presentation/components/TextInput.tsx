@@ -95,7 +95,7 @@ const TextInput: React.FC<TextInputProps> = ({
     showLimit = false,
 }) => {
     const [showPasword, setShowPassword] = useState<boolean>(false);
-    const inputId = `input-${title}}`;
+    const inputId = `input-${title?.toLowerCase().replace(' ', '-')}`;
     return (
         <div className={`${style.container} large-margin-bottom`}>
             {title && (
