@@ -13,7 +13,7 @@ import goalsStyles from './css/SignUpGoals.module.css';
 
 const SignUpGoalsPage: React.FC = () => {
     const { t } = useTranslation();
-    const { configuration, getAllGoals } = useConfig();
+    const { configuration, getAllGoals, deviceAdapter } = useConfig();
     const [showToast] = useIonToast();
     const history = useHistory();
     const profileEdit = useStoreState((store) => store.profileSignUp);
@@ -63,7 +63,7 @@ const SignUpGoalsPage: React.FC = () => {
             headerPercentage={48}
             headerTitle={t('global.create_account_title')}
         >
-            <div className={styles.body}>
+            <div className={`${styles.body} ${deviceAdapter.isNativePlatform() ? styles['native-platform'] : ''}`}>
                 <div className={goalsStyles.content}>
                     <h1 className="title">{t('signup_goals_page.title')}</h1>
                     <span className="subtitle">{t('signup_goals_page.subtitle')}</span>

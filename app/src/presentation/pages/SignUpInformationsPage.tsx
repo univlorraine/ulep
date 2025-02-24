@@ -80,7 +80,7 @@ const PasswordInfo = () => {
 
 const SignUpInformationsPage: React.FC = () => {
     const { t } = useTranslation();
-    const { browserAdapter, cameraAdapter, configuration, createUser } = useConfig();
+    const { browserAdapter, cameraAdapter, configuration, createUser, deviceAdapter } = useConfig();
     const [showToast] = useIonToast();
     const history = useHistory();
     const location = useLocation<SignUpInformationsParams>();
@@ -229,7 +229,7 @@ const SignUpInformationsPage: React.FC = () => {
             headerPercentage={24}
             headerTitle={t('global.create_account_title')}
         >
-            <div className={styles.body}>
+            <div className={`${styles.body} ${deviceAdapter.isNativePlatform() ? styles['native-platform'] : ''}`}>
                 <h1 className={styles.title}>{t('signup_informations_page.title')}</h1>
                 <RequiredFieldsMention />
 

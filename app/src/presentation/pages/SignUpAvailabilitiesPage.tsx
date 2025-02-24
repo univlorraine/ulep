@@ -1,3 +1,4 @@
+import moment from 'moment-timezone';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
@@ -11,7 +12,6 @@ import AvailabilityModal from '../components/modals/AvailabilityModal';
 import AvailabilityNoteModal from '../components/modals/AvailabilityNoteModal';
 import styles from './css/SignUp.module.css';
 import availabilitiesStyles from './css/SignUpAvailabilities.module.css';
-import moment from 'moment-timezone';
 
 const initialAvailabilities: Availabilites = {
     monday: AvailabilitesOptions.VERY_AVAILABLE,
@@ -25,7 +25,7 @@ const initialAvailabilities: Availabilites = {
 
 const SignUpAvailabilitiesPage: React.FC = () => {
     const { t } = useTranslation();
-    const { configuration } = useConfig();
+    const { configuration, deviceAdapter } = useConfig();
     const history = useHistory();
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const profileSignUp = useStoreState((state) => state.profileSignUp);
@@ -67,69 +67,71 @@ const SignUpAvailabilitiesPage: React.FC = () => {
     }
 
     return (
-        <WebLayoutCentered
-            backgroundIconColor={configuration.primaryBackgroundImageColor}
-            headerColor={configuration.primaryColor}
-            headerPercentage={84}
-            headerTitle={t('global.create_account_title')}
-        >
-            <div className={styles.body}>
-                <div>
-                    <h1 className="title">{t('signup_availabilities_page.title')}</h1>
-                    <span className="subtitle">{t('signup_availabilities_page.subtitle')}</span>
+        <>
+            <WebLayoutCentered
+                backgroundIconColor={configuration.primaryBackgroundImageColor}
+                headerColor={configuration.primaryColor}
+                headerPercentage={84}
+                headerTitle={t('global.create_account_title')}
+            >
+                <div className={`${styles.body} ${deviceAdapter.isNativePlatform() ? styles['native-platform'] : ''}`}>
+                    <div>
+                        <h1 className="title">{t('signup_availabilities_page.title')}</h1>
+                        <span className="subtitle">{t('signup_availabilities_page.subtitle')}</span>
 
-                    <div className={availabilitiesStyles.separator} />
+                        <div className={availabilitiesStyles.separator} />
 
-                    <Dropdown<string>
-                        onChange={setTimezone}
-                        options={moment.tz.names().map(
-                            (timezone: string): DropDownItem<string> => ({
-                                label: timezone,
-                                value: timezone,
-                            })
-                        )}
-                        placeholder={university.timezone}
-                        title={t('signup_availabilities_page.timezone')}
-                    />
+                        <Dropdown<string>
+                            onChange={setTimezone}
+                            options={moment.tz.names().map(
+                                (timezone: string): DropDownItem<string> => ({
+                                    label: timezone,
+                                    value: timezone,
+                                })
+                            )}
+                            placeholder={university.timezone}
+                            title={t('signup_availabilities_page.timezone')}
+                        />
 
-                    <div className={availabilitiesStyles.separator} />
+                        <div className={availabilitiesStyles.separator} />
 
-                    {Object.keys(availabilities).map((availabilityKey) => {
-                        return (
-                            <AvailabilityLine
-                                key={availabilityKey}
-                                availability={availabilities[availabilityKey as keyof Availabilites]}
-                                day={availabilityKey}
-                                onPress={(item) => setOpenAvailabilityModal(item)}
-                            />
-                        );
-                    })}
+                        {Object.keys(availabilities).map((availabilityKey) => {
+                            return (
+                                <AvailabilityLine
+                                    key={availabilityKey}
+                                    availability={availabilities[availabilityKey as keyof Availabilites]}
+                                    day={availabilityKey}
+                                    onPress={(item) => setOpenAvailabilityModal(item)}
+                                />
+                            );
+                        })}
+                    </div>
+                    <div className={`large-margin-top extra-large-margin-bottom`}>
+                        <button
+                            aria-label={t('signup_availabilities_page.validate_button') as string}
+                            className="primary-button"
+                            onClick={() => setOpenFinalModal(true)}
+                        >
+                            {t('signup_availabilities_page.validate_button')}
+                        </button>
+                    </div>
                 </div>
-                <div className={`large-margin-top extra-large-margin-bottom`}>
-                    <button
-                        aria-label={t('signup_availabilities_page.validate_button') as string}
-                        className="primary-button"
-                        onClick={() => setOpenFinalModal(true)}
-                    >
-                        {t('signup_availabilities_page.validate_button')}
-                    </button>
-                </div>
-                <AvailabilityModal
-                    currentAvailabilitiesOptions={openAvailabilityModal?.occurence}
-                    onClose={() => setOpenAvailabilityModal(undefined)}
-                    onValidate={updateAvailabilities}
-                    isVisible={!!openAvailabilityModal}
-                    title={openAvailabilityModal ? t(`days.${openAvailabilityModal?.id}`) : ''}
-                />
-                <AvailabilityNoteModal
-                    isVisible={openFinalModal}
-                    onClose={() => setOpenFinalModal(false)}
-                    onValidate={continueSignUp}
-                    defaultIsPrivate={profileEdit?.availabilityNotePrivate}
-                    defaultNote={profileEdit?.availabilityNote}
-                />
-            </div>
-        </WebLayoutCentered>
+            </WebLayoutCentered>
+            <AvailabilityModal
+                currentAvailabilitiesOptions={openAvailabilityModal?.occurence}
+                onClose={() => setOpenAvailabilityModal(undefined)}
+                onValidate={updateAvailabilities}
+                isVisible={!!openAvailabilityModal}
+                title={openAvailabilityModal ? t(`days.${openAvailabilityModal?.id}`) : ''}
+            />
+            <AvailabilityNoteModal
+                isVisible={openFinalModal}
+                onClose={() => setOpenFinalModal(false)}
+                onValidate={continueSignUp}
+                defaultIsPrivate={profileEdit?.availabilityNotePrivate}
+                defaultNote={profileEdit?.availabilityNote}
+            />
+        </>
     );
 };
 

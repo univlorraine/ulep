@@ -50,7 +50,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
                     <img alt={t('global.go_back') as string} src={LeftChevronSvg} />
                 </IonButton>
             </IonHeader>
-            <div className={style['main-content']}>
+            <div
+                className={`${style['main-content']} ${deviceAdapter.isNativePlatform() ? style['native-platform'] : ''}`}
+            >
                 <CircleAvatar backgroundImage={AvatarPng} height={36} viewClassName={style['icons']} width={36} />
                 <div className={`ion-text-center`}>
                     <h1 className={style.title}>{t('login_page.title')}</h1>

@@ -10,7 +10,7 @@ import styles from './css/SignUp.module.css';
 
 const PairingSelectCEFRPage: React.FC = () => {
     const { t } = useTranslation();
-    const { configuration } = useConfig();
+    const { configuration, deviceAdapter } = useConfig();
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const history = useHistory();
     const [selectedLevel, setSelectedLevel] = useState<CEFR>();
@@ -29,7 +29,7 @@ const PairingSelectCEFRPage: React.FC = () => {
             headerPercentage={60}
             headerTitle={t('global.pairing_title')}
         >
-            <div className={styles.body}>
+            <div className={`${styles.body} ${deviceAdapter.isNativePlatform() ? styles['native-platform'] : ''}`}>
                 <div>
                     <h1 className="title">{t('pairing_select_level_page.title')}</h1>
                     <p className="subtitle">{t('pairing_select_level_page.subtitle')}</p>
