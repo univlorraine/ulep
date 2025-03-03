@@ -4,7 +4,7 @@ dependencies:
   version: 13.2.3
 - name: minio
   repository: https://charts.bitnami.com/bitnami
-  version: 14.7.11
+  version: 15.0.5
 - name: mongodb
   repository: https://charts.bitnami.com/bitnami
   version: 15.6.2
@@ -17,5 +17,5 @@ dependencies:
 - name: glitchtip
   repository: https://gitlab.com/api/v4/projects/16325141/packages/helm/stable
   version: 2.5.1
-digest: sha256:82c828b5ddfd7efb832f048e5cc117ff2c967830409099d7ef505a55e60c713e
-generated: "2024-10-25T14:53:32.166371124+02:00"
+digest: sha256:85252e08e8dc905d27bf1852bab6816339799cc0106852fa9442eacc014a7d7a
+generated: "2025-03-03T15:09:36.400838838+01:00"
