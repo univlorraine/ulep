@@ -43,7 +43,7 @@ const InstanceShow = () => {
     const { mutate: generateEditos, isLoading: isGeneratingEditos } = useGenerateEditos();
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-    const handleToggle: SwitchProps['onChange'] = async (event) => {
+    const handleMaintenanceToggle: SwitchProps['onChange'] = async (event) => {
         try {
             const isOn = event.target.checked;
             await update('instance', { data: { isInMaintenance: isOn } });
@@ -113,7 +113,7 @@ const InstanceShow = () => {
                                 <Switch
                                     color="secondary"
                                     defaultChecked={record?.isInMaintenance}
-                                    onChange={handleToggle}
+                                    onChange={handleMaintenanceToggle}
                                     value={record?.isInMaintenance}
                                 />
                             )}

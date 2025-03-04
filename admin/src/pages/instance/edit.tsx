@@ -22,7 +22,6 @@ const EditInstance = () => {
         formData.append('secondaryColor', payload.secondaryColor);
         formData.append('secondaryBackgroundColor', payload.secondaryBackgroundColor);
         formData.append('secondaryDarkColor', payload.secondaryDarkColor);
-        formData.append('isInMaintenance', payload.isInMaintenance.toString());
         formData.append('daysBeforeClosureNotification', payload.daysBeforeClosureNotification.toString());
         payload.editoMandatoryTranslations.forEach((translation, index) => {
             formData.append(`editoMandatoryTranslations[${index}]`, translation);
