@@ -28,7 +28,7 @@ export const CreateOrUpdateCustomLogEntryContent = ({
     const [entryDescription, setEntryDescription] = useState<string>('');
 
     const allRequiredFieldsAreFilled = () => {
-        return entryDate && entryTitle && entryDescription;
+        return entryDate && entryTitle;
     };
 
     const handleSubmit = () => {
@@ -43,7 +43,9 @@ export const CreateOrUpdateCustomLogEntryContent = ({
         if (logEntryToUpdate) {
             setEntryDate(formatInTimeZone(logEntryToUpdate.createdAt, userTz, "yyyy-MM-dd'T'HH:mm"));
             setEntryTitle(logEntryToUpdate.title);
-            setEntryDescription(logEntryToUpdate.content);
+            if (logEntryToUpdate.content) {
+                setEntryDescription(logEntryToUpdate.content);
+            }
         }
     }, [logEntryToUpdate]);
 
@@ -77,6 +79,8 @@ export const CreateOrUpdateCustomLogEntryContent = ({
                     value={entryDescription}
                     onChange={(description: string) => setEntryDescription(description)}
                     type="text-area"
+                    maxLength={1000}
+                    showLimit
                 />
                 <div className={`${styles['button-container']} large-margin-top`}>
                     <IonButton fill="clear" className="tertiary-button no-padding" onClick={onBackPressed}>

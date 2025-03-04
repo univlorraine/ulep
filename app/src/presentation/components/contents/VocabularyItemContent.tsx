@@ -50,7 +50,6 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
     const [showToast] = useIonToast();
     const { getVocabularyListPdf } = useConfig();
     const [showDeleteVocabularyListModal, setShowDeleteVocabularyListModal] = useState(false);
-    const [search, setSearch] = useState('');
     const isVocabularyListShared = vocabularyList.editorsIds.length > 1;
     const isVocabularyListMine = vocabularyList.isMine(profile);
 
@@ -81,19 +80,11 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
     const isSharable = isVocabularyListMine && associatedTandem && associatedTandem.partner;
 
     let vocabulariesWithoutPronunciation;
-    if (
-        [profile.nativeLanguage, ...profile.masteredLanguages].filter(
-            (language) => language.code === vocabularyList.targetLanguage.code
-        ).length > 0
-    ) {
+    if (vocabularyList.creatorId === profile.id) {
         vocabulariesWithoutPronunciation = vocabularyPairs.filter((vocabulary) => {
             return !vocabulary.pronunciationTranslationUrl;
         });
-    } else if (
-        [profile.nativeLanguage, ...profile.masteredLanguages].filter(
-            (language) => language.code === vocabularyList.translationLanguage.code
-        ).length > 0
-    ) {
+    } else {
         vocabulariesWithoutPronunciation = vocabularyPairs.filter((vocabulary) => {
             return !vocabulary.pronunciationWordUrl;
         });
@@ -222,6 +213,7 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
                                     key={vocabulary.id}
                                     onVocabularyClick={onAddVocabulary}
                                     vocabulary={vocabulary}
+                                    isEditable={vocabularyList.isEditable}
                                 />
                             ))}
                             <div className={styles.pronunciationTitle}>

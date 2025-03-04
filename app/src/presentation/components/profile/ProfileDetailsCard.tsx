@@ -1,10 +1,11 @@
-import { IonButton, IonIcon, IonImg, IonText } from '@ionic/react';
+import { IonButton, IonIcon, IonText } from '@ionic/react';
 import { searchOutline } from 'ionicons/icons';
 import User from '../../../domain/entities/User';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../../utils';
 import Avatar from '../Avatar';
 import Loader from '../Loader';
+import NetworkImage from '../NetworkImage';
 import styles from './ProfileDetailsCard.module.css';
 
 interface ProfileDetailsCardProps {
@@ -55,9 +56,7 @@ const ProfileDetailsCard: React.FC<ProfileDetailsCardProps> = ({
                     {isProfileCard && isLoading && <Loader />}
                     {isProfileCard && !isLoading && <Avatar user={user} className={styles.image} />}
                     {!isProfileCard && (
-                        <div className={`${styles.image} ${styles.logo}`}>
-                            <IonImg src={user.university.logo} />
-                        </div>
+                        <NetworkImage id={user.university.logo || ''} className={`${styles.image} ${styles.logo}`} />
                     )}
                     <div className={styles.details}>
                         <p className={styles.subtitle}>{subtitle}</p>

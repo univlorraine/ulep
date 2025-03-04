@@ -277,6 +277,11 @@ export const isImageFormatValid = (file: File): boolean => {
     return imageRegex.test(file.type);
 };
 
+export const isUrlValid = (url: string): boolean => {
+    const urlRegex = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/;
+    return urlRegex.test(url);
+};
+
 export const normalizeString = (string: string) => {
     return string
         .replace('ꜳ', 'aa')

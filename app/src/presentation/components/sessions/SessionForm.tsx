@@ -70,7 +70,7 @@ const SessionForm: React.FC<SessionFormProps> = ({ onBackPressed, onSubmit, sess
                     <TextInput type="text-area" onChange={setComment} value={comment} />
                 </div>
             </div>
-            <div className={`${styles['button-container']} large-margin-top`}>
+            <div className={styles['button-container']}>
                 <IonButton fill="clear" className="tertiary-button no-padding" onClick={onBackPressed}>
                     {t('activity.create.cancel_button')}
                 </IonButton>

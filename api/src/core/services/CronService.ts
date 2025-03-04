@@ -18,7 +18,7 @@ import {
   UniversityRepository,
   UNIVERSITY_REPOSITORY,
 } from 'src/core/ports/university.repository';
-import { Profile, Session, Tandem } from '../models';
+import { Profile, Session } from '../models';
 import {
   SessionRepository,
   SESSION_REPOSITORY,
@@ -202,12 +202,17 @@ export class CronService {
         lastname: profile.user.lastname,
       },
       session: {
-        date: formatInTimeZone(
-          session.startAt,
-          university.timezone,
-          'dd/MM/yyyy',
-        ),
-        hour: formatInTimeZone(session.startAt, university.timezone, 'HH:mm'),
+        date: new Intl.DateTimeFormat(profile.nativeLanguage.code, {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          timeZone: university.timezone,
+        }).format(session.startAt),
+        hour: new Intl.DateTimeFormat(profile.nativeLanguage.code, {
+          hour: '2-digit',
+          minute: '2-digit',
+          timeZone: university.timezone,
+        }).format(session.startAt),
         partnerName: partner.user.firstname,
         comment: session.comment || '',
       },
@@ -221,12 +226,17 @@ export class CronService {
         language: profile.nativeLanguage.code,
       })),
       session: {
-        date: formatInTimeZone(
-          session.startAt,
-          university.timezone,
-          'dd/MM/yyyy',
-        ),
-        hour: formatInTimeZone(session.startAt, university.timezone, 'HH:mm'),
+        date: new Intl.DateTimeFormat(profile.nativeLanguage.code, {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          timeZone: university.timezone,
+        }).format(session.startAt),
+        hour: new Intl.DateTimeFormat(profile.nativeLanguage.code, {
+          hour: '2-digit',
+          minute: '2-digit',
+          timeZone: university.timezone,
+        }).format(session.startAt),
         partnerName: partner.user.firstname,
       },
     });

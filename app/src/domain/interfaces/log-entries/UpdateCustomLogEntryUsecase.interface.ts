@@ -1,11 +1,15 @@
-export interface UpdateCustomLogEntryMetadata {
-    date?: Date;
-    title?: string;
-    content?: string;
+export interface UpdateCustomLogEntryProps {
+    id: string;
+    learningLanguageId: string;
+    metadata: {
+        date?: Date;
+        title?: string;
+        content?: string;
+    };
 }
 
 interface UpdateCustomLogEntryUsecaseInterface {
-    execute(id: string, metadata: UpdateCustomLogEntryMetadata): Promise<void | Error>;
+    execute(props: UpdateCustomLogEntryProps): Promise<void | Error>;
 }
 
 export default UpdateCustomLogEntryUsecaseInterface;

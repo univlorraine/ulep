@@ -1,8 +1,8 @@
 import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
-import openGraphScraper from 'open-graph-scraper';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import { ProficiencyLevel } from 'src/core/models';
 import {
+  Activity,
   ActivityStatus,
   ActivityVocabulary,
 } from 'src/core/models/activity.model';
@@ -17,6 +17,10 @@ import {
   LANGUAGE_REPOSITORY,
 } from 'src/core/ports/language.repository';
 import {
+  MediaObjectRepository,
+  MEDIA_OBJECT_REPOSITORY,
+} from 'src/core/ports/media-object.repository';
+import {
   StorageInterface,
   STORAGE_INTERFACE,
 } from 'src/core/ports/storage.interface';
@@ -25,6 +29,7 @@ import {
   DeleteAudioVocabularyActivityUsecase,
   UploadAudioVocabularyActivityUsecase,
 } from 'src/core/usecases/media';
+const ogs = require('open-graph-scraper');
 
 export class UpdateActivityCommand {
   id: string;
@@ -51,6 +56,8 @@ export class UpdateActivityUsecase {
     private readonly activityRepository: ActivityRepository,
     @Inject(STORAGE_INTERFACE)
     private readonly storage: StorageInterface,
+    @Inject(MEDIA_OBJECT_REPOSITORY)
+    private readonly mediaObjectRepository: MediaObjectRepository,
     @Inject(UploadAudioVocabularyActivityUsecase)
     private readonly uploadAudioVocabularyActivityUsecase: UploadAudioVocabularyActivityUsecase,
     @Inject(DeleteAudioVocabularyActivityUsecase)
@@ -82,8 +89,9 @@ export class UpdateActivityUsecase {
       ? command.ressourceUrl.match(URL_REGEX)?.[0]
       : undefined;
     if (url) {
+      await this.handleDeleteRessourceFile(activity);
       try {
-        const result = await openGraphScraper({ url });
+        const result = await ogs({ url });
         if (result.result.success) {
           openGraphResult = result.result;
         }
@@ -275,5 +283,16 @@ export class UpdateActivityUsecase {
       vocabularyId,
     });
     await this.activityRepository.deleteVocabulary(vocabularyId);
+  }
+
+  private async handleDeleteRessourceFile(activity: Activity) {
+    console.log('activity', activity);
+    if (activity.ressourceFile) {
+      await this.mediaObjectRepository.remove(activity.ressourceFile.id);
+      await this.storage.delete(
+        activity.ressourceFile.bucket,
+        activity.ressourceFile.name,
+      );
+    }
   }
 }

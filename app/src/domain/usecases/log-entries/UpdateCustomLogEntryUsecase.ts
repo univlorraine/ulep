@@ -2,22 +2,23 @@ import { HttpResponse } from '../../../adapter/BaseHttpAdapter';
 import { HttpAdapterInterface } from '../../../adapter/DomainHttpAdapter';
 import { ActivityCommand } from '../../../command/ActivityCommand';
 import UpdateCustomLogEntryUsecaseInterface, {
-    UpdateCustomLogEntryMetadata,
+    UpdateCustomLogEntryProps,
 } from '../../interfaces/log-entries/UpdateCustomLogEntryUsecase.interface';
 
 class UpdateCustomLogEntryUsecase implements UpdateCustomLogEntryUsecaseInterface {
     constructor(private readonly domainHttpAdapter: HttpAdapterInterface) {}
 
-    async execute(id: string, metadata: UpdateCustomLogEntryMetadata): Promise<void | Error> {
+    async execute(props: UpdateCustomLogEntryProps): Promise<void | Error> {
         try {
             const payload = {
-                date: metadata.date,
-                title: metadata.title,
-                content: metadata.content,
+                date: props.metadata.date,
+                title: props.metadata.title,
+                content: props.metadata.content,
+                learningLanguageId: props.learningLanguageId,
             };
 
             const httpResponse: HttpResponse<ActivityCommand> = await this.domainHttpAdapter.put(
-                `/log-entries/${id}`,
+                `/log-entries/${props.id}`,
                 payload
             );
 

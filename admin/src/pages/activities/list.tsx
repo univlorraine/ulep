@@ -81,12 +81,10 @@ const Filters = (props: any) => {
             />
             <SelectInput
                 key="status"
-                choices={Object.values(ActivityStatus)
-                    .filter((status) => status !== ActivityStatus.DRAFT)
-                    .map((status) => ({
-                        id: status,
-                        name: translate(`activities.status.${status.toLowerCase()}`),
-                    }))}
+                choices={Object.values(ActivityStatus).map((status) => ({
+                    id: status,
+                    name: translate(`activities.status.${status.toLowerCase()}`),
+                }))}
                 label={translate('activities.list.status')}
                 source="status"
                 alwaysOn

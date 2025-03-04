@@ -13,7 +13,7 @@ import styles from './css/SignUp.module.css';
 
 const SignUpLanguagesPage: React.FC = () => {
     const { t } = useTranslation();
-    const { configuration, getAllLanguages } = useConfig();
+    const { configuration, getAllLanguages, deviceAdapter } = useConfig();
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const [showToast] = useIonToast();
     const history = useHistory();
@@ -93,7 +93,7 @@ const SignUpLanguagesPage: React.FC = () => {
             headerTitle={t('global.create_account_title')}
             hasGoBackButton={false}
         >
-            <div className={styles.body}>
+            <div className={`${styles.body} ${deviceAdapter.isNativePlatform() ? styles['native-platform'] : ''}`}>
                 <h1 className={styles.title}>{t('signup_languages_page.title')}</h1>
                 <RequiredFieldsMention />
 

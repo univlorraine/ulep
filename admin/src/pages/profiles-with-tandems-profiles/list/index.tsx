@@ -22,12 +22,12 @@ import {
 } from 'react-admin';
 import ColoredChips, { ChipsColors } from '../../../components/ColoredChips';
 import PageTitle from '../../../components/PageTitle';
+import UserStatusChips from '../../../components/UserStatusChips';
 import { Role } from '../../../entities/Administrator';
 import { LearningLanguageWithTandemWithPartnerProfile, LearningType } from '../../../entities/LearningLanguage';
 import { getProfileDisplayName } from '../../../entities/Profile';
 import { ProfileWithTandemsProfiles } from '../../../entities/ProfileWithTandemsProfiles';
 import { TandemStatus, WithoutTandem } from '../../../entities/Tandem';
-import { UserStatus } from '../../../entities/User';
 import codeLanguageToFlag from '../../../utils/codeLanguageToFlag';
 import isAgeCriterionMet from '../../../utils/isAgeCriterionMet';
 import hasTandemManagementPermission from '../hasTandemManagementPermission';
@@ -246,15 +246,12 @@ const LearningLanguageList = () => {
                                                             }
                                                         </Typography>
                                                     </Box>
-                                                    {learningLanguage.tandem.partnerLearningLanguage.profile.user
-                                                        .status === UserStatus.BANNED ? (
-                                                        <ColoredChips color="error" label="Banned" />
-                                                    ) : null}
-
-                                                    {learningLanguage.tandem.partnerLearningLanguage.profile.user
-                                                        .status === UserStatus.REPORTED ? (
-                                                        <ColoredChips color="warning" label="Reported" />
-                                                    ) : null}
+                                                    <UserStatusChips
+                                                        status={
+                                                            learningLanguage.tandem.partnerLearningLanguage.profile.user
+                                                                .status
+                                                        }
+                                                    />
                                                 </Box>
                                             </Box>
                                         );

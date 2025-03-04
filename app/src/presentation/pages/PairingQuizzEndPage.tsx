@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Redirect, useHistory, useLocation } from 'react-router';
+import { Redirect, useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreState } from '../../store/storeTypes';
 import QuizzValidatedContent from '../components/contents/QuizzValidatedContent';
@@ -7,7 +7,7 @@ import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import styles from './css/SignUp.module.css';
 
 const PairingQuizzEndPage: React.FC = () => {
-    const { configuration } = useConfig();
+    const { configuration, deviceAdapter } = useConfig();
     const history = useHistory();
     const profileSignUp = useStoreState((state) => state.profileSignUp);
     const { t } = useTranslation();
@@ -27,7 +27,7 @@ const PairingQuizzEndPage: React.FC = () => {
             headerPercentage={72}
             headerTitle={t('global.pairing_title')}
         >
-            <div className={styles.body}>
+            <div className={`${styles.body} ${deviceAdapter.isNativePlatform() ? styles['native-platform'] : ''}`}>
                 <QuizzValidatedContent
                     language={profileSignUp.learningLanguage}
                     onNextStep={nextStep}

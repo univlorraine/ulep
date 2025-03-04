@@ -248,7 +248,7 @@ export const ActivityContent: React.FC<ActivityContentProps> = ({
                         {activity.ressourceUrl && !activity.ressourceFileUrl && (
                             <div className={styles['ressource-line']}>
                                 <div className={styles['ressource-container']}>
-                                    {activity.ressourceOgUrl && (
+                                    {activity.ressourceOgUrl && activity.ressourceOgUrl.ogImage?.[0]?.url && (
                                         <img
                                             className={styles['ressource-image']}
                                             src={activity.ressourceOgUrl.ogImage?.[0].url}

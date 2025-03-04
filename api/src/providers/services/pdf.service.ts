@@ -164,9 +164,13 @@ export class PdfService implements PdfServicePort {
       .stroke('#00000020');
     doc.moveDown(2);
 
+    const creator = activity.creator
+      ? `${activity.creator.user.firstname} ${activity.creator.user.lastname}`
+      : activity.university.name;
+
     doc.font('Helvetica').text(
       this.translate('activity.show.creator', 'Created by', {
-        name: `${activity.creator.user.firstname} ${activity.creator.user.lastname}`,
+        name: creator,
       }),
       50,
       doc.y,

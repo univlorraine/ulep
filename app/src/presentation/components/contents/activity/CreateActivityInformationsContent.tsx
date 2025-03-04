@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useConfig } from '../../../../context/ConfigurationContext';
 import { Activity, ActivityTheme, ActivityThemeCategory } from '../../../../domain/entities/Activity';
 import Language from '../../../../domain/entities/Language';
-import { codeLanguageToFlag, isImageFormatValid } from '../../../utils';
+import { codeLanguageToFlag, isImageFormatValid, isUrlValid } from '../../../utils';
 import Dropdown, { DropDownItem } from '../../DropDown';
 import RequiredField from '../../forms/RequiredField';
 import TextInput from '../../TextInput';
@@ -154,7 +154,14 @@ export const CreateActivityInformationsContent = ({
             return;
         }
 
-        onSubmit({
+        if (ressourceUrl && !isUrlValid(ressourceUrl)) {
+            return showToast({
+                message: t('errors.invalidUrl'),
+                duration: 3000,
+            });
+        }
+
+        return onSubmit({
             title,
             description,
             language: language!,

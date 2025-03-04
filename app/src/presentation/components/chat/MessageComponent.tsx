@@ -224,6 +224,7 @@ const MessageComponent: React.FC<MessageProps> = ({
                     {renderMessageContent(message)}
                     {!isCurrentUserMessage && !hideContextMenu && (
                         <IonButton
+                            aria-label={t('chat.open_message_menu') as string}
                             fill="clear"
                             className={styles.rightMessageMenu}
                             onClick={onOpenActionsPopover}
@@ -235,6 +236,7 @@ const MessageComponent: React.FC<MessageProps> = ({
                 </div>
                 {!isInReply && message.numberOfReplies > 0 && (
                     <IonButton
+                        aria-label={t('chat.open_replies') as string}
                         fill="clear"
                         className={`${styles.reply} ${isCurrentUserMessage ? styles.rightReply : styles.leftReply} ${
                             message.likes > 0 ? styles.replyWithLike : styles.replyWithoutLike
@@ -260,7 +262,16 @@ const MessageComponent: React.FC<MessageProps> = ({
                 className={styles.fullHeightPopover}
             >
                 {isCommunity && (
-                    <IonButton fill="clear" className={styles.contextButton} onClick={manageLikeOnMessage}>
+                    <IonButton
+                        aria-label={
+                            message.didLike
+                                ? (t('chat.unlikeMessageButton') as string)
+                                : (t('chat.likeMessageButton') as string)
+                        }
+                        fill="clear"
+                        className={styles.contextButton}
+                        onClick={manageLikeOnMessage}
+                    >
                         <IonIcon icon={thumbsUpOutline} className={styles.contextButtonIcon} />
                         <IonText className={styles.contextButtonText}>
                             {message.didLike ? t('chat.unlikeMessageButton') : t('chat.likeMessageButton')}
@@ -268,12 +279,22 @@ const MessageComponent: React.FC<MessageProps> = ({
                     </IonButton>
                 )}
                 {isCommunity && !isInReply && (
-                    <IonButton fill="clear" className={styles.contextButton} onClick={replyToMessage}>
+                    <IonButton
+                        aria-label={t('chat.replyMessageButton') as string}
+                        fill="clear"
+                        className={styles.contextButton}
+                        onClick={replyToMessage}
+                    >
                         <IonIcon icon={arrowUndoOutline} className={styles.contextButtonIcon} />
                         <IonText className={styles.contextButtonText}>{t('chat.replyMessageButton')}</IonText>
                     </IonButton>
                 )}
-                <IonButton fill="clear" className={styles.contextButton} onClick={reportMessage}>
+                <IonButton
+                    aria-label={t('chat.reportMessageButton') as string}
+                    fill="clear"
+                    className={styles.contextButton}
+                    onClick={reportMessage}
+                >
                     <IonIcon icon={alertCircleOutline} className={styles.contextButtonIcon} />
                     <IonText className={styles.contextButtonText}>{t('chat.reportMessageButton')}</IonText>
                 </IonButton>

@@ -1,19 +1,19 @@
 import { useIonToast } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
+import { useConfig } from '../../context/ConfigurationContext';
 import Language from '../../domain/entities/Language';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
-import useGetLearnableLanguages from '../hooks/useGetLearnableLanguages';
 import LearnableLanguagesContent from '../components/contents/LearnableLanguagesContent';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
+import useGetLearnableLanguages from '../hooks/useGetLearnableLanguages';
 import styles from './css/SignUp.module.css';
-import { useConfig } from '../../context/ConfigurationContext';
 
 const PairingLanguagesPage: React.FC = () => {
     const { t } = useTranslation();
     const [showToast] = useIonToast();
     const history = useHistory();
-    const { configuration } = useConfig();
+    const { configuration, deviceAdapter } = useConfig();
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const profile = useStoreState((state) => state.profile);
     const university = profile?.user.university;
@@ -50,7 +50,7 @@ const PairingLanguagesPage: React.FC = () => {
             headerPercentage={12}
             headerTitle={t('global.pairing_title')}
         >
-            <div className={styles.body}>
+            <div className={`${styles.body} ${deviceAdapter.isNativePlatform() ? styles['native-platform'] : ''}`}>
                 <LearnableLanguagesContent
                     abortStep={navigateToHome}
                     isLoading={isLoading}

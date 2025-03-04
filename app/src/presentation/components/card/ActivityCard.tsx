@@ -36,12 +36,17 @@ const ActivityCard: React.FC<ActivityCardProps> = ({ activity, onClick, isHybrid
             <div className={styles.content}>
                 <p className={styles.title}>{activity.title}</p>
                 <span className={styles.subtitle}>
-                    {activity.description.split('\n').map((line, index) => (
-                        <Fragment key={index}>
-                            {line}
-                            <br />
-                        </Fragment>
-                    ))}
+                    {activity.description
+                        .slice(0, 250)
+                        .split('\n')
+                        .map((line, index, array) => (
+                            <Fragment key={index}>
+                                {index === array.length - 1
+                                    ? `${line}${activity.description.length >= 250 ? '...' : ''}`
+                                    : line}
+                                <br />
+                            </Fragment>
+                        ))}
                 </span>
             </div>
             <div className={styles.information}>

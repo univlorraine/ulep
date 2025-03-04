@@ -1,9 +1,9 @@
 import { Type } from 'class-transformer';
-import { IsDate, IsNotEmpty, IsString } from 'class-validator';
+import { IsDate, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class UpdateCustomLogEntryRequest {
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   content: string;
 
   @IsString()

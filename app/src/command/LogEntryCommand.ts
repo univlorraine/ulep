@@ -1,8 +1,8 @@
 import {
     LogEntriesByDates,
+    LogEntry,
     LogEntryAddVocabulary,
     LogEntryCommunityChat,
-    LogEntryConnection,
     LogEntryCustomEntry,
     LogEntryEditActivity,
     LogEntryPlayedGame,
@@ -49,11 +49,11 @@ export const logEntryByDateCommandToDomain = (command: LogEntryByDateCommand) =>
     return new LogEntriesByDates({
         date: new Date(command.date),
         count: command.count,
-        entries: command.entries.map(logEntryCommandToDomain),
+        entries: command.entries.map(logEntryCommandToDomain).filter((entry): entry is LogEntry => entry !== undefined),
     });
 };
 
-export const logEntryCommandToDomain = (command: LogEntryCommand) => {
+export const logEntryCommandToDomain = (command: LogEntryCommand): LogEntry | undefined => {
     switch (command.type) {
         case LogEntryType.ADD_VOCABULARY:
             return new LogEntryAddVocabulary({
@@ -81,13 +81,6 @@ export const logEntryCommandToDomain = (command: LogEntryCommand) => {
                 type: command.type,
                 ownerId: command.ownerId,
                 conversationId: command.metadata.conversationId!,
-            });
-        case LogEntryType.CONNECTION:
-            return new LogEntryConnection({
-                id: command.id,
-                createdAt: command.createdAt,
-                type: command.type,
-                ownerId: command.ownerId,
             });
         case LogEntryType.CUSTOM_ENTRY:
             return new LogEntryCustomEntry({
@@ -154,7 +147,7 @@ export const logEntryCommandToDomain = (command: LogEntryCommand) => {
                 tandemLastname: command.metadata.tandemLastname!,
             });
         default:
-            throw new Error(`Unknown log entry type: ${command.type}`);
+            return undefined;
     }
 };
 
