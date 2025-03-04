@@ -96,6 +96,14 @@ const theme: RaThemeOptions = {
                 },
             },
         },
+        MuiPopover: {
+            styleOverrides: {
+                paper: {
+                    border: '1px solid #000',
+                    backgroundColor: '#EEEEEE',
+                },
+            },
+        },
         MuiOutlinedInput: {
             styleOverrides: {
                 root: {
