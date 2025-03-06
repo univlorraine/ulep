@@ -42,11 +42,26 @@ const ReportMedia = () => {
 
     switch (mediaType) {
         case MessageType.Audio:
-            return <AudioLine audioFile={filePath} />;
+            return (
+                <>
+                    <TextField component="pre" source="content" />
+                    <AudioLine audioFile={filePath} />
+                </>
+            );
         case MessageType.Image:
-            return <ImageField source="metadata.filePath" sx={{ '& img': { minWidth: 200, minHeight: 200 } }} />;
+            return (
+                <>
+                    <TextField component="pre" source="content" />
+                    <ImageField source="metadata.filePath" sx={{ '& img': { minWidth: 200, minHeight: 200 } }} />
+                </>
+            );
         case MessageType.File:
-            return <Button onClick={onDownload} startIcon={<FileDownloadIcon />} />;
+            return (
+                <>
+                    <TextField component="pre" source="content" />
+                    <Button onClick={onDownload} startIcon={<FileDownloadIcon />} />
+                </>
+            );
         default:
             return <TextField component="pre" source="content" />;
     }
