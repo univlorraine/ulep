@@ -22,7 +22,6 @@ import { RichTextInput } from 'ra-input-rich-text';
 import React, { useEffect, useState } from 'react';
 import {
     Button,
-    Form,
     Loading,
     TabbedForm,
     useGetIdentity,
@@ -39,6 +38,15 @@ import ImageUploader from '../ImageUploader';
 import useGetLanguages from './useGetLanguages';
 
 const ALL_OPTION = 'all';
+
+const getFirstAvailableUniversity = (availableUniversities: University[], concernedUniversities: University[]) =>
+    availableUniversities.filter(
+        (availableUniversity) =>
+            !concernedUniversities.some((concernedUniversity) => availableUniversity.id === concernedUniversity.id)
+    )[0];
+
+const getFirstAvailableLanguage = (availableLanguages: string[], diffusionLanguages: string[]) =>
+    availableLanguages.filter((availableLanguage) => !diffusionLanguages.includes(availableLanguage))[0];
 
 interface EventFormProps {
     handleSubmit: (payload: EventFormPayload) => void;
@@ -107,7 +115,7 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
     const [translations, setTranslations] = useState<EventTranslation[]>(record?.translations || []);
 
     // Concerned universities
-    const forcedConcernedUniversities: University[] = [];
+    const [forcedConcernedUniversities, setForcedConcernedUniversities] = useState<University[]>([]);
     const [concernedUniversities, setConcernedUniversities] = useState<University[]>(
         record?.concernedUniversities ?? []
     );
@@ -152,17 +160,31 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
 
         const authorIsFromCentralUniversity = centralUniversity.id === authorUniversity.id;
 
+        let concernedUniversitiesValues = record?.concernedUniversities ?? forcedConcernedUniversities;
+        if (!authorIsFromCentralUniversity) {
+            setForcedConcernedUniversities([authorUniversity]);
+            concernedUniversitiesValues = record?.concernedUniversities ?? [authorUniversity];
+        }
+        setConcernedUniversities(concernedUniversitiesValues);
+
         const possibleConcernedUniversities = authorIsFromCentralUniversity ? universities : [centralUniversity];
         setAvailableConcernedUniversities(possibleConcernedUniversities);
+        const proposedConcernedUniversity = getFirstAvailableUniversity(
+            possibleConcernedUniversities,
+            concernedUniversities
+        );
+        setNewConcernedUniversity(proposedConcernedUniversity || undefined);
+    }, [universities, centralUniversity, authorUniversity, record]);
 
+    useEffect(() => {
         const possibleDiffusionLanguages = universityLanguages;
         setAvailableDiffusionLanguages(possibleDiffusionLanguages);
 
-        if (!authorIsFromCentralUniversity) {
-            forcedConcernedUniversities.push(authorUniversity);
+        if (!newDiffusionLanguage) {
+            const proposedDiffusionLanguage = getFirstAvailableLanguage(possibleDiffusionLanguages, diffusionLanguages);
+            setNewDiffusionLanguage(proposedDiffusionLanguage || undefined);
         }
-        setConcernedUniversities(record?.concernedUniversities ?? forcedConcernedUniversities);
-    }, [universities, universityLanguages, record, centralUniversity, authorUniversity]);
+    }, [universityLanguages, newDiffusionLanguage]);
 
     const onCreatePressed = () => {
         if (startDate && endDate && startDate > endDate) {
@@ -200,7 +222,7 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
     const locale = i18nProvider.getLocale();
 
     return (
-        <Form>
+        <div>
             <LocalizationProvider adapterLocale={locale} dateAdapter={AdapterDayjs}>
                 <Box
                     sx={{
@@ -233,7 +255,7 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                         </Box>
 
                         <Box sx={{ display: 'flex', flexDirection: 'row', gap: '50px' }}>
-                            <Box>
+                            <Box sx={{ flex: 1 }}>
                                 <Typography variant="subtitle1">
                                     {translate(`events.form.concerned_universities.label`)} *
                                 </Typography>
@@ -246,14 +268,22 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                                                         (forcedUniversity) => university.id === forcedUniversity.id
                                                     ) && (
                                                         <Button
-                                                            onClick={() =>
-                                                                setConcernedUniversities(
+                                                            onClick={() => {
+                                                                const newConcernedUniversities =
                                                                     concernedUniversities.filter(
                                                                         (concernedUniversity) =>
                                                                             university.id !== concernedUniversity.id
-                                                                    )
-                                                                )
-                                                            }
+                                                                    );
+                                                                setConcernedUniversities(newConcernedUniversities);
+                                                                const proposedConcernedUniversity =
+                                                                    getFirstAvailableUniversity(
+                                                                        availableConcernedUniversities,
+                                                                        newConcernedUniversities
+                                                                    );
+                                                                setNewConcernedUniversity(
+                                                                    proposedConcernedUniversity || undefined
+                                                                );
+                                                            }}
                                                             sx={{ '& span': { margin: 0 } }}
                                                         >
                                                             <DeleteIcon />
@@ -265,64 +295,72 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                                         ))}
                                     </TableBody>
                                 </Table>
-                                <Box
-                                    sx={{
-                                        display: 'flex',
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                        gap: '10px',
-                                        marginTop: '5px',
-                                    }}
-                                >
-                                    <Select
-                                        onChange={(e: any) => setNewConcernedUniversity(e.target.value as University)}
-                                        sx={{ width: '300px' }}
-                                        value={newConcernedUniversity}
+                                {newConcernedUniversity && (
+                                    <Box
+                                        sx={{
+                                            display: 'flex',
+                                            flexDirection: 'row',
+                                            alignItems: 'center',
+                                            gap: '10px',
+                                            marginTop: '5px',
+                                        }}
                                     >
-                                        {centralUniversity?.id === authorUniversity?.id && (
-                                            <MenuItem value={ALL_OPTION}>
-                                                {translate('events.form.concerned_universities.all')}
-                                            </MenuItem>
-                                        )}
-                                        {availableConcernedUniversities
-                                            ?.filter(
-                                                (university) =>
-                                                    !concernedUniversities.some(
-                                                        (concernedUniversity) =>
-                                                            university.id === concernedUniversity.id
-                                                    )
-                                            )
-                                            .map((university: any) => (
-                                                <MenuItem key={university.id} value={university}>
-                                                    {university.name}
+                                        <Select
+                                            onChange={(e: any) =>
+                                                setNewConcernedUniversity(e.target.value as University)
+                                            }
+                                            sx={{ width: '300px' }}
+                                            value={newConcernedUniversity}
+                                        >
+                                            {centralUniversity?.id === authorUniversity?.id && (
+                                                <MenuItem value={ALL_OPTION}>
+                                                    {translate('events.form.concerned_universities.all')}
                                                 </MenuItem>
-                                            ))}
-                                    </Select>
-                                    <Button
-                                        color="primary"
-                                        disabled={!newConcernedUniversity}
-                                        onClick={() => {
-                                            if (newConcernedUniversity) {
-                                                if (newConcernedUniversity === ALL_OPTION) {
-                                                    setConcernedUniversities(availableConcernedUniversities);
-                                                } else {
-                                                    setConcernedUniversities([
+                                            )}
+                                            {availableConcernedUniversities
+                                                ?.filter(
+                                                    (university) =>
+                                                        !concernedUniversities.some(
+                                                            (concernedUniversity) =>
+                                                                university.id === concernedUniversity.id
+                                                        )
+                                                )
+                                                .map((university: any) => (
+                                                    <MenuItem key={university.id} value={university}>
+                                                        {university.name}
+                                                    </MenuItem>
+                                                ))}
+                                        </Select>
+                                        <Button
+                                            color="primary"
+                                            disabled={!newConcernedUniversity}
+                                            onClick={() => {
+                                                if (newConcernedUniversity) {
+                                                    let newConcernedUniversities = [
                                                         ...concernedUniversities,
                                                         newConcernedUniversity as University,
-                                                    ]);
+                                                    ];
+                                                    if (newConcernedUniversity === ALL_OPTION) {
+                                                        newConcernedUniversities = availableConcernedUniversities;
+                                                    }
+                                                    setConcernedUniversities(newConcernedUniversities);
+                                                    const proposedConcernedUniversity = getFirstAvailableUniversity(
+                                                        availableConcernedUniversities,
+                                                        newConcernedUniversities
+                                                    );
+                                                    setNewConcernedUniversity(proposedConcernedUniversity || undefined);
                                                 }
-                                                setNewConcernedUniversity(undefined);
-                                            }
-                                        }}
-                                        sx={{ padding: '8px 30px' }}
-                                        variant="contained"
-                                    >
-                                        <span> {translate('events.form.concerned_universities.button')}</span>
-                                    </Button>
-                                </Box>
+                                            }}
+                                            sx={{ padding: '8px 30px' }}
+                                            variant="contained"
+                                        >
+                                            <span> {translate('events.form.concerned_universities.button')}</span>
+                                        </Button>
+                                    </Box>
+                                )}
                             </Box>
 
-                            <Box>
+                            <Box sx={{ flex: 1 }}>
                                 <Typography variant="subtitle1">
                                     {translate(`events.form.diffusion_languages.label`)} *
                                 </Typography>
@@ -332,14 +370,19 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                                             <TableRow key={language}>
                                                 <TableCell sx={{ width: 10, padding: '0' }}>
                                                     <Button
-                                                        onClick={() =>
-                                                            setDiffusionLanguages(
-                                                                diffusionLanguages.filter(
-                                                                    (diffusionLanguage) =>
-                                                                        language !== diffusionLanguage
-                                                                )
-                                                            )
-                                                        }
+                                                        onClick={() => {
+                                                            const newDiffusionLanguages = diffusionLanguages.filter(
+                                                                (diffusionLanguage) => language !== diffusionLanguage
+                                                            );
+                                                            setDiffusionLanguages(newDiffusionLanguages);
+                                                            const proposedDiffusionLanguage = getFirstAvailableLanguage(
+                                                                availableDiffusionLanguages,
+                                                                newDiffusionLanguages
+                                                            );
+                                                            setNewDiffusionLanguage(
+                                                                proposedDiffusionLanguage || undefined
+                                                            );
+                                                        }}
                                                     >
                                                         <DeleteIcon />
                                                     </Button>
@@ -349,55 +392,61 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                                         ))}
                                     </TableBody>
                                 </Table>
-                                <Box
-                                    sx={{
-                                        display: 'flex',
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                        gap: '10px',
-                                        marginTop: '5px',
-                                    }}
-                                >
-                                    <Select
-                                        onChange={(e: any) => setNewDiffusionLanguage(e.target.value as string)}
-                                        sx={{ width: '300px' }}
-                                        value={newDiffusionLanguage}
+                                {newDiffusionLanguage && (
+                                    <Box
+                                        sx={{
+                                            display: 'flex',
+                                            flexDirection: 'row',
+                                            alignItems: 'center',
+                                            gap: '10px',
+                                            marginTop: '5px',
+                                        }}
                                     >
-                                        {centralUniversity?.id === authorUniversity?.id && (
-                                            <MenuItem value={ALL_OPTION}>
-                                                {translate('events.form.diffusion_languages.all')}
-                                            </MenuItem>
-                                        )}
-                                        {availableDiffusionLanguages
-                                            ?.filter((language) => !diffusionLanguages.includes(language))
-                                            .map((language) => (
-                                                <MenuItem key={language} value={language}>
-                                                    {language}
+                                        <Select
+                                            onChange={(e: any) => setNewDiffusionLanguage(e.target.value as string)}
+                                            sx={{ width: '300px' }}
+                                            value={newDiffusionLanguage}
+                                        >
+                                            {centralUniversity?.id === authorUniversity?.id && (
+                                                <MenuItem value={ALL_OPTION}>
+                                                    {translate('events.form.diffusion_languages.all')}
                                                 </MenuItem>
-                                            ))}
-                                    </Select>
-                                    <Button
-                                        color="primary"
-                                        disabled={!newDiffusionLanguage}
-                                        onClick={() => {
-                                            if (newDiffusionLanguage) {
-                                                if (newDiffusionLanguage === ALL_OPTION) {
-                                                    setDiffusionLanguages(availableDiffusionLanguages);
-                                                } else {
-                                                    setDiffusionLanguages([
+                                            )}
+                                            {availableDiffusionLanguages
+                                                ?.filter((language) => !diffusionLanguages.includes(language))
+                                                .map((language) => (
+                                                    <MenuItem key={language} value={language}>
+                                                        {language}
+                                                    </MenuItem>
+                                                ))}
+                                        </Select>
+                                        <Button
+                                            color="primary"
+                                            disabled={!newDiffusionLanguage}
+                                            onClick={() => {
+                                                if (newDiffusionLanguage) {
+                                                    let newDiffusionLanguages = [
                                                         ...diffusionLanguages,
                                                         newDiffusionLanguage,
-                                                    ]);
+                                                    ];
+                                                    if (newDiffusionLanguage === ALL_OPTION) {
+                                                        newDiffusionLanguages = availableDiffusionLanguages;
+                                                    }
+                                                    setDiffusionLanguages(newDiffusionLanguages);
+                                                    const proposedDiffusionLanguage = getFirstAvailableLanguage(
+                                                        availableDiffusionLanguages,
+                                                        newDiffusionLanguages
+                                                    );
+                                                    setNewDiffusionLanguage(proposedDiffusionLanguage || undefined);
                                                 }
-                                                setNewDiffusionLanguage(undefined);
-                                            }
-                                        }}
-                                        sx={{ padding: '8px 30px' }}
-                                        variant="contained"
-                                    >
-                                        <span> {translate('events.form.diffusion_languages.button')}</span>
-                                    </Button>
-                                </Box>
+                                            }}
+                                            sx={{ padding: '8px 30px' }}
+                                            variant="contained"
+                                        >
+                                            <span> {translate('events.form.diffusion_languages.button')}</span>
+                                        </Button>
+                                    </Box>
+                                )}
                             </Box>
                         </Box>
 
@@ -698,7 +747,7 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                     </Button>
                 </Box>
             </LocalizationProvider>
-        </Form>
+        </div>
     );
 };
 
