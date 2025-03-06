@@ -36,14 +36,8 @@ export class AddUserToCommunityChatUsecase {
     const learningLanguage = await this.assertLearningLanguageExists(
       command.learningLanguageId,
     );
-    const masteredLanguages = profile.masteredLanguages.map(
-      (language) => language.code,
-    );
 
-    const allProfilesLanguagesCodes = [
-      ...masteredLanguages,
-      profile.nativeLanguage.code,
-    ];
+    const allProfilesLanguagesCodes = [profile.nativeLanguage.code];
 
     for (const languageCode of allProfilesLanguagesCodes) {
       const communityChat = await this.assertCommunityChatExists(

@@ -9,6 +9,8 @@ interface AudioLineProps {
     icon?: string;
 }
 
+// TODO: Remove this todo later
+
 const AudioLine: React.FC<AudioLineProps> = ({ audioFile, hideProgressBar = false, small = false, icon }) => {
     const [isPlaying, setIsPlaying] = useState(false);
     const [progress, setProgress] = useState(0);
