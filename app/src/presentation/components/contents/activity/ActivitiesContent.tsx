@@ -24,6 +24,12 @@ interface ActivitiesContentProps {
     isModal?: boolean;
     languageFilter: Language[];
     setLanguageFilter: (languageFilter: Language[]) => void;
+    proficiencyFilter: CEFR[];
+    setProficiencyFilter: (proficiencyFilter: CEFR[]) => void;
+    activityThemeFilter: ActivityTheme[];
+    setActivityThemeFilter: (activityThemeFilter: ActivityTheme[]) => void;
+    shouldTakeAllMineFilter: boolean;
+    setShouldTakeAllMineFilter: (shouldTakeAllMineFilter: boolean) => void;
 }
 
 export const ActivitiesContent: React.FC<ActivitiesContentProps> = ({
@@ -35,14 +41,17 @@ export const ActivitiesContent: React.FC<ActivitiesContentProps> = ({
     isModal,
     languageFilter,
     setLanguageFilter,
+    proficiencyFilter,
+    setProficiencyFilter,
+    activityThemeFilter,
+    setActivityThemeFilter,
+    shouldTakeAllMineFilter,
+    setShouldTakeAllMineFilter,
 }) => {
     const { t } = useTranslation();
     const { width } = useWindowDimensions();
     const isHybrid = width < HYBRID_MAX_WIDTH;
     const [searchTitle, setSearchTitle] = useState<string>('');
-    const [proficiencyFilter, setProficiencyFilter] = useState<CEFR[]>([]);
-    const [activityThemeFilter, setActivityThemeFilter] = useState<ActivityTheme[]>([]);
-    const [shouldTakeAllMineFilter, setShouldTakeAllMineFilter] = useState<boolean>(false);
     const [showFiltersModal, setShowFiltersModal] = useState<boolean>(false);
 
     const contentRef = useRef<HTMLDivElement>(null);

@@ -129,7 +129,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
                                 {languages.map((language) => (
                                     <Checkbox
                                         key={language.id}
-                                        isSelected={selectedLanguages.includes(language)}
+                                        isSelected={selectedLanguages.some((l) => l.id === language.id)}
                                         onPressed={() => {
                                             addOrRemoveLanguage(language);
                                         }}
