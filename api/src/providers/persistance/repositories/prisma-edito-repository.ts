@@ -73,6 +73,7 @@ export class PrismaEditoRepository implements EditoRepository {
     const edito = await this.prisma.editos.update({
       where: { id: command.id },
       data: {
+        updated_at: new Date(),
         ContentTextContent: {
           update: {
             text: command.content,
