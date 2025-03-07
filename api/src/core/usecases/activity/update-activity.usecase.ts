@@ -286,7 +286,6 @@ export class UpdateActivityUsecase {
   }
 
   private async handleDeleteRessourceFile(activity: Activity) {
-    console.log('activity', activity);
     if (activity.ressourceFile) {
       await this.mediaObjectRepository.remove(activity.ressourceFile.id);
       await this.storage.delete(

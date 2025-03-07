@@ -37,8 +37,6 @@ export class UploadImageActivityUsecase {
 
     const previousImage = await this.tryToFindTheImageOfActivity(activity);
 
-    console.log('previousImage', previousImage);
-
     if (previousImage) {
       await this.deletePreviousActivityImage(previousImage);
     }
