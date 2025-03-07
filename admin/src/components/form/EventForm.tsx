@@ -223,6 +223,7 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                                         />
                                     }
                                     label={translate(`events.status.${EventStatus.READY}`)}
+                                    sx={{ width: 'fit-content' }}
                                 />
                             </FormGroup>
                         </Box>

@@ -187,6 +187,7 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                                         />
                                     }
                                     label={translate(`news.status.${NewsStatus.READY}`)}
+                                    sx={{ width: 'fit-content' }}
                                 />
                             </FormGroup>
                         </Box>
