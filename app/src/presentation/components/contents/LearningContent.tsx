@@ -128,18 +128,19 @@ const LearningContent: React.FC<LearningContentProps> = ({
                                         currentColor={currentTandemColor}
                                     />
                                 )}
-                            {currentTandem && currentTandem.learningLanguage.certificateOption && (
-                                <>
-                                    <LearningJournalCard
-                                        tandem={currentTandem}
-                                        onOpenEdito={() => openUniversityInfos(profile.user.university.id)}
-                                    />
-                                    <LearningGoalCard
-                                        profile={profile}
-                                        customLearningGoals={currentTandem.learningLanguage?.customLearningGoals}
-                                        onShowAllGoalsPressed={() => onShowAllGoalsPressed()}
-                                    />
-                                </>
+                            {currentTandem && (
+                                <LearningJournalCard
+                                    tandem={currentTandem}
+                                    onOpenEdito={() => openUniversityInfos(profile.user.university.id)}
+                                    currentColor={currentTandemColor}
+                                />
+                            )}
+                            {currentTandem && (
+                                <LearningGoalCard
+                                    profile={profile}
+                                    customLearningGoals={currentTandem.learningLanguage?.customLearningGoals}
+                                    onShowAllGoalsPressed={() => onShowAllGoalsPressed()}
+                                />
                             )}
                             <RessourcesCard
                                 onLearningBookPressed={onLearningBookContentPressed}

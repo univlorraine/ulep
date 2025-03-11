@@ -1,5 +1,4 @@
 .container {
-    background-color: var(--secondary-color);
     border-radius: 5px;
     display: flex;
     flex-direction: column;
