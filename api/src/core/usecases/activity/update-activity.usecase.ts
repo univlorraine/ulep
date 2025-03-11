@@ -45,7 +45,8 @@ export class UpdateActivityCommand {
   creditImage?: string;
 }
 
-const URL_REGEX = /(https?:\/\/[^\s]+)/g;
+const URL_REGEX =
+  /^(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
 
 @Injectable()
 export class UpdateActivityUsecase {
@@ -85,9 +86,19 @@ export class UpdateActivityUsecase {
     }
 
     let openGraphResult: any;
-    const url = command.ressourceUrl
-      ? command.ressourceUrl.match(URL_REGEX)?.[0]
-      : undefined;
+    console.log('ressourceUrl', command.ressourceUrl);
+    const urlWithProtocol =
+      command.ressourceUrl &&
+      (command.ressourceUrl.startsWith('http')
+        ? command.ressourceUrl
+        : `https://${command.ressourceUrl}`);
+
+    const url =
+      urlWithProtocol && URL_REGEX.test(urlWithProtocol)
+        ? urlWithProtocol
+        : undefined;
+
+    console.log('url', url);
     if (url) {
       await this.handleDeleteRessourceFile(activity);
       try {
@@ -110,11 +121,9 @@ export class UpdateActivityUsecase {
       languageCode: command.languageCode,
       ressourceUrl: command.ressourceUrl || activity.ressourceUrl,
       creditImage: command.creditImage || activity.creditImage,
-      metadata: openGraphResult
-        ? {
-            openGraph: openGraphResult,
-          }
-        : activity.metadata,
+      metadata: {
+        openGraph: openGraphResult,
+      },
     });
 
     const learningLanguage = activity.creator?.findLearningLanguageByCode(
