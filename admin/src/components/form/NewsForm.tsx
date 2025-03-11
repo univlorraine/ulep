@@ -22,7 +22,6 @@ import { RichTextInput } from 'ra-input-rich-text';
 import React, { useEffect, useState } from 'react';
 import {
     Button,
-    Form,
     Loading,
     TabbedForm,
     useGetIdentity,
@@ -39,6 +38,12 @@ import ImageUploader from '../ImageUploader';
 import useGetUniversitiesLanguages from './useGetUniversitiesLanguages';
 
 const ALL_OPTION = 'all';
+
+const getFirstAvailableUniversity = (availableUniversities: University[], concernedUniversities: University[]) =>
+    availableUniversities.filter(
+        (availableUniversity) =>
+            !concernedUniversities.some((concernedUniversity) => availableUniversity.id === concernedUniversity.id)
+    )[0];
 
 interface NewsFormProps {
     handleSubmit: (payload: NewsFormPayload) => void;
@@ -80,7 +85,7 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
     const [translations, setTranslations] = useState<NewsTranslation[]>(record?.translations || []);
 
     // Concerned universities
-    const forcedConcernedUniversities: University[] = [];
+    const [forcedConcernedUniversities, setForcedConcernedUniversities] = useState<University[]>([]);
     const [concernedUniversities, setConcernedUniversities] = useState<University[]>(
         record?.concernedUniversities ?? []
     );
@@ -125,14 +130,21 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
 
         const authorIsFromCentralUniversity = centralUniversity.id === authorUniversity.id;
 
+        let concernedUniversitiesValues = record?.concernedUniversities ?? [];
+        if (!authorIsFromCentralUniversity) {
+            setForcedConcernedUniversities([authorUniversity]);
+            concernedUniversitiesValues = record?.concernedUniversities ?? [authorUniversity];
+        }
+        setConcernedUniversities(concernedUniversitiesValues);
+
         const possibleConcernedUniversities = authorIsFromCentralUniversity ? universities : [centralUniversity];
         setAvailableConcernedUniversities(possibleConcernedUniversities);
-
-        if (!authorIsFromCentralUniversity) {
-            forcedConcernedUniversities.push(authorUniversity);
-        }
-        setConcernedUniversities(record?.concernedUniversities ?? forcedConcernedUniversities);
-    }, [universities, universitiesLanguages, record, centralUniversity, authorUniversity]);
+        const proposedConcernedUniversity = getFirstAvailableUniversity(
+            possibleConcernedUniversities,
+            concernedUniversities
+        );
+        setNewConcernedUniversity(proposedConcernedUniversity || undefined);
+    }, [universities, centralUniversity, authorUniversity]);
 
     const onCreatePressed = () => {
         if (startPublicationDate && endPublicationDate && startPublicationDate > endPublicationDate) {
@@ -164,7 +176,7 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
     const locale = i18nProvider.getLocale();
 
     return (
-        <Form>
+        <div>
             <LocalizationProvider adapterLocale={locale} dateAdapter={AdapterDayjs}>
                 <Box
                     sx={{
@@ -210,14 +222,22 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                                                     (forcedUniversity) => university.id === forcedUniversity.id
                                                 ) && (
                                                     <Button
-                                                        onClick={() =>
-                                                            setConcernedUniversities(
+                                                        onClick={() => {
+                                                            const newConcernedUniversities =
                                                                 concernedUniversities.filter(
                                                                     (concernedUniversity) =>
                                                                         university.id !== concernedUniversity.id
-                                                                )
-                                                            )
-                                                        }
+                                                                );
+                                                            setConcernedUniversities(newConcernedUniversities);
+                                                            const proposedConcernedUniversity =
+                                                                getFirstAvailableUniversity(
+                                                                    availableConcernedUniversities,
+                                                                    newConcernedUniversities
+                                                                );
+                                                            setNewConcernedUniversity(
+                                                                proposedConcernedUniversity || undefined
+                                                            );
+                                                        }}
                                                         sx={{ '& span': { margin: 0 } }}
                                                     >
                                                         <DeleteIcon />
@@ -229,61 +249,70 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                                     ))}
                                 </TableBody>
                             </Table>
-                            <Box
-                                sx={{
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    gap: '10px',
-                                    marginTop: '5px',
-                                }}
-                            >
-                                <Select
-                                    onChange={(e: any) => setNewConcernedUniversity(e.target.value as University)}
-                                    sx={{ width: '300px' }}
-                                    value={newConcernedUniversity}
+                            {newConcernedUniversity && (
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        gap: '10px',
+                                        marginTop: '5px',
+                                    }}
                                 >
-                                    {centralUniversity?.id === authorUniversity?.id &&
-                                        availableConcernedUniversities.length !== concernedUniversities.length && (
-                                            <MenuItem value={ALL_OPTION}>
-                                                {translate('news.form.concerned_universities.all')}
-                                            </MenuItem>
-                                        )}
-                                    {availableConcernedUniversities
-                                        ?.filter(
-                                            (university) =>
-                                                !concernedUniversities.some(
-                                                    (concernedUniversity) => university.id === concernedUniversity.id
-                                                )
-                                        )
-                                        .map((university: any) => (
-                                            <MenuItem key={university.id} value={university}>
-                                                {university.name}
-                                            </MenuItem>
-                                        ))}
-                                </Select>
-                                <Button
-                                    color="primary"
-                                    disabled={!newConcernedUniversity}
-                                    onClick={() => {
-                                        if (newConcernedUniversity) {
-                                            if (newConcernedUniversity === ALL_OPTION) {
-                                                setConcernedUniversities(availableConcernedUniversities);
-                                            } else {
-                                                setConcernedUniversities([
+                                    <Select
+                                        onChange={(e: any) => {
+                                            setNewConcernedUniversity(e.target.value as University);
+                                        }}
+                                        sx={{ width: '300px' }}
+                                        value={newConcernedUniversity}
+                                    >
+                                        {centralUniversity?.id === authorUniversity?.id &&
+                                            availableConcernedUniversities.length !== concernedUniversities.length && (
+                                                <MenuItem value={ALL_OPTION}>
+                                                    {translate('news.form.concerned_universities.all')}
+                                                </MenuItem>
+                                            )}
+                                        {availableConcernedUniversities
+                                            ?.filter(
+                                                (university) =>
+                                                    !concernedUniversities.some(
+                                                        (concernedUniversity) =>
+                                                            university.id === concernedUniversity.id
+                                                    )
+                                            )
+                                            .map((university: any) => (
+                                                <MenuItem key={university.id} value={university}>
+                                                    {university.name}
+                                                </MenuItem>
+                                            ))}
+                                    </Select>
+                                    <Button
+                                        color="primary"
+                                        disabled={!newConcernedUniversity}
+                                        onClick={() => {
+                                            if (newConcernedUniversity) {
+                                                let newConcernedUniversities = [
                                                     ...concernedUniversities,
                                                     newConcernedUniversity as University,
-                                                ]);
+                                                ];
+                                                if (newConcernedUniversity === ALL_OPTION) {
+                                                    newConcernedUniversities = availableConcernedUniversities;
+                                                }
+                                                setConcernedUniversities(newConcernedUniversities);
+                                                const proposedConcernedUniversity = getFirstAvailableUniversity(
+                                                    availableConcernedUniversities,
+                                                    newConcernedUniversities
+                                                );
+                                                setNewConcernedUniversity(proposedConcernedUniversity || undefined);
                                             }
-                                            setNewConcernedUniversity(undefined);
-                                        }
-                                    }}
-                                    sx={{ padding: '8px 30px' }}
-                                    variant="contained"
-                                >
-                                    <span> {translate('news.form.concerned_universities.button')}</span>
-                                </Button>
-                            </Box>
+                                        }}
+                                        sx={{ padding: '8px 30px' }}
+                                        variant="contained"
+                                    >
+                                        <span> {translate('news.form.concerned_universities.button')}</span>
+                                    </Button>
+                                </Box>
+                            )}
                         </Box>
 
                         <Box display="flex" flexDirection="row" gap="50px">
@@ -515,7 +544,7 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                     </Button>
                 </Box>
             </LocalizationProvider>
-        </Form>
+        </div>
     );
 };
 
