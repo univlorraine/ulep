@@ -1,7 +1,7 @@
 import { IonContent } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { Redirect, useHistory, useLocation } from 'react-router';
-import { Activity } from '../../../domain/entities/Activity';
+import { Activity, ActivityTheme } from '../../../domain/entities/Activity';
 import Language from '../../../domain/entities/Language';
 import { useStoreState } from '../../../store/storeTypes';
 import ActivitiesContent from '../../components/contents/activity/ActivitiesContent';
@@ -23,6 +23,9 @@ const ActivitiesPage = () => {
     const [activityIdToDisplay, setActivityIdToDisplay] = useState<string | undefined>();
     const [activityToUpdate, setActivityToUpdate] = useState<Activity | undefined>();
     const [languageFilter, setLanguageFilter] = useState<Language[]>(learningLanguage ? [learningLanguage] : []);
+    const [proficiencyFilter, setProficiencyFilter] = useState<CEFR[]>([]);
+    const [activityThemeFilter, setActivityThemeFilter] = useState<ActivityTheme[]>([]);
+    const [shouldTakeAllMineFilter, setShouldTakeAllMineFilter] = useState<boolean>(false);
     const { activityThemes } = useGetActivityThemes();
 
     const handleNavigateAfterCreate = (activityId: string) => {
@@ -74,6 +77,12 @@ const ActivitiesPage = () => {
                         profile={profile}
                         languageFilter={languageFilter}
                         setLanguageFilter={setLanguageFilter}
+                        proficiencyFilter={proficiencyFilter}
+                        setProficiencyFilter={setProficiencyFilter}
+                        activityThemeFilter={activityThemeFilter}
+                        setActivityThemeFilter={setActivityThemeFilter}
+                        shouldTakeAllMineFilter={shouldTakeAllMineFilter}
+                        setShouldTakeAllMineFilter={setShouldTakeAllMineFilter}
                     />
                 )}
                 {displayCreateActivity && (

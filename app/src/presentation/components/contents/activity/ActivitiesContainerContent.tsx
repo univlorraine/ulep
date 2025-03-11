@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Activity } from '../../../../domain/entities/Activity';
+import { Activity, ActivityTheme } from '../../../../domain/entities/Activity';
 import Language from '../../../../domain/entities/Language';
 import Profile from '../../../../domain/entities/Profile';
 import useGetActivityThemes from '../../../hooks/useGetActivityThemes';
@@ -28,6 +28,10 @@ const ActivitiesContainerContent: React.FC<ActivitiesContainerContentProps> = ({
     const [languageFilter, setLanguageFilter] = useState<Language[]>(
         currentLearningLanguage ? [currentLearningLanguage] : []
     );
+
+    const [proficiencyFilter, setProficiencyFilter] = useState<CEFR[]>([]);
+    const [activityThemeFilter, setActivityThemeFilter] = useState<ActivityTheme[]>([]);
+    const [shouldTakeAllMineFilter, setShouldTakeAllMineFilter] = useState<boolean>(false);
     const { activityThemes } = useGetActivityThemes();
 
     const handleNavigateAfterCreate = (activityId: string) => {
@@ -65,6 +69,12 @@ const ActivitiesContainerContent: React.FC<ActivitiesContainerContentProps> = ({
                     isModal={isModal}
                     languageFilter={languageFilter}
                     setLanguageFilter={setLanguageFilter}
+                    proficiencyFilter={proficiencyFilter}
+                    setProficiencyFilter={setProficiencyFilter}
+                    activityThemeFilter={activityThemeFilter}
+                    setActivityThemeFilter={setActivityThemeFilter}
+                    shouldTakeAllMineFilter={shouldTakeAllMineFilter}
+                    setShouldTakeAllMineFilter={setShouldTakeAllMineFilter}
                 />
             )}
             {displayCreateActivity && (
