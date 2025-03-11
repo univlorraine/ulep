@@ -1,8 +1,9 @@
+import { IonModal } from '@ionic/react';
 import News from '../../../domain/entities/News';
 import Profile from '../../../domain/entities/Profile';
 import NewsContent from '../contents/news/NewsContent';
 import NewsListContent from '../contents/news/NewsListContent';
-import Modal from './Modal';
+import styles from './ActivitiesContentModal.module.css';
 
 export const DisplayNewsContentModalEnum = {
     show: 'show',
@@ -30,16 +31,16 @@ const NewsContentModal: React.FC<NewsContentModalProps> = ({
     profile,
 }) => {
     return (
-        <Modal isVisible={isVisible} onClose={onClose} position="flex-end" hideWhiteBackground>
-            <>
+        <IonModal animated isOpen={isVisible} onDidDismiss={onClose} className={styles.modal}>
+            <div className={styles.content}>
                 {displayNewsContentModal?.type === DisplayNewsContentModalEnum.list && (
                     <NewsListContent profile={profile} onBackPressed={onClose} onNewsPressed={onNewsPressed} />
                 )}
                 {displayNewsContentModal?.type === DisplayNewsContentModalEnum.show && displayNewsContentModal.news && (
                     <NewsContent news={displayNewsContentModal.news} onBackPressed={onClose} profile={profile} />
                 )}
-            </>
-        </Modal>
+            </div>
+        </IonModal>
     );
 };
 

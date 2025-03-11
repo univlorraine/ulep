@@ -45,7 +45,7 @@ export const NewsListContent: React.FC<NewListContentProps> = ({ profile, onBack
     };
 
     return (
-        <div className="subcontent-container content-wrapper" style={{ paddingTop: 0 }} ref={contentRef}>
+        <div ref={contentRef}>
             <HeaderSubContent title={t('news.list.title')} onBackPressed={onBackPressed} />
             <SearchAndFilter
                 allFilters={newsFilter.language?.map((lang) => ({
