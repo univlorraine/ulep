@@ -1,19 +1,26 @@
 import { useEffect, useState } from 'react';
 import { useGetList } from 'react-admin';
+import Language from '../../entities/Language';
 import University from '../../entities/University';
 
 const useGetUniversitiesLanguages = () => {
-    const { data: universitiesData } = useGetList<University>('universities');
-    const [universitiesLanguages, setUniversitiesLanguages] = useState<string[]>([]);
+    const { data: universitiesData } = useGetList<University>('universities', {
+        sort: { field: 'name', order: 'ASC' },
+    });
+    const [universitiesLanguages, setUniversitiesLanguages] = useState<Language[]>([]);
 
     useEffect(() => {
         if (universitiesData) {
-            const languages = new Set<string>(['en']);
+            const languages: Language[] = [];
             universitiesData.forEach((university: University) => {
-                languages.add(university.nativeLanguage.code);
+                if (!languages.some((lang) => lang.code === university.nativeLanguage.code)) {
+                    languages.push(university.nativeLanguage);
+                }
                 if (university.specificLanguagesAvailable) {
                     university.specificLanguagesAvailable.forEach((specificLanguage) => {
-                        languages.add(specificLanguage.code);
+                        if (!languages.some((lang) => lang.code === specificLanguage.code)) {
+                            languages.push(specificLanguage);
+                        }
                     });
                 }
             });
@@ -21,7 +28,7 @@ const useGetUniversitiesLanguages = () => {
         }
     }, [universitiesData]);
 
-    return universitiesLanguages;
+    return { universitiesLanguages, universitiesData };
 };
 
 export default useGetUniversitiesLanguages;

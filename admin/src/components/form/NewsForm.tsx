@@ -20,16 +20,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import daysjs from 'dayjs';
 import { RichTextInput } from 'ra-input-rich-text';
 import React, { useEffect, useState } from 'react';
-import {
-    Button,
-    Loading,
-    TabbedForm,
-    useGetIdentity,
-    useGetList,
-    useNotify,
-    useRecordContext,
-    useTranslate,
-} from 'react-admin';
+import { Button, Loading, TabbedForm, useGetIdentity, useNotify, useRecordContext, useTranslate } from 'react-admin';
 import { News, NewsFormPayload, NewsStatus, NewsTranslation } from '../../entities/News';
 import University from '../../entities/University';
 import customDataProvider from '../../providers/customDataProvider';
@@ -53,10 +44,7 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
     const dataProvider = customDataProvider;
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
     const translate = useTranslate();
-    const universitiesLanguages = useGetUniversitiesLanguages();
-    const { data: universities, isLoading: isLoadingUniversities } = useGetList('universities', {
-        sort: { field: 'name', order: 'ASC' },
-    });
+    const { universitiesLanguages, universitiesData } = useGetUniversitiesLanguages();
     const notify = useNotify();
 
     const record: News = useRecordContext();
@@ -111,22 +99,22 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
     useEffect(() => {
         const filteredAvailableLanguages = universitiesLanguages.filter(
             (language) =>
-                !translations?.some((translation) => translation?.languageCode === language) &&
-                language !== defaultLanguage
+                !translations?.some((translation) => translation?.languageCode === language.code) &&
+                language.code !== defaultLanguage
         );
-        setAvailableLanguages(filteredAvailableLanguages);
+        setAvailableLanguages(filteredAvailableLanguages.map((language) => language.code));
     }, [universitiesLanguages, translations, defaultLanguage]);
 
     useEffect(() => {
-        if (!universities) return;
+        if (!universitiesData) return;
 
-        setCentralUniversity(universities.filter((university: University) => university.parent === null)[0]);
+        setCentralUniversity(universitiesData.filter((university: University) => university.parent === null)[0]);
         const authorUniversityId = record?.university?.id ?? identity?.universityId;
-        setAuthorUniversity(universities.find((university: University) => university.id === authorUniversityId));
-    }, [universities, record, identity]);
+        setAuthorUniversity(universitiesData.find((university: University) => university.id === authorUniversityId));
+    }, [universitiesData, record, identity]);
 
     useEffect(() => {
-        if (!universities || !centralUniversity || !authorUniversity) return;
+        if (!universitiesData || !centralUniversity || !authorUniversity) return;
 
         const authorIsFromCentralUniversity = centralUniversity.id === authorUniversity.id;
 
@@ -169,7 +157,7 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
         }
     };
 
-    if (isLoadingIdentity || !identity || isLoadingUniversities) {
+    if (isLoadingIdentity || !identity || !universitiesData) {
         return <Loading />;
     }
 

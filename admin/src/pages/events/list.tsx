@@ -13,7 +13,6 @@ import {
     DateField,
     TextInput,
     SelectInput,
-    useGetList,
     Button,
     BulkDeleteButton,
 } from 'react-admin';
@@ -44,8 +43,7 @@ const EventsList = () => {
     const translate = useTranslate();
     const navigate = useNavigate();
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
-    const { data: universities } = useGetList('universities');
-    const universitiesLanguages = useGetUniversitiesLanguages();
+    const { universitiesLanguages, universitiesData } = useGetUniversitiesLanguages();
 
     if (isLoadingIdentity || !identity) {
         return <Loading />;
@@ -56,8 +54,8 @@ const EventsList = () => {
         <SelectInput
             key="defaultLanguageFilter"
             choices={universitiesLanguages.map((language) => ({
-                id: language,
-                name: codeLanguageToFlag(language),
+                id: language.code,
+                name: codeLanguageToFlag(language.code),
             }))}
             label={translate('events.list.filters.language')}
             source="languageCode"
@@ -85,11 +83,11 @@ const EventsList = () => {
         />,
     ];
 
-    if (identity?.isCentralUniversity && universities) {
+    if (identity?.isCentralUniversity && universitiesData) {
         filters.unshift(
             <SelectInput
                 key="groupFilter"
-                choices={universities}
+                choices={universitiesData}
                 label={translate('events.list.filters.university')}
                 source="authorUniversityId"
                 alwaysOn

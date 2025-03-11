@@ -8,7 +8,6 @@ import {
     useGetIdentity,
     Loading,
     SelectInput,
-    useGetList,
     TextInput,
     DateField,
 } from 'react-admin';
@@ -37,16 +36,15 @@ const StatusChips = ({ status }: { status: string }) => {
 const NewsList = () => {
     const translate = useTranslate();
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
-    const { data: universities } = useGetList('universities');
-    const universitiesLanguages = useGetUniversitiesLanguages();
+    const { universitiesLanguages, universitiesData } = useGetUniversitiesLanguages();
 
     const filters = [
         <TextInput key="titleFilter" label={translate('news.list.filters.title')} source="title" alwaysOn />,
         <SelectInput
             key="defaultLanguageFilter"
             choices={universitiesLanguages.map((language) => ({
-                id: language,
-                name: codeLanguageToFlag(language),
+                id: language.code,
+                name: codeLanguageToFlag(language.code),
             }))}
             label={translate('news.list.filters.language')}
             source="languageCode"
@@ -64,11 +62,11 @@ const NewsList = () => {
         />,
     ];
 
-    if (identity?.isCentralUniversity && universities) {
+    if (identity?.isCentralUniversity && universitiesData) {
         filters.unshift(
             <SelectInput
                 key="groupFilter"
-                choices={universities}
+                choices={universitiesData}
                 label={translate('news.list.filters.university')}
                 source="universityId"
                 alwaysOn

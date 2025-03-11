@@ -26,6 +26,9 @@ const EditInstance = () => {
         payload.editoMandatoryTranslations.forEach((translation, index) => {
             formData.append(`editoMandatoryTranslations[${index}]`, translation);
         });
+        payload.editoCentralUniversityTranslations.forEach((translation, index) => {
+            formData.append(`editoCentralUniversityTranslations[${index}]`, translation.code);
+        });
 
         if (payload.defaultCertificateFile) {
             formData.append('defaultCertificateFile', payload.defaultCertificateFile);

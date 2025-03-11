@@ -108,6 +108,23 @@ const InstanceShow = () => {
                             source="editoMandatoryTranslations"
                         />
                         <FunctionField
+                            label={translate('instance.edito.centralUniversityTranslations')}
+                            render={(record: Instance) => {
+                                if (record.editoCentralUniversityTranslations.length > 0) {
+                                    return (
+                                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px' }}>
+                                            {record.editoCentralUniversityTranslations.map((translation) => (
+                                                <span key={translation.code}>{translation.code}</span>
+                                            ))}
+                                        </div>
+                                    );
+                                }
+
+                                return <div>{translate('instance.edito.noCentralUniversityTranslations')}</div>;
+                            }}
+                            source="editoCentralUniversityTranslations"
+                        />
+                        <FunctionField
                             label={translate('instance.maintenance')}
                             render={(record: Instance) => (
                                 <Switch

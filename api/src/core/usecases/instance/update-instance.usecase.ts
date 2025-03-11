@@ -1,9 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
-import {
-  EditoMandatoryTranslations,
-  Instance,
-} from 'src/core/models/Instance.model';
+import { EditoMandatoryTranslations } from 'src/core/models/Instance.model';
 import {
   InstanceRepository,
   INSTANCE_REPOSITORY,
@@ -22,6 +19,7 @@ export class UpdateInstanceCommand {
   secondaryBackgroundColor?: string;
   secondaryDarkColor?: string;
   editoMandatoryTranslations?: EditoMandatoryTranslations[];
+  editoCentralUniversityTranslations?: string[];
 }
 
 @Injectable()
@@ -38,12 +36,10 @@ export class UpdateInstanceUsecase {
       throw new RessourceDoesNotExist();
     }
 
-    const newInstance = new Instance({
-      ...instance,
+    const newInstance = await this.instanceRepository.update({
+      id: instance.id,
       ...command,
     });
-
-    await this.instanceRepository.update(newInstance);
 
     return newInstance;
   }
