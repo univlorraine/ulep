@@ -72,26 +72,65 @@ export class PdfService implements PdfServicePort {
       valign: 'center',
     });
 
+    if (activity.creditImage) {
+      doc.fontSize(8).fillColor('#666666').text(`© ${activity.creditImage}`, {
+        align: 'right',
+        width: pageWidth,
+      });
+    }
+
+    // Marquer la position de début du rectangle jaune
+    const startY = doc.y + imageHeight;
+
+    // Calculer la hauteur du contenu sans l'écrire
+    doc.fontSize(20).font('Helvetica-Bold');
+    const titleHeight = doc.heightOfString(activity.title.replace(/Ɖ/g, ''), {
+      width: pageWidth - 40,
+    });
+
+    doc.fontSize(12).font('Helvetica');
+    const descriptionHeight = doc.heightOfString(
+      activity.description.replace(/Ɖ/g, ''),
+      {
+        width: pageWidth - 40,
+      },
+    );
+
+    const padding = 15;
+    const endY = startY + titleHeight + descriptionHeight + padding * 3;
+
+    // Dessiner d'abord le rectangle jaune
     doc
-      .roundedRect(doc.x, doc.y + imageHeight, pageWidth, 200, 10)
-      .fill('#FDEE66');
+      .save()
+      .roundedRect(doc.x, startY, pageWidth, endY - startY, 10)
+      .fill('#FDEE66')
+      .restore();
 
-    doc.fill('#000');
-
+    // Maintenant écrire le texte par-dessus
     doc
       .fontSize(20)
       .font('Helvetica-Bold')
-      .text(`${activity.title}`, doc.x + 20, doc.y + imageHeight + 20, {
+      .fillColor('#000')
+      .text(activity.title.replace(/Ɖ/g, ''), doc.x + 20, startY + padding, {
         align: 'left',
         width: pageWidth - 40,
       });
+
     doc
-      .font('Helvetica')
       .fontSize(12)
-      .text(`${activity.description}`, {
-        align: 'left',
-        width: pageWidth - 40,
-      });
+      .font('Helvetica')
+      .text(
+        activity.description.replace(/Ɖ/g, ''),
+        doc.x + 20,
+        doc.y + padding,
+        {
+          align: 'left',
+          width: pageWidth - 40,
+        },
+      );
+
+    // Repositionner le curseur après le rectangle
+    doc.y = endY + padding;
     doc.moveDown();
 
     doc.lineWidth(1);
