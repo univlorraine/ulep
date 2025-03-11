@@ -22,8 +22,8 @@ const VocabularyListLine: React.FC<VocabularyListLineProps> = ({
     const isCreatorMe = profile.id === vocabularyList.creatorId;
     const creatorName = isCreatorMe ? t('vocabulary.list.me') : vocabularyList.creatorName;
     const numberOfMissingPronunciation = isCreatorMe
-        ? vocabularyList.missingPronunciationOfWords
-        : vocabularyList.missingPronunciationOfTranslations;
+        ? vocabularyList.missingPronunciationOfTranslations
+        : vocabularyList.missingPronunciationOfWords;
 
     return (
         <IonButton
