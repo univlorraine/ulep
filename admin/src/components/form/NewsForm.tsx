@@ -125,14 +125,14 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
         }
         setConcernedUniversities(concernedUniversitiesValues);
 
-        const possibleConcernedUniversities = authorIsFromCentralUniversity ? universities : [centralUniversity];
+        const possibleConcernedUniversities = authorIsFromCentralUniversity ? universitiesData : [centralUniversity];
         setAvailableConcernedUniversities(possibleConcernedUniversities);
         const proposedConcernedUniversity = getFirstAvailableUniversity(
             possibleConcernedUniversities,
             concernedUniversities
         );
         setNewConcernedUniversity(proposedConcernedUniversity || undefined);
-    }, [universities, centralUniversity, authorUniversity]);
+    }, [universitiesData, centralUniversity, authorUniversity]);
 
     const onCreatePressed = () => {
         if (startPublicationDate && endPublicationDate && startPublicationDate > endPublicationDate) {
