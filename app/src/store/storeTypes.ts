@@ -7,6 +7,7 @@ import LearningLanguage from '../domain/entities/LearningLanguage';
 import MediaObject from '../domain/entities/MediaObject';
 import Profile from '../domain/entities/Profile';
 import ProfileSignUp, { Availabilites, BiographySignUp } from '../domain/entities/ProfileSignUp';
+import Tandem from '../domain/entities/Tandem';
 import University from '../domain/entities/University';
 import User from '../domain/entities/User';
 
@@ -86,6 +87,12 @@ interface UserStorePayload {
     keepProfile?: boolean;
     keepProfileSignUp?: boolean;
 }
+
+interface CurrentLearningWorkspacePayload {
+    learningWorkspace: Tandem;
+    index: number;
+}
+
 interface StoreInterface {
     accessToken: string;
     newsFilter: {
@@ -93,6 +100,8 @@ interface StoreInterface {
     };
     apiUrl: string;
     chatUrl: string;
+    currentLearningWorkspace?: Tandem;
+    currentLearningWorkspaceIndex?: number;
     socketChatUrl: string;
     jitsiUrl: string;
     isRtl?: boolean;
@@ -105,6 +114,7 @@ interface StoreInterface {
     setLanguage: Action<StoreInterface, LanguagePayload>;
     setRtl: Action<StoreInterface, SetRtlPayload>;
     setNewsFilter: Action<StoreInterface, NewsFilterPayload>;
+    setCurrentLearningWorkspace: Action<StoreInterface, CurrentLearningWorkspacePayload>;
     setProfile: Action<StoreInterface, ProfileStorePayload>;
     setTokens: Action<StoreInterface, TokenStorePayload>;
     setUser: Action<StoreInterface, UserStorePayload>;

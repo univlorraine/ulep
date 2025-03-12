@@ -10,6 +10,8 @@ const Store = createStore<TokenStoreTypes>(
                 language: [],
             },
             apiUrl: '',
+            currentLearningWorkspace: undefined,
+            currentLearningWorkspaceIndex: undefined,
             chatUrl: '',
             socketChatUrl: '',
             jitsiUrl: import.meta.env.VITE_JITSI_URL,
@@ -17,6 +19,10 @@ const Store = createStore<TokenStoreTypes>(
             refreshToken: '',
             refreshReports: false,
             isRtl: undefined,
+            setCurrentLearningWorkspace: action((state, payload) => {
+                state.currentLearningWorkspace = payload.learningWorkspace;
+                state.currentLearningWorkspaceIndex = payload.index;
+            }),
             setRtl: action((state, payload) => {
                 state.isRtl = payload.isRtl;
             }),
@@ -58,6 +64,8 @@ const Store = createStore<TokenStoreTypes>(
                 state.apiUrl = '';
                 state.chatUrl = '';
                 state.socketChatUrl = '';
+                state.currentLearningWorkspace = undefined;
+                state.currentLearningWorkspaceIndex = undefined;
             }),
             profile: undefined,
             profileSignUp: new ProfileSignUp(),
