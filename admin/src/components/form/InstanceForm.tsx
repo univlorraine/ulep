@@ -65,7 +65,7 @@ const InstanceForm: React.FC<InstanceFormProps> = ({ handleSubmit, instance }) =
         setAvailableLanguages(newAvailableLanguages);
 
         const newSelectedLanguage = newAvailableLanguages?.filter(
-            (lang) => !instance.editoCentralUniversityTranslations?.includes(lang)
+            (lang) => !instance.editoCentralUniversityTranslations?.some((l) => l.code === lang.code)
         );
         setSelectedLanguage(newSelectedLanguage?.[0]);
     }, [universitiesLanguages]);
@@ -242,8 +242,8 @@ const InstanceForm: React.FC<InstanceFormProps> = ({ handleSubmit, instance }) =
                                                             );
                                                             const newSelectedLanguages = availableLanguages?.filter(
                                                                 (lang) =>
-                                                                    !newCentralUniversityTranslationsValue?.includes(
-                                                                        lang
+                                                                    !newCentralUniversityTranslationsValue?.some(
+                                                                        (l) => l.code === lang.code
                                                                     )
                                                             );
                                                             if (newSelectedLanguages) {
@@ -261,57 +261,67 @@ const InstanceForm: React.FC<InstanceFormProps> = ({ handleSubmit, instance }) =
                                     </TableBody>
                                 </Table>
 
-                                {selectedLanguage && (
-                                    <Box alignItems="center" display="flex" flexDirection="row" gap="10px">
-                                        <Select
-                                            onChange={(e) => {
-                                                const language = availableLanguages.find(
-                                                    (lang) => lang.code === e.target.value
-                                                );
-                                                setSelectedLanguage(language);
-                                            }}
-                                            value={selectedLanguage?.code}
-                                        >
-                                            {availableLanguages
-                                                .filter(
-                                                    (language) => !newCentralUniversityTranslations?.includes(language)
-                                                )
-                                                .map((language) => (
-                                                    <MenuItem key={language.code} value={language.code}>
-                                                        {language.code}
-                                                    </MenuItem>
-                                                ))}
-                                        </Select>
-                                        <Button
-                                            color="primary"
-                                            disabled={!selectedLanguage}
-                                            onClick={() => {
-                                                const language = availableLanguages?.find(
-                                                    (lang) => lang.code === selectedLanguage?.code
-                                                );
-                                                if (language) {
-                                                    const newCentralUniversityTranslationsValue =
-                                                        newCentralUniversityTranslations
-                                                            ? [...newCentralUniversityTranslations, language]
-                                                            : [language];
-                                                    setNewCentralUniversityTranslations(
-                                                        newCentralUniversityTranslationsValue
+                                {selectedLanguage &&
+                                    availableLanguages.filter(
+                                        (language) =>
+                                            !newCentralUniversityTranslations?.some((l) => l.code === language.code)
+                                    ).length > 0 && (
+                                        <Box alignItems="center" display="flex" flexDirection="row" gap="10px">
+                                            <Select
+                                                onChange={(e) => {
+                                                    const language = availableLanguages.find(
+                                                        (lang) => lang.code === e.target.value
                                                     );
-                                                    const newSelectedLanguages = availableLanguages?.filter(
-                                                        (lang) => !newCentralUniversityTranslationsValue?.includes(lang)
+                                                    setSelectedLanguage(language);
+                                                }}
+                                                value={selectedLanguage?.code}
+                                            >
+                                                {availableLanguages
+                                                    .filter(
+                                                        (language) =>
+                                                            !newCentralUniversityTranslations?.some(
+                                                                (l) => l.code === language.code
+                                                            )
+                                                    )
+                                                    .map((language) => (
+                                                        <MenuItem key={language.code} value={language.code}>
+                                                            {language.code}
+                                                        </MenuItem>
+                                                    ))}
+                                            </Select>
+                                            <Button
+                                                color="primary"
+                                                disabled={!selectedLanguage}
+                                                onClick={() => {
+                                                    const language = availableLanguages?.find(
+                                                        (lang) => lang.code === selectedLanguage?.code
                                                     );
-                                                    if (newSelectedLanguages) {
-                                                        setSelectedLanguage(newSelectedLanguages?.[0]);
+                                                    if (language) {
+                                                        const newCentralUniversityTranslationsValue =
+                                                            newCentralUniversityTranslations
+                                                                ? [...newCentralUniversityTranslations, language]
+                                                                : [language];
+                                                        setNewCentralUniversityTranslations(
+                                                            newCentralUniversityTranslationsValue
+                                                        );
+                                                        const newSelectedLanguages = availableLanguages?.filter(
+                                                            (lang) =>
+                                                                !newCentralUniversityTranslationsValue?.some(
+                                                                    (l) => l.code === lang.code
+                                                                )
+                                                        );
+                                                        if (newSelectedLanguages) {
+                                                            setSelectedLanguage(newSelectedLanguages?.[0]);
+                                                        }
                                                     }
-                                                }
-                                            }}
-                                            sx={{ padding: '8px 30px' }}
-                                            variant="contained"
-                                        >
-                                            <span>Ajouter</span>
-                                        </Button>
-                                    </Box>
-                                )}
+                                                }}
+                                                sx={{ padding: '8px 30px' }}
+                                                variant="contained"
+                                            >
+                                                <span>Ajouter</span>
+                                            </Button>
+                                        </Box>
+                                    )}
                             </>
                         )}
                     </Box>
