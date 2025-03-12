@@ -1,8 +1,8 @@
+import { format } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
-import styles from './css/ErrorPage.module.css';
-import { format } from 'date-fns';
 import useLogout from '../hooks/useLogout';
+import styles from './css/ErrorPage.module.css';
 
 interface ServiceClosePageProps {
     openDate: Date;
@@ -11,7 +11,7 @@ interface ServiceClosePageProps {
 
 const ServiceClosePage: React.FC<ServiceClosePageProps> = ({ openDate, closeDate }) => {
     const { t } = useTranslation();
-    const { handleLogout } = useLogout({ forceRedirect: true });
+    const { handleLogout } = useLogout();
 
     return (
         <WebLayoutCentered
