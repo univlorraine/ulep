@@ -79,8 +79,6 @@ const NewsList = () => {
         );
     }
 
-    console.log({ permissions });
-
     if (isLoadingIdentity || !identity) {
         return <Loading />;
     }
