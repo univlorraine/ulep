@@ -1,5 +1,5 @@
 interface GetVocabularyListPdfUsecaseInterface {
-    execute(vocabularyListId: string): Promise<any>;
+    execute(vocabularyListId: string, vocabularyListName: string): Promise<any>;
 }
 
 export default GetVocabularyListPdfUsecaseInterface;

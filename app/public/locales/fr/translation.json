@@ -403,6 +403,9 @@
             "missing_pronunciation": "{{count}} prononciation à enregistrer",
             "number_of_vocabularies": "{{count}} paires",
             "me": "moi",
+            "export": {
+                "success": "La liste de vocabulaire a été exportée avec succès"
+            },
             "add": {
                 "cancel": "Annuler",
                 "create": "Valider",
