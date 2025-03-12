@@ -82,12 +82,12 @@ export const LogEntriesByDateContent: React.FC<LogEntriesByDateContentProps> = (
                     })}
                 </div>
                 {logEntriesResult.isLoading && <Loader />}
-                {!logEntriesResult.isLoading && !isPaginationEnded && (
-                    <IonButton fill="clear" className="secondary-button" onClick={handleOnEndReached}>
-                        {t('learning_book.entry.load_more')}
-                    </IonButton>
-                )}
             </div>
+            {!logEntriesResult.isLoading && !isPaginationEnded && (
+                <IonButton fill="clear" className="secondary-button" onClick={handleOnEndReached}>
+                    {t('learning_book.entry.load_more')}
+                </IonButton>
+            )}
         </div>
     );
 };

@@ -101,7 +101,10 @@ const LearningBookContainerContent: React.FC<LearningBookContainerContentProps> 
     };
 
     const handleExportLogEntries = async () => {
-        const result = await exportLogEntries.execute(learningLanguage.id);
+        const result = await exportLogEntries.execute(
+            learningLanguage.id,
+            `${learningLanguage.profile?.user?.firstname}-${learningLanguage.profile?.user?.lastname}-learning-log-${learningLanguage.code}.csv`
+        );
         if (result instanceof Error) {
             showToast(t(result.message), 3000);
         } else {

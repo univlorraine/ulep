@@ -9,7 +9,7 @@ class ExportLogEntriesUsecase implements ExportLogEntriesUsecaseInterface {
         private readonly fileAdapter: FileAdapterInterface
     ) {}
 
-    async execute(learningLanguageId: string): Promise<void | Error> {
+    async execute(learningLanguageId: string, fileName: string): Promise<void | Error> {
         try {
             const httpResponse: HttpResponse<Blob> = await this.domainHttpAdapter.get(
                 `/log-entries/export/${learningLanguageId}`
@@ -19,7 +19,7 @@ class ExportLogEntriesUsecase implements ExportLogEntriesUsecaseInterface {
                 return new Error('errors.global');
             }
 
-            return await this.fileAdapter.saveBlob(httpResponse.parsedBody, `log_entries.csv`);
+            return await this.fileAdapter.saveBlob(httpResponse.parsedBody, fileName);
         } catch (error: any) {
             console.error(error);
             return new Error('errors.global');
