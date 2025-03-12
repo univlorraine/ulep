@@ -16,11 +16,13 @@ import {
     useGetList,
     Button,
     BulkDeleteButton,
+    usePermissions,
 } from 'react-admin';
 import { useNavigate } from 'react-router-dom';
 import ColoredChips, { ChipsColors } from '../../components/ColoredChips';
 import useGetUniversitiesLanguages from '../../components/form/useGetUniversitiesLanguages';
 import PageTitle from '../../components/PageTitle';
+import { Role } from '../../entities/Administrator';
 import { EventObject, EventStatus, EventTranslation, EventType } from '../../entities/Event';
 import codeLanguageToFlag from '../../utils/codeLanguageToFlag';
 
@@ -43,6 +45,7 @@ const StatusChips = ({ status }: { status: string }) => {
 const EventsList = () => {
     const translate = useTranslate();
     const navigate = useNavigate();
+    const { permissions } = usePermissions();
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
     const { data: universities } = useGetList('universities');
     const universitiesLanguages = useGetUniversitiesLanguages();
@@ -102,7 +105,11 @@ const EventsList = () => {
             <PageTitle>{translate('events.title')}</PageTitle>
             <List
                 exporter={false}
-                filter={!identity?.isCentralUniversity ? { authorUniversityId: identity?.universityId } : undefined}
+                filter={
+                    !identity?.isCentralUniversity || !permissions.checkRole(Role.SUPER_ADMIN)
+                        ? { authorUniversityId: identity?.universityId }
+                        : undefined
+                }
                 filters={filters}
                 disableSyncWithLocation
             >
