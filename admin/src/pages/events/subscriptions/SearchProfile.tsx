@@ -1,5 +1,6 @@
 import CloseIcon from '@mui/icons-material/Close';
-import { Box, Typography } from '@mui/material';
+import { Box, Chip, Typography } from '@mui/material';
+import { useMemo } from 'react';
 import {
     Button,
     Datagrid,
@@ -15,6 +16,7 @@ import {
     useGetIdentity,
     ResourceContextProvider,
     List,
+    useGetList,
 } from 'react-admin';
 import { Profile } from '../../../entities/Profile';
 import { UserRole } from '../../../entities/User';
@@ -55,6 +57,22 @@ const SearchProfile = ({ eventId, setIsModalOpen }: SearchProfileProps) => {
     const translate = useTranslate();
     const { data: identity } = useGetIdentity();
 
+    const { data: languages } = useGetList('languages', {
+        pagination: { page: 1, perPage: 250 },
+        sort: { field: 'name', order: 'ASC' },
+    });
+
+    const sortedLanguages = useMemo(() => {
+        if (!languages) return [];
+
+        return languages.sort((a, b) => {
+            const nameA = translate(`languages_code.${a.code}`);
+            const nameB = translate(`languages_code.${b.code}`);
+
+            return nameA.localeCompare(nameB);
+        });
+    }, [languages]);
+
     const filters = [
         <SelectInput
             key="role"
@@ -83,6 +101,41 @@ const SearchProfile = ({ eventId, setIsModalOpen }: SearchProfileProps) => {
             >
                 <SelectInput label={translate('global.university')} optionText="name" optionValue="id" />
             </ReferenceInput>
+        );
+    }
+
+    if (sortedLanguages) {
+        filters.push(
+            <SelectInput
+                choices={sortedLanguages}
+                label={translate('profiles.native_language')}
+                optionText={(option) => translate(`languages_code.${option.code}`)}
+                optionValue="code"
+                source="nativeLanguageCode"
+                alwaysOn
+            />
+        );
+
+        filters.push(
+            <SelectInput
+                choices={sortedLanguages}
+                label={translate('profiles.mastered_languages')}
+                optionText={(option) => translate(`languages_code.${option.code}`)}
+                optionValue="code"
+                source="masteredLanguageCode"
+                alwaysOn
+            />
+        );
+
+        filters.push(
+            <SelectInput
+                choices={sortedLanguages}
+                label={translate('profiles.learning_languages')}
+                optionText={(option) => translate(`languages_code.${option.code}`)}
+                optionValue="code"
+                source="learningLanguageCode"
+                alwaysOn
+            />
         );
     }
 
@@ -122,6 +175,19 @@ const SearchProfile = ({ eventId, setIsModalOpen }: SearchProfileProps) => {
                         <TextField label="events.subscriptions.list.firstname" source="user.lastname" />
                         <TextField label="events.subscriptions.list.firstname" source="user.email" />
                         <TextField label="events.subscriptions.list.firstname" source="user.university.name" />
+                        <FunctionField
+                            label="events.subscriptions.list.learningLanguage"
+                            render={(record: Profile) => (
+                                <div style={{ display: 'flex', flexDirection: 'row', gap: 4 }}>
+                                    {record.learningLanguages.map((language) => (
+                                        <Chip
+                                            key={language.code}
+                                            label={translate(`languages_code.${language.code}`)}
+                                        />
+                                    ))}
+                                </div>
+                            )}
+                        />
                     </Datagrid>
                 </List>
             </ResourceContextProvider>
