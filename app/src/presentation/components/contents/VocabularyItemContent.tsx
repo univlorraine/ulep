@@ -54,7 +54,7 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
     const isVocabularyListMine = vocabularyList.isMine(profile);
 
     const exportToPdf = async () => {
-        const result = await getVocabularyListPdf.execute(vocabularyList.id);
+        const result = await getVocabularyListPdf.execute(vocabularyList.id, `${vocabularyList.name}.pdf`);
 
         if (result instanceof Error) {
             return showToast({
@@ -62,6 +62,10 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
                 duration: 3000,
             });
         }
+        showToast({
+            message: t('vocabulary.list.export.success'),
+            duration: 2000,
+        });
     };
 
     const onShareVocabularyListPressed = () => {

@@ -9,7 +9,7 @@ class GetVocabularyListPdfUsecase implements GetVocabularyListPdfUsecaseInterfac
         private readonly fileService: FileAdapterInterface
     ) {}
 
-    async execute(vocabularyListId: string): Promise<void | Error> {
+    async execute(vocabularyListId: string, vocabularyListName: string): Promise<void | Error> {
         try {
             const httpResponse: HttpResponse<Blob> = await this.domainHttpAdapter.get(
                 `/vocabulary/pdf/${vocabularyListId}`,
@@ -20,7 +20,7 @@ class GetVocabularyListPdfUsecase implements GetVocabularyListPdfUsecaseInterfac
                 return new Error('errors.global');
             }
 
-            this.fileService.saveBlob(httpResponse.parsedBody, 'vocabulary-list.pdf');
+            this.fileService.saveBlob(httpResponse.parsedBody, vocabularyListName);
         } catch (error: any) {
             console.error(error);
             return new Error('errors.global');
