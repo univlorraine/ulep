@@ -3,7 +3,7 @@
 # Valeur par défaut de l'argument NODE_VERSION
 ARG NODE_VERSION=18
 
-FROM node:$NODE_VERSION-alpine
+FROM node:$NODE_VERSION-alpine3.20
 
 # https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine
 RUN apk add --no-cache libc6-compat
@@ -13,8 +13,9 @@ WORKDIR /srv/app
 # Pour pouvoir utiliser pnpm (https://fek.io/blog/what-is-corepack-in-node-js/)
 # Si le "pnpm run build" est supprimé du fichier de déploiement Helm, l'activation de pnpm ne sera plus utile
 # car les dépendances sont construites dans le fichier .gitlab-ci/template-ci.yml
+ENV COREPACK_DEFAULT_TO_LATEST=0
 RUN corepack enable && \
-	corepack prepare --activate pnpm@latest && \
+	corepack prepare --activate pnpm@10.0.0 && \
 	pnpm config -g set store-dir /.pnpm-store
 
 # Copie de tous les fichiers du dossier dans srv/app du container (nécessaire pour le "pnpm run build" du fichier de déploiement Helm)
