@@ -16,7 +16,7 @@
     overflow: visible;
     width: 56px;
     height: 56px;
-    background-color: rgba(253, 238, 102, 1);
+    background-color: var(--primary-color);
     border-radius: 90px;
     display: flex;
     justify-content: center;

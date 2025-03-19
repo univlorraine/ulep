@@ -79,7 +79,7 @@ const SignUpGoalsPage: React.FC = () => {
                                     aria-label={goal.name}
                                     className={goalsStyles['goal-container']}
                                     onClick={() => goalPressed(goal)}
-                                    style={{ backgroundColor: isIncluded ? '#FDEE66' : '#F2F4F7' }}
+                                    style={{ backgroundColor: isIncluded ? configuration.primaryColor : '#F2F4F7' }}
                                 >
                                     {goal.image ? (
                                         <NetworkImage

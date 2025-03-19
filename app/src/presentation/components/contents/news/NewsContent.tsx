@@ -51,7 +51,7 @@ export const NewsContent: React.FC<NewsContentProps> = ({ news, profile, onBackP
     };
 
     return (
-        <div className="subcontent-container content-wrapper" style={{ padding: 0 }} ref={contentRef}>
+        <div ref={contentRef}>
             <HeaderSubContent title={t('news.list.title')} onBackPressed={onBackPressed} />
             <div className={styles.container}>
                 {news.imageUrl && <IonImg className={styles.image} src={news.imageUrl}></IonImg>}
