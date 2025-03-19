@@ -152,7 +152,10 @@ const Content: React.FC<ChatContentProps> = ({
             return;
         }
 
-        await fileAdapter.saveBlob(response, 'export-medias.zip');
+        await fileAdapter.saveBlob(
+            response,
+            `${partner.firstname}-${partner.lastname}-export-medias-${findLearningLanguageConversation()?.code}.zip`
+        );
         setShowMenu(false);
         showToast({
             message: t('chat.fileDownloaded'),
