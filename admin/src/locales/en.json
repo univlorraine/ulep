@@ -320,7 +320,8 @@
                 "lastname": "Lastname",
                 "university": "University",
                 "email": "Email",
-                "cta": "Actions"
+                "cta": "Actions",
+                "learningLanguage": "Learning languages"
             },
             "searchProfile": "Search a profile",
             "search": {
@@ -624,6 +625,7 @@
             "name": "Learning language name",
             "level": "Level of learning language"
         },
+        "learning_languages": "Learning languages",
         "mastered_languages": "Mastered languages",
         "native_language": "Native language",
         "objectives": "Objectives",

@@ -14,6 +14,7 @@ export interface ProfilesParams {
         };
         masteredLanguageCode?: string;
         nativeLanguageCode?: string;
+        learningLanguageCode?: string;
         university?: string;
         notSubscribedToEvent?: string;
         subscribedToEvent?: string;
@@ -56,6 +57,7 @@ const ProfilesQuery = (params: ProfilesParams): string => {
         university: params.filter.university || params.filter.user?.university,
         masteredLanguageCode: params.filter.masteredLanguageCode,
         nativeLanguageCode: params.filter.nativeLanguageCode,
+        learningLanguageCode: params.filter.learningLanguageCode,
         notSubscribedToEvent: params.filter.notSubscribedToEvent,
         subscribedToEvent: params.filter.subscribedToEvent,
         page: params.pagination.page,

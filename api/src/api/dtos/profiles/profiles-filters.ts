@@ -44,6 +44,10 @@ export class ProfileQueryFilter extends PaginationDto {
 
   @ApiPropertyOptional({ type: 'string' })
   @IsOptional()
+  learningLanguageCode?: string;
+
+  @ApiPropertyOptional({ type: 'string' })
+  @IsOptional()
   notSubscribedToEvent?: string;
 
   @ApiPropertyOptional({ type: 'string' })

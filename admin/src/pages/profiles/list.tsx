@@ -176,7 +176,7 @@ const ProfileList = (props: any) => {
                         label={translate('profiles.native_language')}
                         render={(profile: Profile) => translate(`languages_code.${profile.nativeLanguage.code}`)}
                         sortable={false}
-                        source="nativeLanguageCode"
+                        source="nativeLanguage.code"
                     />
                     <ArrayField
                         label={translate('profiles.mastered_languages')}

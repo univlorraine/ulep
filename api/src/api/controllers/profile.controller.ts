@@ -133,6 +133,7 @@ export class ProfileController {
       status,
       masteredLanguageCode,
       nativeLanguageCode,
+      learningLanguageCode,
       notSubscribedToEvent,
       subscribedToEvent,
       field,
@@ -167,6 +168,7 @@ export class ProfileController {
         nativeLanguageCode: nativeLanguageCode,
         notSubscribedToEvent: notSubscribedToEvent,
         subscribedToEvent: subscribedToEvent,
+        learningLanguageCode: learningLanguageCode,
       },
     });
 

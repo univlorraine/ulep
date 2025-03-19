@@ -135,6 +135,13 @@ export class PrismaProfileRepository implements ProfileRepository {
             },
           }),
           NativeLanguage: { code: where.nativeLanguageCode },
+          ...(where.learningLanguageCode && {
+            LearningLanguages: {
+              some: {
+                LanguageCode: { code: where.learningLanguageCode },
+              },
+            },
+          }),
           ...(where.notSubscribedToEvent && {
             Events: {
               none: { id: where.notSubscribedToEvent },
