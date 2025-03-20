@@ -36,16 +36,14 @@
 }
 
 .button-container {
-    position: absolute;
-    bottom: 0;
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
     text-align: center;
     width: 100%;
     padding: 20px;
+    margin-top: auto;
 }
-
 
 @media (min-width: 768px) {
     .header {

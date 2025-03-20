@@ -1,11 +1,11 @@
 import { IonButton, IonIcon } from '@ionic/react';
-import CustomLearningGoal from '../../../domain/entities/CustomLearningGoal';
-import styles from './CustomGoalShowContent.module.css';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LeftChevronSvg } from '../../../assets';
-import { useState } from 'react';
 import { useConfig } from '../../../context/ConfigurationContext';
+import CustomLearningGoal from '../../../domain/entities/CustomLearningGoal';
 import ConfirmModal from '../modals/ConfirmModal';
+import styles from './CustomGoalShowContent.module.css';
 
 interface CustomGoalShowContentProps {
     customLearningGoal: CustomLearningGoal;
@@ -41,7 +41,7 @@ const CustomGoalShowContent = ({
     };
 
     return (
-        <div className={`${styles.container} subcontent-container content-wrapper`}>
+        <div className={`${styles.container} content-wrapper`}>
             <div className={styles.header}>
                 {goBack && (
                     <IonButton
@@ -69,11 +69,7 @@ const CustomGoalShowContent = ({
                 >
                     {t('goals.show.update_button')}
                 </IonButton>
-                <IonButton
-                    fill="clear"
-                    className="secondary-button no-padding"
-                    onClick={onDeleteCustomGoalPressed}
-                >
+                <IonButton fill="clear" className="secondary-button no-padding" onClick={onDeleteCustomGoalPressed}>
                     {t('goals.show.delete_button')}
                 </IonButton>
             </div>
@@ -84,7 +80,7 @@ const CustomGoalShowContent = ({
                 title={t('goals.confirm_delete')}
             />
         </div>
-    )
-}       
+    );
+};
 
 export default CustomGoalShowContent;

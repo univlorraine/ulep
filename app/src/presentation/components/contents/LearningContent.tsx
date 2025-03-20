@@ -1,5 +1,5 @@
 import { IonButton, IonIcon } from '@ionic/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 import { useHistory } from 'react-router';
@@ -7,6 +7,7 @@ import { AddSvg } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
 import Profile from '../../../domain/entities/Profile';
 import Tandem from '../../../domain/entities/Tandem';
+import { useStoreActions } from '../../../store/storeTypes';
 import { learningLanguagesToTestedLanguages } from '../../utils';
 import CreateLearningLanguageCard from '../card/CreateLearningLanguageCard';
 import PartnerUniversityCard from '../card/PartnerUniversityCard';
@@ -52,7 +53,10 @@ const LearningContent: React.FC<LearningContentProps> = ({
     const { t } = useTranslation();
     const { deviceAdapter } = useConfig();
     const history = useHistory();
-    const [currentTandemColor, setCurrentTandemColor] = useState<string>(TANDEM_COLORS[0]);
+    const setCurrentLearningWorkspace = useStoreActions((state) => state.setCurrentLearningWorkspace);
+    const [currentTandemColor, setCurrentTandemColor] = useState<string>(
+        TANDEM_COLORS[tandems.findIndex((tandem) => tandem.id === currentTandem?.id) || 0]
+    );
     const [universityId, setUniversityId] = useState<string>();
     const openAddLearningLanguagePressed = () => {
         history.push('pairing/languages');
@@ -69,7 +73,14 @@ const LearningContent: React.FC<LearningContentProps> = ({
     const handleSetCurrentTandem = (tandem: Tandem, index: number) => {
         setCurrentTandem(tandem);
         setCurrentTandemColor(TANDEM_COLORS[index]);
+        setCurrentLearningWorkspace({ learningWorkspace: tandem, index });
     };
+
+    useEffect(() => {
+        if (currentTandem && tandems) {
+            setCurrentTandemColor(TANDEM_COLORS[tandems.findIndex((tandem) => tandem.id === currentTandem.id) || 0]);
+        }
+    }, [currentTandem, tandems]);
 
     return (
         <div
@@ -128,18 +139,19 @@ const LearningContent: React.FC<LearningContentProps> = ({
                                         currentColor={currentTandemColor}
                                     />
                                 )}
-                            {currentTandem && currentTandem.learningLanguage.certificateOption && (
-                                <>
-                                    <LearningJournalCard
-                                        tandem={currentTandem}
-                                        onOpenEdito={() => openUniversityInfos(profile.user.university.id)}
-                                    />
-                                    <LearningGoalCard
-                                        profile={profile}
-                                        customLearningGoals={currentTandem.learningLanguage?.customLearningGoals}
-                                        onShowAllGoalsPressed={() => onShowAllGoalsPressed()}
-                                    />
-                                </>
+                            {currentTandem && (
+                                <LearningJournalCard
+                                    tandem={currentTandem}
+                                    onOpenEdito={() => openUniversityInfos(profile.user.university.id)}
+                                    currentColor={currentTandemColor}
+                                />
+                            )}
+                            {currentTandem && (
+                                <LearningGoalCard
+                                    profile={profile}
+                                    customLearningGoals={currentTandem.learningLanguage?.customLearningGoals}
+                                    onShowAllGoalsPressed={() => onShowAllGoalsPressed()}
+                                />
                             )}
                             <RessourcesCard
                                 onLearningBookPressed={onLearningBookContentPressed}

@@ -35,7 +35,10 @@ const LearningPage = () => {
     const { width } = useWindowDimensions();
     const isHybrid = width < HYBRID_MAX_WIDTH;
     const [refresh, setRefresh] = useState<boolean>(false);
-    const [currentTandem, setCurrentTandem] = useState<Tandem | undefined>(location.state?.tandem);
+    const { currentLearningWorkspace } = useStoreState((state) => state);
+    const [currentTandem, setCurrentTandem] = useState<Tandem | undefined>(
+        currentLearningWorkspace || location.state?.tandem
+    );
     const [displaySelectedTandem, setDisplaySelectedTandem] = useState<Tandem>();
     const [displayActivitiesContent, setDisplayActivitiesContent] = useState<boolean>(false);
     const [displayVocabularyContent, setDisplayVocabularyContent] = useState<boolean>(false);

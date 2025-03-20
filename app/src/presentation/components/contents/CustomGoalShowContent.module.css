@@ -47,14 +47,14 @@
 }
 
 .show_title {
-    background-color: #F2F4F7;
+    background-color: #f2f4f7;
     margin: 0;
     border-radius: 5px;
     padding: 10px 20px;
 }
 
 .show_description {
-    background-color: #F2F4F7;
+    background-color: #f2f4f7;
     margin: 0;
     border-radius: 5px;
     padding: 10px 20px;
@@ -66,11 +66,10 @@
 }
 
 .buttons {
-    position: absolute;
-    bottom: 0;
     text-align: center;
     width: 100%;
     padding: 20px;
+    margin-top: auto;
 }
 
 @media (min-width: 768px) {

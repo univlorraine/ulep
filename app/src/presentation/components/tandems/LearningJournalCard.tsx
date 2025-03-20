@@ -11,9 +11,10 @@ import styles from './LearningJournalCard.module.css';
 interface LearningJournalCardProps {
     tandem: Tandem;
     onOpenEdito: () => void;
+    currentColor: string;
 }
 
-const LearningJournalCard: React.FC<LearningJournalCardProps> = ({ tandem, onOpenEdito }) => {
+const LearningJournalCard: React.FC<LearningJournalCardProps> = ({ tandem, onOpenEdito, currentColor }) => {
     const { t } = useTranslation();
     const { fileAdapter } = useConfig();
     const onOpenChat = useOnOpenChat({ tandemId: tandem.id, withAdministrator: true });
@@ -42,7 +43,7 @@ const LearningJournalCard: React.FC<LearningJournalCardProps> = ({ tandem, onOpe
 
     return (
         <LearningCard title={t('learning_journal.title')}>
-            <div className={styles.container}>
+            <div className={styles.container} style={{ backgroundColor: currentColor }}>
                 <div className={styles.content}>
                     <div className={styles.imageContainer}>
                         <img alt="" className={styles.image} src={TrophiePng} aria-hidden={true} />
