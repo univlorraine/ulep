@@ -30,7 +30,7 @@
     font-weight: 500;
     line-height: 20px;
     text-align: start;
-    white-space: nowrap;
+    white-space: normal;
     overflow: hidden;
     text-overflow: ellipsis;
 }
