@@ -12,10 +12,16 @@ import styles from './ViewReportContent.module.css';
 interface ViewReportContentProps {
     goBack: () => void;
     report: Report;
-    setIsModalOpen: (isModalOpen: boolean) => void;
+    setIsCancelModalOpen: (isModalOpen: boolean) => void;
+    setIsCloseModalOpen: (isModalOpen: boolean) => void;
 }
 
-const ViewReportContent: React.FC<ViewReportContentProps> = ({ goBack, report, setIsModalOpen }) => {
+const ViewReportContent: React.FC<ViewReportContentProps> = ({
+    goBack,
+    report,
+    setIsCancelModalOpen,
+    setIsCloseModalOpen,
+}) => {
     const { t } = useTranslation();
 
     const isConversationReport = report.category.name === ReportCategoryName.CONVERSATION;
@@ -93,16 +99,28 @@ const ViewReportContent: React.FC<ViewReportContentProps> = ({ goBack, report, s
                     </div>
                 </div>
                 {!isReportCancelled && !isReportClosed && (
-                    <IonButton
-                        className={`tertiary-button no-padding ${styles.cancel_button}`}
-                        fill="clear"
-                        onClick={() => {
-                            setIsModalOpen(true);
-                        }}
-                        aria-label={t('report_item_page.button_cancel') as string}
-                    >
-                        {t('report_item_page.button_cancel')}
-                    </IonButton>
+                    <div className={styles.button_container}>
+                        <IonButton
+                            className={`tertiary-button no-padding ${styles.cancel_button}`}
+                            fill="clear"
+                            onClick={() => {
+                                setIsCancelModalOpen(true);
+                            }}
+                            aria-label={t('report_item_page.button_cancel') as string}
+                        >
+                            {t('report_item_page.button_cancel')}
+                        </IonButton>
+                        <IonButton
+                            className={`primary-button no-padding`}
+                            fill="clear"
+                            onClick={() => {
+                                setIsCloseModalOpen(true);
+                            }}
+                            aria-label={t('report_item_page.button_close') as string}
+                        >
+                            {t('report_item_page.button_close')}
+                        </IonButton>
+                    </div>
                 )}
             </div>
         </div>
