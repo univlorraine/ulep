@@ -49,22 +49,14 @@ const HomeContent: React.FC<HomeContentProps> = ({
     onShowEventPressed,
 }) => {
     const { t } = useTranslation();
-    const currentDate = new Date();
     const { width } = useWindowDimensions();
     const isHybrid = width < HYBRID_MAX_WIDTH;
-
-    const formattedDate = `${currentDate.getFullYear()}-${currentDate.getDate().toString().padStart(2, '0')}-${(
-        currentDate.getMonth() + 1
-    )
-        .toString()
-        .padStart(2, '0')}`;
 
     return (
         <div className={styles.content}>
             <div className={`${styles.container} content-wrapper`}>
                 <div className={styles['header']}>
                     <div className={styles['hello-container']}>
-                        <span className={styles.date}>{formattedDate}</span>
                         <h1 className={styles.hello}>{`${t('global.hello')} ${profile.user.firstname}`}</h1>
                     </div>
                 </div>
