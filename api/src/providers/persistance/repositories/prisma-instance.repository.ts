@@ -1,6 +1,6 @@
 import { PrismaService } from '@app/common';
 import { Injectable } from '@nestjs/common';
-import { Instance } from 'src/core/models/Instance.model';
+import { Instance, UpdateInstanceProps } from 'src/core/models/Instance.model';
 import { InstanceRepository } from 'src/core/ports/instance.repository';
 import { instanceMapper } from 'src/providers/persistance/mappers/instance.mapper';
 
@@ -11,6 +11,7 @@ export class PrismaInstanceRepository implements InstanceRepository {
     const instance = await this.prisma.instance.findFirst({
       include: {
         DefaultCertificateFile: true,
+        EditoCentralUniversityTranslations: true,
       },
     });
 
@@ -20,30 +21,41 @@ export class PrismaInstanceRepository implements InstanceRepository {
 
     return instanceMapper(instance);
   }
-  async update(instance: Instance): Promise<Instance> {
-    await this.prisma.instance.update({
+  async update(props: UpdateInstanceProps): Promise<Instance> {
+    const instance = await this.prisma.instance.update({
       where: {
-        id: instance.id,
+        id: props.id,
       },
       data: {
-        name: instance.name,
-        email: instance.email,
-        ressource_url: instance.ressourceUrl,
-        cgu_url: instance.cguUrl,
-        confidentiality_url: instance.confidentialityUrl,
-        primary_color: instance.primaryColor,
-        primary_background_color: instance.primaryBackgroundColor,
-        primary_dark_color: instance.primaryDarkColor,
-        secondary_color: instance.secondaryColor,
-        secondary_background_color: instance.secondaryBackgroundColor,
-        secondary_dark_color: instance.secondaryDarkColor,
-        is_in_maintenance: instance.isInMaintenance,
-        days_before_closure_notification:
-          instance.daysBeforeClosureNotification,
-        edito_mandatory_translations: instance.editoMandatoryTranslations,
+        name: props.name,
+        email: props.email,
+        ressource_url: props.ressourceUrl,
+        cgu_url: props.cguUrl,
+        confidentiality_url: props.confidentialityUrl,
+        primary_color: props.primaryColor,
+        primary_background_color: props.primaryBackgroundColor,
+        primary_dark_color: props.primaryDarkColor,
+        secondary_color: props.secondaryColor,
+        secondary_background_color: props.secondaryBackgroundColor,
+        secondary_dark_color: props.secondaryDarkColor,
+        is_in_maintenance: props.isInMaintenance,
+        days_before_closure_notification: props.daysBeforeClosureNotification,
+        edito_mandatory_translations: props.editoMandatoryTranslations || [],
+        EditoCentralUniversityTranslations: {
+          set: [],
+          connect: props.editoCentralUniversityTranslations?.map(
+            (translation) => ({
+              code: translation,
+            }),
+          ),
+        },
+      },
+      include: {
+        DefaultCertificateFile: true,
+        EditoCentralUniversityTranslations: true,
       },
     });
 
-    return instance;
+    return instanceMapper(instance);
   }
 }

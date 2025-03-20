@@ -421,7 +421,9 @@
         },
         "edito": {
             "mandatoryTranslations": "Mandatory translations for the Edito",
-            "noMandatoryTranslations": "No mandatory translations"
+            "noMandatoryTranslations": "No mandatory translations",
+            "centralUniversityTranslations": "Additional languages for the central university Edito",
+            "noCentralUniversityTranslations": "No additional languages"
         },
         "edit": {
             "error": "An error occurred while updating the instance",

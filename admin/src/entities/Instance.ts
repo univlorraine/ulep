@@ -1,3 +1,5 @@
+import Language from './Language';
+
 export enum EditoMandatoryTranslations {
     CentralUniversityLanguage = 'CentralUniversityLanguage',
     PartnerUniversityLanguage = 'PartnerUniversityLanguage',
@@ -19,6 +21,7 @@ type Instance = {
     isInMaintenance: boolean;
     daysBeforeClosureNotification: number;
     editoMandatoryTranslations: EditoMandatoryTranslations[];
+    editoCentralUniversityTranslations: Language[];
 };
 
 export interface InstanceFormPayload {
@@ -37,6 +40,7 @@ export interface InstanceFormPayload {
     daysBeforeClosureNotification: number;
     defaultCertificateFile: File | undefined;
     editoMandatoryTranslations: EditoMandatoryTranslations[];
+    editoCentralUniversityTranslations: Language[];
 }
 
 export default Instance;
