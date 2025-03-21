@@ -104,6 +104,7 @@ export const CreateActivityVocabularyContent: React.FC<CreateActivityVocabularyC
                 <div className={styles['vocabulary-line']}>
                     <div className={styles['vocabulary-container']}>
                         <TextInput
+                            id={`input-vocabulary-${index}`}
                             title=""
                             onChange={(content) => onUpdateContentVocabulary(content, index)}
                             placeholder={t('activity.create.vocabulary_placeholder') as string}

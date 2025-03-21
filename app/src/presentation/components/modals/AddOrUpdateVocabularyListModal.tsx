@@ -95,6 +95,7 @@ const AddOrUpdateVocabularyListModal: React.FC<AddOrUpdateVocabularyListModalPro
                 <h1 className={styles.title}>{t(`vocabulary.list.${vocabularyList ? 'update' : 'add'}.title`)}</h1>
 
                 <TextInput
+                    id="input-vocabulary-list-name"
                     onChange={(text) => setName(text)}
                     title={t('vocabulary.list.add.name') as string}
                     value={name}
@@ -102,6 +103,7 @@ const AddOrUpdateVocabularyListModal: React.FC<AddOrUpdateVocabularyListModalPro
                     errorMessage={errorMessage?.type === 'name' ? errorMessage.message : undefined}
                 />
                 <TextInput
+                    id="input-vocabulary-list-symbol"
                     onChange={(text) => setSymbol(text)}
                     title={t('vocabulary.list.add.symbol') as string}
                     value={symbol}

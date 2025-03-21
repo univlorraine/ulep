@@ -34,6 +34,7 @@ const AvailabilityNoteModal: React.FC<AvailabilityNoteModalProps> = ({
                 <div className={styles.container}>
                     <span className={styles.title}>{t('signup_availabilities_page.modal.title_note')}</span>
                     <TextInput
+                        id="input-note"
                         customHeight={170}
                         onChange={setNote}
                         title={t('signup_availabilities_page.modal.note') as string}

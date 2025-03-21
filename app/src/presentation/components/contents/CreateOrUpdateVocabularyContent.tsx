@@ -126,7 +126,9 @@ const CreateOrUpdateVocabularyContent: React.FC<CreateOrUpdateVocabularyContentP
                 <div className={styles.content}>
                     <TextInput
                         beforeInput={
-                            <span className={styles.flag}>{codeLanguageToFlag(vocabularyList.targetLanguage.code)}</span>
+                            <span className={styles.flag}>
+                                {codeLanguageToFlag(vocabularyList.targetLanguage.code)}
+                            </span>
                         }
                         value={word}
                         onChange={(value) => setWord(value)}
@@ -164,6 +166,7 @@ const CreateOrUpdateVocabularyContent: React.FC<CreateOrUpdateVocabularyContentP
                 <h1 className={styles.language}>{vocabularyList.translationLanguage.name}</h1>
                 <div className={styles.content}>
                     <TextInput
+                        id="input-translation"
                         beforeInput={
                             <span className={styles.flag}>
                                 {codeLanguageToFlag(vocabularyList.translationLanguage.code)}

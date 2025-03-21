@@ -1,10 +1,10 @@
 import { IonButton, IonIcon } from '@ionic/react';
-import styles from './SelectTandemModal.module.css';
-import Modal from './Modal';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CloseWhiteSvg } from '../../../assets';
-import { useState } from 'react';
 import TextInput from '../TextInput';
+import Modal from './Modal';
+import styles from './SelectTandemModal.module.css';
 
 interface ConfirmCancelSessionModalProps {
     isVisible: boolean;
@@ -12,7 +12,11 @@ interface ConfirmCancelSessionModalProps {
     onCancelSession: (comment: string) => void;
 }
 
-const ConfirmCancelSessionModal: React.FC<ConfirmCancelSessionModalProps> = ({ isVisible, onClose, onCancelSession }) => {
+const ConfirmCancelSessionModal: React.FC<ConfirmCancelSessionModalProps> = ({
+    isVisible,
+    onClose,
+    onCancelSession,
+}) => {
     const { t } = useTranslation();
     const [comment, setComment] = useState('');
 
@@ -26,6 +30,7 @@ const ConfirmCancelSessionModal: React.FC<ConfirmCancelSessionModalProps> = ({ i
                 <div className={styles.content}>
                     <p>{t('session.confirm_cancel.content')}</p>
                     <TextInput
+                        id="input-comment"
                         type="text-area"
                         title={t('session.confirm_cancel.comment_label') as string}
                         value={comment}
