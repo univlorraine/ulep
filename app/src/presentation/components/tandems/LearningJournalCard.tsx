@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { TrophiePng } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
 import Tandem from '../../../domain/entities/Tandem';
+import { useStoreState } from '../../../store/storeTypes';
 import useGetMediaObject from '../../hooks/useGetMediaObject';
 import useOnOpenChat from '../../hooks/useOnOpenChat';
 import LearningCard from '../card/LearningCard';
@@ -11,11 +12,13 @@ import styles from './LearningJournalCard.module.css';
 interface LearningJournalCardProps {
     tandem: Tandem;
     onOpenEdito: () => void;
+    currentColor: string;
 }
 
-const LearningJournalCard: React.FC<LearningJournalCardProps> = ({ tandem, onOpenEdito }) => {
+const LearningJournalCard: React.FC<LearningJournalCardProps> = ({ tandem, onOpenEdito, currentColor }) => {
     const { t } = useTranslation();
     const { fileAdapter } = useConfig();
+    const language = useStoreState((state) => state.language);
     const onOpenChat = useOnOpenChat({ tandemId: tandem.id, withAdministrator: true });
     const {
         loading: loadingCertificate,
@@ -40,9 +43,26 @@ const LearningJournalCard: React.FC<LearningJournalCardProps> = ({ tandem, onOpe
         }
     };
 
+    const formatDuration = (minutes: number) => {
+        const hours = Math.floor(minutes / 60);
+        const remainingMinutes = minutes % 60;
+
+        return (
+            new Intl.NumberFormat(language, {
+                minimumIntegerDigits: 2,
+                useGrouping: false,
+            }).format(hours) +
+            'h' +
+            new Intl.NumberFormat(language, {
+                minimumIntegerDigits: 2,
+                useGrouping: false,
+            }).format(remainingMinutes)
+        );
+    };
+
     return (
         <LearningCard title={t('learning_journal.title')}>
-            <div className={styles.container}>
+            <div className={styles.container} style={{ backgroundColor: currentColor }}>
                 <div className={styles.content}>
                     <div className={styles.imageContainer}>
                         <img alt="" className={styles.image} src={TrophiePng} aria-hidden={true} />
@@ -55,7 +75,9 @@ const LearningJournalCard: React.FC<LearningJournalCardProps> = ({ tandem, onOpe
                 <ul className={styles.activities}>
                     <li className={styles.activity}>
                         <h3 className={styles.activityTitle}>{t('learning_journal.sessions_duration_title')}</h3>
-                        <span className={styles.activityValue}>{tandem.learningLanguage.visioDuration}</span>
+                        <span className={styles.activityValue}>
+                            {formatDuration(tandem.learningLanguage.visioDuration || 0)}
+                        </span>
                     </li>
                     <li className={styles.activity}>
                         <h3 className={styles.activityTitle}>{t('learning_journal.vocabulary_title')}</h3>

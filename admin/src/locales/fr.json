@@ -320,7 +320,8 @@
                 "lastname": "Nom",
                 "university": "Université",
                 "email": "Email",
-                "cta": "Actions"
+                "cta": "Actions",
+                "learningLanguage": "Langues d'apprentissage"
             },
             "searchProfile": "Rechercher un profil",
             "search": {
@@ -419,7 +420,9 @@
         },
         "edito": {
             "mandatoryTranslations": "Langues obligatoires pour les éditos",
-            "noMandatoryTranslations": "Aucune langue obligatoire"
+            "centralUniversityTranslations": "Langues supplémentaires de l'édito de l'université centrale",
+            "noMandatoryTranslations": "Aucune langue obligatoire",
+            "noCentralUniversityTranslations": "Aucune langue supplémentaire"
         },
         "edit": {
             "error": "Une erreur est survenue pendant la mise à jour de l'instance",
@@ -626,6 +629,7 @@
             "name": "Nom de langue d'apprentissage",
             "level": "Niveau de la langue d'apprentissage"
         },
+        "learning_languages": "Langues d'apprentissage",
         "mastered_languages": "Langues maîtrisés",
         "native_language": "Langue native",
         "objectives": "Objectifs",

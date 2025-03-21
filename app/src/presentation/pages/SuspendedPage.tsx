@@ -19,7 +19,7 @@ const SuspendedPage: React.FC<SuspendedPageProps> = ({ status }) => {
     const setProfile = useStoreActions((state) => state.setProfile);
     const [isReportMode, setReportMode] = useState<boolean>(false);
 
-    const { handleLogout } = useLogout({ forceRedirect: true });
+    const { handleLogout } = useLogout();
 
     const reloadProfile = async () => {
         const profile = await getProfile.execute(accessToken);

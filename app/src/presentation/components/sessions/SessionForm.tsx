@@ -67,7 +67,14 @@ const SessionForm: React.FC<SessionFormProps> = ({ onBackPressed, onSubmit, sess
                 </div>
                 <div className={styles.language}>
                     <p className={styles.label}>{t('session.comment')}</p>
-                    <TextInput type="text-area" onChange={setComment} value={comment} />
+                    <TextInput
+                        id="input-comment"
+                        type="text-area"
+                        onChange={setComment}
+                        value={comment}
+                        showLimit
+                        maxLength={100}
+                    />
                 </div>
             </div>
             <div className={styles['button-container']}>

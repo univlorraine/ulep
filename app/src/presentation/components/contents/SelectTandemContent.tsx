@@ -9,7 +9,7 @@ import styles from './SelectTandemContent.module.css';
 
 interface SelectTandemContentProps {
     onBackPressed: () => void;
-    setSelectedTandem: (tandem: Tandem) => void;
+    setSelectedTandem: (tandem: Tandem, isSingleTandem?: boolean) => void;
     profile: Profile;
 }
 
@@ -26,6 +26,10 @@ const SelectTandemContent: React.FC<SelectTandemContentProps> = ({ onBackPressed
         }
 
         setTandems(tandems);
+
+        if (tandems.length === 1) {
+            setSelectedTandem(tandems[0], true);
+        }
     };
 
     useEffect(() => {

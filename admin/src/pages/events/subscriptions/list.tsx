@@ -1,4 +1,4 @@
-import { Box, Button, Modal, Typography } from '@mui/material';
+import { Box, Button, Chip, Modal, Typography } from '@mui/material';
 import React, { useEffect, useMemo, useState } from 'react';
 import {
     List,
@@ -108,6 +108,17 @@ const EventsSubscriptionsList = () => {
                 alwaysOn
             />
         );
+
+        filters.push(
+            <SelectInput
+                choices={sortedLanguages}
+                label={translate('profiles.learning_languages')}
+                optionText={(option) => translate(`languages_code.${option.code}`)}
+                optionValue="code"
+                source="learningLanguageCode"
+                alwaysOn
+            />
+        );
     }
 
     if (identity?.isCentralUniversity) {
@@ -193,6 +204,19 @@ const EventsSubscriptionsList = () => {
                         <TextField label="events.subscriptions.list.lastname" source="user.lastname" />
                         <TextField label="events.subscriptions.list.university" source="user.university.name" />
                         <TextField label="events.subscriptions.list.email" source="user.email" />
+                        <FunctionField
+                            label="events.subscriptions.list.learningLanguage"
+                            render={(record: Profile) => (
+                                <div style={{ display: 'flex', flexDirection: 'row', gap: 4 }}>
+                                    {record.learningLanguages.map((language) => (
+                                        <Chip
+                                            key={language.code}
+                                            label={translate(`languages_code.${language.code}`)}
+                                        />
+                                    ))}
+                                </div>
+                            )}
+                        />
                     </Datagrid>
                 </List>
             )}

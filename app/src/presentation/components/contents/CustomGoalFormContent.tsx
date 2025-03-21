@@ -1,11 +1,11 @@
 import { IonButton, IonIcon } from '@ionic/react';
-import CustomLearningGoal from '../../../domain/entities/CustomLearningGoal';
-import styles from './CustomGoalFormContent.module.css';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LeftChevronSvg } from '../../../assets';
-import TextInput from '../TextInput';
-import { useState } from 'react';
 import { useConfig } from '../../../context/ConfigurationContext';
+import CustomLearningGoal from '../../../domain/entities/CustomLearningGoal';
+import TextInput from '../TextInput';
+import styles from './CustomGoalFormContent.module.css';
 
 export interface CustomLearningGoalFormData {
     id?: string;
@@ -48,7 +48,7 @@ const CustomGoalFormContent = ({
             const customLearningGoals = await createCustomLearningGoal.execute({
                 title,
                 description,
-                learningLanguageId
+                learningLanguageId,
             });
 
             if (customLearningGoals instanceof Error) {
@@ -60,7 +60,7 @@ const CustomGoalFormContent = ({
     };
 
     return (
-        <div className={`${styles.container} subcontent-container content-wrapper`}>
+        <div className={`${styles.container}`}>
             <div className={styles.header}>
                 {goBack && (
                     <IonButton
@@ -72,22 +72,26 @@ const CustomGoalFormContent = ({
                         <IonIcon icon={LeftChevronSvg} size="medium" aria-hidden="true" />
                     </IonButton>
                 )}
-                <h2 className={styles.title}>{t(`goals.form.${customLearningGoal?.id ? 'update_title' : 'create_title'}`)}</h2>
+                <h2 className={styles.title}>
+                    {t(`goals.form.${customLearningGoal?.id ? 'update_title' : 'create_title'}`)}
+                </h2>
             </div>
             <div className={styles.content}>
                 <TextInput
+                    id="input-title"
                     title={t('goals.form.title') as string}
                     value={title}
                     onChange={(value) => setTitle(value)}
                 />
                 <TextInput
+                    id="input-description"
                     title={t('goals.form.description') as string}
                     value={description}
                     onChange={(value) => setDescription(value)}
                     type="text-area"
                 />
             </div>
-            <div className={`${styles['button-container']} large-margin-top`}>
+            <div className={`${styles['button-container']}`}>
                 <IonButton fill="clear" className="tertiary-button no-padding" onClick={goBack}>
                     {t('goals.form.cancel_button')}
                 </IonButton>
@@ -99,8 +103,8 @@ const CustomGoalFormContent = ({
                     {customLearningGoal?.id ? t('goals.form.update_button') : t('goals.form.submit_button')}
                 </IonButton>
             </div>
-        </div>  
-    )
-}       
+        </div>
+    );
+};
 
 export default CustomGoalFormContent;

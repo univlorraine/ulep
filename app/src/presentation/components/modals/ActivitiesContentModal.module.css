@@ -5,3 +5,8 @@
         overflow-y: scroll;
     }
 }
+
+.content {
+    overflow-y: scroll;
+    width: 100%;
+}

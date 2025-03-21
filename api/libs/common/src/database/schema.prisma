@@ -9,24 +9,25 @@ generator client {
 }
 
 model Instance {
-  id                               String  @id @default(uuid())
-  name                             String
-  email                            String
-  ressource_url                    String
-  cgu_url                          String
-  confidentiality_url              String
-  primary_color                    String
-  primary_background_color         String
-  primary_dark_color               String
-  secondary_color                  String
-  secondary_background_color       String
-  secondary_dark_color             String
-  days_before_closure_notification Int     @default(30)
-  is_in_maintenance                Boolean @default(false)
-  default_certificate_file_id      String? @unique
-  edito_mandatory_translations     String[]
+  id                                          String  @id @default(uuid())
+  name                                        String
+  email                                       String
+  ressource_url                               String
+  cgu_url                                     String
+  confidentiality_url                         String
+  primary_color                               String
+  primary_background_color                    String
+  primary_dark_color                          String
+  secondary_color                             String
+  secondary_background_color                  String
+  secondary_dark_color                        String
+  days_before_closure_notification            Int     @default(30)
+  is_in_maintenance                           Boolean @default(false)
+  default_certificate_file_id                 String? @unique
+  edito_mandatory_translations                String[]
 
-  DefaultCertificateFile MediaObjects? @relation(fields: [default_certificate_file_id], references: [id])
+  EditoCentralUniversityTranslations          LanguageCodes[] @relation("EditoCentralUniversityTranslations")
+  DefaultCertificateFile                      MediaObjects? @relation(fields: [default_certificate_file_id], references: [id])
 }
 
 model CountryCodes {
@@ -74,6 +75,7 @@ model LanguageCodes {
   Events                         Events[]                     @relation("DiffusionLanguages")
   CommunityChatCentral           CommunityChat[]              @relation("CentralLanguage")
   CommunityChatPartner           CommunityChat[]              @relation("PartnerLanguage")
+  EditoCentralUniversityTranslations Instance[]               @relation("EditoCentralUniversityTranslations")
 
   @@unique([name])
   @@unique([code])
@@ -812,6 +814,7 @@ enum LogEntryType {
   SHARING_LOGS
   ADD_VOCABULARY
   SHARE_VOCABULARY
+  PUBLISH_ACTIVITY
   EDIT_ACTIVITY
   SUBMIT_ACTIVITY
   PLAYED_GAME

@@ -253,6 +253,7 @@ const SignUpPage: React.FC = () => {
                 {university && selectedRole && (
                     <div className="large-margin-top">
                         <TextInput
+                            id="input-department"
                             onChange={setDepartment}
                             title={t('signup_page.department_title') as string}
                             value={department}
@@ -263,6 +264,7 @@ const SignUpPage: React.FC = () => {
                 {/* Staff function selector */}
                 {university && selectedRole === 'STAFF' && (
                     <TextInput
+                        id="input-staff-function"
                         onChange={setStaffFunction}
                         title={t('signup_page.function_title') as string}
                         value={staffFunction}
@@ -272,6 +274,7 @@ const SignUpPage: React.FC = () => {
                 {/* diploma selector */}
                 {university && selectedRole === 'STUDENT' && (
                     <TextInput
+                        id="input-diploma"
                         onChange={setDiploma}
                         title={t('signup_page.diplome_title') as string}
                         value={diploma}

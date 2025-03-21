@@ -8,6 +8,7 @@ export interface Profile {
     user: User;
     nativeLanguage: Language;
     masteredLanguages: Language[];
+    learningLanguages: Language[];
     meetingFrequency: string;
     objectives: Objective[];
     interests: Interest[];

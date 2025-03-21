@@ -8,13 +8,14 @@ import {
     useGetIdentity,
     Loading,
     SelectInput,
-    useGetList,
     TextInput,
     DateField,
+    usePermissions,
 } from 'react-admin';
 import ColoredChips, { ChipsColors } from '../../components/ColoredChips';
 import useGetUniversitiesLanguages from '../../components/form/useGetUniversitiesLanguages';
 import PageTitle from '../../components/PageTitle';
+import { Role } from '../../entities/Administrator';
 import { News, NewsStatus, NewsTranslation } from '../../entities/News';
 import codeLanguageToFlag from '../../utils/codeLanguageToFlag';
 
@@ -36,17 +37,17 @@ const StatusChips = ({ status }: { status: string }) => {
 
 const NewsList = () => {
     const translate = useTranslate();
+    const { permissions } = usePermissions();
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
-    const { data: universities } = useGetList('universities');
-    const universitiesLanguages = useGetUniversitiesLanguages();
+    const { universitiesLanguages, universitiesData } = useGetUniversitiesLanguages();
 
     const filters = [
         <TextInput key="titleFilter" label={translate('news.list.filters.title')} source="title" alwaysOn />,
         <SelectInput
             key="defaultLanguageFilter"
             choices={universitiesLanguages.map((language) => ({
-                id: language,
-                name: codeLanguageToFlag(language),
+                id: language.code,
+                name: codeLanguageToFlag(language.code),
             }))}
             label={translate('news.list.filters.language')}
             source="languageCode"
@@ -64,11 +65,11 @@ const NewsList = () => {
         />,
     ];
 
-    if (identity?.isCentralUniversity && universities) {
+    if (identity?.isCentralUniversity && universitiesData) {
         filters.unshift(
             <SelectInput
                 key="groupFilter"
-                choices={universities}
+                choices={universitiesData}
                 label={translate('news.list.filters.university')}
                 source="universityId"
                 alwaysOn
@@ -85,7 +86,11 @@ const NewsList = () => {
             <PageTitle>{translate('news.title')}</PageTitle>
             <List
                 exporter={false}
-                filter={!identity?.isCentralUniversity ? { universityId: identity?.universityId } : undefined}
+                filter={
+                    !identity?.isCentralUniversity || !permissions.checkRole(Role.SUPER_ADMIN)
+                        ? { universityId: identity?.universityId }
+                        : undefined
+                }
                 filters={filters}
             >
                 <Datagrid rowClick="edit">

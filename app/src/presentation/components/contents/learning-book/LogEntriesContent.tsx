@@ -9,6 +9,7 @@ import {
     LogEntryAddVocabulary,
     LogEntryCustomEntry,
     LogEntryEditActivity,
+    LogEntryPublishActivity,
     LogEntryShareVocabulary,
     LogEntrySubmitActivity,
 } from '../../../../domain/entities/LogEntry';
@@ -61,7 +62,11 @@ export const LogEntriesContent: React.FC<LogEntriesContentProps> = ({
             onUpdateCustomLogEntry(logEntry);
         } else if (logEntry instanceof LogEntryAddVocabulary || logEntry instanceof LogEntryShareVocabulary) {
             onOpenVocabularyList(logEntry.vocabularyListId);
-        } else if (logEntry instanceof LogEntryEditActivity || logEntry instanceof LogEntrySubmitActivity) {
+        } else if (
+            logEntry instanceof LogEntryEditActivity ||
+            logEntry instanceof LogEntrySubmitActivity ||
+            logEntry instanceof LogEntryPublishActivity
+        ) {
             onOpenActivity(logEntry.activityId);
         }
     };
@@ -110,29 +115,31 @@ export const LogEntriesContent: React.FC<LogEntriesContentProps> = ({
             />
             <div className={styles['log-entries-list']}>
                 <div className={styles['log-entries-list-container']}>
-                    {logEntriesResult.logEntries.map((logEntry) => {
-                        if (logEntry.count > 1) {
+                    {logEntriesResult.logEntries
+                        .filter((logEntry) => logEntry.count > 0 && logEntry.entries.length > 0)
+                        .map((logEntry) => {
+                            if (logEntry.count > 1 && logEntry.entries.length > 1) {
+                                return (
+                                    <LogEntriesCard
+                                        key={logEntry.date.toISOString()}
+                                        date={logEntry.date}
+                                        logEntries={logEntry.entries}
+                                        count={logEntry.count}
+                                        profile={profile}
+                                        onClick={onFocusLogEntryForADay}
+                                    />
+                                );
+                            }
                             return (
-                                <LogEntriesCard
-                                    key={logEntry.date.toISOString()}
-                                    date={logEntry.date}
-                                    logEntries={logEntry.entries}
-                                    count={logEntry.count}
+                                <LogEntryCard
+                                    key={logEntry.entries[0].id}
+                                    logEntry={logEntry.entries[0]}
                                     profile={profile}
-                                    onClick={onFocusLogEntryForADay}
+                                    onClick={handleOnPress}
+                                    shouldDisplayDate
                                 />
                             );
-                        }
-                        return (
-                            <LogEntryCard
-                                key={logEntry.entries[0].id}
-                                logEntry={logEntry.entries[0]}
-                                profile={profile}
-                                onClick={handleOnPress}
-                                shouldDisplayDate
-                            />
-                        );
-                    })}
+                        })}
                 </div>
                 {logEntriesResult.isLoading && <Loader />}
                 {!logEntriesResult.isLoading && !isPaginationEnded && (

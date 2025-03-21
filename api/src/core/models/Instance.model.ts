@@ -1,10 +1,30 @@
 import { MediaObject } from 'src/core/models/media.model';
+import { Language } from './language.model';
 
 export enum EditoMandatoryTranslations {
   CentralUniversityLanguage = 'CentralUniversityLanguage',
   PartnerUniversityLanguage = 'PartnerUniversityLanguage',
   English = 'English',
 }
+
+export type UpdateInstanceProps = {
+  id: string;
+  name?: string;
+  email?: string;
+  ressourceUrl?: string;
+  cguUrl?: string;
+  confidentialityUrl?: string;
+  primaryColor?: string;
+  primaryBackgroundColor?: string;
+  primaryDarkColor?: string;
+  secondaryColor?: string;
+  secondaryBackgroundColor?: string;
+  secondaryDarkColor?: string;
+  isInMaintenance?: boolean;
+  daysBeforeClosureNotification?: number;
+  editoMandatoryTranslations?: string[];
+  editoCentralUniversityTranslations?: string[];
+};
 
 interface InstanceProps {
   id: string;
@@ -23,6 +43,7 @@ interface InstanceProps {
   daysBeforeClosureNotification: number;
   defaultCertificateFile?: MediaObject;
   editoMandatoryTranslations: EditoMandatoryTranslations[];
+  editoCentralUniversityTranslations: Language[];
 }
 
 export class Instance {
@@ -43,6 +64,7 @@ export class Instance {
   readonly defaultCertificateFile?: MediaObject;
   logoURL: string;
   editoMandatoryTranslations: EditoMandatoryTranslations[];
+  editoCentralUniversityTranslations: Language[];
 
   constructor(instance: InstanceProps) {
     this.id = instance.id;
@@ -61,5 +83,7 @@ export class Instance {
     this.daysBeforeClosureNotification = instance.daysBeforeClosureNotification;
     this.defaultCertificateFile = instance.defaultCertificateFile;
     this.editoMandatoryTranslations = instance.editoMandatoryTranslations;
+    this.editoCentralUniversityTranslations =
+      instance.editoCentralUniversityTranslations;
   }
 }

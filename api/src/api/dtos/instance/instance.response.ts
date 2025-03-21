@@ -1,6 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import { Instance } from 'src/core/models/Instance.model';
+import { LanguageResponse } from '../languages';
 import { MediaObjectResponse } from '../medias';
 
 export class InstanceResponse {
@@ -75,6 +76,10 @@ export class InstanceResponse {
   @Expose({ groups: ['read'] })
   editoMandatoryTranslations: string[];
 
+  @ApiProperty({ type: 'array', items: { type: 'LanguageResponse' } })
+  @Expose({ groups: ['read'] })
+  editoCentralUniversityTranslations: LanguageResponse[];
+
   constructor(partial: Partial<InstanceResponse>) {
     Object.assign(this, partial);
   }
@@ -99,6 +104,10 @@ export class InstanceResponse {
         : null,
       logoURL: instance.logoURL,
       editoMandatoryTranslations: instance.editoMandatoryTranslations,
+      editoCentralUniversityTranslations:
+        instance.editoCentralUniversityTranslations.map((translation) =>
+          LanguageResponse.fromLanguage(translation),
+        ),
     });
   }
 }

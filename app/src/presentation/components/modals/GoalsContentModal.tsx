@@ -1,10 +1,11 @@
-import Profile from '../../../domain/entities/Profile';
-import LearningLanguage from '../../../domain/entities/LearningLanguage';
-import Modal from './Modal';
-import GoalsContent from '../contents/GoalsContent';
+import { IonModal } from '@ionic/react';
 import CustomLearningGoal from '../../../domain/entities/CustomLearningGoal';
+import LearningLanguage from '../../../domain/entities/LearningLanguage';
+import Profile from '../../../domain/entities/Profile';
 import CustomGoalFormContent from '../contents/CustomGoalFormContent';
 import CustomGoalShowContent from '../contents/CustomGoalShowContent';
+import GoalsContent from '../contents/GoalsContent';
+import styles from './ActivitiesContentModal.module.css';
 
 export const DisplayCustomGoalModalEnum = {
     list: 'list',
@@ -41,13 +42,8 @@ const GoalsContentModal = ({
     onShowCustomGoalPressed,
 }: GoalsContentModalProps) => {
     return (
-        <Modal
-            isVisible={isVisible}
-            onClose={onClose}
-            position="flex-end"
-            hideWhiteBackground
-        >
-            <>
+        <IonModal animated isOpen={isVisible} onDidDismiss={onClose} className={styles.modal}>
+            <div className={styles.content}>
                 {displayCustomGoalModal?.type === DisplayCustomGoalModalEnum.list && (
                     <GoalsContent
                         profile={profile}
@@ -74,9 +70,9 @@ const GoalsContentModal = ({
                             onShowAllGoalsPressed={onShowAllGoalsPressed}
                         />
                     )}
-            </>
-        </Modal>
-    )
-}
+            </div>
+        </IonModal>
+    );
+};
 
 export default GoalsContentModal;

@@ -1,12 +1,12 @@
-import Profile from '../../../domain/entities/Profile';
-import LearningLanguage from '../../../domain/entities/LearningLanguage';
-import styles from './GoalsContent.module.css';
-import Goal from '../../../domain/entities/Goal';
-import NetworkImage from '../NetworkImage';
-import { AddSvg, ArrowRightSvg, LeftChevronSvg, WritingSkillPng } from '../../../assets';
 import { IonButton, IonIcon, IonImg } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
+import { AddSvg, ArrowRightSvg, LeftChevronSvg, WritingSkillPng } from '../../../assets';
 import CustomLearningGoal from '../../../domain/entities/CustomLearningGoal';
+import Goal from '../../../domain/entities/Goal';
+import LearningLanguage from '../../../domain/entities/LearningLanguage';
+import Profile from '../../../domain/entities/Profile';
+import NetworkImage from '../NetworkImage';
+import styles from './GoalsContent.module.css';
 interface GoalsContentProps {
     profile: Profile;
     learningLanguage?: LearningLanguage;
@@ -29,7 +29,7 @@ const GoalsContent = ({
     const customGoalsCount: number = customGoals.length;
 
     return (
-        <div className={`${styles.container} subcontent-container content-wrapper`}>
+        <div className={`${styles.container}`}>
             <div className={styles.header}>
                 {goBack && (
                     <IonButton
@@ -60,10 +60,7 @@ const GoalsContent = ({
                 ))}
                 {customGoals.map((goal: CustomLearningGoal) => (
                     <li key={goal.id} role="listitem" className={styles.goalItem}>
-                        <button
-                            className={styles.customGoalButton}
-                            onClick={() => onShowCustomGoalPressed(goal)}
-                        >
+                        <button className={styles.customGoalButton} onClick={() => onShowCustomGoalPressed(goal)}>
                             <div className={styles.goalTitleContainer}>
                                 <h3 className={styles.goalTitle}>{goal.title}</h3>
                                 <IonIcon icon={ArrowRightSvg} />
@@ -79,7 +76,7 @@ const GoalsContent = ({
                 </IonButton>
             )}
         </div>
-    )
-}
+    );
+};
 
 export default GoalsContent;

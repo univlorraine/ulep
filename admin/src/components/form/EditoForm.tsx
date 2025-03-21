@@ -16,7 +16,6 @@ const EditoForm: React.FC<EditoFormProps> = ({ handleSubmit, record }) => {
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
     const translate = useTranslate();
 
-    const [mandatoryTranslationsConfig, setMandatoryTranslationsConfig] = useState<string[]>([]);
     const [mandatoryLanguages, setMandatoryLanguages] = useState<string[]>([]);
 
     const [image, setImage] = useState<File | undefined>(undefined);
@@ -26,41 +25,39 @@ const EditoForm: React.FC<EditoFormProps> = ({ handleSubmit, record }) => {
     const [isDisabled, setIsDisabled] = useState<boolean>(true);
 
     useEffect(() => {
-        const fetchInstance = async () => {
+        const getMandatoryLanguages = async () => {
             const instance: any = await dataProvider.getOne('instance', { id: 'config' });
             if (instance) {
-                setMandatoryTranslationsConfig(instance.data.editoMandatoryTranslations);
+                const mandatoryTranslationsConfig = instance.data.editoMandatoryTranslations;
+
+                if (mandatoryTranslationsConfig.length === 0) {
+                    return;
+                }
+
+                const languagesMapping: { [key: string]: string } = {
+                    [EditoMandatoryTranslation.CentralUniversityLanguage]: record.languageCode,
+                    [EditoMandatoryTranslation.English]: 'en',
+                };
+                const partnerUniversityLanguage = record.translations.find(
+                    (translation) => translation.languageCode !== 'en'
+                )?.languageCode;
+                if (partnerUniversityLanguage) {
+                    languagesMapping[EditoMandatoryTranslation.PartnerUniversityLanguage] = partnerUniversityLanguage;
+                }
+
+                const mandatoryLanguagesBuild: string[] = [];
+                mandatoryTranslationsConfig.forEach((key: string) => {
+                    if (languagesMapping[key]) {
+                        const language = languagesMapping[key];
+                        mandatoryLanguagesBuild.push(language);
+                    }
+                });
+
+                setMandatoryLanguages(mandatoryLanguagesBuild);
             }
         };
-        fetchInstance();
+        getMandatoryLanguages();
     }, []);
-
-    useEffect(() => {
-        if (mandatoryTranslationsConfig.length === 0) {
-            return;
-        }
-
-        const languagesMapping: { [key: string]: string } = {
-            [EditoMandatoryTranslation.CentralUniversityLanguage]: record.languageCode,
-            [EditoMandatoryTranslation.English]: 'en',
-        };
-        const partnerUniversityLanguage = record.translations.find(
-            (translation) => translation.languageCode !== 'en'
-        )?.languageCode;
-        if (partnerUniversityLanguage) {
-            languagesMapping[EditoMandatoryTranslation.PartnerUniversityLanguage] = partnerUniversityLanguage;
-        }
-
-        const mandatoryLanguagesBuild: string[] = [];
-        mandatoryTranslationsConfig.forEach((key) => {
-            if (languagesMapping[key]) {
-                const language = languagesMapping[key];
-                mandatoryLanguagesBuild.push(language);
-            }
-        });
-
-        setMandatoryLanguages(mandatoryLanguagesBuild);
-    }, [mandatoryTranslationsConfig, record]);
 
     useEffect(() => {
         let mandatoryLanguageIsCompleted = true;

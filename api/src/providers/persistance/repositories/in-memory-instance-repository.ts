@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { Instance, UpdateInstanceProps } from 'src/core/models/Instance.model';
 import { InstanceRepository } from 'src/core/ports/instance.repository';
-import { Instance } from 'src/core/models/Instance.model';
 
 @Injectable()
 export class InMemoryInstanceRepository implements InstanceRepository {
@@ -13,7 +13,7 @@ export class InMemoryInstanceRepository implements InstanceRepository {
   getInstance(): Promise<Instance> {
     return Promise.resolve(this.#instance);
   }
-  update(instance: Instance): Promise<Instance> {
+  update(props: UpdateInstanceProps): Promise<Instance> {
     throw new Error('Method not implemented.');
   }
 }

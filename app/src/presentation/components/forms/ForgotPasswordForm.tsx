@@ -46,6 +46,7 @@ const ForgotPasswordForm = () => {
                         <h1 className={style.title}>{t('forgot_password_page.title')}</h1>
                     </div>
                     <TextInput
+                        id="input-email"
                         autocomplete="email"
                         onChange={(email) => setEmail(email.trim())}
                         title={t('global.email') as string}

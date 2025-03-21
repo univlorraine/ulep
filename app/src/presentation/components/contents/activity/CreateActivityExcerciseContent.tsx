@@ -119,6 +119,7 @@ export const CreateActivityExcerciseContent: React.FC<CreateActivityExcerciseCon
                             </div>
                         </div>
                         <TextInput
+                            id={`input-excercise-${index}`}
                             title=""
                             onChange={(text) => onContentExcerciseChange(text, excercise.order)}
                             value={excercise.content}

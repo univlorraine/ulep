@@ -90,9 +90,11 @@ const SignUpInterestsPage: React.FC = () => {
                                                     aria-checked={isInclued}
                                                     disabled={userInterests.length === 10 ? !isInclued : false}
                                                     style={{
-                                                        backgroundColor: isInclued ? '#FDEE66' : 'white',
+                                                        backgroundColor: isInclued
+                                                            ? configuration.primaryColor
+                                                            : 'white',
                                                         borderWidth: 1,
-                                                        borderColor: isInclued ? '#FDEE66' : 'black',
+                                                        borderColor: isInclued ? configuration.primaryColor : 'black',
                                                     }}
                                                 >
                                                     <span

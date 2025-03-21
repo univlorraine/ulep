@@ -55,7 +55,7 @@ const ActivityForm: React.FC<ActivityFormProps> = ({ handleSubmit }) => {
     const [newExercises, setNewExercises] = useState<ActivityExercise[]>(record?.exercises || DEFAULT_EXCERCISES);
     const [newVocabulary, setNewVocabulary] = useState<ActivityVocabulary[]>(record?.vocabularies || []);
 
-    const universitiesLanguages = useGetUniversitiesLanguages();
+    const { universitiesLanguages } = useGetUniversitiesLanguages();
     const proficiencyLevels = Object.values(ProficiencyLevel);
     const activityThemesCategories = useGetList('activities/categories');
     const { hasPermission, isRecording, startRecording, stopRecording } = useAudioRecorder();
@@ -207,8 +207,8 @@ const ActivityForm: React.FC<ActivityFormProps> = ({ handleSubmit }) => {
                             <Typography variant="subtitle1">{translate(`activities.form.language`)}</Typography>
                             <Select onChange={(e: any) => setNewLanguage(e.target.value as string)} value={newLanguage}>
                                 {universitiesLanguages.map((languageFromUniversity) => (
-                                    <MenuItem key={languageFromUniversity} value={languageFromUniversity}>
-                                        {languageFromUniversity}
+                                    <MenuItem key={languageFromUniversity.code} value={languageFromUniversity.code}>
+                                        {languageFromUniversity.code}
                                     </MenuItem>
                                 ))}
                             </Select>

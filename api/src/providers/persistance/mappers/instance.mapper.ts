@@ -4,9 +4,11 @@ import {
   EditoMandatoryTranslations,
   Instance,
 } from 'src/core/models/Instance.model';
+import { languageMapper } from './language.mapper';
 
 export type InstanceSnapshot = Prisma.Instance & {
   DefaultCertificateFile: Prisma.MediaObjects;
+  EditoCentralUniversityTranslations: Prisma.LanguageCodes[];
 };
 
 export const instanceMapper = (instanceSnapshot: InstanceSnapshot) => {
@@ -38,6 +40,11 @@ export const instanceMapper = (instanceSnapshot: InstanceSnapshot) => {
     editoMandatoryTranslations:
       instanceSnapshot.edito_mandatory_translations.map(
         (translation) => translation as EditoMandatoryTranslations,
+      ),
+    editoCentralUniversityTranslations:
+      instanceSnapshot.EditoCentralUniversityTranslations &&
+      instanceSnapshot.EditoCentralUniversityTranslations.map((translation) =>
+        languageMapper(translation),
       ),
   });
 };

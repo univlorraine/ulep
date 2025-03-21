@@ -33,6 +33,7 @@ export interface ProfileQueryWhere {
   };
   masteredLanguageCode?: string;
   nativeLanguageCode?: string;
+  learningLanguageCode?: string;
   notSubscribedToEvent?: string;
   subscribedToEvent?: string;
 }

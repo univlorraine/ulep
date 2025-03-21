@@ -151,6 +151,10 @@
                 "title": "Activité soumise : {{activityTitle}}",
                 "button": "Voir l'activité"
             },
+            "publish_activity": {
+                "title": "Activité publiée : {{activityTitle}}",
+                "button": "Voir l'activité"
+            },
             "played_game": {
                 "title": "Jeu joué : {{gameName}}",
                 "subtitle": "Vous avez obtenu {{percentage}}% des questions correctes"
@@ -403,6 +407,9 @@
             "missing_pronunciation": "{{count}} prononciation à enregistrer",
             "number_of_vocabularies": "{{count}} paires",
             "me": "moi",
+            "export": {
+                "success": "La liste de vocabulaire a été exportée avec succès"
+            },
             "add": {
                 "cancel": "Annuler",
                 "create": "Valider",
@@ -1092,8 +1099,8 @@
             "date": "Le",
             "application": "Application",
             "report_message": "Message signalé",
-            "tandem": "Tandem",
-            "tandem_missing": "Tandem inconnu"
+            "tandem": "Message de: ",
+            "tandem_missing": "Envoyeur inconnu"
         },
         "no_reports": "Aucun signalement",
         "error_get_reports": "Une erreur est survenue lors de la récupération des signalements",
@@ -1122,11 +1129,14 @@
         "comment": "Commentaire de l'administration",
         "no_comment": "Aucun commentaire de l'administration",
         "button_cancel": "Annuler mon signalement",
+        "button_close": "Clôturer le signalement",
         "cancel_modal": {
             "title": "Annuler le signalement",
-            "text": "Etes-vous certain de vouloir annuler le signalement ?",
-            "validate_button": "Annuler le signalement",
-            "cancel_button": "Ne rien faire"
+            "text": "Etes-vous certain de vouloir annuler le signalement ?"
+        },
+        "close_modal": {
+            "title": "Clôturer le signalement",
+            "text": "Etes-vous certain de vouloir clôturer le signalement ?"
         },
         "modal": {
             "validate": "Annuler le signalement",
@@ -1139,7 +1149,7 @@
         "title": "Mon activité",
         "certificate_title": "Road to certificat",
         "certificate_text": "Complète tous les objectifs listés afin d’obtenir ton certificat !",
-        "sessions_duration_title": "Heures d’échange en visio",
+        "sessions_duration_title": "Temps de passé en visio",
         "vocabulary_title": "Vocabulaire",
         "activities_title": "Fiches d’activité",
         "ask_for_certificate_button": "Demander mon certificat",

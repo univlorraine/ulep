@@ -1,5 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { Transform, Type } from 'class-transformer';
+import { Type } from 'class-transformer';
 import {
   IsArray,
   IsEmail,
@@ -80,7 +80,11 @@ export class UpdateInstanceRequest {
 
   @ApiPropertyOptional({ type: 'array', items: { type: 'string' } })
   @IsOptional()
-  @Transform(({ value }) => (value === undefined ? [] : value))
   @IsArray()
   editoMandatoryTranslations?: EditoMandatoryTranslations[];
+
+  @ApiPropertyOptional({ type: 'array', items: { type: 'string' } })
+  @IsOptional()
+  @IsArray()
+  editoCentralUniversityTranslations?: string[];
 }

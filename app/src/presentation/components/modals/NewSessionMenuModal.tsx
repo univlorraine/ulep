@@ -20,14 +20,18 @@ interface NewSessionMenuModalProps {
 const NewSessionMenuModal: React.FC<NewSessionMenuModalProps> = ({ isVisible, onClose, setRefreshSessions }) => {
     const [selectedTandem, setSelectedTandem] = useState<Tandem>();
     const [displaySessionContent, setDisplaySessionContent] = useState<DisplaySessionModal>();
+    const [isSingleTandem, setIsSingleTandem] = useState<boolean>(false);
     const history = useHistory();
     const { width } = useWindowDimensions();
     const isHybrid = width < HYBRID_MAX_WIDTH;
 
     const profile = useStoreState((state) => state.profile);
 
-    const onSelectedTandem = (tandem: Tandem) => {
+    const onSelectedTandem = (tandem: Tandem, isSingleTandem?: boolean) => {
         setSelectedTandem(tandem);
+        if (isSingleTandem) {
+            setIsSingleTandem(true);
+        }
     };
 
     const onShowSessionPressed = (session: Session, tandem: Tandem, confirmCreation?: boolean) => {
@@ -48,6 +52,14 @@ const NewSessionMenuModal: React.FC<NewSessionMenuModalProps> = ({ isVisible, on
         setSelectedTandem(undefined);
         setDisplaySessionContent(undefined);
         onClose();
+    };
+
+    const onCloseForm = () => {
+        if (selectedTandem && isSingleTandem) {
+            onClose();
+        } else {
+            setSelectedTandem(undefined);
+        }
     };
 
     if (!profile) {
@@ -71,7 +83,7 @@ const NewSessionMenuModal: React.FC<NewSessionMenuModalProps> = ({ isVisible, on
                 )}
                 {selectedTandem && !displaySessionContent?.session && (
                     <SessionFormContent
-                        goBack={() => setSelectedTandem(undefined)}
+                        goBack={onCloseForm}
                         isHybrid={false}
                         profile={profile}
                         tandem={selectedTandem}

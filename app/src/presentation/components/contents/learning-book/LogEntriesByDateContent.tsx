@@ -6,6 +6,7 @@ import {
     LogEntryAddVocabulary,
     LogEntryCustomEntry,
     LogEntryEditActivity,
+    LogEntryPublishActivity,
     LogEntryShareVocabulary,
     LogEntrySubmitActivity,
 } from '../../../../domain/entities/LogEntry';
@@ -49,7 +50,11 @@ export const LogEntriesByDateContent: React.FC<LogEntriesByDateContentProps> = (
             onUpdateCustomLogEntry(logEntry);
         } else if (logEntry instanceof LogEntryAddVocabulary || logEntry instanceof LogEntryShareVocabulary) {
             onOpenVocabularyList(logEntry.vocabularyListId);
-        } else if (logEntry instanceof LogEntryEditActivity || logEntry instanceof LogEntrySubmitActivity) {
+        } else if (
+            logEntry instanceof LogEntryEditActivity ||
+            logEntry instanceof LogEntrySubmitActivity ||
+            logEntry instanceof LogEntryPublishActivity
+        ) {
             onOpenActivity(logEntry.activityId);
         }
     };
@@ -82,12 +87,12 @@ export const LogEntriesByDateContent: React.FC<LogEntriesByDateContentProps> = (
                     })}
                 </div>
                 {logEntriesResult.isLoading && <Loader />}
-                {!logEntriesResult.isLoading && !isPaginationEnded && (
-                    <IonButton fill="clear" className="secondary-button" onClick={handleOnEndReached}>
-                        {t('learning_book.entry.load_more')}
-                    </IonButton>
-                )}
             </div>
+            {!logEntriesResult.isLoading && !isPaginationEnded && (
+                <IonButton fill="clear" className="secondary-button" onClick={handleOnEndReached}>
+                    {t('learning_book.entry.load_more')}
+                </IonButton>
+            )}
         </div>
     );
 };
