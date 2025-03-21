@@ -105,6 +105,7 @@ const ReportContent: React.FC<ReportContentProps> = ({ onClose }) => {
                     />
                 </div>
                 <TextInput
+                    id="input-report-note"
                     onChange={setNote}
                     title={t('home_page.report.note') as string}
                     type="text-area"

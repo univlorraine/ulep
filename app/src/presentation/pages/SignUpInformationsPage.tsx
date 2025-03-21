@@ -259,6 +259,7 @@ const SignUpInformationsPage: React.FC = () => {
                 </button>
 
                 <TextInput
+                    id="input-firstname"
                     autocomplete="name"
                     errorMessage={errorMessage?.type === 'firstname' ? errorMessage.message : undefined}
                     onChange={setFirstname}
@@ -270,6 +271,7 @@ const SignUpInformationsPage: React.FC = () => {
                 />
 
                 <TextInput
+                    id="input-lastname"
                     autocomplete="family-name"
                     errorMessage={errorMessage?.type === 'lastname' ? errorMessage.message : undefined}
                     onChange={setLastname}
@@ -305,6 +307,7 @@ const SignUpInformationsPage: React.FC = () => {
                 </div>
 
                 <TextInput
+                    id="input-age"
                     errorMessage={errorMessage?.type === 'age' ? errorMessage.message : undefined}
                     onChange={(age: string) => setAge(Number(age))}
                     placeholder={t('signup_informations_page.placeholder_age')}
@@ -315,6 +318,7 @@ const SignUpInformationsPage: React.FC = () => {
                 />
 
                 <TextInput
+                    id="input-email"
                     autocomplete="email"
                     errorMessage={
                         errorMessage?.type === 'email' || errorMessage?.type === 'domain'
@@ -332,6 +336,7 @@ const SignUpInformationsPage: React.FC = () => {
 
                 {profileSignUp.university?.hasCode && (
                     <TextInput
+                        id="input-code"
                         errorMessage={errorMessage?.type === 'code' ? errorMessage.message : undefined}
                         onChange={setCode}
                         placeholder={t('signup_informations_page.placeholder_code')}
@@ -345,6 +350,7 @@ const SignUpInformationsPage: React.FC = () => {
                 {!fromIdp && (
                     <>
                         <TextInput
+                            id="input-password"
                             autocomplete="new-password"
                             errorMessage={
                                 errorMessage?.type === 'password' ? <RulesInfo displayImage={false} /> : undefined
@@ -358,6 +364,7 @@ const SignUpInformationsPage: React.FC = () => {
                             required={true}
                         />
                         <TextInput
+                            id="input-confirm-password"
                             autocomplete="new-password"
                             errorMessage={errorMessage?.type === 'confirm' ? errorMessage.message : undefined}
                             onChange={setConfirmPassword}

@@ -181,6 +181,7 @@ export const CreateActivityInformationsContent = ({
         <div>
             <p className="title">{t('activity.create.title_informations')}</p>
             <TextInput
+                id="input-activity-title"
                 title={t('activity.create.title_input') as string}
                 onChange={(text) => setTitle(text)}
                 value={title}
@@ -216,6 +217,7 @@ export const CreateActivityInformationsContent = ({
                 </div>
             )}
             <TextInput
+                id="input-activity-credit-image"
                 title=""
                 onChange={(text) => setCreditImage(text)}
                 value={creditImage ?? ''}
@@ -223,6 +225,7 @@ export const CreateActivityInformationsContent = ({
             />
 
             <TextInput
+                id="input-activity-description"
                 title={t('activity.create.description') as string}
                 onChange={(text) => setDescription(text)}
                 value={description}
@@ -306,6 +309,7 @@ export const CreateActivityInformationsContent = ({
             {isRessourceUrl && !showFileRessource && (
                 <div className={styles.imageContainer}>
                     <TextInput
+                        id="input-activity-ressource-url"
                         title={''}
                         onChange={(text) => setRessourceUrl(text)}
                         value={ressourceUrl ?? ''}

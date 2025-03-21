@@ -78,11 +78,13 @@ const CustomGoalFormContent = ({
             </div>
             <div className={styles.content}>
                 <TextInput
+                    id="input-title"
                     title={t('goals.form.title') as string}
                     value={title}
                     onChange={(value) => setTitle(value)}
                 />
                 <TextInput
+                    id="input-description"
                     title={t('goals.form.description') as string}
                     value={description}
                     onChange={(value) => setDescription(value)}

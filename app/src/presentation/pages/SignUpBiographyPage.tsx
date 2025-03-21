@@ -76,6 +76,7 @@ const SignUpBiographyPage: React.FC = () => {
 
                     <div className={biographyStyles['input-container']}>
                         <TextInput
+                            id="input-power"
                             errorMessage={errorMessage?.id === 'power' ? errorMessage.value : undefined}
                             onChange={setPowerBiography}
                             placeholder={t('signup_biography_page.power_placeholder')}
@@ -88,6 +89,7 @@ const SignUpBiographyPage: React.FC = () => {
 
                     <div className={biographyStyles['input-container']}>
                         <TextInput
+                            id="input-incredible"
                             errorMessage={errorMessage?.id === 'incredible' ? errorMessage.value : undefined}
                             onChange={setIncredibleBiography}
                             placeholder={t('signup_biography_page.incredible_placeholder')}
@@ -100,6 +102,7 @@ const SignUpBiographyPage: React.FC = () => {
 
                     <div className={biographyStyles['input-container']}>
                         <TextInput
+                            id="input-place"
                             errorMessage={errorMessage?.id === 'place' ? errorMessage.value : undefined}
                             onChange={setPlaceBiography}
                             placeholder={t('signup_biography_page.place_placeholder')}
@@ -112,6 +115,7 @@ const SignUpBiographyPage: React.FC = () => {
 
                     <div className={biographyStyles['input-container']}>
                         <TextInput
+                            id="input-travel"
                             errorMessage={errorMessage?.id === 'travel' ? errorMessage.value : undefined}
                             onChange={setTravelBiography}
                             placeholder={t('signup_biography_page.travel_placeholder')}

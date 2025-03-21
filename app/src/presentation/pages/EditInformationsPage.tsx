@@ -113,6 +113,7 @@ const EditInformationsPage: React.FC = () => {
                 </button>
 
                 <TextInput
+                    id="input-firstname"
                     autocomplete="name"
                     errorMessage={errorMessage?.type === 'firstname' ? errorMessage.message : undefined}
                     onChange={setFirstname}
@@ -123,6 +124,7 @@ const EditInformationsPage: React.FC = () => {
                 />
 
                 <TextInput
+                    id="input-lastname"
                     autocomplete="family-name"
                     errorMessage={errorMessage?.type === 'lastname' ? errorMessage.message : undefined}
                     onChange={setLastname}
@@ -151,6 +153,7 @@ const EditInformationsPage: React.FC = () => {
                 </div>
 
                 <TextInput
+                    id="input-age"
                     errorMessage={errorMessage?.type === 'age' ? errorMessage.message : undefined}
                     onChange={(age: string) => setAge(Number(age))}
                     placeholder={t('signup_informations_page.placeholder_age')}
@@ -161,6 +164,7 @@ const EditInformationsPage: React.FC = () => {
 
                 {!profile?.user.university.isCentral && (
                     <TextInput
+                        id="input-email"
                         autocomplete="email"
                         errorMessage={errorMessage?.type === 'email' ? errorMessage.message : undefined}
                         onChange={setEmail}
