@@ -10,10 +10,12 @@ import {
     SelectInput,
     TextInput,
     DateField,
+    usePermissions,
 } from 'react-admin';
 import ColoredChips, { ChipsColors } from '../../components/ColoredChips';
 import useGetUniversitiesLanguages from '../../components/form/useGetUniversitiesLanguages';
 import PageTitle from '../../components/PageTitle';
+import { Role } from '../../entities/Administrator';
 import { News, NewsStatus, NewsTranslation } from '../../entities/News';
 import codeLanguageToFlag from '../../utils/codeLanguageToFlag';
 
@@ -35,6 +37,7 @@ const StatusChips = ({ status }: { status: string }) => {
 
 const NewsList = () => {
     const translate = useTranslate();
+    const { permissions } = usePermissions();
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
     const { universitiesLanguages, universitiesData } = useGetUniversitiesLanguages();
 
@@ -83,7 +86,11 @@ const NewsList = () => {
             <PageTitle>{translate('news.title')}</PageTitle>
             <List
                 exporter={false}
-                filter={!identity?.isCentralUniversity ? { universityId: identity?.universityId } : undefined}
+                filter={
+                    !identity?.isCentralUniversity || !permissions.checkRole(Role.SUPER_ADMIN)
+                        ? { universityId: identity?.universityId }
+                        : undefined
+                }
                 filters={filters}
             >
                 <Datagrid rowClick="edit">
