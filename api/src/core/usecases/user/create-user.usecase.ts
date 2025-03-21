@@ -73,18 +73,37 @@ export class CreateUserUsecase {
       throw new RessourceDoesNotExist('Country code does not exist');
     }
 
-    if(university.domains.length === 0 && (university.codes.length > 0 &&
-      !university.codes.some((codeToCheck) => codeToCheck === command.code))) {
+    const isCodeValid =
+      university.codes.length === 0 ||
+      university.codes.some((codeToCheck) => codeToCheck === command.code);
+
+    const isDomainValid =
+      university.domains.length === 0 ||
+      university.domains.some((domain) => command.email.includes(domain));
+
+    if (
+      university.codes.length > 0 &&
+      university.domains.length === 0 &&
+      !isCodeValid
+    ) {
       throw new BadRequestException('Code is invalid');
     }
 
     if (
       university.domains.length > 0 &&
-      !university.domains.some((domain) => command.email.includes(domain)) &&
-      university.codes.length > 0 &&
-      !university.codes.some((codeToCheck) => codeToCheck === command.code)
+      university.codes.length === 0 &&
+      !isDomainValid
     ) {
       throw new BadRequestException('Domain is invalid');
+    }
+
+    if (
+      university.codes.length > 0 &&
+      university.domains.length > 0 &&
+      !isCodeValid &&
+      !isDomainValid
+    ) {
+      throw new BadRequestException('Code is invalid');
     }
 
     const now = toZonedTime(new Date(), university.timezone);
@@ -113,14 +132,15 @@ export class CreateUserUsecase {
         emailVerified: false,
         origin: 'api',
       });
-    } else if(command.password && keycloakUser) {
+    } else if (command.password && keycloakUser) {
       await this.keycloak.updateUser({
         id: keycloakUser.id,
         email: keycloakUser.email,
         firstname: command.firstname,
         lastname: command.lastname,
         password: command.password,
-        universityId: keycloakUser.attributes?.universityId?.[0] || university.id,
+        universityId:
+          keycloakUser.attributes?.universityId?.[0] || university.id,
         universityLogin: keycloakUser.attributes?.universityLogin?.[0],
         languageId: keycloakUser.attributes?.languageId?.[0],
       });
