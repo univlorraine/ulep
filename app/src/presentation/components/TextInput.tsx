@@ -62,6 +62,7 @@ export type AutocompleteTypes =
     | 'photo';
 
 interface TextInputProps {
+    id?: string;
     autocomplete?: AutocompleteTypes;
     customHeight?: number;
     disabled?: boolean;
@@ -79,6 +80,7 @@ interface TextInputProps {
 }
 
 const TextInput: React.FC<TextInputProps> = ({
+    id,
     autocomplete = 'off',
     customHeight,
     disabled,
@@ -95,7 +97,6 @@ const TextInput: React.FC<TextInputProps> = ({
     showLimit = false,
 }) => {
     const [showPasword, setShowPassword] = useState<boolean>(false);
-    const inputId = `input-${title?.toLowerCase().replace(' ', '-')}`;
     return (
         <div className={`${style.container} large-margin-bottom`}>
             {title && (
@@ -111,7 +112,7 @@ const TextInput: React.FC<TextInputProps> = ({
                 >
                     {beforeInput && <div>{beforeInput}</div>}
                     <IonInput
-                        id={inputId}
+                        id={id}
                         aria-label={title}
                         disabled={disabled}
                         class={style.input}

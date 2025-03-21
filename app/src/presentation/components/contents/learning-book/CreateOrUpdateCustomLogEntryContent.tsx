@@ -67,6 +67,7 @@ export const CreateOrUpdateCustomLogEntryContent = ({
                 ></IonDatetime>
 
                 <TextInput
+                    id="input-log-entry-title"
                     title={t('learning_book.create.title_label') as string}
                     placeholder={entryTitle}
                     value={entryTitle}
@@ -74,6 +75,7 @@ export const CreateOrUpdateCustomLogEntryContent = ({
                 />
 
                 <TextInput
+                    id="input-log-entry-description"
                     title={t('learning_book.create.description_label') as string}
                     placeholder={entryDescription}
                     value={entryDescription}

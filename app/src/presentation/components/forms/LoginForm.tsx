@@ -74,6 +74,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
                     <p className={style.subtitle}>{t('login_page.subtitle')}</p>
                 </div>
                 <TextInput
+                    id="input-email"
                     autocomplete="email"
                     onChange={(email) => setEmail(email.trim())}
                     title={t('global.email') as string}
@@ -81,6 +82,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
                     value={email}
                 />
                 <TextInput
+                    id="input-password"
                     autocomplete="current-password"
                     onChange={setPassword}
                     title={t('global.password') as string}
