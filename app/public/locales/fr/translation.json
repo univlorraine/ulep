@@ -1095,8 +1095,8 @@
             "date": "Le",
             "application": "Application",
             "report_message": "Message signalé",
-            "tandem": "Tandem",
-            "tandem_missing": "Tandem inconnu"
+            "tandem": "Message de: ",
+            "tandem_missing": "Envoyeur inconnu"
         },
         "no_reports": "Aucun signalement",
         "error_get_reports": "Une erreur est survenue lors de la récupération des signalements",
