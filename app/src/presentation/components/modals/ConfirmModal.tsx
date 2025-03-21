@@ -7,16 +7,18 @@ interface ConfirmModalProps {
     onClose: () => void;
     onValidate: () => void;
     title: string;
+    description?: string;
 }
 
-const ConfirmModal: React.FC<ConfirmModalProps> = ({ isVisible, onClose, onValidate, title }) => {
+const ConfirmModal: React.FC<ConfirmModalProps> = ({ isVisible, onClose, onValidate, title, description }) => {
     const { t } = useTranslation();
 
     return (
         <Modal isVisible={isVisible} onClose={onClose}>
             <div>
                 <div className={styles.container}>
-                    <span className={styles.title}>{title}</span>
+                    <h2 className={styles.title}>{title}</h2>
+                    {description && <p>{description}</p>}
                     <div className={styles['button-container']}>
                         <button
                             aria-label={t('confirm_modal.cancel') as string}
