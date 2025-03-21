@@ -278,7 +278,7 @@ export const isImageFormatValid = (file: File): boolean => {
 };
 
 export const isUrlValid = (url: string): boolean => {
-    const urlRegex = /^(https?:\/\/)?([\da-z][\da-z-]{0,61}[\da-z]\.)+[a-z]{2,}([\/\w \.-]*)*\/?$/i;
+    const urlRegex = /^(https?:\/\/)?([\da-z][\da-z-]{0,61}[\da-z]\.)+[a-z]{2,}(\/[\w-]+)*\/?$/i;
     return urlRegex.test(url);
 };
 
