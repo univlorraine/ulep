@@ -86,7 +86,6 @@ export class UpdateActivityUsecase {
     }
 
     let openGraphResult: any;
-    console.log('ressourceUrl', command.ressourceUrl);
     const urlWithProtocol =
       command.ressourceUrl &&
       (command.ressourceUrl.startsWith('http')
@@ -98,7 +97,6 @@ export class UpdateActivityUsecase {
         ? urlWithProtocol
         : undefined;
 
-    console.log('url', url);
     if (url) {
       await this.handleDeleteRessourceFile(activity);
       try {

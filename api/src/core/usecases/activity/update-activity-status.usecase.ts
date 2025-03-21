@@ -138,8 +138,6 @@ export class UpdateActivityStatusUsecase {
       activity.id,
     );
 
-    console.log('learningLanguage', learningLanguage);
-    console.log('status', status);
     if (learningLanguage && status === ActivityStatus.IN_VALIDATION) {
       await this.createOrUpdateLogEntryUsecase.execute({
         learningLanguageId: learningLanguage.id,
