@@ -6,6 +6,7 @@ import {
   LogEntryCustomEntry,
   LogEntryEditActivity,
   LogEntryPlayedGame,
+  LogEntryPublishActivity,
   LogEntryShareVocabulary,
   LogEntrySharingLogs,
   LogEntrySubmitActivity,
@@ -117,6 +118,15 @@ export const logEntryMapper = (
         activityId: data.activityId,
         activityTitle: data.activityTitle,
         updatedCount: data.updatedCount,
+        learningLanguage: learningLanguageMapper(snapshot.LearningLanguage),
+      });
+    case LogEntryType.PUBLISH_ACTIVITY:
+      return new LogEntryPublishActivity({
+        id: snapshot.id,
+        type: LogEntryType.PUBLISH_ACTIVITY,
+        createdAt: snapshot.created_at,
+        activityId: data.activityId,
+        activityTitle: data.activityTitle,
         learningLanguage: learningLanguageMapper(snapshot.LearningLanguage),
       });
     case LogEntryType.EDIT_ACTIVITY:

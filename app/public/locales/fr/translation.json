@@ -151,6 +151,10 @@
                 "title": "Activité soumise : {{activityTitle}}",
                 "button": "Voir l'activité"
             },
+            "publish_activity": {
+                "title": "Activité publiée : {{activityTitle}}",
+                "button": "Voir l'activité"
+            },
             "played_game": {
                 "title": "Jeu joué : {{gameName}}",
                 "subtitle": "Vous avez obtenu {{percentage}}% des questions correctes"

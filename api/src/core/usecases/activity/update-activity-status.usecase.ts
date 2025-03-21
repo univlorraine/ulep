@@ -46,22 +46,7 @@ export class UpdateActivityStatusUsecase {
     }
 
     // Create a log entry when an activity is submitted for validation
-    if (command.status === ActivityStatus.IN_VALIDATION) {
-      const learningLanguage = await this.findActivityLearningLanguageCreator(
-        command.id,
-      );
-
-      if (learningLanguage) {
-        await this.createOrUpdateLogEntryUsecase.execute({
-          learningLanguageId: learningLanguage.id,
-          type: LogEntryType.SUBMIT_ACTIVITY,
-          metadata: {
-            activityId: activity.id,
-            activityTitle: activity.title,
-          },
-        });
-      }
-    }
+    await this.handleLogEntry(activity, command.status);
 
     const updatedActivity = await this.activityRepository.updateActivityStatus(
       command.id,
@@ -146,5 +131,35 @@ export class UpdateActivityStatusUsecase {
     }
 
     return activity.creator?.findLearningLanguageByCode(activity.language.code);
+  }
+
+  private async handleLogEntry(activity: Activity, status: ActivityStatus) {
+    const learningLanguage = await this.findActivityLearningLanguageCreator(
+      activity.id,
+    );
+
+    console.log('learningLanguage', learningLanguage);
+    console.log('status', status);
+    if (learningLanguage && status === ActivityStatus.IN_VALIDATION) {
+      await this.createOrUpdateLogEntryUsecase.execute({
+        learningLanguageId: learningLanguage.id,
+        type: LogEntryType.SUBMIT_ACTIVITY,
+        metadata: {
+          activityId: activity.id,
+          activityTitle: activity.title,
+        },
+      });
+    }
+
+    if (learningLanguage && status === ActivityStatus.PUBLISHED) {
+      await this.createOrUpdateLogEntryUsecase.execute({
+        learningLanguageId: learningLanguage.id,
+        type: LogEntryType.PUBLISH_ACTIVITY,
+        metadata: {
+          activityId: activity.id,
+          activityTitle: activity.title,
+        },
+      });
+    }
   }
 }

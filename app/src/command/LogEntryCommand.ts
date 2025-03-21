@@ -6,6 +6,7 @@ import {
     LogEntryCustomEntry,
     LogEntryEditActivity,
     LogEntryPlayedGame,
+    LogEntryPublishActivity,
     LogEntryShareVocabulary,
     LogEntrySharingLogs,
     LogEntrySubmitActivity,
@@ -119,6 +120,15 @@ export const logEntryCommandToDomain = (command: LogEntryCommand): LogEntry | un
             });
         case LogEntryType.SUBMIT_ACTIVITY:
             return new LogEntrySubmitActivity({
+                id: command.id,
+                createdAt: command.createdAt,
+                type: command.type,
+                ownerId: command.ownerId,
+                activityId: command.metadata.activityId!,
+                activityTitle: command.metadata.activityTitle!,
+            });
+        case LogEntryType.PUBLISH_ACTIVITY:
+            return new LogEntryPublishActivity({
                 id: command.id,
                 createdAt: command.createdAt,
                 type: command.type,

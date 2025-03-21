@@ -8,9 +8,10 @@ import {
   LogEntryCustomEntry,
   LogEntryEditActivity,
   LogEntryPlayedGame,
+  LogEntryPublishActivity,
   LogEntryShareVocabulary,
   LogEntrySubmitActivity,
-  LogEntryTandemChat,
+  LogEntryType,
   LogEntryVisio,
 } from 'src/core/models/log-entry.model';
 import {
@@ -73,19 +74,28 @@ export class ExportLogEntriesUsecase {
     const passThrough = new PassThrough();
     const csvStringifier = stringify({
       header: true,
-      columns: ['id', 'type', 'date', 'metadata'],
+      columns: ['Date', 'Activity', 'Titre', 'Quantité', 'Détail'],
     });
 
     csvStringifier.pipe(passThrough);
 
-    logEntries.forEach((entry) => {
-      csvStringifier.write({
-        id: entry.id,
-        type: entry.type,
-        date: entry.createdAt.toISOString(),
-        metadata: this.formatMetadata(entry),
+    // Ignore chat entry : https://dev.azure.com/theTribe-Mobile/UL%20E-Tandem/_sprints/backlog/UL%20E-Tandem%20Team/UL%20E-Tandem/T2%20Sprint%2025?System.State=In%20Progress%2CNew&System.AssignedTo=_Unassigned_%2Cmarvyn.orourke%40thetribe.io&workitem=4542
+    logEntries
+      .filter(
+        (entry) =>
+          entry instanceof LogEntry &&
+          entry.type !== LogEntryType.COMMUNITY_CHAT &&
+          entry.type !== LogEntryType.TANDEM_CHAT,
+      )
+      .forEach((entry) => {
+        csvStringifier.write({
+          Date: entry.createdAt.toISOString(),
+          Activity: entry.type,
+          Titre: this.getActivityTitle(entry),
+          Quantité: this.getQuantity(entry),
+          Détail: this.getDetail(entry),
+        });
       });
-    });
     csvStringifier.end();
 
     return new Promise((resolve, reject) => {
@@ -97,44 +107,6 @@ export class ExportLogEntriesUsecase {
       });
       passThrough.on('error', reject);
     });
-  }
-
-  private formatMetadata(entry: LogEntry): string {
-    if (entry instanceof LogEntryVisio) {
-      return JSON.stringify({
-        duration: entry.duration,
-        partner: `${entry.tandemFirstname} ${entry.tandemLastname}`,
-      });
-    } else if (entry instanceof LogEntryTandemChat) {
-      return JSON.stringify({
-        partner: `${entry.tandemFirstname} ${entry.tandemLastname}`,
-      });
-    } else if (entry instanceof LogEntryCustomEntry) {
-      return JSON.stringify({
-        title: entry.title,
-        content: entry.content,
-      });
-    } else if (
-      entry instanceof LogEntryShareVocabulary ||
-      entry instanceof LogEntryAddVocabulary
-    ) {
-      return JSON.stringify({
-        listName: entry.vocabularyListName,
-      });
-    } else if (
-      entry instanceof LogEntryEditActivity ||
-      entry instanceof LogEntrySubmitActivity
-    ) {
-      return JSON.stringify({
-        title: entry.activityTitle,
-      });
-    } else if (entry instanceof LogEntryPlayedGame) {
-      return JSON.stringify({
-        gameName: entry.gameName,
-        percentage: entry.percentage,
-      });
-    }
-    return '';
   }
 
   private async assertLearningLanguageExists(learningLanguageId: string) {
@@ -161,5 +133,52 @@ export class ExportLogEntriesUsecase {
     return profile?.learningLanguages.some(
       (learningLanguage) => learningLanguage.id === learningLanguageId,
     );
+  }
+
+  private getActivityTitle(entry: LogEntry): string {
+    if (
+      entry instanceof LogEntrySubmitActivity ||
+      entry instanceof LogEntryPublishActivity ||
+      entry instanceof LogEntryEditActivity
+    ) {
+      return entry.activityTitle;
+    } else if (
+      entry instanceof LogEntryAddVocabulary ||
+      entry instanceof LogEntryShareVocabulary
+    ) {
+      return entry.vocabularyListName;
+    } else if (entry instanceof LogEntryCustomEntry) {
+      return entry.title;
+    } else if (entry instanceof LogEntryPlayedGame) {
+      return entry.gameName;
+    }
+
+    return '';
+  }
+
+  private getQuantity(entry: LogEntry): string {
+    if (entry instanceof LogEntryVisio) {
+      return entry.duration.toString();
+    } else if (entry instanceof LogEntryAddVocabulary) {
+      return entry.entryNumber.toString();
+    }
+
+    return '';
+  }
+
+  private getDetail(entry: LogEntry): string {
+    if (
+      entry instanceof LogEntrySubmitActivity ||
+      entry instanceof LogEntryPublishActivity ||
+      entry instanceof LogEntryEditActivity ||
+      entry instanceof LogEntryAddVocabulary ||
+      entry instanceof LogEntryShareVocabulary
+    ) {
+      return entry.learningLanguage.language.name;
+    } else if (entry instanceof LogEntryPlayedGame) {
+      return entry.percentage.toString();
+    }
+
+    return '';
   }
 }
