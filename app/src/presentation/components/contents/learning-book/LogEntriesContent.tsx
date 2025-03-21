@@ -9,6 +9,7 @@ import {
     LogEntryAddVocabulary,
     LogEntryCustomEntry,
     LogEntryEditActivity,
+    LogEntryPublishActivity,
     LogEntryShareVocabulary,
     LogEntrySubmitActivity,
 } from '../../../../domain/entities/LogEntry';
@@ -61,7 +62,11 @@ export const LogEntriesContent: React.FC<LogEntriesContentProps> = ({
             onUpdateCustomLogEntry(logEntry);
         } else if (logEntry instanceof LogEntryAddVocabulary || logEntry instanceof LogEntryShareVocabulary) {
             onOpenVocabularyList(logEntry.vocabularyListId);
-        } else if (logEntry instanceof LogEntryEditActivity || logEntry instanceof LogEntrySubmitActivity) {
+        } else if (
+            logEntry instanceof LogEntryEditActivity ||
+            logEntry instanceof LogEntrySubmitActivity ||
+            logEntry instanceof LogEntryPublishActivity
+        ) {
             onOpenActivity(logEntry.activityId);
         }
     };

@@ -7,6 +7,7 @@ import {
   LogEntryCustomEntry,
   LogEntryEditActivity,
   LogEntryPlayedGame,
+  LogEntryPublishActivity,
   LogEntryShareVocabulary,
   LogEntrySubmitActivity,
   LogEntryTandemChat,
@@ -211,6 +212,13 @@ export class LogEntryResponse {
     }
 
     if (logEntry instanceof LogEntrySubmitActivity) {
+      metadata = {
+        activityId: logEntry.activityId,
+        activityTitle: logEntry.activityTitle,
+      };
+    }
+
+    if (logEntry instanceof LogEntryPublishActivity) {
       metadata = {
         activityId: logEntry.activityId,
         activityTitle: logEntry.activityTitle,

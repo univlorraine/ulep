@@ -7,6 +7,7 @@ export enum LogEntryType {
     SHARING_LOGS = 'SHARING_LOGS',
     ADD_VOCABULARY = 'ADD_VOCABULARY',
     SHARE_VOCABULARY = 'SHARE_VOCABULARY',
+    PUBLISH_ACTIVITY = 'PUBLISH_ACTIVITY',
     EDIT_ACTIVITY = 'EDIT_ACTIVITY',
     SUBMIT_ACTIVITY = 'SUBMIT_ACTIVITY',
     PLAYED_GAME = 'PLAYED_GAME',
@@ -18,6 +19,7 @@ export type LogEntries =
     | LogEntryEditActivity
     | LogEntryCustomEntry
     | LogEntryShareVocabulary
+    | LogEntryPublishActivity
     | LogEntrySubmitActivity
     | LogEntryVisio
     | LogEntryTandemChat
@@ -182,6 +184,22 @@ export class LogEntrySubmitActivity extends LogEntry {
     activityTitle: string;
 
     constructor(data: LogEntrySubmitActivityProps) {
+        super(data);
+        this.activityId = data.activityId;
+        this.activityTitle = data.activityTitle;
+    }
+}
+
+export type LogEntryPublishActivityProps = LogEntryProps & {
+    activityId: string;
+    activityTitle: string;
+};
+
+export class LogEntryPublishActivity extends LogEntry {
+    activityId: string;
+    activityTitle: string;
+
+    constructor(data: LogEntryPublishActivityProps) {
         super(data);
         this.activityId = data.activityId;
         this.activityTitle = data.activityTitle;

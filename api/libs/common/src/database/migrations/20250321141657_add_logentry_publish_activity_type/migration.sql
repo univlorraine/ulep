@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "LogEntryType" ADD VALUE 'PUBLISH_ACTIVITY';

@@ -7,6 +7,7 @@ import {
     LogEntryCustomEntry,
     LogEntryEditActivity,
     LogEntryPlayedGame,
+    LogEntryPublishActivity,
     LogEntryShareVocabulary,
     LogEntrySharingLogs,
     LogEntrySubmitActivity,
@@ -31,7 +32,11 @@ export const getLogEntryImage = (logEntry: LogEntry): string | undefined => {
         return VocabularyPng;
     } else if (logEntry instanceof LogEntryVisio || logEntry instanceof LogEntryTandemChat) {
         return AvatarPng;
-    } else if (logEntry instanceof LogEntrySubmitActivity || logEntry instanceof LogEntryEditActivity) {
+    } else if (
+        logEntry instanceof LogEntrySubmitActivity ||
+        logEntry instanceof LogEntryEditActivity ||
+        logEntry instanceof LogEntryPublishActivity
+    ) {
         return FicheSvg;
     } else if (logEntry instanceof LogEntryPlayedGame) {
         return DicesPng;
@@ -84,6 +89,14 @@ export const LogEntryTitle: React.FC<LogEntrySubComponentProps> = ({ logEntry })
             return (
                 <>
                     {t('learning_book.entry.submit_activity.title', {
+                        activityTitle: logEntry.activityTitle,
+                    })}
+                </>
+            );
+        } else if (logEntry instanceof LogEntryPublishActivity) {
+            return (
+                <>
+                    {t('learning_book.entry.publish_activity.title', {
                         activityTitle: logEntry.activityTitle,
                     })}
                 </>
@@ -152,7 +165,11 @@ const getLogEntryButton = (logEntry: LogEntry) => {
         return t('learning_book.entry.custom.button');
     } else if (logEntry instanceof LogEntryAddVocabulary || logEntry instanceof LogEntryShareVocabulary) {
         return t('learning_book.entry.add_vocabulary.button');
-    } else if (logEntry instanceof LogEntrySubmitActivity || logEntry instanceof LogEntryEditActivity) {
+    } else if (
+        logEntry instanceof LogEntrySubmitActivity ||
+        logEntry instanceof LogEntryEditActivity ||
+        logEntry instanceof LogEntryPublishActivity
+    ) {
         return t('learning_book.entry.submit_activity.button');
     }
     return undefined;

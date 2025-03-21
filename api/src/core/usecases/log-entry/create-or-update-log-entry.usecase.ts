@@ -135,6 +135,7 @@ export class CreateOrUpdateLogEntryUsecase {
           shouldIgnore: Boolean(shareVocabularyEntryExistsToday),
         };
       case LogEntryType.SUBMIT_ACTIVITY:
+      case LogEntryType.PUBLISH_ACTIVITY:
         const submitActivityEntryExistsToday = entries.find(
           (entry) =>
             entry instanceof LogEntrySubmitActivity &&
@@ -245,6 +246,7 @@ export class CreateOrUpdateLogEntryUsecase {
         }
         break;
       case LogEntryType.SUBMIT_ACTIVITY:
+      case LogEntryType.PUBLISH_ACTIVITY:
         if (!metadata.activityId || !metadata.activityTitle) {
           throw new LogEntryMissingMetadataException();
         }
