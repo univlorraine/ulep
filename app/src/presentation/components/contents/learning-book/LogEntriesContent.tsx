@@ -111,7 +111,7 @@ export const LogEntriesContent: React.FC<LogEntriesContentProps> = ({
             <div className={styles['log-entries-list']}>
                 <div className={styles['log-entries-list-container']}>
                     {logEntriesResult.logEntries.map((logEntry) => {
-                        if (logEntry.count > 1) {
+                        if (logEntry.count > 1 && logEntry.entries.length > 1) {
                             return (
                                 <LogEntriesCard
                                     key={logEntry.date.toISOString()}
