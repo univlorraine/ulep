@@ -1,5 +1,6 @@
 export interface UpdateVisioDurationParams {
     learningLanguageId: string;
+    roomName: string;
     partnerTandemId: string;
     partnerFirstname: string;
     partnerLastname: string;

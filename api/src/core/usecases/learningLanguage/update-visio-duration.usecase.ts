@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { differenceInMinutes } from 'date-fns';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import { LearningLanguage } from 'src/core/models';
 import { LogEntryType, LogEntryVisio } from 'src/core/models/log-entry.model';
@@ -13,6 +14,7 @@ import {
 
 export class UpdateVisioDurationCommand {
   learningLanguageId: string;
+  roomName: string;
   partnerTandemId: string;
   partnerFirstname: string;
   partnerLastname: string;
@@ -50,9 +52,24 @@ export class UpdateVisioDurationUsecase {
       LogEntryType.VISIO,
     );
 
+    const otherLogEntries =
+      (await this.logEntryRepository.findAllOfTypeTodayWithoutLearningLanguage(
+        LogEntryType.VISIO,
+      )) as LogEntryVisio[];
+
     const logEntry = logEntries[0] as LogEntryVisio;
 
-    if (logEntry) {
+    const otherParticipant = otherLogEntries.find(
+      (entry) =>
+        entry.roomName === command.roomName &&
+        entry.partnerTandemId != logEntry.partnerTandemId,
+    );
+
+    const otherEntryIsNow =
+      otherParticipant?.updatedAt &&
+      differenceInMinutes(new Date(), otherParticipant.updatedAt) < 2;
+
+    if (logEntry && otherEntryIsNow) {
       await this.logEntryRepository.update({
         id: logEntry.id,
         metadata: {
@@ -60,9 +77,10 @@ export class UpdateVisioDurationUsecase {
           partnerTandemId: logEntry.partnerTandemId,
           tandemFirstname: logEntry.tandemFirstname,
           tandemLastname: logEntry.tandemLastname,
+          roomName: logEntry.roomName,
         },
       });
-    } else {
+    } else if (!logEntry) {
       await this.logEntryRepository.create({
         learningLanguageId: learningLanguage.id,
         type: LogEntryType.VISIO,
@@ -71,6 +89,18 @@ export class UpdateVisioDurationUsecase {
           partnerTandemId: command.partnerTandemId,
           tandemFirstname: command.partnerFirstname,
           tandemLastname: command.partnerLastname,
+          roomName: command.roomName,
+        },
+      });
+    } else {
+      await this.logEntryRepository.update({
+        id: logEntry.id,
+        metadata: {
+          duration: logEntry.duration,
+          partnerTandemId: logEntry.partnerTandemId,
+          tandemFirstname: logEntry.tandemFirstname,
+          tandemLastname: logEntry.tandemLastname,
+          roomName: logEntry.roomName,
         },
       });
     }

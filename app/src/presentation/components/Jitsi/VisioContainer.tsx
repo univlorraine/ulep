@@ -65,6 +65,7 @@ const VisioContainer = () => {
         const interval = setInterval(() => {
             updateVisioDuration.execute({
                 learningLanguageId,
+                roomName,
                 partnerTandemId: tandemPartner.id,
                 partnerFirstname: firstname,
                 partnerLastname: lastname,

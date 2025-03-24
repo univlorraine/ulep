@@ -155,6 +155,27 @@ export class PrismaLogEntryRepository implements LogEntryRepository {
       .filter((entry) => entry !== undefined);
   }
 
+  async findAllOfTypeTodayWithoutLearningLanguage(
+    type: LogEntryType,
+  ): Promise<LogEntry[]> {
+    const logEntries = await this.prisma.logEntry.findMany({
+      where: {
+        type,
+        created_at: { gte: startOfDay(new Date()), lte: endOfDay(new Date()) },
+      },
+      orderBy: { created_at: 'asc' },
+      ...LogEntryRelations,
+    });
+
+    if (!logEntries) {
+      return null;
+    }
+
+    return logEntries
+      .map(logEntryMapper)
+      .filter((entry) => entry !== undefined);
+  }
+
   async create(command: CreateLogEntryCommand): Promise<LogEntry> {
     const logEntry = await this.prisma.logEntry.create({
       data: {

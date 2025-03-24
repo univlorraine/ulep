@@ -12,4 +12,8 @@ export class UpdateVisioDurationRequest {
   @IsString()
   @IsNotEmpty()
   partnerLastname: string;
+
+  @IsString()
+  @IsNotEmpty()
+  roomName: string;
 }

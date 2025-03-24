@@ -29,6 +29,7 @@ export type LogEntries =
 export type LogEntryProps = {
   id: string;
   createdAt: Date;
+  updatedAt: Date;
   type: LogEntryType;
   learningLanguage: LearningLanguage;
   [key: string]: unknown;
@@ -37,12 +38,14 @@ export type LogEntryProps = {
 export class LogEntry {
   id: string;
   createdAt: Date;
+  updatedAt: Date;
   learningLanguage: LearningLanguage;
   type: LogEntryType;
 
   constructor(data: LogEntryProps) {
     this.id = data.id;
     this.createdAt = data.createdAt;
+    this.updatedAt = data.updatedAt;
     this.type = data.type;
     this.learningLanguage = data.learningLanguage;
   }
@@ -53,6 +56,7 @@ export type LogEntryVisioProps = LogEntryProps & {
   partnerTandemId: string;
   tandemFirstname?: string;
   tandemLastname?: string;
+  roomName: string;
 };
 
 export class LogEntryVisio extends LogEntry {
@@ -60,11 +64,12 @@ export class LogEntryVisio extends LogEntry {
   partnerTandemId: string;
   tandemFirstname?: string;
   tandemLastname?: string;
-
+  roomName: string;
   constructor(data: LogEntryVisioProps) {
     super(data);
     this.duration = data.duration;
     this.partnerTandemId = data.partnerTandemId;
+    this.roomName = data.roomName;
     this.tandemFirstname = data.tandemFirstname;
     this.tandemLastname = data.tandemLastname;
   }

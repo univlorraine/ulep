@@ -213,6 +213,7 @@ export class LearningLanguageController {
   ): Promise<void> {
     await this.updateVisioDurationUsecase.execute({
       learningLanguageId: id,
+      roomName: body.roomName,
       partnerTandemId: body.partnerTandemId,
       partnerFirstname: body.partnerFirstname,
       partnerLastname: body.partnerLastname,
