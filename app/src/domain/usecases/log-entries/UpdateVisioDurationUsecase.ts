@@ -11,6 +11,7 @@ class UpdateVisioDurationUsecase implements UpdateVisioDurationUsecaseInterface 
     async execute(params: UpdateVisioDurationParams): Promise<void | Error> {
         try {
             const payload = {
+                roomName: params.roomName,
                 partnerTandemId: params.partnerTandemId,
                 partnerFirstname: params.partnerFirstname,
                 partnerLastname: params.partnerLastname,

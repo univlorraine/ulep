@@ -254,6 +254,7 @@ export class CreateOrUpdateLogEntryUsecase {
       case LogEntryType.VISIO:
         if (
           !metadata.duration ||
+          !metadata.roomName ||
           !metadata.partnerTandemId ||
           !metadata.tandemFirstname ||
           !metadata.tandemLastname

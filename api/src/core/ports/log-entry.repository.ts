@@ -39,6 +39,9 @@ export interface LogEntryRepository {
     learningLanguageId: string,
     type: LogEntryType,
   ): Promise<LogEntry[]>;
+  findAllOfTypeTodayWithoutLearningLanguage(
+    type: LogEntryType,
+  ): Promise<LogEntry[]>;
   findAllForLearningLanguage(
     learningLanguageId: string,
     beforeDate: Date,
