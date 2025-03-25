@@ -1,3 +1,4 @@
+import { SentryService } from '@app/common';
 import {
   ClassSerializerInterceptor,
   INestApplication,
@@ -6,14 +7,13 @@ import {
 import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
-import { AppModule } from './app.module';
 import { DomainErrorFilter, PrismaClientExceptionFilter } from './api/filters';
 import {
   CollectionInterceptor,
   HttpLoggerInterceptor,
   SentryInterceptor,
 } from './api/interceptors';
-import { SentryService } from '@app/common';
+import { AppModule } from './app.module';
 
 export class Server {
   public async run(port: number): Promise<INestApplication> {
@@ -88,7 +88,15 @@ export class Server {
     const options = new DocumentBuilder()
       .setTitle('ULEP API')
       .setVersion('1.0.0')
-      .addBearerAuth()
+      .addBearerAuth({
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        in: 'header',
+        name: 'Authorization',
+        description: 'Enter your Bearer token',
+      })
+      .addSecurityRequirements('bearer')
       .build();
 
     const document: OpenAPIObject = SwaggerModule.createDocument(app, options);
