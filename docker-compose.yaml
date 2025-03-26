@@ -150,7 +150,7 @@ services:
   database:
     image: postgres:${POSTGRES_VERSION:-14}-alpine
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-ulep} -d ${POSTGRES_DB:-ulep}']
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}']
       interval: 5s
       retries: 5
       start_period: 5s
@@ -161,7 +161,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
     volumes:
       - ./docker/database/db.sql:/docker-entrypoint-initdb.d/db.sql
-      - db_data_2:/var/lib/postgresql/data
+      - db_data:/var/lib/postgresql/data
       # you may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
       # - ./docker/database/data:/var/lib/postgresql/data
 
@@ -191,6 +191,6 @@ services:
     #     POSTGRES_DATABASE: ${WEBLATE_DB:-weblate} # ? TODO use custom schema
 
 volumes:
-  db_data_2:
+  db_data:
   chat_data:
   redis_data:
