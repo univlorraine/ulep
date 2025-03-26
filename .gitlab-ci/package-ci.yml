@@ -18,7 +18,7 @@ stages:
   image: node:$NODE_VERSION-alpine
   before_script: # Activation de corepack pour pouvoir utiliser pnpm
     - COREPACK_DEFAULT_TO_LATEST=0 corepack enable
-    - COREPACK_DEFAULT_TO_LATEST=0 corepack prepare --activate pnpm@10.0.0
+    - COREPACK_DEFAULT_TO_LATEST=0 corepack prepare --activate pnpm@10.7.0
     - cd $WORKING_DIR
 
 # Installation des dépendances
