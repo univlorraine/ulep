@@ -27,12 +27,23 @@ const LearningBookContainerContent: React.FC<LearningBookContainerContentProps> 
     openNewEntry,
 }) => {
     const { t } = useTranslation();
-    const { createLogEntry, updateCustomLogEntry, shareLogEntries, exportLogEntries, unshareLogEntries } = useConfig();
+    const {
+        createLogEntry,
+        updateCustomLogEntry,
+        shareLogEntries,
+        exportLogEntries,
+        unshareLogEntries,
+        shareLogEntriesForResearch,
+        unshareLogEntriesForResearch,
+    } = useConfig();
     const [showToast] = useIonToast();
     const [isCreateCustomLogEntry, setIsCreateCustomLogEntry] = useState<boolean>(false);
     const [logEntryToUpdate, setLogEntryToUpdate] = useState<LogEntryCustomEntry | undefined>();
     const [focusLogEntryForADay, setFocusLogEntryForADay] = useState<Date | undefined>();
     const [isShared, setIsShared] = useState<boolean>(Boolean(learningLanguage.sharedLogsDate));
+    const [isSharedForResearch, setIsSharedForResearch] = useState<boolean>(
+        Boolean(learningLanguage.sharedLogsForResearchDate)
+    );
 
     useEffect(() => {
         if (openNewEntry) {
@@ -90,6 +101,16 @@ const LearningBookContainerContent: React.FC<LearningBookContainerContentProps> 
         }
     };
 
+    const handleShareLogEntriesForResearch = async () => {
+        const result = await shareLogEntriesForResearch.execute(learningLanguage.id);
+        if (result instanceof Error) {
+            showToast(t(result.message), 3000);
+        } else {
+            showToast(t('learning_book.list.share.success'), 3000);
+            setIsSharedForResearch(true);
+        }
+    };
+
     const handleUnshareLogEntries = async () => {
         const result = await unshareLogEntries.execute(learningLanguage.id);
         if (result instanceof Error) {
@@ -97,6 +118,16 @@ const LearningBookContainerContent: React.FC<LearningBookContainerContentProps> 
         } else {
             showToast(t('learning_book.list.unshare.success'), 3000);
             setIsShared(false);
+        }
+    };
+
+    const handleUnshareLogEntriesForResearch = async () => {
+        const result = await unshareLogEntriesForResearch.execute(learningLanguage.id);
+        if (result instanceof Error) {
+            showToast(t(result.message), 3000);
+        } else {
+            showToast(t('learning_book.list.unshare.success'), 3000);
+            setIsSharedForResearch(false);
         }
     };
 
@@ -165,11 +196,14 @@ const LearningBookContainerContent: React.FC<LearningBookContainerContentProps> 
             onFocusLogEntryForADay={setFocusLogEntryForADay}
             onShareLogEntries={handleShareLogEntries}
             onUnshareLogEntries={handleUnshareLogEntries}
+            onShareLogEntriesForResearch={handleShareLogEntriesForResearch}
+            onUnshareLogEntriesForResearch={handleUnshareLogEntriesForResearch}
             onExportLogEntries={handleExportLogEntries}
             learningLanguage={learningLanguage}
             profile={profile}
             isModal={true}
             isShared={isShared}
+            isSharedForResearch={isSharedForResearch}
         />
     );
 };

@@ -61,7 +61,9 @@ import CreateLogEntryUsecaseInterface from '../domain/interfaces/log-entries/Cre
 import ExportLogEntriesUsecaseInterface from '../domain/interfaces/log-entries/ExportLogEntriesUsecase.interface';
 import GetLogEntriesByDateUsecaseInterface from '../domain/interfaces/log-entries/GetLogEntriesByDateUsecase.interface';
 import GetLogEntriesUsecaseInterface from '../domain/interfaces/log-entries/GetLogEntriesUsecase.interface';
+import ShareForResearchLogEntriesUsecaseInterface from '../domain/interfaces/log-entries/ShareForResearchLogEntriesUsecase.interface';
 import ShareLogEntriesUsecaseInterface from '../domain/interfaces/log-entries/ShareLogEntriesUsecase.interface';
+import UnshareForResearchLogEntriesUsecaseInterface from '../domain/interfaces/log-entries/UnshareForResearchLogEntriesUsecase.interface';
 import UnshareLogEntriesUsecaseInterface from '../domain/interfaces/log-entries/UnshareLogEntriesUsecase.interface';
 import UpdateCustomLogEntryUsecaseInterface from '../domain/interfaces/log-entries/UpdateCustomLogEntryUsecase.interface';
 import UpdateVisioDurationUsecaseInterface from '../domain/interfaces/log-entries/UpdateVisioDurationUsecase.interface';
@@ -190,6 +192,8 @@ export interface ConfigContextValueType {
     getLogEntriesByDate: GetLogEntriesByDateUsecaseInterface;
     shareLogEntries: ShareLogEntriesUsecaseInterface;
     unshareLogEntries: UnshareLogEntriesUsecaseInterface;
+    shareLogEntriesForResearch: ShareForResearchLogEntriesUsecaseInterface;
+    unshareLogEntriesForResearch: UnshareForResearchLogEntriesUsecaseInterface;
     exportLogEntries: ExportLogEntriesUsecaseInterface;
     updateVisioDuration: UpdateVisioDurationUsecaseInterface;
     // Edito

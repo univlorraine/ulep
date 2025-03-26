@@ -107,6 +107,10 @@ export class LearningLanguageResponse {
   @Expose({ groups: ['read'] })
   sharedLogsDate?: Date;
 
+  @ApiProperty({ type: 'date' })
+  @Expose({ groups: ['read'] })
+  sharedLogsForResearchDate?: Date;
+
   @ApiProperty({ type: 'number' })
   @Expose({ groups: ['read'] })
   visioDuration?: number;
@@ -152,6 +156,7 @@ export class LearningLanguageResponse {
       hasPriority: learningLanguage.hasPriority,
       sameTandemEmail: learningLanguage.sameTandemEmail,
       sharedLogsDate: learningLanguage.sharedLogsDate,
+      sharedLogsForResearchDate: learningLanguage.sharedLogsForResearchDate,
       tandemLanguage:
         learningLanguage.tandemLanguage &&
         LanguageResponse.fromLanguage(learningLanguage.tandemLanguage),

@@ -9,6 +9,7 @@ import {
   LogEntryPublishActivity,
   LogEntryShareVocabulary,
   LogEntrySharingLogs,
+  LogEntrySharingLogsForResearch,
   LogEntrySubmitActivity,
   LogEntryTandemChat,
   LogEntryType,
@@ -114,6 +115,14 @@ export const logEntryMapper = (
       return new LogEntrySharingLogs({
         id: snapshot.id,
         type: LogEntryType.SHARING_LOGS,
+        createdAt: snapshot.created_at,
+        updatedAt: snapshot.updated_at,
+        learningLanguage: learningLanguageMapper(snapshot.LearningLanguage),
+      });
+    case LogEntryType.SHARING_LOGS_FOR_RESEARCH:
+      return new LogEntrySharingLogsForResearch({
+        id: snapshot.id,
+        type: LogEntryType.SHARING_LOGS_FOR_RESEARCH,
         createdAt: snapshot.created_at,
         updatedAt: snapshot.updated_at,
         learningLanguage: learningLanguageMapper(snapshot.LearningLanguage),

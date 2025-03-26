@@ -108,8 +108,16 @@
                 "title": "Partager les entrées à votre animateur",
                 "success": "Les entrées ont été partagées"
             },
+            "shareforresearch": {
+                "title": "Partager les entrées pour la recherches",
+                "success": "Les entrées ont été partagées"
+            },
             "unshare": {
                 "title": "Ne plus partager les entrées à votre animateur",
+                "success": "Les entrées ne sont plus partagées"
+            },
+            "unshareforresearch": {
+                "title": "Ne plus partager les entrées pour la recherches",
                 "success": "Les entrées ne sont plus partagées"
             },
             "export": {

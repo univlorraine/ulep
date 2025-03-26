@@ -30,11 +30,14 @@ interface LogEntriesContentProps {
     onBackPressed: () => void;
     onShareLogEntries: () => void;
     onUnshareLogEntries: () => void;
+    onShareLogEntriesForResearch: () => void;
+    onUnshareLogEntriesForResearch: () => void;
     onExportLogEntries: () => void;
     profile: Profile;
     learningLanguage: LearningLanguage;
     isModal?: boolean;
     isShared: boolean;
+    isSharedForResearch: boolean;
 }
 
 export const LogEntriesContent: React.FC<LogEntriesContentProps> = ({
@@ -47,10 +50,13 @@ export const LogEntriesContent: React.FC<LogEntriesContentProps> = ({
     onExportLogEntries,
     onShareLogEntries,
     onUnshareLogEntries,
+    onShareLogEntriesForResearch,
+    onUnshareLogEntriesForResearch,
     profile,
     learningLanguage,
     isModal,
     isShared,
+    isSharedForResearch,
 }) => {
     const { t } = useTranslation();
     const [refresh, setRefresh] = useState<boolean>(false);
@@ -97,6 +103,28 @@ export const LogEntriesContent: React.FC<LogEntriesContentProps> = ({
                                 {isShared ? t('learning_book.list.unshare.title') : t('learning_book.list.share.title')}
                             </IonLabel>
                         </IonItem>
+                        {isShared && (
+                            <IonItem
+                                button={true}
+                                detail={false}
+                                onClick={async () => {
+                                    if (isSharedForResearch) {
+                                        await onUnshareLogEntriesForResearch();
+                                    } else {
+                                        await onShareLogEntriesForResearch();
+                                    }
+                                    setRefresh(!refresh);
+                                    closeMenu();
+                                }}
+                            >
+                                <IonIcon icon={arrowRedoOutline} aria-hidden="true" />
+                                <IonLabel className={styles['popover-label']}>
+                                    {isSharedForResearch
+                                        ? t('learning_book.list.unshareforresearch.title')
+                                        : t('learning_book.list.shareforresearch.title')}
+                                </IonLabel>
+                            </IonItem>
+                        )}
                         <IonItem
                             button={true}
                             detail={false}

@@ -108,8 +108,16 @@
                 "title": "Share the logs to your animator",
                 "success": "Logs have been shared"
             },
+            "shareforresearch": {
+                "title": "Share the logs for research",
+                "success": "Logs have been shared"
+            },
             "unshare": {
                 "title": "Unshare the logs to your animator",
+                "success": "Logs have been unshared"
+            },
+            "unshareforresearch": {
+                "title": "Unshare the logs for research",
                 "success": "Logs have been unshared"
             },
             "export": {

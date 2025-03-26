@@ -6,6 +6,7 @@ export enum LogEntryType {
   COMMUNITY_CHAT = 'COMMUNITY_CHAT',
   CUSTOM_ENTRY = 'CUSTOM_ENTRY',
   SHARING_LOGS = 'SHARING_LOGS',
+  SHARING_LOGS_FOR_RESEARCH = 'SHARING_LOGS_FOR_RESEARCH',
   ADD_VOCABULARY = 'ADD_VOCABULARY',
   SHARE_VOCABULARY = 'SHARE_VOCABULARY',
   EDIT_ACTIVITY = 'EDIT_ACTIVITY',
@@ -24,7 +25,8 @@ export type LogEntries =
   | LogEntryPublishActivity
   | LogEntryVisio
   | LogEntryTandemChat
-  | LogEntrySharingLogs;
+  | LogEntrySharingLogs
+  | LogEntrySharingLogsForResearch;
 
 export type LogEntryProps = {
   id: string;
@@ -127,6 +129,14 @@ export type LogEntrySharingLogsProps = LogEntryProps;
 
 export class LogEntrySharingLogs extends LogEntry {
   constructor(data: LogEntrySharingLogsProps) {
+    super(data);
+  }
+}
+
+export type LogEntrySharingLogsForResearchProps = LogEntryProps;
+
+export class LogEntrySharingLogsForResearch extends LogEntry {
+  constructor(data: LogEntrySharingLogsForResearchProps) {
     super(data);
   }
 }

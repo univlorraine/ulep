@@ -61,7 +61,9 @@ import CreateLogEntryUsecase from '../domain/usecases/log-entries/CreateLogEntry
 import ExportLogEntriesUsecase from '../domain/usecases/log-entries/ExportLogEntriesUsecase';
 import GetLogEntriesByDateUsecase from '../domain/usecases/log-entries/GetLogEntriesByDateUsecase';
 import GetLogEntriesUsecase from '../domain/usecases/log-entries/GetLogEntriesUsecase';
+import ShareForResearchLogEntriesUsecase from '../domain/usecases/log-entries/ShareForResearchLogEntriesUsecase';
 import ShareLogEntriesUsecase from '../domain/usecases/log-entries/ShareLogEntriesUsecase';
+import UnshareForResearchLogEntriesUsecase from '../domain/usecases/log-entries/UnshareForResearchLogEntriesUsecase';
 import UnshareLogEntriesUsecase from '../domain/usecases/log-entries/UnshareLogEntriesUsecase';
 import UpdateCustomLogEntryUsecase from '../domain/usecases/log-entries/UpdateCustomLogEntryUsecase';
 import UpdateVisioDurationUsecase from '../domain/usecases/log-entries/UpdateVisioDurationUsecase';
@@ -245,6 +247,8 @@ const getConfigContextValue = ({
     const unshareLogEntries = new UnshareLogEntriesUsecase(domainHttpAdapter);
     const exportLogEntries = new ExportLogEntriesUsecase(domainHttpAdapter, fileAdapter);
     const updateVisioDuration = new UpdateVisioDurationUsecase(domainHttpAdapter);
+    const shareLogEntriesForResearch = new ShareForResearchLogEntriesUsecase(domainHttpAdapter);
+    const unshareLogEntriesForResearch = new UnshareForResearchLogEntriesUsecase(domainHttpAdapter);
 
     // Edito
     const getEditoByUniversityId = new GetEditoByUniversityIdUsecase(domainHttpAdapter);
@@ -339,6 +343,8 @@ const getConfigContextValue = ({
         getLogEntriesByDate,
         shareLogEntries,
         unshareLogEntries,
+        shareLogEntriesForResearch,
+        unshareLogEntriesForResearch,
         exportLogEntries,
         addReaderToVocabularyList,
         getHashtagsFromConversation,
