@@ -164,6 +164,7 @@ export const ActivitiesContent: React.FC<ActivitiesContentProps> = ({
                     setShowFiltersModal={setShowFiltersModal}
                     onFilterRemove={onFilterRemove}
                     onFilterClear={onFilterClear}
+                    searchI18nKey="activity"
                 />
                 <div className={styles['activity-list-container']}>
                     {activities.map((activity) => (
