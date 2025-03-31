@@ -109,6 +109,7 @@ ion-tab-button.tab-selected span {
     display: flex;
     flex-direction: column;
     padding: 8px;
+    width: 100%;
 }
 
 .home-card-title {
