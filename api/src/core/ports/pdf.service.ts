@@ -14,5 +14,6 @@ export interface PdfServicePort {
     activity: Activity,
     storage: StorageInterface,
     language: string,
+    primaryColor: string,
   ): Promise<Buffer>;
 }
