@@ -94,7 +94,10 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
     const isVocabularyListMine = vocabularyList.isMine(profile);
 
     const exportToPdf = async () => {
-        const result = await getVocabularyListPdf.execute(vocabularyList.id, `${vocabularyList.name}.pdf`);
+        const result = await getVocabularyListPdf.execute(
+            vocabularyList.id,
+            `${vocabularyList.name.replace(' ', '_')}.pdf`
+        );
 
         if (result instanceof Error) {
             return showToast({
