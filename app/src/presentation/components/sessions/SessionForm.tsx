@@ -113,7 +113,7 @@ const SessionForm: React.FC<SessionFormProps> = ({ onBackPressed, onSubmit, sess
                         onChange={setComment}
                         value={comment}
                         showLimit
-                        maxLength={100}
+                        maxLength={250}
                     />
                 </div>
             </div>
