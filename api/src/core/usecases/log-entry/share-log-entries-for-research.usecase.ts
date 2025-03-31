@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { RessourceDoesNotExist } from 'src/core/errors';
+import { RessourceDoesNotExist, DomainError } from 'src/core/errors';
 import { LearningLanguage } from 'src/core/models';
 import { LogEntryType } from 'src/core/models/log-entry.model';
 import {
@@ -32,7 +32,7 @@ export class ShareLogForResearchEntriesUsecase {
       command.learningLanguageId,
     );    
     if (learningLanguage.sharedLogsDate == null) {
-      throw 'Learning language is not shared';
+      throw new DomainError('Learning language is not shared');
     }
     await this.learningLanguageRepository.update({
       ...learningLanguage,
