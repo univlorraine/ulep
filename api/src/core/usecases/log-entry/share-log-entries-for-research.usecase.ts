@@ -30,8 +30,7 @@ export class ShareLogForResearchEntriesUsecase {
   async execute(command: ShareLogForResearchEntriesCommand) {
     const learningLanguage = await this.assertLearningLanguageExists(
       command.learningLanguageId,
-    );
-    console.log(learningLanguage);
+    );    
     if (learningLanguage.sharedLogsDate == null) {
       throw 'Learning language is not shared';
     }
