@@ -192,8 +192,8 @@ const Content: React.FC<ChatContentProps> = ({
             return;
         }
 
-        const firstName = profile.user.firstname.replace(' ', '-');
-        const lastName = profile.user.lastname.replace(' ', '-');
+        const firstName = profile.user.firstname.replace(' ', '_');
+        const lastName = profile.user.lastname.replace(' ', '_');
 
         await fileAdapter.saveBlob(
             response,
