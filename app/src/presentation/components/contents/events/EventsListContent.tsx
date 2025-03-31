@@ -60,6 +60,7 @@ export const EventsListContent: React.FC<EventsListContentProps> = ({ profile, o
                 searchTitle={searchTitle}
                 setSearchTitle={setSearchTitle}
                 setShowFiltersModal={setShowFiltersModal}
+                searchI18nKey="events"
             />
             <div className={styles.list}>
                 {events.length > 0 &&

@@ -23,6 +23,7 @@ interface SearchAndFilterProps {
     allFilters: Filter[];
     onFilterRemove: (filter: Filter) => void;
     onFilterClear: () => void;
+    searchI18nKey?: string;
 }
 
 const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
@@ -32,12 +33,13 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
     setShowFiltersModal,
     onFilterRemove,
     onFilterClear,
+    searchI18nKey = 'activity',
 }) => {
     const { t } = useTranslation();
     return (
         <div>
             <IonSearchbar
-                placeholder={t('activity.list.search') as string}
+                placeholder={t(`${searchI18nKey}.list.search`) as string}
                 value={searchTitle}
                 onIonChange={(e) => setSearchTitle(e.detail.value as string)}
             />
@@ -49,7 +51,7 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                         onClick={() => setShowFiltersModal(true)}
                     >
                         <IonIcon icon={filterOutline} className={styles['filter-icon']} aria-hidden />
-                        {t('activity.list.filter_title')}
+                        {t(`${searchI18nKey}.list.filter_title`)}
                     </IonButton>
                 </div>
                 <div>
@@ -58,7 +60,7 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                             fill="clear"
                             key={filter.id}
                             className={styles['active-filter-button']}
-                            aria-label={t('activity.list.filter_remove', { filter }) as string}
+                            aria-label={t(`${searchI18nKey}.list.filter_remove`, { filter }) as string}
                             onClick={() => onFilterRemove(filter)}
                         >
                             {filter.name}
@@ -67,7 +69,7 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                     ))}
                     {allFilters.length > 0 && (
                         <IonButton className={styles['filter-button']} fill="clear" onClick={() => onFilterClear()}>
-                            {t('activity.list.filter_clear')}
+                            {t(`${searchI18nKey}.list.filter_clear`)}
                         </IonButton>
                     )}
                 </div>

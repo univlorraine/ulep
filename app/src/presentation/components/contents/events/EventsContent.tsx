@@ -67,7 +67,7 @@ export const EventsContent: React.FC<EventsContentProps> = ({ eventId, profile, 
 
     return (
         <div className="subcontent-container content-wrapper" style={{ padding: 0 }} ref={contentRef}>
-            <HeaderSubContent title={t('news.list.title')} onBackPressed={onBackPressed} />
+            <HeaderSubContent title={t('events.list.title')} onBackPressed={onBackPressed} />
             <div className={styles.container}>
                 {event.imageUrl && <IonImg className={styles.image} src={event.imageUrl}></IonImg>}
                 {event.creditImage && (
@@ -81,22 +81,22 @@ export const EventsContent: React.FC<EventsContentProps> = ({ eventId, profile, 
                     <EventAdress event={event} showMap />
                     <div className={styles.informations}>
                         <div className={styles['information-item']}>
-                            <span className={styles.label}>{t('news.show.language')}</span>
+                            <span className={styles.label}>{t('events.show.language')}</span>
                             <span>
                                 <LanguageTag languageCode={currentLanguage} />
                                 {event.translations.length > 0 && (
                                     <button
-                                        aria-label={t('news.show.change_language') as string}
+                                        aria-label={t('events.show.change_language') as string}
                                         className={styles['change-language-button']}
                                         onClick={() => setShowChangeLanguage(true)}
                                     >
-                                        {t('news.show.change_language')}
+                                        {t('events.show.change_language')}
                                     </button>
                                 )}
                             </span>
                         </div>
                         <div className={styles['information-item']}>
-                            <span className={styles.label}>{t('news.show.author')}</span>
+                            <span className={styles.label}>{t('events.show.author')}</span>
                             <UniversityTag university={event.authorUniversity} />
                         </div>
                     </div>
