@@ -23,7 +23,7 @@ export const CONVERSATION_CATEGORY = 'Conversation';
 export enum ReportStatus {
     OPEN = 'OPEN',
     IN_PROGRESS = 'IN_PROGRESS',
-    CLOSED = 'CLOSED',
+    TREATED = 'TREATED',
 }
 
 export default Report;

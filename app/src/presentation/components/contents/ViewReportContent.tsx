@@ -32,6 +32,7 @@ const ViewReportContent: React.FC<ViewReportContentProps> = ({
     const isReportCancelled = report.status === ReportStatus.CANCELLED;
     const isReportClosed = report.status === ReportStatus.CLOSED;
     const isReportInProgress = report.status === ReportStatus.IN_PROGRESS;
+    const isReportTreated = report.status === ReportStatus.TREATED;
 
     const messageMedia = new MessageReport(
         report.id,
@@ -101,28 +102,31 @@ const ViewReportContent: React.FC<ViewReportContentProps> = ({
                 </div>
                 {!isReportCancelled && !isReportClosed && (
                     <div className={styles.button_container}>
-                        <IonButton
-                            className={`tertiary-button no-padding ${styles.cancel_button}`}
-                            fill="clear"
-                            onClick={() => {
-                                setIsCancelModalOpen(true);
-                            }}
-                            aria-label={t('report_item_page.button_cancel') as string}
-                        >
-                            {t('report_item_page.button_cancel')}
-                        </IonButton>
-                        {isReportInProgress && (
+                        {!isReportTreated && (
                             <IonButton
-                                className={`primary-button no-padding`}
+                                className={`tertiary-button no-padding ${styles.cancel_button}`}
                                 fill="clear"
                                 onClick={() => {
-                                    setIsCloseModalOpen(true);
+                                    setIsCancelModalOpen(true);
                                 }}
-                                aria-label={t('report_item_page.button_close') as string}
+                                aria-label={t('report_item_page.button_cancel') as string}
                             >
-                                {t('report_item_page.button_close')}
+                                {t('report_item_page.button_cancel')}
                             </IonButton>
                         )}
+                        {isReportInProgress ||
+                            (isReportTreated && (
+                                <IonButton
+                                    className={`primary-button no-padding`}
+                                    fill="clear"
+                                    onClick={() => {
+                                        setIsCloseModalOpen(true);
+                                    }}
+                                    aria-label={t('report_item_page.button_close') as string}
+                                >
+                                    {t('report_item_page.button_close')}
+                                </IonButton>
+                            ))}
                     </div>
                 )}
             </div>

@@ -9,6 +9,7 @@ export enum ReportStatus {
   IN_PROGRESS = 'IN_PROGRESS',
   CLOSED = 'CLOSED',
   CANCELLED = 'CANCELLED',
+  TREATED = 'TREATED',
 }
 
 export type CreateReportCategoryProps = {

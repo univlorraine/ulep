@@ -13,17 +13,22 @@ const ReportStatusTag: React.FC<ReportStatusTagProps> = ({ status, isIcon = fals
 
     const getStatus = (status: string) => {
         switch (status) {
-            case 'OPEN':
+            case ReportStatus.OPEN:
                 return {
                     text: t('reports_status.open'),
                     color: '#00FF47',
                 };
-            case 'IN_PROGRESS':
+            case ReportStatus.IN_PROGRESS:
                 return {
                     text: t('reports_status.in_progress'),
                     color: '#FF8700',
                 };
-            case 'CLOSED':
+            case ReportStatus.TREATED:
+                return {
+                    text: t('reports_status.treated'),
+                    color: '#000000',
+                };
+            case ReportStatus.CLOSED:
                 return {
                     text: t('reports_status.close'),
                     color: '#000000',
