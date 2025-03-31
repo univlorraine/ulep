@@ -45,6 +45,10 @@ import {
   ActivityRepository,
   ACTIVITY_REPOSITORY,
 } from 'src/core/ports/activity.repository';
+import {
+  InstanceRepository,
+  INSTANCE_REPOSITORY,
+} from 'src/core/ports/instance.repository';
 import { PdfServicePort, PDF_SERVICE } from 'src/core/ports/pdf.service';
 import {
   ProfileRepository,
@@ -66,6 +70,8 @@ export class GetActivityPdfUsecase {
     private readonly storage: StorageInterface,
     @Inject(PROFILE_REPOSITORY)
     private readonly profileRepository: ProfileRepository,
+    @Inject(INSTANCE_REPOSITORY)
+    private readonly instanceRepository: InstanceRepository,
   ) {}
 
   async execute(id: string, user: KeycloakUser) {
@@ -81,10 +87,14 @@ export class GetActivityPdfUsecase {
       throw new NotFoundException('Profile not found');
     }
 
+    const instance = await this.instanceRepository.getInstance();
+    const primaryColor = instance.primaryColor;
+
     const pdf = await this.pdfService.createActivityPdf(
       activity,
       this.storage,
       profile.nativeLanguage.code,
+      primaryColor,
     );
 
     return pdf;

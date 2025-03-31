@@ -92,6 +92,7 @@ export class PdfService implements PdfServicePort {
     activity: Activity,
     storage: StorageInterface,
     language: string,
+    primaryColor: string,
   ): Promise<Buffer> {
     this.logger.log('Creating activity PDF');
     const doc = new PDFKitDocument({
@@ -101,6 +102,8 @@ export class PdfService implements PdfServicePort {
     doc.on('data', buffers.push.bind(buffers));
 
     const pageWidth = doc.page.width - doc.x * 2;
+
+    const topMaxBeforeChangingPage = doc.page.height - 30 - 20;
     const imageHeight = 150;
 
     this.setLanguage(language);
@@ -113,24 +116,30 @@ export class PdfService implements PdfServicePort {
     });
 
     if (activity.creditImage) {
-      doc.fontSize(8).fillColor('#666666').text(`© ${activity.creditImage}`, {
-        align: 'right',
-        width: pageWidth,
-      });
+      doc
+        .fontSize(8)
+        .fillColor('#666666')
+        .text(`© ${activity.creditImage}`, doc.x, doc.y + imageHeight + 10, {
+          align: 'center',
+          width: pageWidth,
+        });
     }
 
     // Marquer la position de début du rectangle jaune
-    const startY = doc.y + imageHeight;
+    const startY = activity.creditImage ? doc.y : doc.y + imageHeight;
 
     // Calculer la hauteur du contenu sans l'écrire
     doc.fontSize(20).font('Helvetica-Bold');
-    const titleHeight = doc.heightOfString(activity.title.replace(/Ɖ/g, ''), {
-      width: pageWidth - 40,
-    });
+    const titleHeight = doc.heightOfString(
+      this.sanitizeString(activity.title),
+      {
+        width: pageWidth - 40,
+      },
+    );
 
     doc.fontSize(12).font('Helvetica');
     const descriptionHeight = doc.heightOfString(
-      activity.description.replace(/Ɖ/g, ''),
+      this.sanitizeString(activity.description),
       {
         width: pageWidth - 40,
       },
@@ -143,7 +152,7 @@ export class PdfService implements PdfServicePort {
     doc
       .save()
       .roundedRect(doc.x, startY, pageWidth, endY - startY, 10)
-      .fill('#FDEE66')
+      .fill(primaryColor)
       .restore();
 
     // Maintenant écrire le texte par-dessus
@@ -151,7 +160,7 @@ export class PdfService implements PdfServicePort {
       .fontSize(20)
       .font('Helvetica-Bold')
       .fillColor('#000')
-      .text(activity.title.replace(/Ɖ/g, ''), doc.x + 20, startY + padding, {
+      .text(this.sanitizeString(activity.title), doc.x + 20, startY + padding, {
         align: 'left',
         width: pageWidth - 40,
       });
@@ -160,7 +169,7 @@ export class PdfService implements PdfServicePort {
       .fontSize(12)
       .font('Helvetica')
       .text(
-        activity.description.replace(/Ɖ/g, ''),
+        this.sanitizeString(activity.description),
         doc.x + 20,
         doc.y + padding,
         {
@@ -172,6 +181,10 @@ export class PdfService implements PdfServicePort {
     // Repositionner le curseur après le rectangle
     doc.y = endY + padding;
     doc.moveDown();
+
+    if (doc.y > topMaxBeforeChangingPage) {
+      doc.addPage();
+    }
 
     doc.lineWidth(1);
 
@@ -234,7 +247,6 @@ export class PdfService implements PdfServicePort {
     doc.font('Helvetica-Bold').text(activity.activityTheme.content.content, {
       align: 'left',
     });
-
     doc.moveDown();
     doc
       .lineCap('butt')
@@ -413,5 +425,9 @@ export class PdfService implements PdfServicePort {
 
   private get translationNamespace() {
     return this.env.get('APP_TRANSLATION_NAMESPACE') || 'translation';
+  }
+
+  private sanitizeString(string: string) {
+    return string.replace(/\r\n|\r/g, '\n');
   }
 }

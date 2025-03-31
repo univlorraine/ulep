@@ -39,10 +39,10 @@
  */
 
 import { Inject, Injectable } from '@nestjs/common';
-import { PDF_SERVICE, PdfServicePort } from 'src/core/ports/pdf.service';
+import { PdfServicePort, PDF_SERVICE } from 'src/core/ports/pdf.service';
 import {
-  VOCABULARY_REPOSITORY,
   VocabularyRepository,
+  VOCABULARY_REPOSITORY,
 } from 'src/core/ports/vocabulary.repository';
 
 export class GetVocabularyListPdfCommand {
