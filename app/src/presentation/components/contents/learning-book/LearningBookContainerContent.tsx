@@ -141,10 +141,10 @@ const LearningBookContainerContent: React.FC<LearningBookContainerContentProps> 
     };
 
     const handleExportLogEntries = async () => {
-        const result = await exportLogEntries.execute(
-            learningLanguage.id,
-            `${learningLanguage.profile?.user?.firstname}-${learningLanguage.profile?.user?.lastname}-learning-log-${learningLanguage.code}.csv`
-        );
+        const firstName = learningLanguage.profile?.user?.firstname.replace(' ', '_');
+        const lastName = learningLanguage.profile?.user?.lastname.replace(' ', '_');
+        const fileName = `${firstName}-${lastName}-learning-log-${learningLanguage.code}.csv`;
+        const result = await exportLogEntries.execute(learningLanguage.id, fileName);
         if (result instanceof Error) {
             showToast(t(result.message), 3000);
         } else {
