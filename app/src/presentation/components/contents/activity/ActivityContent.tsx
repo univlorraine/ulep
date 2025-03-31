@@ -256,7 +256,11 @@ export const ActivityContent: React.FC<ActivityContentProps> = ({
                                     )}
                                     <div className={styles['ressource-text']}>
                                         <a
-                                            href={activity.ressourceUrl}
+                                            href={
+                                                activity.ressourceUrl.startsWith('http')
+                                                    ? activity.ressourceUrl
+                                                    : `https://${activity.ressourceUrl}`
+                                            }
                                             onClick={browserAdapter.openLinkInBrowser}
                                             target="_blank"
                                         >
