@@ -38,6 +38,7 @@
  *
  */
 
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import LearningLanguage from '../../../domain/entities/LearningLanguage';
 import Profile from '../../../domain/entities/Profile';
@@ -58,6 +59,12 @@ const SelectLanguageContent: React.FC<SelectLanguageContentProps> = ({
 }) => {
     const { t } = useTranslation();
     const learningLanguages = profile?.learningLanguages;
+
+    useEffect(() => {
+        if (learningLanguages && learningLanguages.length === 1) {
+            setSelectedLanguage(learningLanguages[0]);
+        }
+    }, [learningLanguages, setSelectedLanguage]);
 
     return (
         <div className={styles.container}>
