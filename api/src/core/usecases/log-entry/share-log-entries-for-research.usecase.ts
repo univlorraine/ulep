@@ -32,7 +32,7 @@ export class ShareLogForResearchEntriesUsecase {
       command.learningLanguageId,
     );    
     if (learningLanguage.sharedLogsDate == null) {
-      throw new DomainError('Learning language is not shared');
+      throw new DomainError({message: 'Learning language is not shared'});
     }
     await this.learningLanguageRepository.update({
       ...learningLanguage,
