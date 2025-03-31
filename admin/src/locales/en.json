@@ -223,7 +223,9 @@
     "editos": {
         "form": {
             "mandatoryLanguages": "Languages with a * are mandatory",
-            "update": "Update"
+            "update": "Update",
+            "video": "Video URL",
+            "invalidVideoUrl": "The video URL is invalid"
         },
         "label": "Editos",
         "title": "Editos",

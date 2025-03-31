@@ -52,6 +52,7 @@ export type UpdateEditoCommand = {
   id: string;
   content: string;
   languageCode: string;
+  video: string;
   translations: EditoTranslation[];
 };
 

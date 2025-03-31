@@ -45,7 +45,8 @@ class Edito {
         public id: string,
         public content: string,
         public university: University,
-        public image?: string
+        public image?: string,
+        public video?: string
     ) {}
 }
 

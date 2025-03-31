@@ -109,6 +109,7 @@ export class UpdateInstanceUsecase {
           return {
             languageCode: translation,
             content: existingTranslation?.content || '',
+            video: existingTranslation?.video || '',
           };
         })
       : [];
@@ -121,6 +122,7 @@ export class UpdateInstanceUsecase {
       id: edito.id,
       content: edito.content,
       languageCode: edito.languageCode,
+      video: edito.video,
       translations: newTranslations,
     });
 

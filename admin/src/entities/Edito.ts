@@ -50,11 +50,13 @@ export enum EditoMandatoryTranslation {
 export interface EditoTranslation {
     languageCode: string;
     content: string;
+    video: string;
 }
 
 export type Edito = {
     id: string;
     content: string;
+    video: string;
     languageCode: string;
     translations: EditoTranslation[];
     university: University;
@@ -67,10 +69,12 @@ export type Edito = {
 export interface EditoFormPayload {
     id: string;
     content: string;
+    video: string;
     languageCode: string;
     image: File | undefined;
     translations: {
         content: string;
         languageCode: string;
+        video: string;
     }[];
 }
