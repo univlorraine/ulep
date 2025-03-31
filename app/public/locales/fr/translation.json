@@ -1137,9 +1137,10 @@
     },
     "reports_status": {
         "open": "Enregistré",
-        "close": "Traité",
+        "close": "Fermé",
         "canceled": "Annulé",
-        "in_progress": "En cours"
+        "in_progress": "En cours",
+        "treated": "Traité"
     },
     "report_item_page": {
         "title": "Signalement",

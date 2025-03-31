@@ -675,6 +675,7 @@
     "reports": {
         "category": "Report category",
         "CLOSED": "Closed",
+        "TREATED": "Treated",
         "comment": "Administrator's comments",
         "content": "Content",
         "created_at": "Submission date",
