@@ -31,6 +31,7 @@ const ViewReportContent: React.FC<ViewReportContentProps> = ({
         report.metadata?.mediaType !== MessageType.Link;
     const isReportCancelled = report.status === ReportStatus.CANCELLED;
     const isReportClosed = report.status === ReportStatus.CLOSED;
+    const isReportInProgress = report.status === ReportStatus.IN_PROGRESS;
 
     const messageMedia = new MessageReport(
         report.id,
@@ -110,16 +111,18 @@ const ViewReportContent: React.FC<ViewReportContentProps> = ({
                         >
                             {t('report_item_page.button_cancel')}
                         </IonButton>
-                        <IonButton
-                            className={`primary-button no-padding`}
-                            fill="clear"
-                            onClick={() => {
-                                setIsCloseModalOpen(true);
-                            }}
-                            aria-label={t('report_item_page.button_close') as string}
-                        >
-                            {t('report_item_page.button_close')}
-                        </IonButton>
+                        {isReportInProgress && (
+                            <IonButton
+                                className={`primary-button no-padding`}
+                                fill="clear"
+                                onClick={() => {
+                                    setIsCloseModalOpen(true);
+                                }}
+                                aria-label={t('report_item_page.button_close') as string}
+                            >
+                                {t('report_item_page.button_close')}
+                            </IonButton>
+                        )}
                     </div>
                 )}
             </div>
