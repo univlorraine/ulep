@@ -61,6 +61,8 @@
     display: flex;
     gap: 8px;
     margin-bottom: 8px;
+    flex-wrap: wrap;
+    white-space: nowrap;
 }
 
 .title {
