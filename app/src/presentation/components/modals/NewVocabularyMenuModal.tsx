@@ -70,12 +70,20 @@ const NewVocabularyMenuModal: React.FC<NewVocabularyMenuModalProps> = ({ isVisib
 
     const onSelectedLanguageMobile = (language: LearningLanguage) => {
         const tandem = tandems.find((tandem) => tandem.learningLanguage.id === language.id);
-        history.push('/vocabularies', { profile, tandem });
+        history.push('/vocabularies', { tandem });
     };
 
     const onCloseModal = () => {
         setSelectedLanguage(undefined);
         onClose();
+    };
+
+    const onCloseVocabularyContent = () => {
+        if (profile.learningLanguages.length === 1) {
+            onClose();
+        } else {
+            setSelectedLanguage(undefined);
+        }
     };
 
     if (isHybrid) {
@@ -102,7 +110,7 @@ const NewVocabularyMenuModal: React.FC<NewVocabularyMenuModalProps> = ({ isVisib
             {selectedLanguage && (
                 <VocabularyContent
                     profile={profile}
-                    onClose={() => setSelectedLanguage(undefined)}
+                    onClose={onCloseVocabularyContent}
                     isModal
                     currentLearningLanguage={selectedLanguage}
                 />
