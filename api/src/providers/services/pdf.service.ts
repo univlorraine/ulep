@@ -70,7 +70,7 @@ export class PdfService implements PdfServicePort {
     const buffers = [];
     doc.on('data', buffers.push.bind(buffers));
 
-    doc.fontSize(18).text(`${vocabularyList.symbol} ${vocabularyList.name}`, {
+    doc.fontSize(18).text(vocabularyList.name, {
       align: 'center',
     });
     doc.moveDown();
