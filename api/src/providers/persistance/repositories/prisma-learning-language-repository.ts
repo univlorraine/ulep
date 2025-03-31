@@ -141,6 +141,7 @@ export class PrismaLearningLanguageRepository
         shared_certificate: item.sharedCertificate,
         specific_program: item.specificProgram,
         shared_logs_date: item.sharedLogsDate ?? null,
+        shared_logs_for_research_date: item.sharedLogsForResearchDate ?? null,
         visio_duration: item.visioDuration,
       },
     });

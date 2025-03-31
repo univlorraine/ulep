@@ -147,6 +147,10 @@ export const profileMapper = (instance: ProfileSnapshot): Profile => {
           sharedLogsDate: learningLanguage.shared_logs_date
             ? new Date(learningLanguage.shared_logs_date)
             : undefined,
+          sharedLogsForResearchDate:
+            learningLanguage.shared_logs_for_research_date
+              ? new Date(learningLanguage.shared_logs_for_research_date)
+              : undefined,
           certificateFile:
             learningLanguage.CertificateFile &&
             new MediaObject({

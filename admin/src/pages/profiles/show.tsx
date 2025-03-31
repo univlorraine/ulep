@@ -247,6 +247,20 @@ const ProfileTab = () => {
                             sortable={false}
                             source="sharedLogsDate"
                         />
+                        <FunctionField
+                            render={(record: Pick<LearningLanguage, 'id' | 'code' | 'sharedLogsForResearchDate'>) =>
+                                record.sharedLogsForResearchDate ? (
+                                    <>
+                                        {format(record.sharedLogsForResearchDate, 'dd/MM/yyyy')}
+                                        <LogExportButton languageCode={record.code} learningLanguageId={record.id} />
+                                    </>
+                                ) : (
+                                    ''
+                                )
+                            }
+                            sortable={false}
+                            source="sharedLogsForResearchDate"
+                        />
                         <ReferenceUploadFileField
                             label={translate('learning_languages.show.fields.certificateFile')}
                             sortable={false}

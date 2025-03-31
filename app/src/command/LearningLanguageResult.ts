@@ -61,6 +61,7 @@ export interface LearningLanguageResult {
     certificateFile?: MediaObject;
     sharedCertificate?: boolean;
     sharedLogsDate?: Date;
+    sharedLogsForResearchDate?: Date;
     visioDuration?: number;
     countVocabularies?: number;
     countActivities?: number;
@@ -82,6 +83,7 @@ export const learningLanguageResultToDomain = (result: LearningLanguageResult) =
         result.certificateFile ? mediaObjectCommandToDomain(result.certificateFile) : undefined,
         result.sharedCertificate,
         result.sharedLogsDate,
+        result.sharedLogsForResearchDate,
         result.visioDuration,
         result.countVocabularies,
         result.countActivities

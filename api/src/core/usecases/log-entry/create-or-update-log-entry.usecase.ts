@@ -48,6 +48,7 @@ import {
   LogEntryPlayedGame,
   LogEntryShareVocabulary,
   LogEntrySharingLogs,
+  LogEntrySharingLogsForResearch,
   LogEntrySubmitActivity,
   LogEntryTandemChat,
   LogEntryType,
@@ -214,6 +215,16 @@ export class CreateOrUpdateLogEntryUsecase {
           entryToUpdate: undefined,
           shouldCreate: !sharingLogsEntryExistsToday,
           shouldIgnore: Boolean(sharingLogsEntryExistsToday),
+        };
+      case LogEntryType.SHARING_LOGS_FOR_RESEARCH:
+        const sharingLogsForResearchEntryExistsToday = entries.find(
+          (entry) => entry instanceof LogEntrySharingLogsForResearch,
+        );
+
+        return {
+          entryToUpdate: undefined,
+          shouldCreate: !sharingLogsForResearchEntryExistsToday,
+          shouldIgnore: Boolean(sharingLogsForResearchEntryExistsToday),
         };
 
       case LogEntryType.PLAYED_GAME:

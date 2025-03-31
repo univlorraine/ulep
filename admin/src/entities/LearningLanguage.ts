@@ -72,6 +72,7 @@ export type LearningLanguage = {
     certificateFile?: MediaObject;
     sameTandemEmail?: string;
     sharedLogsDate?: Date;
+    sharedLogsForResearchDate?: Date;
 };
 
 export type LearningLanguageWithTandemWithPartnerProfile = {

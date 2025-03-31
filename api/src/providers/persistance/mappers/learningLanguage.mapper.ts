@@ -129,6 +129,9 @@ export const learningLanguageMapper = (
     sharedLogsDate: instance.shared_logs_date
       ? new Date(instance.shared_logs_date)
       : undefined,
+    sharedLogsForResearchDate: instance.shared_logs_for_research_date
+      ? new Date(instance.shared_logs_for_research_date)
+      : undefined,
     certificateFile:
       instance.CertificateFile &&
       new MediaObject({

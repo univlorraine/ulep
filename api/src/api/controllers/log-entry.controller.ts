@@ -70,7 +70,9 @@ import {
   GetAllEntriesForUserByDateUsecase,
   GetAllEntriesForUserGroupedByDatesUsecase,
   ShareLogEntriesUsecase,
+  ShareLogForResearchEntriesUsecase,
   UnshareLogEntriesUsecase,
+  UnshareLogForResearchEntriesUsecase,
   UpdateCustomLogEntryUsecase,
 } from 'src/core/usecases/log-entry';
 
@@ -86,6 +88,8 @@ export class LogEntryController {
     private readonly getAllEntriesForUserGroupedByDatesUsecase: GetAllEntriesForUserGroupedByDatesUsecase,
     private readonly shareLogEntriesUsecase: ShareLogEntriesUsecase,
     private readonly unshareLogEntriesUsecase: UnshareLogEntriesUsecase,
+    private readonly shareLogForResearchEntriesUsecase: ShareLogForResearchEntriesUsecase,
+    private readonly unshareLogForResearchEntriesUsecase: UnshareLogForResearchEntriesUsecase,
     private readonly exportLogEntriesUsecase: ExportLogEntriesUsecase,
   ) {}
 
@@ -189,12 +193,36 @@ export class LogEntryController {
     });
   }
 
+  @Post('share-for-research/:id')
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({
+    summary: 'Share a Learning Language Log Entry for research.',
+  })
+  @Swagger.ApiOkResponse({ type: () => LogEntryResponse })
+  async shareLogEntryForResearch(@Param('id') id: string) {
+    await this.shareLogForResearchEntriesUsecase.execute({
+      learningLanguageId: id,
+    });
+  }
+
   @Post('unshare/:id')
   @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Unshare a Learning Language Log Entry.' })
   @Swagger.ApiOkResponse({ type: () => LogEntryResponse })
   async unshareLogEntry(@Param('id') id: string) {
     await this.unshareLogEntriesUsecase.execute({
+      learningLanguageId: id,
+    });
+  }
+
+  @Post('unshare-for-research/:id')
+  @UseGuards(AuthenticationGuard)
+  @Swagger.ApiOperation({
+    summary: 'Unshare a Learning Language Log Entry for research.',
+  })
+  @Swagger.ApiOkResponse({ type: () => LogEntryResponse })
+  async unshareLogEntryForResearch(@Param('id') id: string) {
+    await this.unshareLogForResearchEntriesUsecase.execute({
       learningLanguageId: id,
     });
   }

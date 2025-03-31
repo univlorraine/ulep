@@ -69,6 +69,7 @@ interface LearningLanguageProps {
   tandemLanguage?: Language;
   customLearningGoals?: CustomLearningGoal[];
   sharedLogsDate?: Date;
+  sharedLogsForResearchDate?: Date;
   visioDuration?: number;
 }
 
@@ -94,6 +95,7 @@ export class LearningLanguage {
   readonly sameTandemEmail?: string;
   readonly customLearningGoals?: CustomLearningGoal[];
   readonly sharedLogsDate?: Date;
+  readonly sharedLogsForResearchDate?: Date;
   readonly visioDuration?: number;
   constructor({
     id,
@@ -117,6 +119,7 @@ export class LearningLanguage {
     sameTandemEmail,
     customLearningGoals,
     sharedLogsDate,
+    sharedLogsForResearchDate,
     visioDuration,
   }: LearningLanguageProps) {
     this.id = id;
@@ -140,6 +143,7 @@ export class LearningLanguage {
     this.sameTandemEmail = sameTandemEmail;
     this.customLearningGoals = customLearningGoals;
     this.sharedLogsDate = sharedLogsDate;
+    this.sharedLogsForResearchDate = sharedLogsForResearchDate;
     this.visioDuration = visioDuration;
   }
 
