@@ -192,9 +192,12 @@ const Content: React.FC<ChatContentProps> = ({
             return;
         }
 
+        const firstName = profile.user.firstname.replace(' ', '_');
+        const lastName = profile.user.lastname.replace(' ', '_');
+
         await fileAdapter.saveBlob(
             response,
-            `${partner.firstname}-${partner.lastname}-export-medias-${findLearningLanguageConversation()?.code}.zip`
+            `${firstName}-${lastName}-export-medias-${findLearningLanguageConversation()?.code}.zip`
         );
         setShowMenu(false);
         showToast({
