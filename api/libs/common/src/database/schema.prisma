@@ -422,38 +422,39 @@ model LearningObjectives {
 }
 
 model LearningLanguages {
-  id                      String    @id @default(uuid())
-  profile_id              String
-  language_code_id        String
-  level                   String
-  learning_type           String
-  same_gender             Boolean
-  same_age                Boolean
-  same_tandem_email       String?
-  certificate_option      Boolean?
-  specific_program        Boolean?
-  has_priority            Boolean?
-  learning_journal        Boolean?
-  consulting_interview    Boolean?
-  shared_certificate      Boolean?
-  shared_logs_date        DateTime?
-  certificate_file_id     String?   @unique
-  campus_id               String?
-  tandem_id               String?
-  tandem_language_code_id String?
-  visio_duration          Int?      @default(0)
-  created_at              DateTime  @default(now())
-  updated_at              DateTime  @updatedAt
+  id                                  String    @id @default(uuid())
+  profile_id                          String
+  language_code_id                    String
+  level                               String
+  learning_type                       String
+  same_gender                         Boolean
+  same_age                            Boolean
+  same_tandem_email                   String?
+  certificate_option                  Boolean?
+  specific_program                    Boolean?
+  has_priority                        Boolean?
+  learning_journal                    Boolean?
+  consulting_interview                Boolean?
+  shared_certificate                  Boolean?
+  shared_logs_date                    DateTime?
+  shared_logs_for_research_date       DateTime?
+  certificate_file_id                 String?   @unique
+  campus_id                           String?
+  tandem_id                           String?
+  tandem_language_code_id             String?
+  visio_duration                      Int?      @default(0)
+  created_at                          DateTime  @default(now())
+  updated_at                          DateTime  @updatedAt
 
-  Profile             Profiles              @relation(fields: [profile_id], references: [id], onDelete: Cascade)
-  Tandem              Tandems?              @relation(fields: [tandem_id], references: [id])
-  TandemLanguage      LanguageCodes?        @relation("TandemLanguage", fields: [tandem_language_code_id], references: [id])
-  LanguageCode        LanguageCodes         @relation("LearningLanguageLanguage", fields: [language_code_id], references: [id])
-  RefusedTandems      RefusedTandems[]
-  Campus              Places?               @relation(fields: [campus_id], references: [id])
-  CertificateFile     MediaObjects?         @relation("LearningLanguageCertificateFile", fields: [certificate_file_id], references: [id])
-  CustomLearningGoals CustomLearningGoals[]
-  LogEntriesByDate    LogEntry[]
+  Profile                             Profiles              @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+  Tandem                              Tandems?              @relation(fields: [tandem_id], references: [id])
+  TandemLanguage                      LanguageCodes?        @relation("TandemLanguage", fields: [tandem_language_code_id], references: [id])
+  LanguageCode                        LanguageCodes         @relation("LearningLanguageLanguage", fields: [language_code_id], references: [id])
+  RefusedTandems                      RefusedTandems[]
+  Campus                              Places?               @relation(fields: [campus_id], references: [id])
+  CertificateFile                     MediaObjects?         @relation("LearningLanguageCertificateFile", fields: [certificate_file_id], references: [id])
+  CustomLearningGoals                 CustomLearningGoals[]
+  LogEntriesByDate                    LogEntry[]
 
   @@map("learning_languages")
 }
@@ -812,6 +813,7 @@ enum LogEntryType {
   COMMUNITY_CHAT
   CUSTOM_ENTRY
   SHARING_LOGS
+  SHARING_LOGS_FOR_RESEARCH
   ADD_VOCABULARY
   SHARE_VOCABULARY
   PUBLISH_ACTIVITY

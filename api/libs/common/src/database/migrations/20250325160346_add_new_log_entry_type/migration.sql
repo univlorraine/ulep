@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "LogEntryType" ADD VALUE 'SHARING_LOGS_FOR_RESEARCH';

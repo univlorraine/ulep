@@ -59,7 +59,22 @@
         "load_more": "Voir plus",
         "add_to_calendar_success": "Fichier ics téléchargé",
         "list": {
-            "title": "Événements"
+            "title": "Événements",
+            "filter_title": "Filtre",
+            "filter_clear": "Effacer les filtres",
+            "language": "Langue",
+            "level": "Niveau",
+            "theme": "Thème",
+            "search": "Rechercher un événement"
+        },
+        "show": {
+            "change_language": "Changer",
+            "language": "Langue",
+            "author": "Auteur",
+            "change_language_modal": {
+                "title": "Choisir la langue",
+                "current": "Sélectionnée"
+            }
         }
     },
     "edito": {
@@ -72,7 +87,10 @@
         "list": {
             "title": "Actualités",
             "filter_title": "Sélectionner les filtres pour les news",
-            "load_more": "Voir plus"
+            "load_more": "Voir plus",
+            "filter_clear": "Effacer les filtres",
+            "language": "Langue",
+            "search": "Rechercher une actualité"
         },
         "show": {
             "change_language": "Changer",
@@ -108,8 +126,16 @@
                 "title": "Partager les entrées à votre animateur",
                 "success": "Les entrées ont été partagées"
             },
+            "shareforresearch": {
+                "title": "Partager les entrées pour la recherches",
+                "success": "Les entrées ont été partagées"
+            },
             "unshare": {
                 "title": "Ne plus partager les entrées à votre animateur",
+                "success": "Les entrées ne sont plus partagées"
+            },
+            "unshareforresearch": {
+                "title": "Ne plus partager les entrées pour la recherches",
                 "success": "Les entrées ne sont plus partagées"
             },
             "export": {
@@ -1111,9 +1137,10 @@
     },
     "reports_status": {
         "open": "Enregistré",
-        "close": "Traité",
+        "close": "Fermé",
         "canceled": "Annulé",
-        "in_progress": "En cours"
+        "in_progress": "En cours",
+        "treated": "Traité"
     },
     "report_item_page": {
         "title": "Signalement",

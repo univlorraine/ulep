@@ -679,6 +679,7 @@
         "comment": "Commentaire des administrateurs",
         "created_at": "Date de soumission",
         "CLOSED": "Fermé",
+        "TREATED": "Traité",
         "content": "Contenu",
         "IN_PROGRESS": "En cours",
         "label": "Signalements",
