@@ -1,3 +1,4 @@
+#syntax=docker/dockerfile:1.4
 #
 #   Copyright ou © ou Copr. Université de Lorraine, (2025)
 #
@@ -36,7 +37,7 @@
 #   termes.
 #
 
-#syntax=docker/dockerfile:1.4
+
 
 FROM node:18-alpine3.20 as api_base
 
