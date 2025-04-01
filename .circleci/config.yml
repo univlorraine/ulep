@@ -117,6 +117,10 @@ jobs:
       - setup_remote_docker:
           version: 20.10.24
       - run:
+          name: Install pnpm
+          command: |
+            cd api && npm i -g pnpm@10.7.0
+      - run:
           name: Install Dependencies
           command: |
             cd api && pnpm i --no-frozen-lockfile
@@ -163,6 +167,10 @@ jobs:
       - checkout
       - setup_remote_docker:
           version: 20.10.24
+      - run:
+          name: Install pnpm
+          command: |
+            cd admin && npm i -g pnpm@10.7.0
       - run:
           name: Install Dependencies
           command: |
