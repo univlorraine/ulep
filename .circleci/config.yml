@@ -56,7 +56,7 @@ commands:
       - run:
           name: Install pnpm package manager
           command: |
-            cd api && npm i pnpm@9.6.0
+            cd api && npm i pnpm@10.7.0
 
 jobs:
   ##### Code Quality #####
