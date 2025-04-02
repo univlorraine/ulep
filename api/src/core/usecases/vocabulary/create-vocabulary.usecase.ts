@@ -42,6 +42,10 @@ import { Inject, Injectable } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import { LogEntryType } from 'src/core/models/log-entry.model';
 import {
+  ProfileRepository,
+  PROFILE_REPOSITORY,
+} from 'src/core/ports/profile.repository';
+import {
   VocabularyRepository,
   VOCABULARY_REPOSITORY,
 } from 'src/core/ports/vocabulary.repository';
@@ -50,13 +54,15 @@ import { CreateOrUpdateLogEntryUsecase } from 'src/core/usecases/log-entry';
 export class CreateVocabularyCommand {
   translation?: string;
   vocabularyListId: string;
-  ownerId: string;
+  userId: string;
   word: string;
 }
 
 @Injectable()
 export class CreateVocabularyUsecase {
   constructor(
+    @Inject(PROFILE_REPOSITORY)
+    private readonly profileRepository: ProfileRepository,
     @Inject(VOCABULARY_REPOSITORY)
     private readonly vocabularyRepository: VocabularyRepository,
     @Inject(CreateOrUpdateLogEntryUsecase)
@@ -64,6 +70,8 @@ export class CreateVocabularyUsecase {
   ) {}
 
   async execute(command: CreateVocabularyCommand) {
+    const profile = await this.assertProfileExist(command.userId);
+
     const vocabularyList = await this.assertVocabularyListExist(
       command.vocabularyListId,
     );
@@ -74,9 +82,18 @@ export class CreateVocabularyUsecase {
       word: command.word,
     });
 
-    const learningLanguage = vocabularyList.creator?.findLearningLanguageByCode(
+    let learningLanguage = profile.findLearningLanguageByCode(
       vocabularyList.wordLanguage.code,
     );
+
+    if (!learningLanguage) {
+      learningLanguage = profile.findLearningLanguageByCode(
+        vocabularyList.translationLanguage.code,
+      );
+    }
+
+    console.log(profile);
+    console.log(vocabularyList);
 
     if (learningLanguage) {
       await this.createOrUpdateLogEntryUsecase.execute({
@@ -102,5 +119,15 @@ export class CreateVocabularyUsecase {
     }
 
     return vocabularyList;
+  }
+
+  private async assertProfileExist(id: string) {
+    const profile = await this.profileRepository.ofUser(id);
+
+    if (!profile) {
+      throw new RessourceDoesNotExist('Profile does not exist');
+    }
+
+    return profile;
   }
 }

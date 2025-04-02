@@ -142,7 +142,7 @@ export class VocabularyController {
     //TODO: Add Pipe files validators
     const vocabulary = await this.createVocabularyUsecase.execute({
       ...body,
-      ownerId: user.sub,
+      userId: user.sub,
     });
     const { wordPronunciation, translationPronunciation } = files ?? {};
 
