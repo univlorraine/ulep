@@ -197,7 +197,7 @@ export class PrismaLearningLanguageRepository
             Tandem: {
               status: {
                 not: {
-                  equals: TandemStatus.ACTIVE,
+                  in: [TandemStatus.ACTIVE, TandemStatus.PAUSED],
                 },
               },
             },
@@ -240,6 +240,7 @@ export class PrismaLearningLanguageRepository
                   in: [
                     TandemStatus.ACTIVE,
                     TandemStatus.VALIDATED_BY_ONE_UNIVERSITY,
+                    TandemStatus.PAUSED,
                   ],
                 },
               },
@@ -326,6 +327,7 @@ export class PrismaLearningLanguageRepository
                   in: [
                     TandemStatus.ACTIVE,
                     TandemStatus.VALIDATED_BY_ONE_UNIVERSITY,
+                    TandemStatus.PAUSED,
                   ],
                 },
               },
