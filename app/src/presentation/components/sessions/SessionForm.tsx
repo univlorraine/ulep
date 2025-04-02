@@ -38,8 +38,7 @@
  *
  */
 
-import { IonButton, IonDatetime, IonDatetimeButton, IonModal } from '@ionic/react';
-import { addDays, setHours, setMinutes, startOfTomorrow } from 'date-fns';
+import { IonButton, IonDatetime, IonDatetimeButton, IonModal, useIonToast } from '@ionic/react';
 import { formatInTimeZone, fromZonedTime } from 'date-fns-tz';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -66,12 +65,21 @@ const SessionForm: React.FC<SessionFormProps> = ({ onBackPressed, onSubmit, sess
         return <Redirect to="/" />;
     }
 
-    const startAt = session?.startAt || setMinutes(setHours(addDays(new Date(), 1), 18), 0);
+    const startAt = session?.startAt || new Date();
     const { t } = useTranslation();
+    const [useToast] = useIonToast();
     const [datetime, setDatetime] = useState<string>(formatInTimeZone(startAt, userTz, "yyyy-MM-dd'T'HH:mm"));
     const [comment, setComment] = useState(session?.comment || '');
 
     const handleSubmit = () => {
+        const selectedDate = new Date(datetime);
+        if (selectedDate.getTime() < new Date().getTime()) {
+            return useToast({
+                message: t('session.error.past_date'),
+                duration: 3000,
+                position: 'bottom',
+            });
+        }
         onSubmit({ id: session?.id, date: fromZonedTime(datetime, userTz), comment });
     };
 
@@ -79,7 +87,11 @@ const SessionForm: React.FC<SessionFormProps> = ({ onBackPressed, onSubmit, sess
         setDatetime(newDate);
     };
 
-    const isDateToCome = (dateString: string) => new Date(dateString).getTime() >= startOfTomorrow().getTime();
+    const isDateToCome = (dateString: string) => {
+        const selectedDate = new Date(dateString);
+        const now = new Date();
+        return selectedDate.setHours(0, 0, 0, 0) >= now.setHours(0, 0, 0, 0);
+    };
 
     return (
         <>
