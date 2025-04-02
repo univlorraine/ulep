@@ -391,7 +391,7 @@ export const CreateActivityInformationsContent = ({
                     onClick={handleSubmit}
                     disabled={!allRequiredFieldsAreFilled()}
                 >
-                    {t('activity.create.validate_button')}
+                    {t('activity.create.next_screen_button')}
                 </IonButton>
             </div>
         </div>

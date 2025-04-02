@@ -284,6 +284,7 @@
             "ressource_file": "Upload a PDF document",
             "cancel_button": "Cancel",
             "validate_button": "Validate",
+            "next_screen_button": "Next screen",
             "success_title": "Sheet created !",
             "success_description": "Your sheet has been created !",
             "success_description_2": "You can find it in your learning space, in the “My sheets” tab",
