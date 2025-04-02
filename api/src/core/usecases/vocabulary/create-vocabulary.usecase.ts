@@ -92,9 +92,6 @@ export class CreateVocabularyUsecase {
       );
     }
 
-    console.log(profile);
-    console.log(vocabularyList);
-
     if (learningLanguage) {
       await this.createOrUpdateLogEntryUsecase.execute({
         learningLanguageId: learningLanguage.id,
