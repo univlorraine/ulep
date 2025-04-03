@@ -6,7 +6,7 @@
 
 */
 -- AlterTable
-ALTER TABLE "editos" ADD COLUMN     "video_text_content_id" TEXT NOT NULL;
+ALTER TABLE "editos" ADD COLUMN     "video_text_content_id" TEXT;
 
 -- CreateIndex
 CREATE UNIQUE INDEX "editos_video_text_content_id_key" ON "editos"("video_text_content_id");
