@@ -15,8 +15,8 @@ WORKDIR /srv/app
 # car les dépendances sont construites dans le fichier .gitlab-ci/template-ci.yml
 ENV COREPACK_DEFAULT_TO_LATEST=0
 RUN corepack enable && \
-	corepack prepare --activate pnpm@10.0.0 && \
-	pnpm config -g set store-dir /.pnpm-store
+    corepack prepare --activate pnpm@10.0.0 && \
+    pnpm config -g set store-dir /.pnpm-store
 
 # Copie de tous les fichiers du dossier dans srv/app du container (nécessaire pour le "pnpm run build" du fichier de déploiement Helm)
 # A supprimer si le "pnpm run build" est supprimé du fichier de déploiement

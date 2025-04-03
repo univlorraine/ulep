@@ -320,7 +320,8 @@
                 "lastname": "Lastname",
                 "university": "University",
                 "email": "Email",
-                "cta": "Actions"
+                "cta": "Actions",
+                "learningLanguage": "Learning languages"
             },
             "searchProfile": "Search a profile",
             "search": {
@@ -420,7 +421,9 @@
         },
         "edito": {
             "mandatoryTranslations": "Mandatory translations for the Edito",
-            "noMandatoryTranslations": "No mandatory translations"
+            "noMandatoryTranslations": "No mandatory translations",
+            "centralUniversityTranslations": "Additional languages for the central university Edito",
+            "noCentralUniversityTranslations": "No additional languages"
         },
         "edit": {
             "error": "An error occurred while updating the instance",
@@ -624,6 +627,7 @@
             "name": "Learning language name",
             "level": "Level of learning language"
         },
+        "learning_languages": "Learning languages",
         "mastered_languages": "Mastered languages",
         "native_language": "Native language",
         "objectives": "Objectives",
@@ -671,6 +675,7 @@
     "reports": {
         "category": "Report category",
         "CLOSED": "Closed",
+        "TREATED": "Treated",
         "comment": "Administrator's comments",
         "content": "Content",
         "created_at": "Submission date",

@@ -5,3 +5,4 @@ metadata:
 data:
 {{ (.Files.Glob "files/jitsi-meet/swp/custom-config.js").AsConfig | nindent 2 }}
 {{ (.Files.Glob "files/jitsi-meet/swp/custom-interface_config.js").AsConfig | nindent 2 }}
+{{ (.Files.Glob "files/jitsi-meet/swp/jitsi-meet.cfg.lua").AsConfig | nindent 2 }}

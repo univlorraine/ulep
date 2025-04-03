@@ -17,5 +17,8 @@ dependencies:
 - name: glitchtip
   repository: https://gitlab.com/api/v4/projects/16325141/packages/helm/stable
   version: 2.5.1
-digest: sha256:1df2541b81f9c2958801cafef4e9e1aa9723f181da3a36d3593d55acc85bc3b1
-generated: "2025-03-03T15:51:12.803819277+01:00"
+- name: coturn
+  repository: https://small-hack.github.io/coturn-chart/
+  version: 8.1.1
+digest: sha256:30299a4c23c32726588bb05157a0a4ccb357628bdfad38e9f13821cccfcb4b8f
+generated: "2025-03-04T10:42:43.265929601+01:00"

@@ -1,3 +1,43 @@
+/**
+ *
+ *   Copyright ou © ou Copr. Université de Lorraine, (2025)
+ *
+ *   Direction du Numérique de l'Université de Lorraine - SIED
+ *
+ *   Ce logiciel est un programme informatique servant à rendre accessible
+ *   sur mobile et sur internet l'application ULEP (University Language
+ *   Exchange Programme) aux étudiants et aux personnels des universités
+ *   parties prenantes.
+ *
+ *   Ce logiciel est régi par la licence CeCILL 2.1, soumise au droit français
+ *   et respectant les principes de diffusion des logiciels libres. Vous pouvez
+ *   utiliser, modifier et/ou redistribuer ce programme sous les conditions
+ *   de la licence CeCILL telle que diffusée par le CEA, le CNRS et INRIA
+ *   sur le site "http://cecill.info".
+ *
+ *   En contrepartie de l'accessibilité au code source et des droits de copie,
+ *   de modification et de redistribution accordés par cette licence, il n'est
+ *   offert aux utilisateurs qu'une garantie limitée. Pour les mêmes raisons,
+ *   seule une responsabilité restreinte pèse sur l'auteur du programme, le
+ *   titulaire des droits patrimoniaux et les concédants successifs.
+ *
+ *   À cet égard, l'attention de l'utilisateur est attirée sur les risques
+ *   associés au chargement, à l'utilisation, à la modification et/ou au
+ *   développement et à la reproduction du logiciel par l'utilisateur étant
+ *   donné sa spécificité de logiciel libre, qui peut le rendre complexe à
+ *   manipuler et qui le réserve donc à des développeurs et des professionnels
+ *   avertis possédant des connaissances informatiques approfondies. Les
+ *   utilisateurs sont donc invités à charger et à tester l'adéquation du
+ *   logiciel à leurs besoins dans des conditions permettant d'assurer la
+ *   sécurité de leurs systèmes et/ou de leurs données et, plus généralement,
+ *   à l'utiliser et à l'exploiter dans les mêmes conditions de sécurité.
+ *
+ *   Le fait que vous puissiez accéder à cet en-tête signifie que vous avez
+ *   pris connaissance de la licence CeCILL 2.1, et que vous en avez accepté les
+ *   termes.
+ *
+ */
+
 import { IonButton, IonIcon, IonImg, IonItem, IonLabel, IonList } from '@ionic/react';
 import { arrowRedoOutline, downloadOutline } from 'ionicons/icons';
 import { useState } from 'react';
@@ -9,6 +49,7 @@ import {
     LogEntryAddVocabulary,
     LogEntryCustomEntry,
     LogEntryEditActivity,
+    LogEntryPublishActivity,
     LogEntryShareVocabulary,
     LogEntrySubmitActivity,
 } from '../../../../domain/entities/LogEntry';
@@ -29,11 +70,14 @@ interface LogEntriesContentProps {
     onBackPressed: () => void;
     onShareLogEntries: () => void;
     onUnshareLogEntries: () => void;
+    onShareLogEntriesForResearch: () => void;
+    onUnshareLogEntriesForResearch: () => void;
     onExportLogEntries: () => void;
     profile: Profile;
     learningLanguage: LearningLanguage;
     isModal?: boolean;
     isShared: boolean;
+    isSharedForResearch: boolean;
 }
 
 export const LogEntriesContent: React.FC<LogEntriesContentProps> = ({
@@ -46,10 +90,13 @@ export const LogEntriesContent: React.FC<LogEntriesContentProps> = ({
     onExportLogEntries,
     onShareLogEntries,
     onUnshareLogEntries,
+    onShareLogEntriesForResearch,
+    onUnshareLogEntriesForResearch,
     profile,
     learningLanguage,
     isModal,
     isShared,
+    isSharedForResearch,
 }) => {
     const { t } = useTranslation();
     const [refresh, setRefresh] = useState<boolean>(false);
@@ -61,7 +108,11 @@ export const LogEntriesContent: React.FC<LogEntriesContentProps> = ({
             onUpdateCustomLogEntry(logEntry);
         } else if (logEntry instanceof LogEntryAddVocabulary || logEntry instanceof LogEntryShareVocabulary) {
             onOpenVocabularyList(logEntry.vocabularyListId);
-        } else if (logEntry instanceof LogEntryEditActivity || logEntry instanceof LogEntrySubmitActivity) {
+        } else if (
+            logEntry instanceof LogEntryEditActivity ||
+            logEntry instanceof LogEntrySubmitActivity ||
+            logEntry instanceof LogEntryPublishActivity
+        ) {
             onOpenActivity(logEntry.activityId);
         }
     };
@@ -92,6 +143,28 @@ export const LogEntriesContent: React.FC<LogEntriesContentProps> = ({
                                 {isShared ? t('learning_book.list.unshare.title') : t('learning_book.list.share.title')}
                             </IonLabel>
                         </IonItem>
+                        {isShared && (
+                            <IonItem
+                                button={true}
+                                detail={false}
+                                onClick={async () => {
+                                    if (isSharedForResearch) {
+                                        await onUnshareLogEntriesForResearch();
+                                    } else {
+                                        await onShareLogEntriesForResearch();
+                                    }
+                                    setRefresh(!refresh);
+                                    closeMenu();
+                                }}
+                            >
+                                <IonIcon icon={arrowRedoOutline} aria-hidden="true" />
+                                <IonLabel className={styles['popover-label']}>
+                                    {isSharedForResearch
+                                        ? t('learning_book.list.unshareforresearch.title')
+                                        : t('learning_book.list.shareforresearch.title')}
+                                </IonLabel>
+                            </IonItem>
+                        )}
                         <IonItem
                             button={true}
                             detail={false}
@@ -110,29 +183,31 @@ export const LogEntriesContent: React.FC<LogEntriesContentProps> = ({
             />
             <div className={styles['log-entries-list']}>
                 <div className={styles['log-entries-list-container']}>
-                    {logEntriesResult.logEntries.map((logEntry) => {
-                        if (logEntry.count > 1) {
+                    {logEntriesResult.logEntries
+                        .filter((logEntry) => logEntry.count > 0 && logEntry.entries.length > 0)
+                        .map((logEntry) => {
+                            if (logEntry.count > 1 && logEntry.entries.length > 1) {
+                                return (
+                                    <LogEntriesCard
+                                        key={logEntry.date.toISOString()}
+                                        date={logEntry.date}
+                                        logEntries={logEntry.entries}
+                                        count={logEntry.count}
+                                        profile={profile}
+                                        onClick={onFocusLogEntryForADay}
+                                    />
+                                );
+                            }
                             return (
-                                <LogEntriesCard
-                                    key={logEntry.date.toISOString()}
-                                    date={logEntry.date}
-                                    logEntries={logEntry.entries}
-                                    count={logEntry.count}
+                                <LogEntryCard
+                                    key={logEntry.entries[0].id}
+                                    logEntry={logEntry.entries[0]}
                                     profile={profile}
-                                    onClick={onFocusLogEntryForADay}
+                                    onClick={handleOnPress}
+                                    shouldDisplayDate
                                 />
                             );
-                        }
-                        return (
-                            <LogEntryCard
-                                key={logEntry.entries[0].id}
-                                logEntry={logEntry.entries[0]}
-                                profile={profile}
-                                onClick={handleOnPress}
-                                shouldDisplayDate
-                            />
-                        );
-                    })}
+                        })}
                 </div>
                 {logEntriesResult.isLoading && <Loader />}
                 {!logEntriesResult.isLoading && !isPaginationEnded && (

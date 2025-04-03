@@ -72,7 +72,20 @@
         "load_more": "See more",
         "add_to_calendar_success": "ICS file downloaded",
         "list": {
-            "title": "Events"
+            "title": "Events",
+            "filter_title": "Select event filters",
+            "filter_clear": "Clear filters",
+            "language": "Language",
+            "search": "Search an event"
+        },
+        "show": {
+            "change_language": "Change",
+            "language": "Language",
+            "author": "Author",
+            "change_language_modal": {
+                "title": "Choose the language",
+                "current": "Selected"
+            }
         }
     },
     "edito": {
@@ -85,15 +98,18 @@
         "list": {
             "filter_title": "Select news filters",
             "title": "News",
-            "load_more": "See more"
+            "load_more": "See more",
+            "filter_clear": "Clear filters",
+            "language": "Language",
+            "search": "Search a news"
         },
         "show": {
             "change_language": "Change",
             "language": "Language",
             "author": "Author",
             "change_language_modal": {
-                "title": "Choisir la langue",
-                "current": "Sélectionnée"
+                "title": "Choose the language",
+                "current": "Selected"
             }
         }
     },
@@ -108,8 +124,16 @@
                 "title": "Share the logs to your animator",
                 "success": "Logs have been shared"
             },
+            "shareforresearch": {
+                "title": "Share the logs for research",
+                "success": "Logs have been shared"
+            },
             "unshare": {
                 "title": "Unshare the logs to your animator",
+                "success": "Logs have been unshared"
+            },
+            "unshareforresearch": {
+                "title": "Unshare the logs for research",
                 "success": "Logs have been unshared"
             },
             "export": {
