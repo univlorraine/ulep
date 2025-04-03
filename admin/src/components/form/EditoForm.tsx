@@ -120,20 +120,10 @@ const EditoForm: React.FC<EditoFormProps> = ({ handleSubmit, record }) => {
             }
         });
 
-        let videoIsInvalid = false;
-        translations.forEach((translation) => {
-            if (!isValidUrl(translation.video)) {
-                videoIsInvalid = true;
-            }
-        });
-        if (!isValidUrl(video)) {
-            videoIsInvalid = true;
-        }
-
+        const videoIsInvalid = [...translations, { video }].some((item) => !isValidUrl(item.video));
         if (videoIsInvalid) {
             notify(translate('editos.form.invalidVideoUrl'));
         }
-
         setIsDisabled(!mandatoryLanguageIsCompleted || !mandatoryTranslationsAreCompleted || videoIsInvalid);
     }, [translations, content, mandatoryLanguages]);
 
