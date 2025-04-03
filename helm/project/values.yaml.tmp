@@ -498,6 +498,34 @@ jitsi-meet:
         value: 'api'
       - name: 'JWT_APP_SECRET'
         value: *keycloakClientSecret
+      - name: "TURN_HOST"
+        value: "ulep-coturn"
+      - name: "TURN_PORT"
+        value: "80"
+      - name: "TURNS_HOST"
+        value: "ulep-coturn"
+      - name: "TURNS_PORT"
+        value: "443"
+      - name: "TURN_TTL"
+        value: "86400"
+      - name: "TURN_USERNAME"
+        value: coturn
+      - name: "TURN_PASSWORD"
+        value: coturn
+      - name: "TURN_CREDENTIALS"
+        value: ""
+      - name: "TURN_TRANSPORT"
+        value: "tcp,udp"
+      - name: "JVB_AUTH_USER"
+        value: "ulep"
+      - name: "JVB_AUTH_PASSWORD"
+        value: "AZE123aze"
+      - name: "JICOFO_AUTH_USER"
+        value: "ulep"
+      - name: "JICOFO_AUTH_PASSWORD"
+        value: "AZE123aze"
+      - name: "JICOFO_COMPONENT_SECRET"
+        value: "AZE123aze"
     annotations:
       reloader.stakater.com/match: 'true'
     securityContext:
@@ -506,6 +534,17 @@ jitsi-meet:
         type: 'RuntimeDefault'
       readOnlyRootFilesystem: false
       runAsNonRoot: false
+    extraVolumes:
+      - name: "jitsi-meet-swp"
+        configMap:
+          name: "jitsi-meet-swp"
+          items:
+            - key: "jitsi-meet.cfg.lua"
+              path: "jitsi-meet.cfg.lua"
+    extraVolumeMounts:
+      - name: "jitsi-meet-swp"
+        mountPath: "/defaults/conf.d/jitsi-meet.cfg.lua"
+        subPath: "jitsi-meet.cfg.lua"
 
   jicofo:
     xmpp:
@@ -652,7 +691,28 @@ glitchtip:
             - path: /
               pathType: Prefix      
 
-  
+coturn:
+  # --  hostname for the coturn server realm
+  realm: "turn.ulep.thestaging.io"
+  name: coturn
+  externalDatabse:
+    enabled: false
+  postgresql:
+    enabled: false
+  auth:
+    # -- username for the main user of the turn server; ignored if you existingSecret is not ""
+    username: "coturn"
+    # -- password for the main user of the turn server; ignored if you existingSecret is not ""
+    password: "coturn"
+    # -- existing secret with keys username/password for coturn; if this is not "" then we will ignore coturn.auth.username/password
+    existingSecret: ""
+    secretKeys:
+      # -- key in existing secret for turn server user
+      username: coturn
+      # -- key in existing secret for turn server user's password
+      password: coturn
+
+
 
 serviceAccount:
   # Specifies whether a service account should be created
