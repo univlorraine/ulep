@@ -303,6 +303,7 @@
             "ressource_file": "Uploader un document PDF",
             "cancel_button": "Annuler",
             "validate_button": "Valider",
+            "next_screen_button": "Ecran suivant",
             "success_title": "Fiche créée !",
             "success_description": "Votre fiche a bien été créée !",
             "success_description_2": "Tu peux la retrouver dans ton espace apprentissage, dans l’onglet “Mes fiches”",
