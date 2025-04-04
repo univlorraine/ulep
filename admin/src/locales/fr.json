@@ -225,7 +225,9 @@
         "title": "Editos",
         "form": {
             "mandatoryLanguages": "Les langues avec un * sont obligatoires",
-            "update": "Mettre à jour"
+            "update": "Mettre à jour",
+            "video": "Url de la video",
+            "invalidVideoUrl": "L'url de la video est invalide"
         },
         "list": {
             "university": "Université",

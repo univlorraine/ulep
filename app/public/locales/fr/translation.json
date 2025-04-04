@@ -303,6 +303,7 @@
             "ressource_file": "Uploader un document PDF",
             "cancel_button": "Annuler",
             "validate_button": "Valider",
+            "next_screen_button": "Ecran suivant",
             "success_title": "Fiche créée !",
             "success_description": "Votre fiche a bien été créée !",
             "success_description_2": "Tu peux la retrouver dans ton espace apprentissage, dans l’onglet “Mes fiches”",
@@ -775,6 +776,9 @@
             "join_session": "Rejoindre",
             "show_session": "Voir",
             "cancelled": "Annulée"
+        },
+        "error": {
+            "past_date": "La date et l'heure sélectionnées ne peuvent pas être dans le passé."
         },
         "date_and_hour": "Date & heure",
         "time_for_partner": "Horaire pour {{name}} :",

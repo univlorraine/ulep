@@ -49,6 +49,10 @@ export class UpdateEditoRequest {
 
   @ApiProperty()
   @IsString()
+  video: string;
+
+  @ApiProperty()
+  @IsString()
   languageCode: string;
 
   @ApiProperty()

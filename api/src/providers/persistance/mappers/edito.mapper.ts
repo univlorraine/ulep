@@ -55,11 +55,13 @@ export const EditoRelations = {
   University: { include: UniversityRelations },
   Image: true,
   ContentTextContent: TextContentRelations,
+  VideoTextContent: TextContentRelations,
 };
 
 export type EditoSnapshot = Prisma.Editos & {
   University: UniversitySnapshot;
   ContentTextContent: TextContentSnapshot;
+  VideoTextContent: TextContentSnapshot;
   Image?: Prisma.MediaObjects;
 };
 
@@ -77,6 +79,7 @@ export const editoMapper = (snapshot: EditoSnapshot): Edito => {
         size: snapshot.Image.size,
       }),
     content: snapshot.ContentTextContent.text,
+    video: snapshot.VideoTextContent.text,
     languageCode: snapshot.ContentTextContent.LanguageCode.code,
     translations: editoTranslationsMapper(snapshot),
     createdAt: snapshot.created_at,
@@ -94,6 +97,11 @@ export const editoTranslationsMapper = (
       content: snapshot.ContentTextContent.Translations.find(
         (contentTranslation) =>
           contentTranslation.LanguageCode.code ===
+          titleTranslation.LanguageCode.code,
+      ).text,
+      video: snapshot.VideoTextContent.Translations.find(
+        (videoTranslation) =>
+          videoTranslation.LanguageCode.code ===
           titleTranslation.LanguageCode.code,
       ).text,
     });
