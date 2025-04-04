@@ -777,6 +777,9 @@
             "show_session": "Voir",
             "cancelled": "Annulée"
         },
+        "error": {
+            "past_date": "La date et l'heure sélectionnées ne peuvent pas être dans le passé."
+        },
         "date_and_hour": "Date & heure",
         "time_for_partner": "Horaire pour {{name}} :",
         "comment": "Commentaire",
