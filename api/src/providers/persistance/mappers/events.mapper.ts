@@ -129,7 +129,7 @@ export const eventTranslationsMapper = (
         (contentTranslation) =>
           contentTranslation.LanguageCode.code ===
           titleTranslation.LanguageCode.code,
-      ).text,
+      ).text
     });
   });
 

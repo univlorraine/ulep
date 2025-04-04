@@ -267,7 +267,8 @@ model TextContent {
   EventContent             Events[]                 @relation("EventContentTextContent")
   ActivityThemes           ActivityThemes?
   ActivityThemesCategories ActivityThemeCategories?
-  EditosContent        Editos?
+  EditosContent            Editos?                  @relation("ContentTextContent")
+  EditosVideoContent       Editos?                  @relation("VideoTextContent")
 
   @@map("text_content")
 }
@@ -845,7 +846,8 @@ model CommunityChat {
 
 model Editos {
   id                      String   @id @default(uuid())
-  content_text_content_id String @unique
+  content_text_content_id String @unique  
+  video_text_content_id   String @unique
   university_id           String @unique
   image_id                String? @unique
   created_at              DateTime @default(now())
@@ -853,7 +855,8 @@ model Editos {
 
   University              Organizations @relation(fields: [university_id], references: [id], onDelete: Cascade)
   Image                   MediaObjects? @relation(fields: [image_id], references: [id])
-  ContentTextContent      TextContent   @relation(fields: [content_text_content_id], references: [id], onDelete: Cascade)
+  ContentTextContent      TextContent   @relation(fields: [content_text_content_id], references: [id], onDelete: Cascade, name:"ContentTextContent")
+  VideoTextContent        TextContent   @relation(fields: [video_text_content_id], references: [id], onDelete: Cascade, name:"VideoTextContent")
 
   @@map("editos")
 }

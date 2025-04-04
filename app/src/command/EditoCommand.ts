@@ -46,10 +46,17 @@ interface EditoCommand {
     content: string;
     university: UniversityCommand;
     imageURL?: string;
+    video?: string;
 }
 
 export const editoCommandToDomain = (command: EditoCommand) => {
-    return new Edito(command.id, command.content, universityCommandToDomain(command.university), command.imageURL);
+    return new Edito(
+        command.id,
+        command.content,
+        universityCommandToDomain(command.university),
+        command.imageURL,
+        command.video
+    );
 };
 
 export default EditoCommand;

@@ -67,6 +67,7 @@ export class InMemoryEditoRepository implements EditoRepository {
       id: command.universityId,
       university: null,
       content: '',
+      video: '',
       languageCode: '',
       translations: [],
       createdAt: new Date(),

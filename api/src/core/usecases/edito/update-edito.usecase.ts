@@ -50,6 +50,7 @@ export type UpdateEditoCommand = {
   id: string;
   languageCode: string;
   content: string;
+  video: string;
   translations?: EditoTranslation[];
 };
 
@@ -62,10 +63,10 @@ export class UpdateEditoUsecase {
 
   async execute(command: UpdateEditoCommand) {
     await this.assertEditoExists(command.id);
-
     return this.editoRepository.update({
       id: command.id,
       content: command.content,
+      video: command.video,
       languageCode: command.languageCode,
       translations: command.translations ?? [],
     });
