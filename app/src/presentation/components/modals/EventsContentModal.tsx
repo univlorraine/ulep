@@ -38,11 +38,12 @@
  *
  */
 
+import { IonModal } from '@ionic/react';
 import EventObject from '../../../domain/entities/Event';
 import Profile from '../../../domain/entities/Profile';
 import EventsContent from '../contents/events/EventsContent';
 import { EventsListContent } from '../contents/events/EventsListContent';
-import Modal from './Modal';
+import styles from './ActivitiesContentModal.module.css';
 
 export const DisplayEventsContentModalEnum = {
     show: 'show',
@@ -57,7 +58,7 @@ export interface DisplayEventsContentModal {
 interface NewsContentModalProps {
     isVisible: boolean;
     displayEventsContentModal?: DisplayEventsContentModal;
-    onClose: () => void;
+    onClose: (shouldClose?: boolean) => void;
     onEventPressed: (event?: EventObject) => void;
     profile: Profile;
 }
@@ -70,8 +71,8 @@ const NewsContentModal: React.FC<NewsContentModalProps> = ({
     profile,
 }) => {
     return (
-        <Modal isVisible={isVisible} onClose={onClose} position="flex-end" hideWhiteBackground>
-            <>
+        <IonModal animated isOpen={isVisible} onDidDismiss={() => onClose(true)} className={styles.modal}>
+            <div className={styles.content}>
                 {displayEventsContentModal?.type === DisplayEventsContentModalEnum.list && (
                     <EventsListContent profile={profile} onBackPressed={onClose} onEventPressed={onEventPressed} />
                 )}
@@ -83,8 +84,8 @@ const NewsContentModal: React.FC<NewsContentModalProps> = ({
                             profile={profile}
                         />
                     )}
-            </>
-        </Modal>
+            </div>
+        </IonModal>
     );
 };
 

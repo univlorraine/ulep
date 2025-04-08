@@ -106,7 +106,7 @@ export const EventsContent: React.FC<EventsContentProps> = ({ eventId, profile, 
     };
 
     return (
-        <div className="subcontent-container content-wrapper" style={{ padding: 0 }} ref={contentRef}>
+        <div className="content-wrapper" style={{ padding: 0 }} ref={contentRef}>
             <HeaderSubContent title={t('events.list.title')} onBackPressed={onBackPressed} />
             <div className={styles.container}>
                 {event.imageUrl && <IonImg className={styles.image} src={event.imageUrl}></IonImg>}

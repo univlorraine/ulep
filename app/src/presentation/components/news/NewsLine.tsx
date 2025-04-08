@@ -64,20 +64,18 @@ const NewsLine: React.FC<NewsLineProps> = ({ news, profile, onClick }) => {
     }).format(new Date(news.startPublicationDate));
 
     return (
-        <button
-            aria-label={t('news.open', { title: news.title }) as string}
-            className={styles.container}
-            onClick={onClick}
-        >
-            {news.imageUrl && <IonImg className={styles.image} src={news.imageUrl} />}
-            <div className={styles.content}>
-                <div className={styles.tags}>
-                    <LanguageTag languageCode={news.languageCode} />
-                    <UniversityTag university={news.university} />
+        <button aria-label={t('news.open', { title: news.title }) as string} onClick={onClick}>
+            <div className={styles.container}>
+                {news.imageUrl && <IonImg className={styles.image} src={news.imageUrl} />}
+                <div className={styles.content}>
+                    <div className={styles.tags}>
+                        <LanguageTag languageCode={news.languageCode} />
+                        <UniversityTag university={news.university} />
+                    </div>
+                    <span className={styles.date}>{formattedDate}</span>
+                    <br />
+                    <span className={styles.title}>{news.title}</span>
                 </div>
-                <span className={styles.date}>{formattedDate}</span>
-                <br />
-                <span className={styles.title}>{news.title}</span>
             </div>
         </button>
     );

@@ -172,8 +172,8 @@ const HomePage: React.FC = () => {
         }
     };
 
-    const onShowCloseNewsPressed = () => {
-        if (displayNewsContent?.type === DisplayNewsContentModalEnum.show) {
+    const onShowCloseNewsPressed = (shouldClose?: boolean) => {
+        if (!shouldClose && displayNewsContent?.type === DisplayNewsContentModalEnum.show) {
             setDisplayNewsContent({ type: DisplayNewsContentModalEnum.list });
         } else {
             setDisplayNewsContent(undefined);
@@ -191,8 +191,8 @@ const HomePage: React.FC = () => {
         }
     };
 
-    const onShowCloseEventPressed = () => {
-        if (displayEventsContent?.type === DisplayEventsContentModalEnum.show) {
+    const onShowCloseEventPressed = (shouldClose?: boolean) => {
+        if (!shouldClose && displayEventsContent?.type === DisplayEventsContentModalEnum.show) {
             setDisplayEventsContent({ type: DisplayEventsContentModalEnum.list });
         } else {
             setDisplayEventsContent(undefined);
