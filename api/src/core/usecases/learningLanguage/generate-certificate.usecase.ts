@@ -298,21 +298,25 @@ export class GenerateCertificateUsecase {
     ) as string;
 
     if (form.getFieldMaybe('LearningJournalBoolean')) {
-      const learningJournalBooleanField = form.getTextField(
+      const learningJournalBooleanField = form.getCheckBox(
         'LearningJournalBoolean',
       );
-      learningJournalBooleanField.setText(
-        learningJournal ? checkboxYesValue : checkboxNoValue,
-      );
+      if (learningJournal) {
+        learningJournalBooleanField.check();
+      } else {
+        learningJournalBooleanField.uncheck();
+      }
     }
 
     if (form.getFieldMaybe('ConsultingInterviewBoolean')) {
-      const consultingInterviewBooleanField = form.getTextField(
+      const consultingInterviewBooleanField = form.getCheckBox(
         'ConsultingInterviewBoolean',
       );
-      consultingInterviewBooleanField.setText(
-        consultingInterview ? checkboxYesValue : checkboxNoValue,
-      );
+      if (consultingInterview) {
+        consultingInterviewBooleanField.check();
+      } else {
+        consultingInterviewBooleanField.uncheck();
+      }
     }
 
     if (form.getFieldMaybe('VisioTime')) {
