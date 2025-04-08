@@ -50,6 +50,8 @@ const GoalsListPage = () => {
     const location = useLocation<{ customLearningGoals: CustomLearningGoal[]; learningLanguageId: string }>();
     const { customLearningGoals, learningLanguageId } = location.state;
 
+    console.log('customLearningGoals', customLearningGoals);
+
     const learningLanguage = useStoreState((state) =>
         state.profile?.learningLanguages.find((learningLanguage) => learningLanguage.id === learningLanguageId)
     );
@@ -63,11 +65,11 @@ const GoalsListPage = () => {
     };
 
     const onAddCustomGoalPressed = () => {
-        history.push('create-custom-goal', { learningLanguageId });
+        history.push('create-custom-goal', { learningLanguageId, customLearningGoals });
     };
 
     const onShowCustomGoalPressed = (customLearningGoal: CustomLearningGoal) => {
-        history.push('show-custom-goal', { customLearningGoal, learningLanguageId });
+        history.push('show-custom-goal', { customLearningGoal, learningLanguageId, customLearningGoals });
     };
 
     return (

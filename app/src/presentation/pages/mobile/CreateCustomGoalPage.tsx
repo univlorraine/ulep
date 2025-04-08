@@ -46,12 +46,13 @@ import CustomGoalFormContent from '../../components/contents/CustomGoalFormConte
 
 interface CreateSessionPageProps {
     learningLanguageId: string;
+    customLearningGoals: CustomLearningGoal[];
 }
 
 const CreateCustomGoalPage = () => {
     const history = useHistory();
     const location = useLocation<CreateSessionPageProps>();
-    const { learningLanguageId } = location.state;
+    const { learningLanguageId, customLearningGoals } = location.state;
     const profile = useStoreState((state) => state.profile);
 
     if (!profile) {
@@ -59,7 +60,7 @@ const CreateCustomGoalPage = () => {
     }
 
     const goBack = () => {
-        history.push('/goals', { learningLanguageId });
+        history.push('/goals', { learningLanguageId, customLearningGoals });
     };
 
     const onShowAllGoalsPressed = (customLearningGoals: CustomLearningGoal[]) => {
