@@ -40,7 +40,7 @@
 
 import { IonButton, IonPage } from '@ionic/react';
 import { formatInTimeZone } from 'date-fns-tz';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
 import { CancelledPng } from '../../../assets';
@@ -49,6 +49,7 @@ import { useConfig } from '../../../context/ConfigurationContext';
 import Profile from '../../../domain/entities/Profile';
 import Session from '../../../domain/entities/Session';
 import Tandem from '../../../domain/entities/Tandem';
+import { useStoreState } from '../../../store/storeTypes';
 import HeaderSubContent from '../HeaderSubContent';
 import ConfirmCancelSessionModal from '../modals/ConfirmCancelSessionModal';
 import DateFormatted from '../sessions/DateFormatted';
@@ -78,6 +79,19 @@ const Content: React.FC<ShowSessionContentProps> = ({
     const [isCancelSessionModalVisible, setIsCancelSessionModalVisible] = useState(false);
     const userTz = profile?.user?.university?.timezone;
     const partnerTz = tandem.partner?.user?.university?.timezone;
+    const language = useStoreState((state) => state.language) || 'en-US';
+
+    const formatTime = useMemo(() => {
+        return (date: Date, timeZone: string) => {
+            return new Intl.DateTimeFormat(language || profile?.nativeLanguage.code, {
+                hour: 'numeric',
+                minute: 'numeric',
+                hour12: language.startsWith('en'),
+                timeZone,
+            }).format(date);
+        };
+    }, [language]);
+
     const updateSession = () => onUpdateSessionPressed(session, tandem);
 
     const handleCancelSession = async (comment: string) => {
@@ -136,17 +150,11 @@ const Content: React.FC<ShowSessionContentProps> = ({
                         <div className={styles.line}>
                             <div className={styles.icon}>⏰</div>
                             <div className={styles.line_content}>
-                                <p>
-                                    {formatInTimeZone(
-                                        session.startAt,
-                                        profile?.user?.university.timezone as string,
-                                        'HH:mm (zzzz, zzz)'
-                                    )}
-                                </p>
+                                <p>{formatTime(session.startAt, profile?.user?.university.timezone as string)}</p>
                                 {userTz !== partnerTz && (
                                     <p className={styles.datetimeInfo}>
                                         {t('session.time_for_partner', { name: tandem.partner?.user?.firstname })}
-                                        <strong> {formatInTimeZone(session.startAt, partnerTz, 'HH:mm')} </strong>(
+                                        <strong> {formatTime(session.startAt, partnerTz)} </strong>(
                                         {formatInTimeZone(session.startAt, partnerTz, 'zzzz, zzz')})
                                     </p>
                                 )}

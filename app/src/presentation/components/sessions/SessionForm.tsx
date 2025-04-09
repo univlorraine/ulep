@@ -40,11 +40,12 @@
 
 import { IonButton, IonDatetime, IonDatetimeButton, IonModal, useIonToast } from '@ionic/react';
 import { formatInTimeZone, fromZonedTime } from 'date-fns-tz';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Redirect } from 'react-router';
 import Profile from '../../../domain/entities/Profile';
 import Session from '../../../domain/entities/Session';
+import { useStoreState } from '../../../store/storeTypes';
 import { SessionFormData } from '../contents/SessionFormContent';
 import TextInput from '../TextInput';
 import styles from './SessionForm.module.css';
@@ -60,6 +61,7 @@ interface SessionFormProps {
 const SessionForm: React.FC<SessionFormProps> = ({ onBackPressed, onSubmit, session, profile, partner }) => {
     const userTz = profile?.user?.university?.timezone; // TODO: replace university timezone by user profile timezone
     const partnerTz = partner?.user?.university?.timezone; // TODO: replace university timezone by partner profile timezone
+    const language = useStoreState((state) => state.language) || 'en-US'; // Default to 'en-US' if language is not set
 
     if (!userTz || !partnerTz) {
         return <Redirect to="/" />;
@@ -70,6 +72,17 @@ const SessionForm: React.FC<SessionFormProps> = ({ onBackPressed, onSubmit, sess
     const [useToast] = useIonToast();
     const [datetime, setDatetime] = useState<string>(formatInTimeZone(startAt, userTz, "yyyy-MM-dd'T'HH:mm"));
     const [comment, setComment] = useState(session?.comment || '');
+
+    const formatTime = useMemo(() => {
+        return (date: Date, timeZone: string) => {
+            return new Intl.DateTimeFormat(language, {
+                hour: 'numeric',
+                minute: 'numeric',
+                hour12: language.startsWith('en'),
+                timeZone,
+            }).format(date);
+        };
+    }, [language]);
 
     const handleSubmit = () => {
         const selectedDate = new Date(datetime);
@@ -102,10 +115,8 @@ const SessionForm: React.FC<SessionFormProps> = ({ onBackPressed, onSubmit, sess
                     {userTz !== partnerTz && (
                         <p className={styles.datetimeInfo}>
                             {t('session.time_for_partner', { name: partner?.user?.firstname })}
-                            <strong>
-                                {' '}
-                                {formatInTimeZone(fromZonedTime(datetime, userTz), partnerTz, 'HH:mm')}{' '}
-                            </strong>({formatInTimeZone(fromZonedTime(datetime, userTz), partnerTz, 'zzzz, zzz')})
+                            <strong> {formatTime(fromZonedTime(datetime, userTz), partnerTz)} </strong>(
+                            {formatInTimeZone(fromZonedTime(datetime, userTz), partnerTz, 'zzzz, zzz')})
                         </p>
                     )}
                     <IonModal keepContentsMounted={true}>
@@ -114,6 +125,7 @@ const SessionForm: React.FC<SessionFormProps> = ({ onBackPressed, onSubmit, sess
                             value={datetime}
                             onIonChange={(e) => onDatetimeChange(e.detail.value as string)}
                             isDateEnabled={isDateToCome}
+                            locale={language}
                         ></IonDatetime>
                     </IonModal>
                 </div>
