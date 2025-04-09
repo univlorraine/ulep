@@ -100,10 +100,10 @@ const EditoForm: React.FC<EditoFormProps> = ({ handleSubmit, record }) => {
         getMandatoryLanguages();
     }, []);
 
-    const isValidUrl = (url: string): boolean => {
-        const urlRegex = /^$|^https?:\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?$/;
+    const isValidUrl = (url: string | null): boolean => {
+        const htmlRegex = /^$|^<([a-z][a-z0-9]*)[^>]*>(?:[^<]*|<(?!\/\1>)[\s\S])*<\/\1>$/i;
 
-        return urlRegex.test(url);
+        return !url || htmlRegex.test(url) || !url.length;
     };
 
     useEffect(() => {
