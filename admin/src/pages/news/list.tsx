@@ -105,7 +105,7 @@ const NewsList = () => {
         />,
     ];
 
-    if (identity?.isCentralUniversity && universitiesData) {
+    if (identity?.isCentralUniversity && universitiesData && permissions.checkRole(Role.ADMIN)) {
         filters.unshift(
             <SelectInput
                 key="groupFilter"
