@@ -50,8 +50,6 @@ const GoalsListPage = () => {
     const location = useLocation<{ customLearningGoals: CustomLearningGoal[]; learningLanguageId: string }>();
     const { customLearningGoals, learningLanguageId } = location.state;
 
-    console.log('customLearningGoals', customLearningGoals);
-
     const learningLanguage = useStoreState((state) =>
         state.profile?.learningLanguages.find((learningLanguage) => learningLanguage.id === learningLanguageId)
     );
