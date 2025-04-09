@@ -846,17 +846,17 @@ model CommunityChat {
 
 model Editos {
   id                      String   @id @default(uuid())
-  content_text_content_id String @unique  
-  video_text_content_id   String @unique
-  university_id           String @unique
-  image_id                String? @unique
+  content_text_content_id String   @unique  
+  video_text_content_id   String?  @unique
+  university_id           String   @unique
+  image_id                String?  @unique
   created_at              DateTime @default(now())
   updated_at              DateTime @updatedAt
 
   University              Organizations @relation(fields: [university_id], references: [id], onDelete: Cascade)
   Image                   MediaObjects? @relation(fields: [image_id], references: [id])
   ContentTextContent      TextContent   @relation(fields: [content_text_content_id], references: [id], onDelete: Cascade, name:"ContentTextContent")
-  VideoTextContent        TextContent   @relation(fields: [video_text_content_id], references: [id], onDelete: Cascade, name:"VideoTextContent")
+  VideoTextContent        TextContent?   @relation(fields: [video_text_content_id], references: [id], onDelete: Cascade, name:"VideoTextContent")
 
   @@map("editos")
 }

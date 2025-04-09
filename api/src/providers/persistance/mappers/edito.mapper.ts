@@ -79,7 +79,7 @@ export const editoMapper = (snapshot: EditoSnapshot): Edito => {
         size: snapshot.Image.size,
       }),
     content: snapshot.ContentTextContent.text,
-    video: snapshot.VideoTextContent.text,
+    video: snapshot.VideoTextContent?.text,
     languageCode: snapshot.ContentTextContent.LanguageCode.code,
     translations: editoTranslationsMapper(snapshot),
     createdAt: snapshot.created_at,
@@ -99,7 +99,7 @@ export const editoTranslationsMapper = (
           contentTranslation.LanguageCode.code ===
           titleTranslation.LanguageCode.code,
       ).text,
-      video: snapshot.VideoTextContent.Translations.find(
+      video: snapshot.VideoTextContent?.Translations.find(
         (videoTranslation) =>
           videoTranslation.LanguageCode.code ===
           titleTranslation.LanguageCode.code,
