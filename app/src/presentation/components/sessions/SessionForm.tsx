@@ -61,7 +61,7 @@ interface SessionFormProps {
 const SessionForm: React.FC<SessionFormProps> = ({ onBackPressed, onSubmit, session, profile, partner }) => {
     const userTz = profile?.user?.university?.timezone; // TODO: replace university timezone by user profile timezone
     const partnerTz = partner?.user?.university?.timezone; // TODO: replace university timezone by partner profile timezone
-    const language = useStoreState((state) => state.language) || 'en-US'; // Default to 'en-US' if language is not set
+    const language = useStoreState((state) => state.language);
 
     if (!userTz || !partnerTz) {
         return <Redirect to="/" />;
@@ -75,7 +75,7 @@ const SessionForm: React.FC<SessionFormProps> = ({ onBackPressed, onSubmit, sess
 
     const formatTime = useMemo(() => {
         return (date: Date, timeZone: string) => {
-            return new Intl.DateTimeFormat(language, {
+            return new Intl.DateTimeFormat(language || profile?.nativeLanguage.code, {
                 hour: 'numeric',
                 minute: 'numeric',
                 hour12: language.startsWith('en'),
