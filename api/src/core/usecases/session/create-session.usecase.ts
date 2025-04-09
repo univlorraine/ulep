@@ -40,7 +40,11 @@
 
 import { KeycloakUser } from '@app/keycloak';
 import { Inject, Injectable } from '@nestjs/common';
-import { RessourceDoesNotExist } from 'src/core/errors';
+import {
+  DomainError,
+  DomainErrorCode,
+  RessourceDoesNotExist,
+} from 'src/core/errors';
 import { Session } from 'src/core/models/session.model';
 import { EmailGateway, EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
 import {
@@ -55,6 +59,10 @@ import {
   TandemRepository,
   TANDEM_REPOSITORY,
 } from 'src/core/ports/tandem.repository';
+import {
+  UniversityRepository,
+  UNIVERSITY_REPOSITORY,
+} from 'src/core/ports/university.repository';
 
 export class CreateSessionCommand {
   user: KeycloakUser;
@@ -72,12 +80,23 @@ export class CreateSessionUsecase {
     private readonly tandemRepository: TandemRepository,
     @Inject(NOTIFICATION_GATEWAY)
     private readonly notificationGateway: NotificationGateway,
+    @Inject(UNIVERSITY_REPOSITORY)
+    private readonly universityRepository: UniversityRepository,
     @Inject(EMAIL_GATEWAY)
     private readonly emailGateway: EmailGateway,
   ) {}
 
   async execute(command: CreateSessionCommand) {
-    await this.assertTandemExist(command.tandemId);
+    const tandem = await this.assertTandemExist(command.tandemId);
+
+    await this.assertSessionIsBeforeUniversityClosingDate(
+      tandem.learningLanguages[0].profile.user.university.id,
+      command.startAt,
+    );
+    await this.assertSessionIsBeforeUniversityClosingDate(
+      tandem.learningLanguages[1].profile.user.university.id,
+      command.startAt,
+    );
 
     const session = await this.sessionRepository.create({
       tandemId: command.tandemId,
@@ -95,6 +114,22 @@ export class CreateSessionUsecase {
 
     if (!tandem) {
       throw new RessourceDoesNotExist('Tandem does not exist');
+    }
+
+    return tandem;
+  }
+
+  private async assertSessionIsBeforeUniversityClosingDate(
+    universityId: string,
+    startAt: Date,
+  ) {
+    const university = await this.universityRepository.ofId(universityId);
+
+    if (startAt > university.closeServiceDate) {
+      throw new DomainError({
+        code: DomainErrorCode.BAD_REQUEST,
+        message: 'Session is after university closing date',
+      });
     }
   }
 
