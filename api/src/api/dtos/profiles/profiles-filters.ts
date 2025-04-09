@@ -104,4 +104,8 @@ export class ProfileQueryFilter extends PaginationDto {
   @ApiPropertyOptional({ type: 'string' })
   @IsOptional()
   order?: SortOrder;
+
+  @ApiPropertyOptional({ type: 'string' })
+  @IsOptional()
+  division?: string;
 }

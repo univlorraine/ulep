@@ -166,6 +166,7 @@ export class PrismaProfileRepository implements ProfileRepository {
             lastname: where.user?.lastname,
             role: where.user?.role,
             status: where.user?.status,
+            division: where.user?.division,
           },
           ...(where.masteredLanguageCode && {
             MasteredLanguages: {
