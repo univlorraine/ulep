@@ -272,16 +272,21 @@ export enum GameName {
 }
 
 export type LogEntryPlayedGameProps = LogEntryProps & {
-  percentage?: number;
+  totalCardPlayed: number;
+  successCardPlayed: number;
   gameName: string;
 };
 
 export class LogEntryPlayedGame extends LogEntry {
+  totalCardPlayed: number;
+  successCardPlayed: number;
   percentage?: number;
   gameName: string;
   constructor(data: LogEntryPlayedGameProps) {
     super(data);
-    this.percentage = data.percentage;
+    this.totalCardPlayed = data.totalCardPlayed;
+    this.successCardPlayed = data.successCardPlayed;
+    this.percentage = (data.successCardPlayed / data.totalCardPlayed) * 100;
     this.gameName = data.gameName;
   }
 }

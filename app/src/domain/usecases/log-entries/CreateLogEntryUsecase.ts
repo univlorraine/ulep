@@ -52,7 +52,8 @@ interface CreateLogEntryPayload {
     duration?: number;
     tandemFirstname?: string;
     tandemLastname?: string;
-    percentage?: number;
+    totalCardPlayed?: number;
+    successCardPlayed?: number;
     gameName?: GameName;
     title?: string;
     createdAt?: Date;
@@ -90,8 +91,12 @@ class CreateLogEntryUsecase implements CreateLogEntryUsecaseInterface {
                 payload.partnerTandemId = command.metadata.partnerTandemId;
             }
 
-            if (command.metadata.percentage !== undefined) {
-                payload.percentage = command.metadata.percentage;
+            if (command.metadata.totalCardPlayed !== undefined) {
+                payload.totalCardPlayed = command.metadata.totalCardPlayed;
+            }
+
+            if (command.metadata.successCardPlayed !== undefined) {
+                payload.successCardPlayed = command.metadata.successCardPlayed;
             }
 
             if (command.metadata.title) {

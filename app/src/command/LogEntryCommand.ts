@@ -64,7 +64,8 @@ interface LogEntryMetadata {
     duration?: number;
     entryNumber?: number;
     gameName?: string;
-    percentage?: number;
+    totalCardPlayed?: number;
+    successCardPlayed?: number;
     tandemFirstname?: string;
     tandemLastname?: string;
     vocabularyListId?: string;
@@ -148,7 +149,8 @@ export const logEntryCommandToDomain = (command: LogEntryCommand): LogEntry | un
                 createdAt: command.createdAt,
                 type: command.type,
                 ownerId: command.ownerId,
-                percentage: command.metadata.percentage!,
+                totalCardPlayed: command.metadata.totalCardPlayed!,
+                successCardPlayed: command.metadata.successCardPlayed!,
                 gameName: command.metadata.gameName!,
             });
         case LogEntryType.SHARING_LOGS:
