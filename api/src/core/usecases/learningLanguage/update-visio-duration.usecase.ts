@@ -99,16 +99,12 @@ export class UpdateVisioDurationUsecase {
 
     const logEntry = logEntries[0] as LogEntryVisio;
 
-    const otherParticipant = otherLogEntries.find((entry) => {
-      if (entry.partnerTandemId && logEntry.partnerTandemId) {
-        return (
-          entry.roomName === command.roomName &&
-          entry.partnerTandemId != logEntry.partnerTandemId
-        );
-      } else {
-        return false;
-      }
-    });
+const otherParticipant = otherLogEntries.find((entry) => 
+  entry.partnerTandemId && 
+  logEntry.partnerTandemId && 
+  entry.roomName === command.roomName && 
+  entry.partnerTandemId !== logEntry.partnerTandemId
+);
 
     const otherEntryIsNow =
       otherParticipant?.updatedAt &&
