@@ -45,6 +45,7 @@ import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 import { useHistory } from 'react-router';
 import { AddSvg } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
+import CustomLearningGoal from '../../../domain/entities/CustomLearningGoal';
 import Profile from '../../../domain/entities/Profile';
 import Tandem from '../../../domain/entities/Tandem';
 import { useStoreActions } from '../../../store/storeTypes';
@@ -60,7 +61,6 @@ import LearningGoalCard from '../tandems/LearningGoalCard';
 import LearningJournalCard from '../tandems/LearningJournalCard';
 import PendingTandemCard from '../tandems/PendingTandemCard';
 import styles from './LearningContent.module.css';
-
 const TANDEM_COLORS = ['#E0897C', '#8BC4C4', '#B4C2DE'];
 
 interface LearningContentProps {
@@ -72,7 +72,7 @@ interface LearningContentProps {
     onValidatedTandemPressed: (tandem: Tandem) => void;
     onVocabularyListPressed: () => void;
     onActivitiesContentPressed: () => void;
-    onShowAllGoalsPressed: () => void;
+    onShowAllGoalsPressed: (customLearningGoals?: CustomLearningGoal[]) => void;
     onLearningBookContentPressed: () => void;
     setCurrentTandem: (tandem: Tandem) => void;
 }
@@ -190,7 +190,9 @@ const LearningContent: React.FC<LearningContentProps> = ({
                                 <LearningGoalCard
                                     profile={profile}
                                     customLearningGoals={currentTandem.learningLanguage?.customLearningGoals}
-                                    onShowAllGoalsPressed={() => onShowAllGoalsPressed()}
+                                    onShowAllGoalsPressed={() =>
+                                        onShowAllGoalsPressed(currentTandem.learningLanguage?.customLearningGoals)
+                                    }
                                 />
                             )}
                             {tandems.length > 0 && (

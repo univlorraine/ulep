@@ -63,11 +63,11 @@ const GoalsListPage = () => {
     };
 
     const onAddCustomGoalPressed = () => {
-        history.push('create-custom-goal', { learningLanguageId });
+        history.push('create-custom-goal', { learningLanguageId, customLearningGoals });
     };
 
     const onShowCustomGoalPressed = (customLearningGoal: CustomLearningGoal) => {
-        history.push('show-custom-goal', { customLearningGoal, learningLanguageId });
+        history.push('show-custom-goal', { customLearningGoal, learningLanguageId, customLearningGoals });
     };
 
     return (
