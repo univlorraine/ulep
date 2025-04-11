@@ -193,11 +193,13 @@ const LearningContent: React.FC<LearningContentProps> = ({
                                     onShowAllGoalsPressed={() => onShowAllGoalsPressed()}
                                 />
                             )}
-                            <RessourcesCard
-                                onLearningBookPressed={onLearningBookContentPressed}
-                                onVocabularyPressed={onVocabularyListPressed}
-                                onActivityPressed={onActivitiesContentPressed}
-                            />
+                            {tandems.length > 0 && (
+                                <RessourcesCard
+                                    onLearningBookPressed={onLearningBookContentPressed}
+                                    onVocabularyPressed={onVocabularyListPressed}
+                                    onActivityPressed={onActivitiesContentPressed}
+                                />
+                            )}
                             {currentTandem && currentTandem.partner?.user.university && (
                                 <PartnerUniversityCard
                                     university={currentTandem.partner?.user.university}

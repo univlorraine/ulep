@@ -44,6 +44,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router';
 import { ConversationsSvg, HomeSvg, LearningSvg, ProfileSvg } from '../../../assets';
+import { useStoreState } from '../../../store/storeTypes';
 import MenuNew from '../MenuNew';
 import styles from './Sidebar.module.css';
 
@@ -66,6 +67,7 @@ const Sidebar: React.FC<SidebarProps> = ({
     const { t } = useTranslation();
     const history = useHistory();
     const location = useLocation();
+    const profile = useStoreState((state) => state.profile);
 
     const navigateToHome = () => {
         history.push('/home');
@@ -82,6 +84,8 @@ const Sidebar: React.FC<SidebarProps> = ({
     const navigateToProfile = () => {
         history.push('/profile');
     };
+
+    const hasLearningLanguages = profile && profile.learningLanguages && profile.learningLanguages.length >= 1;
 
     return (
         <>
@@ -147,24 +151,30 @@ const Sidebar: React.FC<SidebarProps> = ({
                     {location.pathname === '/profile' && <div className={styles.light}></div>}
                 </IonItem>
                 <div className={styles.separator}></div>
-                <IonItem button={true} className={styles.line} id="click-trigger-new">
-                    <IonIcon icon={addOutline} size="large" aria-hidden={true} />
-                    <span className={styles.title}>{t('navigation.sidebar.new.title')}</span>
-                </IonItem>
-                <div className={styles.separator}></div>
+                {hasLearningLanguages && (
+                    <>
+                        <IonItem button={true} className={styles.line} id="click-trigger-new">
+                            <IonIcon icon={addOutline} size="large" aria-hidden={true} />
+                            <span className={styles.title}>{t('navigation.sidebar.new.title')}</span>
+                        </IonItem>
+                        <div className={styles.separator}></div>
+                    </>
+                )}
                 <IonItem className={styles['report-container']} onClick={onDisplayReport} button>
                     <IonIcon className="margin-right" icon={alertCircleOutline} size="large" aria-hidden={true} />
                     <span>{t('home_page.report.report_button')}</span>
                 </IonItem>
             </IonList>
-            <MenuNew
-                className={styles.menuNew}
-                onVocabularyPressed={onDisplayVocabularySidebar}
-                onLearningDiaryPressed={onDisplayLearningDiary}
-                onSessionPressed={onDisplaySessionModal}
-                onActivityPressed={onDisplayActivitySidebar}
-                trigger="click-trigger-new"
-            />
+            {hasLearningLanguages && (
+                <MenuNew
+                    className={styles.menuNew}
+                    onVocabularyPressed={onDisplayVocabularySidebar}
+                    onLearningDiaryPressed={onDisplayLearningDiary}
+                    onSessionPressed={onDisplaySessionModal}
+                    onActivityPressed={onDisplayActivitySidebar}
+                    trigger="click-trigger-new"
+                />
+            )}
         </>
     );
 };
