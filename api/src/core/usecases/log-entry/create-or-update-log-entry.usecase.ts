@@ -232,11 +232,25 @@ export class CreateOrUpdateLogEntryUsecase {
           (entry) =>
             entry instanceof LogEntryPlayedGame &&
             entry.gameName === metadata.gameName,
-        );
+        ) as LogEntryPlayedGame | undefined;
+
         return {
-          entryToUpdate: undefined,
+          entryToUpdate: playedGameEntryExistsToday
+            ? {
+                id: playedGameEntryExistsToday.id,
+                metadata: {
+                  gameName: playedGameEntryExistsToday.gameName,
+                  totalCardPlayed:
+                    playedGameEntryExistsToday.totalCardPlayed +
+                    metadata.totalCardPlayed,
+                  successCardPlayed:
+                    playedGameEntryExistsToday.successCardPlayed +
+                    metadata.successCardPlayed,
+                },
+              }
+            : undefined,
           shouldCreate: !playedGameEntryExistsToday,
-          shouldIgnore: Boolean(playedGameEntryExistsToday),
+          shouldIgnore: false,
         };
       case LogEntryType.CUSTOM_ENTRY:
         return {
@@ -287,7 +301,11 @@ export class CreateOrUpdateLogEntryUsecase {
         }
         break;
       case LogEntryType.PLAYED_GAME:
-        if (metadata.percentage === undefined || !metadata.gameName) {
+        if (
+          metadata.totalCardPlayed === undefined ||
+          metadata.successCardPlayed === undefined ||
+          !metadata.gameName
+        ) {
           throw new LogEntryMissingMetadataException();
         }
         break;

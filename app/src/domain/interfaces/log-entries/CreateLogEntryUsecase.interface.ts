@@ -48,7 +48,8 @@ interface CreateLogEntryMetadata {
     tandemFirstname?: string;
     tandemLastname?: string;
     partnerTandemId?: string;
-    percentage?: number;
+    totalCardPlayed?: number;
+    successCardPlayed?: number;
     gameName?: GameName;
 }
 
