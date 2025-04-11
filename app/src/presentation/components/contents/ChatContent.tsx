@@ -152,7 +152,7 @@ const Content: React.FC<ChatContentProps> = ({
     });
 
     const partner = Conversation.getMainConversationPartner(conversation, profile.user.id);
-    let disconnectInterval: NodeJS.Timeout;
+    let disconnectInterval: NodeJS.Timeout | undefined;
 
     const setSearchMode = () => {
         setShowMenu(false);
@@ -217,19 +217,25 @@ const Content: React.FC<ChatContentProps> = ({
             await refreshTokensUsecase.execute();
         };
 
-        // Its a trick to reconnect the socket if it is disconnected when the socket wont reconnect by itself
-        // Must be changed when the websocket is fixed
-        socket.onDisconnect(() => {
-            disconnectInterval = setInterval(async () => {
-                if (!socket.isConnected()) {
-                    refreshTokens();
-                    socket.connect(accessToken);
-                    await onLoadMessages({ isFirstMessage: true });
-                } else {
+        // Improved reconnection logic
+        const attemptReconnect = async () => {
+            if (!socket.isConnected()) {
+                await refreshTokens();
+                socket.connect(accessToken);
+                await onLoadMessages({ isFirstMessage: true });
+            } else {
+                if (disconnectInterval) {
                     clearInterval(disconnectInterval);
+                    disconnectInterval = undefined;
                 }
-            }, 3000);
-        });
+            }
+        };
+
+        const handleDisconnect = () => {
+            disconnectInterval = setInterval(attemptReconnect, 5000);
+        };
+
+        socket.onDisconnect(handleDisconnect);
 
         return () => {
             socket.disconnect();
@@ -237,7 +243,9 @@ const Content: React.FC<ChatContentProps> = ({
             socket.offDisconnect();
             socket.offLike();
             socket.offUnlike();
-            clearInterval(disconnectInterval);
+            if (disconnectInterval) {
+                clearInterval(disconnectInterval);
+            }
         };
     }, [conversation.id, accessToken]);
 
