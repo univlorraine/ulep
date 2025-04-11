@@ -38,7 +38,7 @@
  *
  */
 
-import { IonButton } from '@ionic/react';
+import { IonButton, useIonToast } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
 import { TrophiePng } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
@@ -57,6 +57,7 @@ interface LearningJournalCardProps {
 
 const LearningJournalCard: React.FC<LearningJournalCardProps> = ({ tandem, onOpenEdito, currentColor }) => {
     const { t } = useTranslation();
+    const [showToast] = useIonToast();
     const { fileAdapter } = useConfig();
     const language = useStoreState((state) => state.language);
     const onOpenChat = useOnOpenChat({ tandemId: tandem.id, withAdministrator: true });
@@ -72,14 +73,27 @@ const LearningJournalCard: React.FC<LearningJournalCardProps> = ({ tandem, onOpe
         !loadingCertificate &&
         !certificateError;
 
-    const onDownloadCertificate = () => {
+    const onDownloadCertificate = async () => {
         if (downloadableCertificate) {
-            const certificateFileName: string = [
-                t('learning_journal.certificate_file_name'),
-                t(`languages_code.${tandem.learningLanguage.code}`),
-                `${tandem.learningLanguage.profile?.user.firstname} ${tandem.learningLanguage.profile?.user.lastname}`,
-            ].join(' - ');
-            fileAdapter.saveFile(certificateFile, certificateFileName);
+            const certificateFileName: string =
+                [
+                    t('learning_journal.certificate_file_name'),
+                    t(`languages_code.${tandem.learningLanguage.code}`),
+                    `${tandem.learningLanguage.profile?.user.firstname}_${tandem.learningLanguage.profile?.user.lastname}`,
+                ].join('_') + '.pdf';
+            try {
+                await fileAdapter.saveFile(certificateFile, certificateFileName);
+                showToast({
+                    message: t('learning_journal.download_successful'),
+                    duration: 2000,
+                });
+            } catch (error) {
+                console.error(error);
+                showToast({
+                    message: t('learning_journal.download_failed'),
+                    duration: 2000,
+                });
+            }
         }
     };
 
