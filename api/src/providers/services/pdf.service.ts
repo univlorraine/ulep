@@ -173,8 +173,8 @@ export class PdfService implements PdfServicePort {
         doc.x + 20,
         doc.y + padding,
         {
-          align: 'left',
-          width: pageWidth - 40,
+          align: 'justify',
+          width: pageWidth - 40 * 2,
         },
       );
 
