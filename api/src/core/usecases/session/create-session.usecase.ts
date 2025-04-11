@@ -89,14 +89,12 @@ export class CreateSessionUsecase {
   async execute(command: CreateSessionCommand) {
     const tandem = await this.assertTandemExist(command.tandemId);
 
-    await this.assertSessionIsBeforeUniversityClosingDate(
-      tandem.learningLanguages[0].profile.user.university.id,
-      command.startAt,
-    );
-    await this.assertSessionIsBeforeUniversityClosingDate(
-      tandem.learningLanguages[1].profile.user.university.id,
-      command.startAt,
-    );
+    for (const learningLanguage of tandem.learningLanguages) {
+      await this.assertSessionIsBeforeUniversityClosingDate(
+        learningLanguage.profile.user.university.id,
+        command.startAt,
+      );
+    }
 
     const session = await this.sessionRepository.create({
       tandemId: command.tandemId,
