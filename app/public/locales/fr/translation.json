@@ -18,7 +18,8 @@
         "connecteur": "Erreur lors de la récupération des informations utilisateur",
         "fileSizeExceed": "Le fichier est trop volumineux, il doit être inférieur à {{maxSize}}Mo",
         "imageFormat": "Le format de l'image n'est pas autorisé",
-        "invalidUrl": "L'url n'est pas valide"
+        "invalidUrl": "L'url n'est pas valide",
+        "sessionAfterUniversityClosingDate": "La session est après la date de clôture de l'université"
     },
     "error_page": {
         "title": "Une erreur est survenue",
