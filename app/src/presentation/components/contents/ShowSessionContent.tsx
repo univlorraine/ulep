@@ -79,7 +79,7 @@ const Content: React.FC<ShowSessionContentProps> = ({
     const [isCancelSessionModalVisible, setIsCancelSessionModalVisible] = useState(false);
     const userTz = profile?.user?.university?.timezone;
     const partnerTz = tandem.partner?.user?.university?.timezone;
-    const language = useStoreState((state) => state.language) || 'en-US';
+    const language = useStoreState((state) => state.language);
 
     const formatTime = useMemo(() => {
         return (date: Date, timeZone: string) => {
