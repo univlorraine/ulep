@@ -70,6 +70,7 @@ export interface ProfileQueryWhere {
     role?: StringFilter;
     university?: StringFilter;
     status?: StringFilter;
+    division?: StringFilter;
   };
   masteredLanguageCode?: string;
   nativeLanguageCode?: string;

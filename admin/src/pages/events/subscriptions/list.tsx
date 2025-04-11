@@ -123,7 +123,7 @@ const EventsSubscriptionsList = () => {
         />,
         <TextInput key="firstname" label={translate('global.firstname')} source="user.firstname" alwaysOn />,
         <TextInput key="lastname" label={translate('global.lastname')} source="user.lastname" alwaysOn />,
-        <TextInput key="email" label={translate('global.email')} source="user.email" alwaysOn />,
+        <TextInput key="departement" label={translate('global.departement')} source="user.division" alwaysOn />,
     ];
 
     if (sortedLanguages) {
@@ -243,7 +243,7 @@ const EventsSubscriptionsList = () => {
                         <TextField label="events.subscriptions.list.firstname" source="user.firstname" />
                         <TextField label="events.subscriptions.list.lastname" source="user.lastname" />
                         <TextField label="events.subscriptions.list.university" source="user.university.name" />
-                        <TextField label="events.subscriptions.list.email" source="user.email" />
+                        <TextField label="events.subscriptions.list.departement" source="user.division" />
                         <FunctionField
                             label="events.subscriptions.list.learningLanguage"
                             render={(record: Profile) => (

@@ -51,6 +51,7 @@ export interface ProfilesParams {
             role?: string;
             status?: UserStatus;
             university?: string;
+            division?: string;
         };
         masteredLanguageCode?: string;
         nativeLanguageCode?: string;
@@ -81,6 +82,8 @@ const handleOrderField = (field?: string) => {
             return 'role';
         case 'user.university.name':
             return 'university';
+        case 'user.division':
+            return 'division';
         default:
             return undefined;
     }
@@ -103,6 +106,7 @@ const ProfilesQuery = (params: ProfilesParams): string => {
         page: params.pagination.page,
         limit: params.pagination.perPage,
         field: handleOrderField(params.sort.field),
+        division: params.filter.user?.division,
         order: params.sort.order.toLowerCase(),
     };
 
