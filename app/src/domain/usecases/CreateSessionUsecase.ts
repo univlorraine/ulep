@@ -49,14 +49,11 @@ class CreateSessionUsecase implements CreateSessionUsecaseInterface {
 
     async execute(command: CreateSessionCommand): Promise<Session | Error> {
         try {
-            const httpResponse: HttpResponse<SessionCommand> = await this.domainHttpAdapter.post(
-                `/session/`,
-                {
-                    startAt: command.startAt,
-                    comment: command.comment,
-                    tandemId: command.tandemId,
-                },
-            );
+            const httpResponse: HttpResponse<SessionCommand> = await this.domainHttpAdapter.post(`/session/`, {
+                startAt: command.startAt,
+                comment: command.comment,
+                tandemId: command.tandemId,
+            });
 
             if (!httpResponse.parsedBody) {
                 return new Error('errors.global');
@@ -65,7 +62,12 @@ class CreateSessionUsecase implements CreateSessionUsecaseInterface {
             const session = sessionCommandToDomain(httpResponse.parsedBody);
 
             return session;
-        } catch (error: any) {
+        } catch (err: any) {
+            const error = err.error;
+
+            if (error.statusCode === 400 && error.message === 'Session is after university closing date') {
+                return new Error('errors.sessionAfterUniversityClosingDate');
+            }
             return new Error('errors.global');
         }
     }

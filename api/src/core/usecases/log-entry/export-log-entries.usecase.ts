@@ -129,7 +129,7 @@ export class ExportLogEntriesUsecase {
       )
       .forEach((entry) => {
         csvStringifier.write({
-          Date: entry.createdAt.toISOString(),
+          Date: entry.createdAt.toISOString().split('T')[0],
           Activity: entry.type,
           Titre: this.getActivityTitle(entry),
           Quantité: this.getQuantity(entry),
@@ -216,7 +216,9 @@ export class ExportLogEntriesUsecase {
     ) {
       return entry.learningLanguage.language.name;
     } else if (entry instanceof LogEntryPlayedGame) {
-      return entry.percentage.toString();
+      return `${entry.percentage.toFixed(2)}% - (${entry.successCardPlayed}/${entry.totalCardPlayed})`;
+    } else if (entry instanceof LogEntryCustomEntry) {
+      return entry.content;
     }
 
     return '';

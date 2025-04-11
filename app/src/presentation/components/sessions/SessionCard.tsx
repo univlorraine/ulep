@@ -39,7 +39,7 @@
  */
 
 import { IonButton } from '@ionic/react';
-import { formatInTimeZone } from 'date-fns-tz';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
 import Session from '../../../domain/entities/Session';
@@ -142,6 +142,18 @@ const SessionCard: React.FC<SessionCardProps> = ({
 }) => {
     const { t } = useTranslation();
     const profile = useStoreState((state) => state.profile);
+    const language = useStoreState((state) => state.language);
+
+    const formatTime = useMemo(() => {
+        return (date: Date, timeZone: string) => {
+            return new Intl.DateTimeFormat(language || profile?.nativeLanguage.code, {
+                hour: 'numeric',
+                minute: 'numeric',
+                hour12: language.startsWith('en'),
+                timeZone,
+            }).format(date);
+        };
+    }, [language]);
 
     const renderSessionButtons = () => {
         if (!session) {
@@ -201,12 +213,9 @@ const SessionCard: React.FC<SessionCardProps> = ({
                                         <div className={styles.cancelled}>{t('session.card.cancelled')}</div>
                                     )}
                                 </div>
+
                                 <div className={styles['text-container']}>
-                                    {formatInTimeZone(
-                                        session.startAt,
-                                        profile?.user?.university.timezone as string,
-                                        'HH:mm (zzzz, zzz)'
-                                    )}
+                                    {formatTime(session.startAt, profile?.user?.university.timezone as string)}
                                 </div>
                             </>
                         ) : (

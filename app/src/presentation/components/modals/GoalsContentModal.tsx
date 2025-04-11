@@ -56,6 +56,7 @@ export const DisplayCustomGoalModalEnum = {
 export interface DisplayCustomGoalModal {
     type: (typeof DisplayCustomGoalModalEnum)[keyof typeof DisplayCustomGoalModalEnum];
     customLearningGoal?: CustomLearningGoal;
+    customLearningGoals?: CustomLearningGoal[];
 }
 
 interface GoalsContentModalProps {

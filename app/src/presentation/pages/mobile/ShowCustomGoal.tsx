@@ -47,24 +47,27 @@ import CustomGoalShowContent from '../../components/contents/CustomGoalShowConte
 interface ShowCustomGoalPageProps {
     customLearningGoal: CustomLearningGoal;
     learningLanguageId: string;
+    customLearningGoals: CustomLearningGoal[];
 }
 
 const ShowCustomGoalPage = () => {
     const history = useHistory();
     const location = useLocation<ShowCustomGoalPageProps>();
-    const { customLearningGoal, learningLanguageId } = location.state;
+    const { customLearningGoal, learningLanguageId, customLearningGoals } = location.state;
     const profile = useStoreState((state) => state.profile);
 
     if (!profile) {
         return <Redirect to="/" />;
     }
 
+    console.log('customLearningGoals', customLearningGoals);
+
     const goBack = () => {
-        history.push('/goals', { learningLanguageId: learningLanguageId });
+        history.push('/goals', { learningLanguageId: learningLanguageId, customLearningGoals });
     };
 
     const onUpdateCustomGoalPressed = (customLearningGoal: CustomLearningGoal) => {
-        history.push('/update-custom-goal', { customLearningGoal });
+        history.push('/update-custom-goal', { customLearningGoal, customLearningGoals });
     };
 
     const onShowAllGoalsPressed = (customLearningGoals?: CustomLearningGoal[]) => {

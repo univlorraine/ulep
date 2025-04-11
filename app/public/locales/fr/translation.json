@@ -18,7 +18,8 @@
         "connecteur": "Erreur lors de la récupération des informations utilisateur",
         "fileSizeExceed": "Le fichier est trop volumineux, il doit être inférieur à {{maxSize}}Mo",
         "imageFormat": "Le format de l'image n'est pas autorisé",
-        "invalidUrl": "L'url n'est pas valide"
+        "invalidUrl": "L'url n'est pas valide",
+        "sessionAfterUniversityClosingDate": "La session est après la date de clôture de l'université"
     },
     "error_page": {
         "title": "Une erreur est survenue",
@@ -1186,7 +1187,9 @@
         "ask_for_certificate_button": "Demander mon certificat",
         "download_certificate_button": "Voir mon certificat",
         "certificate_file_name": "Certificat",
-        "how_to_get_certificate_button": "Comment obtenir mon certificat ?"
+        "how_to_get_certificate_button": "Comment obtenir mon certificat ?",
+        "download_successful": "Le certificat a été téléchargé avec succès",
+        "download_failed": "Une erreur est survenue lors du téléchargement du certificat"
     },
     "learning_goal": {
         "title": "Mes objectifs ({{count}})",

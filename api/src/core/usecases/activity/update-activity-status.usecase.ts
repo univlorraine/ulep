@@ -51,6 +51,10 @@ import {
   NotificationGateway,
   NOTIFICATION_GATEWAY,
 } from 'src/core/ports/notification.gateway';
+import {
+  ProfileRepository,
+  PROFILE_REPOSITORY,
+} from 'src/core/ports/profile.repository';
 import { CreateOrUpdateLogEntryUsecase } from 'src/core/usecases/log-entry';
 
 export class UpdateActivityStatusCommand {
@@ -65,6 +69,8 @@ export class UpdateActivityStatusUsecase {
     private readonly activityRepository: ActivityRepository,
     @Inject(NOTIFICATION_GATEWAY)
     private readonly notificationGateway: NotificationGateway,
+    @Inject(PROFILE_REPOSITORY)
+    private readonly profileRepository: ProfileRepository,
     @Inject(EMAIL_GATEWAY)
     private readonly emailGateway: EmailGateway,
     @Inject(CreateOrUpdateLogEntryUsecase)
@@ -174,30 +180,30 @@ export class UpdateActivityStatusUsecase {
   }
 
   private async handleLogEntry(activity: Activity, status: ActivityStatus) {
-    const learningLanguage = await this.findActivityLearningLanguageCreator(
-      activity.id,
-    );
+    const learningLanguages = activity.creator?.learningLanguages || [];
 
-    if (learningLanguage && status === ActivityStatus.IN_VALIDATION) {
-      await this.createOrUpdateLogEntryUsecase.execute({
-        learningLanguageId: learningLanguage.id,
-        type: LogEntryType.SUBMIT_ACTIVITY,
-        metadata: {
-          activityId: activity.id,
-          activityTitle: activity.title,
-        },
-      });
-    }
+    for (const learningLanguage of learningLanguages) {
+      if (learningLanguage && status === ActivityStatus.IN_VALIDATION) {
+        await this.createOrUpdateLogEntryUsecase.execute({
+          learningLanguageId: learningLanguage.id,
+          type: LogEntryType.SUBMIT_ACTIVITY,
+          metadata: {
+            activityId: activity.id,
+            activityTitle: activity.title,
+          },
+        });
+      }
 
-    if (learningLanguage && status === ActivityStatus.PUBLISHED) {
-      await this.createOrUpdateLogEntryUsecase.execute({
-        learningLanguageId: learningLanguage.id,
-        type: LogEntryType.PUBLISH_ACTIVITY,
-        metadata: {
-          activityId: activity.id,
-          activityTitle: activity.title,
-        },
-      });
+      if (learningLanguage && status === ActivityStatus.PUBLISHED) {
+        await this.createOrUpdateLogEntryUsecase.execute({
+          learningLanguageId: learningLanguage.id,
+          type: LogEntryType.PUBLISH_ACTIVITY,
+          metadata: {
+            activityId: activity.id,
+            activityTitle: activity.title,
+          },
+        });
+      }
     }
   }
 }

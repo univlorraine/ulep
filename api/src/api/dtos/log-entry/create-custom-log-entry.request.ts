@@ -81,9 +81,14 @@ export class CreateCustomLogEntryRequest {
   tandemLastname?: string;
 
   // Game Event
+
   @IsNumber()
   @IsOptional()
-  percentage?: number;
+  totalCardPlayed?: number;
+
+  @IsNumber()
+  @IsOptional()
+  successCardPlayed?: number;
 
   @IsString()
   @IsOptional()

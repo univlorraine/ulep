@@ -846,10 +846,10 @@ model CommunityChat {
 
 model Editos {
   id                      String   @id @default(uuid())
-  content_text_content_id String @unique  
-  video_text_content_id   String @unique
-  university_id           String @unique
-  image_id                String? @unique
+  content_text_content_id String   @unique  
+  video_text_content_id   String  @unique
+  university_id           String   @unique
+  image_id                String?  @unique
   created_at              DateTime @default(now())
   updated_at              DateTime @updatedAt
 

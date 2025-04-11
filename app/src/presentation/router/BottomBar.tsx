@@ -44,6 +44,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Route, Switch } from 'react-router';
 import { ConversationsSvg, HomeSvg, LearningSvg, ProfileSvg } from '../../assets';
+import { useStoreState } from '../../store/storeTypes';
 import MenuNew from '../components/MenuNew';
 import NewActivityMenuModal from '../components/modals/NewActivityMenuModal';
 import NewLogEntryMenuModal from '../components/modals/NewLogEntryMenuModal';
@@ -65,6 +66,9 @@ const BottomBar: React.FC = () => {
     const [showActivityModal, setShowActivityModal] = useState<boolean>(false);
     const [showSessionModal, setShowSessionModal] = useState<boolean>(false);
     const [showLearningDiaryModal, setShowLearningDiaryModal] = useState<boolean>(false);
+
+    const profile = useStoreState((state) => state.profile);
+    const hasLearningLanguages = profile && profile.learningLanguages && profile.learningLanguages.length >= 1;
     return (
         <PrivateRoute path="/(home|conversations|learning|profile)">
             <IonTabs>
@@ -93,9 +97,11 @@ const BottomBar: React.FC = () => {
                         <img alt="Conversations" src={LearningSvg} />
                         <span>{t('navigation.bottom_bar.learning')}</span>
                     </IonTabButton>
-                    <IonTabButton className={styles.newIcon_button}>
-                        <div className={styles.newIcon_container}></div>
-                    </IonTabButton>
+                    {hasLearningLanguages && (
+                        <IonTabButton className={styles.newIcon_button}>
+                            <div className={styles.newIcon_container}></div>
+                        </IonTabButton>
+                    )}
                     <IonTabButton tab="conversations" href="/conversations">
                         <img alt="Conversations" src={ConversationsSvg} />
                         <span>{t('navigation.bottom_bar.conversations')}</span>
@@ -106,24 +112,28 @@ const BottomBar: React.FC = () => {
                     </IonTabButton>
                 </IonTabBar>
             </IonTabs>
-            <div
-                className={`${styles.newIcon} ${isMenuNewVisible ? styles.active : ''}`}
-                onClick={() => setIsMenuNewVisible(!isMenuNewVisible)}
-                id="click-trigger-new-mobile"
-                role="button"
-            >
-                <IonIcon icon={addOutline} color="black" size="large" />
-            </div>
-            <MenuNew
-                className={styles.menuNew}
-                setIsMenuVisible={setIsMenuNewVisible}
-                onVocabularyPressed={() => setShowVocabularyModal(true)}
-                onLearningDiaryPressed={() => setShowLearningDiaryModal(true)}
-                onSessionPressed={() => setShowSessionModal(true)}
-                onActivityPressed={() => setShowActivityModal(true)}
-                trigger="click-trigger-new-mobile"
-                isMenuOpen={isMenuNewVisible}
-            />
+            {hasLearningLanguages && (
+                <>
+                    <div
+                        className={`${styles.newIcon} ${isMenuNewVisible ? styles.active : ''}`}
+                        onClick={() => setIsMenuNewVisible(!isMenuNewVisible)}
+                        id="click-trigger-new-mobile"
+                        role="button"
+                    >
+                        <IonIcon icon={addOutline} color="black" size="large" />
+                    </div>
+                    <MenuNew
+                        className={styles.menuNew}
+                        setIsMenuVisible={setIsMenuNewVisible}
+                        onVocabularyPressed={() => setShowVocabularyModal(true)}
+                        onLearningDiaryPressed={() => setShowLearningDiaryModal(true)}
+                        onSessionPressed={() => setShowSessionModal(true)}
+                        onActivityPressed={() => setShowActivityModal(true)}
+                        trigger="click-trigger-new-mobile"
+                        isMenuOpen={isMenuNewVisible}
+                    />
+                </>
+            )}
             <NewVocabularyMenuModal
                 isVisible={showVocabularyModal}
                 onClose={() => setShowVocabularyModal(false)}

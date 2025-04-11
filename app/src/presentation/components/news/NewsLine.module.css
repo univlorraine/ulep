@@ -50,11 +50,12 @@
     text-transform: none;
     min-height: 100px;
     overflow: hidden;
+    padding: 16px;
+    gap: 16px;
 }
 
 .content {
     width: 100%;
-    padding: 16px;
 }
 
 .tags {
@@ -79,6 +80,7 @@
     max-height: 60px;
     min-height: 60px;
     object-fit: contain;
+    margin-bottom: 16px;
 }
 
 .date {

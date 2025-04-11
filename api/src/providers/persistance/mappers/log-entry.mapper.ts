@@ -87,6 +87,8 @@ export const logEntryMapper = (
     gameName: string;
     duration: number;
     entryNumber: number;
+    totalCardPlayed: number;
+    successCardPlayed: number;
     percentage: number;
     tandemFirstname: string;
     tandemLastname: string;
@@ -147,7 +149,9 @@ export const logEntryMapper = (
         type: LogEntryType.PLAYED_GAME,
         createdAt: snapshot.created_at,
         updatedAt: snapshot.updated_at,
-        percentage: data.percentage,
+        totalCardPlayed: data.totalCardPlayed,
+        successCardPlayed: data.successCardPlayed,
+        percentage: (data.successCardPlayed / data.totalCardPlayed) * 100,
         gameName: data.gameName,
         learningLanguage: learningLanguageMapper(snapshot.LearningLanguage),
       });

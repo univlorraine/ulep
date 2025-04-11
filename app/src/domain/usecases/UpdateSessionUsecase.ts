@@ -54,7 +54,7 @@ class UpdateSessionUsecase implements UpdateSessionUsecaseInterface {
                 {
                     startAt: command.startAt,
                     comment: command.comment,
-                },
+                }
             );
 
             if (!httpResponse.parsedBody) {
@@ -64,7 +64,13 @@ class UpdateSessionUsecase implements UpdateSessionUsecaseInterface {
             const session = sessionCommandToDomain(httpResponse.parsedBody);
 
             return session;
-        } catch (error: any) {
+        } catch (err: any) {
+            const error = err.error;
+
+            if (error.statusCode === 400 && error.message === 'Session is after university closing date') {
+                return new Error('errors.sessionAfterUniversityClosingDate');
+            }
+
             return new Error('errors.global');
         }
     }

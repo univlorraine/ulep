@@ -169,9 +169,12 @@ const LearningPage = () => {
         });
     };
 
-    const onShowCustomGoalPressed = (customLearningGoal: CustomLearningGoal) => {
+    const onShowCustomGoalPressed = (
+        customLearningGoal: CustomLearningGoal,
+        customLearningGoals?: CustomLearningGoal[]
+    ) => {
         setRefresh(!refresh);
-        setDisplayCustomGoalModal({ type: DisplayCustomGoalModalEnum.show, customLearningGoal });
+        setDisplayCustomGoalModal({ type: DisplayCustomGoalModalEnum.show, customLearningGoal, customLearningGoals });
     };
 
     const onUpdateCustomGoalPressed = (customLearningGoal: CustomLearningGoal) => {
