@@ -100,14 +100,14 @@ const EditUniversity = () => {
         try {
             return await update(
                 `universities/${id}`,
-                { data: formData },
+                { id: '', data: formData },
                 {
-                    onSettled: (_, error: unknown) => {
-                        if (!error) {
-                            return redirect('show', 'universities', id);
-                        }
-
-                        return notify('universities.update.error');
+                    onSuccess: () => redirect('show', 'universities', id),
+                    onError: (error) => {
+                        console.error(error);
+                        notify('universities.update.error', {
+                            type: 'error',
+                        });
                     },
                 }
             );

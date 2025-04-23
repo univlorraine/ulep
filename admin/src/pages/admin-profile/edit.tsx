@@ -39,6 +39,7 @@
  */
 
 import { Edit, useNotify, useTranslate, useUpdate, WithRecord } from 'react-admin';
+import { redirect } from 'react-router-dom';
 import AdministratorForm from '../../components/form/AdministratorForm';
 import Administrator, { AdministratorFormPayload } from '../../entities/Administrator';
 
@@ -65,14 +66,14 @@ const EditAdministratorProfile = () => {
         try {
             return await update(
                 'users/administrators',
-                { data: formData },
+                { id: payload.id, data: formData },
                 {
-                    onSettled: (_, error: unknown) => {
-                        if (!error) {
-                            return notify('ra.notification.updated', { messageArgs: { smart_count: 1 } });
-                        }
-
-                        return notify('administrators.update.error');
+                    onSuccess: () => {
+                        redirect('users/administrators');
+                    },
+                    onError: (error) => {
+                        console.error(error);
+                        notify('administrators.update.error');
                     },
                 }
             );

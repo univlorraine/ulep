@@ -64,6 +64,7 @@ export enum ReportStatus {
     OPEN = 'OPEN',
     IN_PROGRESS = 'IN_PROGRESS',
     TREATED = 'TREATED',
+    CANCELLED = 'CANCELLED',
 }
 
 export default Report;

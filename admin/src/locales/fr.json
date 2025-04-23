@@ -683,6 +683,7 @@
         "created_at": "Date de soumission",
         "CLOSED": "Fermé",
         "TREATED": "Traité",
+        "CANCELLED": "Annulé",
         "content": "Contenu",
         "IN_PROGRESS": "En cours",
         "label": "Signalements",

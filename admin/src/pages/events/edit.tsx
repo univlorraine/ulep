@@ -102,12 +102,12 @@ const EditEvent = () => {
                 'events',
                 { id: payload.id, data: formData },
                 {
-                    onSettled: (_, error: any) => {
-                        if (!error) {
-                            return redirect('/events');
-                        }
-
-                        return notify('events.update.error', {
+                    onSuccess: () => {
+                        redirect('/events');
+                    },
+                    onError: (error) => {
+                        console.error(error);
+                        notify('events.update.error', {
                             type: 'error',
                         });
                     },

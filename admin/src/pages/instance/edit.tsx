@@ -77,14 +77,12 @@ const EditInstance = () => {
         try {
             return await update(
                 'instance',
-                { data: formData },
+                { id: '', data: formData },
                 {
-                    onSettled: (_, error: unknown) => {
-                        if (!error) {
-                            return redirect('/instance/config/show');
-                        }
-
-                        return notify('instance.edit.error');
+                    onSuccess: () => redirect('/instance/config/show'),
+                    onError: (error) => {
+                        console.error(error);
+                        notify('instance.edit.error');
                     },
                 }
             );
