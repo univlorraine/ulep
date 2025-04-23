@@ -103,7 +103,7 @@ const ChatList = () => {
                     <DatagridConfigurable
                         bulkActionButtons={false}
                         rowClick={(_, __, record) => {
-                            setCurrentConversation(record as Conversation);
+                            setCurrentConversation(record as unknown as Conversation);
 
                             // Disable the default rowClick behavior
                             return false;

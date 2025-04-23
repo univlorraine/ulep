@@ -54,9 +54,9 @@ import {
     useRefresh,
     useUnselectAll,
     useGetIdentity,
-    ResourceContextProvider,
     List,
     useGetList,
+    ResourceContext,
 } from 'react-admin';
 import { Profile } from '../../../entities/Profile';
 import { UserRole } from '../../../entities/User';
@@ -188,7 +188,7 @@ const SearchProfile = ({ eventId, setIsModalOpen }: SearchProfileProps) => {
                 </Button>
             </Box>
 
-            <ResourceContextProvider value="profiles">
+            <ResourceContext.Provider value="profiles">
                 <List
                     exporter={false}
                     filter={{
@@ -230,7 +230,7 @@ const SearchProfile = ({ eventId, setIsModalOpen }: SearchProfileProps) => {
                         />
                     </Datagrid>
                 </List>
-            </ResourceContextProvider>
+            </ResourceContext.Provider>
         </Box>
     );
 };

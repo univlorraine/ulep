@@ -102,7 +102,7 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
     const { primaryLanguages, suggestedLanguages, partnerLanguages } = useGetLanguages();
 
     const notify = useNotify();
-    const record: EventObject = useRecordContext();
+    const record: EventObject | undefined = useRecordContext();
 
     const [centralUniversity, setCentralUniversity] = useState<University>();
     const [authorUniversity, setAuthorUniversity] = useState<University>();
@@ -122,7 +122,7 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                   ...(authorUniversity?.specificLanguagesAvailable || []).map((lang) => lang.code),
               ]).sort();
 
-    const [universityData, setUniversityData] = useState<University>(record?.authorUniversity || undefined);
+    const [universityData, setUniversityData] = useState<University | undefined>(record?.authorUniversity || undefined);
     const [title, setTitle] = useState<string>(record?.title || '');
     const [content, setContent] = useState<string>(record?.content || '');
     const [image, setImage] = useState<File | undefined>(undefined);

@@ -183,7 +183,11 @@ const countriesCodeWithFlags: [string, string][] = [
     ['zu', '🇿🇦'], // Zulu - South Africa
 ];
 
-const codeLanguageToFlag = (countryCode: string) => {
+const codeLanguageToFlag = (countryCode: string | undefined) => {
+    if (!countryCode) {
+        return '';
+    }
+
     const countriesMap = new Map(countriesCodeWithFlags);
     if (countriesMap.has(countryCode.toLocaleLowerCase())) {
         return `${countriesMap.get(countryCode.toLowerCase())} ${countryCode}`;

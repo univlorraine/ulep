@@ -75,7 +75,7 @@ const CertificateModal = ({ profile }: { profile: Profile }) => {
     const handleSubmit = async (payload: CertificateFormPayload) => {
         try {
             return await update(
-                `learning-languages/${record.id}/generate-certificate`,
+                `learning-languages/${record?.id}/generate-certificate`,
                 { data: payload },
                 {
                     onSettled: (_, error: unknown) => {

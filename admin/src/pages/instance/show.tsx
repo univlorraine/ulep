@@ -79,8 +79,8 @@ const InstanceShow = () => {
     const notify = useNotify();
     const refresh = useRefresh();
     const { mutate: purge } = usePurge();
-    const { mutate: generateConversations, isLoading: isGeneratingConversations } = useGenerateConversation();
-    const { mutate: generateEditos, isLoading: isGeneratingEditos } = useGenerateEditos();
+    const { mutate: generateConversations, isPending: isGeneratingConversations } = useGenerateConversation();
+    const { mutate: generateEditos, isPending: isGeneratingEditos } = useGenerateEditos();
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
     const handleMaintenanceToggle: SwitchProps['onChange'] = async (event) => {

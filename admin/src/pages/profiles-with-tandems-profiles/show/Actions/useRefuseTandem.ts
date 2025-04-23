@@ -38,8 +38,8 @@
  *
  */
 
+import { useMutation } from '@tanstack/react-query';
 import { useDataProvider } from 'react-admin';
-import { useMutation } from 'react-query';
 
 interface UseRefuseTandemParams {
     onSuccess?: () => void;
@@ -49,13 +49,14 @@ interface UseRefuseTandemParams {
 const useRefuseTandem = (options?: UseRefuseTandemParams) => {
     const dataProvider = useDataProvider();
 
-    const { mutate, isLoading, isError } = useMutation(
-        (props: { learningLanguageIds: string[]; relaunch?: boolean }) =>
+    const { mutate, isPending, isError } = useMutation({
+        mutationFn: (props: { learningLanguageIds: string[]; relaunch?: boolean }) =>
             dataProvider.refuseTandem(props.learningLanguageIds, props.relaunch),
-        options
-    );
+        onSuccess: options?.onSuccess,
+        onError: options?.onError,
+    });
 
-    return { mutate, isLoading, isError };
+    return { mutate, isPending, isError };
 };
 
 export default useRefuseTandem;

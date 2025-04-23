@@ -40,9 +40,9 @@
 
 import { Download } from '@mui/icons-material';
 import { CircularProgress } from '@mui/material';
+import { useMutation } from '@tanstack/react-query';
 import React from 'react';
 import { Button, useDataProvider, useNotify, useRecordContext, useTranslate } from 'react-admin';
-import { useMutation } from 'react-query';
 
 const ProfileExportButton = () => {
     const translate = useTranslate();
@@ -52,8 +52,8 @@ const ProfileExportButton = () => {
 
     const dataProvider = useDataProvider();
 
-    const { mutate: handleDownload, isLoading } = useMutation(
-        async () => {
+    const { mutate: handleDownload, isPending } = useMutation({
+        mutationFn: async () => {
             const response = await dataProvider.exportUserPersonalData(userId);
             const blob = await response.blob();
 
@@ -66,22 +66,20 @@ const ProfileExportButton = () => {
             window.URL.revokeObjectURL(url);
             document.body.removeChild(link);
         },
-        {
-            onError: (err: unknown) => {
-                console.error(err);
-                notify(translate('profiles.export.error'), { type: 'error' });
-            },
-        }
-    );
+        onError: (err: unknown) => {
+            console.error(err);
+            notify(translate('profiles.export.error'), { type: 'error' });
+        },
+    });
 
     if (!userId) return null;
 
     return (
         <Button
-            disabled={isLoading}
+            disabled={isPending}
             label={translate('profiles.export.buttonLabel')}
             onClick={() => handleDownload()}
-            startIcon={isLoading ? <CircularProgress size={15} /> : <Download />}
+            startIcon={isPending ? <CircularProgress size={15} /> : <Download />}
         />
     );
 };

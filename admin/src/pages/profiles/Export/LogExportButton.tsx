@@ -40,9 +40,9 @@
 
 import { Download } from '@mui/icons-material';
 import { CircularProgress } from '@mui/material';
+import { useMutation } from '@tanstack/react-query';
 import React from 'react';
 import { Button, useDataProvider, useNotify, useTranslate } from 'react-admin';
-import { useMutation } from 'react-query';
 
 interface LogExportButtonProps {
     learningLanguageId: string;
@@ -55,8 +55,8 @@ const LogExportButton = ({ learningLanguageId, languageCode }: LogExportButtonPr
 
     const dataProvider = useDataProvider();
 
-    const { mutate: handleDownload, isLoading } = useMutation(
-        async () => {
+    const { mutate: handleDownload, isPending } = useMutation({
+        mutationFn: async () => {
             const response = await dataProvider.exportLogEntries(learningLanguageId);
             const blob = await response.blob();
 
@@ -69,13 +69,11 @@ const LogExportButton = ({ learningLanguageId, languageCode }: LogExportButtonPr
             window.URL.revokeObjectURL(url);
             document.body.removeChild(link);
         },
-        {
-            onError: (err: unknown) => {
-                console.error(err);
-                notify(translate('profiles.export.error'), { type: 'error' });
-            },
-        }
-    );
+        onError: (err: unknown) => {
+            console.error(err);
+            notify(translate('profiles.export.error'), { type: 'error' });
+        },
+    });
 
     const onDownload = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
@@ -85,10 +83,10 @@ const LogExportButton = ({ learningLanguageId, languageCode }: LogExportButtonPr
 
     return (
         <Button
-            disabled={isLoading}
+            disabled={isPending}
             label={translate('profiles.export.buttonLabel')}
             onClick={onDownload}
-            startIcon={isLoading ? <CircularProgress size={15} /> : <Download />}
+            startIcon={isPending ? <CircularProgress size={15} /> : <Download />}
         />
     );
 };
