@@ -61,7 +61,7 @@ const EditActivityThemeCategory = () => {
         try {
             return await update(
                 'activities/categories',
-                { id, data: payload },
+                { id: '', data: payload },
                 {
                     onSuccess: () => {
                         redirect('/activities/categories');

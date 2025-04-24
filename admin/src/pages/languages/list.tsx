@@ -74,16 +74,14 @@ const LanguageList = () => {
         };
         await update(
             'languages',
-            { data: payload },
+            { id: '', data: payload },
             {
-                onSettled: (_, error: unknown) => {
-                    if (!error) {
-                        notify('languages.status.success');
-                    } else {
-                        notify('languages.status.error');
-                    }
-
-                    return refresh();
+                onSuccess: () => {
+                    notify('languages.status.success');
+                    refresh();
+                },
+                onError: () => {
+                    notify('languages.status.error');
                 },
             }
         );

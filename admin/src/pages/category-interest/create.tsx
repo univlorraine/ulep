@@ -61,12 +61,12 @@ const CreateInterestCategory = () => {
                 'interests/categories',
                 { data: payload },
                 {
-                    onSettled: (_, error: unknown) => {
-                        if (!error) {
-                            return redirect('/interests/categories');
-                        }
-
-                        return notify('interest_categories.create.error');
+                    onSuccess: () => redirect('/interests/categories'),
+                    onError: (error) => {
+                        console.error(error);
+                        notify('interest_categories.create.error', {
+                            type: 'error',
+                        });
                     },
                 }
             );

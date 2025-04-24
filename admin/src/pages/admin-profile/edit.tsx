@@ -66,7 +66,7 @@ const EditAdministratorProfile = () => {
         try {
             return await update(
                 'users/administrators',
-                { id: payload.id, data: formData },
+                { id: '', data: formData },
                 {
                     onSuccess: () => {
                         redirect('users/administrators');

@@ -67,12 +67,12 @@ const CreateObjective = () => {
                 'objectives',
                 { data: formData },
                 {
-                    onSettled: (_, error: unknown) => {
-                        if (!error) {
-                            return redirect('/objectives');
-                        }
-
-                        return notify('objectives.create.error');
+                    onSuccess: () => redirect('/objectives'),
+                    onError: (error) => {
+                        console.error(error);
+                        notify('objectives.create.error', {
+                            type: 'error',
+                        });
                     },
                 }
             );

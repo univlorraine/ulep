@@ -97,12 +97,12 @@ const CreateUniversity = () => {
                 'universities/partners',
                 { data: formData },
                 {
-                    onSettled: (_, error: unknown) => {
-                        if (!error) {
-                            return redirect('/universities');
-                        }
-
-                        return notify('universities.create.error');
+                    onSuccess: () => redirect('/universities'),
+                    onError: (error) => {
+                        console.error(error);
+                        notify('universities.create.error', {
+                            type: 'error',
+                        });
                     },
                 }
             );
