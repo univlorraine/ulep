@@ -62,14 +62,12 @@ const EditInterestCategory = () => {
         try {
             return await update(
                 'interests/categories',
-                { data: payload },
+                { id: '', data: payload },
                 {
-                    onSettled: (_, error: unknown) => {
-                        if (!error) {
-                            return redirect('/interests/categories');
-                        }
-
-                        return notify('interest_categories.update.error');
+                    onSuccess: () => redirect('/interests/categories'),
+                    onError: (error) => {
+                        console.error(error);
+                        notify('interest_categories.update.error');
                     },
                 }
             );

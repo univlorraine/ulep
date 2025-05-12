@@ -67,12 +67,10 @@ const EditEvent = () => {
                 'editos',
                 { id: payload.id, data: formData },
                 {
-                    onSettled: (_, error: any) => {
-                        if (!error) {
-                            return refresh();
-                        }
-
-                        return notify('editos.update.error', {
+                    onSuccess: () => refresh(),
+                    onError: (error) => {
+                        console.error(error);
+                        notify('editos.update.error', {
                             type: 'error',
                         });
                     },

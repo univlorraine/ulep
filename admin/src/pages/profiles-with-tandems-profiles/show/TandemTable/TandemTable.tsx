@@ -103,7 +103,7 @@ const TandemTable = ({
     setFieldToSort,
 }: TandemTableProps) => {
     const translate = useTranslate();
-    const record: ProfileWithTandemsProfiles = useRecordContext();
+    const record: ProfileWithTandemsProfiles | undefined = useRecordContext();
     const { permissions } = usePermissions();
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
     const [selectedMatchScore, setSelectedMatchScore] = useState<MatchScore | undefined>();
@@ -212,7 +212,7 @@ const TandemTable = ({
                         <TableCell>{partner.level}</TableCell>
                         <TableCell>
                             <ColoredChips
-                                color={partner.profile.user.role === record.user.role ? 'success' : 'error'}
+                                color={partner.profile.user.role === record?.user?.role ? 'success' : 'error'}
                                 label={translate(`learning_languages.roles.${partner.profile.user.role}`)}
                                 variant="outlined"
                             />

@@ -67,24 +67,23 @@ const CreateAdministrator = () => {
                 'users/administrators',
                 { data: formData },
                 {
-                    onSettled: (_, error: any) => {
-                        if (!error) {
-                            return redirect('/users/administrators');
-                        }
+                    onSuccess: () => redirect('/users/administrators'),
+                    onError: (error: any) => {
+                        console.error(error);
 
                         if (error.message === 'User is already an administrator') {
-                            return notify('administrators.create.error_already_admin', { type: 'error' });
+                            notify('administrators.create.error_already_admin', { type: 'error' });
                         }
 
                         if (error.message === 'email must be an email') {
-                            return notify('administrators.create.error_email', { type: 'error' });
+                            notify('administrators.create.error_email', { type: 'error' });
                         }
 
                         if (error.message) {
-                            return notify(error.message, { type: 'error' });
+                            notify(error.message, { type: 'error' });
                         }
 
-                        return notify('administrators.create.error', { type: 'error' });
+                        notify('administrators.create.error', { type: 'error' });
                     },
                 }
             );

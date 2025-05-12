@@ -39,14 +39,17 @@
  */
 
 import { Collection } from '@app/common';
+import { ProfileWithLogEntries } from 'src/core/models/profileWithLogEntries.model';
 import { Profile } from '../../../core/models/profile.model';
 import { ProfileRepository } from '../../../core/ports/profile.repository';
 
 export class InMemoryProfileRepository implements ProfileRepository {
   #profiles: Map<string, Profile> = new Map();
+  #profilesWithLogEntries: Map<string, ProfileWithLogEntries> = new Map();
 
   init(profiles: Profile[]): void {
     this.#profiles = new Map(profiles.map((profile) => [profile.id, profile]));
+    this.#profilesWithLogEntries = new Map();
   }
 
   reset(): void {
@@ -119,5 +122,23 @@ export class InMemoryProfileRepository implements ProfileRepository {
 
   async delete(profile: Profile): Promise<void> {
     this.#profiles.delete(profile.id);
+  }
+
+  async findAllWithLogEntries(
+    offset?: number,
+    limit?: number,
+  ): Promise<Collection<ProfileWithLogEntries>> {
+    const allItems = Array.from(this.#profilesWithLogEntries.values());
+
+    return {
+      items: allItems.slice(offset, offset + limit),
+      totalItems: allItems.length,
+    };
+  }
+
+  async findByContactIdWithLogEntries(
+    contactId: string,
+  ): Promise<ProfileWithLogEntries> {
+    return this.findAllWithLogEntries()[0];
   }
 }

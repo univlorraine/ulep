@@ -87,12 +87,12 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
     const { universitiesLanguages, universitiesData } = useGetUniversitiesLanguages();
     const notify = useNotify();
 
-    const record: News = useRecordContext();
+    const record: News | undefined = useRecordContext();
 
     const [centralUniversity, setCentralUniversity] = useState<University>();
     const [authorUniversity, setAuthorUniversity] = useState<University>();
 
-    const [universityData, setUniversityData] = useState<University>(record?.university || undefined);
+    const [universityData, setUniversityData] = useState<University | undefined>(record?.university || undefined);
     const [title, setTitle] = useState<string>(record?.title || '');
     const [content, setContent] = useState<string>(record?.content || '');
     const [image, setImage] = useState<File | undefined>(undefined);

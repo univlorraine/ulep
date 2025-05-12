@@ -71,7 +71,11 @@ const Username = ({ user }: UsernameProps) => (
 const AdminMenu = ({ user }: AdminMenuProps) => {
     const translate = useTranslate();
     const logout = useLogout();
-    const { onClose } = useUserMenu();
+    const userMenuContext = useUserMenu();
+    if (!userMenuContext) {
+        throw new Error('userMenuContext is undefined');
+    }
+    const { onClose } = userMenuContext;
 
     return (
         <div>

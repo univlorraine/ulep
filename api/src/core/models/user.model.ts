@@ -51,6 +51,10 @@ export enum AdminGroup {
   MANAGER = 'Manager',
 }
 
+export const ApiUser = 'External-api-user';
+
+export const ApiAdmin = 'External-api-admin';
+
 export enum AdminRole {
   ADMIN = 'admin',
   SUPER_ADMIN = 'super-admin',

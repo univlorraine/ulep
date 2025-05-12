@@ -45,8 +45,8 @@ import ReportsPagesHeader from '../../components/tabs/ReportsPagesHeader';
 const ReportCategoryList = () => (
     <>
         <ReportsPagesHeader />
-        <List bulkActionButtons={false} exporter={false} pagination={false}>
-            <Datagrid rowClick="show">
+        <List exporter={false} pagination={false}>
+            <Datagrid bulkActionButtons={false} rowClick="show">
                 <TextField sortable={false} source="name" />
             </Datagrid>
         </List>

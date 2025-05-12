@@ -62,14 +62,14 @@ const EditReportCategory = () => {
         try {
             return await update(
                 'reports/categories',
-                { data: payload },
+                { id: '', data: payload },
                 {
-                    onSettled: (_, error: unknown) => {
-                        if (!error) {
-                            return redirect('/reports/categories');
-                        }
-
-                        return notify('report_categories.update.error');
+                    onSuccess: () => redirect('/reports/categories'),
+                    onError: (error) => {
+                        console.error(error);
+                        notify('report_categories.update.error', {
+                            type: 'error',
+                        });
                     },
                 }
             );

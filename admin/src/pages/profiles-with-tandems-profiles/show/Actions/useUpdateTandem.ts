@@ -38,8 +38,8 @@
  *
  */
 
+import { useMutation } from '@tanstack/react-query';
 import { useDataProvider } from 'react-admin';
-import { useMutation } from 'react-query';
 import { TandemStatus } from '../../../../entities/Tandem';
 
 interface UseUpdateTandemParams {
@@ -50,13 +50,14 @@ interface UseUpdateTandemParams {
 const useUpdateTandem = (options?: UseUpdateTandemParams) => {
     const dataProvider = useDataProvider();
 
-    const { mutate, isLoading, isError } = useMutation(
-        (props: { tandemId: string; tandemStatus: TandemStatus }) =>
+    const { mutate, isPending, isError } = useMutation({
+        mutationFn: (props: { tandemId: string; tandemStatus: TandemStatus }) =>
             dataProvider.updateTandem(props.tandemId, props.tandemStatus),
-        options
-    );
+        onSuccess: options?.onSuccess,
+        onError: options?.onError,
+    });
 
-    return { mutate, isLoading, isError };
+    return { mutate, isPending, isError };
 };
 
 export default useUpdateTandem;

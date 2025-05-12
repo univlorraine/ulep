@@ -62,12 +62,12 @@ const CreateQuestion = () => {
                 'proficiency/questions',
                 { data: payload },
                 {
-                    onSettled: (_, error: unknown) => {
-                        if (!error) {
-                            return redirect('/proficiency/questions');
-                        }
-
-                        return notify('questions.create.error');
+                    onSuccess: () => redirect('/proficiency/questions'),
+                    onError: (error) => {
+                        console.error(error);
+                        notify('questions.create.error', {
+                            type: 'error',
+                        });
                     },
                 }
             );

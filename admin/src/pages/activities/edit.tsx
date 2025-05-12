@@ -108,10 +108,9 @@ const EditActivity = () => {
             'activities',
             { id: payload.id, data: formData },
             {
-                onSettled: (_, error: unknown) => {
-                    if (!error) {
-                        return redirect('/activities');
-                    }
+                onSuccess: () => redirect('/activities'),
+                onError: (error) => {
+                    console.error(error);
 
                     if (error instanceof Error && error.message === 'Activity is already published') {
                         return notify('activities.error.alreadyPublished', {

@@ -101,21 +101,21 @@ const TandemActions = ({
         notify(translate('learning_languages.show.tandems.actions.error'), { type: 'error' });
     };
 
-    const { mutate: validateTandem, isLoading: isLoadingValidateTandem } = useValidateTandem({
+    const { mutate: validateTandem, isPending: isLoadingValidateTandem } = useValidateTandem({
         onSuccess,
         onError,
     });
-    const { mutate: createTandem, isLoading: isLoadingCreateTandem } = useCreateTandem({
-        onSuccess,
-        onError,
-    });
-
-    const { mutate: refuseTandem, isLoading: isLoadingRefuseTandem } = useRefuseTandem({
+    const { mutate: createTandem, isPending: isLoadingCreateTandem } = useCreateTandem({
         onSuccess,
         onError,
     });
 
-    const { mutate: updateTandem, isLoading: isLoadingUpdateTandem } = useUpdateTandem({
+    const { mutate: refuseTandem, isPending: isLoadingRefuseTandem } = useRefuseTandem({
+        onSuccess,
+        onError,
+    });
+
+    const { mutate: updateTandem, isPending: isLoadingUpdateTandem } = useUpdateTandem({
         onSuccess,
         onError,
     });

@@ -90,12 +90,10 @@ const CreateNews = () => {
                 'news',
                 { data: formData },
                 {
-                    onSettled: (_, error: any) => {
-                        if (!error) {
-                            return redirect('/news');
-                        }
-
-                        return notify('news.create.error', {
+                    onSuccess: () => redirect('/news'),
+                    onError: (error) => {
+                        console.error(error);
+                        notify('news.create.error', {
                             type: 'error',
                         });
                     },

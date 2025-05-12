@@ -60,12 +60,12 @@ const CreateActivityThemeCategory = () => {
                 'activities/categories',
                 { data: payload },
                 {
-                    onSettled: (_, error: unknown) => {
-                        if (!error) {
-                            return redirect('/activities/categories');
-                        }
-
-                        return notify('activities_categories.create.error');
+                    onSuccess: () => redirect('/activities/categories'),
+                    onError: (error) => {
+                        console.error(error);
+                        notify('activities_categories.create.error', {
+                            type: 'error',
+                        });
                     },
                 }
             );

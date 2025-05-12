@@ -38,8 +38,8 @@
  *
  */
 
+import { useMutation } from '@tanstack/react-query';
 import { useDataProvider } from 'react-admin';
-import { useMutation } from 'react-query';
 
 interface UseLaunchGlobalRoutineOptions {
     onSuccess?: () => void;
@@ -49,12 +49,13 @@ interface UseLaunchGlobalRoutineOptions {
 const useLaunchGlobalRoutine = (options?: UseLaunchGlobalRoutineOptions) => {
     const dataProvider = useDataProvider();
 
-    const { mutate, isLoading, isError } = useMutation(
-        (universityIds: string[]) => dataProvider.launchGlobalRoutine(universityIds),
-        options
-    );
+    const { mutate, isPending, isError } = useMutation({
+        mutationFn: (universityIds: string[]) => dataProvider.launchGlobalRoutine(universityIds),
+        onSuccess: options?.onSuccess,
+        onError: options?.onError,
+    });
 
-    return { mutate, isLoading, isError };
+    return { mutate, isPending, isError };
 };
 
 export default useLaunchGlobalRoutine;

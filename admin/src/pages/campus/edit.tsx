@@ -58,14 +58,12 @@ const EditCampus = () => {
         try {
             return await update(
                 'campus',
-                { data: payload },
+                { id: '', data: payload },
                 {
-                    onSettled: (_, error: unknown) => {
-                        if (!error) {
-                            return redirect('/campus');
-                        }
-
-                        return notify('campus.update.error');
+                    onSuccess: () => redirect('/campus'),
+                    onError: (error) => {
+                        console.error(error);
+                        notify('campus.update.error');
                     },
                 }
             );

@@ -66,7 +66,7 @@ const EditQuestion = () => {
             translations: indexedTranslationsToTranslations(newTranslations),
         };
         try {
-            const result = await update('proficiency/questions', { data: payload });
+            const result = await update('proficiency/questions', { id: '', data: payload });
             redirect('/proficiency/questions');
 
             return result;
