@@ -78,7 +78,7 @@ const ActivityCategoriesList = () => {
                             </Typography>
                         )}
                     />
-                    <ArrayField label={translation('activities_categories.themes')} sortable={false}>
+                    <ArrayField label={translation('activities_categories.themes')} sortable={false} source="themes">
                         <FunctionField
                             render={(record: ActivityThemeCategory) => (
                                 <Box style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', gap: '5px' }}>

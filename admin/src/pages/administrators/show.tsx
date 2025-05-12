@@ -68,7 +68,7 @@ const InterestShowAction = () => {
 
     if (
         !permissions.checkRole(Role.SUPER_ADMIN) &&
-        (record.universityId !== identity.universityId || record.group.name === AdminGroup.SUPER_ADMIN)
+        (record?.universityId !== identity.universityId || record?.group.name === AdminGroup.SUPER_ADMIN)
     ) {
         return null;
     }

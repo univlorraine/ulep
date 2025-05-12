@@ -102,12 +102,10 @@ const CreateEvent = () => {
                 'events',
                 { data: formData },
                 {
-                    onSettled: (_, error: any) => {
-                        if (!error) {
-                            return redirect('/events');
-                        }
-
-                        return notify('events.create.error', {
+                    onSuccess: () => redirect('/events'),
+                    onError: (error) => {
+                        console.error(error);
+                        notify('events.create.error', {
                             type: 'error',
                         });
                     },

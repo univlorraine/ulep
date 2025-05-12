@@ -58,12 +58,12 @@ const CreateCampus = () => {
                 'campus',
                 { data: payload },
                 {
-                    onSettled: (_, error: unknown) => {
-                        if (!error) {
-                            return redirect('/campus');
-                        }
-
-                        return notify('campus.create.error');
+                    onSuccess: () => redirect('/campus'),
+                    onError: (error) => {
+                        console.error(error);
+                        notify('campus.create.error', {
+                            type: 'error',
+                        });
                     },
                 }
             );

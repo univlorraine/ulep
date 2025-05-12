@@ -83,14 +83,12 @@ const ActivityStatusComponent = () => {
     const handleChangeStatus = async (status: ActivityStatus) => {
         await update(
             'activities/status',
-            { id: record.id, data: { status } },
+            { id: record?.id, data: { status } },
             {
-                onSettled: (_, error: unknown) => {
-                    if (!error) {
-                        return refresh();
-                    }
-
-                    return notify('activities.error.update', {
+                onSuccess: () => refresh(),
+                onError: (error) => {
+                    console.error(error);
+                    notify('activities.error.update', {
                         type: 'error',
                     });
                 },
@@ -100,7 +98,7 @@ const ActivityStatusComponent = () => {
 
     return (
         <Box display="flex" flexDirection="row" gap="50px">
-            <ActivityStatusChips status={record.status} />
+            <ActivityStatusChips status={record?.status} />
 
             {record?.status === ActivityStatus.REJECTED && (
                 <Box display="flex" flexDirection="row" gap="10px">

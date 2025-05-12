@@ -102,12 +102,10 @@ const CreateActivity = () => {
             'activities',
             { data: formData },
             {
-                onSettled: (_, error: unknown) => {
-                    if (!error) {
-                        return redirect('/activities');
-                    }
-
-                    return notify('activities.create.error', {
+                onSuccess: () => redirect('/activities'),
+                onError: (error) => {
+                    console.error(error);
+                    notify('activities.create.error', {
                         type: 'error',
                     });
                 },

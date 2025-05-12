@@ -164,14 +164,15 @@ const ProfileList = (props: any) => {
             'users',
             { id, data: { status } },
             {
-                onSettled: (_, error: unknown) => {
-                    if (!error) {
-                        notify('profiles.edit_status_success');
-                    } else {
-                        notify('profiles.edit_status_error');
-                    }
-
-                    return refresh();
+                onSuccess: () => {
+                    notify('profiles.edit_status_success');
+                    refresh();
+                },
+                onError: (error) => {
+                    console.error(error);
+                    notify('profiles.edit_status_error', {
+                        type: 'error',
+                    });
                 },
             }
         );

@@ -38,8 +38,8 @@
  *
  */
 
+import { useMutation } from '@tanstack/react-query';
 import { useDataProvider } from 'react-admin';
-import { useMutation } from 'react-query';
 
 interface UseValidateTandemParams {
     onSuccess?: () => void;
@@ -49,12 +49,13 @@ interface UseValidateTandemParams {
 const useValidateTandem = (options?: UseValidateTandemParams) => {
     const dataProvider = useDataProvider();
 
-    const { mutate, isLoading, isError } = useMutation(
-        (tandemId: string) => dataProvider.validateTandem(tandemId),
-        options
-    );
+    const { mutate, isPending, isError } = useMutation({
+        mutationFn: (tandemId: string) => dataProvider.validateTandem(tandemId),
+        onSuccess: options?.onSuccess,
+        onError: options?.onError,
+    });
 
-    return { mutate, isLoading, isError };
+    return { mutate, isPending, isError };
 };
 
 export default useValidateTandem;

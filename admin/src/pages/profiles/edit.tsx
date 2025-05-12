@@ -72,12 +72,12 @@ const ProfileEdit = () => {
                     data: payload,
                 },
                 {
-                    onSettled: (_, error: unknown) => {
-                        if (!error) {
-                            return redirect('/profiles');
-                        }
-
-                        return notify('profiles.update.error');
+                    onSuccess: () => redirect('/profiles'),
+                    onError: (error) => {
+                        console.error(error);
+                        notify('profiles.update.error', {
+                            type: 'error',
+                        });
                     },
                 }
             );

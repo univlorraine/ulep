@@ -207,7 +207,6 @@ const customDataProvider = {
         if (!response.ok) {
             await throwError(response);
         }
-
         const data = await response.json();
 
         switch (resource) {

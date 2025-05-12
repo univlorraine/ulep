@@ -67,13 +67,10 @@ const EditAdministrator = () => {
         try {
             return await update(
                 'users/administrators',
-                { data: formData },
+                { id: '', data: formData },
                 {
-                    onSettled: (_, error: any) => {
-                        if (!error) {
-                            return redirect('/users/administrators');
-                        }
-
+                    onSuccess: () => redirect('/users/administrators'),
+                    onError: (error) => {
                         if (error.message === 'Email is already used') {
                             return notify('administrators.update.error_mail', { type: 'error' });
                         }

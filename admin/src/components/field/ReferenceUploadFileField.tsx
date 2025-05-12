@@ -56,10 +56,10 @@ const UploadFileField = ({ label, id, ...props }: FieldProps<Record<string, any>
             label={label}
             record={data}
             rel="noopener noreferrer"
-            source="url"
             target="_blank"
             title={fileName}
             {...props}
+            source="url"
         />
     );
 };
@@ -79,7 +79,7 @@ const ReferenceUploadFileField = <RecordType extends Record<string, any> = Recor
 
     return (
         <div onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()} role="button" tabIndex={0}>
-            <UploadFileField id={sourceValue} label={label} {...props} />
+            <UploadFileField id={sourceValue} label={label} {...props} source={source} />
         </div>
     );
 };

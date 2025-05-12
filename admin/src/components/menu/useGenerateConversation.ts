@@ -38,8 +38,8 @@
  *
  */
 
+import { useMutation } from '@tanstack/react-query';
 import { useDataProvider, useNotify } from 'react-admin';
-import { useMutation } from 'react-query';
 
 interface UseGenerateConversationParams {
     onSuccess?: () => void;
@@ -50,13 +50,17 @@ const useGenerateConversation = (options?: UseGenerateConversationParams) => {
     const dataProvider = useDataProvider();
     const notify = useNotify();
 
-    const { mutate, isLoading, isError } = useMutation(dataProvider.generateConversations, options);
+    const { mutate, isPending, isError } = useMutation({
+        mutationFn: dataProvider.generateConversations,
+        onSuccess: options?.onSuccess,
+        onError: options?.onError,
+    });
 
     if (isError) {
         notify('generateConversation.error');
     }
 
-    return { mutate, isLoading, isError };
+    return { mutate, isPending, isError };
 };
 
 export default useGenerateConversation;

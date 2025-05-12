@@ -62,7 +62,7 @@ interface ActivityFormProps {
 
 const ActivityForm: React.FC<ActivityFormProps> = ({ handleSubmit }) => {
     const translate = useTranslate();
-    const record: Activity = useRecordContext();
+    const record: Activity | undefined = useRecordContext();
 
     const DEFAULT_EXCERCISES = [
         {

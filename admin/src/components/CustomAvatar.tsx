@@ -43,22 +43,22 @@ import * as React from 'react';
 import { useGetOne, ImageField, Identifier } from 'react-admin';
 
 type CustomAvatarWithInitsProps = {
-    firstName: string;
-    lastName: string;
+    firstName: string | undefined;
+    lastName: string | undefined;
     sx?: React.CSSProperties;
 };
 
 const CustomAvatarWithInits = ({ firstName, lastName, sx }: CustomAvatarWithInitsProps) => (
     <Avatar sx={sx}>
-        {firstName.charAt(0)}
-        {lastName.charAt(0)}
+        {firstName?.charAt(0)}
+        {lastName?.charAt(0)}
     </Avatar>
 );
 
 type CustomAvatarWithImageProps = {
-    avatarId: Identifier;
-    firstName: string;
-    lastName: string;
+    avatarId: Identifier | undefined;
+    firstName: string | undefined;
+    lastName: string | undefined;
     sx?: React.CSSProperties;
 };
 
@@ -83,9 +83,9 @@ const CustomAvatarWithImage = ({ avatarId, firstName, lastName, sx }: CustomAvat
 };
 
 type CustomAvatarProps = {
-    avatarId: Identifier;
-    firstName: string;
-    lastName: string;
+    avatarId: Identifier | undefined;
+    firstName: string | undefined;
+    lastName: string | undefined;
     sx?: React.CSSProperties;
 };
 

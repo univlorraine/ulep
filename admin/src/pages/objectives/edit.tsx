@@ -67,14 +67,14 @@ const EditObjective = () => {
         try {
             return await update(
                 'objectives',
-                { data: formData },
+                { id, data: formData },
                 {
-                    onSettled: (_, error: unknown) => {
-                        if (!error) {
-                            return redirect('/objectives');
-                        }
-
-                        return notify('objectives.edit.error');
+                    onSuccess: () => redirect('/objectives'),
+                    onError: (error) => {
+                        console.error(error);
+                        notify('objectives.edit.error', {
+                            type: 'error',
+                        });
                     },
                 }
             );

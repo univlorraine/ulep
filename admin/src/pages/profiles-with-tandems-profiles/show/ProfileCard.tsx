@@ -51,7 +51,7 @@ import codeLanguageToFlag from '../../../utils/codeLanguageToFlag';
 import ProfileLink from '../ui/ProfileLink';
 
 type ProfileCardProps = {
-    record: ProfileWithTandemsProfiles;
+    record: ProfileWithTandemsProfiles | undefined;
     learningLanguage: LearningLanguageWithTandemWithPartnerProfile;
     hasActiveTandem: boolean;
 };
@@ -65,15 +65,15 @@ const ProfileCard = ({ record, learningLanguage, hasActiveTandem }: ProfileCardP
                 <Typography variant="h4">
                     {translate('learning_languages.show.management.applicant_profile')}
                 </Typography>
-                {record.user.status && <UserStatusChips status={record.user.status} />}
+                {record?.user?.status && <UserStatusChips status={record.user.status} />}
             </Box>
             {!hasActiveTandem && <Typography className="description" />}
 
             <div className="line profile-name">
                 <CustomAvatar
-                    avatarId={record.user.avatar?.id}
-                    firstName={record.user.firstname}
-                    lastName={record.user.lastname}
+                    avatarId={record?.user?.avatar?.id}
+                    firstName={record?.user?.firstname}
+                    lastName={record?.user?.lastname}
                     sx={{ width: '35px', height: '35px', fontSize: '1rem' }}
                 />
                 <ProfileLink profile={record} />
@@ -87,7 +87,7 @@ const ProfileCard = ({ record, learningLanguage, hasActiveTandem }: ProfileCardP
             <div className="line">
                 <span className="label">{translate('learning_languages.show.fields.gender')}</span>
                 <span>
-                    {translate(`global.genderValues.${record.user.gender.toLowerCase()}`)}
+                    {translate(`global.genderValues.${record?.user?.gender?.toLowerCase()}`)}
                     {learningLanguage.sameGender && <WarningCircle />}
                 </span>
             </div>
@@ -95,14 +95,14 @@ const ProfileCard = ({ record, learningLanguage, hasActiveTandem }: ProfileCardP
             <div className="line">
                 <span className="label">{translate('learning_languages.show.fields.age')}</span>
                 <span>
-                    <Typography>{record.user.age}</Typography>
+                    <Typography>{record?.user?.age}</Typography>
                     {learningLanguage.sameAge && <WarningCircle />}
                 </span>
             </div>
 
             <div className="line">
                 <span className="label">{translate('learning_languages.list.tableColumns.university')}</span>
-                <span>{record.user.university.name}</span>
+                <span>{record?.user?.university?.name}</span>
             </div>
 
             <div className="line">
@@ -124,8 +124,8 @@ const ProfileCard = ({ record, learningLanguage, hasActiveTandem }: ProfileCardP
             <div className="line">
                 <span className="label">{translate('learning_languages.show.fields.masteredLanguages')}</span>
                 <span style={{ display: 'flex', gap: '10px', justifyContent: 'flex-start' }}>
-                    <span>{codeLanguageToFlag(record.nativeLanguage.code)}</span>
-                    {record.masteredLanguages.map((language) => (
+                    <span>{codeLanguageToFlag(record?.nativeLanguage?.code)}</span>
+                    {record?.masteredLanguages.map((language) => (
                         <span key={language.code}>{codeLanguageToFlag(language.code)}</span>
                     ))}
                 </span>
@@ -138,12 +138,12 @@ const ProfileCard = ({ record, learningLanguage, hasActiveTandem }: ProfileCardP
 
             <div className="line">
                 <span className="label">{translate('learning_languages.show.fields.status')}</span>
-                <span>{translate(`global.userStatus.${record.user.status?.toLowerCase()}`)}</span>
+                <span>{translate(`global.userStatus.${record?.user?.status?.toLowerCase()}`)}</span>
             </div>
 
             <div className="line">
                 <span className="label">{translate('learning_languages.show.fields.role')}</span>
-                <span>{translate(`learning_languages.roles.${record.user.role}`)}</span>
+                <span>{translate(`learning_languages.roles.${record?.user?.role}`)}</span>
             </div>
 
             <div className="line">

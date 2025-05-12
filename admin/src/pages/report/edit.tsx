@@ -66,16 +66,15 @@ const EditReport = () => {
         };
         try {
             return await update(
-                `reports/${id}`,
-                { data: payload },
+                'reports',
+                { id, data: payload },
                 {
-                    onSettled: (_, error: unknown) => {
-                        if (!error) {
-                            return redirect('/reports');
-                        }
+                    onSuccess: () => {
+                        redirect('/reports');
+                    },
+                    onError: (error) => {
                         console.warn(error);
-
-                        return notify('reports.update.error');
+                        notify('reports.update.error');
                     },
                 }
             );

@@ -38,7 +38,11 @@
  *
  */
 
-const isAgeCriterionMet = (userAge: number, tandemAge: number) => {
+const isAgeCriterionMet = (userAge: number | undefined, tandemAge: number | undefined) => {
+    if (!userAge || !tandemAge) {
+        return false;
+    }
+
     if (userAge < 30) {
         return Math.abs(userAge - tandemAge) <= 5;
     }

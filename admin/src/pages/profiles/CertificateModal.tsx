@@ -75,17 +75,15 @@ const CertificateModal = ({ profile }: { profile: Profile }) => {
     const handleSubmit = async (payload: CertificateFormPayload) => {
         try {
             return await update(
-                `learning-languages/${record.id}/generate-certificate`,
-                { data: payload },
+                `learning-languages/${record?.id}/generate-certificate`,
+                { id: '', data: payload },
                 {
-                    onSettled: (_, error: unknown) => {
-                        if (!error) {
-                            refresh();
-
-                            return notify('certificates.success');
-                        }
-
-                        return notify((error as Error)?.message ? (error as Error)?.message : 'certificates.error');
+                    onSuccess: () => refresh(),
+                    onError: (error) => {
+                        console.error(error);
+                        notify('certificates.error', {
+                            type: 'error',
+                        });
                     },
                 }
             );

@@ -74,7 +74,7 @@ const DeleteAdministratorButton = ({ identity }: DeleteAdministratorButtonProps)
 
     if (
         !permissions.checkRole(Role.SUPER_ADMIN) &&
-        (record.universityId !== identity.universityId || record.group.name === AdminGroup.SUPER_ADMIN)
+        (record?.universityId !== identity.universityId || record?.group.name === AdminGroup.SUPER_ADMIN)
     ) {
         return null;
     }
@@ -83,7 +83,7 @@ const DeleteAdministratorButton = ({ identity }: DeleteAdministratorButtonProps)
         window.setTimeout(logout, 600);
     };
 
-    if (record.id === identity.id) {
+    if (record?.id === identity.id) {
         return (
             <DeleteWithConfirmButton
                 confirmContent={translate('administrators.delete.confirmDeleteOwnAccount')}
@@ -99,7 +99,9 @@ const DeleteAdministratorButton = ({ identity }: DeleteAdministratorButtonProps)
     return (
         <DeleteWithConfirmButton
             confirmContent={translate('administrators.delete.confirmDeleteAccount')}
-            confirmTitle={translate('administrators.delete.title', { name: `${record.firstname} ${record.lastname}` })}
+            confirmTitle={translate('administrators.delete.title', {
+                name: `${record?.firstname} ${record?.lastname}`,
+            })}
             mutationMode="pessimistic"
         />
     );
