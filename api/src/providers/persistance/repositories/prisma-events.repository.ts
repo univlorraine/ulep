@@ -150,7 +150,7 @@ export class PrismaEventRepository implements EventRepository {
     pagination,
     filters,
   }: FindEventsForAnUserProps): Promise<Collection<EventObject>> {
-    const where: Prisma.EventsWhereInput = {
+    const baseWhere: Prisma.EventsWhereInput = {
       AND: [
         {
           ...(filters.title && {
@@ -171,19 +171,6 @@ export class PrismaEventRepository implements EventRepository {
             },
           }),
         },
-        {
-          ...(filters.allowedLanguages && {
-            OR: filters.allowedLanguages.map((languageList) => ({
-              DiffusionLanguages: {
-                every: {
-                  code: {
-                    in: languageList,
-                  },
-                },
-              },
-            })),
-          }),
-        },
         { status: filters.status },
         {
           end_date: {
@@ -200,29 +187,48 @@ export class PrismaEventRepository implements EventRepository {
       ],
     };
 
-    const { page, limit } = pagination;
-    const offset = (page - 1) * limit;
-
-    const count = await this.prisma.events.count({ where });
-
-    // If skip is out of range, return an empty array
-    if (offset >= count) {
-      return { items: [], totalItems: count };
-    }
-
-    const events = await this.prisma.events.findMany({
-      skip: offset,
-      take: limit,
-      where,
-      orderBy: {
-        start_date: 'asc',
-      },
+    const allEvents = await this.prisma.events.findMany({
+      where: baseWhere,
       include: EventRelations,
     });
 
+    const filteredEvents = allEvents.filter((event) => {
+      const diffusionLanguages = event.DiffusionLanguages.map(
+        (lang) => lang.code,
+      );
+
+      if (diffusionLanguages.length === 1) {
+        return filters.allowedLanguages.knownLanguages.includes(
+          diffusionLanguages[0],
+        );
+      } else if (diffusionLanguages.length > 1) {
+        const hasKnownLanguage = diffusionLanguages.some((lang) =>
+          filters.allowedLanguages.knownLanguages.includes(lang),
+        );
+
+        const hasLearningLanguage = diffusionLanguages.some((lang) =>
+          filters.allowedLanguages.learningLanguages.includes(lang),
+        );
+
+        return hasKnownLanguage || hasLearningLanguage;
+      }
+
+      return false;
+    });
+
+    const { page, limit } = pagination;
+    const offset = (page - 1) * limit;
+    const totalCount = filteredEvents.length;
+
+    filteredEvents.sort(
+      (a, b) => a.start_date.getTime() - b.start_date.getTime(),
+    );
+
+    const paginatedEvents = filteredEvents.slice(offset, offset + limit);
+
     return new Collection<EventObject>({
-      items: events.map(eventMapper),
-      totalItems: count,
+      items: paginatedEvents.map(eventMapper),
+      totalItems: totalCount,
     });
   }
 

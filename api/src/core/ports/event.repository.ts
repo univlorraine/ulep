@@ -117,7 +117,10 @@ export type FindEventsForAnUserProps = {
     universityId?: string;
     status?: EventStatus;
     types?: EventType[];
-    allowedLanguages: string[][];
+    allowedLanguages: {
+      knownLanguages: string[]; // langues maîtrisées + langue maternelle
+      learningLanguages: string[]; // langues en cours d'apprentissage
+    };
   };
 };
 

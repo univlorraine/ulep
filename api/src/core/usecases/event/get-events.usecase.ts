@@ -39,7 +39,7 @@
  */
 
 import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { LearningLanguage } from 'src/core/models';
+import { LearningLanguage, Profile } from 'src/core/models';
 import { EventStatus, EventType } from 'src/core/models/event.model';
 import {
   EventRepository,
@@ -90,6 +90,7 @@ export class GetEventsUsecase {
     const allowedLanguages = await this.generateAllowedLanguages(
       profile.learningLanguages,
       command.filters.languageCodes,
+      profile,
     );
 
     const events = await this.eventRepository.findAllForAnUser({
@@ -129,59 +130,29 @@ export class GetEventsUsecase {
   private async generateAllowedLanguages(
     learningLanguages: LearningLanguage[],
     filteredLanguages: string[],
+    profile: Profile,
   ) {
-    let allowedLanguages: string[][] = [];
+    const learningCodes = learningLanguages.map((ll) => ll.language.code);
 
-    for (const learningLanguage of learningLanguages) {
-      const tandem = await this.getTandemForLearningLanguage(learningLanguage);
-      const firstLanguage = tandem
-        ? tandem.learningLanguages[0].language.code
-        : learningLanguage.language.code;
-      const secondLanguage = tandem
-        ? tandem.learningLanguages[1]?.language.code
-        : undefined;
+    const nativeLanguageCode = profile.nativeLanguage.code;
+    const masteredCodes = profile.masteredLanguages.map((ml) => ml.code);
 
-      const isFirstLanguageFiltered =
-        !filteredLanguages ||
-        filteredLanguages?.length === 0 ||
-        filteredLanguages?.includes(firstLanguage);
-      const isSecondLanguageFiltered =
-        !filteredLanguages ||
-        filteredLanguages?.length === 0 ||
-        filteredLanguages?.includes(secondLanguage);
+    const knownLanguages = [nativeLanguageCode, ...masteredCodes];
 
-      if (
-        isFirstLanguageFiltered &&
-        !allowedLanguages.some((language) => language.includes(firstLanguage))
-      ) {
-        allowedLanguages.push([firstLanguage]);
-      }
+    const filteredKnownLanguages =
+      filteredLanguages?.length > 0
+        ? knownLanguages.filter((code) => filteredLanguages.includes(code))
+        : knownLanguages;
 
-      if (
-        secondLanguage &&
-        isSecondLanguageFiltered &&
-        !allowedLanguages.some((language) => language.includes(secondLanguage))
-      ) {
-        allowedLanguages.push([secondLanguage]);
-      }
+    const filteredLearningCodes =
+      filteredLanguages?.length > 0
+        ? learningCodes.filter((code) => filteredLanguages.includes(code))
+        : learningCodes;
 
-      if (
-        (isFirstLanguageFiltered || isSecondLanguageFiltered) &&
-        firstLanguage &&
-        secondLanguage &&
-        !allowedLanguages.some(
-          (lang) =>
-            (lang.length === 2 &&
-              lang[0] === firstLanguage &&
-              lang[1] === secondLanguage) ||
-            (lang[0] === secondLanguage && lang[1] === firstLanguage),
-        )
-      ) {
-        allowedLanguages.push([firstLanguage, secondLanguage]);
-      }
-    }
-
-    return allowedLanguages;
+    return {
+      knownLanguages: filteredKnownLanguages,
+      learningLanguages: filteredLearningCodes,
+    };
   }
 
   private getTandemForLearningLanguage(learningLanguage: LearningLanguage) {
