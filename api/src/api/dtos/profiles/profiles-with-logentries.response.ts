@@ -38,14 +38,55 @@
  *
  */
 
-export * from './create-or-update-log-entry.usecase';
-export * from './export-log-entries.usecase';
-export * from './get-all-entries-for-contact.usecase';
-export * from './get-all-entries-for-user-by-date.usecase';
-export * from './get-all-entries-for-user-grouped-by-date.usecase';
-export * from './get-all-entries.usecase';
-export * from './share-log-entries-for-research.usecase';
-export * from './share-log-entries.usecase';
-export * from './unshare-log-entries-for-research.usecase';
-export * from './unshare-log-entries.usecase';
-export * from './update-custom-log-entry.usecase';
+import { ApiProperty } from '@nestjs/swagger';
+import { Expose } from 'class-transformer';
+import { ProfileWithLogEntries } from 'src/core/models/profileWithLogEntries.model';
+import {
+  LearningLanguageResponse,
+  LearningLanguageWithLogEntriesResponse,
+} from '../learning-languages/learning-language.response';
+import { LogEntryResponse } from '../log-entry';
+import { UserResponse } from '../users';
+
+export class ProfileWithLogEntriesResponse {
+  @ApiProperty()
+  @Expose({ groups: ['api', 'api-admin'] })
+  user: UserResponse;
+
+  @ApiProperty()
+  @Expose({ groups: ['api', 'api-admin'] })
+  id: string;
+
+  @ApiProperty({ type: () => LogEntryResponse })
+  @Expose({ groups: ['api', 'api-admin'] })
+  logs: LogEntryResponse[];
+
+  @ApiProperty({ type: () => LearningLanguageWithLogEntriesResponse })
+  @Expose({ groups: ['api', 'api-admin'] })
+  learnings: LearningLanguageResponse[];
+
+  constructor(partial: Partial<ProfileWithLogEntriesResponse>) {
+    Object.assign(this, partial);
+  }
+
+  static fromDomainWithLogEntries(
+    profile: ProfileWithLogEntries,
+  ): ProfileWithLogEntriesResponse {
+    return new ProfileWithLogEntriesResponse({
+      id: profile.id,
+      user: UserResponse.fromDomain(profile.user),
+      learnings: profile.learningLanguages.map((learningLanguage) =>
+        LearningLanguageWithLogEntriesResponse.fromDomain({
+          learningLanguage,
+        }),
+      ),
+      logs: profile.learningLanguages
+        .flatMap((learningLanguage) =>
+          learningLanguage.logEntries.filter(
+            (logEntry) => logEntry !== undefined,
+          ),
+        )
+        .map((logEntry) => LogEntryResponse.from(logEntry)),
+    });
+  }
+}

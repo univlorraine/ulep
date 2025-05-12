@@ -49,9 +49,10 @@ import * as jwt from 'jsonwebtoken';
 import { Client, Issuer, TokenSet } from 'openid-client';
 import * as qs from 'querystring';
 import { AdminGroup } from 'src/core/models';
+import { ApiAdmin, ApiUser } from 'src/core/models/user.model';
 import {
-  KEYCLOAK_CONFIGURATION,
   KeycloakConfiguration,
+  KEYCLOAK_CONFIGURATION,
 } from './keycloak.configuration';
 import {
   InvalidCredentialsException,
@@ -322,9 +323,23 @@ export class KeycloakClient {
 
   async isAdmin(user: UserRepresentation): Promise<boolean> {
     const userGroups = await this.getUserGroups(user.id);
-
     return userGroups.some((group: { name: string }) =>
       Object.values(AdminGroup).includes(group.name as AdminGroup),
+    );
+  }
+
+  async isApiUser(user: UserRepresentation): Promise<boolean> {
+    const userGroups = await this.getUserGroups(user.id);
+    return userGroups.some(
+      (group: { name: string }) =>
+        group.name === ApiUser || group.name === ApiAdmin,
+    );
+  }
+
+  async isApiAdmin(user: UserRepresentation): Promise<boolean> {
+    const userGroups = await this.getUserGroups(user.id);
+    return userGroups.some(
+      (group: { name: string }) => group.name === ApiAdmin,
     );
   }
 

@@ -41,6 +41,7 @@
 import { Campus } from './campus.model';
 import { CustomLearningGoal } from './custom-learning-goal.model';
 import { Language } from './language.model';
+import { LogEntry } from './log-entry.model';
 import { MediaObject } from './media.model';
 import { ProficiencyLevel } from './proficiency.model';
 import { LearningType, Profile } from './profile.model';
@@ -246,5 +247,18 @@ export class LearningLanguageWithTandemWithPartnerLearningLanguage extends Learn
   ) {
     super(props);
     this.tandem = props.tandem;
+  }
+}
+
+interface LearningLanguageWithLogEntriesProps extends LearningLanguageProps {
+  logEntries: LogEntry[];
+}
+
+export class LearningLanguageWithLogEntries extends LearningLanguage {
+  readonly logEntries: LogEntry[];
+
+  constructor(props: LearningLanguageWithLogEntriesProps) {
+    super(props);
+    this.logEntries = props.logEntries;
   }
 }
