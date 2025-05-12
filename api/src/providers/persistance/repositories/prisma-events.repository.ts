@@ -202,16 +202,6 @@ export class PrismaEventRepository implements EventRepository {
           diffusionLanguages[0],
         );
       } else if (diffusionLanguages.length > 1) {
-        console.log('diffusionLanguages', diffusionLanguages);
-        console.log(
-          'filters.allowedLanguages.learningLanguages',
-          filters.allowedLanguages.learningLanguages,
-        );
-        console.log(
-          'filters.allowedLanguages.knownLanguages',
-          filters.allowedLanguages.knownLanguages,
-        );
-
         const hasKnownLanguage = diffusionLanguages.some((lang) =>
           filters.allowedLanguages.knownLanguages.includes(lang),
         );
