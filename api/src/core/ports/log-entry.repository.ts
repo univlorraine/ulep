@@ -86,6 +86,7 @@ export interface LogEntryRepository {
     learningLanguageId: string,
     beforeDate: Date,
   ): Promise<LogEntry[]>;
+  findAll(page: number, limit: number): Promise<Collection<LogEntry>>;
   create(command: CreateLogEntryCommand): Promise<LogEntry>;
   update(command: UpdateLogEntryCommand): Promise<LogEntry>;
   delete(id: string): Promise<void>;

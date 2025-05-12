@@ -38,14 +38,23 @@
  *
  */
 
-export * from './create-or-update-log-entry.usecase';
-export * from './export-log-entries.usecase';
-export * from './get-all-entries-for-contact.usecase';
-export * from './get-all-entries-for-user-by-date.usecase';
-export * from './get-all-entries-for-user-grouped-by-date.usecase';
-export * from './get-all-entries.usecase';
-export * from './share-log-entries-for-research.usecase';
-export * from './share-log-entries.usecase';
-export * from './unshare-log-entries-for-research.usecase';
-export * from './unshare-log-entries.usecase';
-export * from './update-custom-log-entry.usecase';
+import { LearningLanguageWithLogEntries } from './learning-language.model';
+import { User } from './user.model';
+
+export type CreateProfileWithLogEntriesProps = {
+  id: string;
+  user: User;
+  learningLanguages: LearningLanguageWithLogEntries[];
+};
+
+export class ProfileWithLogEntries {
+  readonly id: string;
+  readonly user: User;
+  readonly learningLanguages: LearningLanguageWithLogEntries[];
+
+  constructor(props: CreateProfileWithLogEntriesProps) {
+    this.id = props.id;
+    this.user = props.user;
+    this.learningLanguages = props.learningLanguages;
+  }
+}

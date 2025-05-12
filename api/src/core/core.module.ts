@@ -52,14 +52,16 @@ import { FindAllSuggestedLanguageUsecase } from 'src/core/usecases/language/find
 import {
   CreateOrUpdateLogEntryUsecase,
   ExportLogEntriesUsecase,
+  GetAllEntriesForContactUsecase,
   GetAllEntriesForUserByDateUsecase,
   GetAllEntriesForUserGroupedByDatesUsecase,
+  GetAllEntriesUsecase,
   ShareLogEntriesUsecase,
   ShareLogForResearchEntriesUsecase,
   UnshareLogEntriesUsecase,
   UnshareLogForResearchEntriesUsecase,
+  UpdateCustomLogEntryUsecase,
 } from 'src/core/usecases/log-entry';
-import { UpdateCustomLogEntryUsecase } from 'src/core/usecases/log-entry/update-custom-log-entry.usecase';
 import { DeleteObjectiveImageUsecase } from 'src/core/usecases/media/delete-objective-image.usecase';
 import { UploadObjectiveImageUsecase } from 'src/core/usecases/media/upload-objective-image.usecase';
 import { SendMessageNotificationUsecase } from 'src/core/usecases/notifications';
@@ -490,6 +492,8 @@ const usecases: Provider[] = [
   ShareLogForResearchEntriesUsecase,
   UnshareLogForResearchEntriesUsecase,
   ExportLogEntriesUsecase,
+  GetAllEntriesForContactUsecase,
+  GetAllEntriesUsecase,
 ];
 
 const services: Provider[] = [MatchScorer, CronService];

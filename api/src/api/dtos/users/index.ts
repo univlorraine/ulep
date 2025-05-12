@@ -402,27 +402,27 @@ export class AddDeviceRequest {
 
 export class UserResponse {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
   id: string;
 
   @Swagger.ApiProperty({ type: 'string', format: 'email' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
   email: string;
 
   @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
   firstname: string;
 
   @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
   lastname: string;
 
   @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
   gender: string;
 
   @Swagger.ApiProperty({ type: 'number' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
   age: number;
 
   @Swagger.ApiProperty()

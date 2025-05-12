@@ -49,6 +49,7 @@ import {
   Put,
   Query,
   Res,
+  SerializeOptions,
   UseGuards,
 } from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
@@ -67,15 +68,17 @@ import { AuthenticationGuard } from 'src/api/guards';
 import {
   CreateOrUpdateLogEntryUsecase,
   ExportLogEntriesUsecase,
+  GetAllEntriesForContactUsecase,
   GetAllEntriesForUserByDateUsecase,
   GetAllEntriesForUserGroupedByDatesUsecase,
+  GetAllEntriesUsecase,
   ShareLogEntriesUsecase,
   ShareLogForResearchEntriesUsecase,
   UnshareLogEntriesUsecase,
   UnshareLogForResearchEntriesUsecase,
   UpdateCustomLogEntryUsecase,
 } from 'src/core/usecases/log-entry';
-
+import { ProfileWithLogEntriesResponse } from '../dtos/profiles/profiles-with-logentries.response';
 @Controller('log-entries')
 @Swagger.ApiTags('Log Entries')
 export class LogEntryController {
@@ -91,6 +94,8 @@ export class LogEntryController {
     private readonly shareLogForResearchEntriesUsecase: ShareLogForResearchEntriesUsecase,
     private readonly unshareLogForResearchEntriesUsecase: UnshareLogForResearchEntriesUsecase,
     private readonly exportLogEntriesUsecase: ExportLogEntriesUsecase,
+    private readonly getAllEntriesForContact: GetAllEntriesForContactUsecase,
+    private readonly getAllEntries: GetAllEntriesUsecase,
   ) {}
 
   @Get('learning-language/:id/grouped-by-dates')
@@ -249,5 +254,51 @@ export class LogEntryController {
     );
 
     res.send(buffer);
+  }
+
+  @Get('')
+  @UseGuards(AuthenticationGuard)
+  @SerializeOptions({ groups: ['api', 'api-admin'] })
+  @Swagger.ApiOperation({
+    summary: 'Get all Log Entries',
+  })
+  @Swagger.ApiOkResponse({
+    type: () => Collection<ProfileWithLogEntriesResponse>,
+  })
+  async getAllLogEntries(
+    @Query() query: GetLogEntriesRequest,
+    @CurrentUser() user: User,
+  ) {
+    const entries = await this.getAllEntries.execute({
+      page: query.page,
+      limit: query.limit,
+      userId: user.sub,
+      getNoSharedProfiles: query.getNoSharedProfiles ? true : false,
+    });
+    return entries.items.map(
+      ProfileWithLogEntriesResponse.fromDomainWithLogEntries,
+    );
+  }
+
+  @Get('contact/:contactId')
+  @UseGuards(AuthenticationGuard)
+  @SerializeOptions({ groups: ['api', 'api-admin'] })
+  @Swagger.ApiOperation({
+    summary: 'Get all Log Entries for a contact id',
+  })
+  @Swagger.ApiOkResponse({
+    type: () => ProfileWithLogEntriesResponse,
+  })
+  async getAllLogEntriesForContact(
+    @Param('contactId') contactId: string,
+    @Query() query: GetLogEntriesRequest,
+    @CurrentUser() user: User,
+  ) {
+    const entries = await this.getAllEntriesForContact.execute({
+      contactId: contactId,
+      userId: user.sub,
+      getNoSharedProfiles: query.getNoSharedProfiles ? true : false,
+    });
+    return ProfileWithLogEntriesResponse.fromDomainWithLogEntries(entries);
   }
 }

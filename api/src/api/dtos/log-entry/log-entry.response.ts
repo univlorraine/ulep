@@ -99,61 +99,61 @@ export class LogEntryByDateResponse {
   }
 }
 
-class LogEntryMetadataResponse {
+export class LogEntryMetadataResponse {
   @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
   activityId?: string;
 
   @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
   activityTitle?: string;
 
   @Swagger.ApiProperty({ type: 'number' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
   updatedCount?: number;
 
   @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
   conversationId?: string;
 
   @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
   content?: string;
 
   @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
   gameName?: string;
 
   @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
   title?: string;
 
   @Swagger.ApiProperty({ type: 'number' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
   duration?: number;
 
   @Swagger.ApiProperty({ type: 'number' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
   entryNumber?: number;
 
   @Swagger.ApiProperty({ type: 'number' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
   percentage?: number;
 
   @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
   tandemFirstname?: string;
 
   @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
   tandemLastname?: string;
 
   @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
   vocabularyListId?: string;
 
   @Swagger.ApiProperty({ type: 'string' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
   vocabularyListName?: string;
 
   constructor(partial: Partial<LogEntryMetadataResponse>) {
@@ -167,19 +167,19 @@ class LogEntryMetadataResponse {
 
 export class LogEntryResponse {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['api', 'api-admin'] })
   id: string;
 
   @Swagger.ApiProperty({ type: 'string', enum: LogEntryType })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['api', 'api-admin'] })
   type: LogEntryType;
 
   @Swagger.ApiProperty({ type: 'date' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['api', 'api-admin'] })
   createdAt: Date;
 
   @Swagger.ApiProperty({ type: 'object' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['api', 'api-admin'] })
   metadata: LogEntryMetadataResponse;
 
   constructor(partial: Partial<LogEntryResponse>) {

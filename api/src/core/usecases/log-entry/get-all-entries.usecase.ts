@@ -38,14 +38,41 @@
  *
  */
 
-export * from './create-or-update-log-entry.usecase';
-export * from './export-log-entries.usecase';
-export * from './get-all-entries-for-contact.usecase';
-export * from './get-all-entries-for-user-by-date.usecase';
-export * from './get-all-entries-for-user-grouped-by-date.usecase';
-export * from './get-all-entries.usecase';
-export * from './share-log-entries-for-research.usecase';
-export * from './share-log-entries.usecase';
-export * from './unshare-log-entries-for-research.usecase';
-export * from './unshare-log-entries.usecase';
-export * from './update-custom-log-entry.usecase';
+import { KeycloakClient } from '@app/keycloak';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  ProfileRepository,
+  PROFILE_REPOSITORY,
+} from 'src/core/ports/profile.repository';
+
+export type GetAllEntriesCommand = {
+  page: number;
+  limit: number;
+  userId: string;
+  getNoSharedProfiles: boolean;
+};
+
+@Injectable()
+export class GetAllEntriesUsecase {
+  constructor(
+    @Inject(PROFILE_REPOSITORY)
+    private readonly profileRepository: ProfileRepository,
+    private readonly keycloakClient: KeycloakClient,
+  ) {}
+
+  async execute(command: GetAllEntriesCommand) {
+    const user = await this.keycloakClient.getUserById(command.userId);
+    const isApiUser = await this.keycloakClient.isApiUser(user);
+    const isApiAdmin = await this.keycloakClient.isApiAdmin(user);
+    if (!isApiUser) {
+      throw new UnauthorizedException();
+    }
+
+    const profiles = await this.profileRepository.findAllWithLogEntries(
+      command.page,
+      command.limit,
+      !isApiAdmin ? false : command.getNoSharedProfiles,
+    );
+    return profiles;
+  }
+}
