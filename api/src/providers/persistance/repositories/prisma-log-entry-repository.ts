@@ -216,6 +216,25 @@ export class PrismaLogEntryRepository implements LogEntryRepository {
       .filter((entry) => entry !== undefined);
   }
 
+  async findAll(page: number, limit: number): Promise<Collection<LogEntry>> {
+    const offset = (page - 1) * limit;
+
+    const logEntries = await this.prisma.logEntry.findMany({
+      orderBy: { created_at: 'desc' },
+      skip: offset,
+      take: limit,
+      ...LogEntryRelations,
+    });
+
+    const count = await this.prisma.logEntry.count();
+    return new Collection({
+      items: logEntries
+        .map(logEntryMapper)
+        .filter((entry) => entry !== undefined),
+      totalItems: count,
+    });
+  }
+
   async create(command: CreateLogEntryCommand): Promise<LogEntry> {
     const logEntry = await this.prisma.logEntry.create({
       data: {

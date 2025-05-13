@@ -83,7 +83,7 @@ export const http = async (method: string, path: string, init: Omit<RequestInit,
     return response;
 };
 
-const redirectUri = `${window.location.origin}/#/auth-callback`;
+const redirectUri = `${window.location.origin}/auth-callback`;
 
 export const ssoLogin = () => {
     window.location.href = `${window.REACT_APP_API_URL}/authentication/flow?redirectUri=${encodeURIComponent(

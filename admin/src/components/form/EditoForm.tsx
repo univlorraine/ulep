@@ -38,13 +38,14 @@
  *
  */
 
-import { Box, Typography } from '@mui/material';
+import { Box, MenuItem, OutlinedInput, Select, Typography } from '@mui/material';
 import { RichTextInput } from 'ra-input-rich-text';
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Loading, TabbedForm, useGetIdentity, useTranslate } from 'react-admin';
+import { Button, Form, Loading, TabbedForm, useGetIdentity, useNotify, useTranslate } from 'react-admin';
 import { Edito, EditoFormPayload, EditoMandatoryTranslation, EditoTranslation } from '../../entities/Edito';
 import customDataProvider from '../../providers/customDataProvider';
 import ImageUploader from '../ImageUploader';
+import useGetLanguages from './useGetLanguages';
 
 interface EditoFormProps {
     handleSubmit: (payload: EditoFormPayload) => void;
@@ -55,12 +56,16 @@ const EditoForm: React.FC<EditoFormProps> = ({ handleSubmit, record }) => {
     const dataProvider = customDataProvider;
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
     const translate = useTranslate();
-
+    const notify = useNotify();
     const [mandatoryLanguages, setMandatoryLanguages] = useState<string[]>([]);
 
     const [image, setImage] = useState<File | undefined>(undefined);
+    const [video, setVideo] = useState<string>(record.video ?? '');
     const [content, setContent] = useState<string>(record.content ?? '');
     const [translations, setTranslations] = useState<EditoTranslation[]>(record.translations ?? []);
+    const [newAvailableLanguages, setNewAvailableLanguages] = useState<string[]>([]);
+    const [newTranslationLanguage, setNewTranslationLanguage] = useState<string>('');
+    const { primaryLanguages } = useGetLanguages();
 
     const [isDisabled, setIsDisabled] = useState<boolean>(true);
 
@@ -99,6 +104,12 @@ const EditoForm: React.FC<EditoFormProps> = ({ handleSubmit, record }) => {
         getMandatoryLanguages();
     }, []);
 
+    const isValidUrl = (url: string | null): boolean => {
+        const htmlRegex = /^$|^<([a-z][a-z0-9]*)[^>]*>(?:[^<]*|<(?!\/\1>)[\s\S])*<\/\1>$/i;
+
+        return !url || htmlRegex.test(url) || !url.length;
+    };
+
     useEffect(() => {
         let mandatoryLanguageIsCompleted = true;
         if (mandatoryLanguages.includes(record.languageCode) && content.length < 50) {
@@ -113,8 +124,21 @@ const EditoForm: React.FC<EditoFormProps> = ({ handleSubmit, record }) => {
             }
         });
 
-        setIsDisabled(!mandatoryLanguageIsCompleted || !mandatoryTranslationsAreCompleted);
+        const videoIsInvalid = [...translations, { video }].some((item) => !isValidUrl(item.video));
+        if (videoIsInvalid) {
+            notify(translate('editos.form.invalidVideoUrl'));
+        }
+        setIsDisabled(!mandatoryLanguageIsCompleted || !mandatoryTranslationsAreCompleted || videoIsInvalid);
     }, [translations, content, mandatoryLanguages]);
+
+    useEffect(() => {
+        const availableLanguages = primaryLanguages.filter(
+            (language) =>
+                !translations.some((translation) => translation.languageCode === language) &&
+                language !== record.languageCode
+        );
+        setNewAvailableLanguages(availableLanguages);
+    }, [translations]);
 
     const handleOnSubmit = () => {
         const payload: EditoFormPayload = {
@@ -123,6 +147,7 @@ const EditoForm: React.FC<EditoFormProps> = ({ handleSubmit, record }) => {
             languageCode: record.languageCode,
             image,
             translations,
+            video,
         };
 
         handleSubmit(payload);
@@ -143,6 +168,44 @@ const EditoForm: React.FC<EditoFormProps> = ({ handleSubmit, record }) => {
                             <ImageUploader onImageSelect={setImage} />
                         </Box>
 
+                        {newAvailableLanguages && (
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    gap: 1,
+                                    marginTop: '20px',
+                                    marginBottom: '20px',
+                                    marginLeft: 'auto',
+                                }}
+                            >
+                                <Select
+                                    onChange={(e: any) => setNewTranslationLanguage(e.target.value as string)}
+                                    sx={{ width: '200px' }}
+                                    value={newTranslationLanguage}
+                                >
+                                    {newAvailableLanguages.map((language) => (
+                                        <MenuItem key={language} value={language}>
+                                            {language}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                                <Button
+                                    disabled={!newTranslationLanguage}
+                                    label={translate('events.form.add_translation')}
+                                    onClick={() => {
+                                        if (newTranslationLanguage) {
+                                            setTranslations([
+                                                ...translations,
+                                                { languageCode: newTranslationLanguage, video: '', content: '' },
+                                            ]);
+                                            setNewTranslationLanguage('');
+                                        }
+                                    }}
+                                    variant="contained"
+                                />
+                            </Box>
+                        )}
+
                         <Typography sx={{ marginTop: '30px', fontStyle: 'italic', fontSize: '0.8rem' }}>
                             {translate('editos.form.mandatoryLanguages')}
                         </Typography>
@@ -153,6 +216,14 @@ const EditoForm: React.FC<EditoFormProps> = ({ handleSubmit, record }) => {
                                 sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}
                             >
                                 <Box sx={{ width: '100%', '& .RaLabeled-label': { display: 'none' } }}>
+                                    <Typography variant="subtitle1">{translate('editos.form.video')}</Typography>
+                                    <OutlinedInput
+                                        defaultValue={video}
+                                        onChange={(e: any) => {
+                                            setVideo(e.target.value);
+                                        }}
+                                        fullWidth
+                                    />
                                     <RichTextInput
                                         defaultValue={content}
                                         onChange={(value) => setContent(value)}
@@ -162,23 +233,28 @@ const EditoForm: React.FC<EditoFormProps> = ({ handleSubmit, record }) => {
                                 </Box>
                             </TabbedForm.Tab>
 
-                            {record.translations?.map((translation, index) => (
+                            {translations?.map((translation, index) => (
                                 <TabbedForm.Tab
                                     key={translation.languageCode}
                                     label={`${translation.languageCode} ${mandatoryLanguages.includes(translation.languageCode) ? ' *' : ''}`}
                                     sx={{ display: 'flex', flexDirection: 'column', gap: '30px' }}
                                 >
                                     <Box sx={{ width: '100%', '& .RaLabeled-label': { display: 'none' } }}>
+                                        <Typography variant="subtitle1">{translate('editos.form.video')}</Typography>
+                                        <OutlinedInput
+                                            defaultValue={translation.video}
+                                            onChange={(e: any) => {
+                                                const newTranslations = [...translations];
+                                                newTranslations[index].video = e.target.value;
+                                                setTranslations(newTranslations);
+                                            }}
+                                            fullWidth
+                                        />
                                         <RichTextInput
                                             defaultValue={translation.content}
                                             onChange={(e: any) => {
                                                 const newTranslations = [...translations];
-                                                const newTranslation = {
-                                                    languageCode: translation.languageCode,
-                                                    content: e,
-                                                };
-                                                newTranslations[index] = newTranslation;
-
+                                                newTranslations[index].content = e;
                                                 setTranslations(newTranslations);
                                             }}
                                             source=""

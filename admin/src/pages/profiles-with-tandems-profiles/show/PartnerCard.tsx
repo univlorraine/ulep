@@ -142,7 +142,7 @@ const ComponentHeader = ({
 type TandemCardProps = {
     partnerType?: PartnerType;
     partnerLearningLanguage: LearningLanguage | undefined;
-    userProfile: ProfileWithTandemsProfiles;
+    userProfile: ProfileWithTandemsProfiles | undefined;
     userLearningLanguage: LearningLanguageWithTandemWithPartnerProfile;
     compatibilityScores?: MatchScore | undefined;
     compatibilityScoreTotal: number | undefined;
@@ -235,7 +235,7 @@ const TandemCard = ({
                             <ChipsElement
                                 isOk={
                                     userLearningLanguage.sameGender
-                                        ? partnerLearningLanguage.profile.user.gender === userProfile.user.gender
+                                        ? partnerLearningLanguage.profile.user.gender === userProfile?.user?.gender
                                         : true
                                 }
                             />
@@ -250,7 +250,7 @@ const TandemCard = ({
                                 isOk={
                                     userLearningLanguage.sameAge
                                         ? isAgeCriterionMet(
-                                              userProfile.user.age,
+                                              userProfile?.user?.age,
                                               partnerLearningLanguage.profile.user.age
                                           )
                                         : true

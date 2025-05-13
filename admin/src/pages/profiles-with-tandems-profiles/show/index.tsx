@@ -51,11 +51,11 @@ import './show.css';
 
 const TabsComponent = () => {
     const translate = useTranslate();
-    const record: ProfileWithTandemsProfiles = useRecordContext();
+    const record: ProfileWithTandemsProfiles | undefined = useRecordContext();
 
     const { state: learningLanguageCode } = useLocation();
     const [value, setValue] = React.useState(
-        learningLanguageCode?.learningLanguageCode || record.learningLanguages[0].code
+        learningLanguageCode?.learningLanguageCode || record?.learningLanguages[0].code
     );
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);
@@ -65,7 +65,7 @@ const TabsComponent = () => {
         <TabContext value={value}>
             <Box sx={{ width: '100%' }}>
                 <TabList onChange={handleChange}>
-                    {record.learningLanguages.map((learningLanguage) => {
+                    {record?.learningLanguages.map((learningLanguage) => {
                         const label = learningLanguage.tandem
                             ? `${learningLanguage.name} (${translate(
                                   `learning_languages.status.${learningLanguage.tandem.status}`
@@ -76,7 +76,7 @@ const TabsComponent = () => {
                     })}
                 </TabList>
             </Box>
-            {record.learningLanguages.map((learningLanguage) => (
+            {record?.learningLanguages.map((learningLanguage) => (
                 <LearningLanguageTabContent key={learningLanguage.code} learningLanguage={learningLanguage} />
             ))}
         </TabContext>

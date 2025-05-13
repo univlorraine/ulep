@@ -54,10 +54,12 @@ const EditEvent = () => {
 
         formData.append('content', payload.content);
         formData.append('languageCode', payload.languageCode);
+        formData.append('video', payload.video);
 
         payload.translations.forEach((translation, index) => {
             formData.append(`translations[${index}][content]`, translation.content);
             formData.append(`translations[${index}][languageCode]`, translation.languageCode);
+            formData.append(`translations[${index}][video]`, translation.video);
         });
 
         if (payload.image) formData.append('file', payload.image);
@@ -67,14 +69,10 @@ const EditEvent = () => {
                 'editos',
                 { id: payload.id, data: formData },
                 {
-                    onSettled: (_, error: any) => {
-                        if (!error) {
-                            return redirect('/editos');
-                        }
-
-                        return notify('editos.update.error', {
-                            type: 'error',
-                        });
+                    onSuccess: () => redirect('/editos'),
+                    onError: (error) => {
+                        console.error(error);
+                        notify('editos.update.error');
                     },
                 }
             );

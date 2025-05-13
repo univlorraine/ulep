@@ -41,6 +41,7 @@
 import { Collection, ModeQuery, PrismaService } from '@app/common';
 import { Injectable } from '@nestjs/common';
 import { Profile, WithoutTandem } from 'src/core/models';
+import { ProfileWithLogEntries } from 'src/core/models/profileWithLogEntries.model';
 import { ProfileWithTandemsProfiles } from 'src/core/models/profileWithTandemsProfiles.model';
 import {
   ProfileQueryOrderBy,
@@ -54,6 +55,10 @@ import {
   ProfilesRelationsWithTandemProfile,
   profileWithTandemsProfilesMapper,
 } from '../mappers';
+import {
+  ProfilesRelationsWithLogEntries,
+  profileWithLogEntriesMapper,
+} from '../mappers/profileWithLogEntries.mapper';
 
 @Injectable()
 export class PrismaProfileRepository implements ProfileRepository {
@@ -166,6 +171,7 @@ export class PrismaProfileRepository implements ProfileRepository {
             lastname: where.user?.lastname,
             role: where.user?.role,
             status: where.user?.status,
+            division: where.user?.division,
           },
           ...(where.masteredLanguageCode && {
             MasteredLanguages: {
@@ -222,6 +228,54 @@ export class PrismaProfileRepository implements ProfileRepository {
       items: profiles.map(profileMapper),
       totalItems: count,
     };
+  }
+
+  async findAllWithLogEntries(
+    offset?: number,
+    limit?: number,
+    forceGettingNoSharedProfiles: boolean = false,
+  ): Promise<Collection<ProfileWithLogEntries>> {
+    const profiles = await this.prisma.profiles.findMany({
+      skip: offset,
+      take: limit,
+      include: ProfilesRelationsWithLogEntries,
+      where: {
+        LearningLanguages: {
+          some: {
+            shared_logs_date: !forceGettingNoSharedProfiles
+              ? { not: null }
+              : undefined,
+          },
+        },
+      },
+    });
+
+    const count = await this.prisma.profiles.count({});
+    return {
+      items: profiles.map(profileWithLogEntriesMapper),
+      totalItems: count,
+    };
+  }
+
+  async findByContactIdWithLogEntries(
+    contactId: string,
+    forceGettingNoSharedProfiles: boolean = false,
+  ): Promise<ProfileWithLogEntries> {
+    const profile = await this.prisma.profiles.findFirst({
+      where: {
+        User: { contact_id: contactId },
+        LearningLanguages: {
+          some: {
+            shared_logs_date: !forceGettingNoSharedProfiles
+              ? { not: null }
+              : undefined,
+          },
+        },
+      },
+      include: ProfilesRelationsWithLogEntries,
+    });
+
+    return profileWithLogEntriesMapper(profile);
   }
 
   async findAllWithTandemsProfiles(

@@ -40,6 +40,7 @@
 
 import { Collection, SortOrder, StringFilter } from '@app/common';
 import { LearningType, Profile, TandemStatusFilter } from '../models';
+import { ProfileWithLogEntries } from '../models/profileWithLogEntries.model';
 import { ProfileWithTandemsProfiles } from '../models/profileWithTandemsProfiles.model';
 
 export const PROFILE_REPOSITORY = 'profile.repository';
@@ -70,6 +71,7 @@ export interface ProfileQueryWhere {
     role?: StringFilter;
     university?: StringFilter;
     status?: StringFilter;
+    division?: StringFilter;
   };
   masteredLanguageCode?: string;
   nativeLanguageCode?: string;
@@ -124,6 +126,17 @@ export interface ProfileRepository {
     limit?: number,
     where?: ProfileWithTandemsProfilesQueryWhere,
   ) => Promise<Collection<ProfileWithTandemsProfiles>>;
+
+  findAllWithLogEntries: (
+    offset?: number,
+    limit?: number,
+    forceGettingNoSharedProfiles?: boolean,
+  ) => Promise<Collection<ProfileWithLogEntries>>;
+
+  findByContactIdWithLogEntries: (
+    contactId: string,
+    forceGettingNoSharedProfiles?: boolean,
+  ) => Promise<ProfileWithLogEntries>;
 
   delete: (profile: Profile) => Promise<void>;
 }

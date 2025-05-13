@@ -43,11 +43,13 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import {
   LearningLanguage,
+  LearningLanguageWithLogEntries,
   LearningLanguageWithTandem,
   LearningLanguageWithTandemWithPartnerLearningLanguage,
   LearningType,
 } from 'src/core/models';
 import { CampusResponse } from '../campus';
+import { LogEntryResponse } from '../log-entry';
 import { MediaObjectResponse } from '../medias';
 import { CustomLearningGoalResponse } from '../objective';
 import { ProfileResponse } from '../profiles';
@@ -63,76 +65,76 @@ interface LearningLanguageResponseProps {
 }
 export class LearningLanguageResponse {
   @ApiProperty({ type: 'string', format: 'uuid' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
   id: string;
 
   @ApiPropertyOptional({ type: 'string', example: 'FR' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
   name?: string;
 
   @ApiPropertyOptional({ type: 'string', example: 'FR' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
   code?: string;
 
   @ApiProperty({ type: 'string', example: 'A1' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
   level: string;
 
   @ApiProperty({ type: () => () => ProfileResponse })
-  @Expose({ groups: ['learning-language:profile'] })
+  @Expose({ groups: ['learning-language:profile', 'api', 'api-admin'] })
   profile: ProfileResponse;
 
   @ApiProperty({ type: 'date' })
   @Optional()
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
   createdAt?: Date;
 
   @ApiProperty({ type: () => () => CampusResponse, nullable: true })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
   campus: CampusResponse;
 
   @ApiProperty({ type: 'boolean' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
   certificateOption: boolean;
 
   @ApiProperty({ type: 'boolean' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
   learningJournal: boolean;
 
   @ApiProperty({ type: 'boolean' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
   consultingInterview: boolean;
 
   @ApiProperty({ type: 'boolean' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
   sharedCertificate: boolean;
 
   @ApiProperty({ type: () => MediaObjectResponse })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
   certificateFile: MediaObjectResponse;
 
   @ApiProperty({ type: 'boolean' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
   specificProgram: boolean;
 
   @ApiProperty({ type: 'boolean' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
   sameGender: boolean;
 
   @ApiProperty({ type: 'boolean' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
   sameAge: boolean;
 
   @ApiProperty({ type: 'boolean' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
   hasPriority: boolean;
 
   @ApiProperty({ type: 'string', example: 'john@example.com' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
   sameTandemEmail?: string;
 
   @ApiProperty({ type: 'string', enum: LearningType })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
   learningType: LearningType;
 
   @ApiProperty({ type: () => LanguageResponse })
@@ -140,11 +142,11 @@ export class LearningLanguageResponse {
   tandemLanguage?: LanguageResponse;
 
   @ApiProperty({ type: () => CustomLearningGoalResponse })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
   customLearningGoals?: CustomLearningGoalResponse[];
 
   @ApiProperty({ type: 'date' })
-  @Expose({ groups: ['read'] })
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
   sharedLogsDate?: Date;
 
   @ApiProperty({ type: 'date' })
@@ -268,6 +270,32 @@ export class LearningLanguageWithTandemsProfilesResponse extends LearningLanguag
         TandemWithPartnerLearningLanguageResponse.fromDomain(
           learningLanguage.tandem,
         ),
+    });
+  }
+}
+
+interface LearningLanguageWithLogEntriesResponseProps {
+  learningLanguage: LearningLanguageWithLogEntries;
+}
+
+export class LearningLanguageWithLogEntriesResponse extends LearningLanguageResponse {
+  @ApiProperty({ type: () => LogEntryResponse })
+  @Expose({ groups: ['read'] })
+  logEntries: LogEntryResponse[];
+
+  constructor(partial: Partial<LearningLanguageWithLogEntriesResponse>) {
+    super(partial);
+    Object.assign(this, partial);
+  }
+
+  static fromDomain({
+    learningLanguage,
+  }: LearningLanguageWithLogEntriesResponseProps): LearningLanguageWithLogEntriesResponse {
+    return new LearningLanguageWithLogEntriesResponse({
+      ...LearningLanguageResponse.fromDomain({ learningLanguage }),
+      logEntries: learningLanguage.logEntries
+        .filter((logEntry) => logEntry !== undefined)
+        .map((logEntry) => LogEntryResponse.from(logEntry)),
     });
   }
 }

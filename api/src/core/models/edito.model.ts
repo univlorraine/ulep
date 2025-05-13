@@ -44,12 +44,14 @@ import { University } from './university.model';
 export interface EditoTranslation {
   languageCode: string;
   content: string;
+  video: string;
 }
 
 export class Edito {
   readonly id: string;
   readonly university: University;
   readonly content: string;
+  readonly video: string;
   readonly languageCode: string;
   readonly translations: EditoTranslation[];
   readonly image?: MediaObject;
@@ -61,6 +63,7 @@ export class Edito {
     this.id = props.id;
     this.university = props.university;
     this.content = props.content;
+    this.video = props.video;
     this.languageCode = props.languageCode;
     this.translations = props.translations;
     this.image = props.image;

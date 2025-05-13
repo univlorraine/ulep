@@ -43,6 +43,8 @@ import { SetMetadata } from '@nestjs/common';
 export enum Role {
   MANAGER = 'manager',
   ADMIN = 'admin',
+  EXTERNAL_API_USER = 'external-api-user',
+  EXTERNAL_API_ADMIN = 'external-api-admin',
 }
 
 export const ROLES_KEY = 'roles';

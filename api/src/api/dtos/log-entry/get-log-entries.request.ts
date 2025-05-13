@@ -38,6 +38,15 @@
  *
  */
 
+import { ApiPropertyOptional } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import { IsInt, IsOptional } from 'class-validator';
 import { PaginationDto } from 'src/api/dtos/pagination';
 
-export class GetLogEntriesRequest extends PaginationDto {}
+export class GetLogEntriesRequest extends PaginationDto {
+  @ApiPropertyOptional({ minimum: 0, default: 0 })
+  @Type(() => Number)
+  @IsInt()
+  @IsOptional()
+  getNoSharedProfiles?: number;
+}

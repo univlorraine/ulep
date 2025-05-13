@@ -68,13 +68,13 @@ const Actions = ({
 
     const {
         data: lastGlobalRoutineExecution,
-        isLoading: isLoadingLastGlobalRoutine,
+        isPending: isLoadingLastGlobalRoutine,
         refetch: refetchGlobalRoutine,
     } = useLastGlobalRoutineExecution(onGlobalRoutineEnded);
 
     const globalRoutineIsCurrentlyRunning = lastGlobalRoutineExecution?.status === RoutineExecutionStatus.ON_GOING;
 
-    const { mutate, isLoading } = useLaunchGlobalRoutine({
+    const { mutate, isPending } = useLaunchGlobalRoutine({
         onSuccess: async () => {
             setConfirmModalIsOpen(false);
             await refetchGlobalRoutine();
@@ -146,7 +146,7 @@ const Actions = ({
                         p: 4,
                     }}
                 >
-                    {isLoading ? (
+                    {isPending ? (
                         <Box
                             sx={{
                                 display: 'flex',

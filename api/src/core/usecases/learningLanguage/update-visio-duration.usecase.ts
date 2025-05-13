@@ -101,8 +101,10 @@ export class UpdateVisioDurationUsecase {
 
     const otherParticipant = otherLogEntries.find(
       (entry) =>
+        entry &&
+        logEntry &&
         entry.roomName === command.roomName &&
-        entry.partnerTandemId != logEntry.partnerTandemId,
+        entry.partnerTandemId !== logEntry.partnerTandemId,
     );
 
     const otherEntryIsNow =

@@ -73,14 +73,14 @@ const FlipcardsContent = ({ profile, selectedListsId, onBackPressed, learningLan
         setIsQuizFinished(true);
         let localNumberRightAnswers = numberRightAnswers;
         if (isRight) {
-            localNumberRightAnswers += 1; // If the answer is right, increment the number of right answers
+            localNumberRightAnswers += 1;
         }
-        const percentage = Math.round((localNumberRightAnswers / vocabularies.length) * 100);
         await createLogEntry.execute({
             type: LogEntryType.PLAYED_GAME,
             learningLanguageId,
             metadata: {
-                percentage,
+                totalCardPlayed: vocabularies.length,
+                successCardPlayed: localNumberRightAnswers,
                 gameName: GameName.FLIPCARDS,
             },
         });

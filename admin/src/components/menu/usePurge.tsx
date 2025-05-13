@@ -38,8 +38,8 @@
  *
  */
 
+import { useMutation } from '@tanstack/react-query';
 import { useDataProvider, useNotify } from 'react-admin';
-import { useMutation } from 'react-query';
 
 interface UsePurgeParams {
     onSuccess?: () => void;
@@ -50,13 +50,17 @@ const usePurge = (options?: UsePurgeParams) => {
     const dataProvider = useDataProvider();
     const notify = useNotify();
 
-    const { mutate, isLoading, isError } = useMutation(dataProvider.purge, options);
+    const { mutate, isPending, isError } = useMutation({
+        mutationFn: dataProvider.purge,
+        onSuccess: options?.onSuccess,
+        onError: options?.onError,
+    });
 
     if (isError) {
         notify('purge.error');
     }
 
-    return { mutate, isLoading, isError };
+    return { mutate, isPending, isError };
 };
 
 export default usePurge;

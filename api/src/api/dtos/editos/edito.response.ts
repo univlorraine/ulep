@@ -42,7 +42,7 @@ import * as Swagger from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { IsArray } from 'class-validator';
 import { Edito } from 'src/core/models/edito.model';
-import { EventTranslation } from 'src/core/models/event.model';
+import { EditoTranslation } from 'src/core/models/edito.model';
 import { UniversityResponse } from '../universities';
 
 export class EditoTranslationResponse {
@@ -54,14 +54,19 @@ export class EditoTranslationResponse {
   @Expose({ groups: ['read'] })
   content: string;
 
+  @Swagger.ApiProperty({ type: 'string' })
+  @Expose({ groups: ['read'] })
+  video: string;
+
   constructor(partial: Partial<EditoTranslationResponse>) {
     Object.assign(this, partial);
   }
 
-  static fromDomain(instance: EventTranslation) {
+  static fromDomain(instance: EditoTranslation) {
     return new EditoTranslationResponse({
       languageCode: instance.languageCode,
       content: instance.content,
+      video: instance.video,
     });
   }
 }
@@ -74,6 +79,10 @@ export class EditoResponse {
   @Swagger.ApiProperty({ type: 'string' })
   @Expose({ groups: ['read'] })
   content: string;
+
+  @Swagger.ApiProperty({ type: 'string' })
+  @Expose({ groups: ['read'] })
+  video: string;
 
   @Swagger.ApiProperty({ type: [EditoTranslationResponse] })
   @Expose({ groups: ['read'] })
@@ -111,6 +120,7 @@ export class EditoResponse {
     return new EditoResponse({
       id: instance.id,
       content: contentTranslated?.content || instance.content,
+      video: contentTranslated?.video || instance.video,
       university: UniversityResponse.fromUniversity(instance.university),
       imageURL: instance.imageURL,
       languageCode: instance.languageCode,

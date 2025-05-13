@@ -81,17 +81,17 @@ type LearningLanguageTabContentProps = {
 };
 
 const LearningLanguageTabContent = ({ learningLanguage }: LearningLanguageTabContentProps) => {
-    const record: ProfileWithTandemsProfiles = useRecordContext();
+    const record: ProfileWithTandemsProfiles | undefined = useRecordContext();
 
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
 
     const isJokerLearningLanguage = isJoker(learningLanguage);
-    const userIsFromCentralUniversity = record.user ? isCentralUniversity(record.user.university) : undefined;
+    const userIsFromCentralUniversity = record?.user ? isCentralUniversity(record.user.university) : undefined;
     const hasActiveTandem =
         learningLanguage.tandem?.status === TandemStatus.ACTIVE ||
         learningLanguage.tandem?.status === TandemStatus.PAUSED;
     const hasTandemWaitingForValidation = learningLanguage.tandem?.status === TandemStatus.VALIDATED_BY_ONE_UNIVERSITY;
-    const isAutomaticPairingMode = record.user.university.pairingMode === PairingMode.AUTOMATIC;
+    const isAutomaticPairingMode = record?.user?.university?.pairingMode === PairingMode.AUTOMATIC;
 
     const { selectedUniversityIds } = useLearningLanguagesStore();
 

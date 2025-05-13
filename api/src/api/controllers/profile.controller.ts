@@ -180,6 +180,7 @@ export class ProfileController {
       order,
       page,
       limit,
+      division,
     } = query;
 
     const orderBy = field && order && { field, order };
@@ -203,6 +204,7 @@ export class ProfileController {
           role: { equals: role },
           university: { equals: university },
           status: { equals: status },
+          division: { contains: division },
         },
         masteredLanguageCode: masteredLanguageCode,
         nativeLanguageCode: nativeLanguageCode,

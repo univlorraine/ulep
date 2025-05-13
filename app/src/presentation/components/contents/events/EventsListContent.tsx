@@ -87,7 +87,7 @@ export const EventsListContent: React.FC<EventsListContentProps> = ({ profile, o
     };
 
     return (
-        <div className="subcontent-container content-wrapper" style={{ paddingTop: 0 }} ref={contentRef}>
+        <div className="content-wrapper" style={{ paddingTop: 0 }} ref={contentRef}>
             <HeaderSubContent title={t('events.list.title')} onBackPressed={onBackPressed} />
             <SearchAndFilter
                 allFilters={languageFilter.map((lang) => ({

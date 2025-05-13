@@ -54,9 +54,9 @@ import {
     useRefresh,
     useUnselectAll,
     useGetIdentity,
-    ResourceContextProvider,
     List,
     useGetList,
+    ResourceContext,
 } from 'react-admin';
 import { Profile } from '../../../entities/Profile';
 import { UserRole } from '../../../entities/User';
@@ -126,7 +126,7 @@ const SearchProfile = ({ eventId, setIsModalOpen }: SearchProfileProps) => {
         />,
         <TextInput key="firstname" label={translate('global.firstname')} source="user.firstname" alwaysOn />,
         <TextInput key="lastname" label={translate('global.lastname')} source="user.lastname" alwaysOn />,
-        <TextInput key="email" label={translate('global.email')} source="user.email" alwaysOn />,
+        <TextInput key="email" label={translate('global.departement')} source="user.division" alwaysOn />,
     ];
 
     if (identity?.isCentralUniversity) {
@@ -188,7 +188,7 @@ const SearchProfile = ({ eventId, setIsModalOpen }: SearchProfileProps) => {
                 </Button>
             </Box>
 
-            <ResourceContextProvider value="profiles">
+            <ResourceContext.Provider value="profiles">
                 <List
                     exporter={false}
                     filter={{
@@ -212,9 +212,9 @@ const SearchProfile = ({ eventId, setIsModalOpen }: SearchProfileProps) => {
                             source="user.role"
                         />
                         <TextField label="events.subscriptions.list.firstname" source="user.firstname" />
-                        <TextField label="events.subscriptions.list.firstname" source="user.lastname" />
-                        <TextField label="events.subscriptions.list.firstname" source="user.email" />
-                        <TextField label="events.subscriptions.list.firstname" source="user.university.name" />
+                        <TextField label="events.subscriptions.list.lastname" source="user.lastname" />
+                        <TextField label="events.subscriptions.list.departement" source="user.division" />
+                        <TextField label="events.subscriptions.list.university" source="user.university.name" />
                         <FunctionField
                             label="events.subscriptions.list.learningLanguage"
                             render={(record: Profile) => (
@@ -230,7 +230,7 @@ const SearchProfile = ({ eventId, setIsModalOpen }: SearchProfileProps) => {
                         />
                     </Datagrid>
                 </List>
-            </ResourceContextProvider>
+            </ResourceContext.Provider>
         </Box>
     );
 };

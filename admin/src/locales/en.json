@@ -223,7 +223,9 @@
     "editos": {
         "form": {
             "mandatoryLanguages": "Languages with a * are mandatory",
-            "update": "Update"
+            "update": "Update",
+            "video": "Video URL",
+            "invalidVideoUrl": "The video URL is invalid"
         },
         "label": "Editos",
         "title": "Editos",
@@ -319,6 +321,7 @@
                 "firstname": "Firstname",
                 "lastname": "Lastname",
                 "university": "University",
+                "departement": "Department",
                 "email": "Email",
                 "cta": "Actions",
                 "learningLanguage": "Learning languages"
@@ -370,6 +373,7 @@
         "university": "University",
         "tandem": "Tandem",
         "both": "Both",
+        "departement": "Department",
         "deleted_user": "Deleted user",
         "sso_login": "Authenticate",
         "forgot_password": "Forgot password",
@@ -532,7 +536,7 @@
             },
             "start_publication_date": "Start publication date",
             "end_publication_date": "End publication date",
-            "credit_image": "Author of the image",
+            "credit_image": "Image credit",
             "concerned_universities": {
                 "all": "All universities",
                 "label": "Universities concerned",
@@ -676,6 +680,7 @@
         "category": "Report category",
         "CLOSED": "Closed",
         "TREATED": "Treated",
+        "CANCELLED": "Cancelled",
         "comment": "Administrator's comments",
         "content": "Content",
         "created_at": "Submission date",

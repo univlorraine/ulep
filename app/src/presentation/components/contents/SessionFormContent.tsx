@@ -38,6 +38,7 @@
  *
  */
 
+import { useIonToast } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
 import { useConfig } from '../../../context/ConfigurationContext';
 import Profile from '../../../domain/entities/Profile';
@@ -71,6 +72,7 @@ const SessionFormContent: React.FC<SessionFormContentProps> = ({
     onShowSessionPressed,
 }) => {
     const { t } = useTranslation();
+    const [showToast] = useIonToast();
     const { createSession, updateSession } = useConfig();
 
     const handleSubmit = async ({ id, date, comment }: SessionFormData) => {
@@ -82,7 +84,11 @@ const SessionFormContent: React.FC<SessionFormContentProps> = ({
             });
 
             if (session instanceof Error) {
-                return;
+                return showToast({
+                    message: session.message,
+                    duration: 3000,
+                    position: 'bottom',
+                });
             }
 
             onShowSessionPressed(session, tandem);
@@ -94,7 +100,11 @@ const SessionFormContent: React.FC<SessionFormContentProps> = ({
             });
 
             if (session instanceof Error) {
-                return;
+                return showToast({
+                    message: session.message,
+                    duration: 3000,
+                    position: 'bottom',
+                });
             }
 
             onShowSessionPressed(session, tandem, true);

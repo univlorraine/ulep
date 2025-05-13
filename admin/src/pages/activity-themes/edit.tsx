@@ -62,12 +62,12 @@ const EditActivityTheme = () => {
                 'activities/themes',
                 { id, data: payload },
                 {
-                    onSettled: (_, error: unknown) => {
-                        if (!error) {
-                            return redirect('/activities/categories');
-                        }
-
-                        return notify('activities_categories.update.error');
+                    onSuccess: () => {
+                        redirect('/activities/categories');
+                    },
+                    onError: (error) => {
+                        console.error(error);
+                        notify('activities_categories.update.error');
                     },
                 }
             );

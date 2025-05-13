@@ -48,8 +48,8 @@ const ObjectivesList = () => {
     return (
         <>
             <PageTitle>{translate('objectives.title')}</PageTitle>
-            <List bulkActionButtons={false} exporter={false} pagination={false}>
-                <Datagrid rowClick="show">
+            <List exporter={false} pagination={false}>
+                <Datagrid bulkActionButtons={false} rowClick="show">
                     <TextField label={translate('objectives.name')} sortable={false} source="name" />
                 </Datagrid>
             </List>

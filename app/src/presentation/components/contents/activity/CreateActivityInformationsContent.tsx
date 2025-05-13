@@ -188,13 +188,14 @@ export const CreateActivityInformationsContent = ({
         setHideRessourceActivity(true);
         setIsRessourceUrl(false);
     };
+    const showFileRessource = ressourceFile || (activityToUpdate?.ressourceFileUrl && !hideRessourceActivity);
 
     const handleSubmit = () => {
         if (!allRequiredFieldsAreFilled()) {
             return;
         }
 
-        if (ressourceUrl && !isUrlValid(ressourceUrl)) {
+        if (ressourceUrl && !showFileRessource && !isUrlValid(ressourceUrl)) {
             return showToast({
                 message: t('errors.invalidUrl'),
                 duration: 3000,
@@ -214,7 +215,6 @@ export const CreateActivityInformationsContent = ({
         });
     };
 
-    const showFileRessource = ressourceFile || (activityToUpdate?.ressourceFileUrl && !hideRessourceActivity);
     const imageToDisplay = imageRef.current ?? activityToUpdate?.imageUrl;
 
     return (
@@ -327,25 +327,23 @@ export const CreateActivityInformationsContent = ({
                     {t('activity.create.ressource')} <RequiredField />
                 </span>
             </div>
-            {!isRessourceUrl &&
-                (!activityToUpdate?.ressourceFileUrl || !activityToUpdate?.ressourceUrl || hideRessourceActivity) &&
-                !ressourceFile && (
-                    <>
-                        <div className={`${styles['button-container']}`}>
-                            <IonButton
-                                fill="clear"
-                                className="tertiary-button no-padding"
-                                onClick={() => setIsRessourceUrl(true)}
-                            >
-                                {t('activity.create.ressource_url')}
-                            </IonButton>
-                            <IonButton fill="clear" className="tertiary-button no-padding" onClick={onRessourcePressed}>
-                                {t('activity.create.ressource_file')}
-                            </IonButton>
-                        </div>
-                        <span className={styles.infos}>{t('activity.create.ressource_infos')}</span>
-                    </>
-                )}
+            {!isRessourceUrl && !showFileRessource && (
+                <>
+                    <div className={`${styles['button-container']}`}>
+                        <IonButton
+                            fill="clear"
+                            className="tertiary-button no-padding"
+                            onClick={() => setIsRessourceUrl(true)}
+                        >
+                            {t('activity.create.ressource_url')}
+                        </IonButton>
+                        <IonButton fill="clear" className="tertiary-button no-padding" onClick={onRessourcePressed}>
+                            {t('activity.create.ressource_file')}
+                        </IonButton>
+                    </div>
+                    <span className={styles.infos}>{t('activity.create.ressource_infos')}</span>
+                </>
+            )}
             {isRessourceUrl && !showFileRessource && (
                 <div className={styles.imageContainer}>
                     <TextInput
@@ -391,7 +389,7 @@ export const CreateActivityInformationsContent = ({
                     onClick={handleSubmit}
                     disabled={!allRequiredFieldsAreFilled()}
                 >
-                    {t('activity.create.validate_button')}
+                    {t('activity.create.next_screen_button')}
                 </IonButton>
             </div>
         </div>

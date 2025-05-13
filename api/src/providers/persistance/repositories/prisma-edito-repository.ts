@@ -68,6 +68,18 @@ export class PrismaEditoRepository implements EditoRepository {
             },
           },
         },
+        VideoTextContent: {
+          create: {
+            text: '',
+            LanguageCode: { connect: { code: command.defaultLanguageCode } },
+            Translations: {
+              create: command.translationsLanguageCodes.map((languageCode) => ({
+                text: '',
+                LanguageCode: { connect: { code: languageCode } },
+              })),
+            },
+          },
+        },
         University: {
           connect: {
             id: command.universityId,
@@ -122,6 +134,19 @@ export class PrismaEditoRepository implements EditoRepository {
               deleteMany: {},
               create: command.translations?.map((translation) => ({
                 text: translation.content,
+                LanguageCode: { connect: { code: translation.languageCode } },
+              })),
+            },
+          },
+        },
+        VideoTextContent: {
+          update: {
+            text: command.video,
+            LanguageCode: { connect: { code: command.languageCode } },
+            Translations: {
+              deleteMany: {},
+              create: command.translations?.map((translation) => ({
+                text: translation.video,
                 LanguageCode: { connect: { code: translation.languageCode } },
               })),
             },

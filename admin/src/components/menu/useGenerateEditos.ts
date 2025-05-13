@@ -38,8 +38,8 @@
  *
  */
 
+import { useMutation } from '@tanstack/react-query';
 import { useDataProvider, useNotify } from 'react-admin';
-import { useMutation } from 'react-query';
 
 interface UseGenerateEditosParams {
     onSuccess?: () => void;
@@ -50,13 +50,17 @@ const useGenerateEditos = (options?: UseGenerateEditosParams) => {
     const dataProvider = useDataProvider();
     const notify = useNotify();
 
-    const { mutate, isLoading, isError } = useMutation(dataProvider.generateEditos, options);
+    const { mutate, isPending, isError } = useMutation({
+        mutationFn: dataProvider.generateEditos,
+        onSuccess: options?.onSuccess,
+        onError: options?.onError,
+    });
 
     if (isError) {
         notify('generateEditos.error');
     }
 
-    return { mutate, isLoading, isError };
+    return { mutate, isPending, isError };
 };
 
 export default useGenerateEditos;

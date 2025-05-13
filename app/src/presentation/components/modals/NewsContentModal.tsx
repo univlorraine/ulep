@@ -58,7 +58,7 @@ export interface DisplayNewsContentModal {
 interface NewsContentModalProps {
     isVisible: boolean;
     displayNewsContentModal?: DisplayNewsContentModal;
-    onClose: () => void;
+    onClose: (shouldClose?: boolean) => void;
     onNewsPressed: (news: News) => void;
     profile: Profile;
 }
@@ -71,7 +71,7 @@ const NewsContentModal: React.FC<NewsContentModalProps> = ({
     profile,
 }) => {
     return (
-        <IonModal animated isOpen={isVisible} onDidDismiss={onClose} className={styles.modal}>
+        <IonModal animated isOpen={isVisible} onDidDismiss={() => onClose(true)} className={styles.modal}>
             <div className={styles.content}>
                 {displayNewsContentModal?.type === DisplayNewsContentModalEnum.list && (
                     <NewsListContent profile={profile} onBackPressed={onClose} onNewsPressed={onNewsPressed} />

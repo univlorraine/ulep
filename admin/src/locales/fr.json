@@ -225,7 +225,9 @@
         "title": "Editos",
         "form": {
             "mandatoryLanguages": "Les langues avec un * sont obligatoires",
-            "update": "Mettre à jour"
+            "update": "Mettre à jour",
+            "video": "Url de la video",
+            "invalidVideoUrl": "L'url de la video est invalide"
         },
         "list": {
             "university": "Université",
@@ -319,7 +321,7 @@
                 "firstname": "Prénom",
                 "lastname": "Nom",
                 "university": "Université",
-                "email": "Email",
+                "departement": "Département",
                 "cta": "Actions",
                 "learningLanguage": "Langues d'apprentissage"
             },
@@ -368,6 +370,7 @@
         "university": "Université",
         "tandem": "Tandem",
         "both": "Les deux",
+        "departement": "Département",
         "deleted_user": "Utilisateur supprimé",
         "sso_login": "M'authentifier",
         "forgot_password": "Mot de passe oublié",
@@ -534,7 +537,7 @@
             },
             "start_publication_date": "Date de début de publication",
             "end_publication_date": "Date de fin de publication",
-            "credit_image": "Auteur de l'image",
+            "credit_image": "Crédit de l'image",
             "concerned_universities": {
                 "all": "Toutes les universités",
                 "label": "Universités concernées",
@@ -680,6 +683,7 @@
         "created_at": "Date de soumission",
         "CLOSED": "Fermé",
         "TREATED": "Traité",
+        "CANCELLED": "Annulé",
         "content": "Contenu",
         "IN_PROGRESS": "En cours",
         "label": "Signalements",

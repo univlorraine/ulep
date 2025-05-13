@@ -69,7 +69,6 @@ export class GetAllActivitiesByAdminUsecase {
 
   async execute(command: GetActivitiesCommand) {
     const user = await this.getUserUniversityId(command.userId);
-
     const activities = await this.activityRepository.allWithThemeWithCategory({
       searchTitle: command.searchTitle,
       pagination: command.pagination,
@@ -86,7 +85,7 @@ export class GetAllActivitiesByAdminUsecase {
             ActivityStatus.DRAFT,
           ],
       university: command.university,
-      currentUserUniversityId: user.attributes['universityId'][0],
+      currentUserUniversityId: user.attributes['universityId']?.[0],
     });
 
     return activities;
