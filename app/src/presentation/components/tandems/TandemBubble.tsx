@@ -52,7 +52,7 @@ interface TandemBubbleProps {
 
 const TandemBubble: React.FC<TandemBubbleProps> = ({ language, onTandemPressed, profile }) => {
     return (
-        <button className={styles.container} onClick={onTandemPressed}>
+        <button className={styles.container} onClick={onTandemPressed} role="listitem">
             <div className={styles.profile}>
                 <Avatar user={profile?.user} className={styles.avatar} />
                 <span className={styles.name}>{profile?.user.firstname}</span>
