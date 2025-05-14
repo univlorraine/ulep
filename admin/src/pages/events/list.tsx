@@ -126,7 +126,7 @@ const EventsList = () => {
         />,
     ];
 
-    if (identity?.isCentralUniversity && universitiesData && permissions.checkRole(Role.ADMIN)) {
+    if (identity?.isCentralUniversity && universitiesData && permissions.checkRole(Role.SUPER_ADMIN)) {
         filters.unshift(
             <SelectInput
                 key="groupFilter"
