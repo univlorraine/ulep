@@ -66,7 +66,7 @@ const ChangeLanguageModal: React.FC<ChangeLanguageModalProps> = ({
         <IonModal animated isOpen={isVisible} onDidDismiss={onClose} className={styles.modal}>
             <div className={styles.container}>
                 <div className={styles.filterContainer}>
-                    <h1>{t('news.show.change_language_modal.title')}</h1>
+                    <div className={styles.title}>{t('news.show.change_language_modal.title')}</div>
 
                     {allLanguagesCodes.map((languageCode) => (
                         <IonButton
