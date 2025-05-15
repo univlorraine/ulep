@@ -136,11 +136,11 @@ const Content: React.FC<ShowSessionContentProps> = ({
                         <div className={styles.cancelled_icon}>
                             <img src={CancelledPng} alt="" aria-hidden="true" />
                         </div>
-                        <h3 className={styles.cancelled_title}>{t('session.cancel_title')}</h3>
+                        <h2 className={styles.cancelled_title}>{t('session.cancel_title')}</h2>
                     </div>
                 ) : (
                     <div className={styles.block}>
-                        <h3 className={styles.block_title}>{t('session.date_and_hour')}</h3>
+                        <h2 className={styles.block_title}>{t('session.date_and_hour')}</h2>
                         <div className={styles.line}>
                             <div className={styles.icon}>📅</div>
                             <p className={styles.line_content}>
@@ -164,11 +164,11 @@ const Content: React.FC<ShowSessionContentProps> = ({
                 )}
                 {session.comment && (
                     <div className={styles.block}>
-                        <h3 className={styles.block_title}>{t('session.comment')}</h3>
+                        <h2 className={styles.block_title}>{t('session.comment')}</h2>
                         <div className={styles.line}>
                             <div className={styles.icon}>💬</div>
                             <div className={styles.line_content}>
-                                <p className={styles.comment}>{session.comment}</p>
+                                <blockquote className={styles.comment}>{session.comment}</blockquote>
                             </div>
                         </div>
                     </div>
