@@ -40,6 +40,7 @@
 
 import { IonButton, IonIcon, IonSearchbar } from '@ionic/react';
 import { closeOutline, filterOutline } from 'ionicons/icons';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './SearchAndFilter.module.css';
 
@@ -76,6 +77,7 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
     searchI18nKey = 'activity',
 }) => {
     const { t } = useTranslation();
+    const [searchBarFocused, setSearchBarFocused] = useState(false);
     return (
         <div>
             <IonSearchbar
@@ -84,6 +86,9 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                 onIonChange={(e) => setSearchTitle(e.detail.value as string)}
                 aria-label={t(`${searchI18nKey}.list.search`) as string}
                 title={t(`${searchI18nKey}.list.search`) as string}
+                className={`${styles.searchbar} ${searchBarFocused ? styles.focused : ''}`}
+                onIonFocus={() => setSearchBarFocused(true)}
+                onIonBlur={() => setSearchBarFocused(false)}
             />
             <div className={styles['filter-container']}>
                 <div>

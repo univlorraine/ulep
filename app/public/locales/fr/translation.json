@@ -50,6 +50,7 @@
         }
     },
     "events": {
+        "no_events": "Aucun événement trouvé",
         "online": "En ligne",
         "open_maps": "S'y rendre",
         "add_to_calendar": "Ajouter au calendrier",

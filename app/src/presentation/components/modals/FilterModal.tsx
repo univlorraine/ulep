@@ -175,7 +175,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
                                         }}
                                         name={t(`languages_code.${language.code}`)}
                                         aria-label={t(`languages_code.${language.code}`)}
-                                        aria-role="listitem"
+                                        ariaRole="listitem"
                                     />
                                 ))}
                             </div>
@@ -184,13 +184,14 @@ const FilterModal: React.FC<FilterModalProps> = ({
                     {filterToDisplay.includes(FiltersToDisplay.EVENT_TYPE) && (
                         <>
                             <p className={styles.filter}>{t('filter.event_type.title')}</p>
-                            <div className={styles.line}>
+                            <div className={styles.line} aria-role="list">
                                 <Checkbox
                                     name={t('filter.event_type.online')}
                                     onPressed={() => {
                                         addOrRemoveEventType(EventType.ONLINE);
                                     }}
                                     isSelected={selectedEventType.includes(EventType.ONLINE)}
+                                    ariaRole="listitem"
                                 />
                                 <Checkbox
                                     name={t('filter.event_type.presential')}
@@ -198,6 +199,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
                                         addOrRemoveEventType(EventType.PRESENTIAL);
                                     }}
                                     isSelected={selectedEventType.includes(EventType.PRESENTIAL)}
+                                    ariaRole="listitem"
                                 />
                             </div>
                         </>
@@ -215,7 +217,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
                                         }}
                                         name={level}
                                         aria-label={level}
-                                        aria-role="listitem"
+                                        ariaRole="listitem"
                                     />
                                 ))}
                             </div>

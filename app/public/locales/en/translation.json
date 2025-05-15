@@ -62,6 +62,7 @@
         "is_mine": "My sheets"
     },
     "events": {
+        "no_events": "No events found",
         "online": "Online",
         "open_maps": "Open maps",
         "subscribe": "Subscribe",

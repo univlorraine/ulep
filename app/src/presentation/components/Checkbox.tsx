@@ -47,15 +47,24 @@ interface CheckboxProps {
     textClass?: string;
     ariaLabel?: string;
     className?: string;
+    ariaRole?: string;
 }
 
-const Checkbox: React.FC<CheckboxProps> = ({ isSelected, onPressed, name, textClass, ariaLabel, className }) => {
+const Checkbox: React.FC<CheckboxProps> = ({
+    isSelected,
+    onPressed,
+    name,
+    textClass,
+    ariaLabel,
+    className,
+    ariaRole,
+}) => {
     const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         onPressed && onPressed();
     };
     return (
-        <div className={`${styles.container} ${className}`}>
+        <div className={`${styles.container} ${className}`} aria-role={ariaRole}>
             <button
                 onClick={onPressed}
                 style={{ backgroundColor: !isSelected ? 'white' : 'black' }}
