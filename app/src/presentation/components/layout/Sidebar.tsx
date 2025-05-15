@@ -97,7 +97,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                     color={location.pathname === '/home' ? 'dark' : undefined}
                 >
                     <img
-                        alt=""
+                        alt={t('navigation.sidebar.home') as string}
                         src={HomeSvg}
                         aria-hidden={true}
                         className={`${styles.image} ${location.pathname === '/home' ? styles.imageActive : ''}`}
@@ -112,7 +112,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                     color={location.pathname === '/learning' ? 'dark' : undefined}
                 >
                     <img
-                        alt=""
+                        alt={t('navigation.sidebar.learning') as string}
                         src={LearningSvg}
                         aria-hidden={true}
                         className={`${styles.image} ${location.pathname === '/learning' ? styles.imageActive : ''}`}
@@ -127,7 +127,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                     color={location.pathname === '/conversations' ? 'dark' : undefined}
                 >
                     <img
-                        alt=""
+                        alt={t('navigation.sidebar.conversations') as string}
                         src={ConversationsSvg}
                         aria-hidden={true}
                         className={`${styles.image} ${location.pathname === '/conversations' ? styles.imageActive : ''}`}
@@ -142,7 +142,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                     color={location.pathname === '/profile' ? 'dark' : undefined}
                 >
                     <img
-                        alt=""
+                        alt={t('navigation.sidebar.profile') as string}
                         src={ProfileSvg}
                         aria-hidden={true}
                         className={`${styles.image} ${location.pathname === '/profile' ? styles.imageActive : ''}`}

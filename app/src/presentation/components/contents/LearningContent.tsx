@@ -131,30 +131,32 @@ const LearningContent: React.FC<LearningContentProps> = ({
             <div className={styles.container}>
                 {!deviceAdapter.isNativePlatform() && <div className={styles.separator} />}
                 <div className={styles.learningLanguageContainer}>
-                    {tandems.map((tandem, index) => {
-                        return (
+                    <nav>
+                        {tandems.map((tandem, index) => {
+                            return (
+                                <IonButton
+                                    key={tandem.id}
+                                    fill="clear"
+                                    className={`${styles.learningLanguage} ${
+                                        tandem.id === currentTandem?.id ? styles.selectedLearningLanguage : ''
+                                    }`}
+                                    onClick={() => handleSetCurrentTandem(tandem, index)}
+                                >
+                                    <p>{t(`languages_code.${tandem.learningLanguage.code}`)}</p>
+                                </IonButton>
+                            );
+                        })}
+                        {profile.user.university.maxTandemsPerUser > tandems.length && (
                             <IonButton
-                                key={tandem.id}
                                 fill="clear"
-                                className={`${styles.learningLanguage} ${
-                                    tandem.id === currentTandem?.id ? styles.selectedLearningLanguage : ''
-                                }`}
-                                onClick={() => handleSetCurrentTandem(tandem, index)}
+                                className={styles.addLearningLanguageButton}
+                                onClick={openAddLearningLanguagePressed}
+                                aria-label={t('learning.add_language') as string}
                             >
-                                <p>{t(`languages_code.${tandem.learningLanguage.code}`)}</p>
+                                <IonIcon icon={AddSvg} aria-hidden="true" />
                             </IonButton>
-                        );
-                    })}
-                    {profile.user.university.maxTandemsPerUser > tandems.length && (
-                        <IonButton
-                            fill="clear"
-                            className={styles.addLearningLanguageButton}
-                            onClick={openAddLearningLanguagePressed}
-                            aria-label={t('learning.add_language') as string}
-                        >
-                            <IonIcon icon={AddSvg} aria-hidden="true" />
-                        </IonButton>
-                    )}
+                        )}
+                    </nav>
                 </div>
 
                 {isLoading ? (

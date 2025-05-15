@@ -73,6 +73,7 @@ const UniversityCard: React.FC<UniversityCardProps> = ({ university, onPress, cu
                         role="presentation"
                         className={styles.logo}
                         aria-hidden={true}
+                        aria-label={university.name}
                     />
                 ) : (
                     <div className={styles.logo} aria-hidden={true} />

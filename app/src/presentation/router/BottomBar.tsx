@@ -94,7 +94,7 @@ const BottomBar: React.FC = () => {
                         <span>{t('navigation.bottom_bar.home')}</span>
                     </IonTabButton>
                     <IonTabButton tab="learning" href="/learning">
-                        <img alt="Conversations" src={LearningSvg} />
+                        <img alt="Learning" src={LearningSvg} />
                         <span>{t('navigation.bottom_bar.learning')}</span>
                     </IonTabButton>
                     {hasLearningLanguages && (
@@ -107,7 +107,7 @@ const BottomBar: React.FC = () => {
                         <span>{t('navigation.bottom_bar.conversations')}</span>
                     </IonTabButton>
                     <IonTabButton tab="profile" href="/profile">
-                        <img alt="Conversations" src={ProfileSvg} />
+                        <img alt="Profile" src={ProfileSvg} />
                         <span>{t('navigation.bottom_bar.profile')}</span>
                     </IonTabButton>
                 </IonTabBar>
