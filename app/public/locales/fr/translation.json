@@ -1129,6 +1129,8 @@
     "reports_page": {
         "title": "Mes signalements",
         "list": {
+            "conversation_report": "Signalement de conversation",
+            "report_report": "Signalement de signalement",
             "date": "Le",
             "application": "Application",
             "report_message": "Message signalé",

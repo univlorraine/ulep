@@ -964,6 +964,26 @@
         "title": "Account suspended",
         "validate_button": "Contact us"
     },
+
+    "reports_page": {
+        "title": "My reports",
+        "list": {
+            "conversation_report": "Conversation report",
+            "report_report": "Report report",
+            "date": "The",
+            "application": "Application",
+            "report_message": "Reported message",
+            "tandem": "Message from: ",
+            "tandem_missing": "Unknown sender"
+        },
+        "no_reports": "No reports",
+        "error_get_reports": "An error occurred while retrieving reports",
+        "aria_label": "List of reports",
+        "item": {
+            "aria_label": "Report of tandem {{name}}"
+        }
+    },
+
     "languages_code": {
         "aa": "Afar",
         "ab": "Abkhazian",

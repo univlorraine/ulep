@@ -88,7 +88,13 @@ const BottomBar: React.FC = () => {
                         </Route>
                     </Switch>
                 </IonRouterOutlet>
-                <IonTabBar slot="bottom" className={styles.bottomBar} onClick={() => setIsMenuNewVisible(false)}>
+
+                <IonTabBar
+                    slot="bottom"
+                    className={styles.bottomBar}
+                    onClick={() => setIsMenuNewVisible(false)}
+                    role="navigation"
+                >
                     <IonTabButton tab="home" href="/home">
                         <img alt="Home" src={HomeSvg} />
                         <span>{t('navigation.bottom_bar.home')}</span>
