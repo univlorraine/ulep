@@ -234,16 +234,16 @@ const LogEntryCard: React.FC<LogEntryCardProps> = ({ logEntry, onClick, profile,
 
     return (
         <div
+            role="listitem"
             className={`${styles.container} ${
                 logEntry.type === LogEntryType.VISIO || logEntry.type === LogEntryType.TANDEM_CHAT
                     ? styles.primaryContainer
                     : ''
             }`}
-            onClick={() => onClick(logEntry)}
         >
             {shouldDisplayDate && (
                 <div className={styles.line}>
-                    <p className={styles.date}>{date}</p>
+                    <h2 className={styles.date}>{date}</h2>
                     {image && (
                         <div className={styles.imageContainer}>
                             <img className={styles.image} src={image} aria-hidden />

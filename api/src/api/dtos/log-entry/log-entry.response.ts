@@ -167,19 +167,19 @@ export class LogEntryMetadataResponse {
 
 export class LogEntryResponse {
   @Swagger.ApiProperty({ type: 'string', format: 'uuid' })
-  @Expose({ groups: ['api', 'api-admin'] })
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
   id: string;
 
   @Swagger.ApiProperty({ type: 'string', enum: LogEntryType })
-  @Expose({ groups: ['api', 'api-admin'] })
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
   type: LogEntryType;
 
   @Swagger.ApiProperty({ type: 'date' })
-  @Expose({ groups: ['api', 'api-admin'] })
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
   createdAt: Date;
 
   @Swagger.ApiProperty({ type: 'object' })
-  @Expose({ groups: ['api', 'api-admin'] })
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
   metadata: LogEntryMetadataResponse;
 
   constructor(partial: Partial<LogEntryResponse>) {
