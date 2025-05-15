@@ -82,6 +82,8 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                 placeholder={t(`${searchI18nKey}.list.search`) as string}
                 value={searchTitle}
                 onIonChange={(e) => setSearchTitle(e.detail.value as string)}
+                aria-label={t(`${searchI18nKey}.list.search`) as string}
+                title={t(`${searchI18nKey}.list.search`) as string}
             />
             <div className={styles['filter-container']}>
                 <div>

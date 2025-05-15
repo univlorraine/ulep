@@ -639,7 +639,8 @@
         },
         "news": {
             "title": "News",
-            "see_all": "See all news"
+            "see_all": "See all news",
+            "no_news": "No news available"
         },
         "events": {
             "title": "Events",

@@ -165,7 +165,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
                     {filterToDisplay.includes(FiltersToDisplay.LANGUAGES) && (
                         <>
                             <p className={styles.filter}>{t('filter.languages')}</p>
-                            <div className={styles.line}>
+                            <div className={styles.line} aria-role="list">
                                 {languages.map((language) => (
                                     <Checkbox
                                         key={language.id}
@@ -174,6 +174,8 @@ const FilterModal: React.FC<FilterModalProps> = ({
                                             addOrRemoveLanguage(language);
                                         }}
                                         name={t(`languages_code.${language.code}`)}
+                                        aria-label={t(`languages_code.${language.code}`)}
+                                        aria-role="listitem"
                                     />
                                 ))}
                             </div>
@@ -203,7 +205,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
                     {filterToDisplay.includes(FiltersToDisplay.LEVELS) && (
                         <>
                             <p className={styles.filter}>{t('filter.levels')}</p>
-                            <div className={styles.line}>
+                            <div className={styles.line} aria-role="list">
                                 {CEFR_LEVELS.map((level) => (
                                     <Checkbox
                                         key={level}
@@ -212,6 +214,8 @@ const FilterModal: React.FC<FilterModalProps> = ({
                                             addOrRemoveProficiencyLevel(level);
                                         }}
                                         name={level}
+                                        aria-label={level}
+                                        aria-role="listitem"
                                     />
                                 ))}
                             </div>
@@ -220,10 +224,10 @@ const FilterModal: React.FC<FilterModalProps> = ({
                     {filterToDisplay.includes(FiltersToDisplay.THEMES) && themes && (
                         <>
                             <p className={styles.filter}>{t('filter.themes')}</p>
-                            <div className={styles.line}>
+                            <div className={styles.line} aria-role="list">
                                 {themes.map((category) => {
                                     return (
-                                        <div key={category.id} className={styles.category}>
+                                        <div key={category.id} className={styles.category} aria-role="listitem">
                                             <p className={styles['category-title']}>{category.content}</p>
                                             <div className={styles.line}>
                                                 {category.themes.map((theme) => {

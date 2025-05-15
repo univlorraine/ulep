@@ -73,3 +73,11 @@
     overflow-y: auto;
     height: 100%;
 }
+
+.noNews {
+    text-align: center;
+    color: #737272;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 16px;
+}

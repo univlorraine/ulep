@@ -733,7 +733,8 @@
         },
         "news": {
             "title": "Actualités",
-            "see_all": "Voir toutes les actualités"
+            "see_all": "Voir toutes les actualités",
+            "no_news": "Aucune actualité disponible"
         },
         "events": {
             "title": "Événements",
