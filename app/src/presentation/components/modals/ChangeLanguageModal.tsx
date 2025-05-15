@@ -74,22 +74,12 @@ const ChangeLanguageModal: React.FC<ChangeLanguageModalProps> = ({
                             className={`${styles.languages} ${
                                 languageCode === currentLanguageCodeSelected ? styles.selected : ''
                             }`}
-                            onClick={() => setCurrentLanguageCodeSelected(languageCode)}
+                            onClick={() => onLanguageCodeChange(languageCode)}
                         >
                             <span>{`${t(`languages_code.${languageCode}`)} ${codeLanguageToFlag(languageCode)}`}</span>
                         </IonButton>
                     ))}
                 </div>
-                <IonButton
-                    fill="clear"
-                    className="primary-button no-padding"
-                    onClick={() => onLanguageCodeChange(currentLanguageCodeSelected)}
-                >
-                    {t('filter.apply')}
-                </IonButton>
-                <IonButton fill="clear" className="secondary-button" onClick={onClose}>
-                    {t('filter.cancel')}
-                </IonButton>
             </div>
         </IonModal>
     );

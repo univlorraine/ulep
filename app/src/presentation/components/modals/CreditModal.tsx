@@ -56,9 +56,9 @@ const CreditModal: React.FC<CreditModalProps> = ({ isVisible, onClose, credit })
     return (
         <IonModal isOpen={isVisible} onDidDismiss={onClose} className={styles.modal}>
             <div className={styles.container}>
-                <div className={styles.close} onClick={onClose} aria-hidden={true}>
+                <button className={styles.close} onClick={onClose} aria-hidden={true}>
                     <IonIcon icon={CloseWhiteSvg} />
-                </div>
+                </button>
                 <h1 className={styles.title}>{t('credit.title')}</h1>
                 <span className={styles.credit}>{credit}</span>
             </div>
