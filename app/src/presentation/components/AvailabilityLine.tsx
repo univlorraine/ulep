@@ -67,7 +67,7 @@ const getColor = (availability: AvailabilitiesOptions) => {
 export const AvailabilityText: React.FC<AvailabilityTextProps> = ({ day, availability, className }) => {
     const { t } = useTranslation();
     return (
-        <div className={`${styles['availability-text']} ${className}`}>
+        <div className={`${styles['availability-text']} ${className}`} role="listitem">
             <span
                 className={styles['availability-day']}
                 style={{ color: availability === 'UNAVAILABLE' ? '#767676' : 'black' }}

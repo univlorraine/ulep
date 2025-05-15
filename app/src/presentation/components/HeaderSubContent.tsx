@@ -62,13 +62,13 @@ const HeaderSubContent: React.FC<HeaderSubContentProps> = ({
     return (
         <div className="subcontent-header">
             {isBackButton && (
-                <IonButton fill="clear" onClick={onBackPressed}>
+                <IonButton fill="clear" onClick={onBackPressed} aria-label={t('global.go_back') as string}>
                     <IonIcon icon={chevronBack} color="dark" />
                 </IonButton>
             )}
-            <p className="subcontent-title" style={{ paddingLeft: isBackButton ? 0 : 20 }}>
+            <h1 className="subcontent-title" style={{ paddingLeft: isBackButton ? 0 : 20 }}>
                 {title}
-            </p>
+            </h1>
             {kebabContent ? (
                 <>
                     <IonButton
