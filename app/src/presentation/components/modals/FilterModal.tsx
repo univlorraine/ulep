@@ -159,6 +159,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
                                     setShouldTakeAllMine(!shouldTakeAllMine);
                                 }}
                                 name={t(`filter.is_mine`)}
+                                ariaRole="listitem"
                             />
                         </>
                     )}
@@ -241,6 +242,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
                                                                 addOrRemoveTheme(theme);
                                                             }}
                                                             name={theme.content}
+                                                            ariaRole="listitem"
                                                         />
                                                     );
                                                 })}

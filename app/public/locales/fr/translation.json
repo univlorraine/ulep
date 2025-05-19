@@ -214,9 +214,11 @@
             "published": "Validée"
         },
         "list": {
+            "no_activities": "Aucune fiche d'activité trouvée",
             "title": "Fiches d'activités",
             "filter_title": "Filtre",
             "filter_clear": "Effacer les filtres",
+            "filter_remove": "Supprimer le filtre {{filter}}",
             "language": "Langue",
             "level": "Niveau",
             "theme": "Thème",

@@ -42,6 +42,13 @@
     padding: 20px;
 }
 
+.no-activities {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
 .active-filter-button {
     border-radius: 30px;
     font-size: 13px;

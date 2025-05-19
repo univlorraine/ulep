@@ -60,7 +60,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({ activity, onClick, isHybrid
     const isMine = activity.creator?.id === profile?.id;
 
     return (
-        <button className={styles.container} onClick={() => onClick(activity)}>
+        <button className={styles.container} onClick={() => onClick(activity)} role="listitem">
             <div className={styles.imageContainer}>
                 <img className={styles.image} src={activity.imageUrl} alt={activity.title} />
                 {isMine && activity.status === ActivityStatus.PUBLISHED && (
@@ -74,8 +74,10 @@ const ActivityCard: React.FC<ActivityCardProps> = ({ activity, onClick, isHybrid
                 )}
             </div>
             <div className={styles.content}>
-                <p className={styles.title}>{activity.title}</p>
-                <span className={styles.subtitle}>
+                <h2 className={styles.title} lang={activity.language.code}>
+                    {activity.title}
+                </h2>
+                <span className={styles.subtitle} lang={activity.language.code}>
                     {activity.description
                         .slice(0, 250)
                         .split('\n')
@@ -91,20 +93,26 @@ const ActivityCard: React.FC<ActivityCardProps> = ({ activity, onClick, isHybrid
             </div>
             <div className={styles.information}>
                 <div className={styles['information-container']}>
-                    <span className={styles['information-title']}>{t('activity.list.language')}</span>
-                    <span className={styles['information-content']}>
+                    <span className={styles['information-title']} lang={activity.language.code}>
+                        {t('activity.list.language')}
+                    </span>
+                    <span className={styles['information-content']} lang={activity.language.code}>
                         {codeLanguageToFlag(activity.language.code)} {t(`languages_code.${activity.language.code}`)}
                     </span>
                 </div>
 
                 <div className={styles['information-container']}>
                     <span className={styles['information-title']}>{t('activity.list.level')}</span>
-                    <span className={styles['information-content']}>{activity.languageLevel}</span>
+                    <span className={styles['information-content']} lang={activity.language.code}>
+                        {activity.languageLevel}
+                    </span>
                 </div>
 
                 <div className={styles['information-container']}>
                     <span className={styles['information-title']}>{t('activity.list.theme')}</span>
-                    <span className={styles['information-content']}>{activity.activityTheme.content}</span>
+                    <span className={styles['information-content']} lang={activity.language.code}>
+                        {activity.activityTheme.content}
+                    </span>
                 </div>
 
                 {!isHybrid && (

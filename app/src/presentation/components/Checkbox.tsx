@@ -64,19 +64,24 @@ const Checkbox: React.FC<CheckboxProps> = ({
         onPressed && onPressed();
     };
     return (
-        <div className={`${styles.container} ${className}`} aria-role={ariaRole}>
+        <div className={`${styles.container} ${className}`}>
             <button
                 onClick={onPressed}
                 style={{ backgroundColor: !isSelected ? 'white' : 'black' }}
                 className={isSelected ? styles['checkbox-selected'] : styles['checkbox-unselected']}
                 aria-label={ariaLabel ?? (name as string)}
                 aria-checked={isSelected}
-                role="checkbox"
+                role={ariaRole + ' checkbox'}
+                aria-labelledby={encodeURIComponent(ariaLabel ?? (name as string)) + '_labelid'}
             >
                 {isSelected && <img alt="check" className={styles.image} src={CheckSvg} />}
             </button>
             {name && (
-                <span className={textClass} onClick={handleClick}>
+                <span
+                    className={textClass}
+                    onClick={handleClick}
+                    id={encodeURIComponent(ariaLabel ?? (name as string)) + '_labelid'}
+                >
                     {name}
                 </span>
             )}

@@ -206,6 +206,8 @@
             "title": "Activity sheets",
             "filter_title": "Filter",
             "filter_clear": "Clear filters",
+            "filter_remove": "Remove filter {{filter}}",
+            "no_activities": "No activity sheet found",
             "language": "Language",
             "level": "Level",
             "theme": "Theme",
