@@ -72,6 +72,7 @@ const VocabularyListLine: React.FC<VocabularyListLineProps> = ({
             fill="clear"
             className={styles.container}
             onClick={() => onSelectVocabularyList(vocabularyList)}
+            role="listitem"
         >
             <div className={styles.content}>
                 <span className={styles.title}>{`${vocabularyList.symbol} ${vocabularyList.name}`}</span>

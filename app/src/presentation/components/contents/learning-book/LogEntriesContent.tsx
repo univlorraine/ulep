@@ -217,7 +217,12 @@ export const LogEntriesContent: React.FC<LogEntriesContentProps> = ({
                 )}
             </div>
 
-            <IonButton fill="clear" className="add-button" onClick={() => onAddCustomLogEntry()}>
+            <IonButton
+                fill="clear"
+                className="add-button"
+                onClick={() => onAddCustomLogEntry()}
+                aria-label={t('learning_book.create.title') as string}
+            >
                 <IonImg aria-hidden className="add-button-icon" src={AddSvg} />
             </IonButton>
         </div>

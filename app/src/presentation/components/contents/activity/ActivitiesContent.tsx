@@ -224,7 +224,12 @@ export const ActivitiesContent: React.FC<ActivitiesContentProps> = ({
                 {isLoading && <Loader />}
             </div>
 
-            <IonButton fill="clear" className="add-button" onClick={() => onAddActivity()}>
+            <IonButton
+                fill="clear"
+                className="add-button"
+                onClick={() => onAddActivity()}
+                aria-label={t('activity.create.add_excercise_button') as string}
+            >
                 <IonImg aria-hidden className="add-button-icon" src={AddSvg} />
             </IonButton>
             <FilterModal
