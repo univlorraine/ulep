@@ -113,7 +113,7 @@ export const LogEntriesByDateContent: React.FC<LogEntriesByDateContentProps> = (
             />
             <h1 className={styles.date}>{formattedDate}</h1>
             <div className={styles['log-entries-list']}>
-                <div className={styles['log-entries-list-container']}>
+                <div className={styles['log-entries-list-container']} role="list">
                     {logEntriesResult.logEntries.map((logEntry) => {
                         return (
                             <LogEntryCard

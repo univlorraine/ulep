@@ -185,7 +185,7 @@
         },
         "create": {
             "title": "New journal entry",
-            "title_label": "Title",
+            "title_label": "Title * (required)",
             "description_label": "Description",
             "cancel_button": "Cancel",
             "validate_button": "Validate",

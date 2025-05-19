@@ -196,7 +196,7 @@
         },
         "create": {
             "title": "Nouvelle entrée de journal",
-            "title_label": "Titre",
+            "title_label": "Titre * (obligatoire)",
             "description_label": "Description",
             "cancel_button": "Annuler",
             "validate_button": "Valider",
