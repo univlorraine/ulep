@@ -52,6 +52,7 @@ interface RecordingButtonProps {
     hideSendButton?: boolean;
     hideRecordButton?: boolean;
     isBlocked: boolean;
+    disabled?: boolean;
 }
 
 const RecordingButton = ({
@@ -62,6 +63,7 @@ const RecordingButton = ({
     isBlocked,
     hideSendButton = false,
     hideRecordButton = false,
+    disabled = false,
 }: RecordingButtonProps) => {
     const { t } = useTranslation();
     const [recording, setRecording] = useState(false);
@@ -147,6 +149,7 @@ const RecordingButton = ({
                     fill="clear"
                     className={styles['sender-button']}
                     onClick={onSendPressed}
+                    disabled={disabled}
                 >
                     <IonIcon className={styles['sender']} icon={SenderSvg} />
                 </IonButton>
