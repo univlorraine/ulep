@@ -144,7 +144,15 @@ const ConversationLine: React.FC<ConversationLineProps> = ({
             className={styles.line}
             button={true}
             onClick={() => onPressed(conversation)}
-            aria-label={t('chat.conversation_menu.user_aria_label', { name: partner.firstname }) as string}
+            aria-label={
+                (((t('chat.conversation_menu.user_aria_label', { name: partner.firstname }) as string) +
+                    ' ' +
+                    t(conversation.lastMessage?.getMessageDate() as string) +
+                    ' ' +
+                    conversation.lastMessage?.getMessageHour()) as string) +
+                ' ' +
+                conversation.lastMessage?.content
+            }
             color={conversation.id === currentConversation?.id ? 'light' : undefined}
         >
             <div className={styles.container}>
