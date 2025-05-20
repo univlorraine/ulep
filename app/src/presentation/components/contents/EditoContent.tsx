@@ -86,12 +86,18 @@ const EditoContent: React.FC<EditoContentProps> = ({ edito, onGoBack }) => {
                     </div>
                 </div>
                 <span dangerouslySetInnerHTML={{ __html: edito.content }}></span>
-                {edito.video && <span dangerouslySetInnerHTML={{ __html: edito.video }}></span>}
+                {edito.video && (
+                    <span
+                        aria-label={t('edito.video') as string}
+                        dangerouslySetInnerHTML={{ __html: edito.video }}
+                    ></span>
+                )}
                 {edito.university.website && (
                     <IonButton
                         fill="clear"
                         className={`${styles.website} primary-button`}
                         href={edito.university.website}
+                        aria-label={t('edito.website') as string}
                     >
                         {t('edito.website')}
                     </IonButton>

@@ -93,7 +93,8 @@
         "service_date": "Opening date of the service",
         "admission_date": "Opening date of the admission",
         "website": "Website",
-        "title": "University information"
+        "title": "University information",
+        "video": "Video"
     },
     "news": {
         "list": {

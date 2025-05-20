@@ -83,7 +83,8 @@
         "service_date": "Date d'ouverture du service",
         "admission_date": "Date d'ouverture des inscriptions",
         "website": "Site web",
-        "title": "Informations université"
+        "title": "Informations université",
+        "video": "Vidéo"
     },
     "news": {
         "list": {
