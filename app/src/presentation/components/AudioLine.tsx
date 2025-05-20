@@ -115,7 +115,11 @@ const AudioLine: React.FC<AudioLineProps> = ({ audioFile, hideProgressBar = fals
 
     return (
         <div className={styles.audioLine}>
-            <button className={`${styles.button} ${small ? styles.smallButton : ''}`} onClick={togglePlayPause}>
+            <button
+                className={`${styles.button} ${small ? styles.smallButton : ''}`}
+                onClick={togglePlayPause}
+                tabIndex={0}
+            >
                 {isPlaying ? <img src={icon || PauseSvg} alt="Pause" /> : <img src={icon || PlaySvg} alt="Play" />}
             </button>
             {!hideProgressBar && (

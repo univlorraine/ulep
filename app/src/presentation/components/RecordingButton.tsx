@@ -101,6 +101,18 @@ const RecordingButton = ({
         handleStopRecord();
     };
 
+    const onKeyDown = (event: React.KeyboardEvent<HTMLIonButtonElement>) => {
+        if (event.code === 'Space') {
+            startRecording();
+        }
+    };
+
+    const onKeyUp = (event: React.KeyboardEvent<HTMLIonButtonElement>) => {
+        if (event.code === 'Space') {
+            stopRecording();
+        }
+    };
+
     return (
         <div className={styles['container']}>
             {mode !== 'send' && (
@@ -117,6 +129,8 @@ const RecordingButton = ({
                             onClick={onSendPressed}
                             onMouseDown={startRecording}
                             onMouseUp={stopRecording}
+                            onKeyDown={onKeyDown}
+                            onKeyUp={onKeyUp}
                             onTouchStart={startRecording}
                             onTouchEnd={stopRecording}
                         >

@@ -161,15 +161,16 @@ const CreateOrUpdateVocabularyContent: React.FC<CreateOrUpdateVocabularyContentP
                 title={`${vocabularyList.symbol} ${vocabularyList.name}`}
                 onBackPressed={() => goBack?.()}
             />
-            <div className={styles.container}>
-                <h1 className={styles.language}>{vocabularyList.targetLanguage.name}</h1>
-                <div className={styles.content}>
+            <div className={styles.container} role="list">
+                <h2 className={styles.language}>{vocabularyList.targetLanguage.name}</h2>
+                <div className={styles.content} role="listitem">
                     <TextInput
                         beforeInput={
                             <span className={styles.flag}>
                                 {codeLanguageToFlag(vocabularyList.targetLanguage.code)}
                             </span>
                         }
+                        lang={vocabularyList.targetLanguage.code}
                         value={word}
                         onChange={(value) => setWord(value)}
                         placeholder={vocabulary?.word ?? t('vocabulary.pair.add.default_word')}
@@ -198,13 +199,14 @@ const CreateOrUpdateVocabularyContent: React.FC<CreateOrUpdateVocabularyContentP
                                 handleStartRecord={onRecordWord}
                                 handleStopRecord={onStopRecordWord}
                                 isBlocked={false}
+                                hideSendButton={true}
                             />
                         )}
                     </div>
                 </div>
 
-                <h1 className={styles.language}>{vocabularyList.translationLanguage.name}</h1>
-                <div className={styles.content}>
+                <h2 className={styles.language}>{vocabularyList.translationLanguage.name}</h2>
+                <div className={styles.content} role="listitem">
                     <TextInput
                         id="input-translation"
                         beforeInput={
@@ -215,6 +217,7 @@ const CreateOrUpdateVocabularyContent: React.FC<CreateOrUpdateVocabularyContentP
                         value={translation}
                         onChange={(value) => setTranslation(value)}
                         placeholder={vocabulary?.translation ?? t('vocabulary.pair.add.default_translation')}
+                        lang={vocabularyList.translationLanguage.code}
                     />
                     <div className={styles.pronunciationContainer}>
                         <div className={styles.playerContainer}>
@@ -242,6 +245,7 @@ const CreateOrUpdateVocabularyContent: React.FC<CreateOrUpdateVocabularyContentP
                                 handleStartRecord={onRecordTranslation}
                                 handleStopRecord={onStopRecordTranslation}
                                 isBlocked={false}
+                                hideSendButton={true}
                             />
                         )}
                     </div>

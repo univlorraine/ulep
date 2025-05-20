@@ -117,6 +117,7 @@ interface TextInputProps {
     required?: boolean;
     beforeInput?: React.ReactNode;
     showLimit?: boolean;
+    lang?: string;
 }
 
 const TextInput: React.FC<TextInputProps> = ({
@@ -135,12 +136,13 @@ const TextInput: React.FC<TextInputProps> = ({
     required = false,
     beforeInput,
     showLimit = false,
+    lang,
 }) => {
     const [showPasword, setShowPassword] = useState<boolean>(false);
     return (
         <div className={`${style.container} large-margin-bottom`}>
             {title && (
-                <span className={style['input-label']}>
+                <span className={style['input-label']} lang={lang}>
                     {title} {required && <RequiredField />}
                 </span>
             )}
@@ -164,6 +166,7 @@ const TextInput: React.FC<TextInputProps> = ({
                         required
                         autocomplete={autocomplete}
                         maxlength={maxLength ?? 100}
+                        lang={lang}
                     />
 
                     {type === 'password' && (
@@ -189,6 +192,7 @@ const TextInput: React.FC<TextInputProps> = ({
                     style={{ height: customHeight }}
                     value={value}
                     required
+                    lang={lang}
                 />
             )}
             {showLimit && (

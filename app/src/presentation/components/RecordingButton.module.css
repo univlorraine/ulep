@@ -67,6 +67,11 @@
     min-width: 44px;
     max-width: 44px;
 }
+
+.sender-button:focus {
+    background-color: rgba(0, 84, 233, 0.12);
+}
+
 .container {
     position: relative;
     display: flex;
