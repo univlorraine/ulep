@@ -125,6 +125,8 @@ const BottomBar: React.FC = () => {
                         onClick={() => setIsMenuNewVisible(!isMenuNewVisible)}
                         id="click-trigger-new-mobile"
                         role="button"
+                        tabIndex={0}
+                        aria-label={t('navigation.bottom_bar.new') as string}
                     >
                         <IonIcon icon={addOutline} color="black" size="large" />
                     </div>

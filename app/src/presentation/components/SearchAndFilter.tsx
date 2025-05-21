@@ -96,6 +96,7 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                         className={styles['filter-button']}
                         fill="clear"
                         onClick={() => setShowFiltersModal(true)}
+                        aria-label={t(`${searchI18nKey}.list.filter_title`) as string}
                     >
                         <IonIcon icon={filterOutline} className={styles['filter-icon']} aria-hidden />
                         {t(`${searchI18nKey}.list.filter_title`)}

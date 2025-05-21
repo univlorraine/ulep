@@ -246,7 +246,7 @@ const LogEntryCard: React.FC<LogEntryCardProps> = ({ logEntry, onClick, profile,
                     <h2 className={styles.date}>{date}</h2>
                     {image && (
                         <div className={styles.imageContainer}>
-                            <img className={styles.image} src={image} aria-hidden />
+                            <img className={styles.image} src={image} aria-hidden width={'90px'} />
                         </div>
                     )}
                 </div>
@@ -258,7 +258,7 @@ const LogEntryCard: React.FC<LogEntryCardProps> = ({ logEntry, onClick, profile,
                 </div>
                 {!shouldDisplayDate && image && (
                     <div className={styles.imageContainer}>
-                        <img className={styles.image} src={image} aria-hidden />
+                        <img className={styles.image} src={image} aria-hidden width={'90px'} />
                     </div>
                 )}
             </div>

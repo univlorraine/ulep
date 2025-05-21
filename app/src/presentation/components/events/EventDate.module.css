@@ -70,3 +70,13 @@
     text-align: start;
     text-decoration: underline;
 }
+
+.calendarIcon {
+    display: inline-block;
+}
+
+@media screen {
+    .calendarIcon {
+        display: none;
+    }
+}

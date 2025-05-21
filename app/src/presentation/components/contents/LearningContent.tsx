@@ -140,6 +140,7 @@ const LearningContent: React.FC<LearningContentProps> = ({
                                     className={`${styles.learningLanguage} ${
                                         tandem.id === currentTandem?.id ? styles.selectedLearningLanguage : ''
                                     }`}
+                                    disabled={tandem.id === currentTandem?.id}
                                     onClick={() => handleSetCurrentTandem(tandem, index)}
                                 >
                                     <p>{t(`languages_code.${tandem.learningLanguage.code}`)}</p>

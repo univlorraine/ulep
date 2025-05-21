@@ -72,6 +72,7 @@
         "add_to_calendar": "Add to calendar",
         "load_more": "See more",
         "add_to_calendar_success": "ICS file downloaded",
+        "open": "Open",
         "list": {
             "title": "Events",
             "filter_title": "Select event filters",
@@ -113,7 +114,8 @@
                 "title": "Choose the language",
                 "current": "Selected"
             }
-        }
+        },
+        "open": "Open"
     },
     "credit": {
         "title": "Credit of the file"
@@ -303,7 +305,8 @@
             "home": "Home",
             "conversations": "Conversations",
             "learning": "Learning",
-            "profile": "Profile"
+            "profile": "Profile",
+            "new": "New"
         },
         "sidebar": {
             "home": "Home",

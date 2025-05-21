@@ -64,6 +64,7 @@ const HeaderSubContent: React.FC<HeaderSubContentProps> = ({
             {isBackButton && (
                 <IonButton fill="clear" onClick={onBackPressed} aria-label={t('global.go_back') as string}>
                     <IonIcon icon={chevronBack} color="dark" />
+                    <span>{t('global.go_back') as string}</span>
                 </IonButton>
             )}
             <h1 className="subcontent-title" style={{ paddingLeft: isBackButton ? 0 : 20 }}>

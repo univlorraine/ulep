@@ -272,7 +272,7 @@ export const ActivityContent: React.FC<ActivityContentProps> = ({
                                                 icon={helpOutline}
                                                 color="#FFF"
                                                 size="small"
-                                                aria-hidden
+                                                aria-hidden={true}
                                             />
                                         </IonButton>
                                     )}

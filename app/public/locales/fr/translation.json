@@ -50,6 +50,7 @@
         }
     },
     "events": {
+        "open": "Ouvrir",
         "no_events": "Aucun événement trouvé",
         "online": "En ligne",
         "open_maps": "S'y rendre",
@@ -103,7 +104,8 @@
                 "title": "Choisir la langue",
                 "current": "Sélectionnée"
             }
-        }
+        },
+        "open": "Ouvrir"
     },
     "filter": {
         "languages": "Langues",
