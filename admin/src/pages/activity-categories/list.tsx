@@ -38,7 +38,7 @@
  *
  */
 
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import React from 'react';
 import { List, Datagrid, CreateButton, TopToolbar, FunctionField, useTranslate, ArrayField } from 'react-admin';
 import { Link, useNavigate } from 'react-router-dom';
@@ -60,22 +60,24 @@ const ActivityCategoriesList = () => {
         <>
             <ConfigPagesHeader />
             <List actions={<ActivityCategoriesAction />} exporter={false}>
-                <Datagrid bulkActionButtons={false}>
+                <Datagrid bulkActionButtons={false} rowClick={false}>
                     <FunctionField
                         label={translation('activities_categories.name')}
                         render={(record: ActivityThemeCategory) => (
-                            <Typography
-                                component={Link}
+                            <Box
+                                onClick={() => {
+                                    navigate(`/activities/categories/${record.id}/show`);
+                                }}
                                 style={{
                                     fontSize: '0.875rem',
                                     textDecoration: 'none',
                                     color: '#212121',
                                     cursor: 'pointer',
+                                    width: '100%',
                                 }}
-                                to={`/activities/categories/${record.id}/show`}
                             >
                                 {record.content}
-                            </Typography>
+                            </Box>
                         )}
                     />
                     <ArrayField label={translation('activities_categories.themes')} sortable={false} source="themes">
@@ -88,11 +90,12 @@ const ActivityCategoriesList = () => {
                                         </Link>
                                     ))}
                                     <button
-                                        onClick={() =>
+                                        onClick={(e) => {
+                                            e.preventDefault();
                                             navigate('/activities/themes/create', {
                                                 state: { categoryId: record.id },
-                                            })
-                                        }
+                                            });
+                                        }}
                                         style={{
                                             background: 'none',
                                             border: 'none',
