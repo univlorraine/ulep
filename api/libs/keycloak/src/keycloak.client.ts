@@ -985,4 +985,18 @@ export class KeycloakClient {
 
     return sessions;
   }
+
+  public async globalLogout(): Promise<void> {
+    await fetch(
+      `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/logout-all`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${await this.getAccessToken()}`,
+        },
+      },
+    );
+    await this.initialize();
+  }
 }
