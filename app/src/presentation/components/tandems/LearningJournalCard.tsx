@@ -75,11 +75,14 @@ const LearningJournalCard: React.FC<LearningJournalCardProps> = ({ tandem, onOpe
 
     const onDownloadCertificate = async () => {
         if (downloadableCertificate) {
+            const firstName = tandem.learningLanguage.profile?.user.firstname.replace(/ /g, '_');
+            const lastName = tandem.learningLanguage.profile?.user.lastname.replace(/ /g, '_');
+
             const certificateFileName: string =
                 [
                     t('learning_journal.certificate_file_name'),
                     t(`languages_code.${tandem.learningLanguage.code}`),
-                    `${tandem.learningLanguage.profile?.user.firstname}_${tandem.learningLanguage.profile?.user.lastname}`,
+                    `${firstName}_${lastName}`,
                 ].join('_') + '.pdf';
             try {
                 await fileAdapter.saveFile(certificateFile, certificateFileName);
