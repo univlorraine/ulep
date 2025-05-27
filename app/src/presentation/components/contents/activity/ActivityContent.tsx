@@ -235,17 +235,21 @@ export const ActivityContent: React.FC<ActivityContentProps> = ({
                         <div className={styles['information-container']}>
                             <div>
                                 <p className={styles['information-title']}>{t('activity.show.language')}</p>
-                                <p className={styles['information-data']}>
+                                <p className={styles['information-data']} lang={activity.language.code}>
                                     {t(`languages_code.${activity.language.code}`)}
                                 </p>
                             </div>
                             <div>
                                 <p className={styles['information-title']}>{t('activity.show.level')}</p>
-                                <p className={styles['information-data']}>{activity.languageLevel}</p>
+                                <p className={styles['information-data']} lang={activity.language.code}>
+                                    {activity.languageLevel}
+                                </p>
                             </div>
                             <div>
                                 <p className={styles['information-title']}>{t('activity.show.theme')}</p>
-                                <p className={styles['information-data']}>{activity.activityTheme.content}</p>
+                                <p className={styles['information-data']} lang={activity.language.code}>
+                                    {activity.activityTheme.content}
+                                </p>
                             </div>
                         </div>
                         <div className={styles['creator-container']}>
@@ -268,7 +272,7 @@ export const ActivityContent: React.FC<ActivityContentProps> = ({
                                                 icon={helpOutline}
                                                 color="#FFF"
                                                 size="small"
-                                                aria-hidden
+                                                aria-hidden={true}
                                             />
                                         </IonButton>
                                     )}
@@ -330,20 +334,22 @@ export const ActivityContent: React.FC<ActivityContentProps> = ({
                     </div>
 
                     <div className={styles['secondary-container']}>
-                        <div className={styles['exercises-container']}>
+                        <div className={styles['exercises-container']} role="list">
                             {activity.exercises.map((exercise, index) => (
-                                <div className={styles['exercise-container']} key={exercise.id}>
+                                <div role="listitem" className={styles['exercise-container']} key={exercise.id}>
                                     <span className={styles['exercise-title']}>
                                         {t('activity.show.exercise', { index: index + 1 })}
                                     </span>
-                                    <span className={styles.exercise}>{exercise.content}</span>
+                                    <span className={styles.exercise} lang={activity.language.code}>
+                                        {exercise.content}
+                                    </span>
                                 </div>
                             ))}
                         </div>
 
                         {activity.vocabularies.length > 0 && (
                             <div className={styles['vocabulary-container']}>
-                                <p className={styles['vocabulary-title']}>{t('activity.show.vocabulary')}</p>
+                                <h2 className={styles['vocabulary-title']}>{t('activity.show.vocabulary')}</h2>
 
                                 {activity.vocabularies.map((vocabulary, index) => (
                                     <div
@@ -351,7 +357,9 @@ export const ActivityContent: React.FC<ActivityContentProps> = ({
                                         className={styles['vocabulary-item']}
                                         key={vocabulary.id}
                                     >
-                                        <p className={styles.vocabulary}>{vocabulary.content}</p>
+                                        <p className={styles.vocabulary} lang={activity.language.code}>
+                                            {vocabulary.content}
+                                        </p>
                                         {vocabulary.pronunciationUrl && (
                                             <div>
                                                 <AudioLine

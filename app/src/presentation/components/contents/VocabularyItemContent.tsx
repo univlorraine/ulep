@@ -136,6 +136,7 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
             return !vocabulary.pronunciationWordUrl;
         });
     }
+    const [isSearchbarFocused, setIsSearchbarFocused] = useState(false);
 
     return (
         <div>
@@ -222,9 +223,9 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
                     </IonList>
                 )}
             />
-            <div className={styles.content}>
+            <div className={styles.content} role="list">
                 {!isLoading && !searchVocabularies && vocabularyPairs.length === 0 && (
-                    <div className={styles.emptyContainer}>
+                    <div className={styles.emptyContainer} role="listitem">
                         <IonImg alt="" aria-hidden className={styles.emptyImage} src={VocabularyPng} />
                         <p className={styles.emptyText}>{t('vocabulary.pair.empty')}</p>
                         <IonButton
@@ -239,6 +240,9 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
                 )}
                 {!isLoading && (vocabularyPairs.length > 0 || searchVocabularies) && (
                     <IonSearchbar
+                        className={isSearchbarFocused ? styles.searchbarFocused : styles.searchbar}
+                        onFocus={() => setIsSearchbarFocused(true)}
+                        onBlur={() => setIsSearchbarFocused(false)}
                         placeholder={t('vocabulary.pair.search') as string}
                         onIonClear={() => onSearch('')}
                         onIonCancel={() => onSearch('')}
@@ -261,6 +265,7 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
                                     onVocabularyClick={onAddVocabulary}
                                     vocabulary={vocabulary}
                                     isEditable={vocabularyList.isEditable}
+                                    vocabularyList={vocabularyList}
                                 />
                             ))}
                             <div className={styles.pronunciationTitle}>
@@ -276,6 +281,7 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
                             onVocabularyClick={onAddVocabulary}
                             vocabulary={vocabulary}
                             isEditable={vocabularyList.isEditable}
+                            vocabularyList={vocabularyList}
                         />
                     ))}
             </div>

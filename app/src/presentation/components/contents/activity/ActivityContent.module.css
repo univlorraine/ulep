@@ -161,12 +161,14 @@
 }
 
 .status-rejected-icon {
+    display: block;
     background-color: #000;
     border-radius: 50%;
     padding: 4px;
 }
 
 .status-container {
+    display: none;
     margin-top: 12px;
     display: flex;
     flex-direction: row;

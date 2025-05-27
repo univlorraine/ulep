@@ -50,6 +50,8 @@
         }
     },
     "events": {
+        "open": "Ouvrir",
+        "no_events": "Aucun événement trouvé",
         "online": "En ligne",
         "open_maps": "S'y rendre",
         "add_to_calendar": "Ajouter au calendrier",
@@ -82,7 +84,8 @@
         "service_date": "Date d'ouverture du service",
         "admission_date": "Date d'ouverture des inscriptions",
         "website": "Site web",
-        "title": "Informations université"
+        "title": "Informations université",
+        "video": "Vidéo"
     },
     "news": {
         "list": {
@@ -101,7 +104,8 @@
                 "title": "Choisir la langue",
                 "current": "Sélectionnée"
             }
-        }
+        },
+        "open": "Ouvrir"
     },
     "filter": {
         "languages": "Langues",
@@ -195,7 +199,7 @@
         },
         "create": {
             "title": "Nouvelle entrée de journal",
-            "title_label": "Titre",
+            "title_label": "Titre * (obligatoire)",
             "description_label": "Description",
             "cancel_button": "Annuler",
             "validate_button": "Valider",
@@ -213,9 +217,11 @@
             "published": "Validée"
         },
         "list": {
+            "no_activities": "Aucune fiche d'activité trouvée",
             "title": "Fiches d'activités",
             "filter_title": "Filtre",
             "filter_clear": "Effacer les filtres",
+            "filter_remove": "Supprimer le filtre {{filter}}",
             "language": "Langue",
             "level": "Niveau",
             "theme": "Thème",
@@ -733,7 +739,8 @@
         },
         "news": {
             "title": "Actualités",
-            "see_all": "Voir toutes les actualités"
+            "see_all": "Voir toutes les actualités",
+            "no_news": "Aucune actualité disponible"
         },
         "events": {
             "title": "Événements",
@@ -1127,6 +1134,8 @@
     "reports_page": {
         "title": "Mes signalements",
         "list": {
+            "conversation_report": "Signalement de conversation",
+            "report_report": "Signalement de signalement",
             "date": "Le",
             "application": "Application",
             "report_message": "Message signalé",

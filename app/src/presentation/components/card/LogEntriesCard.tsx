@@ -63,9 +63,9 @@ const LogEntriesCard: React.FC<LogEntriesCardProps> = ({ date, logEntries, count
         month: '2-digit',
     }).format(date);
     return (
-        <div className={styles.container} onClick={() => onClick(date)}>
+        <div className={styles.container} role="listitem">
             <div className={styles.line}>
-                <p className={styles.date}>{formattedDate}</p>
+                <h2 className={styles.date}>{formattedDate}</h2>
                 <div className={styles.images}>
                     {logEntries.length > 0 &&
                         logEntries.map((logEntry) => (

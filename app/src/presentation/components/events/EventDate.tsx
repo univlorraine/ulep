@@ -96,7 +96,7 @@ END:VCALENDAR`;
     }).format(new Date(event.startDate));
     return (
         <div className={styles['date-container']}>
-            <IonIcon icon={calendarOutline} />
+            <IonIcon icon={calendarOutline} aria-hidden={true} className={styles.calendarIcon} />
             <span className={styles.date}>{formattedDate}</span>
             {showAddToCalendar && (
                 <button className={styles.calendarButton} onClick={() => handleAddToCalendar(event)}>

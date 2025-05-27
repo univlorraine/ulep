@@ -57,8 +57,8 @@
     color: white;
 }
 
-.tertiary-button .button-inner {
-    gap: 10px;
+.primary-button.ion-focused {
+    background-color: #a7a7a7;
 }
 
 .center-button {

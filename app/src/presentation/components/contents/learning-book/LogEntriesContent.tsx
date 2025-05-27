@@ -182,7 +182,7 @@ export const LogEntriesContent: React.FC<LogEntriesContentProps> = ({
                 )}
             />
             <div className={styles['log-entries-list']}>
-                <div className={styles['log-entries-list-container']}>
+                <div className={styles['log-entries-list-container']} role="list">
                     {logEntriesResult.logEntries
                         .filter((logEntry) => logEntry.count > 0 && logEntry.entries.length > 0)
                         .map((logEntry) => {
@@ -217,7 +217,12 @@ export const LogEntriesContent: React.FC<LogEntriesContentProps> = ({
                 )}
             </div>
 
-            <IonButton fill="clear" className="add-button" onClick={() => onAddCustomLogEntry()}>
+            <IonButton
+                fill="clear"
+                className="add-button"
+                onClick={() => onAddCustomLogEntry()}
+                aria-label={t('learning_book.create.title') as string}
+            >
                 <IonImg aria-hidden className="add-button-icon" src={AddSvg} />
             </IonButton>
         </div>

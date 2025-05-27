@@ -68,3 +68,11 @@
 .selected {
     background-color: var(--primary-color);
 }
+
+.title {
+    margin-top: 20px;
+    font-size: 1.625rem;
+    margin-bottom: 10px;
+    font-weight: 500;
+    line-height: 1.2;
+}

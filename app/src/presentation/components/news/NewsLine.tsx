@@ -39,6 +39,7 @@
  */
 
 import { IonImg } from '@ionic/react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import News from '../../../domain/entities/News';
 import Profile from '../../../domain/entities/Profile';
@@ -56,6 +57,7 @@ interface NewsLineProps {
 const NewsLine: React.FC<NewsLineProps> = ({ news, profile, onClick }) => {
     const { t } = useTranslation();
     const language = useStoreState((state) => state.language);
+    const [buttonFocused, setButtonFocused] = useState(false);
 
     const formattedDate = new Intl.DateTimeFormat(language || profile.nativeLanguage.code, {
         day: '2-digit',
@@ -64,7 +66,13 @@ const NewsLine: React.FC<NewsLineProps> = ({ news, profile, onClick }) => {
     }).format(new Date(news.startPublicationDate));
 
     return (
-        <button aria-label={t('news.open', { title: news.title }) as string} onClick={onClick}>
+        <button
+            onFocus={() => setButtonFocused(true)}
+            onBlur={() => setButtonFocused(false)}
+            className={buttonFocused ? styles.buttonFocused : ''}
+            onClick={onClick}
+            role="listitem"
+        >
             <div className={styles.container}>
                 {news.imageUrl && <IonImg className={styles.image} src={news.imageUrl} />}
                 <div className={styles.content}>
@@ -74,7 +82,9 @@ const NewsLine: React.FC<NewsLineProps> = ({ news, profile, onClick }) => {
                     </div>
                     <span className={styles.date}>{formattedDate}</span>
                     <br />
-                    <span className={styles.title}>{news.title}</span>
+                    <span lang={news.languageCode} className={styles.title}>
+                        {news.title}
+                    </span>
                 </div>
             </div>
         </button>

@@ -52,6 +52,7 @@ interface RecordingButtonProps {
     hideSendButton?: boolean;
     hideRecordButton?: boolean;
     isBlocked: boolean;
+    disabled?: boolean;
 }
 
 const RecordingButton = ({
@@ -62,6 +63,7 @@ const RecordingButton = ({
     isBlocked,
     hideSendButton = false,
     hideRecordButton = false,
+    disabled = false,
 }: RecordingButtonProps) => {
     const { t } = useTranslation();
     const [recording, setRecording] = useState(false);
@@ -101,6 +103,18 @@ const RecordingButton = ({
         handleStopRecord();
     };
 
+    const onKeyDown = (event: React.KeyboardEvent<HTMLIonButtonElement>) => {
+        if (event.code === 'Space') {
+            startRecording();
+        }
+    };
+
+    const onKeyUp = (event: React.KeyboardEvent<HTMLIonButtonElement>) => {
+        if (event.code === 'Space') {
+            stopRecording();
+        }
+    };
+
     return (
         <div className={styles['container']}>
             {mode !== 'send' && (
@@ -117,6 +131,8 @@ const RecordingButton = ({
                             onClick={onSendPressed}
                             onMouseDown={startRecording}
                             onMouseUp={stopRecording}
+                            onKeyDown={onKeyDown}
+                            onKeyUp={onKeyUp}
                             onTouchStart={startRecording}
                             onTouchEnd={stopRecording}
                         >
@@ -133,6 +149,7 @@ const RecordingButton = ({
                     fill="clear"
                     className={styles['sender-button']}
                     onClick={onSendPressed}
+                    disabled={disabled}
                 >
                     <IonIcon className={styles['sender']} icon={SenderSvg} />
                 </IonButton>

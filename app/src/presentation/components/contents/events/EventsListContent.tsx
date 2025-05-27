@@ -112,6 +112,11 @@ export const EventsListContent: React.FC<EventsListContentProps> = ({ profile, o
                             profile={profile}
                         />
                     ))}
+                {events.length === 0 && (
+                    <div className={styles.no_events}>
+                        <p>{t('events.no_events')}</p>
+                    </div>
+                )}
             </div>
             {!isEventsListEnded && (
                 <IonButton fill="clear" className="secondary-button" onClick={onLoadMoreEvents}>

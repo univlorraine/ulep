@@ -67,7 +67,7 @@ const ProficiencyTestCard: React.FC<ProficiencyTestCardProps> = ({ testedLanguag
             <div className={styles.container} style={{ backgroundColor: currentColor }}>
                 <div className={styles['container-content']}>
                     <div className={styles['container-image']}>
-                        <img alt="" className={styles.image} src={AdvicePng} aria-hidden={true} />
+                        <img alt="" className={styles.image} src={AdvicePng} aria-hidden={true} width={'90px'} />
                     </div>
                     {testedLanguages.length > 0 && <TestedLanguageComponent testedLanguages={testedLanguages} />}
                 </div>

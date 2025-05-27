@@ -62,6 +62,7 @@
         "is_mine": "My sheets"
     },
     "events": {
+        "no_events": "No events found",
         "online": "Online",
         "open_maps": "Open maps",
         "subscribe": "Subscribe",
@@ -71,6 +72,7 @@
         "add_to_calendar": "Add to calendar",
         "load_more": "See more",
         "add_to_calendar_success": "ICS file downloaded",
+        "open": "Open",
         "list": {
             "title": "Events",
             "filter_title": "Select event filters",
@@ -92,7 +94,8 @@
         "service_date": "Opening date of the service",
         "admission_date": "Opening date of the admission",
         "website": "Website",
-        "title": "University information"
+        "title": "University information",
+        "video": "Video"
     },
     "news": {
         "list": {
@@ -111,7 +114,8 @@
                 "title": "Choose the language",
                 "current": "Selected"
             }
-        }
+        },
+        "open": "Open"
     },
     "credit": {
         "title": "Credit of the file"
@@ -184,7 +188,7 @@
         },
         "create": {
             "title": "New journal entry",
-            "title_label": "Title",
+            "title_label": "Title * (required)",
             "description_label": "Description",
             "cancel_button": "Cancel",
             "validate_button": "Validate",
@@ -205,6 +209,8 @@
             "title": "Activity sheets",
             "filter_title": "Filter",
             "filter_clear": "Clear filters",
+            "filter_remove": "Remove filter {{filter}}",
+            "no_activities": "No activity sheet found",
             "language": "Language",
             "level": "Level",
             "theme": "Theme",
@@ -299,7 +305,8 @@
             "home": "Home",
             "conversations": "Conversations",
             "learning": "Learning",
-            "profile": "Profile"
+            "profile": "Profile",
+            "new": "New"
         },
         "sidebar": {
             "home": "Home",
@@ -639,7 +646,8 @@
         },
         "news": {
             "title": "News",
-            "see_all": "See all news"
+            "see_all": "See all news",
+            "no_news": "No news available"
         },
         "events": {
             "title": "Events",
@@ -962,6 +970,26 @@
         "title": "Account suspended",
         "validate_button": "Contact us"
     },
+
+    "reports_page": {
+        "title": "My reports",
+        "list": {
+            "conversation_report": "Conversation report",
+            "report_report": "Report report",
+            "date": "The",
+            "application": "Application",
+            "report_message": "Reported message",
+            "tandem": "Message from: ",
+            "tandem_missing": "Unknown sender"
+        },
+        "no_reports": "No reports",
+        "error_get_reports": "An error occurred while retrieving reports",
+        "aria_label": "List of reports",
+        "item": {
+            "aria_label": "Report of tandem {{name}}"
+        }
+    },
+
     "languages_code": {
         "aa": "Afar",
         "ab": "Abkhazian",

@@ -122,23 +122,23 @@ const LearningJournalCard: React.FC<LearningJournalCardProps> = ({ tandem, onOpe
                         <img alt="" className={styles.image} src={TrophiePng} aria-hidden={true} />
                     </div>
                     <div className={styles.textContainer}>
-                        <h2 className={styles.title}>{t('learning_journal.certificate_title')}</h2>
+                        <h3 className={styles.title}>{t('learning_journal.certificate_title')}</h3>
                         <p className={styles.text}>{t('learning_journal.certificate_text')}</p>
                     </div>
                 </div>
                 <ul className={styles.activities}>
                     <li className={styles.activity}>
-                        <h3 className={styles.activityTitle}>{t('learning_journal.sessions_duration_title')}</h3>
+                        <h4 className={styles.activityTitle}>{t('learning_journal.sessions_duration_title')}</h4>
                         <span className={styles.activityValue}>
                             {formatDuration(tandem.learningLanguage.visioDuration || 0)}
                         </span>
                     </li>
                     <li className={styles.activity}>
-                        <h3 className={styles.activityTitle}>{t('learning_journal.vocabulary_title')}</h3>
+                        <h4 className={styles.activityTitle}>{t('learning_journal.vocabulary_title')}</h4>
                         <span className={styles.activityValue}>{tandem.learningLanguage.countVocabularies}</span>
                     </li>
                     <li className={styles.activity}>
-                        <h3 className={styles.activityTitle}>{t('learning_journal.activities_title')}</h3>
+                        <h4 className={styles.activityTitle}>{t('learning_journal.activities_title')}</h4>
                         <span className={styles.activityValue}>{tandem.learningLanguage.countActivities}</span>
                     </li>
                 </ul>
