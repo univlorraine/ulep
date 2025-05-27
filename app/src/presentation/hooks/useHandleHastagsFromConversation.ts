@@ -41,13 +41,14 @@
 import { useEffect, useState } from 'react';
 import { useConfig } from '../../context/ConfigurationContext';
 import Hashtag from '../../domain/entities/chat/Hashtag';
+import { Message } from '../../domain/entities/chat/Message';
 import { useStoreState } from '../../store/storeTypes';
-
 interface UseHandleHastagsFromConversationProps {
     conversationId: string;
+    messages: Message[];
 }
 
-const useHandleHastagsFromConversation = ({ conversationId }: UseHandleHastagsFromConversationProps) => {
+const useHandleHastagsFromConversation = ({ conversationId, messages }: UseHandleHastagsFromConversationProps) => {
     const { getHashtagsFromConversation } = useConfig();
     const profile = useStoreState((state) => state.profile);
 
@@ -83,7 +84,7 @@ const useHandleHastagsFromConversation = ({ conversationId }: UseHandleHastagsFr
         };
 
         fetchData();
-    }, [profile, conversationId]);
+    }, [profile, conversationId, messages]);
 
     return { ...hashtagsResult };
 };

@@ -149,6 +149,7 @@ const Content: React.FC<ChatContentProps> = ({
 
     const { hashtags, isLoading: hashtagsLoading } = useHandleHastagsFromConversation({
         conversationId: conversation.id,
+        messages,
     });
 
     const partner = Conversation.getMainConversationPartner(conversation, profile.user.id);
