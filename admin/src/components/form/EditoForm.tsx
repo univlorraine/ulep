@@ -216,18 +216,18 @@ const EditoForm: React.FC<EditoFormProps> = ({ handleSubmit, record }) => {
                                 sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}
                             >
                                 <Box sx={{ width: '100%', '& .RaLabeled-label': { display: 'none' } }}>
+                                    <RichTextInput
+                                        defaultValue={content}
+                                        onChange={(value) => setContent(value)}
+                                        source=""
+                                        fullWidth
+                                    />
                                     <Typography variant="subtitle1">{translate('editos.form.video')}</Typography>
                                     <OutlinedInput
                                         defaultValue={video}
                                         onChange={(e: any) => {
                                             setVideo(e.target.value);
                                         }}
-                                        fullWidth
-                                    />
-                                    <RichTextInput
-                                        defaultValue={content}
-                                        onChange={(value) => setContent(value)}
-                                        source=""
                                         fullWidth
                                     />
                                 </Box>
@@ -240,16 +240,6 @@ const EditoForm: React.FC<EditoFormProps> = ({ handleSubmit, record }) => {
                                     sx={{ display: 'flex', flexDirection: 'column', gap: '30px' }}
                                 >
                                     <Box sx={{ width: '100%', '& .RaLabeled-label': { display: 'none' } }}>
-                                        <Typography variant="subtitle1">{translate('editos.form.video')}</Typography>
-                                        <OutlinedInput
-                                            defaultValue={translation.video}
-                                            onChange={(e: any) => {
-                                                const newTranslations = [...translations];
-                                                newTranslations[index].video = e.target.value;
-                                                setTranslations(newTranslations);
-                                            }}
-                                            fullWidth
-                                        />
                                         <RichTextInput
                                             defaultValue={translation.content}
                                             onChange={(e: any) => {
@@ -258,6 +248,16 @@ const EditoForm: React.FC<EditoFormProps> = ({ handleSubmit, record }) => {
                                                 setTranslations(newTranslations);
                                             }}
                                             source=""
+                                            fullWidth
+                                        />
+                                        <Typography variant="subtitle1">{translate('editos.form.video')}</Typography>
+                                        <OutlinedInput
+                                            defaultValue={translation.video}
+                                            onChange={(e: any) => {
+                                                const newTranslations = [...translations];
+                                                newTranslations[index].video = e.target.value;
+                                                setTranslations(newTranslations);
+                                            }}
                                             fullWidth
                                         />
                                     </Box>
