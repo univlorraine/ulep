@@ -97,7 +97,6 @@ export class UpdateInstanceUsecase {
     });
 
     if (command.isInMaintenance) {
-      console.log('globalLogout');
       await this.keycloakClient.globalLogout();
     }
 
