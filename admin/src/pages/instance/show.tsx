@@ -86,7 +86,7 @@ const InstanceShow = () => {
     const handleMaintenanceToggle: SwitchProps['onChange'] = async (event) => {
         try {
             const isOn = event.target.checked;
-            await update('instance', { data: { isInMaintenance: isOn } });
+            await update('instance', { id: '', data: { isInMaintenance: isOn } });
             notify(translate('instance.mainteance_update'));
         } catch (error) {
             notify(translate('instance.update_error'));

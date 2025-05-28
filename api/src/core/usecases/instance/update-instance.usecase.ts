@@ -38,6 +38,7 @@
  *
  */
 
+import { KeycloakClient } from '@app/keycloak';
 import { Inject, Injectable } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import { EditoMandatoryTranslations } from 'src/core/models/Instance.model';
@@ -68,6 +69,7 @@ export class UpdateInstanceCommand {
   secondaryDarkColor?: string;
   editoMandatoryTranslations?: EditoMandatoryTranslations[];
   editoCentralUniversityTranslations?: string[];
+  isInMaintenance?: boolean;
 }
 
 @Injectable()
@@ -79,6 +81,7 @@ export class UpdateInstanceUsecase {
     private readonly editoRepository: EditoRepository,
     @Inject(UNIVERSITY_REPOSITORY)
     private readonly universityRepository: UniversityRepository,
+    private readonly keycloakClient: KeycloakClient,
   ) {}
 
   async execute(command: UpdateInstanceCommand) {
@@ -92,6 +95,10 @@ export class UpdateInstanceUsecase {
       id: instance.id,
       ...command,
     });
+
+    if (command.isInMaintenance) {
+      await this.keycloakClient.globalLogout();
+    }
 
     // Update the central university edito translations
     const centralUniversity =
