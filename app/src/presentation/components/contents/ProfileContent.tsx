@@ -49,7 +49,13 @@ import { AvatarMaxSizeError } from '../../../domain/usecases/UpdateAvatarUsecase
 import { useStoreActions, useStoreState } from '../../../store/storeTypes';
 import useLogout from '../../hooks/useLogout';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
-import { BACKGROUND_PROFILE_STYLE_INLINE, HYBRID_MAX_WIDTH, isImageFormatValid } from '../../utils';
+import {
+    BACKGROUND_PROFILE_STYLE_INLINE,
+    HYBRID_MAX_WIDTH,
+    isImageFormatValid,
+    learningLanguagesToTestedLanguages,
+} from '../../utils';
+import ProficiencyTestCard from '../card/ProficiencyTestCard';
 import EditoContentModal from '../modals/EditoContentModal';
 import ProfileDetailsCard from '../profile/ProfileDetailsCard';
 import styles from './ProfileContent.module.css';
@@ -171,6 +177,14 @@ const ProfileContent: React.FC<ProfileContentProps> = ({ onDisplaySettings, prof
                         secondInfo={formattedDate(user.university.admissionStart)}
                         thirdInfo={`${t('profile_page.university_card.end_date')} ${formattedDate(user.university.admissionEnd)}`}
                     />
+                    {profile.learningLanguages.length > 0 && (
+                        <ProficiencyTestCard
+                            testedLanguages={learningLanguagesToTestedLanguages(
+                                profile.learningLanguages,
+                                profile.testedLanguages
+                            )}
+                        />
+                    )}
                 </div>
 
                 <div className={styles.buttons}>
