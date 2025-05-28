@@ -69,7 +69,6 @@ const TandemProfileContent: React.FC<TandemProfileContentProps> = ({
 }) => {
     const { t } = useTranslation();
     const meProfile = useStoreState((state) => state.profile);
-
     if (!meProfile) {
         return null;
     }
@@ -129,6 +128,8 @@ const TandemProfileContent: React.FC<TandemProfileContentProps> = ({
             <blockquote className={styles['text-container']}>{partnerProfile.biography.experience}</blockquote>
             <h2 className={styles.category}>{t(`home_page.tandem_validated.availabilities`)}</h2>
             <div className={styles['text-container']}>{partnerProfile.user.university.timezone}</div>
+            <span className={styles.category}>{t(`global.frequency.title`)}</span>
+            <div className={styles['text-container']}>{t(`global.frequency.${partnerProfile.frequency}`)}</div>
             <div className={styles.separator} />
             {Object.keys(partnerProfile.availabilities).map((availabilityKey) => {
                 return (
