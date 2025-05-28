@@ -129,8 +129,7 @@ const SignUpPage: React.FC = () => {
         updateProfileSignUp({ country, department, diplome: diploma, role: selectedRole, staffFunction, university });
         return history.push('/signup/informations', payload);
     };
-
-    // Update country selection and set university to first university find in the list.
+    
     const onCountrySelected = (country: Country) => {
         setCountry(country);
         return setUniversity(undefined);
