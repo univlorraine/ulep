@@ -41,3 +41,11 @@
 .list {
     margin-bottom: 24px;
 }
+
+.no_events {
+    text-align: center;
+    color: #737272;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 16px;
+}

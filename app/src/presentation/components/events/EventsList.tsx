@@ -53,8 +53,8 @@ interface EventsListProps {
 const EventsList: React.FC<EventsListProps> = ({ events, profile, onEventPressed }) => {
     const { t } = useTranslation();
     return (
-        <div className="home-card">
-            <span className="home-card-title">{t('home_page.events.title')}</span>
+        <div className="home-card" role="list">
+            <h2 className="home-card-title">{t('home_page.events.title')}</h2>
             {events.map((eventItem: EventObject) => (
                 <EventLine
                     key={eventItem.id}

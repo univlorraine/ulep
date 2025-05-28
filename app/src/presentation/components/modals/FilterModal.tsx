@@ -159,13 +159,14 @@ const FilterModal: React.FC<FilterModalProps> = ({
                                     setShouldTakeAllMine(!shouldTakeAllMine);
                                 }}
                                 name={t(`filter.is_mine`)}
+                                ariaRole="listitem"
                             />
                         </>
                     )}
                     {filterToDisplay.includes(FiltersToDisplay.LANGUAGES) && (
                         <>
                             <p className={styles.filter}>{t('filter.languages')}</p>
-                            <div className={styles.line}>
+                            <div className={styles.line} aria-role="list">
                                 {languages.map((language) => (
                                     <Checkbox
                                         key={language.id}
@@ -174,6 +175,8 @@ const FilterModal: React.FC<FilterModalProps> = ({
                                             addOrRemoveLanguage(language);
                                         }}
                                         name={t(`languages_code.${language.code}`)}
+                                        aria-label={t(`languages_code.${language.code}`)}
+                                        ariaRole="listitem"
                                     />
                                 ))}
                             </div>
@@ -182,13 +185,14 @@ const FilterModal: React.FC<FilterModalProps> = ({
                     {filterToDisplay.includes(FiltersToDisplay.EVENT_TYPE) && (
                         <>
                             <p className={styles.filter}>{t('filter.event_type.title')}</p>
-                            <div className={styles.line}>
+                            <div className={styles.line} aria-role="list">
                                 <Checkbox
                                     name={t('filter.event_type.online')}
                                     onPressed={() => {
                                         addOrRemoveEventType(EventType.ONLINE);
                                     }}
                                     isSelected={selectedEventType.includes(EventType.ONLINE)}
+                                    ariaRole="listitem"
                                 />
                                 <Checkbox
                                     name={t('filter.event_type.presential')}
@@ -196,6 +200,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
                                         addOrRemoveEventType(EventType.PRESENTIAL);
                                     }}
                                     isSelected={selectedEventType.includes(EventType.PRESENTIAL)}
+                                    ariaRole="listitem"
                                 />
                             </div>
                         </>
@@ -203,7 +208,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
                     {filterToDisplay.includes(FiltersToDisplay.LEVELS) && (
                         <>
                             <p className={styles.filter}>{t('filter.levels')}</p>
-                            <div className={styles.line}>
+                            <div className={styles.line} aria-role="list">
                                 {CEFR_LEVELS.map((level) => (
                                     <Checkbox
                                         key={level}
@@ -212,6 +217,8 @@ const FilterModal: React.FC<FilterModalProps> = ({
                                             addOrRemoveProficiencyLevel(level);
                                         }}
                                         name={level}
+                                        aria-label={level}
+                                        ariaRole="listitem"
                                     />
                                 ))}
                             </div>
@@ -220,10 +227,10 @@ const FilterModal: React.FC<FilterModalProps> = ({
                     {filterToDisplay.includes(FiltersToDisplay.THEMES) && themes && (
                         <>
                             <p className={styles.filter}>{t('filter.themes')}</p>
-                            <div className={styles.line}>
+                            <div className={styles.line} aria-role="list">
                                 {themes.map((category) => {
                                     return (
-                                        <div key={category.id} className={styles.category}>
+                                        <div key={category.id} className={styles.category} aria-role="listitem">
                                             <p className={styles['category-title']}>{category.content}</p>
                                             <div className={styles.line}>
                                                 {category.themes.map((theme) => {
@@ -235,6 +242,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
                                                                 addOrRemoveTheme(theme);
                                                             }}
                                                             name={theme.content}
+                                                            ariaRole="listitem"
                                                         />
                                                     );
                                                 })}

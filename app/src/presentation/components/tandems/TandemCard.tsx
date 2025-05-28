@@ -55,11 +55,13 @@ const TandemCard: React.FC<TandemCardProps> = ({ profile, language }) => {
             <div className={styles.card2} />
             <div className={styles.card1} />
             <div className={styles.card}>
-                <div className={styles.content}>
+                <div className={styles.content} role="figure" aria-labelledby={`${profile.user.id}-name`}>
                     <Avatar user={profile.user} className={styles.avatar} />
                     <div className={styles.bubble}>{codeLanguageToFlag(language.code)}</div>
                     <div className={styles['text-container']}>
-                        <span className={styles.name}>{`${profile.user.firstname} ${profile.user.lastname}`}</span>
+                        <span id={`${profile.user.id}-name`} className={styles.name}>
+                            {`${profile.user.firstname} ${profile.user.lastname}`}
+                        </span>
                         <span className={styles['university-name']}>{profile.user.university.name}</span>
                     </div>
                 </div>

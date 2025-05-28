@@ -109,6 +109,7 @@ export const NewsListContent: React.FC<NewListContentProps> = ({ profile, onBack
                         onClick={() => handleNewsPressed(newsItem)}
                     />
                 ))}
+                {news.length === 0 && <span className={styles.noNews}>{t('home_page.news.no_news')}</span>}
                 {!isNewsListEnded && (
                     <IonButton fill="clear" className="secondary-button" onClick={onLoadMoreNews}>
                         {t('news.list.load_more')}

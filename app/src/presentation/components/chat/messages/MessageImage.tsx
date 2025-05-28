@@ -39,13 +39,14 @@
  */
 
 import { IonButton } from '@ionic/react';
+import { useTranslation } from 'react-i18next';
 import { MessageProps } from '../MessageComponent';
 import styles from '../MessageComponent.module.css';
 import LikeButton from './LikeButton';
 
 const MessageImage: React.FC<MessageProps> = ({ message, isCurrentUserMessage, setImageToDisplay }) => {
     const messageClass = isCurrentUserMessage ? styles.currentUser : styles.otherUser;
-
+    const { t } = useTranslation();
     const openModal = () => {
         if (setImageToDisplay) {
             setImageToDisplay(message.content);
@@ -55,7 +56,11 @@ const MessageImage: React.FC<MessageProps> = ({ message, isCurrentUserMessage, s
     return (
         <div className={`${styles.messageImage} ${messageClass}`}>
             <IonButton fill="clear" onClick={openModal}>
-                <img className={styles.image} src={message.getThumbnail()} />
+                <img
+                    className={styles.image}
+                    src={message.getThumbnail()}
+                    alt={t('chat.medias.images-alt') as string}
+                />
             </IonButton>
             <LikeButton message={message} isCurrentUserMessage={isCurrentUserMessage} />
         </div>

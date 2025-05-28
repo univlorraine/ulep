@@ -69,21 +69,20 @@ const TandemProfileContent: React.FC<TandemProfileContentProps> = ({
 }) => {
     const { t } = useTranslation();
     const meProfile = useStoreState((state) => state.profile);
-
     if (!meProfile) {
         return null;
     }
 
     return (
         <div className={`${styles.content} ${className ? className : ''}`}>
-            <span className="title extra-large-margin-bottom large-margin-top">
+            <h1 className="title extra-large-margin-bottom large-margin-top">
                 {t(`home_page.tandem_validated.title`)}
-            </span>
+            </h1>
             <TandemCard profile={partnerProfile} language={learningLanguage} />
-            <span className={styles.category}>{t(`global.email`)}</span>
+            <h2 className={styles.category}>{t(`global.email`)}</h2>
             <div className={styles['text-container']}>{partnerProfile.user.email}</div>
 
-            <span className={styles.category}>{t(`home_page.tandem_validated.goals`)}</span>
+            <h2 className={styles.category}>{t(`home_page.tandem_validated.goals`)}</h2>
             <div className={styles['text-container']}>
                 <span>{`${t(`home_page.tandem_validated.type.${pedagogy}`)} ( ${level} ) ${codeLanguageToFlag(
                     partnerLearningLanguage.code
@@ -97,7 +96,7 @@ const TandemProfileContent: React.FC<TandemProfileContentProps> = ({
                 ))}
             </div>
 
-            <span className={styles.category}>{t(`home_page.tandem_validated.languages`)}</span>
+            <h2 className={styles.category}>{t(`home_page.tandem_validated.languages`)}</h2>
             <div className={styles['text-container']}>
                 <>
                     {partnerProfile.nativeLanguage.name} <br />
@@ -109,26 +108,28 @@ const TandemProfileContent: React.FC<TandemProfileContentProps> = ({
                     ))}
                 </>
             </div>
-            <span className={styles.category}>{t(`home_page.tandem_validated.interests`)}</span>
-            <div className={styles.interests}>
+            <h2 className={styles.category}>{t(`home_page.tandem_validated.interests`)}</h2>
+            <div className={styles.interests} role="list">
                 {partnerProfile.interests.map((interest) => {
                     return (
-                        <div key={interest.id} className={styles.interest}>
+                        <div key={interest.id} className={styles.interest} role="listitem">
                             {interest.name}
                         </div>
                     );
                 })}
             </div>
-            <span className={styles.category}>{t(`home_page.tandem_validated.power`)}</span>
-            <div className={styles['text-container']}>{partnerProfile.biography.superpower}</div>
-            <span className={styles.category}>{t(`home_page.tandem_validated.incredible`)}</span>
-            <div className={styles['text-container']}>{partnerProfile.biography.anecdote}</div>
-            <span className={styles.category}>{t(`home_page.tandem_validated.place`)}</span>
-            <div className={styles['text-container']}>{partnerProfile.biography.favoritePlace}</div>
-            <span className={styles.category}>{t(`home_page.tandem_validated.travel`)}</span>
-            <div className={styles['text-container']}>{partnerProfile.biography.experience}</div>
-            <span className={styles.category}>{t(`home_page.tandem_validated.availabilities`)}</span>
+            <h2 className={styles.category}>{t(`home_page.tandem_validated.power`)}</h2>
+            <blockquote className={styles['text-container']}>{partnerProfile.biography.superpower}</blockquote>
+            <h2 className={styles.category}>{t(`home_page.tandem_validated.incredible`)}</h2>
+            <blockquote className={styles['text-container']}>{partnerProfile.biography.anecdote}</blockquote>
+            <h2 className={styles.category}>{t(`home_page.tandem_validated.place`)}</h2>
+            <blockquote className={styles['text-container']}>{partnerProfile.biography.favoritePlace}</blockquote>
+            <h2 className={styles.category}>{t(`home_page.tandem_validated.travel`)}</h2>
+            <blockquote className={styles['text-container']}>{partnerProfile.biography.experience}</blockquote>
+            <h2 className={styles.category}>{t(`home_page.tandem_validated.availabilities`)}</h2>
             <div className={styles['text-container']}>{partnerProfile.user.university.timezone}</div>
+            <span className={styles.category}>{t(`global.frequency.title`)}</span>
+            <div className={styles['text-container']}>{t(`global.frequency.${partnerProfile.frequency}`)}</div>
             <div className={styles.separator} />
             {Object.keys(partnerProfile.availabilities).map((availabilityKey) => {
                 return (
@@ -141,7 +142,7 @@ const TandemProfileContent: React.FC<TandemProfileContentProps> = ({
             })}
             {!partnerProfile.availabilitiesNotePrivacy && (
                 <>
-                    <span className={styles.category}>{t(`home_page.tandem_validated.availabilities_note`)}</span>
+                    <h2 className={styles.category}>{t(`home_page.tandem_validated.availabilities_note`)}</h2>
                     <div className={styles['text-container']}>{partnerProfile.availabilitiesNote}</div>
                 </>
             )}

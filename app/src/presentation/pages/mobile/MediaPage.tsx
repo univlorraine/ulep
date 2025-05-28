@@ -40,6 +40,7 @@
 
 import { IonContent } from '@ionic/react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory, useLocation } from 'react-router';
 import Conversation from '../../../domain/entities/chat/Conversation';
 import { useStoreState } from '../../../store/storeTypes';
@@ -52,6 +53,7 @@ interface MediaPageProps {
 }
 
 const MediaPage = () => {
+    const { t } = useTranslation();
     const history = useHistory();
     const location = useLocation<MediaPageProps>();
     const { conversation } = location.state;
@@ -86,7 +88,11 @@ const MediaPage = () => {
                 isVisible={Boolean(imageToDisplay)}
                 onClose={() => setImageToDisplay(undefined)}
             >
-                <img className={styles['image-modal']} src={imageToDisplay} />
+                <img
+                    className={styles['image-modal']}
+                    src={imageToDisplay}
+                    alt={t('chat.medias.images-alt') as string}
+                />
             </Modal>
         </>
     );

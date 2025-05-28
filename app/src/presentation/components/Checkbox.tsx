@@ -47,9 +47,18 @@ interface CheckboxProps {
     textClass?: string;
     ariaLabel?: string;
     className?: string;
+    ariaRole?: string;
 }
 
-const Checkbox: React.FC<CheckboxProps> = ({ isSelected, onPressed, name, textClass, ariaLabel, className }) => {
+const Checkbox: React.FC<CheckboxProps> = ({
+    isSelected,
+    onPressed,
+    name,
+    textClass,
+    ariaLabel,
+    className,
+    ariaRole,
+}) => {
     const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         onPressed && onPressed();
@@ -62,12 +71,17 @@ const Checkbox: React.FC<CheckboxProps> = ({ isSelected, onPressed, name, textCl
                 className={isSelected ? styles['checkbox-selected'] : styles['checkbox-unselected']}
                 aria-label={ariaLabel ?? (name as string)}
                 aria-checked={isSelected}
-                role="checkbox"
+                role={ariaRole + ' checkbox'}
+                aria-labelledby={encodeURIComponent(ariaLabel ?? (name as string)) + '_labelid'}
             >
                 {isSelected && <img alt="check" className={styles.image} src={CheckSvg} />}
             </button>
             {name && (
-                <span className={textClass} onClick={handleClick}>
+                <span
+                    className={textClass}
+                    onClick={handleClick}
+                    id={encodeURIComponent(ariaLabel ?? (name as string)) + '_labelid'}
+                >
                     {name}
                 </span>
             )}

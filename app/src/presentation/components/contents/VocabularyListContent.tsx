@@ -77,7 +77,7 @@ const VocabularyListContent: React.FC<VocabularyListContentProps> = ({
                 title={t('vocabulary.list.title')}
                 onBackPressed={() => goBack?.()}
             />
-            <div className={styles.content}>
+            <div className={styles.content} role="list">
                 {!isLoading && vocabularyLists.length === 0 && (
                     <div className={styles.emptyContainer}>
                         <IonImg alt="" aria-hidden className={styles.emptyImage} src={VocabularyPng} />
@@ -118,7 +118,12 @@ const VocabularyListContent: React.FC<VocabularyListContentProps> = ({
                     )}
             </div>
 
-            <IonButton fill="clear" className="add-button" onClick={onAddVocabularyList}>
+            <IonButton
+                fill="clear"
+                className="add-button"
+                onClick={onAddVocabularyList}
+                aria-label={t('vocabulary.list.create.title') as string}
+            >
                 <IonImg aria-hidden className="add-button-icon" src={AddSvg} />
             </IonButton>
         </div>

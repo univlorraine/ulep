@@ -71,33 +71,43 @@ const ProfileAvailabilities: React.FC<ProfileAvailabilitiesProps> = ({ partner }
                 className={styles.header}
                 onClick={openAvailabilities}
                 role="button"
-                aria-label={t('session.availabilities.open') as string}
+                aria-expanded={isOpen}
+                aria-controls="availabilities-content"
+                tabIndex={0}
             >
                 <p className={styles.title}>{t('session.availabilities.title', { name: partner?.user.firstname })}</p>
                 <IonButton fill="clear" onClick={openAvailabilities}>
-                    {isOpen ? <IonIcon icon={ArrowUpSvg} /> : <IonIcon icon={ArrowDownSvg} />}
+                    {isOpen ? (
+                        <IonIcon icon={ArrowUpSvg} aria-label={t('session.availabilities.close') as string} />
+                    ) : (
+                        <IonIcon icon={ArrowDownSvg} aria-label={t('session.availabilities.open') as string} />
+                    )}
                 </IonButton>
             </div>
-            {isOpen && (
-                <div className={styles.content}>
-                    <div className={styles.availabilities_container}>
-                        {availabilities.map((availabilityKey) => (
+            <div
+                id="availabilities-content"
+                className={`${styles.content} ${!isOpen ? styles.hidden : ''}`}
+                role="region"
+                aria-label={t('session.availabilities.title') as string}
+            >
+                <div className={styles.availabilities_container} role="list">
+                    {availabilities.map((availabilityKey) => (
+                        <div key={availabilityKey} role="listitem" tabIndex={0} className={styles.availability_item}>
                             <AvailabilityText
-                                key={availabilityKey}
                                 availability={partner.availabilities[availabilityKey as keyof Availabilites]}
                                 day={availabilityKey}
                                 className={styles.availability_text}
                             />
-                        ))}
-                    </div>
-                    {isNoteAvailable && (
-                        <p>
-                            <p className={styles.title}>{t('session.availabilities.note')}</p>
-                            <div className={styles.note}>{partner.availabilitiesNote}</div>
-                        </p>
-                    )}
+                        </div>
+                    ))}
                 </div>
-            )}
+                {isNoteAvailable && (
+                    <div className={styles.note_container}>
+                        <h3 className={styles.title}>{t('session.availabilities.note')}</h3>
+                        <div className={styles.note}>{partner.availabilitiesNote}</div>
+                    </div>
+                )}
+            </div>
         </div>
     );
 };

@@ -53,8 +53,8 @@ interface NewsListProps {
 const NewsList: React.FC<NewsListProps> = ({ news, profile, onNewsPressed }) => {
     const { t } = useTranslation();
     return (
-        <div className="home-card">
-            <span className="home-card-title">{t('home_page.news.title')}</span>
+        <div className="home-card" role="list">
+            <h2 className="home-card-title">{t('home_page.news.title')}</h2>
             {news.map((newsItem: News) => (
                 <NewsLine key={newsItem.id} news={newsItem} profile={profile} onClick={() => onNewsPressed(newsItem)} />
             ))}

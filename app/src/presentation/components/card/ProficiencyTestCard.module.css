@@ -92,6 +92,7 @@
 }
 
 .tested-languages {
+    color: #000;
     display: inline-block;
     padding-right: 1rem;
 }

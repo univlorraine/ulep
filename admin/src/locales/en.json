@@ -224,8 +224,8 @@
         "form": {
             "mandatoryLanguages": "Languages with a * are mandatory",
             "update": "Update",
-            "video": "Video URL",
-            "invalidVideoUrl": "The video URL is invalid"
+            "video": "Embed a video player (iframe)",
+            "invalidVideoUrl": "The video integration is invalid"
         },
         "label": "Editos",
         "title": "Editos",

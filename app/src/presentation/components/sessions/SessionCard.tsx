@@ -186,7 +186,7 @@ const SessionCard: React.FC<SessionCardProps> = ({
     };
 
     return (
-        <div className={styles.container}>
+        <div className={styles.container} role="listitem">
             <div className={styles.card}>
                 {!isHybrid && (
                     <div className={styles.bubble}>

@@ -40,7 +40,6 @@
 
 import { IonButton } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router';
 import Session from '../../../domain/entities/Session';
 import Tandem from '../../../domain/entities/Tandem';
 import SessionCard from './SessionCard';
@@ -71,19 +70,18 @@ const SessionListHome: React.FC<SessionListHomeProps> = ({
         onShowSessionListPressed();
     };
 
-    const tandemsWithoutSession = tandems.filter((tandem) => 
-        tandem.status === 'ACTIVE' &&
-        !sessions.some((session) => session.tandemId === tandem.id
-    ));
-    
+    const tandemsWithoutSession = tandems.filter(
+        (tandem) => tandem.status === 'ACTIVE' && !sessions.some((session) => session.tandemId === tandem.id)
+    );
+
     const countTandems = tandemsWithoutSession.length;
     const countSessionsToDisplay = 3 - countTandems;
 
     return (
         <div className="home-card">
-            <span className="home-card-title">{t('home_page.session.title', { count: sessions.length })}</span>
+            <h2 className="home-card-title">{t('home_page.session.title', { count: sessions.length })}</h2>
             <div className={styles.container}>
-                <div className={styles['session-container']}>
+                <div className={styles['session-container']} role="list">
                     {tandemsWithoutSession.map((tandem) => {
                         return (
                             <SessionCard
@@ -96,21 +94,22 @@ const SessionListHome: React.FC<SessionListHomeProps> = ({
                             />
                         );
                     })}
-                    {countSessionsToDisplay > 0 && sessions.slice(0, countSessionsToDisplay).map((session) => {
-                        const tandem = tandems.find((tandem) => tandem.id === session.tandemId);
-                        if (!tandem) return null;
-                        return (
-                            <SessionCard
-                                key={session.id}
-                                tandem={tandem}
-                                session={session}
-                                isHybrid={isHybrid}
-                                onShowSessionPressed={onShowSessionPressed}
-                                onUpdateSessionPressed={onUpdateSessionPressed}
-                                onCreateSessionPressed={onCreateSessionPressed}
-                            />
-                        );
-                    })}
+                    {countSessionsToDisplay > 0 &&
+                        sessions.slice(0, countSessionsToDisplay).map((session) => {
+                            const tandem = tandems.find((tandem) => tandem.id === session.tandemId);
+                            if (!tandem) return null;
+                            return (
+                                <SessionCard
+                                    key={session.id}
+                                    tandem={tandem}
+                                    session={session}
+                                    isHybrid={isHybrid}
+                                    onShowSessionPressed={onShowSessionPressed}
+                                    onUpdateSessionPressed={onUpdateSessionPressed}
+                                    onCreateSessionPressed={onCreateSessionPressed}
+                                />
+                            );
+                        })}
                 </div>
                 {sessions.length > 0 && (
                     <IonButton className="primary-button no-padding" fill="clear" onClick={handleShowSessionList}>

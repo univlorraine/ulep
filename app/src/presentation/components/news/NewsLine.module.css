@@ -54,6 +54,10 @@
     gap: 16px;
 }
 
+button.buttonFocused .container {
+    background-color: rgba(0, 84, 233, 0.12);
+}
+
 .content {
     width: 100%;
 }
@@ -90,4 +94,8 @@
     font-weight: 400;
     line-height: 16px;
     width: 100%;
+}
+
+button.buttonFocused {
+    background-color: transparent;
 }

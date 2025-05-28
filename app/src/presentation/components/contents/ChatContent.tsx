@@ -149,6 +149,7 @@ const Content: React.FC<ChatContentProps> = ({
 
     const { hashtags, isLoading: hashtagsLoading } = useHandleHastagsFromConversation({
         conversationId: conversation.id,
+        messages,
     });
 
     const partner = Conversation.getMainConversationPartner(conversation, profile.user.id);
@@ -300,7 +301,7 @@ const Content: React.FC<ChatContentProps> = ({
                     </IonButton>
                 )}
                 <div className={styles['title-container']}>
-                    <h2 className={styles.title}>
+                    <h1 className={styles.title}>
                         {!isCommunity
                             ? t('chat.title', {
                                   name: partner.firstname,
@@ -309,7 +310,7 @@ const Content: React.FC<ChatContentProps> = ({
                                   firstLanguage: t(`languages_code.${conversation.centralLanguage?.code}`),
                                   secondLanguage: t(`languages_code.${conversation.partnerLanguage?.code}`),
                               })}
-                    </h2>
+                    </h1>
                     {!isBlocked && !isCommunity && (
                         <IonButton
                             fill="clear"
@@ -330,7 +331,11 @@ const Content: React.FC<ChatContentProps> = ({
                     id="click-trigger"
                     className={styles['kebab-button']}
                     onClick={() => setShowMenu(!showMenu)}
-                    aria-label={t('chat.conversation_menu.aria_label') as string}
+                    aria-label={
+                        t('chat.conversation_menu.aria_label', {
+                            name: partner.firstname,
+                        }) as string
+                    }
                 >
                     <IonIcon icon={KebabSvg} size="medium" aria-hidden="true" />
                 </IonButton>

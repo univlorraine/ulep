@@ -42,6 +42,7 @@ import { IonIcon } from '@ionic/react';
 import { chevronForwardOutline } from 'ionicons/icons';
 import { useTranslation } from 'react-i18next';
 import Vocabulary from '../../../domain/entities/Vocabulary';
+import VocabularyList from '../../../domain/entities/VocabularyList';
 import AudioLine from '../AudioLine';
 import styles from './VocabularyLine.module.css';
 
@@ -49,9 +50,15 @@ interface VocabularyLineProps {
     vocabulary: Vocabulary;
     onVocabularyClick: (vocabulary: Vocabulary) => void;
     isEditable?: boolean;
+    vocabularyList?: VocabularyList;
 }
 
-const VocabularyLine: React.FC<VocabularyLineProps> = ({ vocabulary, onVocabularyClick, isEditable }) => {
+const VocabularyLine: React.FC<VocabularyLineProps> = ({
+    vocabulary,
+    onVocabularyClick,
+    isEditable,
+    vocabularyList,
+}) => {
     const { t } = useTranslation();
     return (
         <button
@@ -59,16 +66,19 @@ const VocabularyLine: React.FC<VocabularyLineProps> = ({ vocabulary, onVocabular
             className={styles.container}
             disabled={!isEditable}
             onClick={() => onVocabularyClick(vocabulary)}
+            role="listitem"
         >
             <div className={styles.content}>
                 <div className={styles.player}>
-                    <span className={styles.word}>{vocabulary.word}</span>
+                    <span lang={vocabularyList?.targetLanguage.code} className={styles.word}>
+                        {vocabulary.word}
+                    </span>
                     {vocabulary.pronunciationWordUrl && (
                         <AudioLine audioFile={vocabulary.pronunciationWordUrl} hideProgressBar small />
                     )}
                 </div>
                 <div className={styles.player}>
-                    <span className={styles.translation}>
+                    <span lang={vocabularyList?.translationLanguage.code} className={styles.translation}>
                         {vocabulary.translation ?? t('vocabulary.pair.no_translation')}
                     </span>
                     {vocabulary.pronunciationTranslationUrl && (
@@ -76,7 +86,7 @@ const VocabularyLine: React.FC<VocabularyLineProps> = ({ vocabulary, onVocabular
                     )}
                 </div>
             </div>
-            {isEditable && <IonIcon icon={chevronForwardOutline} aria-hidden="true" />}
+            {isEditable && <IonIcon icon={chevronForwardOutline} aria-hidden="true" tabIndex={0} />}
         </button>
     );
 };
