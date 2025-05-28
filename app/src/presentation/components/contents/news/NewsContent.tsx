@@ -101,7 +101,9 @@ export const NewsContent: React.FC<NewsContentProps> = ({ news, profile, onBackP
                     </IonButton>
                 )}
                 <div className={styles['primary-container']} style={{ marginTop: news.imageUrl ? 200 : 0 }}>
-                    <h1 className={styles.title}>{currentTitle}</h1>
+                    <h1 className={styles.title} lang={currentLanguage}>
+                        {currentTitle}
+                    </h1>
                     <span className={styles.date}>{formattedDate}</span>
                     <div className={styles.informations}>
                         <div className={styles['information-item']}>
@@ -124,7 +126,11 @@ export const NewsContent: React.FC<NewsContentProps> = ({ news, profile, onBackP
                             <UniversityTag university={news.university} />
                         </div>
                     </div>
-                    <p className={styles.content} dangerouslySetInnerHTML={{ __html: currentContent }} />
+                    <p
+                        lang={currentLanguage}
+                        className={styles.content}
+                        dangerouslySetInnerHTML={{ __html: currentContent }}
+                    />
                 </div>
             </div>
             <ChangeLanguageModal

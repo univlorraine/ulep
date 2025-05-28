@@ -145,7 +145,11 @@ export const EventsContent: React.FC<EventsContentProps> = ({ eventId, profile, 
                         profile={profile}
                         onEventSubscribed={() => setRefresh(!refresh)}
                     />
-                    <p className={styles.content} dangerouslySetInnerHTML={{ __html: currentContent }} />
+                    <p
+                        lang={currentLanguage}
+                        className={styles.content}
+                        dangerouslySetInnerHTML={{ __html: currentContent }}
+                    />
                 </div>
             </div>
             <ChangeLanguageModal

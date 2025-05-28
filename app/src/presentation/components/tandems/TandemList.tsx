@@ -52,9 +52,9 @@ const TandemList: React.FC<TandemListProps> = ({ onTandemPressed, tandems }) => 
     const { t } = useTranslation();
     return (
         <div className="home-card">
-            <span className="home-card-title">{t('home_page.tandem.title')}</span>
+            <h2 className="home-card-title">{t('home_page.tandem.title')}</h2>
             <div className={styles.container}>
-                <div className={styles['tandem-container']}>
+                <div className={styles['tandem-container']} role="list">
                     {tandems
                         .filter((tandem) => tandem.status === 'ACTIVE')
                         .map((tandem) => {

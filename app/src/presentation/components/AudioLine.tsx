@@ -49,8 +49,6 @@ interface AudioLineProps {
     icon?: string;
 }
 
-// TODO: Remove this todo later
-
 const AudioLine: React.FC<AudioLineProps> = ({ audioFile, hideProgressBar = false, small = false, icon }) => {
     const [isPlaying, setIsPlaying] = useState(false);
     const [progress, setProgress] = useState(0);
@@ -62,7 +60,13 @@ const AudioLine: React.FC<AudioLineProps> = ({ audioFile, hideProgressBar = fals
     } else {
         audioFileString = URL.createObjectURL(audioFile);
     }
+
     const audioRef = useRef(new Audio(audioFileString));
+
+    //audio object keep ref if not destroy. We must check url have been updated
+    if (audioRef.current.src != audioFileString) {
+        audioRef.current.src = audioFileString;
+    }
 
     useEffect(() => {
         if (duration === 0) return;
@@ -115,7 +119,11 @@ const AudioLine: React.FC<AudioLineProps> = ({ audioFile, hideProgressBar = fals
 
     return (
         <div className={styles.audioLine}>
-            <button className={`${styles.button} ${small ? styles.smallButton : ''}`} onClick={togglePlayPause}>
+            <button
+                className={`${styles.button} ${small ? styles.smallButton : ''}`}
+                onClick={togglePlayPause}
+                tabIndex={0}
+            >
                 {isPlaying ? <img src={icon || PauseSvg} alt="Pause" /> : <img src={icon || PlaySvg} alt="Play" />}
             </button>
             {!hideProgressBar && (

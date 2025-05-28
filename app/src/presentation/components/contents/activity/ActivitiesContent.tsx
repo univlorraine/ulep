@@ -206,7 +206,7 @@ export const ActivitiesContent: React.FC<ActivitiesContentProps> = ({
                     onFilterClear={onFilterClear}
                     searchI18nKey="activity"
                 />
-                <div className={styles['activity-list-container']}>
+                <div className={styles['activity-list-container']} role="list">
                     {activities.map((activity) => (
                         <ActivityCard
                             key={activity.id}
@@ -215,12 +215,21 @@ export const ActivitiesContent: React.FC<ActivitiesContentProps> = ({
                             isHybrid={isHybrid}
                         />
                     ))}
-                    <div />
+                    {activities.length === 0 && (
+                        <div className={styles['no-activities']}>
+                            <p>{t('activity.list.no_activities')}</p>
+                        </div>
+                    )}
                 </div>
                 {isLoading && <Loader />}
             </div>
 
-            <IonButton fill="clear" className="add-button" onClick={() => onAddActivity()}>
+            <IonButton
+                fill="clear"
+                className="add-button"
+                onClick={() => onAddActivity()}
+                aria-label={t('activity.create.add_excercise_button') as string}
+            >
                 <IonImg aria-hidden className="add-button-icon" src={AddSvg} />
             </IonButton>
             <FilterModal

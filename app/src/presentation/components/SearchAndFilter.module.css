@@ -45,6 +45,11 @@
     color: white;
 }
 
+.active-filter-button:focus {
+    background-color: rgba(0, 84, 233, 0.12);
+    color: black;
+}
+
 .filter-button {
     color: black;
 }
@@ -65,4 +70,8 @@
     flex-direction: column;
     gap: 24px;
     overflow-y: auto;
+}
+
+.focused {
+    background-color: rgba(0, 84, 233, 0.12);
 }

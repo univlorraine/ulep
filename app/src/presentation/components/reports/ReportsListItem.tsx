@@ -82,6 +82,11 @@ const ReportsListItem: React.FC<ReportsListItemProps> = ({ report, key }) => {
                 className={styles.image}
                 src={isConversationReport ? MessagesPng : SignalerPng}
                 style={{ objectFit: 'contain' }}
+                alt={
+                    isConversationReport
+                        ? (t('reports_page.list.conversation_report') as string)
+                        : (t('reports_page.list.report_report') as string)
+                }
             />
             <div className={styles.content}>
                 <div className={styles.status_container}>

@@ -109,7 +109,7 @@ export class UpdateUserUsecase {
       command.email !== user.email
     ) {
       await this.keycloakClient.updateUser({
-        id: user.id,
+        id: user.contactId,
         firstname: command.firstname || user.firstname,
         lastname: command.lastname || user.lastname,
         email: command.email || user.email,
@@ -166,6 +166,10 @@ export class UpdateUserUsecase {
     if (tandems.length > 0) {
       for (const tandem of tandems) {
         if (tandem.status === TandemStatus.INACTIVE) {
+          continue;
+        }
+        if (tandem.status === TandemStatus.DRAFT) {
+          await this.tandemRepository.delete(tandem.id);
           continue;
         }
 

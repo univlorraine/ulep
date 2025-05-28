@@ -65,7 +65,12 @@ const EventLine: React.FC<EventLineProps> = ({ event, profile, onClick }) => {
     }).format(new Date(event.startDate));
 
     return (
-        <button aria-label={t('events.open', { title: event.title }) as string} onClick={onClick}>
+        <button
+            lang={language}
+            aria-label={t('events.open', { title: event.title }) as string}
+            onClick={onClick}
+            role="listitem"
+        >
             <div className={styles.container}>
                 {event.imageUrl && <IonImg className={styles.image} src={event.imageUrl} />}
                 <div className={styles.content}>

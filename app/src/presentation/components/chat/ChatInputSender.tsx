@@ -229,11 +229,15 @@ const ChatInputSender: React.FC<ChatInputSenderProps> = ({
         });
     };
 
-    const onSendPressed = async () => {
-        if (
+    const canSendMessage = () => {
+        return !(
             isRecording ||
             (!message && !imageToSend && !audioFile && !fileToSend && !selectedVocabularyList && !selectedActivity)
-        ) {
+        );
+    };
+
+    const onSendPressed = async () => {
+        if (!canSendMessage()) {
             return;
         }
 
@@ -371,6 +375,9 @@ const ChatInputSender: React.FC<ChatInputSenderProps> = ({
                         }
                         value={message}
                         disabled={isBlocked}
+                        aria-label={
+                            t(isBlocked ? 'chat.input.placeholder.blocked' : 'chat.input.placeholder.unblocked') ?? ''
+                        }
                     />
                 )}
                 <RecordingButton
@@ -383,6 +390,7 @@ const ChatInputSender: React.FC<ChatInputSenderProps> = ({
                     handleStartRecord={handleStartRecord}
                     handleStopRecord={handleStopRecord}
                     isBlocked={isBlocked}
+                    disabled={!canSendMessage()}
                     hideRecordButton={isCommunity}
                 />
             </div>

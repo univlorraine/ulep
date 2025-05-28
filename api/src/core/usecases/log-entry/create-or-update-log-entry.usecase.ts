@@ -112,10 +112,16 @@ export class CreateOrUpdateLogEntryUsecase {
     type: LogEntryType,
     metadata: Record<string, any>,
   ): Promise<HandleEntryExistsTodayResult> {
-    const entries = await this.logEntryRepository.findAllOfTypeToday(
-      learningLanguageId,
-      type,
-    );
+    const entries =
+      type === LogEntryType.TANDEM_CHAT
+        ? await this.logEntryRepository.findAllOfType(
+            learningLanguageId,
+            type,
+          )
+        : await this.logEntryRepository.findAllOfTypeToday(
+            learningLanguageId,
+            type,
+          );
 
     switch (type) {
       case LogEntryType.ADD_VOCABULARY:

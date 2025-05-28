@@ -226,8 +226,8 @@
         "form": {
             "mandatoryLanguages": "Les langues avec un * sont obligatoires",
             "update": "Mettre à jour",
-            "video": "Url de la video",
-            "invalidVideoUrl": "L'url de la video est invalide"
+            "video": "Intégrer un lecteur vidéo (iframe)",
+            "invalidVideoUrl": "L'intégration de la vidéo est invalide"
         },
         "list": {
             "university": "Université",

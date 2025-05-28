@@ -79,6 +79,10 @@ export interface LogEntryRepository {
     learningLanguageId: string,
     type: LogEntryType,
   ): Promise<LogEntry[]>;
+  findAllOfType(
+    learningLanguageId: string,
+    type: LogEntryType,
+  ): Promise<LogEntry[]>;
   findAllOfTypeTodayWithoutLearningLanguage(
     type: LogEntryType,
   ): Promise<LogEntry[]>;

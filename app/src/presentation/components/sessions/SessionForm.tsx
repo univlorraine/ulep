@@ -110,7 +110,7 @@ const SessionForm: React.FC<SessionFormProps> = ({ onBackPressed, onSubmit, sess
         <>
             <div className={styles.container}>
                 <div className={styles.datetime}>
-                    <p className={styles.label}>{t('session.date_and_hour')}</p>
+                    <label className={styles.label}>{t('session.date_and_hour')}</label>
                     <IonDatetimeButton className={styles.datetimeBtn} datetime="datetime"></IonDatetimeButton>
                     {userTz !== partnerTz && (
                         <p className={styles.datetimeInfo}>
@@ -130,7 +130,9 @@ const SessionForm: React.FC<SessionFormProps> = ({ onBackPressed, onSubmit, sess
                     </IonModal>
                 </div>
                 <div className={styles.language}>
-                    <p className={styles.label}>{t('session.comment')}</p>
+                    <label className={styles.label} htmlFor="input-comment">
+                        {t('session.comment')}
+                    </label>
                     <TextInput
                         id="input-comment"
                         type="text-area"
