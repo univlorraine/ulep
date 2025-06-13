@@ -78,7 +78,6 @@
     flex-direction: row;
     flex: 1 1 auto;
     min-width: 0;
-    /* Permet au titre de prendre toute la largeur possible */
 }
 
 .title {
@@ -136,13 +135,6 @@
 .replyHeaderButton {
     padding: 0;
     color: black;
-}
-
-.header-buttons {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-shrink: 0;
 }
 
 @media (min-width: 768px) {
