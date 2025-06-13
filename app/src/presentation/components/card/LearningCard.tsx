@@ -55,9 +55,9 @@ const LearningCard: React.FC<LearningCardProps> = ({ buttonText, children, onBut
     const isHybrid = width < HYBRID_MAX_WIDTH;
 
     return (
-        <h2 className="home-card">
+        <div className="home-card">
             <div className={styles.header}>
-                <span className="home-card-title">{title}</span>
+                <h2 className="home-card-title">{title}</h2>
                 {!isHybrid && onButtonPressed && (
                     <IonButton
                         fill="clear"
@@ -69,7 +69,7 @@ const LearningCard: React.FC<LearningCardProps> = ({ buttonText, children, onBut
                 )}
             </div>
             {children}
-        </h2>
+        </div>
     );
 };
 
