@@ -142,3 +142,32 @@
         width: 60px;
     }
 }
+
+/* Styles spécifiques pour la gestion du clavier sur Android/Xiaomi */
+@media (max-width: 767px) {
+    .footer {
+        position: sticky;
+        bottom: 0;
+        z-index: 1000;
+        padding-bottom: calc(12px + env(safe-area-inset-bottom));
+    }
+
+    .input {
+        min-height: 40px;
+        max-height: 120px;
+        line-height: 1.4;
+        position: relative;
+        z-index: 1001;
+    }
+
+    .sender-view {
+        position: relative;
+        z-index: 1001;
+    }
+}
+
+@media (max-height: 600px) {
+    .footer {
+        min-height: 80px;
+    }
+}

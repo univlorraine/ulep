@@ -55,8 +55,9 @@ const baseConfig: CapacitorConfig = {
             presentationOptions: ['badge', 'sound', 'alert'],
         },
         Keyboard: {
-            resize: 'native',
+            resize: 'body',
             style: 'DARK',
+            accessoryBarVisible: false,
         },
     },
 };
