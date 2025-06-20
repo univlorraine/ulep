@@ -64,6 +64,7 @@ import PageTitle from '../../components/PageTitle';
 import { Role } from '../../entities/Administrator';
 import { EventObject, EventStatus, EventTranslation, EventType } from '../../entities/Event';
 import codeLanguageToFlag from '../../utils/codeLanguageToFlag';
+import useGetSortedLanguagesWithLabel from '../../utils/useGetSortedLanguagesWithLabel';
 
 const StatusChips = ({ status }: { status: string }) => {
     const translate = useTranslate();
@@ -88,22 +89,15 @@ const EventsList = () => {
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
     const { universitiesLanguages, universitiesData } = useGetUniversitiesLanguages();
 
+    const sortedLanguages = useGetSortedLanguagesWithLabel(universitiesLanguages);
+
     if (isLoadingIdentity || !identity) {
         return <Loading />;
     }
 
     const filters = [
         <TextInput key="titleFilter" label={translate('events.list.filters.title')} source="title" alwaysOn />,
-        <SelectInput
-            key="defaultLanguageFilter"
-            choices={universitiesLanguages.map((language) => ({
-                id: language.code,
-                name: codeLanguageToFlag(language.code),
-            }))}
-            label={translate('events.list.filters.language')}
-            source="languageCode"
-            alwaysOn
-        />,
+
         <SelectInput
             key="typeFilter"
             choices={Object.values(EventType).map((type) => ({
@@ -125,6 +119,20 @@ const EventsList = () => {
             alwaysOn
         />,
     ];
+
+    if (sortedLanguages) {
+        filters.push(
+            <SelectInput
+                key="defaultLanguageFilter"
+                choices={sortedLanguages}
+                label={translate('events.list.filters.language')}
+                optionText={(option) => option.label}
+                optionValue="code"
+                source="languageCode"
+                alwaysOn
+            />
+        );
+    }
 
     if (identity?.isCentralUniversity && universitiesData && permissions.checkRole(Role.SUPER_ADMIN)) {
         filters.unshift(

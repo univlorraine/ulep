@@ -58,6 +58,7 @@ import PageTitle from '../../components/PageTitle';
 import { Role } from '../../entities/Administrator';
 import { News, NewsStatus, NewsTranslation } from '../../entities/News';
 import codeLanguageToFlag from '../../utils/codeLanguageToFlag';
+import useGetSortedLanguagesWithLabel from '../../utils/useGetSortedLanguagesWithLabel';
 
 const StatusChips = ({ status }: { status: string }) => {
     const translate = useTranslate();
@@ -81,18 +82,10 @@ const NewsList = () => {
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
     const { universitiesLanguages, universitiesData } = useGetUniversitiesLanguages();
 
+    const sortedLanguages = useGetSortedLanguagesWithLabel(universitiesLanguages);
+
     const filters = [
         <TextInput key="titleFilter" label={translate('news.list.filters.title')} source="title" alwaysOn />,
-        <SelectInput
-            key="defaultLanguageFilter"
-            choices={universitiesLanguages.map((language) => ({
-                id: language.code,
-                name: codeLanguageToFlag(language.code),
-            }))}
-            label={translate('news.list.filters.language')}
-            source="languageCode"
-            alwaysOn
-        />,
         <SelectInput
             key="statusFilter"
             choices={Object.values(NewsStatus).map((status) => ({
@@ -104,6 +97,20 @@ const NewsList = () => {
             alwaysOn
         />,
     ];
+
+    if (sortedLanguages) {
+        filters.push(
+            <SelectInput
+                key="defaultLanguageFilter"
+                choices={sortedLanguages}
+                label={translate('news.list.filters.language')}
+                optionText={(option) => option.label}
+                optionValue="code"
+                source="languageCode"
+                alwaysOn
+            />
+        );
+    }
 
     if (identity?.isCentralUniversity && universitiesData && permissions.checkRole(Role.SUPER_ADMIN)) {
         filters.unshift(

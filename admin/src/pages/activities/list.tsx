@@ -60,6 +60,7 @@ import { Activity, ActivityStatus } from '../../entities/Activity';
 import { ActivityThemeCategory } from '../../entities/ActivityThemeCategory';
 import ProficiencyLevel from '../../entities/Proficiency';
 import codeLanguageToFlag from '../../utils/codeLanguageToFlag';
+import useGetSortedLanguagesWithLabel from '../../utils/useGetSortedLanguagesWithLabel';
 
 const Filters = (props: any) => {
     const translate = useTranslate();
@@ -72,6 +73,8 @@ const Filters = (props: any) => {
         },
     });
     const { data: categories } = useGetList('activities/categories');
+
+    const sortedLanguages = useGetSortedLanguagesWithLabel(languages);
 
     if (isLoadingIdentity || !identity || !categories || !universities || !languages) {
         return <Loading />;
@@ -89,16 +92,17 @@ const Filters = (props: any) => {
                 />
             )}
             <TextInput key="title" label={translate('activities.list.title')} source="title" alwaysOn />
-            <AutocompleteInput
-                key="languageCode"
-                choices={languages?.map((language) => ({
-                    id: language.id,
-                    name: `${codeLanguageToFlag(language.code)}`,
-                }))}
-                label={translate('activities.list.language')}
-                source="languageCode"
-                alwaysOn
-            />
+            {sortedLanguages && (
+                <AutocompleteInput
+                    key="languageCode"
+                    choices={sortedLanguages}
+                    label={translate('activities.list.language')}
+                    optionText={(option) => option.label}
+                    optionValue="code"
+                    source="languageCode"
+                    alwaysOn
+                />
+            )}
             <SelectInput
                 key="languageLevel"
                 choices={Object.values(ProficiencyLevel).map((level) => ({
