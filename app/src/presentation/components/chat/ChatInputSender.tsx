@@ -50,6 +50,7 @@ import Hashtag from '../../../domain/entities/chat/Hashtag';
 import { MessageType } from '../../../domain/entities/chat/Message';
 import Profile from '../../../domain/entities/Profile';
 import VocabularyList from '../../../domain/entities/VocabularyList';
+import { useAudioRecorder } from '../../hooks/useAudioRecorder';
 import AudioLine from '../AudioLine';
 import SmallActivityCard from '../card/SmallActivityCard';
 import VocabularyListCard from '../card/VocabularyListCard';
@@ -100,12 +101,23 @@ const ChatInputSender: React.FC<ChatInputSenderProps> = ({
     const [message, setMessage] = useState('');
     const [openVocabularyListModal, setOpenVocabularyListModal] = useState<boolean>(false);
     const [openActivitiesListModal, setOpenActivitiesListModal] = useState<boolean>(false);
-    const [isRecording, setIsRecording] = useState<boolean>(false);
     const [imageToSend, setImageToSend] = useState<File | undefined>(undefined);
-    const [audioFile, setAudioFile] = useState<File | undefined>(undefined);
     const [fileToSend, setFileToSend] = useState<File | undefined>(undefined);
     const [selectedVocabularyList, setSelectedVocabularyList] = useState<VocabularyList | undefined>(undefined);
     const [selectedActivity, setSelectedActivity] = useState<Activity | undefined>(undefined);
+
+    const { isRecording, audioFile, error, startRecording, stopRecording, clearAudioFile, clearError } =
+        useAudioRecorder(recorderAdapter);
+
+    useEffect(() => {
+        if (error) {
+            showToast({
+                message: t(error),
+                duration: 5000,
+            });
+            clearError();
+        }
+    }, [error, showToast, t, clearError]);
 
     const handleClearState = ({
         imageToSend,
@@ -121,46 +133,15 @@ const ChatInputSender: React.FC<ChatInputSenderProps> = ({
         selectedActivity?: Activity;
     }) => {
         setImageToSend(imageToSend);
-        setAudioFile(audioFile);
+        if (audioFile) {
+            clearAudioFile();
+        }
         setFileToSend(fileToSend);
         setSelectedVocabularyList(selectedVocabularyList);
         setSelectedActivity(selectedActivity);
         setMessage('');
         setOpenVocabularyListModal(false);
         setOpenActivitiesListModal(false);
-    };
-
-    const handleStartRecord = () => {
-        // If we are already recording or if we have an audio file, we don't want to start a new recording
-        if (isRecording || audioFile) {
-            return;
-        }
-
-        setIsRecording(true);
-        recorderAdapter.startRecording((audio, error) => {
-            if (error) {
-                return showToast({
-                    message: t(error.message),
-                    duration: 5000,
-                });
-            }
-            setIsRecording(false);
-            setAudioFile(audio);
-        });
-    };
-
-    const handleStopRecord = () => {
-        setIsRecording(false);
-        recorderAdapter.stopRecording((audio, error) => {
-            if (error) {
-                return showToast({
-                    message: t(error.message),
-                    duration: 5000,
-                });
-            }
-            setIsRecording(false);
-            setAudioFile(audio);
-        });
     };
 
     const handleImageClick = async () => {
@@ -273,7 +254,7 @@ const ChatInputSender: React.FC<ChatInputSenderProps> = ({
 
         setMessage('');
         setImageToSend(undefined);
-        setAudioFile(undefined);
+        clearAudioFile();
         setFileToSend(undefined);
         setSelectedVocabularyList(undefined);
         setSelectedActivity(undefined);
@@ -344,7 +325,7 @@ const ChatInputSender: React.FC<ChatInputSenderProps> = ({
                         <button
                             aria-label={t('chat.cancel_audio_aria_label') as string}
                             className={styles['cancel-audio-button']}
-                            onClick={() => setAudioFile(undefined)}
+                            onClick={() => clearAudioFile()}
                         >
                             <img src={CloseBlackSvg} style={{ filter: 'invert(1)' }} />
                         </button>
@@ -387,8 +368,8 @@ const ChatInputSender: React.FC<ChatInputSenderProps> = ({
                             : 'record'
                     }
                     onSendPressed={onSendPressed}
-                    handleStartRecord={handleStartRecord}
-                    handleStopRecord={handleStopRecord}
+                    handleStartRecord={startRecording}
+                    handleStopRecord={stopRecording}
                     isBlocked={isBlocked}
                     disabled={!canSendMessage()}
                     hideRecordButton={isCommunity}
