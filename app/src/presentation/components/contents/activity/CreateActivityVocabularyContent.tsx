@@ -40,10 +40,11 @@
 
 import { IonButton, IonIcon, useIonToast } from '@ionic/react';
 import { addSharp, trashBinOutline } from 'ionicons/icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useConfig } from '../../../../context/ConfigurationContext';
 import { Activity } from '../../../../domain/entities/Activity';
+import { useAudioRecorder } from '../../../hooks/useAudioRecorder';
 import AudioLine from '../../AudioLine';
 import Loader from '../../Loader';
 import RecordingButton from '../../RecordingButton';
@@ -67,8 +68,32 @@ export const CreateActivityVocabularyContent: React.FC<CreateActivityVocabularyC
     const [vocabularies, setVocabularies] = useState<
         { id?: string; content: string; file?: File; pronunciationUrl?: string }[]
     >(activityToUpdate?.vocabularies ?? []);
-    const [isRecording, setIsRecording] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [recordingIndex, setRecordingIndex] = useState<number | null>(null);
+
+    const { isRecording, audioFile, error, startRecording, stopRecording, clearAudioFile, clearError } =
+        useAudioRecorder(recorderAdapter);
+
+    useEffect(() => {
+        if (error) {
+            showToast({
+                message: t(error),
+                duration: 5000,
+            });
+            clearError();
+        }
+    }, [error, showToast, t, clearError]);
+
+    useEffect(() => {
+        if (audioFile && recordingIndex !== null) {
+            const newVocabularies = [...vocabularies];
+            newVocabularies[recordingIndex].file = audioFile;
+            setVocabularies(newVocabularies);
+            setRecordingIndex(null);
+            clearAudioFile();
+        }
+    }, [audioFile, recordingIndex, vocabularies, clearAudioFile]);
+
     const handleDeleteVocabulary = (index: number) => {
         const newVocabularies = vocabularies.filter((_, i) => i !== index);
         setVocabularies(newVocabularies);
@@ -102,35 +127,13 @@ export const CreateActivityVocabularyContent: React.FC<CreateActivityVocabularyC
             return;
         }
 
-        setIsRecording(true);
-        recorderAdapter.startRecording((audio, error) => {
-            if (error) {
-                return showToast({
-                    message: t(error.message),
-                    duration: 5000,
-                });
-            }
-            setIsRecording(false);
-            const newVocabularies = [...vocabularies];
-            newVocabularies[index].file = audio;
-            setVocabularies(newVocabularies);
-        });
+        setRecordingIndex(index);
+        startRecording();
     };
 
     const handleStopRecord = (index: number) => {
-        setIsRecording(false);
-        recorderAdapter.stopRecording((audio, error) => {
-            if (error) {
-                return showToast({
-                    message: t(error.message),
-                    duration: 5000,
-                });
-            }
-            setIsRecording(false);
-            const newVocabularies = [...vocabularies];
-            newVocabularies[index].file = audio;
-            setVocabularies(newVocabularies);
-        });
+        setRecordingIndex(null);
+        stopRecording();
     };
 
     const allVocabulariesAreFilled = vocabularies.every((vocabulary) => vocabulary.content !== '');
