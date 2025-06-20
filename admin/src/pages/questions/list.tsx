@@ -61,7 +61,7 @@ const QuestionList = () => {
         <>
             <PageTitle>{translate('questions.title')}</PageTitle>
             <List exporter={false} filters={<QuestionFilter />}>
-                <Datagrid bulkActionButtons={false} rowClick="show">
+                <Datagrid rowClick="show">
                     <TextField label={translate('questions.level')} sortable={false} source="level" />
                     <TextField label={translate('questions.question')} sortable={false} source="value" />
                 </Datagrid>
