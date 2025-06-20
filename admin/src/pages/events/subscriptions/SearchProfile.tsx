@@ -57,6 +57,7 @@ import {
     List,
     useGetList,
     ResourceContext,
+    useListContext,
 } from 'react-admin';
 import { Profile } from '../../../entities/Profile';
 import { UserRole } from '../../../entities/User';
@@ -64,11 +65,10 @@ import { UserRole } from '../../../entities/User';
 interface BulkActionButtonProps {
     eventId: string;
     setIsModalOpen: (isModalOpen: boolean) => void;
-    selectedIds?: string[];
-    resource?: string;
 }
 
-const BulkActionButton = ({ eventId, setIsModalOpen, resource, selectedIds }: BulkActionButtonProps) => {
+const BulkActionButton = ({ eventId, setIsModalOpen }: BulkActionButtonProps) => {
+    const { selectedIds, resource } = useListContext();
     const translate = useTranslate();
     const { subscribeToEvent } = useDataProvider();
     const refresh = useRefresh();
