@@ -98,6 +98,8 @@ const EditoContent: React.FC<EditoContentProps> = ({ edito, onGoBack }) => {
                         className={`${styles.website} primary-button`}
                         href={edito.university.website}
                         aria-label={t('edito.website') as string}
+                        target="_blank"
+                        rel="noopener noreferrer"
                     >
                         {t('edito.website')}
                     </IonButton>
