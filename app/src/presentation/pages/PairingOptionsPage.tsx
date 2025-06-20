@@ -126,24 +126,26 @@ const PairingOptionsPage: React.FC = () => {
                                 {t('pairing_options_page.certificat')}
                             </p>
                         </IonButton>
-                        <IonButton
-                            aria-label={t('pairing_options_page.program') as string}
-                            className={`${pairingOptionsStyles['preference-container']} ${
-                                isForProgram ? 'secondary-selected-button' : ''
-                            } no-padding`}
-                            fill="clear"
-                            onClick={() => setIsForProgram(!isForProgram)}
-                        >
-                            <div>
-                                <span className={pairingOptionsStyles['preference-text']}>
-                                    {t('pairing_options_page.program')}
-                                </span>
-                                <br />
-                                <span className={pairingOptionsStyles['preference-description']}>
-                                    {t('pairing_options_page.program_subtitle')}
-                                </span>
-                            </div>
-                        </IonButton>
+                        {profile.user.university.isCentral && (
+                            <IonButton
+                                aria-label={t('pairing_options_page.program') as string}
+                                className={`${pairingOptionsStyles['preference-container']} ${
+                                    isForProgram ? 'secondary-selected-button' : ''
+                                } no-padding`}
+                                fill="clear"
+                                onClick={() => setIsForProgram(!isForProgram)}
+                            >
+                                <div>
+                                    <span className={pairingOptionsStyles['preference-text']}>
+                                        {t('pairing_options_page.program')}
+                                    </span>
+                                    <br />
+                                    <span className={pairingOptionsStyles['preference-description']}>
+                                        {t('pairing_options_page.program_subtitle')}
+                                    </span>
+                                </div>
+                            </IonButton>
+                        )}
 
                         <IonButton
                             aria-label={t('pairing_options_page.none') as string}
