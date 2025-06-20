@@ -40,7 +40,7 @@
 
 import { IonButton, IonIcon, useIonToast } from '@ionic/react';
 import { languageOutline, newspaperOutline } from 'ionicons/icons';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CloseBlackSvg, PaperclipSvg, PictureSvg } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
@@ -51,6 +51,7 @@ import { MessageType } from '../../../domain/entities/chat/Message';
 import Profile from '../../../domain/entities/Profile';
 import VocabularyList from '../../../domain/entities/VocabularyList';
 import { useAudioRecorder } from '../../hooks/useAudioRecorder';
+import { useKeyboardHandler } from '../../hooks/useKeyboardHandler';
 import AudioLine from '../AudioLine';
 import SmallActivityCard from '../card/SmallActivityCard';
 import VocabularyListCard from '../card/VocabularyListCard';
@@ -105,9 +106,32 @@ const ChatInputSender: React.FC<ChatInputSenderProps> = ({
     const [fileToSend, setFileToSend] = useState<File | undefined>(undefined);
     const [selectedVocabularyList, setSelectedVocabularyList] = useState<VocabularyList | undefined>(undefined);
     const [selectedActivity, setSelectedActivity] = useState<Activity | undefined>(undefined);
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
 
     const { isRecording, audioFile, error, startRecording, stopRecording, clearAudioFile, clearError } =
         useAudioRecorder(recorderAdapter);
+
+    useKeyboardHandler({ inputRef: textareaRef, scrollToInput: true });
+
+    const handleTextareaFocus = () => {
+        if (textareaRef.current) {
+            setTimeout(() => {
+                textareaRef.current?.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center',
+                });
+            }, 300);
+        }
+    };
+
+    const handleTextareaBlur = () => {
+        setTimeout(() => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth',
+            });
+        }, 100);
+    };
 
     useEffect(() => {
         if (error) {
@@ -359,6 +383,9 @@ const ChatInputSender: React.FC<ChatInputSenderProps> = ({
                         aria-label={
                             t(isBlocked ? 'chat.input.placeholder.blocked' : 'chat.input.placeholder.unblocked') ?? ''
                         }
+                        ref={textareaRef}
+                        onFocus={handleTextareaFocus}
+                        onBlur={handleTextareaBlur}
                     />
                 )}
                 <RecordingButton
