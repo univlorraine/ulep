@@ -248,7 +248,7 @@ const ActivityForm: React.FC<ActivityFormProps> = ({ handleSubmit }) => {
                             <Select onChange={(e: any) => setNewLanguage(e.target.value as string)} value={newLanguage}>
                                 {universitiesLanguages.map((languageFromUniversity) => (
                                     <MenuItem key={languageFromUniversity.code} value={languageFromUniversity.code}>
-                                        {languageFromUniversity.code}
+                                        {languageFromUniversity.label}
                                     </MenuItem>
                                 ))}
                             </Select>

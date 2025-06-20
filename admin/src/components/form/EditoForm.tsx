@@ -44,6 +44,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Form, Loading, TabbedForm, useGetIdentity, useNotify, useTranslate } from 'react-admin';
 import { Edito, EditoFormPayload, EditoMandatoryTranslation, EditoTranslation } from '../../entities/Edito';
 import customDataProvider from '../../providers/customDataProvider';
+import useGetTranslatedLanguageCode from '../../utils/useGetTranslatedLanguageCode';
 import ImageUploader from '../ImageUploader';
 import useGetLanguages from './useGetLanguages';
 
@@ -57,6 +58,7 @@ const EditoForm: React.FC<EditoFormProps> = ({ handleSubmit, record }) => {
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
     const translate = useTranslate();
     const notify = useNotify();
+    const translateLanguageCode = useGetTranslatedLanguageCode();
     const [mandatoryLanguages, setMandatoryLanguages] = useState<string[]>([]);
 
     const [image, setImage] = useState<File | undefined>(undefined);
@@ -185,7 +187,7 @@ const EditoForm: React.FC<EditoFormProps> = ({ handleSubmit, record }) => {
                                 >
                                     {newAvailableLanguages.map((language) => (
                                         <MenuItem key={language} value={language}>
-                                            {language}
+                                            {translateLanguageCode(language)}
                                         </MenuItem>
                                     ))}
                                 </Select>
@@ -212,7 +214,7 @@ const EditoForm: React.FC<EditoFormProps> = ({ handleSubmit, record }) => {
 
                         <TabbedForm>
                             <TabbedForm.Tab
-                                label={`${record.languageCode} ${mandatoryLanguages.includes(record.languageCode) ? ' *' : ''}`}
+                                label={`${translateLanguageCode(record.languageCode)} ${mandatoryLanguages.includes(record.languageCode) ? ' *' : ''}`}
                                 sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}
                             >
                                 <Box sx={{ width: '100%', '& .RaLabeled-label': { display: 'none' } }}>
@@ -236,7 +238,7 @@ const EditoForm: React.FC<EditoFormProps> = ({ handleSubmit, record }) => {
                             {translations?.map((translation, index) => (
                                 <TabbedForm.Tab
                                     key={translation.languageCode}
-                                    label={`${translation.languageCode} ${mandatoryLanguages.includes(translation.languageCode) ? ' *' : ''}`}
+                                    label={`${translateLanguageCode(translation.languageCode)} ${mandatoryLanguages.includes(translation.languageCode) ? ' *' : ''}`}
                                     sx={{ display: 'flex', flexDirection: 'column', gap: '30px' }}
                                 >
                                     <Box sx={{ width: '100%', '& .RaLabeled-label': { display: 'none' } }}>

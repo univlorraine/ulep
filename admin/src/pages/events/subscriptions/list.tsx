@@ -39,7 +39,7 @@
  */
 
 import { Box, Button, Chip, Modal, Typography } from '@mui/material';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     List,
     Datagrid,
@@ -61,6 +61,7 @@ import PageTitle from '../../../components/PageTitle';
 import { EventObject } from '../../../entities/Event';
 import { Profile } from '../../../entities/Profile';
 import { UserRole } from '../../../entities/User';
+import useGetSortedLanguagesWithLabel from '../../../utils/useGetSortedLanguagesWithLabel';
 import SearchProfile from './SearchProfile';
 import SendEmail from './SendEmail';
 
@@ -97,16 +98,7 @@ const EventsSubscriptionsList = () => {
         sort: { field: 'name', order: 'ASC' },
     });
 
-    const sortedLanguages = useMemo(() => {
-        if (!languages) return [];
-
-        return languages.sort((a, b) => {
-            const nameA = translate(`languages_code.${a.code}`);
-            const nameB = translate(`languages_code.${b.code}`);
-
-            return nameA.localeCompare(nameB);
-        });
-    }, [languages]);
+    const sortedLanguages = useGetSortedLanguagesWithLabel(languages);
 
     const eventId = window.location.pathname.split('/').slice(-1)[0].split('?')[0];
 
@@ -131,7 +123,7 @@ const EventsSubscriptionsList = () => {
             <SelectInput
                 choices={sortedLanguages}
                 label={translate('profiles.native_language')}
-                optionText={(option) => translate(`languages_code.${option.code}`)}
+                optionText={(option) => option.label}
                 optionValue="code"
                 source="nativeLanguageCode"
                 alwaysOn
@@ -142,7 +134,7 @@ const EventsSubscriptionsList = () => {
             <SelectInput
                 choices={sortedLanguages}
                 label={translate('profiles.mastered_languages')}
-                optionText={(option) => translate(`languages_code.${option.code}`)}
+                optionText={(option) => option.label}
                 optionValue="code"
                 source="masteredLanguageCode"
                 alwaysOn
@@ -153,7 +145,7 @@ const EventsSubscriptionsList = () => {
             <SelectInput
                 choices={sortedLanguages}
                 label={translate('profiles.learning_languages')}
-                optionText={(option) => translate(`languages_code.${option.code}`)}
+                optionText={(option) => option.label}
                 optionValue="code"
                 source="learningLanguageCode"
                 alwaysOn

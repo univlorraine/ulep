@@ -84,16 +84,6 @@ const NewsList = () => {
     const filters = [
         <TextInput key="titleFilter" label={translate('news.list.filters.title')} source="title" alwaysOn />,
         <SelectInput
-            key="defaultLanguageFilter"
-            choices={universitiesLanguages.map((language) => ({
-                id: language.code,
-                name: codeLanguageToFlag(language.code),
-            }))}
-            label={translate('news.list.filters.language')}
-            source="languageCode"
-            alwaysOn
-        />,
-        <SelectInput
             key="statusFilter"
             choices={Object.values(NewsStatus).map((status) => ({
                 id: status,
@@ -104,6 +94,20 @@ const NewsList = () => {
             alwaysOn
         />,
     ];
+
+    if (universitiesLanguages) {
+        filters.push(
+            <SelectInput
+                key="defaultLanguageFilter"
+                choices={universitiesLanguages}
+                label={translate('news.list.filters.language')}
+                optionText={(option) => option.label}
+                optionValue="code"
+                source="languageCode"
+                alwaysOn
+            />
+        );
+    }
 
     if (identity?.isCentralUniversity && universitiesData && permissions.checkRole(Role.SUPER_ADMIN)) {
         filters.unshift(

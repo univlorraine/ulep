@@ -47,4 +47,8 @@ type Language = {
     isDiscovery: boolean;
 };
 
+export type LanguageWithLabel = Language & {
+    label: string;
+};
+
 export default Language;

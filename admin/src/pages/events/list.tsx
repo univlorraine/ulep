@@ -94,16 +94,7 @@ const EventsList = () => {
 
     const filters = [
         <TextInput key="titleFilter" label={translate('events.list.filters.title')} source="title" alwaysOn />,
-        <SelectInput
-            key="defaultLanguageFilter"
-            choices={universitiesLanguages.map((language) => ({
-                id: language.code,
-                name: codeLanguageToFlag(language.code),
-            }))}
-            label={translate('events.list.filters.language')}
-            source="languageCode"
-            alwaysOn
-        />,
+
         <SelectInput
             key="typeFilter"
             choices={Object.values(EventType).map((type) => ({
@@ -125,6 +116,20 @@ const EventsList = () => {
             alwaysOn
         />,
     ];
+
+    if (universitiesLanguages) {
+        filters.push(
+            <SelectInput
+                key="defaultLanguageFilter"
+                choices={universitiesLanguages}
+                label={translate('events.list.filters.language')}
+                optionText={(option) => option.label}
+                optionValue="code"
+                source="languageCode"
+                alwaysOn
+            />
+        );
+    }
 
     if (identity?.isCentralUniversity && universitiesData && permissions.checkRole(Role.SUPER_ADMIN)) {
         filters.unshift(

@@ -70,6 +70,7 @@ import { ProfileWithTandemsProfiles } from '../../../entities/ProfileWithTandems
 import { TandemStatus, WithoutTandem } from '../../../entities/Tandem';
 import codeLanguageToFlag from '../../../utils/codeLanguageToFlag';
 import isAgeCriterionMet from '../../../utils/isAgeCriterionMet';
+import useGetSortedLanguagesWithLabel from '../../../utils/useGetSortedLanguagesWithLabel';
 import hasTandemManagementPermission from '../hasTandemManagementPermission';
 import TandemActions from '../show/Actions/TandemActions';
 import ProfileTandemDetailLink from '../ui/ProfileTandemDetailLink';
@@ -133,6 +134,8 @@ const LearningLanguageList = () => {
         }
     }, [identity]);
 
+    const sortedLanguages = useGetSortedLanguagesWithLabel(languages);
+
     const filters = [
         <TextInput
             key="userLastname"
@@ -140,18 +143,8 @@ const LearningLanguageList = () => {
             source="user.lastname"
             alwaysOn
         />,
-        <AutocompleteInput
-            key="learningLanguage"
-            choices={languages?.map((language) => ({
-                id: language.id,
-                name: `${codeLanguageToFlag(language.code)}`,
-            }))}
-            label={translate('learning_languages.list.filters.learningLanguage.label')}
-            source="learningLanguage"
-            alwaysOn
-        />,
         <SelectInput
-            key="learningTypeFilter"
+            key="tandemStatusFilter"
             choices={[
                 ...Object.values(TandemStatus).map((tandemStatus) => ({
                     id: tandemStatus,
@@ -167,6 +160,20 @@ const LearningLanguageList = () => {
             alwaysOn
         />,
     ];
+
+    if (sortedLanguages) {
+        filters.push(
+            <AutocompleteInput
+                key="learningLanguage"
+                choices={sortedLanguages}
+                label={translate('learning_languages.list.filters.learningLanguage.label')}
+                optionText={(option) => option.label}
+                optionValue="id"
+                source="learningLanguage"
+                alwaysOn
+            />
+        );
+    }
 
     if (identity?.isCentralUniversity && universities && universityDivisions) {
         filters.unshift(

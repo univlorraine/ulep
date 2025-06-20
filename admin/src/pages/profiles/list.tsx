@@ -39,7 +39,7 @@
  */
 
 import { Select, MenuItem } from '@mui/material';
-import React, { useMemo } from 'react';
+import React from 'react';
 import {
     useRefresh,
     useNotify,
@@ -67,6 +67,7 @@ import { Role } from '../../entities/Administrator';
 import Language from '../../entities/Language';
 import { Profile } from '../../entities/Profile';
 import User, { UserRole, UserStatus } from '../../entities/User';
+import useGetSortedLanguagesWithLabel from '../../utils/useGetSortedLanguagesWithLabel';
 
 export interface ProfileFilterProps {
     displayAllUniversities: boolean;
@@ -77,19 +78,9 @@ const ProfileFilter = ({ displayAllUniversities, ...props }: ProfileFilterProps)
 
     const { data: languages } = useGetList('languages', {
         pagination: { page: 1, perPage: 250 },
-        sort: { field: 'name', order: 'ASC' },
     });
 
-    const sortedLanguages = useMemo(() => {
-        if (!languages) return [];
-
-        return languages.sort((a, b) => {
-            const nameA = translate(`languages_code.${a.code}`);
-            const nameB = translate(`languages_code.${b.code}`);
-
-            return nameA.localeCompare(nameB);
-        });
-    }, [languages]);
+    const sortedLanguages = useGetSortedLanguagesWithLabel(languages);
 
     return (
         <Filter {...props}>
@@ -112,7 +103,7 @@ const ProfileFilter = ({ displayAllUniversities, ...props }: ProfileFilterProps)
                 <SelectInput
                     choices={sortedLanguages}
                     label={translate('profiles.native_language')}
-                    optionText={(option) => translate(`languages_code.${option.code}`)}
+                    optionText={(option) => option.label}
                     optionValue="code"
                     source="nativeLanguageCode"
                 />
@@ -121,7 +112,7 @@ const ProfileFilter = ({ displayAllUniversities, ...props }: ProfileFilterProps)
                 <SelectInput
                     choices={sortedLanguages}
                     label={translate('profiles.mastered_languages')}
-                    optionText={(option) => translate(`languages_code.${option.code}`)}
+                    optionText={(option) => option.label}
                     optionValue="code"
                     source="masteredLanguageCode"
                 />

@@ -39,18 +39,15 @@
  */
 
 import { FormControl, MenuItem, Select } from '@mui/material';
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { useGetList, useTranslate } from 'react-admin';
-import Language from '../entities/Language';
+import Language, { LanguageWithLabel } from '../entities/Language';
+import useGetSortedLanguagesWithLabel from '../utils/useGetSortedLanguagesWithLabel';
 
 interface LanguagePickerProps {
     onChange: (value: Language) => void;
     value?: Language;
     initialValue?: string;
-}
-
-interface LanguageWithLabel extends Language {
-    label: string;
 }
 
 const LanguagePicker: React.FC<LanguagePickerProps> = ({ onChange, value, initialValue }) => {
@@ -66,18 +63,7 @@ const LanguagePicker: React.FC<LanguagePickerProps> = ({ onChange, value, initia
         }
     }, [initialValue, languages]);
 
-    const sortedLanguages = useMemo(() => {
-        if (languages) {
-            return languages
-                .map((language: Language) => ({
-                    ...language,
-                    label: translate(`languages_code.${language.code}`),
-                }))
-                .sort((a: LanguageWithLabel, b: LanguageWithLabel) => a.label.localeCompare(b.label));
-        }
-
-        return [];
-    }, [languages]);
+    const sortedLanguages = useGetSortedLanguagesWithLabel(languages);
 
     if (isLoading || !languages || (value === undefined && initialValue)) {
         return null;
