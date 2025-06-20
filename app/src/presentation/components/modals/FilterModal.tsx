@@ -145,7 +145,14 @@ const FilterModal: React.FC<FilterModalProps> = ({
         setSelectedEventType(currentEventTypeFilter ?? []);
     }, [isVisible]);
 
-    const languages = [profile.nativeLanguage, ...profile.masteredLanguages, ...profile.learningLanguages];
+    const languages = Array.from(
+        new Map(
+            [profile.nativeLanguage, ...profile.masteredLanguages, ...profile.learningLanguages]
+                .filter((language): language is Language => language !== null && language !== undefined)
+                .filter((language) => language.id !== '*')
+                .map((language) => [language.id, language])
+        ).values()
+    );
     return (
         <IonModal animated isOpen={isVisible} onDidDismiss={onClose} className={styles.modal}>
             <div className={styles.container}>
