@@ -58,7 +58,6 @@ import PageTitle from '../../components/PageTitle';
 import { Role } from '../../entities/Administrator';
 import { News, NewsStatus, NewsTranslation } from '../../entities/News';
 import codeLanguageToFlag from '../../utils/codeLanguageToFlag';
-import useGetSortedLanguagesWithLabel from '../../utils/useGetSortedLanguagesWithLabel';
 
 const StatusChips = ({ status }: { status: string }) => {
     const translate = useTranslate();
@@ -82,8 +81,6 @@ const NewsList = () => {
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
     const { universitiesLanguages, universitiesData } = useGetUniversitiesLanguages();
 
-    const sortedLanguages = useGetSortedLanguagesWithLabel(universitiesLanguages);
-
     const filters = [
         <TextInput key="titleFilter" label={translate('news.list.filters.title')} source="title" alwaysOn />,
         <SelectInput
@@ -98,11 +95,11 @@ const NewsList = () => {
         />,
     ];
 
-    if (sortedLanguages) {
+    if (universitiesLanguages) {
         filters.push(
             <SelectInput
                 key="defaultLanguageFilter"
-                choices={sortedLanguages}
+                choices={universitiesLanguages}
                 label={translate('news.list.filters.language')}
                 optionText={(option) => option.label}
                 optionValue="code"

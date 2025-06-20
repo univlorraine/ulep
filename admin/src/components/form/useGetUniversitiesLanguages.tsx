@@ -42,6 +42,7 @@ import { useEffect, useState } from 'react';
 import { useGetList } from 'react-admin';
 import Language from '../../entities/Language';
 import University from '../../entities/University';
+import useGetSortedLanguagesWithLabel from '../../utils/useGetSortedLanguagesWithLabel';
 
 const useGetUniversitiesLanguages = () => {
     const { data: universitiesData } = useGetList<University>('universities', {
@@ -68,7 +69,9 @@ const useGetUniversitiesLanguages = () => {
         }
     }, [universitiesData]);
 
-    return { universitiesLanguages, universitiesData };
+    const sortedUniversitiesLanguages = useGetSortedLanguagesWithLabel(universitiesLanguages);
+
+    return { universitiesLanguages: sortedUniversitiesLanguages, universitiesData };
 };
 
 export default useGetUniversitiesLanguages;

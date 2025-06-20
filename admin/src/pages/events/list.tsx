@@ -64,7 +64,6 @@ import PageTitle from '../../components/PageTitle';
 import { Role } from '../../entities/Administrator';
 import { EventObject, EventStatus, EventTranslation, EventType } from '../../entities/Event';
 import codeLanguageToFlag from '../../utils/codeLanguageToFlag';
-import useGetSortedLanguagesWithLabel from '../../utils/useGetSortedLanguagesWithLabel';
 
 const StatusChips = ({ status }: { status: string }) => {
     const translate = useTranslate();
@@ -88,8 +87,6 @@ const EventsList = () => {
     const { permissions } = usePermissions();
     const { data: identity, isLoading: isLoadingIdentity } = useGetIdentity();
     const { universitiesLanguages, universitiesData } = useGetUniversitiesLanguages();
-
-    const sortedLanguages = useGetSortedLanguagesWithLabel(universitiesLanguages);
 
     if (isLoadingIdentity || !identity) {
         return <Loading />;
@@ -120,11 +117,11 @@ const EventsList = () => {
         />,
     ];
 
-    if (sortedLanguages) {
+    if (universitiesLanguages) {
         filters.push(
             <SelectInput
                 key="defaultLanguageFilter"
-                choices={sortedLanguages}
+                choices={universitiesLanguages}
                 label={translate('events.list.filters.language')}
                 optionText={(option) => option.label}
                 optionValue="code"

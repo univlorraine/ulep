@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
-import { useTranslate } from 'react-admin';
 import Language, { LanguageWithLabel } from '../entities/Language';
+import useGetTranslatedLanguageCode from './useGetTranslatedLanguageCode';
 
 const useGetSortedLanguagesWithLabel = (languages: Language[] | undefined): LanguageWithLabel[] => {
-    const translate = useTranslate();
+    const translateLanguageCode = useGetTranslatedLanguageCode();
 
     const sortedLanguages = useMemo(() => {
         if (!languages) return [];
@@ -11,7 +11,7 @@ const useGetSortedLanguagesWithLabel = (languages: Language[] | undefined): Lang
         return languages
             .map((language: Language) => ({
                 ...language,
-                label: translate(`languages_code.${language.code}`),
+                label: translateLanguageCode(language.code),
             }))
             .sort((a: LanguageWithLabel, b: LanguageWithLabel) => a.label.localeCompare(b.label));
     }, [languages]);
