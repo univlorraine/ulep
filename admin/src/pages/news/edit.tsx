@@ -38,7 +38,7 @@
  *
  */
 
-import { Edit, useNotify, useRefresh, useTranslate, useUpdate } from 'react-admin';
+import { Edit, useNotify, useRedirect, useTranslate, useUpdate } from 'react-admin';
 import NewsForm from '../../components/form/NewsForm';
 import PageTitle from '../../components/PageTitle';
 import { NewsFormPayload } from '../../entities/News';
@@ -47,7 +47,7 @@ const EditNews = () => {
     const translate = useTranslate();
     const [update] = useUpdate();
     const notify = useNotify();
-    const refresh = useRefresh();
+    const redirect = useRedirect();
 
     const handleSubmit = async (payload: NewsFormPayload) => {
         if (!payload.id) {
@@ -96,7 +96,9 @@ const EditNews = () => {
                 'news',
                 { id: '', data: formData },
                 {
-                    onSuccess: () => refresh(),
+                    onSuccess: () => {
+                        redirect('/news');
+                    },
                     onError: (error) => {
                         console.error(error);
                         notify('news.create.error', {
