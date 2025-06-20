@@ -48,14 +48,21 @@ interface LearningCardProps {
     children: React.ReactNode;
     onButtonPressed?: () => void;
     title: string;
+    homeStyle?: boolean;
 }
 
-const LearningCard: React.FC<LearningCardProps> = ({ buttonText, children, onButtonPressed, title }) => {
+const LearningCard: React.FC<LearningCardProps> = ({
+    buttonText,
+    children,
+    onButtonPressed,
+    title,
+    homeStyle = true,
+}) => {
     const { width } = useWindowDimensions();
     const isHybrid = width < HYBRID_MAX_WIDTH;
 
     return (
-        <h2 className="home-card">
+        <h2 className={`${homeStyle ? 'home-card' : ''}`}>
             <div className={styles.header}>
                 <span className="home-card-title">{title}</span>
                 {!isHybrid && onButtonPressed && (

@@ -178,12 +178,15 @@ const ProfileContent: React.FC<ProfileContentProps> = ({ onDisplaySettings, prof
                         thirdInfo={`${t('profile_page.university_card.end_date')} ${formattedDate(user.university.admissionEnd)}`}
                     />
                     {profile.learningLanguages.length > 0 && (
-                        <ProficiencyTestCard
-                            testedLanguages={learningLanguagesToTestedLanguages(
-                                profile.learningLanguages,
-                                profile.testedLanguages
-                            )}
-                        />
+                        <div className={styles.proficiencyTestCard}>
+                            <ProficiencyTestCard
+                                testedLanguages={learningLanguagesToTestedLanguages(
+                                    profile.learningLanguages,
+                                    profile.testedLanguages
+                                )}
+                                homeStyle={false}
+                            />
+                        </div>
                     )}
                 </div>
 
