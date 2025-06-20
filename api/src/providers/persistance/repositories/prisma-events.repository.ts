@@ -198,10 +198,12 @@ export class PrismaEventRepository implements EventRepository {
       );
 
       if (diffusionLanguages.length === 1) {
-        return filters.allowedLanguages.knownLanguages.includes(
+        // Si une seule langue : l'utilisateur doit l'apprendre
+        return filters.allowedLanguages.learningLanguages.includes(
           diffusionLanguages[0],
         );
       } else if (diffusionLanguages.length > 1) {
+        // Si plusieurs langues : l'utilisateur doit connaître AU MOINS une langue ET apprendre AU MOINS une langue
         const hasKnownLanguage = diffusionLanguages.some((lang) =>
           filters.allowedLanguages.knownLanguages.includes(lang),
         );
@@ -210,7 +212,7 @@ export class PrismaEventRepository implements EventRepository {
           filters.allowedLanguages.learningLanguages.includes(lang),
         );
 
-        return hasKnownLanguage || hasLearningLanguage;
+        return hasKnownLanguage && hasLearningLanguage;
       }
 
       return false;
