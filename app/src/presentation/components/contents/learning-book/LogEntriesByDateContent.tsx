@@ -51,6 +51,7 @@ import {
     LogEntrySubmitActivity,
 } from '../../../../domain/entities/LogEntry';
 import Profile from '../../../../domain/entities/Profile';
+import { useStoreState } from '../../../../store/storeTypes';
 import useGetLogEntriesByDate from '../../../hooks/useGetLogEntriesByDate';
 import LogEntryCard from '../../card/LogEntryCard';
 import HeaderSubContent from '../../HeaderSubContent';
@@ -79,6 +80,7 @@ export const LogEntriesByDateContent: React.FC<LogEntriesByDateContentProps> = (
     learningLanguage,
 }) => {
     const { t } = useTranslation();
+    const language = useStoreState((state) => state.language);
 
     const { logEntriesResult, isPaginationEnded, handleOnEndReached } = useGetLogEntriesByDate(
         date,
@@ -99,7 +101,7 @@ export const LogEntriesByDateContent: React.FC<LogEntriesByDateContentProps> = (
         }
     };
 
-    const formattedDate = new Intl.DateTimeFormat(profile.nativeLanguage.code, {
+    const formattedDate = new Intl.DateTimeFormat(language || profile.nativeLanguage.code, {
         day: '2-digit',
         month: '2-digit',
     }).format(date);
