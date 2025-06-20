@@ -214,6 +214,8 @@ const customDataProvider = {
                 return { data: { ...data, id: 'config' } };
             case 'chat':
                 return { data: { ...data, id: params.id } };
+            case 'events':
+                return { data: { ...data, id: params.id } };
             default:
                 break;
         }

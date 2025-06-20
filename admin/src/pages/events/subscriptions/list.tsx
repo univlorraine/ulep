@@ -55,6 +55,7 @@ import {
     ReferenceInput,
     FunctionField,
     useGetList,
+    useListContext,
 } from 'react-admin';
 import PageTitle from '../../../components/PageTitle';
 import { EventObject } from '../../../entities/Event';
@@ -65,11 +66,10 @@ import SendEmail from './SendEmail';
 
 interface BulkActionButtonProps {
     eventId: string;
-    selectedIds?: string[];
-    resource?: string;
 }
 
-const BulkActionButton = ({ eventId, resource, selectedIds }: BulkActionButtonProps) => {
+const BulkActionButton = ({ eventId }: BulkActionButtonProps) => {
+    const { selectedIds, resource } = useListContext();
     const translate = useTranslate();
     const { unsubscribeToEvent } = useDataProvider();
     const refresh = useRefresh();
@@ -108,7 +108,7 @@ const EventsSubscriptionsList = () => {
         });
     }, [languages]);
 
-    const eventId = window.location.hash.split('/').slice(-1)[0].split('?')[0];
+    const eventId = window.location.pathname.split('/').slice(-1)[0].split('?')[0];
 
     const filters = [
         <SelectInput
