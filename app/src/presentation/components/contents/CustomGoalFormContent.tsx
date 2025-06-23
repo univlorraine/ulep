@@ -122,6 +122,7 @@ const CustomGoalFormContent = ({
                     title={t('goals.form.title') as string}
                     value={title}
                     onChange={(value) => setTitle(value)}
+                    required={true}
                 />
                 <TextInput
                     id="input-description"
@@ -137,7 +138,8 @@ const CustomGoalFormContent = ({
                 </IonButton>
                 <IonButton
                     fill="clear"
-                    className={`primary-button no-padding`}
+                    className={`primary-button no-padding ${title.length === 0 ? 'disabled' : ''}`}
+                    disabled={title.length === 0}
                     onClick={() => handleSubmit({ id: customLearningGoal?.id, title, description })}
                 >
                     {customLearningGoal?.id ? t('goals.form.update_button') : t('goals.form.submit_button')}

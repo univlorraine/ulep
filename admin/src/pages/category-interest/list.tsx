@@ -60,7 +60,7 @@ const InterestCategoryList = () => {
         <>
             <ConfigPagesHeader />
             <List actions={<InterestCategoryAction />} exporter={false}>
-                <Datagrid bulkActionButtons={false}>
+                <Datagrid bulkActionButtons={false} rowClick={false}>
                     <FunctionField
                         label={translation('interest_categories.name')}
                         render={(record: { id: string; name: string }) => (

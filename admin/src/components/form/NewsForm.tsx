@@ -65,6 +65,7 @@ import { News, NewsFormPayload, NewsStatus, NewsTranslation } from '../../entiti
 import University from '../../entities/University';
 import customDataProvider from '../../providers/customDataProvider';
 import i18nProvider from '../../providers/i18nProvider';
+import useGetTranslatedLanguageCode from '../../utils/useGetTranslatedLanguageCode';
 import ImageUploader from '../ImageUploader';
 import useGetUniversitiesLanguages from './useGetUniversitiesLanguages';
 
@@ -86,6 +87,7 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
     const translate = useTranslate();
     const { universitiesLanguages, universitiesData } = useGetUniversitiesLanguages();
     const notify = useNotify();
+    const translateLanguageCode = useGetTranslatedLanguageCode();
 
     const record: News | undefined = useRecordContext();
 
@@ -411,7 +413,7 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                         >
                             {availableLanguages.map((language) => (
                                 <MenuItem key={language} value={language}>
-                                    {language}
+                                    {translateLanguageCode(language)}
                                 </MenuItem>
                             ))}
                         </Select>
@@ -434,7 +436,7 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                     <Box sx={{ '& .MuiDivider-root': { display: 'none' } }}>
                         <TabbedForm>
                             <TabbedForm.Tab
-                                label={defaultLanguage}
+                                label={translateLanguageCode(defaultLanguage)}
                                 sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}
                             >
                                 {availableLanguages.length > 0 && (
@@ -451,11 +453,11 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                                         >
                                             {availableLanguages.map((language) => (
                                                 <MenuItem key={language} value={language}>
-                                                    {language}
+                                                    {translateLanguageCode(language)}
                                                 </MenuItem>
                                             ))}
                                             <MenuItem key={defaultLanguage} value={defaultLanguage}>
-                                                {defaultLanguage}
+                                                {translateLanguageCode(defaultLanguage)}
                                             </MenuItem>
                                         </Select>
                                     </Box>
@@ -488,7 +490,7 @@ const NewsForm: React.FC<NewsFormProps> = ({ handleSubmit }) => {
                             {translations?.map((translation, index) => (
                                 <TabbedForm.Tab
                                     key={translation.languageCode}
-                                    label={translation.languageCode}
+                                    label={translateLanguageCode(translation.languageCode)}
                                     sx={{ display: 'flex', flexDirection: 'column', gap: '30px' }}
                                 >
                                     <Box sx={{ display: 'flex', width: '100%', justifyContent: 'flex-end' }}>

@@ -129,10 +129,10 @@ const SignUpPage: React.FC = () => {
         updateProfileSignUp({ country, department, diplome: diploma, role: selectedRole, staffFunction, university });
         return history.push('/signup/informations', payload);
     };
-    
+
     const onCountrySelected = (country: Country) => {
         setCountry(country);
-        return setUniversity(undefined);
+        return setUniversity(country.universities[0]);
     };
 
     // Get user infos and update fields when user is logged in.

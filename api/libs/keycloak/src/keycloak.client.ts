@@ -480,6 +480,9 @@ export class KeycloakClient {
       },
     };
 
+    const user = await this.getUserByEmail(props.email);
+    props.id = user.id;
+
     if (props.password) {
       const passwordResponse = await fetch(
         `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users/${props.id}/reset-password`,

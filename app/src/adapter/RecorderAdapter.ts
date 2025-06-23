@@ -68,42 +68,80 @@ export class RecorderAdapter implements RecorderAdapterInterface {
         }
     }
 
-    stopRecording(onStop: (audio?: File, error?: Error) => void) {
+    async stopRecording(onStop: (audio?: File, error?: Error) => void) {
         if (this.recordingTimeout) {
             clearTimeout(this.recordingTimeout);
             this.recordingTimeout = null;
         }
 
-        VoiceRecorder.stopRecording()
-            .then((result) => {
-                if (result.value && result.value.recordDataBase64) {
-                    const endTime = Date.now();
-                    const duration = (endTime - (this.startTime || 0)) / 1000; // Durée en secondes
+        try {
+            const result = await VoiceRecorder.stopRecording();
 
-                    if (duration < 1) {
+            if (result.value && result.value.recordDataBase64) {
+                const endTime = Date.now();
+                const duration = (endTime - (this.startTime || 0)) / 1000; // Durée en secondes
+
+                if (duration < 1) {
+                    this.startTime = null;
+                    onStop(undefined, new Error('record.error.too_short'));
+                    return;
+                }
+
+                try {
+                    const audioBlob = this.base64ToBlob(result.value.recordDataBase64, 'audio/wav');
+
+                    if (audioBlob.size === 0) {
                         this.startTime = null;
+                        onStop(undefined, new Error('record.error.empty_file'));
                         return;
                     }
 
-                    const audioBlob = this.base64ToBlob(result.value.recordDataBase64, 'audio/wav');
-                    const audioFile = new File([audioBlob], `${Date.now()}.wav`, { type: 'audio/wav' });
+                    const audioFile = new File([audioBlob], `recording_${Date.now()}.wav`, {
+                        type: 'audio/wav',
+                        lastModified: Date.now(),
+                    });
+
                     this.startTime = null;
-                    onStop(audioFile);
+
+                    setTimeout(() => {
+                        onStop(audioFile);
+                    }, 100);
+                } catch (error) {
+                    console.error('Error creating audio file:', error);
+                    this.startTime = null;
+                    onStop(undefined, new Error('record.error.file_creation'));
                 }
-            })
-            .catch((error) => {
-                console.error(error);
-                onStop(undefined, new Error('record.error.unexpected'));
-            });
+            } else {
+                this.startTime = null;
+                onStop(undefined, new Error('record.error.no_data'));
+            }
+        } catch (error) {
+            console.error('Recording error:', error);
+            this.startTime = null;
+            onStop(undefined, new Error('record.error.unexpected'));
+        }
     }
 
     private base64ToBlob(base64: string, type: string): Blob {
-        const byteCharacters = atob(base64);
-        const byteNumbers = new Array(byteCharacters.length);
-        for (let i = 0; i < byteCharacters.length; i++) {
-            byteNumbers[i] = byteCharacters.charCodeAt(i);
+        try {
+            if (!base64 || typeof base64 !== 'string') {
+                throw new Error('Invalid base64 data');
+            }
+
+            const base64Data = base64.replace(/^data:[^;]+;base64,/, '');
+
+            const byteCharacters = atob(base64Data);
+            const byteNumbers = new Array(byteCharacters.length);
+
+            for (let i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+
+            const byteArray = new Uint8Array(byteNumbers);
+            return new Blob([byteArray], { type });
+        } catch (error) {
+            console.error('Error converting base64 to blob:', error);
+            throw new Error('Failed to convert audio data');
         }
-        const byteArray = new Uint8Array(byteNumbers);
-        return new Blob([byteArray], { type });
     }
 }

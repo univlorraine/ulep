@@ -149,7 +149,8 @@ const RecordingButton = ({
                     fill="clear"
                     className={styles['sender-button']}
                     onClick={onSendPressed}
-                    disabled={disabled}
+                    // https://github.com/ionic-team/ionic-framework/issues/27930
+                    disabled={disabled ? true : undefined}
                 >
                     <IonIcon className={styles['sender']} icon={SenderSvg} />
                 </IonButton>
