@@ -44,6 +44,7 @@ import { useTranslation } from 'react-i18next';
 import { useConfig } from '../../../context/ConfigurationContext';
 import Vocabulary from '../../../domain/entities/Vocabulary';
 import VocabularyList from '../../../domain/entities/VocabularyList';
+import { useAudioRecorder } from '../../hooks/useAudioRecorder';
 import { codeLanguageToFlag } from '../../utils';
 import AudioLine from '../AudioLine';
 import HeaderSubContent from '../HeaderSubContent';
@@ -79,11 +80,34 @@ const CreateOrUpdateVocabularyContent: React.FC<CreateOrUpdateVocabularyContentP
     const { recorderAdapter } = useConfig();
     const [word, setWord] = useState(vocabulary?.word || '');
     const [translation, setTranslation] = useState(vocabulary?.translation || '');
-    const [isRecording, setIsRecording] = useState(false);
     const [translationPronunciation, setTranslationPronunciation] = useState<File>();
     const [wordPronunciation, setWordPronunciation] = useState<File>();
     const [hideUploadedWordPronunciation, setHideUploadedWordPronunciation] = useState<boolean>(false);
     const [hideUploadedTranslationPronunciation, setHideUploadedTranslationPronunciation] = useState<boolean>(false);
+
+    const { isRecording, audioFile, error, startRecording, stopRecording, clearAudioFile, clearError } =
+        useAudioRecorder(recorderAdapter);
+
+    useEffect(() => {
+        if (error) {
+            showToast({
+                message: t(error),
+                duration: 5000,
+            });
+            clearError();
+        }
+    }, [error, showToast, t, clearError]);
+
+    useEffect(() => {
+        if (audioFile) {
+            if (!wordPronunciation && !translationPronunciation) {
+                setWordPronunciation(audioFile);
+            } else if (wordPronunciation && !translationPronunciation) {
+                setTranslationPronunciation(audioFile);
+            }
+            clearAudioFile();
+        }
+    }, [audioFile, wordPronunciation, translationPronunciation, clearAudioFile]);
 
     const displayWordPronunciation = vocabulary?.pronunciationWordUrl && !hideUploadedWordPronunciation;
     const displayTranslationPronunciation =
@@ -93,52 +117,22 @@ const CreateOrUpdateVocabularyContent: React.FC<CreateOrUpdateVocabularyContentP
         if (isRecording || wordPronunciation) {
             return;
         }
-
-        handleStartRecord(setWordPronunciation);
+        startRecording();
     };
 
     const onRecordTranslation = () => {
         if (isRecording || translationPronunciation) {
             return;
         }
-
-        handleStartRecord(setTranslationPronunciation);
+        startRecording();
     };
 
     const onStopRecordWord = () => {
-        handleStopRecord(setWordPronunciation);
+        stopRecording();
     };
 
     const onStopRecordTranslation = () => {
-        handleStopRecord(setTranslationPronunciation);
-    };
-
-    const handleStartRecord = (fileSetter: Function) => {
-        setIsRecording(true);
-        recorderAdapter.startRecording((audio, error) => {
-            if (error) {
-                return showToast({
-                    message: t(error.message),
-                    duration: 5000,
-                });
-            }
-            setIsRecording(false);
-            fileSetter(audio);
-        });
-    };
-
-    const handleStopRecord = (fileSetter: Function) => {
-        setIsRecording(false);
-        recorderAdapter.stopRecording((audio, error) => {
-            if (error) {
-                return showToast({
-                    message: t(error.message),
-                    duration: 5000,
-                });
-            }
-            setIsRecording(false);
-            fileSetter(audio);
-        });
+        stopRecording();
     };
 
     const onHideUploadedWordPronunciation = () => {
@@ -150,10 +144,6 @@ const CreateOrUpdateVocabularyContent: React.FC<CreateOrUpdateVocabularyContentP
         setHideUploadedTranslationPronunciation(true);
         setTranslationPronunciation(undefined);
     };
-
-    useEffect(() => {
-        recorderAdapter.requestPermission();
-    }, []);
 
     return (
         <div>

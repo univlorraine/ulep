@@ -40,7 +40,6 @@
 
 import CloseIcon from '@mui/icons-material/Close';
 import { Box, Chip, Typography } from '@mui/material';
-import { useMemo } from 'react';
 import {
     Button,
     Datagrid,
@@ -57,18 +56,19 @@ import {
     List,
     useGetList,
     ResourceContext,
+    useListContext,
 } from 'react-admin';
 import { Profile } from '../../../entities/Profile';
 import { UserRole } from '../../../entities/User';
+import useGetSortedLanguagesWithLabel from '../../../utils/useGetSortedLanguagesWithLabel';
 
 interface BulkActionButtonProps {
     eventId: string;
     setIsModalOpen: (isModalOpen: boolean) => void;
-    selectedIds?: string[];
-    resource?: string;
 }
 
-const BulkActionButton = ({ eventId, setIsModalOpen, resource, selectedIds }: BulkActionButtonProps) => {
+const BulkActionButton = ({ eventId, setIsModalOpen }: BulkActionButtonProps) => {
+    const { selectedIds, resource } = useListContext();
     const translate = useTranslate();
     const { subscribeToEvent } = useDataProvider();
     const refresh = useRefresh();
@@ -99,19 +99,9 @@ const SearchProfile = ({ eventId, setIsModalOpen }: SearchProfileProps) => {
 
     const { data: languages } = useGetList('languages', {
         pagination: { page: 1, perPage: 250 },
-        sort: { field: 'name', order: 'ASC' },
     });
 
-    const sortedLanguages = useMemo(() => {
-        if (!languages) return [];
-
-        return languages.sort((a, b) => {
-            const nameA = translate(`languages_code.${a.code}`);
-            const nameB = translate(`languages_code.${b.code}`);
-
-            return nameA.localeCompare(nameB);
-        });
-    }, [languages]);
+    const sortedLanguages = useGetSortedLanguagesWithLabel(languages);
 
     const filters = [
         <SelectInput
@@ -149,7 +139,7 @@ const SearchProfile = ({ eventId, setIsModalOpen }: SearchProfileProps) => {
             <SelectInput
                 choices={sortedLanguages}
                 label={translate('profiles.native_language')}
-                optionText={(option) => translate(`languages_code.${option.code}`)}
+                optionText={(option) => option.label}
                 optionValue="code"
                 source="nativeLanguageCode"
                 alwaysOn
@@ -160,7 +150,7 @@ const SearchProfile = ({ eventId, setIsModalOpen }: SearchProfileProps) => {
             <SelectInput
                 choices={sortedLanguages}
                 label={translate('profiles.mastered_languages')}
-                optionText={(option) => translate(`languages_code.${option.code}`)}
+                optionText={(option) => option.label}
                 optionValue="code"
                 source="masteredLanguageCode"
                 alwaysOn
@@ -171,7 +161,7 @@ const SearchProfile = ({ eventId, setIsModalOpen }: SearchProfileProps) => {
             <SelectInput
                 choices={sortedLanguages}
                 label={translate('profiles.learning_languages')}
-                optionText={(option) => translate(`languages_code.${option.code}`)}
+                optionText={(option) => option.label}
                 optionValue="code"
                 source="learningLanguageCode"
                 alwaysOn

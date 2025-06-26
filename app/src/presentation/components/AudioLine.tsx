@@ -53,78 +53,172 @@ const AudioLine: React.FC<AudioLineProps> = ({ audioFile, hideProgressBar = fals
     const [isPlaying, setIsPlaying] = useState(false);
     const [progress, setProgress] = useState(0);
     const [duration, setDuration] = useState(0);
+    const [isAudioReady, setIsAudioReady] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
-    let audioFileString = '';
-    if (typeof audioFile === 'string') {
-        audioFileString = audioFile;
-    } else {
-        audioFileString = URL.createObjectURL(audioFile);
-    }
-
-    const audioRef = useRef(new Audio(audioFileString));
-
-    //audio object keep ref if not destroy. We must check url have been updated
-    if (audioRef.current.src != audioFileString) {
-        audioRef.current.src = audioFileString;
-    }
+    const audioRef = useRef<HTMLAudioElement | null>(null);
+    const urlRef = useRef<string | null>(null);
 
     useEffect(() => {
-        if (duration === 0) return;
+        return () => {
+            if (urlRef.current) {
+                URL.revokeObjectURL(urlRef.current);
+            }
+        };
+    }, []);
 
-        const audio = audioRef.current;
+    useEffect(() => {
+        let audioFileString = '';
+
+        if (typeof audioFile === 'string') {
+            audioFileString = audioFile;
+        } else {
+            if (urlRef.current) {
+                URL.revokeObjectURL(urlRef.current);
+            }
+            audioFileString = URL.createObjectURL(audioFile);
+            urlRef.current = audioFileString;
+        }
+
+        const audio = new Audio(audioFileString);
+        audioRef.current = audio;
+
+        setIsAudioReady(false);
+        setError(null);
+        setDuration(0);
+        setProgress(0);
+        setIsPlaying(false);
+
+        const updateDuration = () => {
+            if (audio.duration && !isNaN(audio.duration) && audio.duration !== Infinity) {
+                setDuration(audio.duration);
+            }
+        };
+
+        const handleCanPlay = () => {
+            setIsAudioReady(true);
+            updateDuration();
+        };
+
+        const handleError = (e: Event) => {
+            console.error('Audio error:', e);
+            setError('Failed to load audio file');
+            setIsAudioReady(false);
+        };
+
+        const handleLoadedMetadata = () => {
+            updateDuration();
+        };
 
         const handleTimeUpdate = () => {
-            setProgress((audio.currentTime / duration) * 100);
+            const currentDuration = audio.duration;
+            if (currentDuration && !isNaN(currentDuration) && currentDuration !== Infinity && currentDuration > 0) {
+                setProgress((audio.currentTime / currentDuration) * 100);
+            }
         };
 
         const handleEnded = () => {
             setIsPlaying(false);
             setProgress(0);
-            audio.currentTime = 0;
+            if (audioRef.current) {
+                audioRef.current.currentTime = 0;
+            }
         };
 
+        audio.addEventListener('canplay', handleCanPlay);
+        audio.addEventListener('error', handleError);
+        audio.addEventListener('loadedmetadata', handleLoadedMetadata);
         audio.addEventListener('timeupdate', handleTimeUpdate);
         audio.addEventListener('ended', handleEnded);
 
+        audio.load();
+
+        const durationTimeout = setTimeout(() => {
+            if (duration === 0 && audio.duration && !isNaN(audio.duration) && audio.duration !== Infinity) {
+                setDuration(audio.duration);
+            } else if (duration === 0) {
+                audio.currentTime = 100000000;
+                setTimeout(() => {
+                    if (audio.duration && !isNaN(audio.duration) && audio.duration !== Infinity) {
+                        audio.currentTime = 0;
+                        setDuration(audio.duration);
+                    }
+                }, 100);
+            }
+        }, 100);
+
         return () => {
+            clearTimeout(durationTimeout);
+            audio.removeEventListener('canplay', handleCanPlay);
+            audio.removeEventListener('error', handleError);
+            audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
             audio.removeEventListener('timeupdate', handleTimeUpdate);
             audio.removeEventListener('ended', handleEnded);
+            audio.pause();
         };
-    }, [duration]);
+    }, [audioFile]);
 
-    // Go to the end of the audio file to get the duration (infinity problem : https://stackoverflow.com/questions/21522036/html-audio-tag-duration-always-infinity )
     useEffect(() => {
-        const audio = audioRef.current;
-        if (duration === 0 && (audio.duration === Infinity || Number.isNaN(audio.duration))) {
-            audio.currentTime = 100000000;
-            setTimeout(() => {
-                audio.currentTime = 0;
-                setDuration(audio.duration);
-            }, 1000);
+        if (audioRef.current && duration > 0 && isPlaying) {
+            const audio = audioRef.current;
+            const currentProgress = (audio.currentTime / duration) * 100;
+            setProgress(currentProgress);
         }
-    }, [audioFile, audioRef, audioRef.current.duration]);
+    }, [duration, isPlaying]);
 
-    const togglePlayPause = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const togglePlayPause = async (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         event.stopPropagation();
-        const audio = audioRef.current;
-        if (isPlaying) {
-            audio.pause();
-            audio.currentTime = 0;
-        } else {
-            audio.play();
+
+        if (!audioRef.current || !isAudioReady || error) {
+            return;
         }
-        setIsPlaying(!isPlaying);
+
+        const audio = audioRef.current;
+
+        try {
+            if (isPlaying) {
+                audio.pause();
+                audio.currentTime = 0;
+                setProgress(0);
+                setIsPlaying(false);
+            } else {
+                await audio.play();
+                setIsPlaying(true);
+            }
+        } catch (err) {
+            console.error('Error playing audio:', err);
+            setError('Failed to play audio');
+            setIsPlaying(false);
+        }
     };
+
+    if (error) {
+        return (
+            <div className={styles.audioLine}>
+                <button className={`${styles.button} ${small ? styles.smallButton : ''}`} disabled title={error}>
+                    <img src={icon || PlaySvg} alt="Error" style={{ opacity: 0.5 }} />
+                </button>
+            </div>
+        );
+    }
 
     return (
         <div className={styles.audioLine}>
             <button
                 className={`${styles.button} ${small ? styles.smallButton : ''}`}
                 onClick={togglePlayPause}
+                disabled={!isAudioReady}
                 tabIndex={0}
+                title={!isAudioReady ? 'Loading audio...' : undefined}
             >
-                {isPlaying ? <img src={icon || PauseSvg} alt="Pause" /> : <img src={icon || PlaySvg} alt="Play" />}
+                {!isAudioReady ? (
+                    <img src={icon || PlaySvg} alt="Loading" style={{ opacity: 0.5 }} />
+                ) : isPlaying ? (
+                    <img src={icon || PauseSvg} alt="Pause" />
+                ) : (
+                    <img src={icon || PlaySvg} alt="Play" />
+                )}
             </button>
             {!hideProgressBar && (
                 <div className={styles.progressBar}>

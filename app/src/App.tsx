@@ -81,11 +81,12 @@ if (import.meta.env.VITE_SENTRY_DSN) {
     Sentry.init({
         dsn: import.meta.env.VITE_SENTRY_DSN,
         debug: import.meta.env.VITE_ENV === 'dev',
-        integrations: [new Sentry.BrowserTracing(), new Sentry.Replay()],
         release: 'ulep-frontend@' + APP_VERSION,
         dist: '1',
         environment: import.meta.env.VITE_ENV,
         tracesSampleRate: 1.0,
+        replaysSessionSampleRate: 0.1,
+        replaysOnErrorSampleRate: 1.0,
     });
 }
 
@@ -118,10 +119,12 @@ const AppCore = () => {
     }, [profile]);
 
     return (
-        <IonReactRouter>
-            <Router />
-            <AppUrlListener />
-        </IonReactRouter>
+        <Sentry.Profiler name="AppCore">
+            <IonReactRouter>
+                <Router />
+                <AppUrlListener />
+            </IonReactRouter>
+        </Sentry.Profiler>
     );
 };
 

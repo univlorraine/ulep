@@ -54,7 +54,9 @@
     display: flex;
     justify-content: space-between;
     flex-shrink: 0;
-    height: 50px;
+    min-height: 50px;
+    padding: 8px 0;
+    flex-wrap: nowrap;
 }
 
 .icon {
@@ -70,12 +72,23 @@
     height: 100%;
 }
 
+.title-container {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
 .title {
     color: #000;
     font-family: 'Roboto', sans-serif;
     font-size: 17px;
     font-weight: 700;
     margin: 0;
+    white-space: normal;
+    word-break: break-word;
+    flex: 1 1 auto;
 }
 
 .cancel-image-button {
@@ -94,17 +107,12 @@
     font-size: 14px;
 }
 
-.title-container {
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-}
-
 .camera {
     background-color: #000;
     border-radius: 4px;
     color: white;
     margin-left: 12px;
+    flex-shrink: 0;
 }
 
 .replyHeader {

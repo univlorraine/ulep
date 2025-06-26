@@ -34,75 +34,75 @@ PODS:
     - Capacitor
   - CapawesomeCapacitorFilePicker (6.2.0):
     - Capacitor
-  - Firebase/CoreOnly (11.4.2):
-    - FirebaseCore (= 11.4.2)
-  - Firebase/Messaging (11.4.2):
+  - Firebase/CoreOnly (11.14.0):
+    - FirebaseCore (~> 11.14.0)
+  - Firebase/Messaging (11.14.0):
     - Firebase/CoreOnly
-    - FirebaseMessaging (~> 11.4.0)
-  - FirebaseCore (11.4.2):
-    - FirebaseCoreInternal (< 12.0, >= 11.4.2)
-    - GoogleUtilities/Environment (~> 8.0)
-    - GoogleUtilities/Logger (~> 8.0)
-  - FirebaseCoreInternal (11.4.2):
-    - "GoogleUtilities/NSData+zlib (~> 8.0)"
-  - FirebaseInstallations (11.4.0):
-    - FirebaseCore (~> 11.0)
-    - GoogleUtilities/Environment (~> 8.0)
-    - GoogleUtilities/UserDefaults (~> 8.0)
+    - FirebaseMessaging (~> 11.14.0)
+  - FirebaseCore (11.14.0):
+    - FirebaseCoreInternal (~> 11.14.0)
+    - GoogleUtilities/Environment (~> 8.1)
+    - GoogleUtilities/Logger (~> 8.1)
+  - FirebaseCoreInternal (11.14.0):
+    - "GoogleUtilities/NSData+zlib (~> 8.1)"
+  - FirebaseInstallations (11.14.0):
+    - FirebaseCore (~> 11.14.0)
+    - GoogleUtilities/Environment (~> 8.1)
+    - GoogleUtilities/UserDefaults (~> 8.1)
     - PromisesObjC (~> 2.4)
-  - FirebaseMessaging (11.4.0):
-    - FirebaseCore (~> 11.0)
+  - FirebaseMessaging (11.14.0):
+    - FirebaseCore (~> 11.14.0)
     - FirebaseInstallations (~> 11.0)
     - GoogleDataTransport (~> 10.0)
-    - GoogleUtilities/AppDelegateSwizzler (~> 8.0)
-    - GoogleUtilities/Environment (~> 8.0)
-    - GoogleUtilities/Reachability (~> 8.0)
-    - GoogleUtilities/UserDefaults (~> 8.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 8.1)
+    - GoogleUtilities/Environment (~> 8.1)
+    - GoogleUtilities/Reachability (~> 8.1)
+    - GoogleUtilities/UserDefaults (~> 8.1)
     - nanopb (~> 3.30910.0)
   - Giphy (2.2.4):
     - libwebp
   - GoogleDataTransport (10.1.0):
     - nanopb (~> 3.30910.0)
     - PromisesObjC (~> 2.4)
-  - GoogleUtilities/AppDelegateSwizzler (8.0.2):
+  - GoogleUtilities/AppDelegateSwizzler (8.1.0):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
     - GoogleUtilities/Network
     - GoogleUtilities/Privacy
-  - GoogleUtilities/Environment (8.0.2):
+  - GoogleUtilities/Environment (8.1.0):
     - GoogleUtilities/Privacy
-  - GoogleUtilities/Logger (8.0.2):
+  - GoogleUtilities/Logger (8.1.0):
     - GoogleUtilities/Environment
     - GoogleUtilities/Privacy
-  - GoogleUtilities/Network (8.0.2):
+  - GoogleUtilities/Network (8.1.0):
     - GoogleUtilities/Logger
     - "GoogleUtilities/NSData+zlib"
     - GoogleUtilities/Privacy
     - GoogleUtilities/Reachability
-  - "GoogleUtilities/NSData+zlib (8.0.2)":
+  - "GoogleUtilities/NSData+zlib (8.1.0)":
     - GoogleUtilities/Privacy
-  - GoogleUtilities/Privacy (8.0.2)
-  - GoogleUtilities/Reachability (8.0.2):
+  - GoogleUtilities/Privacy (8.1.0)
+  - GoogleUtilities/Reachability (8.1.0):
     - GoogleUtilities/Logger
     - GoogleUtilities/Privacy
-  - GoogleUtilities/UserDefaults (8.0.2):
+  - GoogleUtilities/UserDefaults (8.1.0):
     - GoogleUtilities/Logger
     - GoogleUtilities/Privacy
   - JitsiMeetSDK (10.1.2):
     - Giphy (= 2.2.4)
     - JitsiWebRTC (~> 124.0)
-  - JitsiWebRTC (124.0.1)
-  - libwebp (1.3.2):
-    - libwebp/demux (= 1.3.2)
-    - libwebp/mux (= 1.3.2)
-    - libwebp/sharpyuv (= 1.3.2)
-    - libwebp/webp (= 1.3.2)
-  - libwebp/demux (1.3.2):
+  - JitsiWebRTC (124.0.2)
+  - libwebp (1.5.0):
+    - libwebp/demux (= 1.5.0)
+    - libwebp/mux (= 1.5.0)
+    - libwebp/sharpyuv (= 1.5.0)
+    - libwebp/webp (= 1.5.0)
+  - libwebp/demux (1.5.0):
     - libwebp/webp
-  - libwebp/mux (1.3.2):
+  - libwebp/mux (1.5.0):
     - libwebp/demux
-  - libwebp/sharpyuv (1.3.2)
-  - libwebp/webp (1.3.2):
+  - libwebp/sharpyuv (1.5.0)
+  - libwebp/webp (1.5.0):
     - libwebp/sharpyuv
   - nanopb (3.30910.0):
     - nanopb/decode (= 3.30910.0)
@@ -110,12 +110,10 @@ PODS:
   - nanopb/decode (3.30910.0)
   - nanopb/encode (3.30910.0)
   - PromisesObjC (2.4.0)
-  - Sentry/HybridSDK (8.8.0):
-    - SentryPrivate (= 8.8.0)
-  - SentryCapacitor (0.14.0):
+  - Sentry/HybridSDK (8.48.0)
+  - SentryCapacitor (1.4.0):
     - Capacitor
-    - Sentry/HybridSDK (= 8.8.0)
-  - SentryPrivate (8.8.0)
+    - Sentry/HybridSDK (= 8.48.0)
 
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/.pnpm/@capacitor+ios@6.2.0_@capacitor+core@6.2.0/node_modules/@capacitor/ios`)"
@@ -135,7 +133,7 @@ DEPENDENCIES:
   - "CapacitorStatusBar (from `../../node_modules/.pnpm/@capacitor+status-bar@6.0.2_@capacitor+core@6.2.0/node_modules/@capacitor/status-bar`)"
   - "CapacitorVoiceRecorder (from `../../node_modules/.pnpm/capacitor-voice-recorder@6.0.3_@capacitor+core@6.2.0/node_modules/capacitor-voice-recorder`)"
   - "CapawesomeCapacitorFilePicker (from `../../node_modules/.pnpm/@capawesome+capacitor-file-picker@6.2.0_@capacitor+core@6.2.0/node_modules/@capawesome/capacitor-file-picker`)"
-  - "SentryCapacitor (from `../../node_modules/.pnpm/@sentry+capacitor@0.14.0_@capacitor+core@6.2.0_@sentry+react@7.73.0_react@18.3.1_/node_modules/@sentry/capacitor`)"
+  - "SentryCapacitor (from `../../node_modules/.pnpm/@sentry+capacitor@1.4.0_@capacitor+core@6.2.0_@sentry+react@8.55.0_react@18.3.1_/node_modules/@sentry/capacitor`)"
 
 SPEC REPOS:
   trunk:
@@ -153,7 +151,6 @@ SPEC REPOS:
     - nanopb
     - PromisesObjC
     - Sentry
-    - SentryPrivate
 
 EXTERNAL SOURCES:
   Capacitor:
@@ -191,7 +188,7 @@ EXTERNAL SOURCES:
   CapawesomeCapacitorFilePicker:
     :path: "../../node_modules/.pnpm/@capawesome+capacitor-file-picker@6.2.0_@capacitor+core@6.2.0/node_modules/@capawesome/capacitor-file-picker"
   SentryCapacitor:
-    :path: "../../node_modules/.pnpm/@sentry+capacitor@0.14.0_@capacitor+core@6.2.0_@sentry+react@7.73.0_react@18.3.1_/node_modules/@sentry/capacitor"
+    :path: "../../node_modules/.pnpm/@sentry+capacitor@1.4.0_@capacitor+core@6.2.0_@sentry+react@8.55.0_react@18.3.1_/node_modules/@sentry/capacitor"
 
 SPEC CHECKSUMS:
   Capacitor: 1f3c7b9802d958cd8c4eb63895fff85dff2e1eea
@@ -211,23 +208,22 @@ SPEC CHECKSUMS:
   CapacitorStatusBar: 3b9ac7d0684770522c532d1158a1434512ab1477
   CapacitorVoiceRecorder: d44c1da901cc3918eb9c92c24834d8dc90f071f4
   CapawesomeCapacitorFilePicker: c14df1f5a23226039e0cb82b171cf5a351470459
-  Firebase: 7fd5466678d964be78fbf536d8a3385da19c4828
-  FirebaseCore: 6b32c57269bd999aab34354c3923d92a6e5f3f84
-  FirebaseCoreInternal: 35731192cab10797b88411be84940d2beb33a238
-  FirebaseInstallations: 6ef4a1c7eb2a61ee1f74727d7f6ce2e72acf1414
-  FirebaseMessaging: f8a160d99c2c2e5babbbcc90c4a3e15db036aee2
+  Firebase: 38f818b36ca01648fa78ec7402b4ee3076086c2b
+  FirebaseCore: 8fb12caed934c900218ce66a419107db74214ade
+  FirebaseCoreInternal: 6a3b668197644aa858fc4127578637c6767ba123
+  FirebaseInstallations: 863f2846bb124331b501d29c0f17f95caa2ef6bb
+  FirebaseMessaging: 61404edd221eaa09f9a733ce0fc9885f286705fe
   Giphy: 6b5f6986c8df4f71e01a8ef86595f426b3439fb5
   GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
-  GoogleUtilities: 26a3abef001b6533cf678d3eb38fd3f614b7872d
+  GoogleUtilities: 00c88b9a86066ef77f0da2fab05f65d7768ed8e1
   JitsiMeetSDK: bbb8b4cf23b09d27115ffbabd9f3a49e88a499eb
-  JitsiWebRTC: d0ae5fd6a81e771bfd82c2ee6c6bb542ebd65ee8
-  libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
+  JitsiWebRTC: b47805ab5668be38e7ee60e2258f49badfe8e1d0
+  libwebp: 02b23773aedb6ff1fd38cec7a77b81414c6842a8
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
-  Sentry: 927dfb29d18a14d924229a59cc2ad149f43349f2
-  SentryCapacitor: 24d2fdc00e259b9cd9454a2331444ab6c41141be
-  SentryPrivate: 4350d865f898224ab9fa02b37d6ee7fbb623f47e
+  Sentry: 1ca8405451040482877dcd344dfa3ef80b646631
+  SentryCapacitor: 76bed93eb1c508a1aac9eddd273e7ff7b77b509b
 
-PODFILE CHECKSUM: b01e71b7e15e4bc9262730e8b2fb094667b7d5b0
+PODFILE CHECKSUM: 5eb31af0aaed52b288253a703c6242abb3f5c41f
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.16.2

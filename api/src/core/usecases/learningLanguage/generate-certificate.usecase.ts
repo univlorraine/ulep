@@ -106,10 +106,6 @@ export class GenerateCertificateUsecase {
       throw new RessourceDoesNotExist('Learning language not found');
     }
 
-    if (!tandem) {
-      throw new RessourceDoesNotExist('Tandem not found');
-    }
-
     const certificateModel =
       learningLanguage.profile.user.university.defaultCertificateFile;
 
@@ -158,7 +154,7 @@ export class GenerateCertificateUsecase {
     fileBuffer,
     language,
     learningLanguage,
-    tandem,
+    tandem = null,
     learningJournal,
     consultingInterview,
   }: FillCertificatePdfParams) {
@@ -166,7 +162,7 @@ export class GenerateCertificateUsecase {
 
     const form = pdfDoc.getForm();
 
-    if (form.getFieldMaybe('TandemType')) {
+    if (tandem && form.getFieldMaybe('TandemType')) {
       const tandemTypeField = form.getTextField('TandemType');
       tandemTypeField.setText(tandem.learningType);
     }

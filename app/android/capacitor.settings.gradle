@@ -42,7 +42,7 @@ include ':capawesome-capacitor-file-picker'
 project(':capawesome-capacitor-file-picker').projectDir = new File('../node_modules/.pnpm/@capawesome+capacitor-file-picker@6.2.0_@capacitor+core@6.2.0/node_modules/@capawesome/capacitor-file-picker/android')
 
 include ':sentry-capacitor'
-project(':sentry-capacitor').projectDir = new File('../node_modules/.pnpm/@sentry+capacitor@0.14.0_@capacitor+core@6.2.0_@sentry+react@7.73.0_react@18.3.1_/node_modules/@sentry/capacitor/android')
+project(':sentry-capacitor').projectDir = new File('../node_modules/.pnpm/@sentry+capacitor@1.4.0_@capacitor+core@6.2.0_@sentry+react@8.55.0_react@18.3.1_/node_modules/@sentry/capacitor/android')
 
 include ':capacitor-jitsi-meet'
 project(':capacitor-jitsi-meet').projectDir = new File('../node_modules/.pnpm/capacitor-jitsi-meet@6.2.1/node_modules/capacitor-jitsi-meet/android')

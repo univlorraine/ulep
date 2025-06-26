@@ -74,6 +74,7 @@ import { EventFormPayload, EventObject, EventStatus, EventTranslation, EventType
 import University from '../../entities/University';
 import customDataProvider from '../../providers/customDataProvider';
 import i18nProvider from '../../providers/i18nProvider';
+import useGetTranslatedLanguageCode from '../../utils/useGetTranslatedLanguageCode';
 import ImageUploader from '../ImageUploader';
 import useGetLanguages from './useGetLanguages';
 
@@ -100,6 +101,7 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
         sort: { field: 'name', order: 'ASC' },
     });
     const { primaryLanguages, suggestedLanguages, partnerLanguages } = useGetLanguages();
+    const translateLanguageCode = useGetTranslatedLanguageCode();
 
     const notify = useNotify();
     const record: EventObject | undefined = useRecordContext();
@@ -428,7 +430,9 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                                                         <DeleteIcon />
                                                     </Button>
                                                 </TableCell>
-                                                <TableCell sx={{ padding: '10px' }}>{language}</TableCell>
+                                                <TableCell sx={{ padding: '10px' }}>
+                                                    {translateLanguageCode(language)}
+                                                </TableCell>
                                             </TableRow>
                                         ))}
                                     </TableBody>
@@ -457,7 +461,7 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                                                 ?.filter((language) => !diffusionLanguages.includes(language))
                                                 .map((language) => (
                                                     <MenuItem key={language} value={language}>
-                                                        {language}
+                                                        {translateLanguageCode(language)}
                                                     </MenuItem>
                                                 ))}
                                         </Select>
@@ -625,7 +629,7 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                         >
                             {availableLanguages.map((language) => (
                                 <MenuItem key={language} value={language}>
-                                    {language}
+                                    {translateLanguageCode(language)}
                                 </MenuItem>
                             ))}
                         </Select>
@@ -648,7 +652,7 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                     <Box sx={{ '& .MuiDivider-root': { display: 'none' } }}>
                         <TabbedForm>
                             <TabbedForm.Tab
-                                label={defaultLanguage}
+                                label={translateLanguageCode(defaultLanguage)}
                                 sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}
                             >
                                 {availableLanguages.length > 0 && (
@@ -665,11 +669,11 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                                         >
                                             {availableLanguages.map((language) => (
                                                 <MenuItem key={language} value={language}>
-                                                    {language}
+                                                    {translateLanguageCode(language)}
                                                 </MenuItem>
                                             ))}
                                             <MenuItem key={defaultLanguage} value={defaultLanguage}>
-                                                {defaultLanguage}
+                                                {translateLanguageCode(defaultLanguage)}
                                             </MenuItem>
                                         </Select>
                                     </Box>
@@ -701,7 +705,7 @@ const EventForm: React.FC<EventFormProps> = ({ handleSubmit }) => {
                             {translations?.map((translation, index) => (
                                 <TabbedForm.Tab
                                     key={translation.languageCode}
-                                    label={translation.languageCode}
+                                    label={translateLanguageCode(translation.languageCode)}
                                     sx={{ display: 'flex', flexDirection: 'column', gap: '30px' }}
                                 >
                                     <Box sx={{ display: 'flex', width: '100%', justifyContent: 'flex-end' }}>
