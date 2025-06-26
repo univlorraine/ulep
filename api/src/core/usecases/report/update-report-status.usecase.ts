@@ -80,6 +80,12 @@ export class UpdateReportStatusUsecase {
         instance.metadata?.messageId,
         command.shouldDeleteMessage,
       );
+      //here send notification to the user that the message has been deleted
+      await this.notificationService.sendNotification(
+        instance.user.id,
+        'Message deleted',
+        'The message has been deleted',
+      );
     }
 
     return this.reportRepository.updateReport(
