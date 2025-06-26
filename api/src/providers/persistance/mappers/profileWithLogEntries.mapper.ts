@@ -1,3 +1,4 @@
+import { NotFoundException } from '@nestjs/common';
 import * as Prisma from '@prisma/client';
 import { LearningLanguageWithLogEntries } from 'src/core/models/learning-language.model';
 import { ProfileWithLogEntries } from 'src/core/models/profileWithLogEntries.model';
@@ -37,6 +38,9 @@ export const ProfilesRelationsWithLogEntries = {
 export const profileWithLogEntriesMapper = (
   instance: ProfileWithLogEntriesSnapshot,
 ) => {
+  if (!instance) {
+    throw new NotFoundException('Profile not found');
+  }
   const profile = new ProfileWithLogEntries({
     id: instance.id,
     user: userMapper(instance.User),
