@@ -48,6 +48,7 @@ import {
   LearningLanguageWithTandemWithPartnerLearningLanguage,
   LearningType,
 } from 'src/core/models';
+import { LogEntry } from 'src/core/models/log-entry.model';
 import { CampusResponse } from '../campus';
 import { LogEntryResponse } from '../log-entry';
 import { MediaObjectResponse } from '../medias';
@@ -62,6 +63,7 @@ interface LearningLanguageResponseProps {
   languageCode?: string;
   countVocabularies?: number;
   countActivities?: number;
+  logEntries?: LogEntry[];
 }
 export class LearningLanguageResponse {
   @ApiProperty({ type: 'string', format: 'uuid' })
@@ -165,6 +167,10 @@ export class LearningLanguageResponse {
   @Expose({ groups: ['read'] })
   countActivities?: number;
 
+  @ApiProperty({ type: () => LogEntryResponse })
+  @Expose({ groups: ['read'] })
+  logs?: LogEntryResponse[];
+
   constructor(partial: Partial<LearningLanguageResponse>) {
     Object.assign(this, partial);
   }
@@ -174,6 +180,7 @@ export class LearningLanguageResponse {
     languageCode,
     countVocabularies,
     countActivities,
+    logEntries,
   }: LearningLanguageResponseProps): LearningLanguageResponse {
     const response = new LearningLanguageResponse({
       id: learningLanguage.id,
@@ -213,6 +220,7 @@ export class LearningLanguageResponse {
       visioDuration: learningLanguage.visioDuration,
       countVocabularies: countVocabularies,
       countActivities: countActivities,
+      logs: logEntries?.map((logEntry) => LogEntryResponse.from(logEntry)),
     });
 
     return response;
@@ -280,8 +288,8 @@ interface LearningLanguageWithLogEntriesResponseProps {
 
 export class LearningLanguageWithLogEntriesResponse extends LearningLanguageResponse {
   @ApiProperty({ type: () => LogEntryResponse })
-  @Expose({ groups: ['read'] })
-  logEntries: LogEntryResponse[];
+  @Expose({ groups: ['read', 'api', 'api-admin'] })
+  logs: LogEntryResponse[];
 
   constructor(partial: Partial<LearningLanguageWithLogEntriesResponse>) {
     super(partial);
@@ -293,7 +301,7 @@ export class LearningLanguageWithLogEntriesResponse extends LearningLanguageResp
   }: LearningLanguageWithLogEntriesResponseProps): LearningLanguageWithLogEntriesResponse {
     return new LearningLanguageWithLogEntriesResponse({
       ...LearningLanguageResponse.fromDomain({ learningLanguage }),
-      logEntries: learningLanguage.logEntries
+      logs: learningLanguage.logEntries
         .filter((logEntry) => logEntry !== undefined)
         .map((logEntry) => LogEntryResponse.from(logEntry)),
     });
