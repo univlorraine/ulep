@@ -114,4 +114,8 @@ export class PrismaCommunityChatRepository implements CommunityChatRepository {
 
     return communityChatMapper(result);
   }
+
+  async deleteAll(): Promise<void> {
+    await this.prisma.communityChat.deleteMany();
+  }
 }

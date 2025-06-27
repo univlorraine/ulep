@@ -228,8 +228,9 @@ export class ChatService implements ChatServicePort {
     }
 
     try {
-      const response = await axios.delete(
+      const response = await axios.post(
         this.env.get('CHAT_URL') + '/purge/',
+        {},
         { headers: this.headers },
       );
 

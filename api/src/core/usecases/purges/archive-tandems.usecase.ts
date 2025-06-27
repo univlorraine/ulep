@@ -49,28 +49,32 @@ import {
 import Purge from 'src/core/models/purge.model';
 import { CHAT_SERVICE } from 'src/core/ports/chat.service';
 import {
-  LEARNING_LANGUAGE_REPOSITORY,
+  CommunityChatRepository,
+  COMMUNITY_CHAT_REPOSITORY,
+} from 'src/core/ports/community-chat.repository';
+import {
   LearningLanguageRepository,
+  LEARNING_LANGUAGE_REPOSITORY,
 } from 'src/core/ports/learning-language.repository';
 import {
-  PURGE_REPOSITORY,
   PurgeRepository,
+  PURGE_REPOSITORY,
 } from 'src/core/ports/purge.repository';
 import {
-  REPORT_REPOSITORY,
   ReportRepository,
+  REPORT_REPOSITORY,
 } from 'src/core/ports/report.repository';
 import {
-  TANDEM_REPOSITORY,
   TandemRepository,
+  TANDEM_REPOSITORY,
 } from 'src/core/ports/tandem.repository';
 import {
-  USER_REPOSITORY,
   UserRepository,
+  USER_REPOSITORY,
 } from 'src/core/ports/user.repository';
 import {
-  UUID_PROVIDER,
   UuidProviderInterface,
+  UUID_PROVIDER,
 } from 'src/core/ports/uuid.provider';
 import { ChatService } from 'src/providers/services/chat.service';
 import { DeleteUserUsecase } from '../user';
@@ -105,6 +109,8 @@ export class ArchiveTandemsAndDeleteUsersUsecase {
     private readonly uuidProvider: UuidProviderInterface,
     @Inject(DeleteUserUsecase)
     private readonly deleteUsersUsecase: DeleteUserUsecase,
+    @Inject(COMMUNITY_CHAT_REPOSITORY)
+    private readonly communityChatRepository: CommunityChatRepository,
   ) {}
 
   async execute(command: UserTandemPurgeCommand): Promise<Purge> {
@@ -127,6 +133,7 @@ export class ArchiveTandemsAndDeleteUsersUsecase {
     await this.deleteClosedReports();
     // Delete everything in chat api
     await this.chatService.deleteAllConversations();
+    await this.communityChatRepository.deleteAll();
 
     return purge;
   }
