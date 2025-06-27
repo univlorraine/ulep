@@ -85,6 +85,12 @@ const Dropdown = <T,>({
         }
     }, [placeholder, options]);
 
+    useEffect(() => {
+        if (value) {
+            setSelectedOption(value);
+        }
+    }, [value]);
+
     const handleOptionClick = (item: DropDownItem<T>) => {
         setSelectedOption(item);
         onChange(item.value);
