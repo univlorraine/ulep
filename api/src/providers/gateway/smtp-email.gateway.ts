@@ -48,6 +48,7 @@ import {
   ActivityStatusChangeEmailProps,
   EmailGateway,
   EventDeletedEmailProps,
+  MessageDeletedEmailProps,
   NewMessageEmailProps,
   NewPartnerEmail,
   NewReportEmailProps,
@@ -679,6 +680,25 @@ export class SmtpEmailGateway implements EmailGateway {
         images: this.images,
         bodyHtml: props.content,
       },
+    });
+  }
+
+  async sendMessageDeletedEmail(
+    props: MessageDeletedEmailProps,
+  ): Promise<void> {
+    const translations = this.translate('messageDeleted', props.language, {
+      ...props,
+    });
+
+    this.mailer.sendMail({
+      to: props.to,
+      subject: translations.title,
+      template: 'user',
+      variables: {
+        content: props.content,
+        roomTitle: props.roomTitle,
+      },
+      ...translations,
     });
   }
 }

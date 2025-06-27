@@ -86,4 +86,8 @@ export default class InMemoryNotificaitonGateway
   sendSessionCreatedNotification(): Promise<void> {
     return Promise.resolve();
   }
+
+  sendMessageDeletedNotification(): Promise<void> {
+    return Promise.resolve();
+  }
 }
