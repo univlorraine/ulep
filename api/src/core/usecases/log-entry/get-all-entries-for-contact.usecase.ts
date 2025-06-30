@@ -39,7 +39,13 @@
  */
 
 import { KeycloakClient } from '@app/keycloak';
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import {
   ProfileRepository,
   PROFILE_REPOSITORY,
@@ -66,8 +72,16 @@ export class GetAllEntriesForContactUsecase {
       throw new UnauthorizedException();
     }
 
+    const usersToSearch = await this.keycloakClient.getUsers({
+      attributes: { key: 'universityLogin', value: command.contactId },
+    });
+    if (usersToSearch.length === 0) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+    const userToSearch = usersToSearch[0];
+
     const profiles = await this.profileRepository.findByContactIdWithLogEntries(
-      command.contactId,
+      userToSearch.attributes.contactId,
       !isApiAdmin ? false : command.getNoSharedProfiles,
     );
     return profiles;
