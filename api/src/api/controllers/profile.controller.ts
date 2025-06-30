@@ -374,8 +374,6 @@ export class ProfileController {
       id: user.sub,
     });
 
-    console.log('profile', profile, languageCode);
-
     return ProfileResponse.fromDomain(profile, languageCode);
   }
 
