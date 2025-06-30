@@ -36,7 +36,7 @@ dependencies:
     version: "19.5.2"
     repository: "https://charts.bitnami.com/bitnami"
   - name: jitsi-meet
-    version: 1.3.8
+    version: 1.5.1
     repository: "https://jitsi-contrib.github.io/jitsi-helm/"
   - name: glitchtip
     version: 2.5.1

@@ -60,39 +60,40 @@ import {
   Profile,
   User,
 } from 'src/core/models';
-import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
+import { EmailGateway, EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
 import {
-  INTEREST_REPOSITORY,
   InterestRepository,
+  INTEREST_REPOSITORY,
 } from 'src/core/ports/interest.repository';
 import {
-  LANGUAGE_REPOSITORY,
   LanguageRepository,
+  LANGUAGE_REPOSITORY,
 } from 'src/core/ports/language.repository';
 import {
-  LEARNING_LANGUAGE_REPOSITORY,
   LearningLanguageRepository,
+  LEARNING_LANGUAGE_REPOSITORY,
 } from 'src/core/ports/learning-language.repository';
 import {
   LearningObjectiveRepository,
   OBJECTIVE_REPOSITORY,
 } from 'src/core/ports/objective.repository';
 import {
-  PROFILE_REPOSITORY,
   ProfileRepository,
+  PROFILE_REPOSITORY,
 } from 'src/core/ports/profile.repository';
 import {
-  TANDEM_HISTORY_REPOSITORY,
   TandemHistoryRepository,
+  TANDEM_HISTORY_REPOSITORY,
 } from 'src/core/ports/tandem-history.repository';
 import {
-  USER_REPOSITORY,
   UserRepository,
+  USER_REPOSITORY,
 } from 'src/core/ports/user.repository';
 import {
-  UUID_PROVIDER,
   UuidProviderInterface,
+  UUID_PROVIDER,
 } from 'src/core/ports/uuid.provider';
+import { UpdateLearningLanguageUsecase } from '../learningLanguage/update-learning-language.usecase';
 
 export class CreateProfileCommand {
   user: string;
@@ -137,6 +138,8 @@ export class CreateProfileUsecase {
     private readonly uuidProvider: UuidProviderInterface,
     @Inject(EMAIL_GATEWAY)
     private readonly emailGateway: EmailGateway,
+    @Inject(UpdateLearningLanguageUsecase)
+    private readonly updateLearningLanguageUsecase: UpdateLearningLanguageUsecase,
   ) {}
 
   async execute(command: CreateProfileCommand): Promise<Profile> {
@@ -218,6 +221,45 @@ export class CreateProfileUsecase {
               historyTandem.tandemId,
             );
           sameTandemEmail = otherUser.userEmail;
+        } else {
+          // On regarde si l'utilisateur a déjà un tandem historisé avec cette langue
+          const historyTandem =
+            await this.tandemHistoryRepository.getHistoryTandemFormUserIdAndLanguageId(
+              user.id,
+              language.id,
+            );
+          // Si l'utilisateur a déjà un tandem historisé avec cette langue, on récupère l'email de l'autre utilisateur
+          if (historyTandem) {
+            const otherUserHistory =
+              await this.tandemHistoryRepository.getOtherUserInTandemHistory(
+                user.id,
+                historyTandem.tandemId,
+              );
+            // Si on a bien un autre user, alors il faut regarder s'il a une demande de tandem avec le same Tandem, si c'est le cas
+            // on modifie le sameTandemEmail de la demande de tandem
+            const otherUserProfile = await this.profilesRepository.ofUser(
+              otherUserHistory.userId,
+            );
+            if (otherUserProfile) {
+              const otherUserLearningLanguage =
+                otherUserProfile.learningLanguages.find(
+                  (learningLanguage) =>
+                    learningLanguage.language.id ===
+                      otherUserHistory.language.id &&
+                    learningLanguage.sameTandemEmail ===
+                      historyTandem.userEmail,
+                );
+
+              if (otherUserLearningLanguage) {
+                await this.updateLearningLanguageUsecase.execute(
+                  otherUserLearningLanguage.id,
+                  {
+                    sameTandemEmail: null,
+                  },
+                );
+              }
+            }
+          }
         }
 
         return new LearningLanguage({

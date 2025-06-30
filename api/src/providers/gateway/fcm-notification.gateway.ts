@@ -46,6 +46,7 @@ import {
   NotificationGateway,
   NotificationParams,
   SendActivityStatusChangeNotification,
+  SendMessageDeletedNotification,
   SendMessageNotification,
   SendSessionCanceledNotification,
   SendSessionCreatedNotification,
@@ -312,6 +313,28 @@ export class FCMNotificationGateway implements NotificationGateway {
     const notifications = props.to.map((notification) => {
       const translation = this.translate(
         'sessionCreated',
+        notification.language,
+        {
+          ...props,
+        },
+      );
+      return {
+        token: notification.token,
+        title: translation.title,
+        body: translation.body,
+        image,
+      };
+    });
+    await this.sender.sendNotifications(notifications);
+  }
+
+  async sendMessageDeletedNotification(
+    props: SendMessageDeletedNotification,
+  ): Promise<void> {
+    const image = this.images.notification;
+    const notifications = props.to.map((notification) => {
+      const translation = this.translate(
+        'messageDeleted',
         notification.language,
         {
           ...props,

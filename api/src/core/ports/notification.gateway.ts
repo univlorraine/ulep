@@ -104,6 +104,13 @@ export interface SendSessionUpdatedNotification {
   session: SessionParams;
 }
 
+export interface SendMessageDeletedNotification {
+  to: Notification[];
+  content: string;
+  roomTitle: string;
+  session: SessionParams;
+}
+
 export interface NotificationGateway {
   sendTandemClosureNoticeNotification(
     props: SendTandemClosureNoticeNotification,
@@ -129,5 +136,8 @@ export interface NotificationGateway {
   ): Promise<void>;
   sendSessionUpdatedNotification(
     props: SendSessionUpdatedNotification,
+  ): Promise<void>;
+  sendMessageDeletedNotification(
+    props: SendMessageDeletedNotification,
   ): Promise<void>;
 }

@@ -42,8 +42,8 @@ import { Inject, Injectable } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import { LearningLanguage, MediaObject } from 'src/core/models';
 import {
-  LEARNING_LANGUAGE_REPOSITORY,
   LearningLanguageRepository,
+  LEARNING_LANGUAGE_REPOSITORY,
 } from 'src/core/ports/learning-language.repository';
 
 export class UpdateLearningLanguageCommand {
@@ -51,6 +51,7 @@ export class UpdateLearningLanguageCommand {
   consultingInterview?: boolean;
   sharedCertificate?: boolean;
   certificateFile?: MediaObject;
+  sameTandemEmail?: string | null;
 }
 
 @Injectable()

@@ -5,7 +5,6 @@ import { ProfileWithLogEntries } from 'src/core/models/profileWithLogEntries.mod
 import { LearningLanguageWithLogEntriesResponse } from '../learning-languages';
 import { ProfileWithLogEntriesResponse } from '../profiles/profiles-with-logentries.response';
 import { UserResponse } from '../users';
-import { LogEntryResponse } from './log-entry.response';
 
 export class ApiLogEntryResponse extends ProfileWithLogEntriesResponse {
   @Swagger.ApiProperty({ type: LearningLanguageWithLogEntriesResponse })
@@ -25,11 +24,6 @@ export class ApiLogEntryResponse extends ProfileWithLogEntriesResponse {
         LearningLanguageWithLogEntriesResponse.fromDomain({
           learningLanguage,
         }),
-      ),
-      logs: profile.learningLanguages.flatMap((learningLanguage) =>
-        learningLanguage.logEntries.map((logEntry) =>
-          LogEntryResponse.from(logEntry),
-        ),
       ),
     });
   }

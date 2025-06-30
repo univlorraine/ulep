@@ -128,13 +128,14 @@ export class ProfileController {
   async create(
     @CurrentUser() user: KeycloakUser,
     @Body() body: CreateProfileRequest,
+    @Headers('Language-code') languageCode?: string,
   ): Promise<ProfileResponse> {
     const profile = await this.createProfileUsecase.execute({
       ...body,
       user: user.sub,
     });
 
-    return ProfileResponse.fromDomain(profile);
+    return ProfileResponse.fromDomain(profile, languageCode);
   }
 
   @Post('edit/:id')
@@ -143,13 +144,14 @@ export class ProfileController {
   async edit(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() body: UpdateProfileRequest,
+    @Headers('Language-code') languageCode?: string,
   ) {
     const profile = await this.updateProfileUsecase.execute(id, {
       ...body,
       biography: body.biography as unknown as { [key: string]: string },
     });
 
-    return ProfileResponse.fromDomain(profile);
+    return ProfileResponse.fromDomain(profile, languageCode);
   }
 
   @Get()
@@ -162,6 +164,7 @@ export class ProfileController {
   @CollectionResponse(ProfileResponse)
   async getCollection(
     @Query() query: ProfileQueryFilter,
+    @Headers('Language-code') languageCode?: string,
   ): Promise<Collection<ProfileResponse>> {
     const {
       email,
@@ -216,7 +219,7 @@ export class ProfileController {
 
     return new Collection<ProfileResponse>({
       items: profiles.items.map((profile: Profile) =>
-        ProfileResponse.fromDomain(profile),
+        ProfileResponse.fromDomain(profile, languageCode),
       ),
       totalItems: profiles.totalItems,
     });
@@ -365,12 +368,13 @@ export class ProfileController {
   @Swagger.ApiNotFoundResponse({ description: 'Resource not found' })
   async getItemByUserId(
     @CurrentUser() user: KeycloakUser,
+    @Headers('Language-code') languageCode?: string,
   ): Promise<ProfileResponse> {
     const profile = await this.getProfileByUserIdUsecase.execute({
       id: user.sub,
     });
 
-    return ProfileResponse.fromDomain(profile);
+    return ProfileResponse.fromDomain(profile, languageCode);
   }
 
   @Get(':id')
@@ -467,12 +471,13 @@ export class ProfileController {
   async createOrUpdateTestedLanguage(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() body: TestedLanguageProps,
+    @Headers('Language-code') languageCode?: string,
   ): Promise<ProfileResponse> {
     const profile = await this.createOrUpdateTestedLanguageUsecase.execute({
       ...body,
       profileId: id,
     });
 
-    return ProfileResponse.fromDomain(profile);
+    return ProfileResponse.fromDomain(profile, languageCode);
   }
 }

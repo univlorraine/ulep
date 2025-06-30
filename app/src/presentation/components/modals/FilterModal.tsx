@@ -45,6 +45,7 @@ import { ActivityTheme, ActivityThemeCategory } from '../../../domain/entities/A
 import { EventType } from '../../../domain/entities/Event';
 import Language from '../../../domain/entities/Language';
 import Profile from '../../../domain/entities/Profile';
+import useGetLearnableLanguages from '../../hooks/useGetLearnableLanguages';
 import { CEFR_LEVELS } from '../../utils';
 import Checkbox from '../Checkbox';
 import styles from './FilterModal.module.css';
@@ -145,14 +146,17 @@ const FilterModal: React.FC<FilterModalProps> = ({
         setSelectedEventType(currentEventTypeFilter ?? []);
     }, [isVisible]);
 
+    const { languages: learnableLanguages } = useGetLearnableLanguages(profile?.user.university, false, []);
+
     const languages = Array.from(
         new Map(
-            [profile.nativeLanguage, ...profile.masteredLanguages, ...profile.learningLanguages]
+            [profile.nativeLanguage, ...profile.masteredLanguages, ...profile.learningLanguages, ...learnableLanguages]
                 .filter((language): language is Language => language !== null && language !== undefined)
                 .filter((language) => language.id !== '*')
-                .map((language) => [language.id, language])
+                .map((language) => [language.code, language])
         ).values()
     );
+
     return (
         <IonModal animated isOpen={isVisible} onDidDismiss={onClose} className={styles.modal}>
             <div className={styles.container}>
