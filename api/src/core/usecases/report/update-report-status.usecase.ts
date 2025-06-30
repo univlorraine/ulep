@@ -41,12 +41,23 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import { CHAT_SERVICE } from 'src/core/ports/chat.service';
+import { EmailGateway, EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
+import {
+  NotificationGateway,
+  NOTIFICATION_GATEWAY,
+} from 'src/core/ports/notification.gateway';
+import {
+  UserRepository,
+  USER_REPOSITORY,
+} from 'src/core/ports/user.repository';
 import { ChatService } from 'src/providers/services/chat.service';
 import { ReportStatus } from '../../models';
 import {
   ReportRepository,
   REPORT_REPOSITORY,
 } from '../../ports/report.repository';
+
+import { GetProfileByUserIdUsecase } from '../profiles';
 
 export class UpdateReportStatusCommand {
   id: string;
@@ -62,6 +73,13 @@ export class UpdateReportStatusUsecase {
     private readonly reportRepository: ReportRepository,
     @Inject(CHAT_SERVICE)
     private readonly chatService: ChatService,
+    @Inject(NOTIFICATION_GATEWAY)
+    private readonly notificationGateway: NotificationGateway,
+    @Inject(USER_REPOSITORY)
+    private readonly userRepository: UserRepository,
+    @Inject(EMAIL_GATEWAY)
+    private readonly emailGateway: EmailGateway,
+    private readonly getProfileByUserIdUsecase: GetProfileByUserIdUsecase,
   ) {}
 
   async execute(command: UpdateReportStatusCommand) {
@@ -80,17 +98,39 @@ export class UpdateReportStatusUsecase {
         instance.metadata?.messageId,
         command.shouldDeleteMessage,
       );
-    }
 
-    return this.reportRepository.updateReport(
-      command.id,
-      command.status,
-      command.comment,
-      {
-        ...instance.metadata,
-        isMessageDeleted:
-          command.shouldDeleteMessage || instance.metadata?.isMessageDeleted,
-      },
-    );
+      const profile = await this.getProfileByUserIdUsecase.execute({
+        id: instance.user.id,
+      });
+      if (profile && instance.user) {
+        await this.notificationGateway.sendMessageDeletedNotification({
+          to: instance.user.devices.map((device) => ({
+            token: device.token,
+            language: profile.nativeLanguage.code,
+          })),
+          content: instance.content,
+          roomTitle: '',
+          session: instance.metadata?.session,
+        });
+
+        await this.emailGateway.sendMessageDeletedEmail({
+          to: instance.user.email,
+          language: profile.nativeLanguage.code,
+          roomTitle: '',
+          content: instance.content,
+        });
+      }
+
+      return this.reportRepository.updateReport(
+        command.id,
+        command.status,
+        command.comment,
+        {
+          ...instance.metadata,
+          isMessageDeleted:
+            command.shouldDeleteMessage || instance.metadata?.isMessageDeleted,
+        },
+      );
+    }
   }
 }

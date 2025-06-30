@@ -228,6 +228,13 @@ export interface SendEmailToSubscribedToEventUserProps {
   content: string;
 }
 
+export interface MessageDeletedEmailProps {
+  to: string;
+  language: string;
+  roomTitle: string;
+  content: string;
+}
+
 export interface EmailGateway {
   // Notifies a user with a welcome email.
   sendWelcomeMail(props: SendWelcomeMailProps): Promise<void>;
@@ -335,4 +342,6 @@ export interface EmailGateway {
   sendEmailToSubscribedToEventUser(
     props: SendEmailToSubscribedToEventUserProps,
   ): Promise<void>;
+
+  sendMessageDeletedEmail(props: MessageDeletedEmailProps): Promise<void>;
 }
