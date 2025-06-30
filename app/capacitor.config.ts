@@ -39,6 +39,7 @@
  */
 
 import { CapacitorConfig } from '@capacitor/cli';
+import { KeyboardResize, KeyboardStyle } from '@capacitor/keyboard';
 
 let config: CapacitorConfig;
 
@@ -55,9 +56,9 @@ const baseConfig: CapacitorConfig = {
             presentationOptions: ['badge', 'sound', 'alert'],
         },
         Keyboard: {
-            resize: 'body',
-            style: 'DARK',
-            accessoryBarVisible: false,
+            resize: KeyboardResize.Ionic,
+            style: KeyboardStyle.Dark,
+            resizeOnFullScreen: true,
         },
     },
 };
