@@ -101,11 +101,11 @@
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
 }
 
-:dir(ltr) .add-button {
+[dir='ltr'] .add-button {
     right: 20px;
 }
 
-:dir(rtl) .add-button {
+[dir='rtl'] .add-button {
     left: 20px;
 }
 
