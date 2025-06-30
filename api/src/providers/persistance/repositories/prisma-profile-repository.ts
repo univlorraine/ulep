@@ -235,19 +235,21 @@ export class PrismaProfileRepository implements ProfileRepository {
     limit?: number,
     forceGettingNoSharedProfiles: boolean = false,
   ): Promise<Collection<ProfileWithLogEntries>> {
+    const whereCondition = !forceGettingNoSharedProfiles
+      ? {
+          LearningLanguages: {
+            some: {
+              shared_logs_date: { not: null },
+            },
+          },
+        }
+      : {};
+
     const profiles = await this.prisma.profiles.findMany({
       skip: offset,
       take: limit,
       include: ProfilesRelationsWithLogEntries,
-      where: {
-        LearningLanguages: {
-          some: {
-            shared_logs_date: !forceGettingNoSharedProfiles
-              ? { not: null }
-              : undefined,
-          },
-        },
-      },
+      where: whereCondition,
     });
 
     const count = await this.prisma.profiles.count({});

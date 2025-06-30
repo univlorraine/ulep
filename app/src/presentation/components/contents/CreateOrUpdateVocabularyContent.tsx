@@ -52,6 +52,11 @@ import RecordingButton from '../RecordingButton';
 import TextInput from '../TextInput';
 import styles from './CreateOrUpdateVocabularyContent.module.css';
 
+enum RecordingMode {
+    WORD = 'word',
+    TRANSLATION = 'translation',
+}
+
 interface CreateOrUpdateVocabularyContentProps {
     vocabulary?: Vocabulary;
     vocabularyList: VocabularyList;
@@ -84,6 +89,7 @@ const CreateOrUpdateVocabularyContent: React.FC<CreateOrUpdateVocabularyContentP
     const [wordPronunciation, setWordPronunciation] = useState<File>();
     const [hideUploadedWordPronunciation, setHideUploadedWordPronunciation] = useState<boolean>(false);
     const [hideUploadedTranslationPronunciation, setHideUploadedTranslationPronunciation] = useState<boolean>(false);
+    const [activeRecording, setActiveRecording] = useState<RecordingMode | null>(null);
 
     const { isRecording, audioFile, error, startRecording, stopRecording, clearAudioFile, clearError } =
         useAudioRecorder(recorderAdapter);
@@ -99,15 +105,16 @@ const CreateOrUpdateVocabularyContent: React.FC<CreateOrUpdateVocabularyContentP
     }, [error, showToast, t, clearError]);
 
     useEffect(() => {
-        if (audioFile) {
-            if (!wordPronunciation && !translationPronunciation) {
+        if (audioFile && activeRecording) {
+            if (activeRecording === RecordingMode.WORD) {
                 setWordPronunciation(audioFile);
-            } else if (wordPronunciation && !translationPronunciation) {
+            } else if (activeRecording === RecordingMode.TRANSLATION) {
                 setTranslationPronunciation(audioFile);
             }
+            setActiveRecording(null);
             clearAudioFile();
         }
-    }, [audioFile, wordPronunciation, translationPronunciation, clearAudioFile]);
+    }, [audioFile, activeRecording, clearAudioFile]);
 
     const displayWordPronunciation = vocabulary?.pronunciationWordUrl && !hideUploadedWordPronunciation;
     const displayTranslationPronunciation =
@@ -117,6 +124,7 @@ const CreateOrUpdateVocabularyContent: React.FC<CreateOrUpdateVocabularyContentP
         if (isRecording || wordPronunciation) {
             return;
         }
+        setActiveRecording(RecordingMode.WORD);
         startRecording();
     };
 
@@ -124,6 +132,7 @@ const CreateOrUpdateVocabularyContent: React.FC<CreateOrUpdateVocabularyContentP
         if (isRecording || translationPronunciation) {
             return;
         }
+        setActiveRecording(RecordingMode.TRANSLATION);
         startRecording();
     };
 

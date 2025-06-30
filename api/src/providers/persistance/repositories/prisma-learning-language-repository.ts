@@ -143,6 +143,7 @@ export class PrismaLearningLanguageRepository
         shared_logs_date: item.sharedLogsDate ?? null,
         shared_logs_for_research_date: item.sharedLogsForResearchDate ?? null,
         visio_duration: item.visioDuration,
+        same_tandem_email: item.sameTandemEmail,
       },
     });
   }

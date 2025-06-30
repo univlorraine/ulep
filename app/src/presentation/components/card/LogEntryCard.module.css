@@ -68,11 +68,11 @@
     padding: 8px;
 }
 
-:dir(ltr) .imageContainer {
+[dir='ltr'] .imageContainer {
     margin-left: -24px;
 }
 
-:dir(rtl) .imageContainer {
+[dir='rtl'] .imageContainer {
     margin-right: -24px;
 }
 
@@ -81,11 +81,11 @@
     height: 48px;
 }
 
-:dir(ltr) .imageContainer:first-child {
+[dir='ltr'] .imageContainer:first-child {
     margin-left: 0;
 }
 
-:dir(rtl) .imageContainer:last-child {
+[dir='rtl'] .imageContainer:last-child {
     margin-left: 0;
 }
 

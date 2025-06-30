@@ -43,7 +43,6 @@ import { useTranslation } from 'react-i18next';
 import News from '../../../domain/entities/News';
 import Profile from '../../../domain/entities/Profile';
 import NewsLine from './NewsLine';
-
 interface NewsListProps {
     news: News[];
     profile: Profile;

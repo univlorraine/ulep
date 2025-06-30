@@ -132,7 +132,12 @@ const SignUpPage: React.FC = () => {
 
     const onCountrySelected = (country: Country) => {
         setCountry(country);
-        return setUniversity(country.universities[0]);
+        // Select the first university of the new country
+        if (country.universities.length > 0) {
+            setUniversity(country.universities[0]);
+        } else {
+            setUniversity(undefined);
+        }
     };
 
     // Get user infos and update fields when user is logged in.

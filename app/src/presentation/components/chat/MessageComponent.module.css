@@ -92,11 +92,11 @@
     width: 100%;
 }
 
-:dir(ltr) .leftMessageMenu {
+[dir='ltr'] .leftMessageMenu {
     margin-left: auto;
 }
 
-:dir(rtl) .leftMessageMenu {
+[dir='rtl'] .leftMessageMenu {
     margin-right: auto;
 }
 
@@ -104,11 +104,11 @@
     padding: 0px;
 }
 
-:dir(ltr) .rightMessageMenu {
+[dir='ltr'] .rightMessageMenu {
     margin-right: auto;
 }
 
-:dir(rtl) .rightMessageMenu {
+[dir='rtl'] .rightMessageMenu {
     margin-left: auto;
 }
 
@@ -198,13 +198,13 @@
     position: relative;
 }
 
-:dir(ltr) .currentUser {
+[dir='ltr'] .currentUser {
     text-align: end;
     margin-left: auto;
     margin-right: none;
 }
 
-:dir(rtl) .currentUser {
+[dir='rtl'] .currentUser {
     text-align: start;
     margin-right: auto;
     margin-left: none;
@@ -216,11 +216,11 @@
     position: relative;
 }
 
-:dir(ltr) .otherUser {
+[dir='ltr'] .otherUser {
     text-align: start;
 }
 
-:dir(rtl) .otherUser {
+[dir='rtl'] .otherUser {
     text-align: end;
 }
 
@@ -262,23 +262,23 @@
     margin-top: 0px;
 }
 
-:dir(ltr) .rightReply {
+[dir='ltr'] .rightReply {
     margin-left: auto;
     border-right: 1px dashed black;
 }
 
-:dir(rtl) .rightReply {
+[dir='rtl'] .rightReply {
     margin-right: auto;
     border-left: 1px dashed black;
 }
 
-:dir(ltr) .leftReply {
+[dir='ltr'] .leftReply {
     margin-right: auto;
     border-left: 1px dashed black;
     margin-left: 60px;
 }
 
-:dir(rtl) .leftReply {
+[dir='rtl'] .leftReply {
     margin-left: auto;
     border-right: 1px dashed black;
     margin-right: 60px;
@@ -317,19 +317,19 @@
     bottom: -20px;
 }
 
-:dir(ltr) .likeContainerLeft {
+[dir='ltr'] .likeContainerLeft {
     left: -5px;
 }
 
-:dir(rtl) .likeContainerLeft {
+[dir='rtl'] .likeContainerLeft {
     right: -5px;
 }
 
-:dir(ltr) .likeContainerRight {
+[dir='ltr'] .likeContainerRight {
     left: -5px;
 }
 
-:dir(rtl) .likeContainerRight {
+[dir='rtl'] .likeContainerRight {
     right: -5px;
 }
 

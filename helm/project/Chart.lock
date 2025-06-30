@@ -13,12 +13,12 @@ dependencies:
   version: 19.5.2
 - name: jitsi-meet
   repository: https://jitsi-contrib.github.io/jitsi-helm/
-  version: 1.3.8
+  version: 1.5.1
 - name: glitchtip
   repository: https://gitlab.com/api/v4/projects/16325141/packages/helm/stable
   version: 2.5.1
 - name: coturn
   repository: https://small-hack.github.io/coturn-chart/
   version: 8.1.1
-digest: sha256:30299a4c23c32726588bb05157a0a4ccb357628bdfad38e9f13821cccfcb4b8f
-generated: "2025-03-04T10:42:43.265929601+01:00"
+digest: sha256:0b0fd49996c8ea4668b47cdfd5d65aa5a50745746289ffea13b7c27b2f870bff
+generated: "2025-06-26T16:54:53.897846355+02:00"

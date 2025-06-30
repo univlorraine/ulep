@@ -40,7 +40,7 @@
 
 .menuNew {
     transform: translateY(-50%);
-    --offset-y: -70px;
+    --offset-y: -40px;
 }
 
 .newIcon_container {

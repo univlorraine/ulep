@@ -379,6 +379,7 @@ const TandemCard = ({
                         !hasActiveTandem &&
                         !hasTandemWaitingForValidation && (
                             <TandemActions
+                                disableTandemsButton={userProfile?.user.status === UserStatus.CANCELED}
                                 learningLanguageIds={[userLearningLanguage.id, partnerLearningLanguage.id]}
                                 onTandemAction={refresh}
                                 relaunchGlobalRoutineOnAccept={
@@ -393,6 +394,7 @@ const TandemCard = ({
 
                     {hasTandemManagementPermission(permissions) && isUserValidationNeeded && (
                         <TandemActions
+                            disableTandemsButton={userProfile?.user.status === UserStatus.CANCELED}
                             learningLanguageIds={[userLearningLanguage.id, partnerLearningLanguage.id]}
                             onTandemAction={refresh}
                             tandemId={tandem?.id}

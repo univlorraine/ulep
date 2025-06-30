@@ -45,7 +45,6 @@ import {
   LearningLanguageResponse,
   LearningLanguageWithLogEntriesResponse,
 } from '../learning-languages/learning-language.response';
-import { LogEntryResponse } from '../log-entry';
 import { UserResponse } from '../users';
 
 export class ProfileWithLogEntriesResponse {
@@ -56,10 +55,6 @@ export class ProfileWithLogEntriesResponse {
   @ApiProperty()
   @Expose({ groups: ['api', 'api-admin'] })
   id: string;
-
-  @ApiProperty({ type: () => LogEntryResponse })
-  @Expose({ groups: ['api', 'api-admin'] })
-  logs: LogEntryResponse[];
 
   @ApiProperty({ type: () => LearningLanguageWithLogEntriesResponse })
   @Expose({ groups: ['api', 'api-admin'] })
@@ -80,13 +75,6 @@ export class ProfileWithLogEntriesResponse {
           learningLanguage,
         }),
       ),
-      logs: profile.learningLanguages
-        .flatMap((learningLanguage) =>
-          learningLanguage.logEntries.filter(
-            (logEntry) => logEntry !== undefined,
-          ),
-        )
-        .map((logEntry) => LogEntryResponse.from(logEntry)),
     });
   }
 }

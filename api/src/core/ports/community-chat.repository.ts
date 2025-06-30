@@ -56,4 +56,5 @@ export interface CommunityChatRepository {
     centralLanguageCode: string,
     partnerLanguageCode: string,
   ): Promise<CommunityChat | null>;
+  deleteAll(): Promise<void>;
 }

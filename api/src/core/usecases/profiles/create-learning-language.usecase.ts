@@ -73,6 +73,7 @@ import {
   UUID_PROVIDER,
 } from 'src/core/ports/uuid.provider';
 import { AddUserToCommunityChatUsecase } from 'src/core/usecases/chat/add-user-to-community-chat.usecase';
+import { UpdateLearningLanguageUsecase } from '../learningLanguage/update-learning-language.usecase';
 
 export interface CreateLearningLanguageCommand {
   profileId: string;
@@ -102,6 +103,8 @@ export class CreateLearningLanguageUseCase {
     private readonly tandemHistoryRepository: TandemHistoryRepository,
     @Inject(UUID_PROVIDER)
     private readonly uuidProvider: UuidProviderInterface,
+    @Inject(UpdateLearningLanguageUsecase)
+    private readonly updateLearningLanguageUsecase: UpdateLearningLanguageUsecase,
     @Inject(AddUserToCommunityChatUsecase)
     private readonly addUserToCommunityChatUsecase: AddUserToCommunityChatUsecase,
   ) {}
@@ -176,6 +179,47 @@ export class CreateLearningLanguageUseCase {
           historyTandem.tandemId,
         );
       sameTandemEmail = otherUser.userEmail;
+    } else {
+      // On regarde si l'utilisateur a déjà un tandem historisé avec cette langue
+
+      const historyTandem =
+        await this.tandemHistoryRepository.getHistoryTandemFormUserIdAndLanguageId(
+          profile.user.id,
+          language.id,
+        );
+
+      // Si l'utilisateur a déjà un tandem historisé avec cette langue, on récupère l'email de l'autre utilisateur
+      if (historyTandem) {
+        const otherUserHistory =
+          await this.tandemHistoryRepository.getOtherUserInTandemHistory(
+            profile.user.id,
+            historyTandem.tandemId,
+          );
+
+        // Si on a bien un autre user, alors il faut regarder s'il a une demande de tandem avec le same Tandem, si c'est le cas
+        // on modifie le sameTandemEmail de la demande de tandem
+        const otherUserProfile = await this.profilesRepository.ofUser(
+          otherUserHistory.userId,
+        );
+
+        if (otherUserProfile) {
+          const otherUserLearningLanguage =
+            otherUserProfile.learningLanguages.find(
+              (learningLanguage) =>
+                learningLanguage.language.id === otherUserHistory.language.id &&
+                learningLanguage.sameTandemEmail === historyTandem.userEmail,
+            );
+
+          if (otherUserLearningLanguage) {
+            await this.updateLearningLanguageUsecase.execute(
+              otherUserLearningLanguage.id,
+              {
+                sameTandemEmail: null,
+              },
+            );
+          }
+        }
+      }
     }
 
     const item = new LearningLanguage({
