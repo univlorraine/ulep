@@ -58,7 +58,7 @@ const baseConfig: CapacitorConfig = {
         Keyboard: {
             resize: KeyboardResize.Ionic,
             style: KeyboardStyle.Dark,
-            resizeOnFullScreen: true,
+            resizeOnFullScreen: false,
         },
     },
 };

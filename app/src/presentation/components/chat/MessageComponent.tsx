@@ -113,6 +113,7 @@ const MessageComponent: React.FC<MessageProps> = ({
     const date = `${t(message.getMessageDate())} ${message.getMessageHour()}`;
     const [displayPopover, setDisplayPopover] = useState<boolean>(false);
     const [popoverEvent, setPopoverEvent] = useState<React.MouseEvent<HTMLIonButtonElement> | null>(null);
+    const messageClass = isCurrentUserMessage ? styles.currentUser : styles.otherUser;
 
     const reportMessage = async () => {
         const result = await createReportMessage.execute({
