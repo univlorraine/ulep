@@ -75,7 +75,7 @@ const CustomGoalFormContent = ({
     const setProfile = useStoreActions((state) => state.setProfile);
 
     const handleSubmit = async ({ id, title, description }: CustomLearningGoalFormData) => {
-        let customLearningGoals;
+        let customLearningGoals: CustomLearningGoal[] | Error;
         if (id) {
             customLearningGoals = await updateCustomLearningGoal.execute({
                 id,
