@@ -94,11 +94,13 @@ const CustomGoalFormContent = ({
         }
         if (profile) {
             const updatedLearningLanguages = profile.learningLanguages.map((ll) =>
-                ll.id === learningLanguageId ? { ...ll, customLearningGoals } : ll
+                ll.id === learningLanguageId
+                    ? { ...ll, customLearningGoals: customLearningGoals as CustomLearningGoal[] }
+                    : ll
             );
             setProfile({ profile: { ...profile, learningLanguages: updatedLearningLanguages } });
         }
-        onShowAllGoalsPressed(customLearningGoals);
+        onShowAllGoalsPressed(customLearningGoals as CustomLearningGoal[]);
     };
 
     return (
