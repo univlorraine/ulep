@@ -129,6 +129,7 @@ export class PrismaConversationRepository implements ConversationRepository {
                     },
                     where: {
                         ParentMessage: null,
+                        isDeleted: false,
                     },
                 },
             },
