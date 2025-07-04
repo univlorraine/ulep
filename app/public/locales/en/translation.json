@@ -182,6 +182,9 @@
             "sharing_logs": {
                 "title": "Logs have been shared"
             },
+            "unsharing_logs": {
+                "title": "Logs have been unshared"
+            },
             "see_more": "See more",
             "load_more": "See more",
             "title": "Journal entries"
