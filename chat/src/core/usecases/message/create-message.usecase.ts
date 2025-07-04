@@ -150,14 +150,20 @@ export class CreateMessageUsecase {
             const parentMessage = await this.messageRepository.findById(
                 command.parentId,
             );
-            if (parentMessage?.ownerId !== message.ownerId) {
+            // If the parent message is not the same as the message owner & is a response
+            // and the conversation has at least 2 users, send a notification
+            if (
+                parentMessage?.ownerId !== message.ownerId &&
+                conversation.usersIds.length >= 2
+            ) {
                 this.notificationService.sendNotification(
                     message.ownerId,
                     [parentMessage.ownerId],
                     message.content,
                 );
             }
-        } else {
+        } else if (conversation.usersIds.length === 2) {
+            // If the conversation has 2 users and its not a response, send a notification
             this.notificationService.sendNotification(
                 message.ownerId,
                 conversation.usersIds.filter((id) => id !== message.ownerId),
