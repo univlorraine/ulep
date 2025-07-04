@@ -783,7 +783,7 @@ model CustomLearningGoals {
   id                   String            @id @default(uuid())
   learning_language_id String
   title                String
-  description          String
+  description          String?
   created_at           DateTime          @default(now())
   updated_at           DateTime          @updatedAt
   LearningLanguage     LearningLanguages @relation(fields: [learning_language_id], references: [id], onDelete: Cascade)
@@ -846,7 +846,7 @@ model CommunityChat {
 
 model Editos {
   id                      String   @id @default(uuid())
-  content_text_content_id String   @unique  
+  content_text_content_id String   @unique
   video_text_content_id   String  @unique
   university_id           String   @unique
   image_id                String?  @unique
