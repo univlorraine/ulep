@@ -42,7 +42,7 @@ import { IonApp, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import * as Sentry from '@sentry/react';
 import { StoreProvider, useStoreRehydrated } from 'easy-peasy';
-import { Suspense, useEffect } from 'react';
+import { Suspense, useEffect, useRef } from 'react';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { ConfigContext, useConfig } from './context/ConfigurationContext';
 import getConfigContextValue from './context/getConfigurationContextValue';
@@ -128,11 +128,29 @@ const AppCore = () => {
     );
 };
 
-const AppContext = () => {
+const ProfileRefresher = () => {
+    const { getProfile } = useConfig();
+    const { setProfile } = useStoreActions((state) => state);
     const accessToken = useStoreState((state) => state.accessToken);
-    const apiUrl = useStoreState((state) => state.apiUrl);
-    const chatUrl = useStoreState((state) => state.chatUrl);
-    const refreshToken = useStoreState((state) => state.refreshToken);
+    const languageCode = useStoreState((state) => state.language);
+    const prevLanguage = useRef(languageCode);
+
+    useEffect(() => {
+        if (accessToken && prevLanguage.current !== languageCode) {
+            getProfile.execute(accessToken).then((profile) => {
+                if (profile instanceof Error) {
+                    return;
+                }
+                setProfile({ profile });
+            });
+        }
+        prevLanguage.current = languageCode;
+    }, [languageCode, accessToken, getProfile]);
+    return null;
+};
+
+const AppContext = () => {
+    const { accessToken, refreshToken, apiUrl, chatUrl, language } = useStoreState((state) => state);
     const setProfile = useStoreActions((state) => state.setProfile);
     const setTokens = useStoreActions((state) => state.setTokens);
     const logout = useStoreActions((state) => state.logout);
@@ -157,7 +175,7 @@ const AppContext = () => {
             value={getConfigContextValue({
                 apiUrl: import.meta.env.VITE_API_URL || apiUrl,
                 chatUrl: import.meta.env.VITE_CHAT_URL || chatUrl,
-                languageCode: i18n.language,
+                languageCode: language || i18n.language,
                 accessToken,
                 refreshToken,
                 setProfile,
@@ -168,6 +186,7 @@ const AppContext = () => {
                 logoUrl: configuration.logoURL,
             })}
         >
+            <ProfileRefresher />
             <AppCore />
         </ConfigContext.Provider>
     );
