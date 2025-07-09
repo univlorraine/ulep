@@ -52,6 +52,7 @@ import {
     LogEntrySubmitActivity,
     LogEntryTandemChat,
     LogEntryType,
+    LogEntryUnsharingLogs,
     LogEntryVisio,
 } from '../domain/entities/LogEntry';
 
@@ -155,6 +156,13 @@ export const logEntryCommandToDomain = (command: LogEntryCommand): LogEntry | un
             });
         case LogEntryType.SHARING_LOGS:
             return new LogEntrySharingLogs({
+                id: command.id,
+                createdAt: command.createdAt,
+                type: command.type,
+                ownerId: command.ownerId,
+            });
+        case LogEntryType.UNSHARE_LOGS:
+            return new LogEntryUnsharingLogs({
                 id: command.id,
                 createdAt: command.createdAt,
                 type: command.type,

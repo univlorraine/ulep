@@ -53,6 +53,7 @@ import {
     LogEntrySubmitActivity,
     LogEntryTandemChat,
     LogEntryType,
+    LogEntryUnsharingLogs,
     LogEntryVisio,
 } from '../../../domain/entities/LogEntry';
 import Profile from '../../../domain/entities/Profile';
@@ -66,7 +67,7 @@ interface LogEntrySubComponentProps {
 export const getLogEntryImage = (logEntry: LogEntry): string | undefined => {
     if (logEntry instanceof LogEntryCustomEntry) {
         return JournalSvg;
-    } else if (logEntry instanceof LogEntrySharingLogs) {
+    } else if (logEntry instanceof LogEntrySharingLogs || logEntry instanceof LogEntryUnsharingLogs) {
         return Star2Png;
     } else if (logEntry instanceof LogEntryAddVocabulary || logEntry instanceof LogEntryShareVocabulary) {
         return VocabularyPng;
@@ -159,6 +160,8 @@ export const LogEntryTitle: React.FC<LogEntrySubComponentProps> = ({ logEntry })
             );
         } else if (logEntry instanceof LogEntrySharingLogs) {
             return <>{t('learning_book.entry.sharing_logs.title')}</>;
+        } else if (logEntry instanceof LogEntryUnsharingLogs) {
+            return <>{t('learning_book.entry.unsharing_logs.title')}</>;
         }
 
         return <>{t('learning_book.entry.default.title')}</>;
