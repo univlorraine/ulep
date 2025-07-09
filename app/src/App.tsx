@@ -62,6 +62,7 @@ import { polyfillCountryFlagEmojis } from 'country-flag-emoji-polyfill';
 import getSocketContextValue from './context/getSocketContextValue';
 import { SocketContext } from './context/SocketContext';
 import Loader from './presentation/components/Loader';
+import { useAppVisibilityRefresh } from './presentation/hooks/useAppVisibilityRefresh';
 import useFetchConfiguration from './presentation/hooks/useFetchConfiguration';
 import useFetchI18NBackend from './presentation/hooks/useFetchI18NBackend';
 import ErrorPage from './presentation/pages/ErrorPage';
@@ -93,6 +94,8 @@ if (import.meta.env.VITE_SENTRY_DSN) {
 const AppCore = () => {
     const { addDevice, deviceAdapter, notificationAdapter } = useConfig();
     const profile = useStoreState((state) => state.profile);
+
+    useAppVisibilityRefresh();
 
     useEffect(() => {
         if (profile && deviceAdapter.isNativePlatform()) {

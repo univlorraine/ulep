@@ -61,6 +61,7 @@ import Conversation, { MessagePaginationDirection } from '../../../domain/entiti
 import Profile from '../../../domain/entities/Profile';
 import VocabularyList from '../../../domain/entities/VocabularyList';
 import { useStoreState } from '../../../store/storeTypes';
+import { useAppVisibilityRefresh } from '../../hooks/useAppVisibilityRefresh';
 import useHandleHastagsFromConversation from '../../hooks/useHandleHastagsFromConversation';
 import useHandleMessagesFromConversation from '../../hooks/useHandleMessagesFromConversation';
 import ChatInputSender from '../chat/ChatInputSender';
@@ -97,6 +98,7 @@ const Content: React.FC<ChatContentProps> = ({
         refreshTokensUsecase,
         exportMediasFromConversation,
         fileAdapter,
+        deviceAdapter,
     } = useConfig();
     const isBlocked = conversation.isBlocked;
     const [showMenu, setShowMenu] = useState(false);
@@ -107,6 +109,9 @@ const Content: React.FC<ChatContentProps> = ({
     const history = useHistory();
     const accessToken = useStoreState((state) => state.accessToken);
     const isCommunity = conversation.isForCommunity;
+
+    // Hook pour rafraîchir la page sur mobile quand l'app revient au premier plan
+    useAppVisibilityRefresh();
 
     const findLearningLanguageConversation = () => {
         const profileLearningLanguages = profile.learningLanguages;
@@ -214,41 +219,52 @@ const Content: React.FC<ChatContentProps> = ({
         socket.onLiked(conversation.id, onLikeMessageReceived);
         socket.onUnliked(conversation.id, onUnlikeMessageReceived);
 
-        const refreshTokens = async () => {
-            await refreshTokensUsecase.execute();
-        };
+        // Ancien système de reconnexion manuelle - SEULEMENT pour le web
+        if (!deviceAdapter.isNativePlatform()) {
+            const refreshTokens = async () => {
+                await refreshTokensUsecase.execute();
+            };
 
-        // Improved reconnection logic
-        const attemptReconnect = async () => {
-            if (!socket.isConnected()) {
-                await refreshTokens();
-                socket.connect(accessToken);
-                await onLoadMessages({ isFirstMessage: true });
-            } else {
+            const attemptReconnect = async () => {
+                if (!socket.isConnected()) {
+                    await refreshTokens();
+                    socket.connect(accessToken);
+                    await onLoadMessages({ isFirstMessage: true });
+                } else {
+                    if (disconnectInterval) {
+                        clearInterval(disconnectInterval);
+                        disconnectInterval = undefined;
+                    }
+                }
+            };
+
+            const handleDisconnect = () => {
+                disconnectInterval = setInterval(attemptReconnect, 5000);
+            };
+
+            socket.onDisconnect(handleDisconnect);
+
+            return () => {
+                socket.disconnect();
+                socket.offMessage();
+                socket.offDisconnect();
+                socket.offLike();
+                socket.offUnlike();
                 if (disconnectInterval) {
                     clearInterval(disconnectInterval);
-                    disconnectInterval = undefined;
                 }
-            }
-        };
-
-        const handleDisconnect = () => {
-            disconnectInterval = setInterval(attemptReconnect, 5000);
-        };
-
-        socket.onDisconnect(handleDisconnect);
-
-        return () => {
-            socket.disconnect();
-            socket.offMessage();
-            socket.offDisconnect();
-            socket.offLike();
-            socket.offUnlike();
-            if (disconnectInterval) {
-                clearInterval(disconnectInterval);
-            }
-        };
-    }, [conversation.id, accessToken]);
+            };
+        } else {
+            // Sur mobile : pas de reconnexion manuelle, on laisse socket.io gérer
+            return () => {
+                socket.disconnect();
+                socket.offMessage();
+                socket.offDisconnect();
+                socket.offLike();
+                socket.offUnlike();
+            };
+        }
+    }, [conversation.id, accessToken, deviceAdapter]);
 
     const getAllVocabularyLists = async () => {
         const learningLanguage = findLearningLanguageCommunityConversation();
