@@ -44,6 +44,7 @@ import { useTranslation } from 'react-i18next';
 import { LeftChevronSvg } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
 import CustomLearningGoal from '../../../domain/entities/CustomLearningGoal';
+import { useStoreActions, useStoreState } from '../../../store/storeTypes';
 import TextInput from '../TextInput';
 import styles from './CustomGoalFormContent.module.css';
 
@@ -70,33 +71,36 @@ const CustomGoalFormContent = ({
     const [title, setTitle] = useState<string>(customLearningGoal?.title || '');
     const [description, setDescription] = useState<string>(customLearningGoal?.description || '');
     const { createCustomLearningGoal, updateCustomLearningGoal } = useConfig();
+    const profile = useStoreState((state) => state.profile);
+    const setProfile = useStoreActions((state) => state.setProfile);
 
     const handleSubmit = async ({ id, title, description }: CustomLearningGoalFormData) => {
+        let customLearningGoals: CustomLearningGoal[] | Error;
         if (id) {
-            const customLearningGoals = await updateCustomLearningGoal.execute({
+            customLearningGoals = await updateCustomLearningGoal.execute({
                 id,
                 title,
                 description,
             });
-
-            if (customLearningGoals instanceof Error) {
-                return;
-            }
-
-            onShowAllGoalsPressed(customLearningGoals);
         } else {
-            const customLearningGoals = await createCustomLearningGoal.execute({
+            customLearningGoals = await createCustomLearningGoal.execute({
                 title,
                 description,
                 learningLanguageId,
             });
-
-            if (customLearningGoals instanceof Error) {
-                return;
-            }
-
-            onShowAllGoalsPressed(customLearningGoals);
         }
+        if (customLearningGoals instanceof Error) {
+            return;
+        }
+        if (profile) {
+            const updatedLearningLanguages = profile.learningLanguages.map((ll) =>
+                ll.id === learningLanguageId
+                    ? { ...ll, customLearningGoals: customLearningGoals as CustomLearningGoal[] }
+                    : ll
+            );
+            setProfile({ profile: { ...profile, learningLanguages: updatedLearningLanguages } });
+        }
+        onShowAllGoalsPressed(customLearningGoals as CustomLearningGoal[]);
     };
 
     return (
@@ -140,7 +144,7 @@ const CustomGoalFormContent = ({
                     fill="clear"
                     className={`primary-button no-padding ${title.length === 0 ? 'disabled' : ''}`}
                     disabled={title.length === 0}
-                    onClick={() => handleSubmit({ id: customLearningGoal?.id, title, description })}
+                    onClick={() => handleSubmit({ id: customLearningGoal?.id, title, description: description })}
                 >
                     {customLearningGoal?.id ? t('goals.form.update_button') : t('goals.form.submit_button')}
                 </IonButton>

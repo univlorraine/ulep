@@ -193,6 +193,9 @@
             "sharing_logs": {
                 "title": "Les entrées ont été partagées"
             },
+            "unsharing_logs": {
+                "title": "Les entrées ont été désactivées"
+            },
             "see_more": "Voir plus",
             "load_more": "Voir plus",
             "title": "Entrées du journal"

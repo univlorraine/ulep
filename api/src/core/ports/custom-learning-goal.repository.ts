@@ -45,14 +45,14 @@ export const CUSTOM_LEARNING_GOAL_REPOSITORY =
 
 export type CreateCustomLearningGoalProps = {
   title: string;
-  description: string;
+  description?: string;
   learningLanguageId: string;
 };
 
 export type UpdateCustomLearningGoalProps = {
   id: string;
   title: string;
-  description: string;
+  description?: string;
 };
 
 export interface CustomLearningGoalRepository {

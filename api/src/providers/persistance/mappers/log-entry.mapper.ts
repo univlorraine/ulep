@@ -53,6 +53,7 @@ import {
   LogEntrySubmitActivity,
   LogEntryTandemChat,
   LogEntryType,
+  LogEntryUnsharingLogs,
   LogEntryVisio,
 } from 'src/core/models/log-entry.model';
 import {
@@ -159,6 +160,14 @@ export const logEntryMapper = (
       return new LogEntrySharingLogs({
         id: snapshot.id,
         type: LogEntryType.SHARING_LOGS,
+        createdAt: snapshot.created_at,
+        updatedAt: snapshot.updated_at,
+        learningLanguage: learningLanguageMapper(snapshot.LearningLanguage),
+      });
+    case LogEntryType.UNSHARE_LOGS:
+      return new LogEntryUnsharingLogs({
+        id: snapshot.id,
+        type: LogEntryType.UNSHARE_LOGS,
         createdAt: snapshot.created_at,
         updatedAt: snapshot.updated_at,
         learningLanguage: learningLanguageMapper(snapshot.LearningLanguage),

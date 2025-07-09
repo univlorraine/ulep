@@ -101,7 +101,7 @@ export const LogEntriesContent: React.FC<LogEntriesContentProps> = ({
     const { t } = useTranslation();
     const [refresh, setRefresh] = useState<boolean>(false);
 
-    const { logEntriesResult, isPaginationEnded, handleOnEndReached } = useGetLogEntries(learningLanguage.id, false);
+    const { logEntriesResult, isPaginationEnded, handleOnEndReached } = useGetLogEntries(learningLanguage.id, isShared);
 
     const handleOnPress = (logEntry: LogEntry) => {
         if (logEntry instanceof LogEntryCustomEntry) {
