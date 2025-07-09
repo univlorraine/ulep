@@ -41,10 +41,12 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import { LearningLanguage } from 'src/core/models';
+import { LogEntryType } from 'src/core/models/log-entry.model';
 import {
   LearningLanguageRepository,
   LEARNING_LANGUAGE_REPOSITORY,
 } from 'src/core/ports/learning-language.repository';
+import { CreateOrUpdateLogEntryUsecase } from './create-or-update-log-entry.usecase';
 
 export type UnshareLogEntriesCommand = {
   learningLanguageId: string;
@@ -55,6 +57,8 @@ export class UnshareLogEntriesUsecase {
   constructor(
     @Inject(LEARNING_LANGUAGE_REPOSITORY)
     private readonly learningLanguageRepository: LearningLanguageRepository,
+    @Inject(CreateOrUpdateLogEntryUsecase)
+    private readonly createOrUpdateLogEntryUsecase: CreateOrUpdateLogEntryUsecase,
   ) {}
 
   async execute(command: UnshareLogEntriesCommand) {
@@ -65,6 +69,8 @@ export class UnshareLogEntriesUsecase {
       ...learningLanguage,
       sharedLogsDate: undefined,
     } as LearningLanguage);
+
+    await this.createShareLogEntry(command.learningLanguageId);
   }
 
   private async assertLearningLanguageExists(learningLanguageId: string) {
@@ -75,5 +81,13 @@ export class UnshareLogEntriesUsecase {
     }
 
     return learningLanguage;
+  }
+
+  private async createShareLogEntry(learningLanguageId: string) {
+    await this.createOrUpdateLogEntryUsecase.execute({
+      type: LogEntryType.UNSHARE_LOGS,
+      learningLanguageId: learningLanguageId,
+      metadata: {},
+    });
   }
 }

@@ -208,13 +208,12 @@ const LearningLanguageList = () => {
         );
     }
 
-    const handleLearningLanguageSelection = (learningLanguageId: string) => {
-        if (selectedLearningLanguages.includes(learningLanguageId)) {
-            setSelectedLearningLanguages(selectedLearningLanguages.filter((id) => id !== learningLanguageId));
-        } else {
-            setSelectedLearningLanguages([...selectedLearningLanguages, learningLanguageId]);
-        }
-    };
+    const handleLearningLanguageSelection = (learningLanguageId: string) =>
+        setSelectedLearningLanguages((prevSelectedLearningLanguages) =>
+            prevSelectedLearningLanguages.includes(learningLanguageId)
+                ? prevSelectedLearningLanguages.filter((id) => id !== learningLanguageId)
+                : [...prevSelectedLearningLanguages, learningLanguageId]
+        );
 
     if (isLoadingIdentity || !identity) {
         return <Loading />;
@@ -266,6 +265,7 @@ const LearningLanguageList = () => {
                                                         onChange={() =>
                                                             handleLearningLanguageSelection(learningLanguage.id)
                                                         }
+                                                        onClick={(e) => e.stopPropagation()}
                                                     />
                                                 )}
                                                 {learningLanguage.tandem.status === TandemStatus.ACTIVE && (
@@ -309,6 +309,7 @@ const LearningLanguageList = () => {
                                             <Checkbox
                                                 checked={selectedLearningLanguages.includes(learningLanguage.id)}
                                                 onChange={() => handleLearningLanguageSelection(learningLanguage.id)}
+                                                onClick={(e) => e.stopPropagation()}
                                             />
                                             {translate('learning_languages.list.noTandem')}{' '}
                                             {codeLanguageToFlag(learningLanguage.code)}

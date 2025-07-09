@@ -119,12 +119,10 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
         this.logout = logout;
     }
 
-    private getHeaders(token?: string): any {
-        return {
-            Authorization: `Bearer ${token || this.accessToken}`,
-            'Language-code': this.languageCode,
-        };
-    }
+    getHeaders = (token?: string) => ({
+        ...(token || this.accessToken ? { Authorization: `Bearer ${token || this.accessToken}` } : {}),
+        'Language-code': this.languageCode,
+    });
 
     async get(path: string, args: RequestInit = {}, isTokenNeeded = true, accessToken?: string): Promise<Response> {
         return this.withAuthCheck('get', { path: `${this.apiUrl}${path}`, args, isTokenNeeded, accessToken });
@@ -164,7 +162,13 @@ class DomainHttpAdapter extends BaseHttpAdapter implements HttpAdapterInterface 
     ): Promise<Response> {
         await this.handleTokens(isTokenNeeded);
 
-        const requestInit = isTokenNeeded || accessToken ? { ...args, headers: this.getHeaders(accessToken) } : args;
+        const requestInit = {
+            ...args,
+            headers: {
+                ...((args && args.headers) || {}),
+                ...this.getHeaders(accessToken),
+            },
+        };
 
         const request: Request = [path, requestInit, body, contentType];
 

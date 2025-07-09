@@ -47,7 +47,7 @@ import {
 
 export class CreateCustomLearningGoalCommand {
   title: string;
-  description: string;
+  description?: string;
   learningLanguageId: string;
 }
 

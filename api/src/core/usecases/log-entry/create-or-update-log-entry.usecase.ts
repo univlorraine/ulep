@@ -52,6 +52,7 @@ import {
   LogEntrySubmitActivity,
   LogEntryTandemChat,
   LogEntryType,
+  LogEntryUnsharingLogs,
 } from 'src/core/models/log-entry.model';
 import {
   LearningLanguageRepository,
@@ -114,10 +115,7 @@ export class CreateOrUpdateLogEntryUsecase {
   ): Promise<HandleEntryExistsTodayResult> {
     const entries =
       type === LogEntryType.TANDEM_CHAT
-        ? await this.logEntryRepository.findAllOfType(
-            learningLanguageId,
-            type,
-          )
+        ? await this.logEntryRepository.findAllOfType(learningLanguageId, type)
         : await this.logEntryRepository.findAllOfTypeToday(
             learningLanguageId,
             type,
@@ -211,6 +209,16 @@ export class CreateOrUpdateLogEntryUsecase {
           entryToUpdate: undefined,
           shouldCreate: true,
           shouldIgnore: undefined,
+        };
+      case LogEntryType.UNSHARE_LOGS:
+        const unshareLogsEntryExistsToday = entries.find(
+          (entry) => entry instanceof LogEntryUnsharingLogs,
+        );
+
+        return {
+          entryToUpdate: undefined,
+          shouldCreate: !unshareLogsEntryExistsToday,
+          shouldIgnore: Boolean(unshareLogsEntryExistsToday),
         };
       case LogEntryType.SHARING_LOGS:
         const sharingLogsEntryExistsToday = entries.find(

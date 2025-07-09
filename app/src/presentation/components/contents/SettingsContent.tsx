@@ -62,11 +62,9 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
     const { askForAccountDeletion, browserAdapter, configuration, updateNotificationPermission } = useConfig();
     const setLanguage = useStoreActions((state) => state.setLanguage);
     const setRtl = useStoreActions((state) => state.setRtl);
-    const currentLanguage = useStoreState((state) => state.language);
-    const currentRtl = useStoreState((state) => state.isRtl);
+    const { language: currentLanguage, isRtl, profile, accessToken } = useStoreState((state) => state);
     const setProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const [showToast] = useIonToast();
-    const profile = useStoreState((state) => state.profile);
     const updateProfile = useStoreActions((state) => state.updateProfile);
     const [emailNotificationStatus, setEmailNotificationStatus] = useState<boolean>(profile!.user.acceptsEmail);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -101,7 +99,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
     };
 
     const onUpdateRtl = async () => {
-        setRtl({ isRtl: !currentRtl });
+        setRtl({ isRtl: !currentLanguage });
     };
 
     const updateLanguage = (code: string) => {
@@ -162,7 +160,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
                 <span>{t('home_page.settings.rtl_button')}</span>
                 <Switch
                     onChange={() => onUpdateRtl()}
-                    checked={Boolean(currentRtl)}
+                    checked={Boolean(isRtl)}
                     uncheckedIcon={false}
                     checkedIcon={false}
                 />

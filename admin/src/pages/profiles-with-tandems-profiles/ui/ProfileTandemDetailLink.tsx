@@ -52,7 +52,8 @@ const ProfileTandemDetailLink = ({ profile, learningLanguageCode }: ProfileLinkP
 
     return (
         <Button
-            onClick={() => {
+            onClick={(e) => {
+                e.stopPropagation();
                 redirect('show', 'profiles/with-tandems-profiles', profile.id, {}, { learningLanguageCode });
             }}
             sx={{ cursor: 'pointer' }}

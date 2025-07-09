@@ -179,13 +179,19 @@ const TandemActions = ({
                             <Box sx={{ marginTop: 4, display: 'flex', justifyContent: 'space-around' }}>
                                 <Button
                                     label={translate('learning_languages.show.tandems.actions.ctaLabels.cancel')}
-                                    onClick={handleCloseModal}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleCloseModal();
+                                    }}
                                     variant="text"
                                 />
                                 <Button
                                     color="error"
                                     label={translate('learning_languages.show.tandems.actions.ctaLabels.confirm')}
-                                    onClick={handleConfirm}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleConfirm();
+                                    }}
                                     variant="outlined"
                                 />
                             </Box>
@@ -202,13 +208,14 @@ const TandemActions = ({
                                 tandemStatus === TandemStatus.PAUSED ? 'free' : 'pause'
                             }`
                         )}
-                        onClick={() =>
+                        onClick={(e) => {
+                            e.stopPropagation();
                             updateTandem({
                                 tandemId,
                                 tandemStatus:
                                     tandemStatus === TandemStatus.PAUSED ? TandemStatus.ACTIVE : TandemStatus.PAUSED,
-                            })
-                        }
+                            });
+                        }}
                         variant="outlined"
                     />
                 )}
@@ -218,7 +225,10 @@ const TandemActions = ({
                         color="success"
                         disabled={disableTandemsButton}
                         label={translate('learning_languages.show.management.validate')}
-                        onClick={() => handleAction(TandemAction.ACCEPT)}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            handleAction(TandemAction.ACCEPT);
+                        }}
                         variant="contained"
                     />
                 )}
@@ -227,7 +237,10 @@ const TandemActions = ({
                     color="error"
                     disabled={disableTandemsButton}
                     label={translate('learning_languages.show.management.refuse')}
-                    onClick={() => handleAction(TandemAction.REFUSE)}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        handleAction(TandemAction.REFUSE);
+                    }}
                     variant="contained"
                 />
             </Box>
