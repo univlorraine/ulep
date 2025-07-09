@@ -53,16 +53,18 @@ interface EventsListProps {
 const EventsList: React.FC<EventsListProps> = ({ events, profile, onEventPressed }) => {
     const { t } = useTranslation();
     return (
-        <div className="home-card" role="list">
+        <div className="home-card">
             <h2 className="home-card-title">{t('home_page.events.title')}</h2>
-            {events.map((eventItem: EventObject) => (
-                <EventLine
-                    key={eventItem.id}
-                    event={eventItem}
-                    profile={profile}
-                    onClick={() => onEventPressed(eventItem)}
-                />
-            ))}
+            <div className="home-card-list" role="list">
+                {events.map((eventItem: EventObject) => (
+                    <EventLine
+                        key={eventItem.id}
+                        event={eventItem}
+                        profile={profile}
+                        onClick={() => onEventPressed(eventItem)}
+                    />
+                ))}
+            </div>
             <IonButton fill="clear" className="primary-button" onClick={() => onEventPressed()}>
                 {t('home_page.events.see_all')}
             </IonButton>

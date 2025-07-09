@@ -65,12 +65,7 @@ const EventLine: React.FC<EventLineProps> = ({ event, profile, onClick }) => {
     }).format(new Date(event.startDate));
 
     return (
-        <button
-            lang={language}
-            aria-label={t('events.open', { title: event.title }) as string}
-            onClick={onClick}
-            role="listitem"
-        >
+        <button lang={language} onClick={onClick} role="listitem">
             <div className={styles.container}>
                 {event.imageUrl && <IonImg className={styles.image} src={event.imageUrl} />}
                 <div className={styles.content}>
@@ -82,7 +77,13 @@ const EventLine: React.FC<EventLineProps> = ({ event, profile, onClick }) => {
                     </div>
                     <span className={styles.date}>{formattedDate}</span>
                     <br />
-                    <span className={styles.title}>{event.title}</span>
+                    <span
+                        lang={language}
+                        className={styles.title}
+                        aria-label={t('events.open', { title: event.title }) as string}
+                    >
+                        {event.title}
+                    </span>
                     <br />
                     <EventAdress event={event} />
                 </div>

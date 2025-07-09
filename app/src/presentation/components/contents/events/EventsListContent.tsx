@@ -102,7 +102,7 @@ export const EventsListContent: React.FC<EventsListContentProps> = ({ profile, o
                 setShowFiltersModal={setShowFiltersModal}
                 searchI18nKey="events"
             />
-            <div className={styles.list}>
+            <div className={styles.list} role="list">
                 {events.length > 0 &&
                     events.map((event) => (
                         <EventLine

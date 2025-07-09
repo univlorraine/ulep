@@ -71,6 +71,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
                 className={isSelected ? styles['checkbox-selected'] : styles['checkbox-unselected']}
                 aria-label={ariaLabel ?? (name as string)}
                 aria-checked={isSelected}
+                aria-selected={isSelected}
                 role={ariaRole + ' checkbox'}
                 aria-labelledby={encodeURIComponent(ariaLabel ?? (name as string)) + '_labelid'}
             >

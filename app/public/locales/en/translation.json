@@ -62,6 +62,7 @@
         "is_mine": "My sheets"
     },
     "events": {
+        "open": "Open event {{title}}",
         "no_events": "No events found",
         "online": "Online",
         "open_maps": "Open maps",
@@ -72,7 +73,6 @@
         "add_to_calendar": "Add to calendar",
         "load_more": "See more",
         "add_to_calendar_success": "ICS file downloaded",
-        "open": "Open",
         "list": {
             "title": "Events",
             "filter_title": "Select event filters",
@@ -104,7 +104,8 @@
             "load_more": "See more",
             "filter_clear": "Clear filters",
             "language": "Language",
-            "search": "Search a news"
+            "search": "Search a news",
+            "open": "Open news {{title}}"
         },
         "show": {
             "change_language": "Change",
@@ -114,8 +115,7 @@
                 "title": "Choose the language",
                 "current": "Selected"
             }
-        },
-        "open": "Open"
+        }
     },
     "credit": {
         "title": "Credit of the file"

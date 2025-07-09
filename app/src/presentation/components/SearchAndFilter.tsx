@@ -116,7 +116,12 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                         </IonButton>
                     ))}
                     {allFilters.length > 0 && (
-                        <IonButton className={styles['filter-button']} fill="clear" onClick={() => onFilterClear()}>
+                        <IonButton
+                            className={styles['filter-button']}
+                            fill="clear"
+                            onClick={() => onFilterClear()}
+                            aria-label={t(`${searchI18nKey}.list.filter_clear`) as string}
+                        >
                             {t(`${searchI18nKey}.list.filter_clear`)}
                         </IonButton>
                     )}

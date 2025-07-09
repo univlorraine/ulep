@@ -126,7 +126,8 @@ export const NewsContent: React.FC<NewsContentProps> = ({ news, profile, onBackP
                             <UniversityTag university={news.university} />
                         </div>
                     </div>
-                    <p
+                    <div
+                        role="article"
                         lang={currentLanguage}
                         className={styles.content}
                         dangerouslySetInnerHTML={{ __html: currentContent }}

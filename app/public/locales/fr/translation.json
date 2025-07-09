@@ -50,7 +50,7 @@
         }
     },
     "events": {
-        "open": "Ouvrir",
+        "open": "Ouvrir l'événement {{title}}",
         "no_events": "Aucun événement trouvé",
         "online": "En ligne",
         "open_maps": "S'y rendre",
@@ -94,7 +94,8 @@
             "load_more": "Voir plus",
             "filter_clear": "Effacer les filtres",
             "language": "Langue",
-            "search": "Rechercher une actualité"
+            "search": "Rechercher une actualité",
+            "open": "Ouvrir l'actualité {{title}}"
         },
         "show": {
             "change_language": "Changer",
@@ -104,8 +105,7 @@
                 "title": "Choisir la langue",
                 "current": "Sélectionnée"
             }
-        },
-        "open": "Ouvrir"
+        }
     },
     "filter": {
         "languages": "Langues",

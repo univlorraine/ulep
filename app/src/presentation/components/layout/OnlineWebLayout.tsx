@@ -62,7 +62,7 @@ const OnlineWebLayout: React.FC<OnlineLayoutProps> = ({ children, onRefresh }) =
     return (
         <IonPage>
             <HomeHeader />
-            <div className={styles.container}>
+            <nav className={styles.container}>
                 <Sidebar
                     onDisplayReport={() => setDisplayReport(true)}
                     onDisplayVocabularySidebar={() => setDisplayVocabularySidebar(true)}
@@ -72,7 +72,7 @@ const OnlineWebLayout: React.FC<OnlineLayoutProps> = ({ children, onRefresh }) =
                     onDisplaySessionModal={() => setDisplaySessionModal(true)}
                 />
                 <IonContent className={styles.content}>{children}</IonContent>
-            </div>
+            </nav>
             <ReportModal isVisible={displayReport} onClose={() => setDisplayReport(false)} />
             <NewVocabularyMenuModal
                 isVisible={displayVocabularySidebar}
