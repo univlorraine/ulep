@@ -47,7 +47,7 @@ import {
 
 export class UpdateCustomLearningGoalCommand {
   title: string;
-  description: string;
+  description?: string;
 }
 
 @Injectable()
