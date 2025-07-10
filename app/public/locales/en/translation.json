@@ -59,7 +59,8 @@
         },
         "apply": "Apply",
         "cancel": "Cancel",
-        "is_mine": "My sheets"
+        "is_mine": "My sheets",
+        "selected_aria_label": "{{selected}} selected"
     },
     "events": {
         "open": "Open event {{title}}",
@@ -78,7 +79,8 @@
             "filter_title": "Select event filters",
             "filter_clear": "Clear filters",
             "language": "Language",
-            "search": "Search an event"
+            "search": "Search an event",
+            "search_button": "Launch the search"
         },
         "show": {
             "change_language": "Change",
@@ -105,6 +107,7 @@
             "filter_clear": "Clear filters",
             "language": "Language",
             "search": "Search a news",
+            "search_button": "Launch the search",
             "open": "Open news {{title}}"
         },
         "show": {
@@ -195,7 +198,8 @@
             "description_label": "Description",
             "cancel_button": "Cancel",
             "validate_button": "Validate",
-            "date_label": "Date"
+            "date_label": "Date",
+            "date_value": "The selected date is {{date}}"
         },
         "update": {
             "title": "Update journal entry"
@@ -217,7 +221,8 @@
             "language": "Language",
             "level": "Level",
             "theme": "Theme",
-            "search": "Search activity"
+            "search": "Search activity",
+            "search_button": "Launch the search"
         },
         "show": {
             "activity_shared": "Your sheet has been shared to your animator",

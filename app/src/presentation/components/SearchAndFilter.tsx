@@ -90,6 +90,14 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                 onIonFocus={() => setSearchBarFocused(true)}
                 onIonBlur={() => setSearchBarFocused(false)}
             />
+            <IonButton
+                fill="clear"
+                className="primary-button no-padding"
+                onClick={() => setSearchBarFocused(false)}
+                expand="full"
+            >
+                {t(`${searchI18nKey}.list.search_button`)}
+            </IonButton>
             <div className={styles['filter-container']}>
                 <div>
                     <IonButton

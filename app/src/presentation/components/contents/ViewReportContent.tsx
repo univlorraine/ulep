@@ -44,6 +44,7 @@ import { LeftChevronSvg } from '../../../assets';
 import { MessageType } from '../../../domain/entities/chat/Message';
 import MessageReport from '../../../domain/entities/MessageReport';
 import Report, { ReportCategoryName, ReportStatus } from '../../../domain/entities/Report';
+import { useStoreState } from '../../../store/storeTypes';
 import MediaComponent from '../chat/MediaComponent';
 import ReportDetail from '../reports/ReportDetail';
 import ReportStatusTag from '../reports/ReportStatusTag';
@@ -63,6 +64,14 @@ const ViewReportContent: React.FC<ViewReportContentProps> = ({
     setIsCloseModalOpen,
 }) => {
     const { t } = useTranslation();
+    const language = useStoreState((state) => state.language);
+    const profile = useStoreState((state) => state.profile);
+
+    const formattedDate = new Intl.DateTimeFormat(language || profile?.nativeLanguage?.code, {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
+    }).format(new Date(report.createdAt));
 
     const isConversationReport = report.category.name === ReportCategoryName.CONVERSATION;
     const isMediaReport =
@@ -85,8 +94,6 @@ const ViewReportContent: React.FC<ViewReportContentProps> = ({
         isConversationReport && report.content.includes('----')
             ? report.content.split('----')[1]?.trim()
             : report.content;
-
-    const createdDate = new Date(report.createdAt).toLocaleDateString();
 
     return (
         <div className={`${styles.container}`}>
@@ -111,7 +118,7 @@ const ViewReportContent: React.FC<ViewReportContentProps> = ({
                             isMediaReport ? (
                                 <div className={styles.item}>
                                     <p className={styles.item_title}>
-                                        {`${t('report_item_page.conversation.message')} ${createdDate} - ${report.metadata.tandemUserName}`}
+                                        {`${t('report_item_page.conversation.message')} ${formattedDate} - ${report.metadata.tandemUserName}`}
                                     </p>
                                     <div className={styles.item_content_media}>
                                         <MediaComponent message={messageMedia} setImageToDisplay={() => {}} />
@@ -119,14 +126,14 @@ const ViewReportContent: React.FC<ViewReportContentProps> = ({
                                 </div>
                             ) : (
                                 <ReportDetail
-                                    title={`${t('report_item_page.conversation.message')} ${createdDate} - ${report.metadata.tandemUserName}`}
+                                    title={`${t('report_item_page.conversation.message')} ${formattedDate} - ${report.metadata.tandemUserName}`}
                                     text={messageContent}
                                     isUrl={messageMedia.metadata?.mediaType === MessageType.Link}
                                 />
                             )
                         ) : (
                             <>
-                                <ReportDetail title={t('report_item_page.application.date')} text={createdDate} />
+                                <ReportDetail title={t('report_item_page.application.date')} text={formattedDate} />
                                 <ReportDetail
                                     title={t('report_item_page.application.details')}
                                     text={messageContent}

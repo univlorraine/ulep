@@ -44,6 +44,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LogEntryCustomEntry } from '../../../../domain/entities/LogEntry';
 import Profile from '../../../../domain/entities/Profile';
+import { useStoreState } from '../../../../store/storeTypes';
 import HeaderSubContent from '../../HeaderSubContent';
 import TextInput from '../../TextInput';
 import styles from './CreateOrUpdateCustomLogEntryContent.module.css';
@@ -66,6 +67,13 @@ export const CreateOrUpdateCustomLogEntryContent = ({
     const [entryDate, setEntryDate] = useState<string>(formatInTimeZone(new Date(), userTz, "yyyy-MM-dd'T'HH:mm"));
     const [entryTitle, setEntryTitle] = useState<string>('');
     const [entryDescription, setEntryDescription] = useState<string>('');
+    const language = useStoreState((state) => state.language);
+
+    const formattedDate = new Intl.DateTimeFormat(language || profile?.nativeLanguage?.code, {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
+    }).format(new Date(entryDate));
 
     const allRequiredFieldsAreFilled = () => {
         return entryDate && entryTitle;
@@ -105,6 +113,8 @@ export const CreateOrUpdateCustomLogEntryContent = ({
                     presentation="date"
                     onIonChange={(e) => setEntryDate(e.detail.value as string)}
                 ></IonDatetime>
+
+                <p className={styles.date_value}>{t('learning_book.create.date_value', { date: formattedDate })}</p>
 
                 <TextInput
                     id="input-log-entry-title"

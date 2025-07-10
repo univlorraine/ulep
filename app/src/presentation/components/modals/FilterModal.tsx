@@ -170,7 +170,11 @@ const FilterModal: React.FC<FilterModalProps> = ({
                                     setShouldTakeAllMine(!shouldTakeAllMine);
                                 }}
                                 name={t(`filter.is_mine`)}
-                                ariaRole="option"
+                                ariaLabel={
+                                    t('filter.selected_aria_label', {
+                                        selected: t(`filter.is_mine`),
+                                    }) as string
+                                }
                             />
                         </>
                     )}
@@ -186,7 +190,11 @@ const FilterModal: React.FC<FilterModalProps> = ({
                                             addOrRemoveLanguage(language);
                                         }}
                                         name={t(`languages_code.${language.code}`)}
-                                        aria-label={t(`languages_code.${language.code}`)}
+                                        ariaLabel={
+                                            t('filter.selected_aria_label', {
+                                                selected: t(`languages_code.${language.code}`),
+                                            }) as string
+                                        }
                                         ariaRole="option"
                                     />
                                 ))}
@@ -203,6 +211,11 @@ const FilterModal: React.FC<FilterModalProps> = ({
                                         addOrRemoveEventType(EventType.ONLINE);
                                     }}
                                     isSelected={selectedEventType.includes(EventType.ONLINE)}
+                                    ariaLabel={
+                                        t('filter.selected_aria_label', {
+                                            selected: t('filter.event_type.online'),
+                                        }) as string
+                                    }
                                     ariaRole="option"
                                 />
                                 <Checkbox
@@ -211,6 +224,11 @@ const FilterModal: React.FC<FilterModalProps> = ({
                                         addOrRemoveEventType(EventType.PRESENTIAL);
                                     }}
                                     isSelected={selectedEventType.includes(EventType.PRESENTIAL)}
+                                    ariaLabel={
+                                        t('filter.selected_aria_label', {
+                                            selected: t('filter.event_type.presential'),
+                                        }) as string
+                                    }
                                     ariaRole="option"
                                 />
                             </div>
@@ -228,7 +246,11 @@ const FilterModal: React.FC<FilterModalProps> = ({
                                             addOrRemoveProficiencyLevel(level);
                                         }}
                                         name={level}
-                                        aria-label={level}
+                                        ariaLabel={
+                                            t('filter.selected_aria_label', {
+                                                selected: level,
+                                            }) as string
+                                        }
                                         ariaRole="option"
                                     />
                                 ))}
@@ -253,6 +275,11 @@ const FilterModal: React.FC<FilterModalProps> = ({
                                                                 addOrRemoveTheme(theme);
                                                             }}
                                                             name={theme.content}
+                                                            ariaLabel={
+                                                                t('filter.selected_aria_label', {
+                                                                    selected: theme.content,
+                                                                }) as string
+                                                            }
                                                             ariaRole="option"
                                                         />
                                                     );

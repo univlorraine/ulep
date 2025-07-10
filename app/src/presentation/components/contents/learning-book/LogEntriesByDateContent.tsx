@@ -113,7 +113,7 @@ export const LogEntriesByDateContent: React.FC<LogEntriesByDateContentProps> = (
                 onBackPressed={onBackPressed}
                 isBackButton={isModal}
             />
-            <h1 className={styles.date}>{formattedDate}</h1>
+            <h2 className={styles.date}>{formattedDate}</h2>
             <div className={styles['log-entries-list']}>
                 <div className={styles['log-entries-list-container']} role="list">
                     {logEntriesResult.logEntries.map((logEntry) => {

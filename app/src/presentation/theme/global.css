@@ -65,6 +65,10 @@ ion-tab-button.tab-selected span {
     padding: 2px 4px;
 }
 
+ion-button {
+    --background-focused-opacity: 0.5;
+}
+
 .ion-background-yellow {
     --ion-background-color: #fdee66;
 }

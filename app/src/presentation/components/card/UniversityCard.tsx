@@ -72,7 +72,6 @@ const UniversityCard: React.FC<UniversityCardProps> = ({ university, onPress, cu
                         alt=""
                         role="presentation"
                         className={styles.logo}
-                        aria-hidden={true}
                         aria-label={university.name}
                     />
                 ) : (
