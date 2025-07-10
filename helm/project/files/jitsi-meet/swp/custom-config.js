@@ -4,7 +4,9 @@ config.prejoinPageEnabled = false;
 config.enableWelcomePage = false;
 config.enableClosePage = false;
 
-// Configuration pour permettre à tous les utilisateurs d'être modérateurs
-// Cela leur donnera accès au bouton "End Meeting" dans l'interface Jitsi
-config.everyoneIsModerator = true;
-config.autoGrantModerator = true;
+// Configuration officielle pour permettre l'attribution de modérateur
+// Cela permettra aux utilisateurs de devenir modérateurs et d'avoir accès au bouton "End Meeting"
+config.disableGrantModerator = false;
+
+// Configuration pour désactiver les indicateurs de modérateur (optionnel)
+// config.disableModeratorIndicator = false;
