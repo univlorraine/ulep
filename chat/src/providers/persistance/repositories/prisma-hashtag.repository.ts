@@ -70,10 +70,13 @@ export class PrismaHashtagRepository implements HashtagRepository {
             select: { name: true },
         });
 
-        const hashtagCount = hashtags.reduce((acc, { name }) => {
-            acc[name] = (acc[name] || 0) + 1;
-            return acc;
-        }, {} as Record<string, number>);
+        const hashtagCount: Record<string, number> = hashtags.reduce(
+            (acc: Record<string, number>, { name }) => {
+                acc[name] = (acc[name] || 0) + 1;
+                return acc;
+            },
+            {},
+        );
 
         // Trier les hashtags par fréquence et prendre les 10 premiers
         const topHashtags = Object.entries(hashtagCount)
