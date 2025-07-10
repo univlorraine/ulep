@@ -46,7 +46,11 @@ import {
 } from 'src/providers/persistance/mappers';
 
 const ConversationInclude = Prisma.validator<Prisma.ConversationInclude>()({
-    Messages: MessagesRelations,
+    Messages: {
+        where: {
+            ParentMessage: null,
+        },
+    },
 });
 
 export const ConversationRelations = { include: ConversationInclude };
