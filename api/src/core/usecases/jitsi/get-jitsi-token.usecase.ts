@@ -44,8 +44,8 @@ import { ConfigService } from '@nestjs/config';
 import * as jwt from 'jsonwebtoken';
 import { Env } from 'src/configuration';
 import {
-  STORAGE_INTERFACE,
   StorageInterface,
+  STORAGE_INTERFACE,
 } from 'src/core/ports/storage.interface';
 import { GetMediaObjectUsecase } from '../media';
 
