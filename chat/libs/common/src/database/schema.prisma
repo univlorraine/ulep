@@ -1,7 +1,7 @@
 generator client {
   provider = "prisma-client-js"
   enableTracing = true
-  //binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x","linux-musl-openssl-3.0.x"]
+//binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x","linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
@@ -68,7 +68,7 @@ model MediaObject {
 
 model MessageLike {
   id         String              @id @default(uuid()) @map("_id")
-  messageId  String              @unique
+  messageId  String
   userId     String
 
   Message   Message?             @relation("MessageLikes", fields: [messageId], references: [id], onDelete: Cascade)
