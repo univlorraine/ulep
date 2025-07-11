@@ -457,7 +457,7 @@
                 "pronunciation": "Pronunciation",
                 "add_prounonciation": "Add",
                 "delete_prounonciation": "Delete",
-                "default_word": "Word to learn",
+                "default_word": "Word to learn (required)",
                 "default_translation": "Translation",
                 "title": "New word pair",
                 "edit_title": "Edit word pair"
