@@ -104,13 +104,13 @@ const RecordingButton = ({
     };
 
     const onKeyDown = (event: React.KeyboardEvent<HTMLIonButtonElement>) => {
-        if (event.code === 'Space') {
+        if (event.code === 'Space' || event.code === 'Enter') {
             startRecording();
         }
     };
 
     const onKeyUp = (event: React.KeyboardEvent<HTMLIonButtonElement>) => {
-        if (event.code === 'Space') {
+        if (event.code === 'Space' || event.code === 'Enter') {
             stopRecording();
         }
     };

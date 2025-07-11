@@ -173,6 +173,7 @@ const CreateOrUpdateVocabularyContent: React.FC<CreateOrUpdateVocabularyContentP
                         value={word}
                         onChange={(value) => setWord(value)}
                         placeholder={vocabulary?.word ?? t('vocabulary.pair.add.default_word')}
+                        required={true}
                     />
                     <div className={styles.pronunciationContainer}>
                         <div className={styles.pronunciationContainer}>
@@ -217,6 +218,7 @@ const CreateOrUpdateVocabularyContent: React.FC<CreateOrUpdateVocabularyContentP
                         onChange={(value) => setTranslation(value)}
                         placeholder={vocabulary?.translation ?? t('vocabulary.pair.add.default_translation')}
                         lang={vocabularyList.translationLanguage.code}
+                        required={false}
                     />
                     <div className={styles.pronunciationContainer}>
                         <div className={styles.playerContainer}>

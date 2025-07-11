@@ -93,6 +93,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                 <IonItem
                     button={true}
                     className={`${styles.line} ${location.pathname === '/home' ? styles.active : ''}`}
+                    aria-current={location.pathname === '/home' ? 'location' : 'false'}
                     onClick={navigateToHome}
                     color={location.pathname === '/home' ? 'dark' : undefined}
                 >
@@ -108,6 +109,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                 <IonItem
                     button={true}
                     className={`${styles.line} ${location.pathname === '/learning' ? styles.active : ''}`}
+                    aria-current={location.pathname === '/learning' ? 'location' : 'false'}
                     onClick={navigateToLearning}
                     color={location.pathname === '/learning' ? 'dark' : undefined}
                 >
@@ -123,6 +125,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                 <IonItem
                     button={true}
                     className={`${styles.line} ${location.pathname === '/conversations' ? styles.active : ''}`}
+                    aria-current={location.pathname === '/conversations' ? 'location' : 'false'}
                     onClick={navigateToConversations}
                     color={location.pathname === '/conversations' ? 'dark' : undefined}
                 >
@@ -138,6 +141,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                 <IonItem
                     button={true}
                     className={`${styles.line} ${location.pathname === '/profile' ? styles.active : ''}`}
+                    aria-current={location.pathname === '/profile' ? 'location' : 'false'}
                     onClick={navigateToProfile}
                     color={location.pathname === '/profile' ? 'dark' : undefined}
                 >

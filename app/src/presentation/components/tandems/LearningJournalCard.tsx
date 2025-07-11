@@ -131,17 +131,17 @@ const LearningJournalCard: React.FC<LearningJournalCardProps> = ({ tandem, onOpe
                 </div>
                 <ul className={styles.activities}>
                     <li className={styles.activity}>
-                        <h4 className={styles.activityTitle}>{t('learning_journal.sessions_duration_title')}</h4>
+                        <span className={styles.activityTitle}>{t('learning_journal.sessions_duration_title')}</span>
                         <span className={styles.activityValue}>
                             {formatDuration(tandem.learningLanguage.visioDuration || 0)}
                         </span>
                     </li>
                     <li className={styles.activity}>
-                        <h4 className={styles.activityTitle}>{t('learning_journal.vocabulary_title')}</h4>
+                        <span className={styles.activityTitle}>{t('learning_journal.vocabulary_title')}</span>
                         <span className={styles.activityValue}>{tandem.learningLanguage.countVocabularies}</span>
                     </li>
                     <li className={styles.activity}>
-                        <h4 className={styles.activityTitle}>{t('learning_journal.activities_title')}</h4>
+                        <span className={styles.activityTitle}>{t('learning_journal.activities_title')}</span>
                         <span className={styles.activityValue}>{tandem.learningLanguage.countActivities}</span>
                     </li>
                 </ul>

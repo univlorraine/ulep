@@ -223,7 +223,7 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
                     </IonList>
                 )}
             />
-            <div className={styles.content} role="list">
+            <div className={styles.content}>
                 {!isLoading && !searchVocabularies && vocabularyPairs.length === 0 && (
                     <div className={styles.emptyContainer} role="listitem">
                         <IonImg alt="" aria-hidden className={styles.emptyImage} src={VocabularyPng} />
@@ -250,40 +250,43 @@ const VocabularyItemContent: React.FC<VocabularyContentProps> = ({
                         value={searchVocabularies}
                     />
                 )}
-
-                {!isLoading &&
-                    vocabulariesWithoutPronunciation &&
-                    vocabulariesWithoutPronunciation.length > 0 &&
-                    vocabularyList.isEditable && (
-                        <>
-                            <div className={styles.pronunciationTitle}>
-                                <span>{t('vocabulary.pair.without_pronunciation')}</span>
-                            </div>
-                            {vocabulariesWithoutPronunciation.map((vocabulary) => (
-                                <VocabularyLine
-                                    key={vocabulary.id}
-                                    onVocabularyClick={onAddVocabulary}
-                                    vocabulary={vocabulary}
-                                    isEditable={vocabularyList.isEditable}
-                                    vocabularyList={vocabularyList}
-                                />
-                            ))}
-                            <div className={styles.pronunciationTitle}>
-                                <span>{t('vocabulary.pair.every_pronunciation')}</span>
-                            </div>
-                        </>
-                    )}
-                {!isLoading &&
-                    vocabularyPairs.length > 0 &&
-                    vocabularyPairs.map((vocabulary) => (
-                        <VocabularyLine
-                            key={vocabulary.id}
-                            onVocabularyClick={onAddVocabulary}
-                            vocabulary={vocabulary}
-                            isEditable={vocabularyList.isEditable}
-                            vocabularyList={vocabularyList}
-                        />
-                    ))}
+                <div role="list">
+                    {!isLoading &&
+                        vocabulariesWithoutPronunciation &&
+                        vocabulariesWithoutPronunciation.length > 0 &&
+                        vocabularyList.isEditable && (
+                            <>
+                                <div className={styles.pronunciationTitle}>
+                                    <h2>{t('vocabulary.pair.without_pronunciation')}</h2>
+                                </div>
+                                {vocabulariesWithoutPronunciation.map((vocabulary) => (
+                                    <VocabularyLine
+                                        key={vocabulary.id}
+                                        onVocabularyClick={onAddVocabulary}
+                                        vocabulary={vocabulary}
+                                        isEditable={vocabularyList.isEditable}
+                                        vocabularyList={vocabularyList}
+                                    />
+                                ))}
+                                <div className={styles.pronunciationTitle}>
+                                    <h2>{t('vocabulary.pair.every_pronunciation')}</h2>
+                                </div>
+                            </>
+                        )}
+                </div>
+                <div role="list">
+                    {!isLoading &&
+                        vocabularyPairs.length > 0 &&
+                        vocabularyPairs.map((vocabulary) => (
+                            <VocabularyLine
+                                key={vocabulary.id}
+                                onVocabularyClick={onAddVocabulary}
+                                vocabulary={vocabulary}
+                                isEditable={vocabularyList.isEditable}
+                                vocabularyList={vocabularyList}
+                            />
+                        ))}
+                </div>
             </div>
 
             {vocabularyList.isEditable && (

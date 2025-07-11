@@ -46,10 +46,12 @@
     height: 100%;
     position: relative;
     padding: 0 !important;
+    overflow-y: scroll;
 }
 
 .show_session_content {
     display: flex;
+    flex: 1 0 auto;
     flex-direction: column;
     margin: 20px;
     gap: 10px;
@@ -130,7 +132,9 @@
 }
 
 .buttons {
-    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
     bottom: 0;
     text-align: center;
     width: 100%;

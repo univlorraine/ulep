@@ -50,7 +50,7 @@
         }
     },
     "events": {
-        "open": "Ouvrir",
+        "open": "Ouvrir l'événement {{title}}",
         "no_events": "Aucun événement trouvé",
         "online": "En ligne",
         "open_maps": "S'y rendre",
@@ -68,7 +68,8 @@
             "language": "Langue",
             "level": "Niveau",
             "theme": "Thème",
-            "search": "Rechercher un événement"
+            "search": "Rechercher un événement",
+            "search_button": "Lancer la recherche"
         },
         "show": {
             "change_language": "Changer",
@@ -94,7 +95,9 @@
             "load_more": "Voir plus",
             "filter_clear": "Effacer les filtres",
             "language": "Langue",
-            "search": "Rechercher une actualité"
+            "search": "Rechercher une actualité",
+            "search_button": "Lancer la recherche",
+            "open": "Ouvrir l'actualité {{title}}"
         },
         "show": {
             "change_language": "Changer",
@@ -104,8 +107,7 @@
                 "title": "Choisir la langue",
                 "current": "Sélectionnée"
             }
-        },
-        "open": "Ouvrir"
+        }
     },
     "filter": {
         "languages": "Langues",
@@ -118,7 +120,8 @@
         },
         "apply": "Appliquer",
         "cancel": "Annuler",
-        "is_mine": "Mes fiches"
+        "is_mine": "Mes fiches",
+        "selected_aria_label": "{{selected}} sélectionné"
     },
     "credit": {
         "title": "Auteur du fichier"
@@ -206,7 +209,8 @@
             "description_label": "Description",
             "cancel_button": "Annuler",
             "validate_button": "Valider",
-            "date_label": "Date"
+            "date_label": "Date",
+            "date_value": "La date sélectionnée est le {{date}}"
         },
         "update": {
             "title": "Modifier l'entrée de journal"
@@ -228,7 +232,8 @@
             "language": "Langue",
             "level": "Niveau",
             "theme": "Thème",
-            "search": "Rechercher une activité"
+            "search": "Rechercher une activité",
+            "search_button": "Lancer la recherche"
         },
         "show": {
             "activity_shared": "Votre fiche a été partagée à votre animateur",

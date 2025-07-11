@@ -132,21 +132,19 @@ const ConversationSearchBar: React.FC<ConversationSearchBarProps> = ({
                 aria-label={t('chat.search.placeholder') as string}
                 showCancelButton="always"
             ></IonSearchbar>
-            <IonButton
-                fill="clear"
-                className={styles.searchIcon}
-                onClick={goPrevious}
-                aria-label={t('chat.search.previous') as string}
-            >
-                <IonIcon icon={chevronBackOutline} />
+            <IonButton fill="clear" className={styles.searchIcon} onClick={goPrevious}>
+                <IonIcon
+                    icon={chevronBackOutline}
+                    aria-label={t('chat.search.previous') as string}
+                    title={t('chat.search.previous') as string}
+                />
             </IonButton>
-            <IonButton
-                fill="clear"
-                className={styles.searchIcon}
-                onClick={goNext}
-                aria-label={t('chat.search.next') as string}
-            >
-                <IonIcon icon={chevronForwardOutline} />
+            <IonButton fill="clear" className={styles.searchIcon} onClick={goNext}>
+                <IonIcon
+                    icon={chevronForwardOutline}
+                    aria-label={t('chat.search.next') as string}
+                    title={t('chat.search.next') as string}
+                />
             </IonButton>
         </div>
     );

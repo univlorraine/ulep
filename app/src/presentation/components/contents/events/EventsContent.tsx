@@ -116,7 +116,9 @@ export const EventsContent: React.FC<EventsContentProps> = ({ eventId, profile, 
                     </IonButton>
                 )}
                 <div className={styles['primary-container']} style={{ marginTop: event.imageUrl ? 200 : 0 }}>
-                    <h1 className={styles.title}>{currentTitle}</h1>
+                    <h1 className={styles.title} lang={currentLanguage}>
+                        {currentTitle}
+                    </h1>
                     <EventDate event={event} profile={profile} showAddToCalendar />
                     <EventAdress event={event} showMap />
                     <div className={styles.informations}>
@@ -145,7 +147,8 @@ export const EventsContent: React.FC<EventsContentProps> = ({ eventId, profile, 
                         profile={profile}
                         onEventSubscribed={() => setRefresh(!refresh)}
                     />
-                    <p
+                    <div
+                        role="article"
                         lang={currentLanguage}
                         className={styles.content}
                         dangerouslySetInnerHTML={{ __html: currentContent }}
