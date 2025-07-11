@@ -21,6 +21,9 @@
         "generate": "pnpm dlx prisma@6.11.1 generate",
         "migrate": "pnpm dlx prisma@6.11.1 db push",
         "seed": "pnpm dlx prisma@6.11.1 db seed -- --delete",
+        "seed:full": "pnpm dlx prisma@6.11.1 db seed -- --delete --seed=full --conversations=2000 --messages=10 --hashtags=5",
+        "seed:minimal": "pnpm dlx prisma@6.11.1 db seed -- --delete --seed=minimal --conversations=100 --messages=3 --hashtags=2",
+        "seed:custom": "pnpm dlx prisma@6.11.1 db seed -- --delete --conversations=1000 --messages=5 --hashtags=3",
         "reset-last-activity": "ts-node scripts/reset-last-activity-conversations.ts"
     },
     "dependencies": {

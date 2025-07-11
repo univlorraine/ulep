@@ -49,3 +49,6 @@ seed: ## Seed the database with test data
 
 seed-random: ## Seed the database with test and random data
 	@$(NEST) pnpm seed:random
+
+seed-random-chat: ## Seed the database with test and random data
+	@$(CHAT) pnpm seed:full
