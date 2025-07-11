@@ -51,12 +51,15 @@
         margin: 0;
     }
     .image {
-        height: 50px;
-        width: 50px;
-        min-width: 50px;
-        min-height: 50px;
-        margin: 0 10px;
-        margin-bottom: 20px;
+        width: 48px !important;
+        height: 48px !important;
+        max-width: 48px !important;
+        max-height: 48px !important;
+        min-width: 48px !important;
+        min-height: 48px !important;
+        object-fit: contain;
+        display: block;
+        margin: 0 10px 20px 10px;
     }
 
     .content {
