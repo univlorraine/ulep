@@ -125,4 +125,5 @@ export interface ChatServicePort {
   addUserToConversation(conversationId: string, userId: string): Promise<any>;
   deleteConversation(tandemId: string): Promise<any>;
   deleteMessage(messageId: string, shouldDelete: boolean): Promise<any>;
+  getMessageById(messageId: string): Promise<Message | null>;
 }

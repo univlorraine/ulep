@@ -40,3 +40,4 @@
 
 export * from './create-message.usecase';
 export * from './update-message.usecase';
+export * from './get-message-by-id.usecase';

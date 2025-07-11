@@ -99,26 +99,40 @@ export class UpdateReportStatusUsecase {
         command.shouldDeleteMessage,
       );
 
-      const profile = await this.getProfileByUserIdUsecase.execute({
-        id: instance.user.id,
-      });
-      if (profile && instance.user) {
-        await this.notificationGateway.sendMessageDeletedNotification({
-          to: instance.user.devices.map((device) => ({
-            token: device.token,
-            language: profile.nativeLanguage.code,
-          })),
-          content: instance.content,
-          roomTitle: '',
-          session: instance.metadata?.session,
-        });
+      // Récupérer l'auteur du message via le messageId
+      const message = await this.chatService.getMessageById(
+        instance.metadata?.messageId,
+      );
 
-        await this.emailGateway.sendMessageDeletedEmail({
-          to: instance.user.email,
-          language: profile.nativeLanguage.code,
-          roomTitle: '',
-          content: instance.content,
-        });
+      if (message && message.ownerId) {
+        const messageAuthorProfile =
+          await this.getProfileByUserIdUsecase.execute({
+            id: message.ownerId,
+          });
+
+        if (messageAuthorProfile) {
+          // Récupérer les informations de l'utilisateur auteur du message
+          const messageAuthor = await this.userRepository.ofId(message.ownerId);
+
+          if (messageAuthor) {
+            await this.notificationGateway.sendMessageDeletedNotification({
+              to: messageAuthor.devices.map((device) => ({
+                token: device.token,
+                language: messageAuthorProfile.nativeLanguage.code,
+              })),
+              content: instance.content,
+              roomTitle: '',
+              session: instance.metadata?.session,
+            });
+
+            await this.emailGateway.sendMessageDeletedEmail({
+              to: messageAuthor.email,
+              language: messageAuthorProfile.nativeLanguage.code,
+              roomTitle: '',
+              content: instance.content,
+            });
+          }
+        }
       }
 
       return this.reportRepository.updateReport(

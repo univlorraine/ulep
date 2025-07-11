@@ -38,16 +38,29 @@
  *
  */
 
-import { Body, Controller, Param, Post, Put } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Param,
+    Post,
+    Put,
+    Get,
+    NotFoundException,
+    Inject,
+} from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 import { MessageResponse } from 'src/api/dtos/message';
 import { UpdateMessageRequest } from 'src/api/dtos/message/update-message.request';
 import { UpdateMessageUsecase } from 'src/core/usecases';
+import { GetMessageByIdUsecase } from 'src/core/usecases/message';
 
 @Controller('messages')
 @Swagger.ApiTags('Messages')
 export class MessageController {
-    constructor(private updateMessageUsecase: UpdateMessageUsecase) {}
+    constructor(
+        private updateMessageUsecase: UpdateMessageUsecase,
+        private getMessageByIdUsecase: GetMessageByIdUsecase,
+    ) {}
 
     @Put('/:id')
     @Swagger.ApiOperation({ summary: 'Update a message' })
@@ -62,6 +75,15 @@ export class MessageController {
             isDeleted: command.isDeleted,
         });
 
+        return MessageResponse.from(message);
+    }
+
+    @Get('/:id')
+    @Swagger.ApiOperation({ summary: 'Get a message by id' })
+    async getMessageById(
+        @Param('id') messageId: string,
+    ): Promise<MessageResponse> {
+        const message = await this.getMessageByIdUsecase.execute(messageId);
         return MessageResponse.from(message);
     }
 }
