@@ -40,3 +40,4 @@
 
 export * from './domain-exceptions.filter';
 export * from './prisma-exceptions.filter';
+export * from './registration-exception.filter';

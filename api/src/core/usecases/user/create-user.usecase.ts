@@ -39,13 +39,9 @@
  */
 
 import { KeycloakClient } from '@app/keycloak';
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { toZonedTime } from 'date-fns-tz';
-import {
-  RessourceAlreadyExists,
-  RessourceDoesNotExist,
-  UnauthorizedOperation,
-} from 'src/core/errors';
+import { RegistrationException, UnauthorizedOperation } from 'src/core/errors';
 import { Gender, Role, User } from 'src/core/models';
 import { CHAT_SERVICE } from 'src/core/ports/chat.service';
 import {
@@ -105,12 +101,12 @@ export class CreateUserUsecase {
 
     const university = await this.universityRepository.ofId(command.university);
     if (!university) {
-      throw new RessourceDoesNotExist('University does not exist');
+      throw new RegistrationException('University does not exist');
     }
 
     const country = await this.countryRepository.ofCode(command.countryCode);
     if (!country) {
-      throw new RessourceDoesNotExist('Country code does not exist');
+      throw new RegistrationException('Country code does not exist');
     }
 
     const isCodeValid =
@@ -126,7 +122,7 @@ export class CreateUserUsecase {
       university.domains.length === 0 &&
       !isCodeValid
     ) {
-      throw new BadRequestException('Code is invalid');
+      throw new RegistrationException('Code is invalid');
     }
 
     if (
@@ -134,7 +130,7 @@ export class CreateUserUsecase {
       university.codes.length === 0 &&
       !isDomainValid
     ) {
-      throw new BadRequestException('Domain is invalid');
+      throw new RegistrationException('Domain is invalid');
     }
 
     if (
@@ -143,7 +139,7 @@ export class CreateUserUsecase {
       !isCodeValid &&
       !isDomainValid
     ) {
-      throw new BadRequestException('Code is invalid');
+      throw new RegistrationException('Code is invalid');
     }
 
     const now = toZonedTime(new Date(), university.timezone);
@@ -157,7 +153,7 @@ export class CreateUserUsecase {
     );
 
     if (admissionEndTimezoned < now || admissionStartTimezoned > now) {
-      throw new BadRequestException('Registration unavailable');
+      throw new RegistrationException('Registration unavailable');
     }
 
     let keycloakUser = await this.keycloak.getUserByEmail(command.email);
@@ -187,7 +183,7 @@ export class CreateUserUsecase {
     }
 
     if (!keycloakUser) {
-      throw new RessourceDoesNotExist('User does not exist');
+      throw new RegistrationException('User does not exist');
     }
 
     let user = await this.userRepository.ofId(keycloakUser.id);
@@ -231,7 +227,7 @@ export class CreateUserUsecase {
         }
       }
     } else {
-      throw new RessourceAlreadyExists('User already exist');
+      throw new RegistrationException('User already exist');
     }
 
     return user;

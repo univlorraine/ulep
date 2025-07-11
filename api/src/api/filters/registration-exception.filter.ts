@@ -38,69 +38,21 @@
  *
  */
 
-import { SentryService } from '@app/common';
-import { KeycloakException } from '@app/keycloak';
-import {
-  CallHandler,
-  Catch,
-  ExecutionContext,
-  ForbiddenException,
-  NestInterceptor,
-  UnauthorizedException,
-} from '@nestjs/common';
-import { catchError, Observable } from 'rxjs';
-import {
-  DomainError,
-  DomainErrorCode,
-  RegistrationException,
-} from 'src/core/errors';
+import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
+import { Response } from 'express';
+import { RegistrationException } from 'src/core/errors';
 
-@Catch()
-export class SentryInterceptor implements NestInterceptor {
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-    return next.handle().pipe(
-      catchError((err) => {
-        if (this.shouldHandleError(err, context)) {
-          SentryService.captureException(err, context);
-        }
-        throw err;
-      }),
-    );
-  }
+@Catch(RegistrationException)
+export class RegistrationExceptionFilter implements ExceptionFilter {
+  catch(exception: RegistrationException, host: ArgumentsHost) {
+    const ctx = host.switchToHttp();
+    const response = ctx.getResponse<Response>();
+    const status = exception.code;
 
-  private shouldHandleError(
-    exception: unknown,
-    context: ExecutionContext,
-  ): boolean {
-    // Exclure les erreurs d'inscription d'utilisateur
-    const request = context.switchToHttp().getRequest();
-    const url = request.url;
-    const method = request.method;
-    const controllerName = context.getClass().name;
-    const handlerName = context.getHandler().name;
-
-    // Ne pas envoyer les erreurs pour la création d'utilisateur (inscription)
-    if (
-      method === 'POST' &&
-      url === '/users' &&
-      controllerName === 'UserController' &&
-      handlerName === 'create'
-    ) {
-      return false;
-    }
-
-    if (exception instanceof DomainError) {
-      return [
-        DomainErrorCode.RESSOURCE_ALREADY_EXIST,
-        DomainErrorCode.BAD_REQUEST,
-      ].includes(exception.code);
-    }
-
-    return ![
-      UnauthorizedException,
-      ForbiddenException,
-      KeycloakException,
-      RegistrationException,
-    ].some((error) => exception instanceof error);
+    response.status(status).json({
+      statusCode: status,
+      message: exception.message,
+      error: 'Bad Request',
+    });
   }
 }
