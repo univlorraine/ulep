@@ -141,4 +141,10 @@ export class InMemoryProfileRepository implements ProfileRepository {
   ): Promise<ProfileWithLogEntries> {
     return this.findAllWithLogEntries()[0];
   }
+
+  async findByEmailWithLogEntries(
+    email: string,
+  ): Promise<ProfileWithLogEntries> {
+    return this.findAllWithLogEntries()[0];
+  }
 }

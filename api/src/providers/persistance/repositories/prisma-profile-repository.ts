@@ -246,13 +246,15 @@ export class PrismaProfileRepository implements ProfileRepository {
       : {};
 
     const profiles = await this.prisma.profiles.findMany({
-      skip: offset,
+      skip: (offset - 1) * limit,
       take: limit,
       include: ProfilesRelationsWithLogEntries,
       where: whereCondition,
     });
 
-    const count = await this.prisma.profiles.count({});
+    const count = await this.prisma.profiles.count({
+      where: whereCondition,
+    });
     return {
       items: profiles.map(profileWithLogEntriesMapper),
       totalItems: count,
@@ -266,6 +268,27 @@ export class PrismaProfileRepository implements ProfileRepository {
     const profile = await this.prisma.profiles.findFirst({
       where: {
         User: { contact_id: contactId },
+        LearningLanguages: {
+          some: {
+            shared_logs_date: !forceGettingNoSharedProfiles
+              ? { not: null }
+              : undefined,
+          },
+        },
+      },
+      include: ProfilesRelationsWithLogEntries,
+    });
+
+    return profileWithLogEntriesMapper(profile);
+  }
+
+  async findByEmailWithLogEntries(
+    email: string,
+    forceGettingNoSharedProfiles: boolean = false,
+  ): Promise<ProfileWithLogEntries> {
+    const profile = await this.prisma.profiles.findFirst({
+      where: {
+        User: { email: { equals: email, mode: ModeQuery.INSENSITIVE } },
         LearningLanguages: {
           some: {
             shared_logs_date: !forceGettingNoSharedProfiles

@@ -138,5 +138,10 @@ export interface ProfileRepository {
     forceGettingNoSharedProfiles?: boolean,
   ) => Promise<ProfileWithLogEntries>;
 
+  findByEmailWithLogEntries: (
+    email: string,
+    forceGettingNoSharedProfiles?: boolean,
+  ) => Promise<ProfileWithLogEntries>;
+
   delete: (profile: Profile) => Promise<void>;
 }
