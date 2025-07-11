@@ -94,6 +94,17 @@ class SendMessageUsecase implements SendMessageUsecaseInterface {
 
             return messageWithoutSenderCommandToDomain(httpResponse.parsedBody);
         } catch (error: any) {
+            // Gestion spécifique des erreurs de format de fichier
+            if (error.error?.statusCode === 400) {
+                const errorMessage = error.error.message?.toLowerCase() || '';
+                if (
+                    errorMessage.includes('unallowed content type') ||
+                    errorMessage.includes('file type') ||
+                    errorMessage.includes('content type')
+                ) {
+                    return new Error('errors.fileFormat');
+                }
+            }
             return new Error('errors.global');
         }
     }
