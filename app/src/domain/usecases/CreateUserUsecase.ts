@@ -141,6 +141,7 @@ class CreateUserUsecase implements CreateUserUsecaseInterface {
                 return new Error('errors.global');
             }
 
+            // Gestion des erreurs de fichier
             if (error.statusCode === 400 && error.message.includes('expected size')) {
                 return new Error('signup_informations_page.error_picture_weight');
             }
@@ -149,20 +150,43 @@ class CreateUserUsecase implements CreateUserUsecaseInterface {
                 return new Error('signup_informations_page.error_picture_format');
             }
 
+            // Gestion des erreurs d'authentification
             if (error.statusCode === 401) {
                 return new Error('signup_informations_page.error_unauthorized');
             }
 
+            // Gestion des erreurs de conflit
             if (error.statusCode === 409) {
                 return new Error('signup_informations_page.error_email_already_exist');
             }
 
+            // Gestion des erreurs d'inscription par message
             if (error.statusCode === 400 && error.message === 'Domain is invalid') {
                 return new Error('signup_informations_page.error_domain');
             }
 
             if (error.statusCode === 400 && error.message === 'Code is invalid') {
                 return new Error('signup_informations_page.error_code');
+            }
+
+            if (error.statusCode === 400 && error.message === 'University does not exist') {
+                return new Error('signup_informations_page.error_university_not_found');
+            }
+
+            if (error.statusCode === 400 && error.message === 'Country code does not exist') {
+                return new Error('signup_informations_page.error_country_not_found');
+            }
+
+            if (error.statusCode === 400 && error.message === 'Registration unavailable') {
+                return new Error('signup_informations_page.error_registration_unavailable');
+            }
+
+            if (error.statusCode === 400 && error.message === 'User does not exist') {
+                return new Error('signup_informations_page.error_user_not_found');
+            }
+
+            if (error.statusCode === 400 && error.message === 'User already exist') {
+                return new Error('signup_informations_page.error_user_already_exists');
             }
 
             if (error.statusCode === 400 && error.message === 'User password is not valid') {

@@ -47,7 +47,11 @@ import {
 import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
-import { DomainErrorFilter, PrismaClientExceptionFilter } from './api/filters';
+import {
+  DomainErrorFilter,
+  PrismaClientExceptionFilter,
+  RegistrationExceptionFilter,
+} from './api/filters';
 import {
   CollectionInterceptor,
   HttpLoggerInterceptor,
@@ -89,6 +93,7 @@ export class Server {
     const { httpAdapter } = app.get(HttpAdapterHost);
     app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
     app.useGlobalFilters(new DomainErrorFilter(httpAdapter));
+    app.useGlobalFilters(new RegistrationExceptionFilter());
   }
 
   protected addGlobalInterceptors(app: INestApplication): void {
