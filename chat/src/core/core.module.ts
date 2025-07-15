@@ -53,6 +53,7 @@ import {
     UpdateMessageUsecase,
     UploadMediaUsecase,
     ExportMediasFromConversationUsecase,
+    GetMessageByIdUsecase,
 } from 'src/core/usecases';
 import { PurgeChatUsecase } from 'src/core/usecases/purge/purge-chat.usecase';
 import { ProvidersModule } from 'src/providers/providers.module';
@@ -72,6 +73,7 @@ const usecases: Provider[] = [
     UpdateConversationUsecase,
     UpdateMessageUsecase,
     ExportMediasFromConversationUsecase,
+    GetMessageByIdUsecase,
 ];
 
 const services: Provider[] = [];
