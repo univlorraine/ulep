@@ -65,6 +65,10 @@ ion-tab-button.tab-selected span {
     padding: 2px 4px;
 }
 
+ion-button {
+    --background-focused-opacity: 0.5;
+}
+
 .ion-background-yellow {
     --ion-background-color: #fdee66;
 }
@@ -110,6 +114,12 @@ ion-tab-button.tab-selected span {
     flex-direction: column;
     padding: 8px;
     width: 100%;
+}
+
+.home-card-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .home-card-title {

@@ -39,12 +39,12 @@
  */
 
 import { IonImg, IonItem } from '@ionic/react';
-import { formatDate } from 'date-fns';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
 import { MessagesPng, SignalerPng } from '../../../assets';
 import Report from '../../../domain/entities/Report';
+import { useStoreState } from '../../../store/storeTypes';
 import { codeLanguageToFlag } from '../../utils';
 import styles from './ReportsListItem.module.css';
 import ReportStatusTag from './ReportStatusTag';
@@ -58,6 +58,14 @@ const ReportsListItem: React.FC<ReportsListItemProps> = ({ report, key }) => {
     const { t } = useTranslation();
     const history = useHistory();
     const isConversationReport = report.category.name === 'Conversation';
+    const language = useStoreState((state) => state.language);
+    const profile = useStoreState((state) => state.profile);
+
+    const formattedDate = new Intl.DateTimeFormat(language || profile?.nativeLanguage?.code, {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
+    }).format(new Date(report.createdAt));
 
     const getTandemInfo = () => {
         if (!report.metadata?.tandemUserName || !report.metadata?.tandemLanguage)
@@ -75,7 +83,7 @@ const ReportsListItem: React.FC<ReportsListItemProps> = ({ report, key }) => {
             className={styles.line}
             button={true}
             onClick={() => history.push(`/report-item`, { reportId: report.id })}
-            aria-label={t('reports_page.item.aria_label', { name: report.content }) as string}
+            role="listitem"
         >
             <IonImg
                 aria-hidden
@@ -93,7 +101,7 @@ const ReportsListItem: React.FC<ReportsListItemProps> = ({ report, key }) => {
                     <ReportStatusTag status={report.status} />
                 </div>
                 <p className={styles.date}>
-                    {t('reports_page.list.date')} {formatDate(report.createdAt, 'dd/MM/yy')} -{' '}
+                    {t('reports_page.list.date')} {formattedDate} -{' '}
                     {isConversationReport ? getTandemInfo() : t('reports_page.list.application')}
                 </p>
                 <p className={styles.message}>

@@ -273,7 +273,7 @@ export const CreateActivityInformationsContent = ({
                 type="text-area"
                 maxLength={1000}
                 showLimit
-                required
+                required={true}
             />
 
             <Dropdown<Language>

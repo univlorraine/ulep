@@ -383,6 +383,9 @@ const ChatInputSender: React.FC<ChatInputSenderProps> = ({
                         aria-label={
                             t(isBlocked ? 'chat.input.placeholder.blocked' : 'chat.input.placeholder.unblocked') ?? ''
                         }
+                        title={
+                            t(isBlocked ? 'chat.input.placeholder.blocked' : 'chat.input.placeholder.unblocked') ?? ''
+                        }
                         ref={textareaRef}
                         onFocus={handleTextareaFocus}
                         onBlur={handleTextareaBlur}

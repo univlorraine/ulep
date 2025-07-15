@@ -82,7 +82,11 @@ const NewsLine: React.FC<NewsLineProps> = ({ news, profile, onClick }) => {
                     </div>
                     <span className={styles.date}>{formattedDate}</span>
                     <br />
-                    <span lang={news.languageCode} className={styles.title}>
+                    <span
+                        lang={news.languageCode}
+                        className={styles.title}
+                        aria-label={t('news.list.open', { title: news.title }) as string}
+                    >
                         {news.title}
                     </span>
                 </div>

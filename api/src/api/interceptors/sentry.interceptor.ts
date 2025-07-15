@@ -48,15 +48,19 @@ import {
   NestInterceptor,
   UnauthorizedException,
 } from '@nestjs/common';
-import { Observable, catchError } from 'rxjs';
-import { DomainError, DomainErrorCode } from 'src/core/errors';
+import { catchError, Observable } from 'rxjs';
+import {
+  DomainError,
+  DomainErrorCode,
+  RegistrationException,
+} from 'src/core/errors';
 
 @Catch()
 export class SentryInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
       catchError((err) => {
-        if (this.shouldHandleError(err)) {
+        if (this.shouldHandleError(err, context)) {
           SentryService.captureException(err, context);
         }
         throw err;
@@ -64,7 +68,27 @@ export class SentryInterceptor implements NestInterceptor {
     );
   }
 
-  private shouldHandleError(exception: unknown): boolean {
+  private shouldHandleError(
+    exception: unknown,
+    context: ExecutionContext,
+  ): boolean {
+    // Exclure les erreurs d'inscription d'utilisateur
+    const request = context.switchToHttp().getRequest();
+    const url = request.url;
+    const method = request.method;
+    const controllerName = context.getClass().name;
+    const handlerName = context.getHandler().name;
+
+    // Ne pas envoyer les erreurs pour la création d'utilisateur (inscription)
+    if (
+      method === 'POST' &&
+      url === '/users' &&
+      controllerName === 'UserController' &&
+      handlerName === 'create'
+    ) {
+      return false;
+    }
+
     if (exception instanceof DomainError) {
       return [
         DomainErrorCode.RESSOURCE_ALREADY_EXIST,
@@ -72,8 +96,11 @@ export class SentryInterceptor implements NestInterceptor {
       ].includes(exception.code);
     }
 
-    return ![UnauthorizedException, ForbiddenException, KeycloakException].some(
-      (error) => exception instanceof error,
-    );
+    return ![
+      UnauthorizedException,
+      ForbiddenException,
+      KeycloakException,
+      RegistrationException,
+    ].some((error) => exception instanceof error);
   }
 }

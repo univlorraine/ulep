@@ -69,12 +69,12 @@ const EditoContent: React.FC<EditoContentProps> = ({ edito, onGoBack }) => {
         <div className={styles.content}>
             <HeaderSubContent title={t('edito.title')} onBackPressed={onGoBack} isBackButton />
             <div className={styles.header}>
-                <span className={styles.title}>{edito.university.name}</span>
+                <h2 className={styles.title}>{edito.university.name}</h2>
                 {edito.university.logo && <NetworkImage id={edito.university.logo} />}
-                <span className={styles.title}>{t('edito.service_date')}</span>
-                <span>{`${formatDate(edito.university.openServiceDate)} - ${formatDate(edito.university.closeServiceDate)}`}</span>
-                <span className={styles.title}>{t('edito.admission_date')}</span>
-                <span>{`${formatDate(edito.university.admissionStart)} - ${formatDate(edito.university.admissionEnd)}`}</span>
+                <div className={styles.title}>{t('edito.service_date')}</div>
+                <div>{`${formatDate(edito.university.openServiceDate)} - ${formatDate(edito.university.closeServiceDate)}`}</div>
+                <div className={styles.title}>{t('edito.admission_date')}</div>
+                <div>{`${formatDate(edito.university.admissionStart)} - ${formatDate(edito.university.admissionEnd)}`}</div>
             </div>
             <div className={styles.body}>
                 <div className={styles.logoContainer}>
@@ -85,12 +85,12 @@ const EditoContent: React.FC<EditoContentProps> = ({ edito, onGoBack }) => {
                         <span className={styles.flag}>{codeLanguageToFlag(edito.university.nativeLanguage.code)}</span>
                     </div>
                 </div>
-                <span dangerouslySetInnerHTML={{ __html: edito.content }}></span>
+                <div dangerouslySetInnerHTML={{ __html: edito.content }} />
                 {edito.video && (
-                    <span
+                    <div
                         aria-label={t('edito.video') as string}
                         dangerouslySetInnerHTML={{ __html: edito.video }}
-                    ></span>
+                    ></div>
                 )}
                 {edito.university.website && (
                     <IonButton

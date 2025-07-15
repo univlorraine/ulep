@@ -38,12 +38,39 @@
  *
  */
 
-import { MaxFileSizeValidator, ParseFilePipe,FileTypeValidator } from '@nestjs/common';
+import {
+    MaxFileSizeValidator,
+    ParseFilePipe,
+    FileTypeValidator,
+    BadRequestException,
+} from '@nestjs/common';
 
 export type FileOptions = {
     maxSize?: number;
     fileType?: string | RegExp;
 };
+
+// Validateur personnalisé pour les types de fichiers avec message d'erreur spécifique
+class CustomFileTypeValidator extends FileTypeValidator {
+    constructor(options: { fileType: string | RegExp }) {
+        super(options);
+    }
+
+    isValid(fileOrFiles: Express.Multer.File | Express.Multer.File[]): boolean {
+        const files = Array.isArray(fileOrFiles) ? fileOrFiles : [fileOrFiles];
+
+        for (const file of files) {
+            if (!super.isValid(file)) {
+                // Lancer une BadRequestException avec un message spécifique
+                throw new BadRequestException(
+                    'Unallowed content type: ' + file.mimetype,
+                );
+            }
+        }
+
+        return true;
+    }
+}
 
 export class FilePipe extends ParseFilePipe {
     constructor(options?: FileOptions) {
@@ -51,39 +78,48 @@ export class FilePipe extends ParseFilePipe {
             maxSize: options?.maxSize ?? 10000000,
         });
 
-        const validMimeTypes = ['image/jpeg', 'image/png', 
-            'image/jpg', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.openxmlformats-officedocument.presentationml.presentation',            
-            'application/msword',
-            'application/vnd.ms-excel',
-            'application/vnd.ms-powerpoint',            
+        const validMimeTypes = [
+            'image/jpeg',
+            'image/png',
+            'image/jpg',
+            'application/pdf',
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            'application/vnd.openxmlformats-officedocument.presentationml.presentation',            
+            'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+            'application/msword',
+            'application/vnd.ms-excel',
+            'application/vnd.ms-powerpoint',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'application/vnd.openxmlformats-officedocument.presentationml.presentation',
             'application/vnd.ms-word.document.macroEnabled.12',
             'application/vnd.ms-excel.sheet.macroEnabled.12',
-            'application/vnd.ms-powerpoint.presentation.macroEnabled.12',            
+            'application/vnd.ms-powerpoint.presentation.macroEnabled.12',
             'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
             'application/vnd.openxmlformats-officedocument.spreadsheetml.template',
-            'application/vnd.openxmlformats-officedocument.presentationml.template',            
+            'application/vnd.openxmlformats-officedocument.presentationml.template',
             'application/vnd.ms-word.template.macroEnabled.12',
             'application/vnd.ms-excel.template.macroEnabled.12',
-            'application/vnd.ms-powerpoint.template.macroEnabled.12',            
+            'application/vnd.ms-powerpoint.template.macroEnabled.12',
             'application/vnd.oasis.opendocument.text',
             'application/vnd.oasis.opendocument.spreadsheet',
-            'application/vnd.oasis.opendocument.presentation',            
+            'application/vnd.oasis.opendocument.presentation',
             'application/vnd.oasis.opendocument.text-template',
             'application/vnd.oasis.opendocument.spreadsheet-template',
-            'application/vnd.oasis.opendocument.presentation-template',            
-            'application/vnd.oasis.opendocument.graphics',            
-            'application/vnd.oasis.opendocument.formula',            
-            'application/vnd.oasis.opendocument.database',            
-            'application/vnd.oasis.opendocument.chart'
+            'application/vnd.oasis.opendocument.presentation-template',
+            'application/vnd.oasis.opendocument.graphics',
+            'application/vnd.oasis.opendocument.formula',
+            'application/vnd.oasis.opendocument.database',
+            'application/vnd.oasis.opendocument.chart',
         ];
-        
-        const mimeTypeRegex = new RegExp(`^(${validMimeTypes.map(type => type.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})$`);
-                
-        const mimeValidator = new FileTypeValidator({
+
+        const mimeTypeRegex = new RegExp(
+            `^(${validMimeTypes
+                .map((type) => type.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+                .join('|')})$`,
+        );
+
+        const mimeValidator = new CustomFileTypeValidator({
             fileType: options?.fileType ?? mimeTypeRegex,
         });
 

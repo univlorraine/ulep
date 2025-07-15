@@ -100,7 +100,7 @@ export const NewsListContent: React.FC<NewListContentProps> = ({ profile, onBack
                 setShowFiltersModal={setShowFiltersModal}
                 searchI18nKey="news"
             />
-            <div className={styles.list}>
+            <div className={styles.list} role="list">
                 {news.map((newsItem: News) => (
                     <NewsLine
                         key={newsItem.id}

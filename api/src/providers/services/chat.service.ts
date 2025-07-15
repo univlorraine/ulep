@@ -281,4 +281,22 @@ export class ChatService implements ChatServicePort {
       this.logger.error('Error while adding user to conversation', { error });
     }
   }
+
+  async getMessageById(messageId: string): Promise<any> {
+    if (!this.env.get('CHAT_URL')) {
+      return null;
+    }
+
+    try {
+      const response = await axios.get(
+        this.env.get('CHAT_URL') + '/messages/' + messageId,
+        { headers: this.headers },
+      );
+
+      return response.data;
+    } catch (error) {
+      this.logger.error('Error while getting message by id', { error });
+      return null;
+    }
+  }
 }

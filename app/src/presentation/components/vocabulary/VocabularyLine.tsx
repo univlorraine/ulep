@@ -86,7 +86,7 @@ const VocabularyLine: React.FC<VocabularyLineProps> = ({
                     )}
                 </div>
             </div>
-            {isEditable && <IonIcon icon={chevronForwardOutline} aria-hidden="true" tabIndex={0} />}
+            {isEditable && <IonIcon icon={chevronForwardOutline} aria-hidden="true" tabIndex={0} size="small" />}
         </button>
     );
 };

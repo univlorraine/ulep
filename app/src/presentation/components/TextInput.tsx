@@ -163,7 +163,7 @@ const TextInput: React.FC<TextInputProps> = ({
                         style={{ height: customHeight }}
                         type={showPasword ? 'text' : type}
                         value={value}
-                        required
+                        required={required}
                         autocomplete={autocomplete}
                         maxlength={maxLength ?? 100}
                         lang={lang}

@@ -67,14 +67,12 @@ const VocabularyListLine: React.FC<VocabularyListLineProps> = ({
 
     return (
         <IonButton
-            aria-label={`${vocabularyList.symbol} ${vocabularyList.name}`}
             key={vocabularyList.id}
             fill="clear"
             className={styles.container}
             onClick={() => onSelectVocabularyList(vocabularyList)}
-            role="listitem"
         >
-            <div className={styles.content}>
+            <div className={styles.content} role="listitem">
                 <span className={styles.title}>{`${vocabularyList.symbol} ${vocabularyList.name}`}</span>
                 <span className={styles.creator}>{`${t('vocabulary.list.creator', {
                     name: creatorName,

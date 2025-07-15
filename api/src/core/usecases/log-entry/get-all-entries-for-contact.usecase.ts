@@ -75,13 +75,14 @@ export class GetAllEntriesForContactUsecase {
     const usersToSearch = await this.keycloakClient.getUsers({
       attributes: { key: 'universityLogin', value: command.contactId },
     });
+
     if (usersToSearch.length === 0) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
     const userToSearch = usersToSearch[0];
 
-    const profiles = await this.profileRepository.findByContactIdWithLogEntries(
-      userToSearch.attributes.contactId,
+    const profiles = await this.profileRepository.findByEmailWithLogEntries(
+      userToSearch.email,
       !isApiAdmin ? false : command.getNoSharedProfiles,
     );
     return profiles;

@@ -167,7 +167,7 @@ export const LogEntryTitle: React.FC<LogEntrySubComponentProps> = ({ logEntry })
         return <>{t('learning_book.entry.default.title')}</>;
     };
 
-    return <h2 className={styles.title}>{getTitle()}</h2>;
+    return <span className={styles.title}>{getTitle()}</span>;
 };
 
 export const LogEntrySubTitle: React.FC<LogEntrySubComponentProps> = ({ logEntry }) => {

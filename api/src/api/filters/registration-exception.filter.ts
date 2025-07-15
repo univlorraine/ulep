@@ -38,53 +38,21 @@
  *
  */
 
-.line {
-    background: transparent;
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    justify-content: space-between;
-    padding-top: 20px;
-    text-align: start;
-    width: 100%;
-    p {
-        margin: 0;
-    }
-    .image {
-        width: 48px !important;
-        height: 48px !important;
-        max-width: 48px !important;
-        max-height: 48px !important;
-        min-width: 48px !important;
-        min-height: 48px !important;
-        object-fit: contain;
-        display: block;
-        margin: 0 10px 20px 10px;
-    }
+import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
+import { Response } from 'express';
+import { RegistrationException } from 'src/core/errors';
 
-    .content {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        .status_container {
-            margin-bottom: 5px;
-        }
-        .date {
-            color: #737272;
-            font-family: 'Maven Pro', sans-serif;
-            font-size: 13px;
-            font-weight: 400;
-            line-height: 16px;
-            margin-bottom: 5px;
-        }
+@Catch(RegistrationException)
+export class RegistrationExceptionFilter implements ExceptionFilter {
+  catch(exception: RegistrationException, host: ArgumentsHost) {
+    const ctx = host.switchToHttp();
+    const response = ctx.getResponse<Response>();
+    const status = exception.code;
 
-        .message {
-            font-family: 'Maven pro', sans-serif;
-            font-size: 16px;
-            font-weight: 500;
-            color: black;
-            line-height: 20px;
-            margin-bottom: 20px;
-        }
-    }
+    response.status(status).json({
+      statusCode: status,
+      message: exception.message,
+      error: 'Bad Request',
+    });
+  }
 }
