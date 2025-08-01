@@ -64,6 +64,7 @@ import Language from '../../entities/Language';
 import { LearningLanguage } from '../../entities/LearningLanguage';
 import { Profile } from '../../entities/Profile';
 import User from '../../entities/User';
+import useLimitedFeatures from '../../utils/useLimitedFeatures';
 import CertificateModal from './CertificateModal';
 import LogExportButton from './Export/LogExportButton';
 import ProfileExportButton from './Export/ProfileExportButton';
@@ -110,6 +111,7 @@ export const ShowActions = () => {
 const ProfileTab = () => {
     const translate = useTranslate();
     const recordContext = useRecordContext();
+    const limitedFeatures = useLimitedFeatures();
 
     return (
         <TabbedShowLayout syncWithLocation={false}>
@@ -261,13 +263,17 @@ const ProfileTab = () => {
                             sortable={false}
                             source="sharedLogsForResearchDate"
                         />
-                        <ReferenceUploadFileField
-                            label={translate('learning_languages.show.fields.certificateFile')}
-                            sortable={false}
-                            source="certificateFile.id"
-                        />
+                        {!limitedFeatures && (
+                            <>
+                                <ReferenceUploadFileField
+                                    label={translate('learning_languages.show.fields.certificateFile')}
+                                    sortable={false}
+                                    source="certificateFile.id"
+                                />
 
-                        <CertificateModal profile={recordContext as Profile} />
+                                <CertificateModal profile={recordContext as Profile} />
+                            </>
+                        )}
                     </Datagrid>
                 </ArrayField>
             </TabbedShowLayout.Tab>

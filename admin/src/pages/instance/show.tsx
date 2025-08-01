@@ -66,6 +66,7 @@ import useGenerateEditos from '../../components/menu/useGenerateEditos';
 import usePurge from '../../components/menu/usePurge';
 import ConfigPagesHeader from '../../components/tabs/ConfigPagesHeader';
 import Instance from '../../entities/Instance';
+import useLimitedFeatures from '../../utils/useLimitedFeatures';
 
 const InstanceShowAction = () => (
     <TopToolbar>
@@ -82,6 +83,7 @@ const InstanceShow = () => {
     const { mutate: generateConversations, isPending: isGeneratingConversations } = useGenerateConversation();
     const { mutate: generateEditos, isPending: isGeneratingEditos } = useGenerateEditos();
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const limitedFeatures = useLimitedFeatures();
 
     const handleMaintenanceToggle: SwitchProps['onChange'] = async (event) => {
         try {
@@ -201,42 +203,54 @@ const InstanceShow = () => {
                                             </Typography>
                                         </div>
                                     </Button>
-                                    <Button color="secondary" onClick={handleGenerateConversations} variant="contained">
-                                        <div
-                                            style={{
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                            }}
-                                        >
-                                            <QuestionAnswerIcon />
-                                            {isGeneratingConversations ? (
-                                                <CircularProgress size={25} />
-                                            ) : (
-                                                <Typography style={{ marginLeft: 12 }}>
-                                                    {translate('generateConversation.title')}
-                                                </Typography>
-                                            )}
-                                        </div>
-                                    </Button>
-                                    <Button color="secondary" onClick={handleGenerateEditos} variant="contained">
-                                        <div
-                                            style={{
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                            }}
-                                        >
-                                            <FormatQuoteIcon />
-                                            {isGeneratingEditos ? (
-                                                <CircularProgress size={25} />
-                                            ) : (
-                                                <Typography style={{ marginLeft: 12 }}>
-                                                    {translate('generateEditos.title')}
-                                                </Typography>
-                                            )}
-                                        </div>
-                                    </Button>
+                                    {!limitedFeatures && (
+                                        <>
+                                            <Button
+                                                color="secondary"
+                                                onClick={handleGenerateConversations}
+                                                variant="contained"
+                                            >
+                                                <div
+                                                    style={{
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                    }}
+                                                >
+                                                    <QuestionAnswerIcon />
+                                                    {isGeneratingConversations ? (
+                                                        <CircularProgress size={25} />
+                                                    ) : (
+                                                        <Typography style={{ marginLeft: 12 }}>
+                                                            {translate('generateConversation.title')}
+                                                        </Typography>
+                                                    )}
+                                                </div>
+                                            </Button>
+                                            <Button
+                                                color="secondary"
+                                                onClick={handleGenerateEditos}
+                                                variant="contained"
+                                            >
+                                                <div
+                                                    style={{
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                    }}
+                                                >
+                                                    <FormatQuoteIcon />
+                                                    {isGeneratingEditos ? (
+                                                        <CircularProgress size={25} />
+                                                    ) : (
+                                                        <Typography style={{ marginLeft: 12 }}>
+                                                            {translate('generateEditos.title')}
+                                                        </Typography>
+                                                    )}
+                                                </div>
+                                            </Button>
+                                        </>
+                                    )}
                                 </Box>
                             )}
                         />

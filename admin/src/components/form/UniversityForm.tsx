@@ -65,6 +65,7 @@ import { PairingMode } from '../../entities/University';
 import i18nProvider from '../../providers/i18nProvider';
 import isCodeValid from '../../utils/isCodeValid';
 import isUrlValid from '../../utils/isUrlValid';
+import useLimitedFeatures from '../../utils/useLimitedFeatures';
 import AdministratorPicker from '../AdministratorPicker';
 import CountriesPicker from '../CountriesPicker';
 import ReferenceUploadFileField from '../field/ReferenceUploadFileField';
@@ -177,6 +178,7 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
     const [file, setFile] = useState<File>();
     const [newCertificateFile, setNewCertificateFile] = useState<File>();
     const addLanguage = (language: Language) => setNewLanguages([...newLanguages, language]);
+    const limitedFeatures = useLimitedFeatures();
 
     const removeLanguage = (languageToRemove: Language) => {
         setNewLanguages(newLanguages.filter((language) => language.code !== languageToRemove.code));
@@ -512,25 +514,28 @@ const UniversityForm: React.FC<UniversityFormProps> = ({
                                 </>
                             )}
                         </Box>
-                        <Box>
-                            <Typography variant="subtitle1">
-                                {translate(`universities.create.defaultCertificateFile`)}
-                            </Typography>
-                            <FileUploader
-                                accept="application/pdf"
-                                fileType="PDF"
-                                onFileSelect={setNewCertificateFile}
-                                source="defaultCertificateFile.id"
-                            />
-                        </Box>
-                        <Box>
-                            <Typography variant="subtitle1">
-                                {translate(`universities.create.exampleDefaultCertificateFile`)}
-                            </Typography>
-                            <ReferenceUploadFileField source="exampleDefaultCertificateFile.id" />
-                        </Box>
+                        {!limitedFeatures && (
+                            <>
+                                <Box>
+                                    <Typography variant="subtitle1">
+                                        {translate(`universities.create.defaultCertificateFile`)}
+                                    </Typography>
+                                    <FileUploader
+                                        accept="application/pdf"
+                                        fileType="PDF"
+                                        onFileSelect={setNewCertificateFile}
+                                        source="defaultCertificateFile.id"
+                                    />
+                                </Box>
+                                <Box>
+                                    <Typography variant="subtitle1">
+                                        {translate(`universities.create.exampleDefaultCertificateFile`)}
+                                    </Typography>
+                                    <ReferenceUploadFileField source="exampleDefaultCertificateFile.id" />
+                                </Box>
+                            </>
+                        )}
                     </Box>
-
                     <Box flex="1" sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                         <Box>
                             <Typography variant="subtitle1">

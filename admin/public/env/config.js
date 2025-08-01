@@ -44,3 +44,4 @@ window.REACT_APP_CHAT_URL = 'http://0.0.0.0:3003';
 window.REACT_APP_SOCKET_CHAT_URL = 'ws://0.0.0.0:5001';
 window.REACT_APP_JITSI_DOMAIN = 'jitsi.ulep.thestaging.io';
 window.REACT_APP_DEFAULT_TRANSLATION_LANGUAGE = 'FR';
+window.REACT_APP_LIMITED_FEATURES = 'true';
