@@ -47,6 +47,7 @@ import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import Avatar from '../components/Avatar';
 import FlagBubble from '../components/FlagBubble';
 import SuccessLayout from '../components/layout/SuccessLayout';
+import useLimitedFeatures from '../hooks/useLimitedFeatures';
 import { codeLanguageToFlag } from '../utils';
 import styles from './css/PairingFinalPage.module.css';
 
@@ -62,6 +63,7 @@ const PairingFinalPage: React.FC = () => {
     const userSignIn = useStoreState((state) => state.user);
     const user = profile?.user || userSignIn;
     const university = user?.university;
+    const limitedFeatures = useLimitedFeatures();
 
     if ((!profileSignUp.learningLanguage && !loading) || !university || !user) {
         return <Redirect to={`/pairing/languages`} />;
@@ -92,7 +94,7 @@ const PairingFinalPage: React.FC = () => {
         }
 
         updateProfile({ learningLanguage: result });
-        history.push('/home');
+        history.push(limitedFeatures ? '/learning' : '/home');
     };
 
     if (profileSignUp.learningLanguage === undefined) {

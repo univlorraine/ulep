@@ -41,13 +41,14 @@
 import { useIonToast } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
+import { useConfig } from '../../../context/ConfigurationContext';
 import Language from '../../../domain/entities/Language';
 import { useStoreState } from '../../../store/storeTypes';
-import useGetLearnableLanguages from '../../hooks/useGetLearnableLanguages';
 import LearnableLanguagesContent from '../../components/contents/LearnableLanguagesContent';
 import WebLayoutCentered from '../../components/layout/WebLayoutCentered';
+import useGetLearnableLanguages from '../../hooks/useGetLearnableLanguages';
+import useLimitedFeatures from '../../hooks/useLimitedFeatures';
 import styles from '../css/SignUp.module.css';
-import { useConfig } from '../../../context/ConfigurationContext';
 
 const CEFRQuizzLanguagePage: React.FC = () => {
     const { t } = useTranslation();
@@ -56,6 +57,7 @@ const CEFRQuizzLanguagePage: React.FC = () => {
     const { configuration } = useConfig();
     const profile = useStoreState((state) => state.profile);
     const university = profile?.user.university;
+    const limitedFeatures = useLimitedFeatures();
 
     if (!university) {
         return <Redirect to={'/signup'} />;
@@ -80,7 +82,7 @@ const CEFRQuizzLanguagePage: React.FC = () => {
     };
 
     const navigateToHome = () => {
-        return history.push('/home');
+        return history.push(limitedFeatures ? '/learning' : '/home');
     };
 
     const otherLanguages = () => {

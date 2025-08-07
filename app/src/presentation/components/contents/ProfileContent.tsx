@@ -47,6 +47,7 @@ import { useConfig } from '../../../context/ConfigurationContext';
 import Profile from '../../../domain/entities/Profile';
 import { AvatarMaxSizeError } from '../../../domain/usecases/UpdateAvatarUsecase';
 import { useStoreActions, useStoreState } from '../../../store/storeTypes';
+import useLimitedFeatures from '../../hooks/useLimitedFeatures';
 import useLogout from '../../hooks/useLogout';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 import {
@@ -77,8 +78,8 @@ const ProfileContent: React.FC<ProfileContentProps> = ({ onDisplaySettings, prof
     const { width } = useWindowDimensions();
     const isHybrid = width < HYBRID_MAX_WIDTH;
     const history = useHistory();
-
     const { handleLogout } = useLogout();
+    const limitedFeatures = useLimitedFeatures();
 
     const { user } = profile;
 
@@ -167,16 +168,18 @@ const ProfileContent: React.FC<ProfileContentProps> = ({ onDisplaySettings, prof
                         isProfileCard={true}
                         isLoading={loading}
                     />
-                    <ProfileDetailsCard
-                        user={user}
-                        title={t('profile_page.university_card.title')}
-                        onPress={() => setUniversityId(user.university.id)}
-                        textButton={t('profile_page.university_card.button')}
-                        subtitle={user.university.name}
-                        firstInfo={t('profile_page.university_card.semester_date') || ''}
-                        secondInfo={formattedDate(user.university.admissionStart)}
-                        thirdInfo={`${t('profile_page.university_card.end_date')} ${formattedDate(user.university.admissionEnd)}`}
-                    />
+                    {!limitedFeatures && (
+                        <ProfileDetailsCard
+                            user={user}
+                            title={t('profile_page.university_card.title')}
+                            onPress={() => setUniversityId(user.university.id)}
+                            textButton={t('profile_page.university_card.button')}
+                            subtitle={user.university.name}
+                            firstInfo={t('profile_page.university_card.semester_date') || ''}
+                            secondInfo={formattedDate(user.university.admissionStart)}
+                            thirdInfo={`${t('profile_page.university_card.end_date')} ${formattedDate(user.university.admissionEnd)}`}
+                        />
+                    )}
                     {profile.learningLanguages.length > 0 && (
                         <div className={styles.proficiencyTestCard}>
                             <ProficiencyTestCard
