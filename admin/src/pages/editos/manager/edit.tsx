@@ -38,13 +38,13 @@
  *
  */
 
-import { Edit, useNotify, useRefresh, useTranslate, useUpdate, WithRecord } from 'react-admin';
+import { Edit, useNotify, useRefresh, useTranslate, useUpdate, useRecordContext } from 'react-admin';
 import EditoForm from '../../../components/form/EditoForm';
 import PageTitle from '../../../components/PageTitle';
 import { Edito, EditoFormPayload } from '../../../entities/Edito';
 
-const EditEvent = () => {
-    const translate = useTranslate();
+const EditoManagerEditForm = () => {
+    const record = useRecordContext<Edito>();
     const [update] = useUpdate();
     const notify = useNotify();
     const refresh = useRefresh();
@@ -85,14 +85,21 @@ const EditEvent = () => {
         }
     };
 
+    if (!record) {
+        return null;
+    }
+
+    return <EditoForm handleSubmit={handleSubmit} record={record} />;
+};
+
+const EditEvent = () => {
+    const translate = useTranslate();
+
     return (
         <>
             <PageTitle>{translate('editos.title')}</PageTitle>
             <Edit>
-                <WithRecord<Edito>
-                    label="editos"
-                    render={(record) => <EditoForm handleSubmit={handleSubmit} record={record} />}
-                />
+                <EditoManagerEditForm />
             </Edit>
         </>
     );

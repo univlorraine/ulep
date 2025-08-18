@@ -96,16 +96,19 @@ const UniversityShow = (props: any) => {
                             source="maxTandemsPerUser"
                         />
                         <ArrayField label={translate('universities.show.sites')} sortable={false} source="sites">
+                            {/* @ts-ignore */}
                             <SingleFieldList linkType={false}>
                                 <ChipField source="name" />
                             </SingleFieldList>
                         </ArrayField>
                         <TextField label={translate('universities.show.codes')} source="codes">
+                            {/* @ts-ignore */}
                             <SingleFieldList>
                                 <ChipField source="id" />
                             </SingleFieldList>
                         </TextField>
                         <TextField label={translate('universities.show.domains')} source="domains">
+                            {/* @ts-ignore */}
                             <SingleFieldList>
                                 <ChipField source="id" />
                             </SingleFieldList>
@@ -127,6 +130,7 @@ const UniversityShow = (props: any) => {
                             sortable={false}
                             source="specificLanguagesAvailable"
                         >
+                            {/* @ts-ignore */}
                             <SingleFieldList>
                                 <FunctionField
                                     render={(record: Language) => (

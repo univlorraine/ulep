@@ -215,6 +215,7 @@ const ProfileList = (props: any) => {
                         sortable={false}
                         source="masteredLanguages"
                     >
+                        {/* @ts-ignore */}
                         <SingleFieldList linkType={false}>
                             <FunctionField
                                 render={(record: Language) => (

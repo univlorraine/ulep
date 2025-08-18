@@ -374,7 +374,7 @@ const InstanceForm: React.FC<InstanceFormProps> = ({ handleSubmit, instance }) =
                                                         sx={{ padding: '8px 30px' }}
                                                         variant="contained"
                                                     >
-                                                        <span>Ajouter</span>
+                                                        <span>{translate('instance.add_button')}</span>
                                                     </Button>
                                                 </Box>
                                             )}

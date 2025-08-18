@@ -123,6 +123,7 @@
         }
     },
     "instance": {
+        "add_button": "Agregar",
         "button": "Validar y continuar",
         "error": "Error al cargar la solicitud",
         "subtitle": "Elija su solicitud en la siguiente lista",

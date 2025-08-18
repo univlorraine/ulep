@@ -39,7 +39,7 @@
  */
 
 import React from 'react';
-import { useTranslate, useNotify, useRedirect, useUpdate, WithRecord, Edit } from 'react-admin';
+import { useTranslate, useNotify, useRedirect, useUpdate, useRecordContext, Edit } from 'react-admin';
 import CategoryReportForm from '../../components/form/CategoryReportForm';
 import ReportsPagesHeader from '../../components/tabs/ReportsPagesHeader';
 import IndexedTranslation from '../../entities/IndexedTranslation';
@@ -47,17 +47,17 @@ import ReportCategory from '../../entities/ReportCategory';
 import Translation from '../../entities/Translation';
 import indexedTranslationsToTranslations from '../../utils/indexedTranslationsToTranslations';
 
-const EditReportCategory = () => {
-    const translate = useTranslate();
+const ReportCategoryEditForm = () => {
+    const record = useRecordContext<ReportCategory>();
     const [update] = useUpdate();
     const redirect = useRedirect();
     const notify = useNotify();
 
-    const handleSubmit = async (id: string, name: string, translations: IndexedTranslation[]) => {
+    const handleSubmit = async (id: string, newName: string, newTranslations: IndexedTranslation[]) => {
         const payload = {
             id,
-            name,
-            translations: indexedTranslationsToTranslations(translations),
+            name: newName,
+            translations: indexedTranslationsToTranslations(newTranslations),
         };
         try {
             return await update(
@@ -67,9 +67,7 @@ const EditReportCategory = () => {
                     onSuccess: () => redirect('/reports/categories'),
                     onError: (error) => {
                         console.error(error);
-                        notify('report_categories.update.error', {
-                            type: 'error',
-                        });
+                        notify('report_categories.update.error');
                     },
                 }
             );
@@ -80,25 +78,32 @@ const EditReportCategory = () => {
         }
     };
 
+    if (!record) {
+        return null;
+    }
+
+    return (
+        <CategoryReportForm
+            handleSubmit={(name: string, translations: IndexedTranslation[]) =>
+                handleSubmit(record.id, name, translations)
+            }
+            name={record.name.content}
+            tradKey="update"
+            translations={record.name.translations?.map(
+                (translation: Translation, index: number) => new IndexedTranslation(index, translation)
+            )}
+        />
+    );
+};
+
+const EditReportCategory = () => {
+    const translate = useTranslate();
+
     return (
         <>
             <ReportsPagesHeader />
             <Edit title={translate('report_categories.update.title')}>
-                <WithRecord<ReportCategory>
-                    label="interests"
-                    render={(record) => (
-                        <CategoryReportForm
-                            handleSubmit={(name: string, translations: IndexedTranslation[]) =>
-                                handleSubmit(record.id, name, translations)
-                            }
-                            name={record.name.content}
-                            tradKey="update"
-                            translations={record.name.translations?.map(
-                                (translation: Translation, index: number) => new IndexedTranslation(index, translation)
-                            )}
-                        />
-                    )}
-                />
+                <ReportCategoryEditForm />
             </Edit>
         </>
     );

@@ -163,6 +163,7 @@ const ProfileTab = () => {
                 )}
                 <TextField label={translate('global.university')} source="user.university.name" />
                 <ArrayField label={translate('profiles.objectives')} source="objectives">
+                    {/* @ts-ignore */}
                     <SingleFieldList linkType={false}>
                         <ChipField clickable={false} source="name" />
                     </SingleFieldList>
@@ -175,6 +176,7 @@ const ProfileTab = () => {
                     source="meetingFrequency"
                 />
                 <ArrayField label={translate('profiles.interests')} sortable={false} source="interests">
+                    {/* @ts-ignore */}
                     <SingleFieldList linkType={false}>
                         <ChipField clickable={false} source="name" />
                     </SingleFieldList>
@@ -191,6 +193,7 @@ const ProfileTab = () => {
                     sortable={false}
                     source="masteredLanguages"
                 >
+                    {/* @ts-ignore */}
                     <SingleFieldList>
                         <FunctionField
                             render={(record: Language) => (

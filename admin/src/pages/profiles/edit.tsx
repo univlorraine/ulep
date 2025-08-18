@@ -38,11 +38,10 @@
  *
  */
 
-import React from 'react';
 import {
     useTranslate,
     Edit,
-    WithRecord,
+    useRecordContext,
     useUpdate,
     useRedirect,
     useNotify,
@@ -55,12 +54,13 @@ import PageTitle from '../../components/PageTitle';
 import { Role } from '../../entities/Administrator';
 import { Profile, ProfileFormPayload } from '../../entities/Profile';
 
-const ProfileEdit = () => {
+const ProfileEditForm = () => {
+    const record = useRecordContext<Profile>();
     const translate = useTranslate();
     const [update] = useUpdate();
     const redirect = useRedirect();
     const notify = useNotify();
-    const identity = useGetIdentity();
+    const { identity } = useGetIdentity();
     const { permissions } = usePermissions();
 
     const handleSubmit = async (id: string, payload: ProfileFormPayload) => {
@@ -90,6 +90,28 @@ const ProfileEdit = () => {
         }
     };
 
+    if (!record) {
+        return null;
+    }
+
+    const isCentralUniversity = identity?.isCentralUniversity;
+    const adminUniversityId = identity?.universityId;
+    const profileUniversityId = record.user.university.id;
+
+    if (
+        !permissions.checkRoles([Role.MANAGER, Role.SUPER_ADMIN]) ||
+        (!isCentralUniversity && adminUniversityId !== profileUniversityId)
+    ) {
+        return <div>{translate('profiles.update.unauthorized')}</div>;
+    }
+
+    return <ProfileForm handleSubmit={handleSubmit} record={record} />;
+};
+
+const ProfileEdit = () => {
+    const translate = useTranslate();
+    const identity = useGetIdentity();
+
     if (!identity) {
         return <Loading />;
     }
@@ -98,23 +120,7 @@ const ProfileEdit = () => {
         <>
             <PageTitle>{translate('profiles.title')}</PageTitle>
             <Edit title={translate('profiles.update.title')}>
-                <WithRecord<Profile>
-                    label="profiles"
-                    render={(record) => {
-                        const isCentralUniversity = identity?.identity?.isCentralUniversity;
-                        const adminUniversityId = identity?.identity?.universityId;
-                        const profileUniversityId = record.user.university.id;
-
-                        if (
-                            !permissions.checkRoles([Role.MANAGER, Role.SUPER_ADMIN]) ||
-                            (!isCentralUniversity && adminUniversityId !== profileUniversityId)
-                        ) {
-                            return <div>{translate('profiles.update.unauthorized')}</div>;
-                        }
-
-                        return <ProfileForm handleSubmit={handleSubmit} record={record} />;
-                    }}
-                />
+                <ProfileEditForm />
             </Edit>
         </>
     );
