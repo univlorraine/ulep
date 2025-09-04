@@ -171,9 +171,9 @@ export class CreateUserUsecase {
     } else if (command.password && keycloakUser) {
       await this.keycloak.updateUser({
         id: keycloakUser.id,
-        email: keycloakUser.email,
-        firstname: command.firstname,
-        lastname: command.lastname,
+        newEmail: keycloakUser.email,
+        newFirstName: command.firstname,
+        newLastName: command.lastname,
         password: command.password,
         universityId:
           keycloakUser.attributes?.universityId?.[0] || university.id,
