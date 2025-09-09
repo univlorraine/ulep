@@ -94,6 +94,7 @@ export class Tandem {
   readonly updatedAt?: Date;
 
   constructor(props: CreateTandemProps) {
+    console.log('[Tandem] Tandem constructor props', props);
     this.id = props.id;
     this.status = props.status;
     this.learningType = props.learningType;
@@ -106,6 +107,7 @@ export class Tandem {
       this.learningLanguages = [...props.learningLanguages];
       this.assertNoErrors();
     }
+    console.log('[Tandem] Tandem constructor this', this);
   }
 
   static create(props: CreateTandemProps): Tandem {
