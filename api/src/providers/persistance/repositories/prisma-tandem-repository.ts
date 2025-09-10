@@ -140,10 +140,7 @@ export class PrismaTandemRepository implements TandemRepository {
       },
     });
 
-    console.log('[PrismaTandemRepository] Tandems count', count);
-
     if (props.offset && props.offset >= count) {
-      console.log('[PrismaTandemRepository] Tandems offset out of range');
       return { items: [], totalItems: count };
     }
 
@@ -156,18 +153,12 @@ export class PrismaTandemRepository implements TandemRepository {
       include: TandemRelations,
     });
 
-    console.log('[PrismaTandemRepository] Tandems found :', tandems.length);
-
     const items = tandems.map(tandemMapper);
-
-    console.log('[PrismaTandemRepository] Tandems items', items);
 
     const result = {
       items,
       totalItems: count,
     };
-
-    console.log('[PrismaTandemRepository] Tandems result', result);
 
     return result;
   }
