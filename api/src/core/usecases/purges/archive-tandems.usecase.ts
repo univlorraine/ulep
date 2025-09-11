@@ -167,7 +167,10 @@ export class ArchiveTandemsAndDeleteUsersUsecase {
     );
 
     await Promise.all([
-      this.tandemRepository.archiveTandems(activeTandems.items, purgeId),
+      this.tandemRepository.archiveTandems(
+        activeTandems.items.filter((tandem) => tandem.isValid),
+        purgeId,
+      ),
       this.tandemRepository.deleteAll(),
     ]);
     console.log(
