@@ -59,7 +59,6 @@ export type TandemSnapshot = Prisma.Tandems & {
 };
 
 export const tandemMapper = (instance: TandemSnapshot): Tandem => {
-  console.log('[TandemMapper] Tandem instance', instance);
   const tandem = new Tandem({
     id: instance.id,
     learningLanguages: instance.LearningLanguages?.map(learningLanguageMapper),
@@ -72,6 +71,5 @@ export const tandemMapper = (instance: TandemSnapshot): Tandem => {
     updatedAt: instance.updated_at,
   });
 
-  console.log('[TandemMapper] Tandem domain', tandem);
   return tandem;
 };
