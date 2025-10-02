@@ -115,26 +115,37 @@ export class ArchiveTandemsAndDeleteUsersUsecase {
 
   async execute(command: UserTandemPurgeCommand): Promise<Purge> {
     // Create purge
+    console.log('[Purge] Create new purge');
     const purge = await this.createNewPurge(command.userId);
     // Blacklist users who have been banned
+    console.log('[Purge] Blacklist users who have been banned');
     await this.blacklistUsers();
     // Archive all unmatched learning languages
+    console.log('[Purge] Archive all unmatched learning languages');
     const userWithUnmatchedLearningLanguages =
       await this.archiveUnmatchedLearningLanguages(purge.id);
     // Retrieve all users who have an active tandem
+    console.log('[Purge] Archive all active tandems');
     const activeTandems = await this.archiveTandems(purge.id);
+    console.log('[Purge] Retrieve all users who have an active tandem');
     const usersWithActiveTandem = this.getUserIdFromTandems(activeTandems);
     // Delete inactives users and are not administrators
+    console.log('[Purge] Delete users');
     await this.deleteUsers([
       ...usersWithActiveTandem,
       ...userWithUnmatchedLearningLanguages,
     ]);
     // Delete closed reports
+    console.log('[Purge] Delete closed reports');
     await this.deleteClosedReports();
     // Delete everything in chat api
+    console.log('[Purge] Delete all conversations in chat api');
     await this.chatService.deleteAllConversations();
+    // Delete all community chats
+    console.log('[Purge] Delete all community chats');
     await this.communityChatRepository.deleteAll();
 
+    console.log('[Purge] Purge completed');
     return purge;
   }
 
@@ -151,11 +162,20 @@ export class ArchiveTandemsAndDeleteUsersUsecase {
     const activeTandems = await this.tandemRepository.findWhere({
       status: TandemStatus.ACTIVE,
     });
+    console.log(
+      '[Purge] Archive all active tandems - Active tandems retreived',
+    );
 
     await Promise.all([
-      this.tandemRepository.archiveTandems(activeTandems.items, purgeId),
+      this.tandemRepository.archiveTandems(
+        activeTandems.items.filter((tandem) => tandem.isValid),
+        purgeId,
+      ),
       this.tandemRepository.deleteAll(),
     ]);
+    console.log(
+      '[Purge] Archive all active tandems - Active tandems archived and all tandems deleted',
+    );
 
     return activeTandems.items;
   }
@@ -163,10 +183,16 @@ export class ArchiveTandemsAndDeleteUsersUsecase {
   private async archiveUnmatchedLearningLanguages(purgeId: string) {
     const unmatchedLearningLanguages =
       await this.learningLanguageRepository.getUnmatchedLearningLanguages();
+    console.log(
+      '[Purge] Archive all unmatched learning languages - Unmatched learning languages retreived',
+    );
 
     await this.learningLanguageRepository.archiveUnmatchedLearningLanguages(
       unmatchedLearningLanguages,
       purgeId,
+    );
+    console.log(
+      '[Purge] Archive all unmatched learning languages - Unmatched learning languages archived',
     );
 
     return unmatchedLearningLanguages.map((l) => l.profile.user.id);
@@ -177,10 +203,15 @@ export class ArchiveTandemsAndDeleteUsersUsecase {
     const administratorsIds = (await this.keycloak.getAdministrators()).map(
       (administrator) => administrator.id,
     );
+    console.log(
+      '[Purge] Delete users - Administrators retreived from Keycloak',
+    );
     // Retrieve the total number of users in keycloak
     const usersCount = await this.keycloak.getUsersCount();
+    console.log('[Purge] Delete users - Users count retreived from Keycloak');
     // Retrieve all users from keycloak
     const keycloakUsers = await this.keycloak.getUsers({ max: usersCount });
+    console.log('[Purge] Delete users - Users retreived from Keycloak');
     // Loop through all users in keycloak
     for (const user of keycloakUsers) {
       // Check if the user is an administrator
@@ -194,22 +225,31 @@ export class ArchiveTandemsAndDeleteUsersUsecase {
       // If the user is not an administrator and does not have an active tandem, delete it
       await this.keycloak.deleteUser(user.id);
     }
+    console.log('[Purge] Delete users - Keycloak users deleted');
 
     // Finally, delete all users from the application. Users with active tandems
     // will still be in keycloak in case they want to register again in the next campaign.
     // We call the deleteUsersUsecase for each user to delete the user's image from the storage.
     const users = await this.userRepository.findAll();
+    console.log('[Purge] Delete users - Users retreived from database');
     for (const user of users.items) {
       await this.deleteUsersUsecase.execute({
         id: user.id,
         shouldKeepKeycloakUser: true,
       });
     }
+    console.log('[Purge] Delete users - Users deleted from database');
   }
 
   private async blacklistUsers(): Promise<void> {
     const users = await this.userRepository.ofStatus(UserStatus.BANNED);
+    console.log(
+      '[Purge] Blacklist users who have been banned - Users retreived',
+    );
     await this.userRepository.blacklist(users);
+    console.log(
+      '[Purge] Blacklist users who have been banned - Users blacklisted',
+    );
   }
 
   private async deleteClosedReports(): Promise<void> {

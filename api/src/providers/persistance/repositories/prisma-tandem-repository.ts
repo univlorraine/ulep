@@ -153,10 +153,14 @@ export class PrismaTandemRepository implements TandemRepository {
       include: TandemRelations,
     });
 
-    return {
-      items: tandems.map(tandemMapper),
+    const items = tandems.map(tandemMapper);
+
+    const result = {
+      items,
       totalItems: count,
     };
+
+    return result;
   }
 
   async getExistingTandems(): Promise<Tandem[]> {

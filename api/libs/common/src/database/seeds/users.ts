@@ -50,6 +50,7 @@ export const createUsers = async (
   prisma: Prisma.PrismaClient,
 ): Promise<Prisma.Users[]> => {
   const users: Prisma.Users[] = [];
+  let emailCounter = 1;
 
   const universities = await prisma.organizations.findMany();
   const [centralUniversity, partnerUniversities] = universities.reduce(
@@ -76,7 +77,7 @@ export const createUsers = async (
     const user = await prisma.users.create({
       data: {
         id: faker.string.uuid(),
-        email: faker.internet.email(),
+        email: `user${emailCounter}@example.com`,
         firstname: faker.person.firstName(),
         lastname: faker.person.lastName(),
         gender: faker.helpers.arrayElement(['MALE', 'FEMALE', 'OTHER']),
@@ -96,6 +97,7 @@ export const createUsers = async (
     });
 
     users.push(user);
+    emailCounter++;
   }
 
   for (let i = 0; i < nbUserPartnersUniversity; i++) {
@@ -114,7 +116,7 @@ export const createUsers = async (
     const user = await prisma.users.create({
       data: {
         id: faker.string.uuid(),
-        email: faker.internet.email(),
+        email: `user${emailCounter}@example.com`,
         firstname: faker.person.firstName(),
         lastname: faker.person.lastName(),
         gender: faker.helpers.arrayElement(['MALE', 'FEMALE', 'OTHER']),
@@ -134,6 +136,7 @@ export const createUsers = async (
     });
 
     users.push(user);
+    emailCounter++;
   }
 
   return users;

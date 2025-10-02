@@ -556,14 +556,76 @@ export class PrismaLearningLanguageRepository
   }
 
   async getUnmatchedLearningLanguages() {
-    const learningLanguages = await this.prisma.learningLanguages.findMany({
+    // Optimized approach: first retrieve just the user IDs
+    const userIds = await this.getUnmatchedLearningLanguageUserIds();
+
+    if (userIds.length === 0) {
+      return [];
+    }
+
+    // Then, retrieve learning languages in batches for these users
+    const batchSize = 50;
+    let offset = 0;
+    let allMappedLearningLanguages: LearningLanguage[] = [];
+    let hasMore = true;
+
+    while (hasMore) {
+      const batch = await this.prisma.learningLanguages.findMany({
+        where: {
+          Tandem: null,
+          profile_id: {
+            in: userIds.slice(offset, offset + batchSize),
+          },
+        },
+        include: LearningLanguageRelations,
+        orderBy: {
+          id: 'asc',
+        },
+      });
+
+      if (batch.length === 0) {
+        hasMore = false;
+      } else {
+        // Map the batch immediately to free up memory
+        const mappedBatch = batch
+          .filter((ll) => ll !== null && ll !== undefined)
+          .map((ll) => {
+            try {
+              return learningLanguageMapper(ll);
+            } catch (error) {
+              console.info(`Error mapping learning language ${ll.id}:`, error);
+              return null;
+            }
+          })
+          .filter((ll) => ll !== null);
+
+        allMappedLearningLanguages =
+          allMappedLearningLanguages.concat(mappedBatch);
+        offset += batchSize;
+
+        // If we have processed all users
+        if (offset >= userIds.length) {
+          hasMore = false;
+        }
+      }
+    }
+
+    return allMappedLearningLanguages;
+  }
+
+  private async getUnmatchedLearningLanguageUserIds(): Promise<string[]> {
+    // Retrieve just the profile IDs for unmatched learning languages
+    const result = await this.prisma.learningLanguages.findMany({
       where: {
         Tandem: null,
       },
-      include: LearningLanguageRelations,
+      select: {
+        profile_id: true,
+      },
+      distinct: ['profile_id'],
     });
 
-    return learningLanguages.map(learningLanguageMapper);
+    return result.map((r) => r.profile_id);
   }
 
   async archiveUnmatchedLearningLanguages(

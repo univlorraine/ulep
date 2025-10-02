@@ -125,8 +125,9 @@ const load = async () => {
       await insertUlData(prisma);
     } else if (seedRandomDataset) {
       console.info('[DB seed] random dataset');
-      await createUsers(200, 100, prisma);
+      await createUsers(2000, 1000, prisma);
       await createProfiles(prisma);
+      // await createTandems(prisma, 1000);
       await createNews(20, prisma);
       await createEvents(40, prisma);
     }
