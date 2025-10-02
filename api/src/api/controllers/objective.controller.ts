@@ -170,7 +170,7 @@ export class ObjectiveController {
     return this.deleteObjectiveUsecase.execute({ id });
   }
 
-  @Put()
+  @Put(':id')
   @Roles(Role.ADMIN)
   @UseInterceptors(FileInterceptor('file'))
   @UseGuards(AuthenticationGuard)

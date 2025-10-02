@@ -134,17 +134,17 @@ export class UpdateReportStatusUsecase {
           }
         }
       }
-
-      return this.reportRepository.updateReport(
-        command.id,
-        command.status,
-        command.comment,
-        {
-          ...instance.metadata,
-          isMessageDeleted:
-            command.shouldDeleteMessage || instance.metadata?.isMessageDeleted,
-        },
-      );
     }
+
+    return this.reportRepository.updateReport(
+      command.id,
+      command.status,
+      command.comment,
+      {
+        ...instance.metadata,
+        isMessageDeleted:
+          command.shouldDeleteMessage || instance.metadata?.isMessageDeleted,
+      },
+    );
   }
 }

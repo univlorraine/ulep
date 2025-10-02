@@ -85,7 +85,7 @@ const InterestCategoryList = () => {
                     >
                         <FunctionField
                             render={(record: InterestCategory) => (
-                                <Box style={{ display: 'flex', flexDirection: 'row', gap: '5px' }}>
+                                <Box style={{ display: 'flex', flexDirection: 'row', gap: '5px', flexWrap: 'wrap' }}>
                                     {record.interests.map((interest: any) => (
                                         <Link key={interest.id} to={`/interests/${interest.id}/show`}>
                                             <ColoredChips color="secondary" label={interest.name} />

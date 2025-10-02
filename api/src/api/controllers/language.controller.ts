@@ -127,17 +127,6 @@ export class LanguageController {
     });
   }
 
-  @Get(':id')
-  @UseGuards(AuthenticationGuard)
-  @CollectionResponse(LanguageResponse)
-  @Swagger.ApiOperation({ summary: 'Get Language ressource.' })
-  @Swagger.ApiOkResponse({ type: LanguageResponse })
-  async findOne(@Param('id') id: string) {
-    const language = await this.getLanguageUsecase.execute({ id });
-
-    return LanguageResponse.fromLanguage(language);
-  }
-
   @Put()
   @Roles(Role.ADMIN)
   @UseGuards(AuthenticationGuard)
@@ -220,5 +209,16 @@ export class LanguageController {
     });
 
     return LanguageRequestsCountResponse.fromDomain(count);
+  }
+
+  @Get(':id')
+  @UseGuards(AuthenticationGuard)
+  @CollectionResponse(LanguageResponse)
+  @Swagger.ApiOperation({ summary: 'Get Language ressource.' })
+  @Swagger.ApiOkResponse({ type: LanguageResponse })
+  async findOne(@Param('id') id: string) {
+    const language = await this.getLanguageUsecase.execute({ id });
+
+    return LanguageResponse.fromLanguage(language);
   }
 }

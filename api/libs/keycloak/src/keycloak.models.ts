@@ -156,11 +156,12 @@ export interface CreateAdministratorProps {
   groups: string[];
 }
 
-export interface UpdateAdministratorProps {
+export interface UpdateKeycloakUserProps {
   id: string;
-  firstname?: string;
-  lastname?: string;
-  email?: string;
+  newFirstName?: string;
+  newLastName?: string;
+  newEmail?: string;
+  previousEmail?: string;
   password?: string;
   universityId?: string;
   languageId?: string;
@@ -169,7 +170,7 @@ export interface UpdateAdministratorProps {
   mimetype?: string;
 }
 
-export interface UpdateAdministratorPayload {
+export interface UpdateKeycloakUserPayload {
   email: string;
   firstName?: string;
   lastName?: string;
