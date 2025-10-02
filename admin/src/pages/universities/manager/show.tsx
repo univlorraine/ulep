@@ -92,16 +92,19 @@ const UniversityShow = (props: any) => {
                 <DateField label={translate('universities.show.close_service')} source="closeServiceDate" />
                 <TextField label={translate('universities.show.max_tandems_per_user')} source="maxTandemsPerUser" />
                 <ArrayField label={translate('universities.show.sites')} sortable={false} source="sites">
+                    {/* @ts-ignore */}
                     <SingleFieldList linkType={false}>
                         <ChipField source="name" />
                     </SingleFieldList>
                 </ArrayField>
                 <TextField label={translate('universities.show.codes')} source="codes">
+                    {/* @ts-ignore */}
                     <SingleFieldList>
                         <ChipField source="id" />
                     </SingleFieldList>
                 </TextField>
                 <TextField label={translate('universities.show.domains')} source="domains">
+                    {/* @ts-ignore */}
                     <SingleFieldList>
                         <ChipField source="id" />
                     </SingleFieldList>

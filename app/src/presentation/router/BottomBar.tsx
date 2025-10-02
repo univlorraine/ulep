@@ -50,6 +50,7 @@ import NewActivityMenuModal from '../components/modals/NewActivityMenuModal';
 import NewLogEntryMenuModal from '../components/modals/NewLogEntryMenuModal';
 import NewSessionMenuModal from '../components/modals/NewSessionMenuModal';
 import NewVocabularyMenuModal from '../components/modals/NewVocabularyMenuModal';
+import useLimitedFeatures from '../hooks/useLimitedFeatures';
 import ConversationsPage from '../pages/ConversationsPage';
 import HomePage from '../pages/HomePage';
 import LearningPage from '../pages/LearningPage';
@@ -59,27 +60,30 @@ import PrivateRoute from './PrivateRoute';
 
 const BottomBar: React.FC = () => {
     const { t } = useTranslation();
-
     const [isMenuNewVisible, setIsMenuNewVisible] = useState(false);
-
     const [showVocabularyModal, setShowVocabularyModal] = useState<boolean>(false);
     const [showActivityModal, setShowActivityModal] = useState<boolean>(false);
     const [showSessionModal, setShowSessionModal] = useState<boolean>(false);
     const [showLearningDiaryModal, setShowLearningDiaryModal] = useState<boolean>(false);
-
     const profile = useStoreState((state) => state.profile);
     const hasLearningLanguages = profile && profile.learningLanguages && profile.learningLanguages.length >= 1;
+    const limitedFeatures = useLimitedFeatures();
+
     return (
         <PrivateRoute path="/(home|conversations|learning|profile)">
             <IonTabs>
                 <IonRouterOutlet>
                     <Switch>
-                        <Route exact path="/home">
-                            <HomePage />
-                        </Route>
-                        <Route exact path="/conversations">
-                            <ConversationsPage />
-                        </Route>
+                        {!limitedFeatures && (
+                            <>
+                                <Route exact path="/home">
+                                    <HomePage />
+                                </Route>
+                                <Route exact path="/conversations">
+                                    <ConversationsPage />
+                                </Route>
+                            </>
+                        )}
                         <Route exact path="/learning">
                             <LearningPage />
                         </Route>
@@ -95,30 +99,34 @@ const BottomBar: React.FC = () => {
                     onClick={() => setIsMenuNewVisible(false)}
                     role="navigation"
                 >
-                    <IonTabButton tab="home" href="/home">
-                        <img alt="Home" src={HomeSvg} />
-                        <span>{t('navigation.bottom_bar.home')}</span>
-                    </IonTabButton>
+                    {!limitedFeatures && (
+                        <IonTabButton tab="home" href="/home">
+                            <img alt="Home" src={HomeSvg} />
+                            <span>{t('navigation.bottom_bar.home')}</span>
+                        </IonTabButton>
+                    )}
                     <IonTabButton tab="learning" href="/learning">
                         <img alt="Learning" src={LearningSvg} />
                         <span>{t('navigation.bottom_bar.learning')}</span>
                     </IonTabButton>
-                    {hasLearningLanguages && (
+                    {!limitedFeatures && hasLearningLanguages && (
                         <IonTabButton className={styles.newIcon_button}>
                             <div className={styles.newIcon_container}></div>
                         </IonTabButton>
                     )}
-                    <IonTabButton tab="conversations" href="/conversations">
-                        <img alt="Conversations" src={ConversationsSvg} />
-                        <span>{t('navigation.bottom_bar.conversations')}</span>
-                    </IonTabButton>
+                    {!limitedFeatures && (
+                        <IonTabButton tab="conversations" href="/conversations">
+                            <img alt="Conversations" src={ConversationsSvg} />
+                            <span>{t('navigation.bottom_bar.conversations')}</span>
+                        </IonTabButton>
+                    )}
                     <IonTabButton tab="profile" href="/profile">
                         <img alt="Profile" src={ProfileSvg} />
                         <span>{t('navigation.bottom_bar.profile')}</span>
                     </IonTabButton>
                 </IonTabBar>
             </IonTabs>
-            {hasLearningLanguages && (
+            {!limitedFeatures && hasLearningLanguages && (
                 <>
                     <div
                         className={`${styles.newIcon} ${isMenuNewVisible ? styles.active : ''}`}
@@ -142,18 +150,26 @@ const BottomBar: React.FC = () => {
                     />
                 </>
             )}
-            <NewVocabularyMenuModal
-                isVisible={showVocabularyModal}
-                onClose={() => setShowVocabularyModal(false)}
-                isHybrid
-            />
-            <NewActivityMenuModal isVisible={showActivityModal} onClose={() => setShowActivityModal(false)} isHybrid />
-            <NewSessionMenuModal isVisible={showSessionModal} onClose={() => setShowSessionModal(false)} />
-            <NewLogEntryMenuModal
-                isVisible={showLearningDiaryModal}
-                onClose={() => setShowLearningDiaryModal(false)}
-                isHybrid
-            />
+            {!limitedFeatures && (
+                <>
+                    <NewVocabularyMenuModal
+                        isVisible={showVocabularyModal}
+                        onClose={() => setShowVocabularyModal(false)}
+                        isHybrid
+                    />
+                    <NewActivityMenuModal
+                        isVisible={showActivityModal}
+                        onClose={() => setShowActivityModal(false)}
+                        isHybrid
+                    />
+                    <NewSessionMenuModal isVisible={showSessionModal} onClose={() => setShowSessionModal(false)} />
+                    <NewLogEntryMenuModal
+                        isVisible={showLearningDiaryModal}
+                        onClose={() => setShowLearningDiaryModal(false)}
+                        isHybrid
+                    />
+                </>
+            )}
         </PrivateRoute>
     );
 };

@@ -38,8 +38,7 @@
  *
  */
 
-import React from 'react';
-import { useTranslate, useNotify, useRedirect, useUpdate, Edit, WithRecord } from 'react-admin';
+import { useTranslate, useNotify, useRedirect, useUpdate, Edit, useRecordContext } from 'react-admin';
 import InterestForm from '../../components/form/InterestForm';
 import ConfigPagesHeader from '../../components/tabs/ConfigPagesHeader';
 import IndexedTranslation from '../../entities/IndexedTranslation';
@@ -47,8 +46,8 @@ import InterestCategory from '../../entities/InterestCategory';
 import Translation from '../../entities/Translation';
 import indexedTranslationsToTranslations from '../../utils/indexedTranslationsToTranslations';
 
-const EditInterestCategory = () => {
-    const translate = useTranslate();
+const CategoryInterestEditForm = () => {
+    const record = useRecordContext<InterestCategory>();
     const [update] = useUpdate();
     const redirect = useRedirect();
     const notify = useNotify();
@@ -78,26 +77,33 @@ const EditInterestCategory = () => {
         }
     };
 
+    if (!record) {
+        return null;
+    }
+
+    return (
+        <InterestForm
+            handleSubmit={(name: string, translations: IndexedTranslation[]) =>
+                handleSubmit(record.id, name, translations)
+            }
+            name={record.name.content}
+            tradKey="interest_categories"
+            tradModeKey="update"
+            translations={record.name.translations?.map(
+                (translation: Translation, index: number) => new IndexedTranslation(index, translation)
+            )}
+        />
+    );
+};
+
+const EditInterestCategory = () => {
+    const translate = useTranslate();
+
     return (
         <>
             <ConfigPagesHeader />
             <Edit title={translate('interest_categories.update.title')}>
-                <WithRecord<InterestCategory>
-                    label="interests/categories/"
-                    render={(record) => (
-                        <InterestForm
-                            handleSubmit={(name: string, translations: IndexedTranslation[]) =>
-                                handleSubmit(record.id, name, translations)
-                            }
-                            name={record.name.content}
-                            tradKey="interest_categories"
-                            tradModeKey="update"
-                            translations={record.name.translations?.map(
-                                (translation: Translation, index: number) => new IndexedTranslation(index, translation)
-                            )}
-                        />
-                    )}
-                />
+                <CategoryInterestEditForm />
             </Edit>
         </>
     );

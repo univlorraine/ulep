@@ -45,6 +45,7 @@ import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router';
 import { ConversationsSvg, HomeSvg, LearningSvg, ProfileSvg } from '../../../assets';
 import { useStoreState } from '../../../store/storeTypes';
+import useLimitedFeatures from '../../hooks/useLimitedFeatures';
 import MenuNew from '../MenuNew';
 import styles from './Sidebar.module.css';
 
@@ -68,6 +69,7 @@ const Sidebar: React.FC<SidebarProps> = ({
     const history = useHistory();
     const location = useLocation();
     const profile = useStoreState((state) => state.profile);
+    const limitedFeatures = useLimitedFeatures();
 
     const navigateToHome = () => {
         history.push('/home');
@@ -90,22 +92,24 @@ const Sidebar: React.FC<SidebarProps> = ({
     return (
         <>
             <IonList lines="none" className={styles.container}>
-                <IonItem
-                    button={true}
-                    className={`${styles.line} ${location.pathname === '/home' ? styles.active : ''}`}
-                    aria-current={location.pathname === '/home' ? 'location' : 'false'}
-                    onClick={navigateToHome}
-                    color={location.pathname === '/home' ? 'dark' : undefined}
-                >
-                    <img
-                        alt={t('navigation.sidebar.home') as string}
-                        src={HomeSvg}
-                        aria-hidden={true}
-                        className={`${styles.image} ${location.pathname === '/home' ? styles.imageActive : ''}`}
-                    />
-                    <span className={styles.title}>{t('navigation.sidebar.home')}</span>
-                    {location.pathname === '/home' && <div className={styles.light}></div>}
-                </IonItem>
+                {!limitedFeatures && (
+                    <IonItem
+                        button={true}
+                        className={`${styles.line} ${location.pathname === '/home' ? styles.active : ''}`}
+                        aria-current={location.pathname === '/home' ? 'location' : 'false'}
+                        onClick={navigateToHome}
+                        color={location.pathname === '/home' ? 'dark' : undefined}
+                    >
+                        <img
+                            alt={t('navigation.sidebar.home') as string}
+                            src={HomeSvg}
+                            aria-hidden={true}
+                            className={`${styles.image} ${location.pathname === '/home' ? styles.imageActive : ''}`}
+                        />
+                        <span className={styles.title}>{t('navigation.sidebar.home')}</span>
+                        {location.pathname === '/home' && <div className={styles.light}></div>}
+                    </IonItem>
+                )}
                 <IonItem
                     button={true}
                     className={`${styles.line} ${location.pathname === '/learning' ? styles.active : ''}`}
@@ -122,22 +126,24 @@ const Sidebar: React.FC<SidebarProps> = ({
                     <span className={styles.title}>{t('navigation.sidebar.learning')}</span>
                     {location.pathname === '/learning' && <div className={styles.light}></div>}
                 </IonItem>
-                <IonItem
-                    button={true}
-                    className={`${styles.line} ${location.pathname === '/conversations' ? styles.active : ''}`}
-                    aria-current={location.pathname === '/conversations' ? 'location' : 'false'}
-                    onClick={navigateToConversations}
-                    color={location.pathname === '/conversations' ? 'dark' : undefined}
-                >
-                    <img
-                        alt={t('navigation.sidebar.conversations') as string}
-                        src={ConversationsSvg}
-                        aria-hidden={true}
-                        className={`${styles.image} ${location.pathname === '/conversations' ? styles.imageActive : ''}`}
-                    />
-                    <span className={styles.title}>{t('navigation.sidebar.conversations')}</span>
-                    {location.pathname === '/conversations' && <div className={styles.light}></div>}
-                </IonItem>
+                {!limitedFeatures && (
+                    <IonItem
+                        button={true}
+                        className={`${styles.line} ${location.pathname === '/conversations' ? styles.active : ''}`}
+                        aria-current={location.pathname === '/conversations' ? 'location' : 'false'}
+                        onClick={navigateToConversations}
+                        color={location.pathname === '/conversations' ? 'dark' : undefined}
+                    >
+                        <img
+                            alt={t('navigation.sidebar.conversations') as string}
+                            src={ConversationsSvg}
+                            aria-hidden={true}
+                            className={`${styles.image} ${location.pathname === '/conversations' ? styles.imageActive : ''}`}
+                        />
+                        <span className={styles.title}>{t('navigation.sidebar.conversations')}</span>
+                        {location.pathname === '/conversations' && <div className={styles.light}></div>}
+                    </IonItem>
+                )}
                 <IonItem
                     button={true}
                     className={`${styles.line} ${location.pathname === '/profile' ? styles.active : ''}`}
@@ -155,7 +161,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                     {location.pathname === '/profile' && <div className={styles.light}></div>}
                 </IonItem>
                 <div className={styles.separator}></div>
-                {hasLearningLanguages && (
+                {!limitedFeatures && hasLearningLanguages && (
                     <>
                         <IonItem button={true} className={styles.line} id="click-trigger-new">
                             <IonIcon icon={addOutline} size="large" aria-hidden={true} />
@@ -169,7 +175,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                     <span>{t('home_page.report.report_button')}</span>
                 </IonItem>
             </IonList>
-            {hasLearningLanguages && (
+            {!limitedFeatures && hasLearningLanguages && (
                 <MenuNew
                     className={styles.menuNew}
                     onVocabularyPressed={onDisplayVocabularySidebar}

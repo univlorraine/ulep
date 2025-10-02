@@ -38,16 +38,15 @@
  *
  */
 
-import React from 'react';
-import { useTranslate, useNotify, useRedirect, useUpdate, Edit, WithRecord } from 'react-admin';
+import { useTranslate, useNotify, useRedirect, useUpdate, Edit, useRecordContext } from 'react-admin';
 import ObjectiveForm from '../../components/form/ObjectiveForm';
 import PageTitle from '../../components/PageTitle';
 import IndexedTranslation from '../../entities/IndexedTranslation';
 import Objective from '../../entities/Objective';
 import indexedTranslationsToTranslations from '../../utils/indexedTranslationsToTranslations';
 
-const EditObjective = () => {
-    const translate = useTranslate();
+const ObjectiveEditForm = () => {
+    const record = useRecordContext<Objective>();
     const [update] = useUpdate();
     const redirect = useRedirect();
     const notify = useNotify();
@@ -85,24 +84,31 @@ const EditObjective = () => {
         }
     };
 
+    if (!record) {
+        return null;
+    }
+
+    return (
+        <ObjectiveForm
+            handleSubmit={(name: string, translations: IndexedTranslation[], file?: File) =>
+                handleSubmit(record.id, name, translations, file)
+            }
+            name={record.name.content}
+            tranlsations={record.name.translations.map(
+                (translation, index) => new IndexedTranslation(index, translation)
+            )}
+        />
+    );
+};
+
+const EditObjective = () => {
+    const translate = useTranslate();
+
     return (
         <>
             <PageTitle>{translate('objectives.title')}</PageTitle>
             <Edit title={translate('objectives.update.title')}>
-                <WithRecord<Objective>
-                    label="objective"
-                    render={(record) => (
-                        <ObjectiveForm
-                            handleSubmit={(name: string, translations: IndexedTranslation[], file?: File) =>
-                                handleSubmit(record.id, name, translations, file)
-                            }
-                            name={record.name.content}
-                            tranlsations={record.name.translations.map(
-                                (translation, index) => new IndexedTranslation(index, translation)
-                            )}
-                        />
-                    )}
-                />
+                <ObjectiveEditForm />
             </Edit>
         </>
     );

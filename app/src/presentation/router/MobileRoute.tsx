@@ -41,6 +41,7 @@
 import { ReactNode } from 'react';
 import { Route, RouteProps } from 'react-router-dom';
 import { useStoreState } from '../../store/storeTypes';
+import useLimitedFeatures from '../hooks/useLimitedFeatures';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../utils';
 
@@ -52,6 +53,7 @@ const MobileRoute: React.FC<PrivateRouteProps> = ({ children, ...props }) => {
     const token = useStoreState((state) => state.accessToken);
     const { width } = useWindowDimensions();
     const isHybrid = width < HYBRID_MAX_WIDTH;
+    const limitedFeatures = useLimitedFeatures();
 
     if (!token) {
         window.location.href = '/';
@@ -59,7 +61,7 @@ const MobileRoute: React.FC<PrivateRouteProps> = ({ children, ...props }) => {
     }
 
     if (!isHybrid) {
-        window.location.href = '/home';
+        window.location.href = limitedFeatures ? '/learning' : '/home';
         return null;
     }
 

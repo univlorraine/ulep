@@ -48,6 +48,7 @@ import User from '../../domain/entities/User';
 import { useStoreActions } from '../../store/storeTypes';
 import CenterLayout from '../components/layout/CenterLayout';
 import Loader from '../components/Loader';
+import useLimitedFeatures from '../hooks/useLimitedFeatures';
 
 const AuthPage: React.FC = () => {
     const { t } = useTranslation();
@@ -59,6 +60,7 @@ const AuthPage: React.FC = () => {
     const setUser = useStoreActions((store) => store.setUser);
     const history = useHistory();
     const [showToast] = useIonToast();
+    const limitedFeatures = useLimitedFeatures();
 
     const getAccessToken = async (code: string) => {
         const result = await getTokenFromCodeUsecase.execute({
@@ -79,7 +81,7 @@ const AuthPage: React.FC = () => {
         const resultProfile = await getProfile.execute(result.accessToken);
         if (resultProfile instanceof Profile) {
             setProfile({ profile: resultProfile });
-            return history.push('/home');
+            return history.push(limitedFeatures ? '/learning' : '/home');
         }
 
         const resultUser = await getUser.execute(result.accessToken);

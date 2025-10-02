@@ -38,13 +38,13 @@
  *
  */
 
-import { Edit, useNotify, useRedirect, useTranslate, useUpdate, WithRecord } from 'react-admin';
+import { Edit, useNotify, useRedirect, useTranslate, useUpdate, useRecordContext } from 'react-admin';
 import InstanceForm from '../../components/form/InstanceForm';
 import ConfigPagesHeader from '../../components/tabs/ConfigPagesHeader';
 import Instance, { InstanceFormPayload } from '../../entities/Instance';
 
-const EditInstance = () => {
-    const translate = useTranslate();
+const InstanceEditForm = () => {
+    const record = useRecordContext<Instance>();
     const [update] = useUpdate();
     const redirect = useRedirect();
     const notify = useNotify();
@@ -93,14 +93,21 @@ const EditInstance = () => {
         }
     };
 
+    if (!record) {
+        return null;
+    }
+
+    return <InstanceForm handleSubmit={handleSubmit} instance={record} />;
+};
+
+const EditInstance = () => {
+    const translate = useTranslate();
+
     return (
         <>
             <ConfigPagesHeader />
             <Edit title={translate('instance.edit.title')}>
-                <WithRecord<Instance>
-                    label="instance"
-                    render={(record) => <InstanceForm handleSubmit={handleSubmit} instance={record} />}
-                />
+                <InstanceEditForm />
             </Edit>
         </>
     );

@@ -38,14 +38,13 @@
  *
  */
 
-import React from 'react';
-import { useTranslate, useNotify, useRedirect, useUpdate, Edit, WithRecord } from 'react-admin';
+import { useTranslate, useNotify, useRedirect, useUpdate, Edit, useRecordContext } from 'react-admin';
 import CampusForm from '../../components/form/CampusForm';
 import UniversitiesPagesHeader from '../../components/tabs/UniversitiesPagesHeader';
 import Campus from '../../entities/Campus';
 
-const EditCampus = () => {
-    const translate = useTranslate();
+const CampusEditForm = () => {
+    const record = useRecordContext<Campus>();
     const [update] = useUpdate();
     const redirect = useRedirect();
     const notify = useNotify();
@@ -74,19 +73,21 @@ const EditCampus = () => {
         }
     };
 
+    if (!record) {
+        return null;
+    }
+
+    return <CampusForm handleSubmit={(newName: string) => handleSubmit(record.id, newName)} name={record.name} />;
+};
+
+const EditCampus = () => {
+    const translate = useTranslate();
+
     return (
         <>
             <UniversitiesPagesHeader />
             <Edit title={translate('campus.update.title')}>
-                <WithRecord<Campus>
-                    label="campus"
-                    render={(record) => (
-                        <CampusForm
-                            handleSubmit={(newName: string) => handleSubmit(record.id, newName)}
-                            name={record.name}
-                        />
-                    )}
-                />
+                <CampusEditForm />
             </Edit>
         </>
     );

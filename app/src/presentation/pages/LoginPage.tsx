@@ -49,6 +49,7 @@ import { useStoreActions } from '../../store/storeTypes';
 import WelcomeContent from '../components/contents/WelcomeContent';
 import LoginForm from '../components/forms/LoginForm';
 import WebLayout from '../components/layout/WebLayout';
+import useLimitedFeatures from '../hooks/useLimitedFeatures';
 import useRedirectToHomeIfLogged from '../hooks/useRedirectToHomeIfLogged';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../utils';
@@ -62,12 +63,13 @@ const LoginPage: React.FC = () => {
     const setProfile = useStoreActions((store) => store.setProfile);
     const setUser = useStoreActions((store) => store.setUser);
     useRedirectToHomeIfLogged();
+    const limitedFeatures = useLimitedFeatures();
 
     const onLogin = async (tokens: Tokens) => {
         const resultProfile = await getProfile.execute(tokens.accessToken);
         if (resultProfile instanceof Profile) {
             setProfile({ profile: resultProfile });
-            return history.push('/home');
+            return history.push(limitedFeatures ? '/learning' : '/home');
         }
 
         const resultUser = await getUser.execute(tokens.accessToken);

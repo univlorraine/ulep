@@ -1,6 +1,6 @@
 kind: ConfigMap
 metadata:
-  name: "{{ .Values.name }}-env-admin-{{ .Values.admin.name }}"
+  name: '{{ .Values.name }}-env-admin-{{ .Values.admin.name }}'
 apiVersion: v1
 data:
   config.js: |
@@ -10,3 +10,4 @@ data:
     window.REACT_APP_SOCKET_CHAT_URL = "https://{{ .Values.socketChatUrl }}.{{ .Values.domain }}";
     window.REACT_APP_JITSI_DOMAIN = "{{ .Values.jitsiUrl }}.{{ .Values.domain }}";
     window.REACT_APP_DEFAULT_TRANSLATION_LANGUAGE = "{{ .Values.api.env.defaultTranslationLanguage }}";
+    window.REACT_APP_LIMITED_FEATURES = "{{ .Values.limitedFeatures }}";
