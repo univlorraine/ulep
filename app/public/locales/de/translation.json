@@ -33,6 +33,7 @@
         "title": "Überprüfe deine E-Mails"
     },
     "global": {
+        "app_name": "ULEP",
         "account": "Konto",
         "age": "Alter",
         "binary": "Nichtbinär",

@@ -33,6 +33,7 @@
         "title": "查阅你的电子邮件"
     },
     "global": {
+        "app_name": "ULEP",
         "account": "帐户",
         "age": "年龄",
         "binary": "非二元",
