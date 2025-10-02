@@ -64,6 +64,7 @@ declare global {
         REACT_APP_SOCKET_CHAT_URL?: string;
         REACT_APP_JITSI_DOMAIN?: string;
         REACT_APP_DEFAULT_TRANSLATION_LANGUAGE?: string;
+        REACT_APP_LIMITED_FEATURES?: string;
     }
 }
 

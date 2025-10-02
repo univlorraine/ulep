@@ -224,6 +224,7 @@ export class ChatService implements ChatServicePort {
 
   async deleteAllConversations(): Promise<any> {
     if (!this.env.get('CHAT_URL')) {
+      console.log('[ChatService] No chat url found');
       return;
     }
 
@@ -233,6 +234,8 @@ export class ChatService implements ChatServicePort {
         {},
         { headers: this.headers },
       );
+
+      console.log('[ChatService] Response from chat api', response.data);
 
       return response.data;
     } catch (error) {

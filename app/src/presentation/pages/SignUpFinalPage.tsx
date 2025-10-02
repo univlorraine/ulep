@@ -38,14 +38,15 @@
  *
  */
 
+import { useIonToast } from '@ionic/react';
 import { useTranslation } from 'react-i18next';
+import { useHistory } from 'react-router';
 import { useConfig } from '../../context/ConfigurationContext';
 import { useStoreState } from '../../store/storeTypes';
-import SuccessLayout from '../components/layout/SuccessLayout';
-import styles from './css/SignUpFinalPage.module.css';
-import { useIonToast } from '@ionic/react';
 import Avatar from '../components/Avatar';
-import { useHistory } from 'react-router';
+import SuccessLayout from '../components/layout/SuccessLayout';
+import useLimitedFeatures from '../hooks/useLimitedFeatures';
+import styles from './css/SignUpFinalPage.module.css';
 
 const SignupFinalPage: React.FC = () => {
     const { t } = useTranslation();
@@ -56,6 +57,7 @@ const SignupFinalPage: React.FC = () => {
     const profile = useStoreState((state) => state.profile);
     const user = useStoreState((state) => state.user);
     const isUpdate = Boolean(profile?.id);
+    const limitedFeatures = useLimitedFeatures();
 
     const onCreateProfile = async () => {
         if (
@@ -104,7 +106,7 @@ const SignupFinalPage: React.FC = () => {
             return await showToast({ message: t(result.message), duration: 1000 });
         }
 
-        return history.push('/home');
+        return history.push(limitedFeatures ? '/learning' : '/home');
     };
 
     const nextStep = async () => {

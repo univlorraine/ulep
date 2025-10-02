@@ -46,6 +46,7 @@ import Box from '@mui/material/Box';
 import { useState } from 'react';
 import { Menu, useCreatePath, useGetIdentity, usePermissions, useTranslate } from 'react-admin';
 import { Role } from '../../entities/Administrator';
+import useLimitedFeatures from '../../utils/useLimitedFeatures';
 import useCurrentPathname from './useCurrentPathname';
 
 export type LinkPage = {
@@ -199,6 +200,7 @@ const CustomMenu = () => {
     const [configurationRef, setConfigurationRef] = useState<HTMLDivElement>();
     const [profilesRef, setProfilesRef] = useState<HTMLDivElement>();
     const [activitiesRef, setActivitiesRef] = useState<HTMLDivElement>();
+    const limitedFeatures = useLimitedFeatures();
 
     if (universitiesRef) {
         manageUniversitySubMenuActiveClass(universitiesRef, currentPathname, 'universities');
@@ -219,13 +221,19 @@ const CustomMenu = () => {
                 <Menu.ResourceItem name="profiles" />
             </Box>
             <Menu.ResourceItem name="profiles/with-tandems-profiles" />
-            <Menu.ResourceItem name="chat" />
-            <Menu.ResourceItem name="news" />
-            <Menu.ResourceItem name="events" />
-            <Box ref={(newRef: HTMLDivElement) => setActivitiesRef(newRef)} sx={{ marginTop: 0 }}>
-                <Menu.ResourceItem name="activities" />
-            </Box>
+            {!limitedFeatures && (
+                // Note: div is mandatory to group these Menu.Item as Fragment throw an error from MUI component
+                <div>
+                    <Menu.ResourceItem name="chat" />
+                    <Menu.ResourceItem name="news" />
+                    <Menu.ResourceItem name="events" />
+                    <Box ref={(newRef: HTMLDivElement) => setActivitiesRef(newRef)} sx={{ marginTop: 0 }}>
+                        <Menu.ResourceItem name="activities" />
+                    </Box>
+                </div>
+            )}
             {permissions.checkRole(Role.MANAGER) && data && data.universityId && (
+                // Note: div is mandatory to group these Menu.Item as Fragment throw an error from MUI component
                 <div>
                     <Menu.Item
                         leftIcon={<SchoolIcon />}
@@ -245,13 +253,14 @@ const CustomMenu = () => {
                     <Box ref={(newRef: HTMLDivElement) => setUniversitiesRef(newRef)}>
                         <Menu.ResourceItem name="universities" />
                     </Box>
-                    <Menu.ResourceItem name="editos" />
+                    {!limitedFeatures && <Menu.ResourceItem name="editos" />}
                     <Menu.ResourceItem name="objectives" />
                     <Menu.ResourceItem name="proficiency/questions" />
                 </div>
             )}
             <Menu.ResourceItem name="reports" />
             {!permissions.checkRole(Role.ANIMATOR) && (
+                // Note: div is mandatory to group these Menu.Item as Fragment throw an error from MUI component
                 <div>
                     <Divider sx={{ margin: '0 !important' }} />
                     <Box ref={(newRef: HTMLDivElement) => setConfigurationRef(newRef)}>

@@ -39,7 +39,7 @@
  */
 
 import React from 'react';
-import { useNotify, useUpdate, Edit, WithRecord, useRedirect } from 'react-admin';
+import { useNotify, useUpdate, Edit, useRecordContext, useRedirect } from 'react-admin';
 import ActivityCategoryForm from '../../components/form/ActivityCategoryForm';
 import ConfigPagesHeader from '../../components/tabs/ConfigPagesHeader';
 import { ActivityThemeCategoryDetails } from '../../entities/ActivityThemeCategory';
@@ -47,7 +47,8 @@ import IndexedTranslation from '../../entities/IndexedTranslation';
 import Translation from '../../entities/Translation';
 import indexedTranslationsToTranslations from '../../utils/indexedTranslationsToTranslations';
 
-const EditActivityThemeCategory = () => {
+const ActivityCategoryEditForm = () => {
+    const record = useRecordContext<ActivityThemeCategoryDetails>();
     const [update] = useUpdate();
     const redirect = useRedirect();
     const notify = useNotify();
@@ -79,26 +80,30 @@ const EditActivityThemeCategory = () => {
         }
     };
 
+    if (!record) {
+        return null;
+    }
+
     return (
-        <>
-            <ConfigPagesHeader />
-            <Edit>
-                <WithRecord<ActivityThemeCategoryDetails>
-                    render={(record) => (
-                        <ActivityCategoryForm
-                            handleSubmit={(content: string, translations: IndexedTranslation[]) =>
-                                handleSubmit(record.id, content, translations)
-                            }
-                            name={record.content.content}
-                            translations={record.content.translations?.map(
-                                (translation: Translation, index: number) => new IndexedTranslation(index, translation)
-                            )}
-                        />
-                    )}
-                />
-            </Edit>
-        </>
+        <ActivityCategoryForm
+            handleSubmit={(content: string, translations: IndexedTranslation[]) =>
+                handleSubmit(record.id, content, translations)
+            }
+            name={record.content.content}
+            translations={record.content.translations?.map(
+                (translation: Translation, index: number) => new IndexedTranslation(index, translation)
+            )}
+        />
     );
 };
+
+const EditActivityThemeCategory = () => (
+    <>
+        <ConfigPagesHeader />
+        <Edit>
+            <ActivityCategoryEditForm />
+        </Edit>
+    </>
+);
 
 export default EditActivityThemeCategory;

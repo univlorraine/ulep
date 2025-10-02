@@ -38,13 +38,13 @@
  *
  */
 
+import * as Prisma from '@prisma/client';
 import { LearningType, Tandem, TandemStatus } from 'src/core/models';
 import {
+  learningLanguageMapper,
   LearningLanguageRelations,
   LearningLanguageSnapshot,
-  learningLanguageMapper,
 } from './learningLanguage.mapper';
-import * as Prisma from '@prisma/client';
 
 export const TandemRelations = {
   LearningLanguages: {
@@ -59,7 +59,7 @@ export type TandemSnapshot = Prisma.Tandems & {
 };
 
 export const tandemMapper = (instance: TandemSnapshot): Tandem => {
-  return new Tandem({
+  const tandem = new Tandem({
     id: instance.id,
     learningLanguages: instance.LearningLanguages?.map(learningLanguageMapper),
     status: TandemStatus[instance.status],
@@ -70,4 +70,6 @@ export const tandemMapper = (instance: TandemSnapshot): Tandem => {
     createdAt: instance.created_at,
     updatedAt: instance.updated_at,
   });
+
+  return tandem;
 };

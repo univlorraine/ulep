@@ -64,6 +64,7 @@ import Language from '../../entities/Language';
 import { LearningLanguage } from '../../entities/LearningLanguage';
 import { Profile } from '../../entities/Profile';
 import User from '../../entities/User';
+import useLimitedFeatures from '../../utils/useLimitedFeatures';
 import CertificateModal from './CertificateModal';
 import LogExportButton from './Export/LogExportButton';
 import ProfileExportButton from './Export/ProfileExportButton';
@@ -110,6 +111,7 @@ export const ShowActions = () => {
 const ProfileTab = () => {
     const translate = useTranslate();
     const recordContext = useRecordContext();
+    const limitedFeatures = useLimitedFeatures();
 
     return (
         <TabbedShowLayout syncWithLocation={false}>
@@ -161,6 +163,7 @@ const ProfileTab = () => {
                 )}
                 <TextField label={translate('global.university')} source="user.university.name" />
                 <ArrayField label={translate('profiles.objectives')} source="objectives">
+                    {/* @ts-ignore */}
                     <SingleFieldList linkType={false}>
                         <ChipField clickable={false} source="name" />
                     </SingleFieldList>
@@ -173,6 +176,7 @@ const ProfileTab = () => {
                     source="meetingFrequency"
                 />
                 <ArrayField label={translate('profiles.interests')} sortable={false} source="interests">
+                    {/* @ts-ignore */}
                     <SingleFieldList linkType={false}>
                         <ChipField clickable={false} source="name" />
                     </SingleFieldList>
@@ -189,6 +193,7 @@ const ProfileTab = () => {
                     sortable={false}
                     source="masteredLanguages"
                 >
+                    {/* @ts-ignore */}
                     <SingleFieldList>
                         <FunctionField
                             render={(record: Language) => (
@@ -261,13 +266,17 @@ const ProfileTab = () => {
                             sortable={false}
                             source="sharedLogsForResearchDate"
                         />
-                        <ReferenceUploadFileField
-                            label={translate('learning_languages.show.fields.certificateFile')}
-                            sortable={false}
-                            source="certificateFile.id"
-                        />
+                        {!limitedFeatures && (
+                            <>
+                                <ReferenceUploadFileField
+                                    label={translate('learning_languages.show.fields.certificateFile')}
+                                    sortable={false}
+                                    source="certificateFile.id"
+                                />
 
-                        <CertificateModal profile={recordContext as Profile} />
+                                <CertificateModal profile={recordContext as Profile} />
+                            </>
+                        )}
                     </Datagrid>
                 </ArrayField>
             </TabbedShowLayout.Tab>

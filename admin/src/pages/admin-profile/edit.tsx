@@ -38,13 +38,13 @@
  *
  */
 
-import { Edit, useNotify, useTranslate, useUpdate, WithRecord } from 'react-admin';
+import { Edit, useNotify, useTranslate, useUpdate, useRecordContext } from 'react-admin';
 import { redirect } from 'react-router-dom';
 import AdministratorForm from '../../components/form/AdministratorForm';
 import Administrator, { AdministratorFormPayload } from '../../entities/Administrator';
 
-const EditAdministratorProfile = () => {
-    const translate = useTranslate();
+const AdminProfileEditForm = () => {
+    const record = useRecordContext<Administrator>();
     const [update] = useUpdate();
     const notify = useNotify();
 
@@ -84,25 +84,32 @@ const EditAdministratorProfile = () => {
         }
     };
 
+    if (!record) {
+        return null;
+    }
+
+    return (
+        <AdministratorForm
+            email={record.email}
+            firstname={record.firstname}
+            group={record.group}
+            handleSubmit={handleSubmit}
+            id={record.id}
+            languageId={record.languageId}
+            lastname={record.lastname}
+            type="update"
+            universityId={record.universityId || 'central'}
+            isProfileEdit
+        />
+    );
+};
+
+const EditAdministratorProfile = () => {
+    const translate = useTranslate();
+
     return (
         <Edit resource="users/administrators" title={translate('administrators.update.title')}>
-            <WithRecord<Administrator>
-                label="user/administrator"
-                render={(record) => (
-                    <AdministratorForm
-                        email={record.email}
-                        firstname={record.firstname}
-                        group={record.group}
-                        handleSubmit={handleSubmit}
-                        id={record.id}
-                        languageId={record.languageId}
-                        lastname={record.lastname}
-                        type="update"
-                        universityId={record.universityId || 'central'}
-                        isProfileEdit
-                    />
-                )}
-            />
+            <AdminProfileEditForm />
         </Edit>
     );
 };

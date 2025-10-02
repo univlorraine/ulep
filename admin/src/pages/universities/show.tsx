@@ -57,6 +57,7 @@ import ReferenceUploadField from '../../components/field/ReferenceUploadImageFie
 import UniversitiesPagesHeader from '../../components/tabs/UniversitiesPagesHeader';
 import Language from '../../entities/Language';
 import University from '../../entities/University';
+import useLimitedFeatures from '../../utils/useLimitedFeatures';
 
 const UniversityShowAction = () => (
     <TopToolbar>
@@ -66,6 +67,7 @@ const UniversityShowAction = () => (
 
 const UniversityShow = (props: any) => {
     const translate = useTranslate();
+    const limitedFeatures = useLimitedFeatures();
 
     return (
         <>
@@ -94,16 +96,19 @@ const UniversityShow = (props: any) => {
                             source="maxTandemsPerUser"
                         />
                         <ArrayField label={translate('universities.show.sites')} sortable={false} source="sites">
+                            {/* @ts-ignore */}
                             <SingleFieldList linkType={false}>
                                 <ChipField source="name" />
                             </SingleFieldList>
                         </ArrayField>
                         <TextField label={translate('universities.show.codes')} source="codes">
+                            {/* @ts-ignore */}
                             <SingleFieldList>
                                 <ChipField source="id" />
                             </SingleFieldList>
                         </TextField>
                         <TextField label={translate('universities.show.domains')} source="domains">
+                            {/* @ts-ignore */}
                             <SingleFieldList>
                                 <ChipField source="id" />
                             </SingleFieldList>
@@ -125,6 +130,7 @@ const UniversityShow = (props: any) => {
                             sortable={false}
                             source="specificLanguagesAvailable"
                         >
+                            {/* @ts-ignore */}
                             <SingleFieldList>
                                 <FunctionField
                                     render={(record: Language) => (
@@ -136,10 +142,12 @@ const UniversityShow = (props: any) => {
                                 />
                             </SingleFieldList>
                         </ArrayField>
-                        <ReferenceUploadFileField
-                            label={translate('universities.show.defaultCertificateFile')}
-                            source="defaultCertificateFile.id"
-                        />
+                        {!limitedFeatures && (
+                            <ReferenceUploadFileField
+                                label={translate('universities.show.defaultCertificateFile')}
+                                source="defaultCertificateFile.id"
+                            />
+                        )}
                     </SimpleShowLayout>
 
                     <SimpleShowLayout sx={{ m: 3, display: 'flex', flexDirection: 'column', gap: '30px' }}>

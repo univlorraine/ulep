@@ -107,6 +107,7 @@ export type LearningLanguageSnapshot = Prisma.LearningLanguages & {
 export const learningLanguageMapper = (
   instance: LearningLanguageSnapshot,
 ): LearningLanguage => {
+  console.log('[LearningLanguageMapper] LearningLanguage instance', instance);
   return new LearningLanguage({
     id: instance.id,
     language: languageMapper(instance.LanguageCode),

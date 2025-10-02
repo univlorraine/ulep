@@ -39,7 +39,7 @@
  */
 
 import React from 'react';
-import { useNotify, useRedirect, useUpdate, Edit, WithRecord } from 'react-admin';
+import { useNotify, useRedirect, useUpdate, Edit, useRecordContext } from 'react-admin';
 import ActivityCategoryForm from '../../components/form/ActivityCategoryForm';
 import ConfigPagesHeader from '../../components/tabs/ConfigPagesHeader';
 import { ActivityThemeDetails } from '../../entities/ActivityTheme';
@@ -47,7 +47,8 @@ import IndexedTranslation from '../../entities/IndexedTranslation';
 import Translation from '../../entities/Translation';
 import indexedTranslationsToTranslations from '../../utils/indexedTranslationsToTranslations';
 
-const EditActivityTheme = () => {
+const ActivityThemeEditForm = () => {
+    const record = useRecordContext<ActivityThemeDetails>();
     const [update] = useUpdate();
     const redirect = useRedirect();
     const notify = useNotify();
@@ -78,26 +79,30 @@ const EditActivityTheme = () => {
         }
     };
 
+    if (!record) {
+        return null;
+    }
+
     return (
-        <>
-            <ConfigPagesHeader />
-            <Edit>
-                <WithRecord<ActivityThemeDetails>
-                    render={(record) => (
-                        <ActivityCategoryForm
-                            handleSubmit={(content: string, translations: IndexedTranslation[]) =>
-                                handleSubmit(record.id, content, translations)
-                            }
-                            name={record.content.content}
-                            translations={record.content.translations?.map(
-                                (translation: Translation, index: number) => new IndexedTranslation(index, translation)
-                            )}
-                        />
-                    )}
-                />
-            </Edit>
-        </>
+        <ActivityCategoryForm
+            handleSubmit={(content: string, translations: IndexedTranslation[]) =>
+                handleSubmit(record.id, content, translations)
+            }
+            name={record.content.content}
+            translations={record.content.translations?.map(
+                (translation: Translation, index: number) => new IndexedTranslation(index, translation)
+            )}
+        />
     );
 };
+
+const EditActivityTheme = () => (
+    <>
+        <ConfigPagesHeader />
+        <Edit>
+            <ActivityThemeEditForm />
+        </Edit>
+    </>
+);
 
 export default EditActivityTheme;

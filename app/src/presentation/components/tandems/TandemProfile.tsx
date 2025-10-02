@@ -48,6 +48,7 @@ import Language from '../../../domain/entities/Language';
 import LearningLanguage from '../../../domain/entities/LearningLanguage';
 import Profile from '../../../domain/entities/Profile';
 import { useStoreState } from '../../../store/storeTypes';
+import useLimitedFeatures from '../../hooks/useLimitedFeatures';
 import useOnOpenChat from '../../hooks/useOnOpenChat';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../../utils';
@@ -80,6 +81,7 @@ const TandemProfile: React.FC<TandemProfileProps> = ({
     const meProfile = useStoreState((state) => state.profile);
     const history = useHistory();
     const onOpenChat = useOnOpenChat({ tandemId: id });
+    const limitedFeatures = useLimitedFeatures();
 
     if (!meProfile) {
         return null;
@@ -111,20 +113,24 @@ const TandemProfile: React.FC<TandemProfileProps> = ({
                         <img alt={t('global.go_back') as string} src={ArrowLeftSvg} />
                     </button>
                 )}
-                <button
-                    aria-label={t('global.open_chat') as string}
-                    className={styles['action-button']}
-                    onClick={onOpenChat}
-                >
-                    <img alt={t('global.open_chat') as string} src={ChatSvg} />
-                </button>
-                <button
-                    aria-label={t('global.start_video_call') as string}
-                    className={styles['action-button']}
-                    onClick={onOpenVideoCall}
-                >
-                    <img alt={t('global.start_video_call') as string} src={CameraSvg} />
-                </button>
+                {!limitedFeatures && (
+                    <>
+                        <button
+                            aria-label={t('global.open_chat') as string}
+                            className={styles['action-button']}
+                            onClick={onOpenChat}
+                        >
+                            <img alt={t('global.open_chat') as string} src={ChatSvg} />
+                        </button>
+                        <button
+                            aria-label={t('global.start_video_call') as string}
+                            className={styles['action-button']}
+                            onClick={onOpenVideoCall}
+                        >
+                            <img alt={t('global.start_video_call') as string} src={CameraSvg} />
+                        </button>
+                    </>
+                )}
                 {!isHybrid && (
                     <button
                         aria-label={t('global.go_back') as string}

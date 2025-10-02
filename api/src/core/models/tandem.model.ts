@@ -93,6 +93,8 @@ export class Tandem {
 
   readonly updatedAt?: Date;
 
+  isValid: boolean;
+
   constructor(props: CreateTandemProps) {
     this.id = props.id;
     this.status = props.status;
@@ -101,6 +103,7 @@ export class Tandem {
     this.compatibilityScore = props.compatibilityScore;
     this.createdAt = props.createdAt;
     this.updatedAt = props.updatedAt;
+    this.isValid = true;
 
     if (props.learningLanguages) {
       this.learningLanguages = [...props.learningLanguages];
@@ -113,6 +116,10 @@ export class Tandem {
   }
 
   private assertNoErrors() {
+    // For now, in production, students are allowed to change their mastered languages
+    // after the tandem has been created, so it becomes invalid. But we have to keep
+    // the script running for purge to work (and filter out those tandems for archives).
+
     if (this.learningLanguages.length !== 2) {
       throw new InvalidTandemError(
         'Tandem must have exactly two learning languages',
@@ -120,9 +127,14 @@ export class Tandem {
     }
 
     if (this.learningLanguages[0].id === this.learningLanguages[1].id) {
-      throw new InvalidTandemError(
+      this.isValid = false;
+      console.error(
         'Tandem must have two different learning languages',
+        this.learningLanguages,
       );
+      /*       throw new InvalidTandemError(
+        'Tandem must have two different learning languages',
+      ); */
     }
 
     const profile1 = this.learningLanguages[0].profile;
@@ -150,18 +162,27 @@ export class Tandem {
         this.learningLanguages[1],
       )
     ) {
-      throw new InvalidTandemError(
+      this.isValid = false;
+      console.error(
         `learningLanguage ${this.learningLanguages[0].id} doesn't match learningLanguages ${this.learningLanguages[1].id} languages`,
       );
+      /*       throw new InvalidTandemError(
+        `learningLanguage ${this.learningLanguages[0].id} doesn't match learningLanguages ${this.learningLanguages[1].id} languages`,
+      ); */
     }
     if (
       !this.learningLanguages[1].isCompatibleWithLearningLanguage(
         this.learningLanguages[0],
       )
     ) {
-      throw new InvalidTandemError(
+      this.isValid = false;
+      console.error(
         `learningLanguage ${this.learningLanguages[1].id} doesn't match learningLanguages ${this.learningLanguages[0].id} languages`,
       );
+      /*       throw new InvalidTandemError(
+      throw new InvalidTandemError(
+        `learningLanguage ${this.learningLanguages[1].id} doesn't match learningLanguages ${this.learningLanguages[0].id} languages`,
+      ); */
     }
   }
 

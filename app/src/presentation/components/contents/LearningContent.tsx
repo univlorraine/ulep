@@ -49,6 +49,7 @@ import CustomLearningGoal from '../../../domain/entities/CustomLearningGoal';
 import Profile from '../../../domain/entities/Profile';
 import Tandem from '../../../domain/entities/Tandem';
 import { useStoreActions } from '../../../store/storeTypes';
+import useLimitedFeatures from '../../hooks/useLimitedFeatures';
 import { learningLanguagesToTestedLanguages } from '../../utils';
 import CreateLearningLanguageCard from '../card/CreateLearningLanguageCard';
 import PartnerUniversityCard from '../card/PartnerUniversityCard';
@@ -98,6 +99,8 @@ const LearningContent: React.FC<LearningContentProps> = ({
         TANDEM_COLORS[tandems.findIndex((tandem) => tandem.id === currentTandem?.id) || 0]
     );
     const [universityId, setUniversityId] = useState<string>();
+    const limitedFeatures = useLimitedFeatures();
+
     const openAddLearningLanguagePressed = () => {
         history.push('pairing/languages');
     };
@@ -182,14 +185,14 @@ const LearningContent: React.FC<LearningContentProps> = ({
                                         currentColor={currentTandemColor}
                                     />
                                 )}
-                            {currentTandem && (
+                            {!limitedFeatures && currentTandem && (
                                 <LearningJournalCard
                                     tandem={currentTandem}
                                     onOpenEdito={() => openUniversityInfos(profile.user.university.id)}
                                     currentColor={currentTandemColor}
                                 />
                             )}
-                            {currentTandem && (
+                            {!limitedFeatures && currentTandem && (
                                 <LearningGoalCard
                                     profile={profile}
                                     customLearningGoals={currentTandem.learningLanguage?.customLearningGoals}
@@ -198,14 +201,14 @@ const LearningContent: React.FC<LearningContentProps> = ({
                                     }
                                 />
                             )}
-                            {tandems.length > 0 && (
+                            {!limitedFeatures && tandems.length > 0 && (
                                 <RessourcesCard
                                     onLearningBookPressed={onLearningBookContentPressed}
                                     onVocabularyPressed={onVocabularyListPressed}
                                     onActivityPressed={onActivitiesContentPressed}
                                 />
                             )}
-                            {currentTandem && currentTandem.partner?.user.university && (
+                            {!limitedFeatures && currentTandem && currentTandem.partner?.user.university && (
                                 <PartnerUniversityCard
                                     university={currentTandem.partner?.user.university}
                                     onPress={() => openUniversityInfos(currentTandem.partner?.user.university.id)}

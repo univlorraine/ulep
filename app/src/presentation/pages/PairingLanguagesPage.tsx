@@ -47,6 +47,7 @@ import { useStoreActions, useStoreState } from '../../store/storeTypes';
 import LearnableLanguagesContent from '../components/contents/LearnableLanguagesContent';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import useGetLearnableLanguages from '../hooks/useGetLearnableLanguages';
+import useLimitedFeatures from '../hooks/useLimitedFeatures';
 import styles from './css/SignUp.module.css';
 
 const PairingLanguagesPage: React.FC = () => {
@@ -57,6 +58,7 @@ const PairingLanguagesPage: React.FC = () => {
     const updateProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const profile = useStoreState((state) => state.profile);
     const university = profile?.user.university;
+    const limitedFeatures = useLimitedFeatures();
 
     if (!university) {
         return <Redirect to={'/signup'} />;
@@ -75,7 +77,7 @@ const PairingLanguagesPage: React.FC = () => {
     };
 
     const navigateToHome = () => {
-        return history.push('/home');
+        return history.push(limitedFeatures ? '/learning' : '/home');
     };
 
     const otherLanguages = () => {

@@ -81,6 +81,8 @@ spec:
               value: "https://{{ .Values.socketChatUrl }}.{{ .Values.domain }}"
             - name: REACT_APP_DEFAULT_TRANSLATION_LANGUAGE
               value: "{{ .Values.api.env.defaultTranslationLanguage }}"
+            - name: REACT_APP_LIMITED_FEATURES
+              value: "{{ .Values.limitedFeatures }}"
           volumeMounts:
           - name: "{{ .Values.admin.name }}-env"
             mountPath: /tmp/env/

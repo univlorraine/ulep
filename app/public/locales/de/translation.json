@@ -123,6 +123,7 @@
         }
     },
     "instance": {
+        "add_button": "Hinzufügen",
         "button": "Bestätigen und fortfahren",
         "error": "Fehler beim Laden",
         "subtitle": "Wähle eine Option aus der folgenden Liste",

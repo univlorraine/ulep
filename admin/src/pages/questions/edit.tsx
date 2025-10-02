@@ -39,7 +39,7 @@
  */
 
 import React from 'react';
-import { useTranslate, useNotify, useRedirect, useUpdate, Edit, WithRecord } from 'react-admin';
+import { useTranslate, useNotify, useRedirect, useUpdate, Edit, useRecordContext } from 'react-admin';
 import QuestionForm from '../../components/form/QuestionForm';
 import PageTitle from '../../components/PageTitle';
 import IndexedTranslation from '../../entities/IndexedTranslation';
@@ -47,29 +47,31 @@ import Question from '../../entities/Question';
 import Translation from '../../entities/Translation';
 import indexedTranslationsToTranslations from '../../utils/indexedTranslationsToTranslations';
 
-const EditQuestion = () => {
-    const translate = useTranslate();
+const QuestionEditForm = () => {
+    const record = useRecordContext<Question>();
     const [update] = useUpdate();
     const redirect = useRedirect();
     const notify = useNotify();
 
-    const handleSubmit = async (
-        id: string,
-        newLevel: string,
-        newQuestion: string,
-        newTranslations: IndexedTranslation[]
-    ) => {
+    const handleSubmit = async (id: string, level: string, newName: string, newTranslations: IndexedTranslation[]) => {
         const payload = {
             id,
-            level: newLevel,
-            value: newQuestion,
+            value: newName,
+            level,
             translations: indexedTranslationsToTranslations(newTranslations),
         };
         try {
-            const result = await update('proficiency/questions', { id: '', data: payload });
-            redirect('/proficiency/questions');
-
-            return result;
+            return await update(
+                'questions',
+                { id: '', data: payload },
+                {
+                    onSuccess: () => redirect('/questions'),
+                    onError: (error) => {
+                        console.error(error);
+                        notify('questions.update.error');
+                    },
+                }
+            );
         } catch (err) {
             console.error(err);
 
@@ -77,25 +79,32 @@ const EditQuestion = () => {
         }
     };
 
+    if (!record) {
+        return null;
+    }
+
+    return (
+        <QuestionForm
+            handleSubmit={(level: string, name: string, translations: IndexedTranslation[]) =>
+                handleSubmit(record.id, level, name, translations)
+            }
+            level={record.level}
+            name={record.value.content}
+            translations={record.value.translations?.map(
+                (translation: Translation, index: number) => new IndexedTranslation(index, translation)
+            )}
+        />
+    );
+};
+
+const EditQuestion = () => {
+    const translate = useTranslate();
+
     return (
         <>
             <PageTitle>{translate('questions.title')}</PageTitle>
             <Edit title={translate('questions.update.title')}>
-                <WithRecord<Question>
-                    label="proficiency/questions"
-                    render={(record) => (
-                        <QuestionForm
-                            handleSubmit={(level: string, name: string, translations: IndexedTranslation[]) =>
-                                handleSubmit(record.id, level, name, translations)
-                            }
-                            level={record.level}
-                            name={record.value.content}
-                            translations={record.value.translations?.map(
-                                (translation: Translation, index: number) => new IndexedTranslation(index, translation)
-                            )}
-                        />
-                    )}
-                />
+                <QuestionEditForm />
             </Edit>
         </>
     );
