@@ -384,6 +384,7 @@
         "title": "Consulte tes emails"
     },
     "global": {
+        "app_name": "ULEP",
         "account": "Compte",
         "age": "Âge",
         "binary": "Non binaire",
