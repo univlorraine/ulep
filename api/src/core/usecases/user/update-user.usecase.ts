@@ -110,9 +110,10 @@ export class UpdateUserUsecase {
     ) {
       await this.keycloakClient.updateUser({
         id: user.contactId,
-        firstname: command.firstname || user.firstname,
-        lastname: command.lastname || user.lastname,
-        email: command.email || user.email,
+        newFirstName: command.firstname || user.firstname,
+        newLastName: command.lastname || user.lastname,
+        newEmail: command.email || user.email,
+        previousEmail: user.email,
       });
     }
 

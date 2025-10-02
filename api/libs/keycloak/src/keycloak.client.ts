@@ -68,8 +68,8 @@ import RoleRepresentation, {
   KeycloakEmailAction,
   KeycloakUser,
   OpenIdConfiguration,
-  UpdateAdministratorPayload,
-  UpdateAdministratorProps,
+  UpdateKeycloakUserPayload,
+  UpdateKeycloakUserProps,
   UserRepresentation,
   UserSession,
 } from './keycloak.models';
@@ -467,12 +467,12 @@ export class KeycloakClient {
    * Updates an existing user in Keycloak.
    */
   async updateUser(
-    props: UpdateAdministratorProps,
+    props: UpdateKeycloakUserProps,
   ): Promise<UserRepresentation> {
-    const payload: UpdateAdministratorPayload = {
-      email: props.email,
-      firstName: props.firstname,
-      lastName: props.lastname,
+    const payload: UpdateKeycloakUserPayload = {
+      email: props.newEmail,
+      firstName: props.newFirstName,
+      lastName: props.newLastName,
       attributes: {
         universityId: props.universityId,
         universityLogin: props.universityLogin,
@@ -480,7 +480,9 @@ export class KeycloakClient {
       },
     };
 
-    const user = await this.getUserByEmail(props.email);
+    const user = await this.getUserByEmail(
+      props.previousEmail || props.newEmail,
+    );
     props.id = user.id;
 
     if (props.password) {

@@ -49,8 +49,8 @@ import { Env } from 'src/configuration';
 import { RessourceDoesNotExist } from 'src/core/errors';
 import { University } from 'src/core/models';
 import {
-  UNIVERSITY_REPOSITORY,
   UniversityRepository,
+  UNIVERSITY_REPOSITORY,
 } from 'src/core/ports/university.repository';
 
 export class CreateAdministratorCommand {
@@ -100,9 +100,9 @@ export class CreateAdministratorUsecase {
 
       await this.keycloakClient.updateUser({
         id: user.id,
-        email: command.email,
-        firstname: command.firstname,
-        lastname: command.lastname,
+        newEmail: command.email,
+        newFirstName: command.firstname,
+        newLastName: command.lastname,
         universityLogin: user.attributes?.universityLogin,
         universityId: command.universityId,
         groups: [command.group],
