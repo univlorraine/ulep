@@ -174,7 +174,6 @@ export class CreateUserUsecase {
         newEmail: keycloakUser.email,
         newFirstName: command.firstname,
         newLastName: command.lastname,
-        password: command.password,
         universityId:
           keycloakUser.attributes?.universityId?.[0] || university.id,
         universityLogin: keycloakUser.attributes?.universityLogin?.[0],
