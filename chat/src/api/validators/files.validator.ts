@@ -82,6 +82,7 @@ export class FilePipe extends ParseFilePipe {
             'image/jpeg',
             'image/png',
             'image/jpg',
+            'audio/wav',
             'application/pdf',
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
