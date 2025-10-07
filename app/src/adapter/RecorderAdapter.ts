@@ -44,19 +44,27 @@ import RecorderAdapterInterface from './interfaces/RecorderAdapter.interface';
 export class RecorderAdapter implements RecorderAdapterInterface {
     private recordingTimeout: NodeJS.Timeout | null = null;
     private startTime: number | null = null;
+    private isRecording: boolean = false;
 
     async requestPermission() {
         await VoiceRecorder.requestAudioRecordingPermission();
     }
 
     async startRecording(onStop: (audio?: File, error?: Error) => void) {
+        if (this.isRecording) {
+            console.warn('Recording already in progress');
+            return onStop(undefined, new Error('ALREADY_RECORDING'));
+        }
+
         try {
             const requestPermission = await VoiceRecorder.requestAudioRecordingPermission();
 
             if (!requestPermission.value) {
                 return onStop(undefined, new Error('record.error.permission'));
             }
+
             await VoiceRecorder.startRecording();
+            this.isRecording = true;
             this.startTime = Date.now();
 
             this.recordingTimeout = setTimeout(() => {
@@ -64,11 +72,20 @@ export class RecorderAdapter implements RecorderAdapterInterface {
             }, 60000);
         } catch (error) {
             console.error(error);
+            this.isRecording = false;
             onStop(undefined, new Error('record.error.unexpected'));
         }
     }
 
     async stopRecording(onStop: (audio?: File, error?: Error) => void) {
+        if (!this.isRecording) {
+            console.warn('No recording in progress');
+            setTimeout(() => {
+                this.stopRecording(onStop);
+            }, 500);
+            return;
+        }
+
         if (this.recordingTimeout) {
             clearTimeout(this.recordingTimeout);
             this.recordingTimeout = null;
@@ -76,13 +93,14 @@ export class RecorderAdapter implements RecorderAdapterInterface {
 
         try {
             const result = await VoiceRecorder.stopRecording();
+            this.isRecording = false;
 
             if (result.value && result.value.recordDataBase64) {
                 const endTime = Date.now();
                 const duration = (endTime - (this.startTime || 0)) / 1000; // Durée en secondes
 
                 if (duration < 1) {
-                    this.startTime = null;
+                    this.resetState();
                     onStop(undefined, new Error('record.error.too_short'));
                     return;
                 }
@@ -91,7 +109,7 @@ export class RecorderAdapter implements RecorderAdapterInterface {
                     const audioBlob = this.base64ToBlob(result.value.recordDataBase64, 'audio/wav');
 
                     if (audioBlob.size === 0) {
-                        this.startTime = null;
+                        this.resetState();
                         onStop(undefined, new Error('record.error.empty_file'));
                         return;
                     }
@@ -101,24 +119,33 @@ export class RecorderAdapter implements RecorderAdapterInterface {
                         lastModified: Date.now(),
                     });
 
-                    this.startTime = null;
+                    this.resetState();
 
                     setTimeout(() => {
                         onStop(audioFile);
                     }, 100);
                 } catch (error) {
                     console.error('Error creating audio file:', error);
-                    this.startTime = null;
+                    this.resetState();
                     onStop(undefined, new Error('record.error.file_creation'));
                 }
             } else {
-                this.startTime = null;
+                this.resetState();
                 onStop(undefined, new Error('record.error.no_data'));
             }
         } catch (error) {
             console.error('Recording error:', error);
-            this.startTime = null;
+            this.resetState();
             onStop(undefined, new Error('record.error.unexpected'));
+        }
+    }
+
+    private resetState() {
+        this.isRecording = false;
+        this.startTime = null;
+        if (this.recordingTimeout) {
+            clearTimeout(this.recordingTimeout);
+            this.recordingTimeout = null;
         }
     }
 
