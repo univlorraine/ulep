@@ -53,7 +53,6 @@ const ReportEditForm = () => {
 
     const handleSubmit = async (id: string, status: ReportStatus, comment?: string, shouldDeleteMessage?: boolean) => {
         const payload = {
-            id,
             status,
             comment,
             shouldDeleteMessage,
@@ -61,7 +60,7 @@ const ReportEditForm = () => {
         try {
             return await update(
                 'reports',
-                { id: '', data: payload },
+                { id, data: payload },
                 {
                     onSuccess: () => redirect('/reports'),
                     onError: (error) => {
