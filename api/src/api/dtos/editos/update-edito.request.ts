@@ -39,7 +39,7 @@
  */
 
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsString } from 'class-validator';
+import { IsArray, IsOptional, IsString } from 'class-validator';
 import { EditoTranslation } from 'src/core/models/edito.model';
 
 export class UpdateEditoRequest {
@@ -48,6 +48,7 @@ export class UpdateEditoRequest {
   content: string;
 
   @ApiProperty()
+  @IsOptional()
   @IsString()
   video: string;
 

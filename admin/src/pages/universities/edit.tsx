@@ -38,7 +38,7 @@
  *
  */
 
-import { Edit, useNotify, useRedirect, useTranslate, useUpdate, WithRecord } from 'react-admin';
+import { Edit, useNotify, useRedirect, useTranslate, useUpdate, useRecordContext } from 'react-admin';
 import UniversityForm from '../../components/form/UniversityForm';
 import UniversitiesPagesHeader from '../../components/tabs/UniversitiesPagesHeader';
 import Administrator from '../../entities/Administrator';
@@ -47,8 +47,8 @@ import Language from '../../entities/Language';
 import University from '../../entities/University';
 import universityToFormData from './universityToFormData';
 
-const EditUniversity = () => {
-    const translate = useTranslate();
+const UniversityEditForm = () => {
+    const record = useRecordContext<University>();
     const [update] = useUpdate();
     const redirect = useRedirect();
     const notify = useNotify();
@@ -103,9 +103,7 @@ const EditUniversity = () => {
                     onSuccess: () => redirect('/universities'),
                     onError: (error) => {
                         console.error(error);
-                        notify('universities.update.error', {
-                            type: 'error',
-                        });
+                        notify('universities.update.error');
                     },
                 }
             );
@@ -116,78 +114,85 @@ const EditUniversity = () => {
         }
     };
 
+    if (!record) {
+        return null;
+    }
+
+    return (
+        <UniversityForm
+            admissionEndDate={record.admissionEnd}
+            admissionStartDate={record.admissionStart}
+            canAddNewLanguages={!!record.parent}
+            closeServiceDate={record.closeServiceDate}
+            codes={record.codes}
+            country={record.country}
+            defaultContact={record.defaultContact}
+            domains={record.domains}
+            handleSubmit={(
+                name: string,
+                country: Country,
+                timezone: string,
+                admissionStart: Date,
+                admissionEnd: Date,
+                openServiceDate: Date,
+                closeServiceDate: Date,
+                codes: string[],
+                domains: string[],
+                pairingMode: string,
+                maxTandemsPerUser: number,
+                nativeLanguage: Language,
+                website?: string,
+                notificationEmail?: string,
+                specificLanguagesAvailable?: Language[],
+                defaultContact?: Administrator,
+                file?: File,
+                defaultCertificateFile?: File
+            ) =>
+                handleSubmit(
+                    record.id,
+                    name,
+                    country,
+                    timezone,
+                    admissionStart,
+                    admissionEnd,
+                    openServiceDate,
+                    closeServiceDate,
+                    codes,
+                    domains,
+                    pairingMode,
+                    maxTandemsPerUser,
+                    nativeLanguage,
+                    website,
+                    notificationEmail,
+                    specificLanguagesAvailable,
+                    defaultContact,
+                    file,
+                    defaultCertificateFile
+                )
+            }
+            maxTandemsPerUser={record.maxTandemsPerUser}
+            name={record.name}
+            nativeLanguage={record.nativeLanguage}
+            notificationEmail={record.notificationEmail}
+            openServiceDate={record.openServiceDate}
+            pairingMode={record.pairingMode}
+            specificLanguagesAvailable={record.specificLanguagesAvailable}
+            timezone={record.timezone}
+            tradKey="update"
+            universityId={record.id}
+            website={record.website}
+        />
+    );
+};
+
+const EditUniversity = () => {
+    const translate = useTranslate();
+
     return (
         <>
             <UniversitiesPagesHeader />
             <Edit title={translate('universities.update.title')}>
-                <WithRecord<University>
-                    label="university"
-                    render={(record) => (
-                        <UniversityForm
-                            admissionEndDate={record.admissionEnd}
-                            admissionStartDate={record.admissionStart}
-                            canAddNewLanguages={!!record.parent}
-                            closeServiceDate={record.closeServiceDate}
-                            codes={record.codes}
-                            country={record.country}
-                            defaultContact={record.defaultContact}
-                            domains={record.domains}
-                            handleSubmit={(
-                                name: string,
-                                country: Country,
-                                timezone: string,
-                                admissionStart: Date,
-                                admissionEnd: Date,
-                                openServiceDate: Date,
-                                closeServiceDate: Date,
-                                codes: string[],
-                                domains: string[],
-                                pairingMode: string,
-                                maxTandemsPerUser: number,
-                                nativeLanguage: Language,
-                                website?: string,
-                                notificationEmail?: string,
-                                specificLanguagesAvailable?: Language[],
-                                defaultContact?: Administrator,
-                                file?: File,
-                                defaultCertificateFile?: File
-                            ) =>
-                                handleSubmit(
-                                    record.id,
-                                    name,
-                                    country,
-                                    timezone,
-                                    admissionStart,
-                                    admissionEnd,
-                                    openServiceDate,
-                                    closeServiceDate,
-                                    codes,
-                                    domains,
-                                    pairingMode,
-                                    maxTandemsPerUser,
-                                    nativeLanguage,
-                                    website,
-                                    notificationEmail,
-                                    specificLanguagesAvailable,
-                                    defaultContact,
-                                    file,
-                                    defaultCertificateFile
-                                )
-                            }
-                            maxTandemsPerUser={record.maxTandemsPerUser}
-                            name={record.name}
-                            nativeLanguage={record.nativeLanguage}
-                            notificationEmail={record.notificationEmail}
-                            openServiceDate={record.openServiceDate}
-                            pairingMode={record.pairingMode}
-                            specificLanguagesAvailable={record.specificLanguagesAvailable}
-                            timezone={record.timezone}
-                            tradKey="update"
-                            universityId={record.id}
-                            website={record.website}
-                        />
-                    )}
-                />
+                <UniversityEditForm />
             </Edit>
         </>
     );

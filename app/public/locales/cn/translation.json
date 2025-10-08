@@ -33,6 +33,7 @@
         "title": "查阅你的电子邮件"
     },
     "global": {
+        "app_name": "ULEP",
         "account": "帐户",
         "age": "年龄",
         "binary": "非二元",
@@ -123,6 +124,7 @@
         }
     },
     "instance": {
+        "add_button": "添加",
         "button": "确认并继续",
         "error": "学校数据加载时出错",
         "subtitle": "在下列菜单中选择学校信息",

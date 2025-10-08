@@ -39,21 +39,14 @@
  */
 
 import React from 'react';
-import { useTranslate, useNotify, useRedirect, useUpdate, WithRecord, Edit, usePermissions } from 'react-admin';
+import { useTranslate, useNotify, useRedirect, useUpdate, useRecordContext, Edit, usePermissions } from 'react-admin';
 import ReportForm from '../../components/form/ReportForm';
 import ReportsPagesHeader from '../../components/tabs/ReportsPagesHeader';
 import { Role } from '../../entities/Administrator';
 import Report, { ReportStatus } from '../../entities/Report';
 
-const EditReport = () => {
-    const translate = useTranslate();
-
-    const { permissions } = usePermissions();
-    const canEdit = permissions.checkRoles([Role.MANAGER, Role.SUPER_ADMIN]);
-    if (!canEdit) {
-        return <div>{translate('reports.error.unauthorized')}</div>;
-    }
-
+const ReportEditForm = () => {
+    const record = useRecordContext<Report>();
     const [update] = useUpdate();
     const redirect = useRedirect();
     const notify = useNotify();
@@ -69,11 +62,9 @@ const EditReport = () => {
                 'reports',
                 { id, data: payload },
                 {
-                    onSuccess: () => {
-                        redirect('/reports');
-                    },
+                    onSuccess: () => redirect('/reports'),
                     onError: (error) => {
-                        console.warn(error);
+                        console.error(error);
                         notify('reports.update.error');
                     },
                 }
@@ -85,26 +76,40 @@ const EditReport = () => {
         }
     };
 
+    if (!record) {
+        return null;
+    }
+
+    return (
+        <ReportForm
+            category={record.category.name}
+            comment={record.comment}
+            content={record.content}
+            handleSubmit={(status: ReportStatus, comment?: string, shouldDeleteMessage?: boolean) =>
+                handleSubmit(record.id, status, comment, shouldDeleteMessage)
+            }
+            isMessageDeleted={record.metadata?.isMessageDeleted}
+            messageId={record.metadata?.messageId}
+            status={record.status}
+            user={record.user}
+        />
+    );
+};
+
+const EditReport = () => {
+    const translate = useTranslate();
+
+    const { permissions } = usePermissions();
+    const canEdit = permissions.checkRoles([Role.MANAGER, Role.SUPER_ADMIN]);
+    if (!canEdit) {
+        return <div>{translate('reports.error.unauthorized')}</div>;
+    }
+
     return (
         <>
             <ReportsPagesHeader />
             <Edit title={translate('reports.update.title')}>
-                <WithRecord<Report>
-                    render={(record) => (
-                        <ReportForm
-                            category={record.category.name}
-                            comment={record.comment}
-                            content={record.content}
-                            handleSubmit={(status: ReportStatus, comment?: string, shouldDeleteMessage?: boolean) =>
-                                handleSubmit(record.id, status, comment, shouldDeleteMessage)
-                            }
-                            isMessageDeleted={record.metadata?.isMessageDeleted}
-                            messageId={record.metadata?.messageId}
-                            status={record.status}
-                            user={record.user}
-                        />
-                    )}
-                />
+                <ReportEditForm />
             </Edit>
         </>
     );

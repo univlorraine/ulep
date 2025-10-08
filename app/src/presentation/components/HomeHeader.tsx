@@ -39,6 +39,7 @@
  */
 
 import { IonHeader } from '@ionic/react';
+import { useTranslation } from 'react-i18next';
 import { useConfig } from '../../context/ConfigurationContext';
 import styles from './HomeHeader.module.css';
 
@@ -46,13 +47,14 @@ interface HomeHeaderProps {}
 
 const HomeHeader: React.FC<HomeHeaderProps> = () => {
     const { logoUrl } = useConfig();
+    const { t } = useTranslation();
     return (
         <IonHeader>
             <div className={styles['header-container']}>
                 <div className={styles['logo-container']}>
-                    <img alt="ULEP" className={styles.logo} src={logoUrl} />
+                    <img alt={t('global.app_name') as string} className={styles.logo} src={logoUrl} />
                     <div className={styles['header-separator']} />
-                    <span className={styles['app-name']}>ULEP</span>
+                    <span className={styles['app-name']}>{t('global.app_name')}</span>
                 </div>
             </div>
         </IonHeader>

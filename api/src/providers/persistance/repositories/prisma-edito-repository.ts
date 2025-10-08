@@ -141,12 +141,12 @@ export class PrismaEditoRepository implements EditoRepository {
         },
         VideoTextContent: {
           update: {
-            text: command.video,
+            text: command.video || '',
             LanguageCode: { connect: { code: command.languageCode } },
             Translations: {
               deleteMany: {},
               create: command.translations?.map((translation) => ({
-                text: translation.video,
+                text: translation.video || '',
                 LanguageCode: { connect: { code: translation.languageCode } },
               })),
             },

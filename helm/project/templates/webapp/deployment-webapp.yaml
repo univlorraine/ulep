@@ -44,6 +44,8 @@ spec:
             value: "https://{{ .Values.chatUrl }}.{{ .Values.domain }}"
           - name: VITE_SOCKET_CHAT_URL
             value: "https://{{ .Values.socketChatUrl }}.{{ .Values.domain }}"
+          - name: VITE_LIMITED_FEATURES
+            value: "{{ .Values.limitedFeatures }}"
         volumeMounts:
           - name: "{{ .Values.webapp.name }}-build"
             mountPath: /usr/share/nginx/html/

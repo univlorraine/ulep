@@ -345,6 +345,7 @@
         "title": "Check your emails"
     },
     "global": {
+        "app_name": "ULEP",
         "account": "Account",
         "age": "Age",
         "binary": "Non binary",
@@ -675,6 +676,7 @@
         }
     },
     "instance": {
+        "add_button": "Add",
         "button": "Validate and continue",
         "error": "Error loading instance",
         "subtitle": "Choose your instance from the list below",

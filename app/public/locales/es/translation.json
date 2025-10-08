@@ -33,6 +33,7 @@
         "title": "Consulta tus correos electrónicos"
     },
     "global": {
+        "app_name": "ULEP",
         "account": "Cuenta",
         "age": "Edad",
         "binary": "No binario",
@@ -123,6 +124,7 @@
         }
     },
     "instance": {
+        "add_button": "Agregar",
         "button": "Validar y continuar",
         "error": "Error al cargar la solicitud",
         "subtitle": "Elija su solicitud en la siguiente lista",

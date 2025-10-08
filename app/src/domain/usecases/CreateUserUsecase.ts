@@ -165,6 +165,10 @@ class CreateUserUsecase implements CreateUserUsecaseInterface {
                 return new Error('signup_informations_page.error_domain');
             }
 
+            if (error.statusCode === 400 && error.message === 'Invalid password provided') {
+                return new Error('login_page.invalid_password');
+            }
+
             if (error.statusCode === 400 && error.message === 'Code is invalid') {
                 return new Error('signup_informations_page.error_code');
             }

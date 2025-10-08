@@ -33,6 +33,7 @@
         "title": "Überprüfe deine E-Mails"
     },
     "global": {
+        "app_name": "ULEP",
         "account": "Konto",
         "age": "Alter",
         "binary": "Nichtbinär",
@@ -123,6 +124,7 @@
         }
     },
     "instance": {
+        "add_button": "Hinzufügen",
         "button": "Bestätigen und fortfahren",
         "error": "Fehler beim Laden",
         "subtitle": "Wähle eine Option aus der folgenden Liste",

@@ -59,6 +59,7 @@ import { Button, useTranslate } from 'react-admin';
 import Instance, { EditoMandatoryTranslations, InstanceFormPayload } from '../../entities/Instance';
 import Language from '../../entities/Language';
 import { isCentralUniversity } from '../../entities/University';
+import useLimitedFeatures from '../../utils/useLimitedFeatures';
 import FileUploader from '../FileUploader';
 import useGetUniversitiesLanguages from './useGetUniversitiesLanguages';
 
@@ -96,6 +97,7 @@ const InstanceForm: React.FC<InstanceFormProps> = ({ handleSubmit, instance }) =
         instance.editoCentralUniversityTranslations
     );
     const [selectedLanguage, setSelectedLanguage] = useState<Language>();
+    const limitedFeatures = useLimitedFeatures();
 
     useEffect(() => {
         const centralUniversity = universitiesData?.find(isCentralUniversity);
@@ -221,150 +223,166 @@ const InstanceForm: React.FC<InstanceFormProps> = ({ handleSubmit, instance }) =
                         </Box>
                     </Box>
 
-                    <Box>
-                        <Typography variant="subtitle1">{translate(`instance.edit.defaultCertificateFile`)}</Typography>
-                        <FileUploader
-                            accept="application/pdf"
-                            fileType="PDF"
-                            onFileSelect={setNewDefaultCertificateFile}
-                            source="defaultCertificateFile.id"
-                        />
-                    </Box>
+                    {!limitedFeatures && (
+                        <>
+                            <Box>
+                                <Typography variant="subtitle1">
+                                    {translate(`instance.edit.defaultCertificateFile`)}
+                                </Typography>
+                                <FileUploader
+                                    accept="application/pdf"
+                                    fileType="PDF"
+                                    onFileSelect={setNewDefaultCertificateFile}
+                                    source="defaultCertificateFile.id"
+                                />
+                            </Box>
 
-                    <Box>
-                        <Typography variant="subtitle1">{translate(`instance.edito.mandatoryTranslations`)}</Typography>
-                        <Box alignItems="center" display="flex" flexDirection="row">
-                            <FormGroup>
-                                {Object.values(EditoMandatoryTranslations).map((translation) => (
-                                    <FormControlLabel
-                                        key={translation}
-                                        checked={newEditoMandatoryTranslations.includes(translation)}
-                                        control={<Switch />}
-                                        label={translate(`editos.languages.${translation}`)}
-                                        onChange={() => {
-                                            if (newEditoMandatoryTranslations.includes(translation)) {
-                                                setNewEditoMandatoryTranslations(
-                                                    newEditoMandatoryTranslations.filter((t) => t !== translation)
-                                                );
-                                            } else {
-                                                setNewEditoMandatoryTranslations([
-                                                    ...newEditoMandatoryTranslations,
-                                                    translation,
-                                                ]);
-                                            }
-                                        }}
-                                        value={translation}
-                                    />
-                                ))}
-                            </FormGroup>
-                        </Box>
-                    </Box>
-
-                    <Box>
-                        <Typography variant="subtitle1">
-                            {translate(`instance.edito.centralUniversityTranslations`)}
-                        </Typography>
-                        {availableLanguages.length > 0 && (
-                            <>
-                                <Table>
-                                    <TableBody>
-                                        {newCentralUniversityTranslations?.map((language) => (
-                                            <TableRow key={language.code}>
-                                                <TableCell sx={{ width: '60px', padding: '0' }}>
-                                                    <Button
-                                                        onClick={() => {
-                                                            const newCentralUniversityTranslationsValue =
-                                                                newCentralUniversityTranslations.filter(
-                                                                    (lang) => lang.code !== language.code
-                                                                );
-                                                            setNewCentralUniversityTranslations(
-                                                                newCentralUniversityTranslationsValue
-                                                            );
-                                                            const newSelectedLanguages = availableLanguages?.filter(
-                                                                (lang) =>
-                                                                    !newCentralUniversityTranslationsValue?.some(
-                                                                        (l) => l.code === lang.code
-                                                                    )
-                                                            );
-                                                            if (newSelectedLanguages) {
-                                                                setSelectedLanguage(newSelectedLanguages?.[0]);
-                                                            }
-                                                        }}
-                                                        sx={{ '& span': { margin: 0 } }}
-                                                    >
-                                                        <DeleteIcon />
-                                                    </Button>
-                                                </TableCell>
-                                                <TableCell sx={{ padding: '10px' }}>{language.code}</TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-
-                                {selectedLanguage &&
-                                    availableLanguages.filter(
-                                        (language) =>
-                                            !newCentralUniversityTranslations?.some((l) => l.code === language.code)
-                                    ).length > 0 && (
-                                        <Box alignItems="center" display="flex" flexDirection="row" gap="10px">
-                                            <Select
-                                                onChange={(e) => {
-                                                    const language = availableLanguages.find(
-                                                        (lang) => lang.code === e.target.value
-                                                    );
-                                                    setSelectedLanguage(language);
-                                                }}
-                                                value={selectedLanguage?.code}
-                                            >
-                                                {availableLanguages
-                                                    .filter(
-                                                        (language) =>
-                                                            !newCentralUniversityTranslations?.some(
-                                                                (l) => l.code === language.code
+                            <Box>
+                                <Typography variant="subtitle1">
+                                    {translate(`instance.edito.mandatoryTranslations`)}
+                                </Typography>
+                                <Box alignItems="center" display="flex" flexDirection="row">
+                                    <FormGroup>
+                                        {Object.values(EditoMandatoryTranslations).map((translation) => (
+                                            <FormControlLabel
+                                                key={translation}
+                                                checked={newEditoMandatoryTranslations.includes(translation)}
+                                                control={<Switch />}
+                                                label={translate(`editos.languages.${translation}`)}
+                                                onChange={() => {
+                                                    if (newEditoMandatoryTranslations.includes(translation)) {
+                                                        setNewEditoMandatoryTranslations(
+                                                            newEditoMandatoryTranslations.filter(
+                                                                (t) => t !== translation
                                                             )
-                                                    )
-                                                    .map((language) => (
-                                                        <MenuItem key={language.code} value={language.code}>
-                                                            {language.code}
-                                                        </MenuItem>
-                                                    ))}
-                                            </Select>
-                                            <Button
-                                                color="primary"
-                                                disabled={!selectedLanguage}
-                                                onClick={() => {
-                                                    const language = availableLanguages?.find(
-                                                        (lang) => lang.code === selectedLanguage?.code
-                                                    );
-                                                    if (language) {
-                                                        const newCentralUniversityTranslationsValue =
-                                                            newCentralUniversityTranslations
-                                                                ? [...newCentralUniversityTranslations, language]
-                                                                : [language];
-                                                        setNewCentralUniversityTranslations(
-                                                            newCentralUniversityTranslationsValue
                                                         );
-                                                        const newSelectedLanguages = availableLanguages?.filter(
-                                                            (lang) =>
-                                                                !newCentralUniversityTranslationsValue?.some(
-                                                                    (l) => l.code === lang.code
-                                                                )
-                                                        );
-                                                        if (newSelectedLanguages) {
-                                                            setSelectedLanguage(newSelectedLanguages?.[0]);
-                                                        }
+                                                    } else {
+                                                        setNewEditoMandatoryTranslations([
+                                                            ...newEditoMandatoryTranslations,
+                                                            translation,
+                                                        ]);
                                                     }
                                                 }}
-                                                sx={{ padding: '8px 30px' }}
-                                                variant="contained"
-                                            >
-                                                <span>Ajouter</span>
-                                            </Button>
-                                        </Box>
-                                    )}
-                            </>
-                        )}
-                    </Box>
+                                                value={translation}
+                                            />
+                                        ))}
+                                    </FormGroup>
+                                </Box>
+                            </Box>
+
+                            <Box>
+                                <Typography variant="subtitle1">
+                                    {translate(`instance.edito.centralUniversityTranslations`)}
+                                </Typography>
+                                {availableLanguages.length > 0 && (
+                                    <>
+                                        <Table>
+                                            <TableBody>
+                                                {newCentralUniversityTranslations?.map((language) => (
+                                                    <TableRow key={language.code}>
+                                                        <TableCell sx={{ width: '60px', padding: '0' }}>
+                                                            <Button
+                                                                onClick={() => {
+                                                                    const newCentralUniversityTranslationsValue =
+                                                                        newCentralUniversityTranslations.filter(
+                                                                            (lang) => lang.code !== language.code
+                                                                        );
+                                                                    setNewCentralUniversityTranslations(
+                                                                        newCentralUniversityTranslationsValue
+                                                                    );
+                                                                    const newSelectedLanguages =
+                                                                        availableLanguages?.filter(
+                                                                            (lang) =>
+                                                                                !newCentralUniversityTranslationsValue?.some(
+                                                                                    (l) => l.code === lang.code
+                                                                                )
+                                                                        );
+                                                                    if (newSelectedLanguages) {
+                                                                        setSelectedLanguage(newSelectedLanguages?.[0]);
+                                                                    }
+                                                                }}
+                                                                sx={{ '& span': { margin: 0 } }}
+                                                            >
+                                                                <DeleteIcon />
+                                                            </Button>
+                                                        </TableCell>
+                                                        <TableCell sx={{ padding: '10px' }}>{language.code}</TableCell>
+                                                    </TableRow>
+                                                ))}
+                                            </TableBody>
+                                        </Table>
+
+                                        {selectedLanguage &&
+                                            availableLanguages.filter(
+                                                (language) =>
+                                                    !newCentralUniversityTranslations?.some(
+                                                        (l) => l.code === language.code
+                                                    )
+                                            ).length > 0 && (
+                                                <Box alignItems="center" display="flex" flexDirection="row" gap="10px">
+                                                    <Select
+                                                        onChange={(e) => {
+                                                            const language = availableLanguages.find(
+                                                                (lang) => lang.code === e.target.value
+                                                            );
+                                                            setSelectedLanguage(language);
+                                                        }}
+                                                        value={selectedLanguage?.code}
+                                                    >
+                                                        {availableLanguages
+                                                            .filter(
+                                                                (language) =>
+                                                                    !newCentralUniversityTranslations?.some(
+                                                                        (l) => l.code === language.code
+                                                                    )
+                                                            )
+                                                            .map((language) => (
+                                                                <MenuItem key={language.code} value={language.code}>
+                                                                    {language.code}
+                                                                </MenuItem>
+                                                            ))}
+                                                    </Select>
+                                                    <Button
+                                                        color="primary"
+                                                        disabled={!selectedLanguage}
+                                                        onClick={() => {
+                                                            const language = availableLanguages?.find(
+                                                                (lang) => lang.code === selectedLanguage?.code
+                                                            );
+                                                            if (language) {
+                                                                const newCentralUniversityTranslationsValue =
+                                                                    newCentralUniversityTranslations
+                                                                        ? [
+                                                                              ...newCentralUniversityTranslations,
+                                                                              language,
+                                                                          ]
+                                                                        : [language];
+                                                                setNewCentralUniversityTranslations(
+                                                                    newCentralUniversityTranslationsValue
+                                                                );
+                                                                const newSelectedLanguages = availableLanguages?.filter(
+                                                                    (lang) =>
+                                                                        !newCentralUniversityTranslationsValue?.some(
+                                                                            (l) => l.code === lang.code
+                                                                        )
+                                                                );
+                                                                if (newSelectedLanguages) {
+                                                                    setSelectedLanguage(newSelectedLanguages?.[0]);
+                                                                }
+                                                            }
+                                                        }}
+                                                        sx={{ padding: '8px 30px' }}
+                                                        variant="contained"
+                                                    >
+                                                        <span>{translate('instance.add_button')}</span>
+                                                    </Button>
+                                                </Box>
+                                            )}
+                                    </>
+                                )}
+                            </Box>
+                        </>
+                    )}
                 </Box>
 
                 <Box sx={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '20px' }}>

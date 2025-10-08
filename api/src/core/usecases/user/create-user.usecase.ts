@@ -41,7 +41,11 @@
 import { KeycloakClient } from '@app/keycloak';
 import { Inject, Injectable } from '@nestjs/common';
 import { toZonedTime } from 'date-fns-tz';
-import { RegistrationException, UnauthorizedOperation } from 'src/core/errors';
+import {
+  DomainError,
+  RegistrationException,
+  UnauthorizedOperation,
+} from 'src/core/errors';
 import { Gender, Role, User } from 'src/core/models';
 import { CHAT_SERVICE } from 'src/core/ports/chat.service';
 import {
@@ -169,12 +173,17 @@ export class CreateUserUsecase {
         origin: 'api',
       });
     } else if (command.password && keycloakUser) {
+      try {
+        await this.keycloak.getCredentials(command.email, command.password);
+      } catch (error) {
+        throw new DomainError({ message: 'Invalid password provided' });
+      }
+
       await this.keycloak.updateUser({
         id: keycloakUser.id,
-        email: keycloakUser.email,
-        firstname: command.firstname,
-        lastname: command.lastname,
-        password: command.password,
+        newEmail: keycloakUser.email,
+        newFirstName: command.firstname,
+        newLastName: command.lastname,
         universityId:
           keycloakUser.attributes?.universityId?.[0] || university.id,
         universityLogin: keycloakUser.attributes?.universityLogin?.[0],

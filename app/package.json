@@ -1,7 +1,7 @@
 {
     "name": "ulep",
     "private": true,
-    "version": "0.51.0",
+    "version": "0.53.0",
     "type": "module",
     "scripts": {
         "dev": "vite",
@@ -9,6 +9,9 @@
         "build:prod": "tsc && ionic build --prod",
         "build:android": "npx cap sync android && ionic capacitor run android -l --external --prod",
         "build:ios": "npx cap sync ios && ionic capacitor run ios --open -l --external",
+        "build:aab:dev": "npm run build:prod && npx cap sync android && cd android && ./gradlew bundleDevRelease",
+        "build:aab:staging": "npm run build:prod && npx cap sync android && cd android && ./gradlew bundleStagingRelease",
+        "build:aab:prod": "npm run build:prod && npx cap sync android && cd android && ./gradlew bundleProdRelease",
         "preview": "vite preview",
         "test.e2e": "cypress run",
         "test.unit": "TZ=UTC jest --config jest.config.cjs --coverage",

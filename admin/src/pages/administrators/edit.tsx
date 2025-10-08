@@ -38,13 +38,13 @@
  *
  */
 
-import { Edit, useNotify, useRedirect, useTranslate, useUpdate, WithRecord } from 'react-admin';
+import { Edit, useNotify, useRedirect, useTranslate, useUpdate, useRecordContext } from 'react-admin';
 import AdministratorForm from '../../components/form/AdministratorForm';
 import ConfigPagesHeader from '../../components/tabs/ConfigPagesHeader';
 import Administrator, { AdministratorFormPayload } from '../../entities/Administrator';
 
-const EditAdministrator = () => {
-    const translate = useTranslate();
+const AdministratorEditForm = () => {
+    const record = useRecordContext<Administrator>();
     const [update] = useUpdate();
     const redirect = useRedirect();
     const notify = useNotify();
@@ -90,26 +90,33 @@ const EditAdministrator = () => {
         }
     };
 
+    if (!record) {
+        return null;
+    }
+
+    return (
+        <AdministratorForm
+            email={record.email}
+            firstname={record.firstname}
+            group={record.group}
+            handleSubmit={handleSubmit}
+            id={record.id}
+            languageId={record.languageId}
+            lastname={record.lastname}
+            type="update"
+            universityId={record.universityId || 'central'}
+        />
+    );
+};
+
+const EditAdministrator = () => {
+    const translate = useTranslate();
+
     return (
         <>
             <ConfigPagesHeader />
             <Edit title={translate('administrators.update.title')}>
-                <WithRecord<Administrator>
-                    label="user/administrator"
-                    render={(record) => (
-                        <AdministratorForm
-                            email={record.email}
-                            firstname={record.firstname}
-                            group={record.group}
-                            handleSubmit={handleSubmit}
-                            id={record.id}
-                            languageId={record.languageId}
-                            lastname={record.lastname}
-                            type="update"
-                            universityId={record.universityId || 'central'}
-                        />
-                    )}
-                />
+                <AdministratorEditForm />
             </Edit>
         </>
     );

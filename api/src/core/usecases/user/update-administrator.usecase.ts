@@ -88,9 +88,9 @@ export class UpdateAdministratorUsecase {
     try {
       const keycloakUser = await this.keycloakClient.updateUser({
         id: admin.id,
-        firstname: command.firstname || admin.firstName,
-        lastname: command.lastname || admin.lastName,
-        email: command.email || admin.email,
+        newFirstName: command.firstname || admin.firstName,
+        newLastName: command.lastname || admin.lastName,
+        newEmail: command.email || admin.email,
         password: command.password,
         universityId: command.universityId || '',
         languageId: command.languageId || '',
