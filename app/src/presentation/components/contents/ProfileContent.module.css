@@ -45,6 +45,8 @@
     height: 100%;
     padding: 50px;
     overflow-y: auto;
+    max-width: 100%;
+    box-sizing: border-box;
 
     .content {
         align-items: center;
@@ -63,9 +65,11 @@
         .cards {
             width: 100%;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 20px;
             margin-bottom: 25px;
+            max-width: 100%;
+            box-sizing: border-box;
         }
 
         .buttons {
@@ -149,5 +153,33 @@
                 background-color: rgba(242, 244, 247, 1);
             }
         }
+    }
+}
+
+/* Media queries for responsive design */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+
+    .content .cards {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .content .buttons {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 15px;
+    }
+
+    .content .cards {
+        grid-template-columns: 1fr;
+        gap: 10px;
     }
 }
