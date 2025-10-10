@@ -42,6 +42,8 @@ import { IonButton, IonIcon } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { RecordSvg, SenderSvg } from '../../assets';
+import useWindowDimensions from '../hooks/useWindowDimensions';
+import { HYBRID_MAX_WIDTH } from '../utils';
 import styles from './RecordingButton.module.css';
 
 interface RecordingButtonProps {
@@ -68,6 +70,8 @@ const RecordingButton = ({
     const { t } = useTranslation();
     const [recording, setRecording] = useState(false);
     const [time, setTime] = useState(0);
+    const { width } = useWindowDimensions();
+    const isHybrid = width < HYBRID_MAX_WIDTH;
 
     useEffect(() => {
         if (isBlocked) {
@@ -115,6 +119,18 @@ const RecordingButton = ({
         }
     };
 
+    const handleRecordButtonClick = (from: 'mouse' | 'touch') => {
+        if (from === 'mouse' && isHybrid) return;
+        if (from === 'touch' && !isHybrid) return;
+        startRecording();
+    };
+
+    const handleRecordButtonRelease = (from: 'mouse' | 'touch') => {
+        if (from === 'mouse' && isHybrid) return;
+        if (from === 'touch' && !isHybrid) return;
+        stopRecording();
+    };
+
     return (
         <div className={styles['container']}>
             {mode !== 'send' && (
@@ -129,12 +145,20 @@ const RecordingButton = ({
                             className={styles['sender-button']}
                             disabled={isBlocked}
                             onClick={onSendPressed}
-                            onMouseDown={startRecording}
-                            onMouseUp={stopRecording}
+                            onMouseDown={() => {
+                                handleRecordButtonClick('mouse');
+                            }}
+                            onMouseUp={() => {
+                                handleRecordButtonRelease('mouse');
+                            }}
                             onKeyDown={onKeyDown}
                             onKeyUp={onKeyUp}
-                            onTouchStart={startRecording}
-                            onTouchEnd={stopRecording}
+                            onTouchStart={() => {
+                                handleRecordButtonClick('touch');
+                            }}
+                            onTouchEnd={() => {
+                                handleRecordButtonRelease('touch');
+                            }}
                         >
                             <IonIcon className={styles['recorder']} icon={RecordSvg} />
                         </IonButton>
