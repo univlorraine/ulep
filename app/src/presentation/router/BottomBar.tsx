@@ -74,7 +74,7 @@ const BottomBar: React.FC = () => {
             <IonTabs>
                 <IonRouterOutlet>
                     <Switch>
-                        {!limitedFeatures && (
+                        {!limitedFeatures ? (
                             <>
                                 <Route exact path="/home">
                                     <HomePage />
@@ -82,14 +82,23 @@ const BottomBar: React.FC = () => {
                                 <Route exact path="/conversations">
                                     <ConversationsPage />
                                 </Route>
+                                <Route exact path="/learning">
+                                    <LearningPage />
+                                </Route>
+                                <Route exact path="/profile">
+                                    <ProfilePage />
+                                </Route>
+                            </>
+                        ) : (
+                            <>
+                                <Route exact path="/learning">
+                                    <LearningPage />
+                                </Route>
+                                <Route exact path="/profile">
+                                    <ProfilePage />
+                                </Route>
                             </>
                         )}
-                        <Route exact path="/learning">
-                            <LearningPage />
-                        </Route>
-                        <Route exact path="/profile">
-                            <ProfilePage />
-                        </Route>
                     </Switch>
                 </IonRouterOutlet>
 
