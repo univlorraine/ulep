@@ -86,15 +86,28 @@ export const CreateActivityVocabularyContent: React.FC<CreateActivityVocabularyC
 
     useEffect(() => {
         if (audioFile && recordingIndex !== null) {
-            const newVocabularies = [...vocabularies];
-            newVocabularies[recordingIndex].file = audioFile;
-            setVocabularies(newVocabularies);
+            setVocabularies((prevVocabularies) => {
+                const newVocabularies = [...prevVocabularies];
+                if (newVocabularies[recordingIndex]) {
+                    newVocabularies[recordingIndex].file = audioFile;
+                }
+                return newVocabularies;
+            });
             setRecordingIndex(null);
             clearAudioFile();
         }
-    }, [audioFile, recordingIndex, vocabularies, clearAudioFile]);
+    }, [audioFile, recordingIndex, clearAudioFile]);
 
     const handleDeleteVocabulary = (index: number) => {
+        // Si on supprime l'élément en cours d'enregistrement, annuler l'enregistrement
+        if (recordingIndex === index) {
+            setRecordingIndex(null);
+            stopRecording();
+        } else if (recordingIndex !== null && recordingIndex > index) {
+            // Ajuster l'index d'enregistrement si on supprime un élément avant
+            setRecordingIndex(recordingIndex - 1);
+        }
+
         const newVocabularies = vocabularies.filter((_, i) => i !== index);
         setVocabularies(newVocabularies);
     };
@@ -131,8 +144,7 @@ export const CreateActivityVocabularyContent: React.FC<CreateActivityVocabularyC
         startRecording();
     };
 
-    const handleStopRecord = (index: number) => {
-        setRecordingIndex(null);
+    const handleStopRecord = () => {
         stopRecording();
     };
 
@@ -144,7 +156,7 @@ export const CreateActivityVocabularyContent: React.FC<CreateActivityVocabularyC
             <p className="subtitle">{t('activity.create.subtitle_vocabulary')}</p>
 
             {vocabularies.map((vocabulary, index) => (
-                <div className={styles['vocabulary-line']}>
+                <div key={vocabulary.id || `vocabulary-${index}`} className={styles['vocabulary-line']}>
                     <div className={styles['vocabulary-container']}>
                         <TextInput
                             id={`input-vocabulary-${index}`}
