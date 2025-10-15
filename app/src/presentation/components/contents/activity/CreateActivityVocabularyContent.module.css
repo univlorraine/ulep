@@ -64,10 +64,10 @@
 
 .pronunciation-container {
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
+    align-items: flex-start;
     width: 100%;
+    gap: 8px;
 }
 
 .pronunciation {
@@ -80,13 +80,21 @@
     padding-left: 12px;
 }
 
+.action-container {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+}
+
 .delete-pronunciation {
     color: #000;
     font-family: Maven Pro;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 400;
-    line-height: 20px;
+    line-height: 18px;
     text-align: start;
+    white-space: nowrap;
+    min-width: fit-content;
 }
 
 .loader-container {

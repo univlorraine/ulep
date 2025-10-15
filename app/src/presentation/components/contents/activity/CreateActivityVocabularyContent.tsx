@@ -86,15 +86,28 @@ export const CreateActivityVocabularyContent: React.FC<CreateActivityVocabularyC
 
     useEffect(() => {
         if (audioFile && recordingIndex !== null) {
-            const newVocabularies = [...vocabularies];
-            newVocabularies[recordingIndex].file = audioFile;
-            setVocabularies(newVocabularies);
+            setVocabularies((prevVocabularies) => {
+                const newVocabularies = [...prevVocabularies];
+                if (newVocabularies[recordingIndex]) {
+                    newVocabularies[recordingIndex].file = audioFile;
+                }
+                return newVocabularies;
+            });
             setRecordingIndex(null);
             clearAudioFile();
         }
-    }, [audioFile, recordingIndex, vocabularies, clearAudioFile]);
+    }, [audioFile, recordingIndex, clearAudioFile]);
 
     const handleDeleteVocabulary = (index: number) => {
+        // If the element is being recorded, stop the recording
+        if (recordingIndex === index) {
+            setRecordingIndex(null);
+            stopRecording();
+        } else if (recordingIndex !== null && recordingIndex > index) {
+            // Adjust the recording index if an element is deleted before
+            setRecordingIndex(recordingIndex - 1);
+        }
+
         const newVocabularies = vocabularies.filter((_, i) => i !== index);
         setVocabularies(newVocabularies);
     };
@@ -131,8 +144,7 @@ export const CreateActivityVocabularyContent: React.FC<CreateActivityVocabularyC
         startRecording();
     };
 
-    const handleStopRecord = (index: number) => {
-        setRecordingIndex(null);
+    const handleStopRecord = () => {
         stopRecording();
     };
 
@@ -144,7 +156,7 @@ export const CreateActivityVocabularyContent: React.FC<CreateActivityVocabularyC
             <p className="subtitle">{t('activity.create.subtitle_vocabulary')}</p>
 
             {vocabularies.map((vocabulary, index) => (
-                <div className={styles['vocabulary-line']}>
+                <div key={vocabulary.id || `vocabulary-${index}`} className={styles['vocabulary-line']}>
                     <div className={styles['vocabulary-container']}>
                         <TextInput
                             id={`input-vocabulary-${index}`}
@@ -165,23 +177,25 @@ export const CreateActivityVocabularyContent: React.FC<CreateActivityVocabularyC
                                     />
                                 )}
                             </div>
-                            {vocabulary.file || vocabulary.pronunciationUrl ? (
-                                <IonButton
-                                    className={styles['delete-pronunciation']}
-                                    fill="clear"
-                                    onClick={() => onDeletePronunciation(index)}
-                                >
-                                    {t('activity.create.delete_pronunciation')}
-                                </IonButton>
-                            ) : (
-                                <RecordingButton
-                                    mode="record"
-                                    handleStartRecord={() => handleStartRecord(index)}
-                                    handleStopRecord={() => handleStopRecord(index)}
-                                    isBlocked={false}
-                                    hideSendButton
-                                />
-                            )}
+                            <div className={styles['action-container']}>
+                                {vocabulary.file || vocabulary.pronunciationUrl ? (
+                                    <IonButton
+                                        className={styles['delete-pronunciation']}
+                                        fill="clear"
+                                        onClick={() => onDeletePronunciation(index)}
+                                    >
+                                        {t('activity.create.delete_pronunciation')}
+                                    </IonButton>
+                                ) : (
+                                    <RecordingButton
+                                        mode="record"
+                                        handleStartRecord={() => handleStartRecord(index)}
+                                        handleStopRecord={handleStopRecord}
+                                        isBlocked={false}
+                                        hideSendButton
+                                    />
+                                )}
+                            </div>
                         </div>
                     </div>
                     <IonButton
