@@ -177,23 +177,25 @@ export const CreateActivityVocabularyContent: React.FC<CreateActivityVocabularyC
                                     />
                                 )}
                             </div>
-                            {vocabulary.file || vocabulary.pronunciationUrl ? (
-                                <IonButton
-                                    className={styles['delete-pronunciation']}
-                                    fill="clear"
-                                    onClick={() => onDeletePronunciation(index)}
-                                >
-                                    {t('activity.create.delete_pronunciation')}
-                                </IonButton>
-                            ) : (
-                                <RecordingButton
-                                    mode="record"
-                                    handleStartRecord={() => handleStartRecord(index)}
-                                    handleStopRecord={handleStopRecord}
-                                    isBlocked={false}
-                                    hideSendButton
-                                />
-                            )}
+                            <div className={styles['action-container']}>
+                                {vocabulary.file || vocabulary.pronunciationUrl ? (
+                                    <IonButton
+                                        className={styles['delete-pronunciation']}
+                                        fill="clear"
+                                        onClick={() => onDeletePronunciation(index)}
+                                    >
+                                        {t('activity.create.delete_pronunciation')}
+                                    </IonButton>
+                                ) : (
+                                    <RecordingButton
+                                        mode="record"
+                                        handleStartRecord={() => handleStartRecord(index)}
+                                        handleStopRecord={handleStopRecord}
+                                        isBlocked={false}
+                                        hideSendButton
+                                    />
+                                )}
+                            </div>
                         </div>
                     </div>
                     <IonButton
