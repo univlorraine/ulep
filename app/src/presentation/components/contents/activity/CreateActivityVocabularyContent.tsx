@@ -99,12 +99,12 @@ export const CreateActivityVocabularyContent: React.FC<CreateActivityVocabularyC
     }, [audioFile, recordingIndex, clearAudioFile]);
 
     const handleDeleteVocabulary = (index: number) => {
-        // Si on supprime l'élément en cours d'enregistrement, annuler l'enregistrement
+        // If the element is being recorded, stop the recording
         if (recordingIndex === index) {
             setRecordingIndex(null);
             stopRecording();
         } else if (recordingIndex !== null && recordingIndex > index) {
-            // Ajuster l'index d'enregistrement si on supprime un élément avant
+            // Adjust the recording index if an element is deleted before
             setRecordingIndex(recordingIndex - 1);
         }
 
@@ -189,7 +189,7 @@ export const CreateActivityVocabularyContent: React.FC<CreateActivityVocabularyC
                                 <RecordingButton
                                     mode="record"
                                     handleStartRecord={() => handleStartRecord(index)}
-                                    handleStopRecord={() => handleStopRecord(index)}
+                                    handleStopRecord={handleStopRecord}
                                     isBlocked={false}
                                     hideSendButton
                                 />
