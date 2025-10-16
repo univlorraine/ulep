@@ -122,7 +122,7 @@
         "apply": "Appliquer",
         "cancel": "Annuler",
         "is_mine": "Mes fiches",
-        "selected_aria_label": "{{selected}} sélectionné"
+        "selected_aria_label": "{{selected}}"
     },
     "credit": {
         "title": "Auteur du fichier"

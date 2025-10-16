@@ -61,7 +61,7 @@
         "apply": "Apply",
         "cancel": "Cancel",
         "is_mine": "My sheets",
-        "selected_aria_label": "{{selected}} selected"
+        "selected_aria_label": "{{selected}}"
     },
     "events": {
         "open": "Open event {{title}}",
