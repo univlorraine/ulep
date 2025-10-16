@@ -935,6 +935,7 @@
         "error_confirm_password": "The passwords are not identical",
         "error_domain": "Please enter a valid email address (check email format and domain name)",
         "error_email": "Please enter a valid email",
+        "error_password": "Password must contain at least 8 characters, one uppercase letter, one lowercase letter and one digit",
         "error_email_already_exist": "",
         "error_firstname": "Please enter a valid first name",
         "error_gender": "Please select a gender",
