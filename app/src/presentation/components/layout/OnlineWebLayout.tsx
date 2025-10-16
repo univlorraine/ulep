@@ -62,17 +62,21 @@ const OnlineWebLayout: React.FC<OnlineLayoutProps> = ({ children, onRefresh }) =
     return (
         <IonPage>
             <HomeHeader />
-            <nav className={styles.container}>
-                <Sidebar
-                    onDisplayReport={() => setDisplayReport(true)}
-                    onDisplayVocabularySidebar={() => setDisplayVocabularySidebar(true)}
-                    onDisplayActivitySidebar={() => setDisplayActivitySidebar(true)}
-                    onDisplayLearningDiary={() => setDisplayLearningDiary(true)}
-                    onOpenActivitySidebar={() => setDisplayActivitySidebar(true)}
-                    onDisplaySessionModal={() => setDisplaySessionModal(true)}
-                />
-                <IonContent className={styles.content}>{children}</IonContent>
-            </nav>
+            <div className={styles.container}>
+                <nav className={styles.sidebar}>
+                    <Sidebar
+                        onDisplayReport={() => setDisplayReport(true)}
+                        onDisplayVocabularySidebar={() => setDisplayVocabularySidebar(true)}
+                        onDisplayActivitySidebar={() => setDisplayActivitySidebar(true)}
+                        onDisplayLearningDiary={() => setDisplayLearningDiary(true)}
+                        onOpenActivitySidebar={() => setDisplayActivitySidebar(true)}
+                        onDisplaySessionModal={() => setDisplaySessionModal(true)}
+                    />
+                </nav>
+                <main className={styles.content}>
+                    <IonContent>{children}</IonContent>
+                </main>
+            </div>
             <ReportModal isVisible={displayReport} onClose={() => setDisplayReport(false)} />
             <NewVocabularyMenuModal
                 isVisible={displayVocabularySidebar}
