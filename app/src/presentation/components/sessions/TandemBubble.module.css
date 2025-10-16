@@ -55,7 +55,7 @@
 .flag {
     color: #000;
     text-align: center;
-    font-family: 'Twemoji Country Flags';
+    font-family: 'Twemoji Country Flags', 'Maven Pro';
     font-size: 15.58px;
     font-style: italic;
     font-weight: 100;
@@ -94,7 +94,7 @@
 
     .flag {
         color: #000;
-        font-family: 'Maven Pro';
+        font-family: 'Twemoji Country Flags';
         font-size: 16px;
         font-style: normal;
         font-weight: 400;
