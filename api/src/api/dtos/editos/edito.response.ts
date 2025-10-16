@@ -41,8 +41,7 @@
 import * as Swagger from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { IsArray } from 'class-validator';
-import { Edito } from 'src/core/models/edito.model';
-import { EditoTranslation } from 'src/core/models/edito.model';
+import { Edito, EditoTranslation } from 'src/core/models/edito.model';
 import { UniversityResponse } from '../universities';
 
 export class EditoTranslationResponse {
@@ -114,13 +113,22 @@ export class EditoResponse {
   }
 
   static fromDomain(instance: Edito, languageCode?: string) {
+    let content;
+    let video;
     const contentTranslated = instance.translations.find(
       (translation) => translation.languageCode === languageCode,
     );
+    if (contentTranslated) {
+      content = contentTranslated.content;
+      video = contentTranslated.video;
+    } else {
+      content = instance.content;
+      video = instance.video;
+    }
     return new EditoResponse({
       id: instance.id,
-      content: contentTranslated?.content || instance.content,
-      video: contentTranslated?.video || instance.video,
+      content: content,
+      video: video,
       university: UniversityResponse.fromUniversity(instance.university),
       imageURL: instance.imageURL,
       languageCode: instance.languageCode,
