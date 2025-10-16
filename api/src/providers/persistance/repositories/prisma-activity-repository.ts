@@ -223,7 +223,7 @@ export class PrismaActivityRepository implements ActivityRepository {
 
     if (props.languageCode) {
       where.LanguageCode = {
-        id: props.languageCode,
+        code: props.languageCode,
       };
     }
 
