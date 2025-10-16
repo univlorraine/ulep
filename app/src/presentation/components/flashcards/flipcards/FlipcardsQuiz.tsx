@@ -41,6 +41,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Vocabulary from '../../../../domain/entities/Vocabulary';
+import { shuffleArray } from '../../../utils';
 import Loader from '../../Loader';
 import FlipcardsButtons from './FlipcardsButtons';
 import FlipcardsCards from './FlipcardsCards';
@@ -62,6 +63,7 @@ const FlipcardsQuiz: React.FC<FlipcardsQuizProps> = ({
     setIsQuizFinished,
 }) => {
     const [vocabulariesCount, setVocabulariesCount] = useState<number>(1);
+    const [shuffledVocabularies, setShuffledVocabularies] = useState<Vocabulary[]>([]);
     const [currentVocabulary, setCurrentVocabulary] = useState<Vocabulary>({
         id: '',
         word: '',
@@ -75,9 +77,14 @@ const FlipcardsQuiz: React.FC<FlipcardsQuizProps> = ({
 
     useEffect(() => {
         if (vocabularies.length > 0 && !currentVocabulary.word && !isLoading) {
-            setCurrentVocabulary(vocabularies[0]);
+            const validVocabularies = vocabularies.filter((vocabulary) => vocabulary.word && vocabulary.translation);
+            const shuffled = shuffleArray(validVocabularies);
+            setShuffledVocabularies(shuffled);
+            if (shuffled.length > 0) {
+                setCurrentVocabulary(shuffled[0]);
+            }
         }
-    }, [isLoading]);
+    }, [vocabularies, isLoading]);
 
     return (
         <div className={`${styles.container} content-wrapper`}>
@@ -85,7 +92,7 @@ const FlipcardsQuiz: React.FC<FlipcardsQuizProps> = ({
                 <p className={styles.title}>{t('flashcards.flipcards.title')}</p>
                 <p className={styles.text}>
                     {t('flashcards.flipcards.term.term')} {vocabulariesCount} {t('flashcards.flipcards.term.of')}{' '}
-                    {vocabularies.length}
+                    {shuffledVocabularies.length}
                 </p>
             </div>
 
@@ -93,7 +100,7 @@ const FlipcardsQuiz: React.FC<FlipcardsQuizProps> = ({
             {!isLoading && <FlipcardsCards currentVocabulary={currentVocabulary} showAnswer={showAnswer} />}
 
             <FlipcardsButtons
-                vocabularies={vocabularies}
+                vocabularies={shuffledVocabularies}
                 setCurrentVocabulary={setCurrentVocabulary}
                 setVocabulariesCount={setVocabulariesCount}
                 vocabulariesCount={vocabulariesCount}
