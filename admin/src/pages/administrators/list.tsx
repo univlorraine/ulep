@@ -74,7 +74,7 @@ const DeleteAdministratorButton = ({ identity }: DeleteAdministratorButtonProps)
 
     if (
         !permissions.checkRole(Role.SUPER_ADMIN) &&
-        (record?.universityId !== identity.universityId || record?.group.name === AdminGroup.SUPER_ADMIN)
+        (record?.universityId !== identity.universityId || record?.group?.name === AdminGroup.SUPER_ADMIN)
     ) {
         return null;
     }
@@ -182,7 +182,9 @@ const AdministratorList = (props: ListProps<Administrator>) => {
                     <FunctionField
                         label={translate('global.group')}
                         render={(admin: Administrator) =>
-                            translate(`admin_groups_picker.${admin.group.name.toLowerCase()}`)
+                            admin.group?.name
+                                ? translate(`admin_groups_picker.${admin.group.name.toLowerCase()}`)
+                                : translate('global.loading')
                         }
                         sortable={false}
                     />
