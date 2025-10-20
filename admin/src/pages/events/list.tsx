@@ -154,7 +154,6 @@ const EventsList = () => {
                         : undefined
                 }
                 filters={filters}
-                disableSyncWithLocation
             >
                 <Datagrid bulkActionButtons={<BulkDeleteButton mutationMode="pessimistic" />} rowClick={false}>
                     <TextField label="events.list.title" source="title" />
