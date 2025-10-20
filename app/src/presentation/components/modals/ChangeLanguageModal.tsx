@@ -39,7 +39,7 @@
  */
 
 import { IonButton, IonModal } from '@ionic/react';
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { codeLanguageToFlag } from '../../utils';
 import styles from './ChangeLanguageModal.module.css';
@@ -60,11 +60,7 @@ const ChangeLanguageModal: React.FC<ChangeLanguageModalProps> = ({
     allLanguagesCodes,
 }) => {
     const { t } = useTranslation();
-    const [currentLanguageCodeSelected, setCurrentLanguageCodeSelected] = useState(currentLanguageCode);
-
-    useEffect(() => {
-        setCurrentLanguageCodeSelected(currentLanguageCode);
-    }, [currentLanguageCode]);
+    const currentLanguageCodeSelected = useMemo(() => currentLanguageCode, [currentLanguageCode]);
 
     return (
         <IonModal animated isOpen={isVisible} onDidDismiss={onClose} className={styles.modal}>
