@@ -71,7 +71,7 @@ const PairingLanguagesPage: React.FC = () => {
     }
 
     const continueSignUp = async (selectedLanguage: Language) => {
-        updateProfileSignUp({ learningLanguage: selectedLanguage });
+        updateProfileSignUp({ learningLanguage: selectedLanguage, isSuggested: false });
 
         return history.push(`/pairing/pedagogy`);
     };

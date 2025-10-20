@@ -136,7 +136,7 @@ const Store = createStore<TokenStoreTypes>(
                 if (payload.gender) profile.gender = payload.gender;
                 if (payload.goals) profile.goals = payload.goals;
                 if (payload.interests) profile.interests = payload.interests;
-                if (payload.isSuggested) profile.isSuggested = payload.isSuggested;
+                if (payload.isSuggested !== undefined) profile.isSuggested = payload.isSuggested;
                 if (payload.isForCertificate) profile.isForCertificate = payload.isForCertificate;
                 if (payload.isForProgram) profile.isForProgram = payload.isForProgram;
                 if (payload.lastname) profile.lastname = payload.lastname;

@@ -46,13 +46,14 @@ interface OGCardProps {
     title: string;
     description: string;
     url: string;
+    maxWidth?: number;
 }
 
-const OGCard: React.FC<OGCardProps> = ({ imageUrl, title, description, url }) => {
+const OGCard: React.FC<OGCardProps> = ({ imageUrl, title, description, url, maxWidth }) => {
     return (
         <div className={styles.container}>
             {imageUrl && (
-                <div className={styles.image}>
+                <div className={styles.image} style={{ maxWidth: maxWidth }}>
                     <img src={imageUrl} />
                 </div>
             )}

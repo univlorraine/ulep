@@ -96,7 +96,13 @@ const InterestShow = () => {
                     <TextField label={translate('administrators.show.email')} source="email" />
                     <FunctionField
                         label={translate('administrators.show.group.label')}
-                        render={(record: Administrator) => translate(`administrators.show.group.${record.group.name}`)}
+                        render={(record: Administrator) => {
+                            if (record.group) {
+                                return translate(`administrators.show.group.${record.group.name}`);
+                            }
+
+                            return translate('global.loading');
+                        }}
                         source="university.name"
                     />
                     <FunctionField

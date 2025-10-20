@@ -312,13 +312,23 @@ export const compareCEFR = (levelA: CEFR, levelB: CEFR) => {
     return CEFRlevels[levelB] - CEFRlevels[levelA];
 };
 
+export const isPasswordValid = (password: string): boolean => {
+    const minLength = password.length >= 8;
+    const hasUppercase = /[A-Z]/.test(password);
+    const hasLowercase = /[a-z]/.test(password);
+    const hasDigit = /\d/.test(password);
+
+    return minLength && hasUppercase && hasLowercase && hasDigit;
+};
+
 export const isImageFormatValid = (file: File): boolean => {
     const imageRegex = /^(image\/(jpg|png|jpeg))$/;
     return imageRegex.test(file.type);
 };
 
 export const isUrlValid = (url: string): boolean => {
-    const urlRegex = /https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}/i;
+    const urlRegex =
+        /https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}/i;
     return urlRegex.test(url);
 };
 
@@ -338,4 +348,13 @@ export const normalizeString = (string: string) => {
         .toLowerCase()
         .normalize('NFD')
         .replace(/[\u0300-\u036f]/g, '');
+};
+
+export const shuffleArray = <T>(array: T[]): T[] => {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
 };
