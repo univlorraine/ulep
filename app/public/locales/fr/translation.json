@@ -430,6 +430,10 @@
         "years_old": "ans",
         "kebab_button": "Ouvrir le menu contextuel"
     },
+    "video_call": {
+        "permissions_required": "Les permissions caméra et microphone sont requises pour les appels vidéo",
+        "permissions_error": "Erreur lors de la demande de permissions pour l'appel vidéo"
+    },
     "vocabulary": {
         "list": {
             "create": {

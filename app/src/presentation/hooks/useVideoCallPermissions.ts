@@ -15,7 +15,7 @@
  *   de la licence CeCILL telle que diffusée par le CEA, le CNRS et INRIA
  *   sur le site "http://cecill.info".
  *
- *   En contrepartie de l'accessibilité au code source et des droits de copie,
+ *   En contrepartie de l'accessibilité du code source et des droits de copie,
  *   de modification et de redistribution accordés par cette licence, il n'est
  *   offert aux utilisateurs qu'une garantie limitée. Pour les mêmes raisons,
  *   seule une responsabilité restreinte pèse sur l'auteur du programme, le
@@ -38,10 +38,56 @@
  *
  */
 
-interface CameraAdapterInterface {
-    getPictureFromGallery: () => Promise<File | undefined>;
-    checkPermissions: () => Promise<void>;
-    requestVideoCallPermissions: () => Promise<boolean>;
+import { useIonToast } from '@ionic/react';
+import { useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useHistory } from 'react-router-dom';
+import { useConfig } from '../../context/ConfigurationContext';
+
+interface UseVideoCallPermissionsReturn {
+    requestPermissionsAndNavigate: (roomName: string, state?: any) => Promise<void>;
 }
 
-export default CameraAdapterInterface;
+export const useVideoCallPermissions = (): UseVideoCallPermissionsReturn => {
+    const history = useHistory();
+    const { deviceAdapter, cameraAdapter } = useConfig();
+    const { t } = useTranslation();
+    const [showToast] = useIonToast();
+
+    const requestPermissionsAndNavigate = useCallback(
+        async (roomName: string, state?: any) => {
+            try {
+                if (deviceAdapter.isAndroid() || deviceAdapter.isIos()) {
+                    const hasPermissions = await cameraAdapter.requestVideoCallPermissions();
+
+                    if (!hasPermissions) {
+                        showToast({
+                            message: t('video_call.permissions_required') as string,
+                            duration: 3000,
+                            color: 'warning',
+                        });
+                        return;
+                    }
+                }
+
+                history.push({
+                    pathname: '/jitsi',
+                    search: `?roomName=${roomName}`,
+                    state,
+                });
+            } catch (error) {
+                console.error('Error requesting video call permissions:', error);
+                showToast({
+                    message: t('video_call.permissions_error') as string,
+                    duration: 3000,
+                    color: 'danger',
+                });
+            }
+        },
+        [history, deviceAdapter, cameraAdapter, t, showToast]
+    );
+
+    return {
+        requestPermissionsAndNavigate,
+    };
+};

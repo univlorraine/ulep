@@ -384,6 +384,10 @@
         "download": "Download",
         "years_old": "years old"
     },
+    "video_call": {
+        "permissions_required": "Camera and microphone permissions are required for video calls",
+        "permissions_error": "Error requesting video call permissions"
+    },
     "vocabulary": {
         "list": {
             "create": {
