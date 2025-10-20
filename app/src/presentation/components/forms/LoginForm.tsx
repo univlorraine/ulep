@@ -45,6 +45,7 @@ import { AvatarPng, LeftChevronSvg } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
 import Tokens from '../../../domain/entities/Tokens';
 import useLogout from '../../hooks/useLogout';
+import { isEmailCorrect } from '../../utils';
 import CircleAvatar from '../CircleAvatar';
 import TextInput from '../TextInput';
 import style from './Form.module.css';
@@ -61,9 +62,31 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [errorMessage, setErrorMessage] = useState<string>('');
+    const [emailError, setEmailError] = useState<string>('');
     const [showLoading, hideLoading] = useIonLoading();
 
     const handleLogin = async () => {
+        // Reset error messages
+        setErrorMessage('');
+        setEmailError('');
+
+        // Validate email format
+        if (!email.trim()) {
+            setEmailError(t('login_page.invalid_email') as string);
+            return;
+        }
+
+        if (!isEmailCorrect(email)) {
+            setEmailError(t('login_page.invalid_email') as string);
+            return;
+        }
+
+        // Validate password
+        if (!password.trim()) {
+            setErrorMessage(t('login_page.invalid_password') as string);
+            return;
+        }
+
         await showLoading();
         const result = await login.execute(email, password);
         if (result instanceof Error) {
@@ -120,6 +143,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
                     title={t('global.email') as string}
                     type="email"
                     value={email}
+                    errorMessage={emailError}
+                    required={true}
                 />
                 <TextInput
                     id="input-password"
@@ -128,6 +153,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ goBack, onLogin }) => {
                     title={t('global.password') as string}
                     type="password"
                     value={password}
+                    required={true}
                 />
                 {errorMessage && <p className={style['error-message']}>{t(errorMessage)}</p>}
                 <div className={style['bottom-container']}>

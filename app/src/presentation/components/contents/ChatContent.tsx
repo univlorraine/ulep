@@ -64,6 +64,7 @@ import { useStoreState } from '../../../store/storeTypes';
 import { useAppVisibilityRefresh } from '../../hooks/useAppVisibilityRefresh';
 import useHandleHastagsFromConversation from '../../hooks/useHandleHastagsFromConversation';
 import useHandleMessagesFromConversation from '../../hooks/useHandleMessagesFromConversation';
+import { useVideoCallPermissions } from '../../hooks/useVideoCallPermissions';
 import ChatInputSender from '../chat/ChatInputSender';
 import ConversationSearchBar from '../chat/ConversationSearchBar';
 import MessageComponent from '../chat/MessageComponent';
@@ -91,6 +92,7 @@ const Content: React.FC<ChatContentProps> = ({
     const { t } = useTranslation();
     const { socket } = useSocket();
     const [showToast] = useIonToast();
+    const { requestPermissionsAndNavigate } = useVideoCallPermissions();
     const {
         getVocabularyLists,
         getActivities,
@@ -182,10 +184,9 @@ const Content: React.FC<ChatContentProps> = ({
         }
 
         const conversationLearningLanguage = findLearningLanguageConversation();
-        history.push({
-            pathname: '/jitsi',
-            search: `?roomName=${conversation.id}`,
-            state: { tandemPartner: partner, learningLanguageId: conversationLearningLanguage?.id },
+        requestPermissionsAndNavigate(conversation.id, {
+            tandemPartner: partner,
+            learningLanguageId: conversationLearningLanguage?.id,
         });
     };
 

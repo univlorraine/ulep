@@ -180,7 +180,7 @@ export class CreateMessageUsecase {
     ): Promise<void> {
         const hashtags = content.match(/#\w+/g);
         const allHashtags = hashtags
-            ? hashtags.map((hashtag) => hashtag.slice(1))
+            ? hashtags.map((hashtag) => hashtag.slice(1).toLowerCase())
             : [];
 
         for (const hashtag of allHashtags) {
