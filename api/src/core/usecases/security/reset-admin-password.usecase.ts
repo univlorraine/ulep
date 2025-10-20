@@ -42,10 +42,10 @@ import { KeycloakClient, UserRepresentation } from '@app/keycloak';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Env } from 'src/configuration';
-import { EMAIL_GATEWAY, EmailGateway } from 'src/core/ports/email.gateway';
+import { EmailGateway, EMAIL_GATEWAY } from 'src/core/ports/email.gateway';
 import {
-  UNIVERSITY_REPOSITORY,
   UniversityRepository,
+  UNIVERSITY_REPOSITORY,
 } from 'src/core/ports/university.repository';
 
 export class ResetPasswordCommand {
@@ -86,7 +86,9 @@ export class ResetAdminPasswordUsecase {
 
     const language = await this.getUserLanguage(user);
 
-    if (hasPasswordCredentials) {
+    const isCentralUniversityUser = await this.isCentralUniversityUser(user);
+
+    if (hasPasswordCredentials || !isCentralUniversityUser) {
       await this.sendResetPasswordEmail(user, command.loginUrl, language);
     } else {
       await this.sendPasswordChangeDeniedEmail(user, language);
@@ -141,5 +143,19 @@ export class ResetAdminPasswordUsecase {
     }
 
     return defaultLanguage;
+  }
+
+  private async isCentralUniversityUser(
+    user: UserRepresentation,
+  ): Promise<boolean> {
+    if (!user.attributes?.universityId?.[0]) {
+      return false;
+    }
+
+    const university = await this.universityRepository.ofId(
+      user.attributes.universityId[0],
+    );
+
+    return university ? university.isCentralUniversity() : false;
   }
 }
