@@ -368,6 +368,7 @@
         "error_confirm_password": "密码不一样",
         "error_domain": "",
         "error_email": "请输入有效的电子邮件",
+        "error_password": "密码必须至少包含8个字符、一个大写字母、一个小写字母和一个数字",
         "error_email_already_exist": "",
         "error_firstname": "请输入有效的名字",
         "error_gender": "请选择性别",

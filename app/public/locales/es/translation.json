@@ -368,6 +368,7 @@
         "error_confirm_password": "Las contraseñas no son iguales",
         "error_domain": "",
         "error_email": "Inscriba un correo electrónico válido",
+        "error_password": "La contraseña debe contener al menos 8 caracteres, una mayúscula, una minúscula y un dígito",
         "error_email_already_exist": "",
         "error_firstname": "Inscriba un nombre válido",
         "error_gender": "Escoja el género",

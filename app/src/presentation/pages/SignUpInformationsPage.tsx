@@ -50,7 +50,7 @@ import RequiredField from '../components/forms/RequiredField';
 import RequiredFieldsMention from '../components/forms/RequiredFieldsMention';
 import WebLayoutCentered from '../components/layout/WebLayoutCentered';
 import TextInput from '../components/TextInput';
-import { isEmailCorrect, isImageFormatValid, isNameCorrect } from '../utils';
+import { isEmailCorrect, isImageFormatValid, isNameCorrect, isPasswordValid } from '../utils';
 import styles from './css/SignUp.module.css';
 
 export interface SignUpInformationsParams {
@@ -194,6 +194,10 @@ const SignUpInformationsPage: React.FC = () => {
         }
 
         if (!fromIdp && !password) {
+            return setErrorMessage({ type: 'password', message: t('signup_informations_page.error_password') });
+        }
+
+        if (!fromIdp && !isPasswordValid(password)) {
             return setErrorMessage({ type: 'password', message: t('signup_informations_page.error_password') });
         }
 
@@ -392,9 +396,7 @@ const SignUpInformationsPage: React.FC = () => {
                         <TextInput
                             id="input-password"
                             autocomplete="new-password"
-                            errorMessage={
-                                errorMessage?.type === 'password' ? <RulesInfo displayImage={false} /> : undefined
-                            }
+                            errorMessage={errorMessage?.type === 'password' ? errorMessage.message : undefined}
                             onChange={setPassword}
                             placeholder={t('signup_informations_page.placeholder_password')}
                             title={t('global.password') as string}

@@ -312,6 +312,15 @@ export const compareCEFR = (levelA: CEFR, levelB: CEFR) => {
     return CEFRlevels[levelB] - CEFRlevels[levelA];
 };
 
+export const isPasswordValid = (password: string): boolean => {
+    const minLength = password.length >= 8;
+    const hasUppercase = /[A-Z]/.test(password);
+    const hasLowercase = /[a-z]/.test(password);
+    const hasDigit = /\d/.test(password);
+
+    return minLength && hasUppercase && hasLowercase && hasDigit;
+};
+
 export const isImageFormatValid = (file: File): boolean => {
     const imageRegex = /^(image\/(jpg|png|jpeg))$/;
     return imageRegex.test(file.type);
