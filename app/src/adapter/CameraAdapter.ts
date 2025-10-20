@@ -39,6 +39,7 @@
  */
 
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { VoiceRecorder } from 'capacitor-voice-recorder';
 import CameraAdapterInterface from './interfaces/CameraAdapter.interface';
 
 class CameraAdapter implements CameraAdapterInterface {
@@ -64,6 +65,18 @@ class CameraAdapter implements CameraAdapterInterface {
     checkPermissions = async () => {
         const res = await Camera.checkPermissions();
         await Camera.requestPermissions({ permissions: ['camera'] });
+    };
+
+    requestVideoCallPermissions = async () => {
+        try {
+            const cameraPermission = await Camera.requestPermissions({ permissions: ['camera'] });
+            const microphonePermission = await VoiceRecorder.requestAudioRecordingPermission();
+
+            return cameraPermission.camera === 'granted' && microphonePermission.value === true;
+        } catch (error) {
+            console.error('Error requesting video call permissions:', error);
+            return false;
+        }
     };
 }
 export default CameraAdapter;

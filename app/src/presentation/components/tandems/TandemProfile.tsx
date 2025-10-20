@@ -50,6 +50,7 @@ import Profile from '../../../domain/entities/Profile';
 import { useStoreState } from '../../../store/storeTypes';
 import useLimitedFeatures from '../../hooks/useLimitedFeatures';
 import useOnOpenChat from '../../hooks/useOnOpenChat';
+import { useVideoCallPermissions } from '../../hooks/useVideoCallPermissions';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../../utils';
 import styles from './TandemProfile.module.css';
@@ -82,16 +83,16 @@ const TandemProfile: React.FC<TandemProfileProps> = ({
     const history = useHistory();
     const onOpenChat = useOnOpenChat({ tandemId: id });
     const limitedFeatures = useLimitedFeatures();
+    const { requestPermissionsAndNavigate } = useVideoCallPermissions();
 
     if (!meProfile) {
         return null;
     }
 
     const onOpenVideoCall = () => {
-        history.push({
-            pathname: '/jitsi',
-            search: `?roomName=${id}`,
-            state: { tandemPartner: meProfile, learningLanguageId: learningLanguage.id },
+        requestPermissionsAndNavigate(id, {
+            tandemPartner: meProfile,
+            learningLanguageId: learningLanguage.id,
         });
     };
 
