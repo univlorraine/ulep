@@ -82,6 +82,7 @@
                 height: 95px;
                 background-color: white;
                 object-fit: cover;
+                border-radius: 50%;
             }
             .logo {
                 object-fit: contain;
