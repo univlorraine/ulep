@@ -121,8 +121,7 @@
         },
         "apply": "Appliquer",
         "cancel": "Annuler",
-        "is_mine": "Mes fiches",
-        "selected_aria_label": "{{selected}}"
+        "is_mine": "Mes fiches"
     },
     "credit": {
         "title": "Auteur du fichier"
