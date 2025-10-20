@@ -46,6 +46,7 @@ import { useConfig } from '../../../context/ConfigurationContext';
 import { Message, MessageType } from '../../../domain/entities/chat/Message';
 import MessageReport from '../../../domain/entities/MessageReport';
 import AudioLine from '../AudioLine';
+import OGCard from '../card/OGCard';
 import styles from './MediaComponent.module.css';
 
 interface MessageProps<T extends Message | MessageReport> {
@@ -62,6 +63,9 @@ const MediaComponent = <T extends Message | MessageReport>({ message, setImageTo
                 return <MessageFile message={message} />;
             case MessageType.Audio:
                 return <MessageAudio message={message} />;
+            case MessageType.Link:
+                return <MessageLinkMedia message={message} />;
+            default:
                 return null;
         }
     };
@@ -129,6 +133,20 @@ const MessageFile: React.FC<MessageProps<Message | MessageReport>> = ({ message 
                     />
                 </div>
             </IonButton>
+        </div>
+    );
+};
+
+const MessageLinkMedia: React.FC<MessageProps<Message | MessageReport>> = ({ message }) => {
+    return (
+        <div className={styles.messageLink} role="listitem">
+            <OGCard
+                imageUrl={message.metadata?.openGraphResult?.ogImage?.[0]?.url}
+                title={message.metadata?.openGraphResult?.ogTitle || message.content}
+                description={message.metadata?.openGraphResult?.ogDescription || ''}
+                url={message.content}
+                maxWidth={200}
+            />
         </div>
     );
 };
