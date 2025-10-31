@@ -22,4 +22,4 @@ jobs:
                   MIRROR_TOKEN: ${{ secrets.MIRROR_TOKEN }}
               run: |
                   git remote add mirror https://$MIRROR_TOKEN@github.com/univlorraine/ulep.git
-                  git push mirror main
+                  git push --mirror main
