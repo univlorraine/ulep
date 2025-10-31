@@ -18,10 +18,8 @@ jobs:
                   git config --global user.email "action@github.com"
 
             - name: Add mirror remote and push
-              env:
-                  MIRROR_TOKEN: ${{ secrets.MIRROR_TOKEN }}
               run: |
-                  git remote add mirror https://$MIRROR_TOKEN@github.com/univlorraine/ulep.git                  
+                  git remote add mirror https://${{ secrets.MIRROR_TOKEN }}@github.com/univlorraine/ulep.git                  
                   rm -rf .github/workflows
                   git commit -a -m "Remove github workflows"
                   git push mirror main
