@@ -14,12 +14,12 @@ jobs:
 
             - name: Configure Git
               run: |
-                  git config --global user.name "colin boulanger"
-                  git config --global user.email "colin.boulanger@thetribe.io"
+                  git config --global user.name "GitHub Action"
+                  git config --global user.email "action@github.com"
 
             - name: Add mirror remote and push
               run: |
-                  git remote add mirror https://${{ secrets.MIRROR_TOKEN }}@github.com/univlorraine/ulep.git                  
+                  git remote add mirror https://x-access-token:${{ secrets.MIRROR_TOKEN }}@github.com/univlorraine/ulep.git                  
                   rm -rf .github/workflows
                   git commit -a -m "Remove github workflows"
                   git push mirror main
