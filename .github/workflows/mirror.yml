@@ -20,8 +20,8 @@ jobs:
       - name: Add mirror remote and push
         run: |
           git config --local --unset-all "http.https://github.com/.extraheader"
-          git remote add mirror github.com/univlorraine/ulep.git                  
+          git remote add mirror https://x-access-token:${{ secrets.MIRROR_TOKEN }}@github.com/univlorraine/ulep.git                  
           rm -rf .github/workflows
           git commit -a -m "Remove github workflows"
           git pull mirror main
-          git push https://${{ secrets.MIRROR_TOKEN }}@github.com/univlorraine/ulep.git main
+          git push mirror main
