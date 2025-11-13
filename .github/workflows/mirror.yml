@@ -24,5 +24,4 @@ jobs:
           git remote add mirror https://x-access-token:${{ secrets.MIRROR_TOKEN }}@github.com/univlorraine/ulep.git                  
           rm -rf .github/workflows
           git commit -a -m "Remove github workflows"
-          git pull --allow-unrelated-histories mirror main
-          git push mirror main
+          git push -f mirror main
