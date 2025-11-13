@@ -11,7 +11,8 @@ jobs:
     steps:
       - name: Checkout source repository
         uses: actions/checkout@v3
-
+        with:
+          token: ${{ secrets.MIRROR_TOKEN }}
       - name: Configure Git
         run: |
           git config --global user.name "GitHub Action"
