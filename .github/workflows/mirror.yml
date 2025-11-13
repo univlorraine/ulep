@@ -26,4 +26,5 @@ jobs:
           rm -rf .github/workflows
           git add .
           git commit -a -m "Remove github workflows"
+          git repack remote/mirror/main
           git push -f mirror main
