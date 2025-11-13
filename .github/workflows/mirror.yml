@@ -3,7 +3,7 @@ name: Mirror GitHub ULEP from The Tribe to UL
 on:
   push:
     branches:
-      - main
+      - ops/mirror-to-public
 
 jobs:
   mirror:
@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout source repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: Configure Git
         run: |
           git config --global user.name "GitHub Action"
@@ -22,11 +24,6 @@ jobs:
           git config --local --unset-all "http.https://github.com/.extraheader"
           git config pull.rebase true          
           git remote add mirror https://x-access-token:${{ secrets.MIRROR_TOKEN }}@github.com/univlorraine/ulep.git 
-
-          # S'assurer que tous les objets sont présents
-          git fetch origin --unshallow || true
-          git gc --prune=now  
-
           rm -rf .github/workflows
           git add .
           git commit -a -m "Remove github workflows"          
