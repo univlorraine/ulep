@@ -3,7 +3,7 @@ name: Mirror GitHub ULEP from The Tribe to UL
 on:
   push:
     branches:
-      - ops/mirror-to-public
+      - main
 
 jobs:
   mirror:
