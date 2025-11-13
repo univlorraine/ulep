@@ -21,7 +21,12 @@ jobs:
         run: |
           git config --local --unset-all "http.https://github.com/.extraheader"
           git config pull.rebase true          
-          git remote add mirror https://x-access-token:${{ secrets.MIRROR_TOKEN }}@github.com/univlorraine/ulep.git                         
+          git remote add mirror https://x-access-token:${{ secrets.MIRROR_TOKEN }}@github.com/univlorraine/ulep.git 
+
+          # S'assurer que tous les objets sont présents
+          git fetch origin --unshallow || true
+          git gc --prune=now  
+
           rm -rf .github/workflows
           git add .
           git commit -a -m "Remove github workflows"          
