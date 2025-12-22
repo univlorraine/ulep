@@ -103,20 +103,24 @@ export class PrismaEditoRepository implements EditoRepository {
     return editos.map(editoMapper);
   }
 
-  async findById(id: string): Promise<Edito> {
+  async findById(id: string): Promise<Edito | null> {
     const edito = await this.prisma.editos.findUnique({
       where: { id },
       include: EditoRelations,
     });
 
+    if (!edito) return null;
+
     return editoMapper(edito);
   }
 
-  async findByUniversityId(universityId: string): Promise<Edito> {
+  async findByUniversityId(universityId: string): Promise<Edito | null> {
     const edito = await this.prisma.editos.findFirst({
       where: { University: { id: universityId } },
       include: EditoRelations,
     });
+
+    if (!edito) return null;
 
     return editoMapper(edito);
   }
