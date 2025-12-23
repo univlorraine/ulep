@@ -112,6 +112,10 @@ export class InstanceResponse {
   @Expose({ groups: ['read'] })
   logoURL: string;
 
+  @ApiPropertyOptional({ type: 'string', format: 'url' })
+  @Expose({ groups: ['read'] })
+  faviconURL?: string;
+
   @ApiProperty({ type: 'array', items: { type: 'string' } })
   @Expose({ groups: ['read'] })
   editoMandatoryTranslations: string[];
@@ -143,6 +147,7 @@ export class InstanceResponse {
         ? MediaObjectResponse.fromMediaObject(instance.defaultCertificateFile)
         : null,
       logoURL: instance.logoURL,
+      faviconURL: instance.faviconURL,
       editoMandatoryTranslations: instance.editoMandatoryTranslations,
       editoCentralUniversityTranslations:
         instance.editoCentralUniversityTranslations.map((translation) =>
