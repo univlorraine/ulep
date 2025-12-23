@@ -108,30 +108,32 @@ export class UpdateInstanceUsecase {
       centralUniversity.id,
     );
 
-    const newTranslations = command.editoCentralUniversityTranslations
-      ? command.editoCentralUniversityTranslations.map((translation) => {
-          const existingTranslation = edito.translations.find(
-            (t) => t.languageCode === translation,
-          );
-          return {
-            languageCode: translation,
-            content: existingTranslation?.content || '',
-            video: existingTranslation?.video || '',
-          };
-        })
-      : [];
+    if (edito) {
+      const newTranslations = command.editoCentralUniversityTranslations
+        ? command.editoCentralUniversityTranslations.map((translation) => {
+            const existingTranslation = edito.translations.find(
+              (t) => t.languageCode === translation,
+            );
+            return {
+              languageCode: translation,
+              content: existingTranslation?.content || '',
+              video: existingTranslation?.video || '',
+            };
+          })
+        : [];
 
-    newTranslations.push(
-      edito.translations.find((t) => t.languageCode === 'en'),
-    );
+      newTranslations.push(
+        edito.translations.find((t) => t.languageCode === 'en'),
+      );
 
-    await this.editoRepository.update({
-      id: edito.id,
-      content: edito.content,
-      languageCode: edito.languageCode,
-      video: edito.video,
-      translations: newTranslations,
-    });
+      await this.editoRepository.update({
+        id: edito.id,
+        content: edito.content,
+        languageCode: edito.languageCode,
+        video: edito.video,
+        translations: newTranslations,
+      });
+    }
 
     return newInstance;
   }
