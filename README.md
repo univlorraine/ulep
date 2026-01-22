@@ -1,18 +1,60 @@
-# eTandems
+# eTandems ULEP
 
-TODO: Put a short description of the project here.
+Le projet **ULEP** porté par l'université de Lorraine a pour objectif de proposer un socle technique open source permettant la mise en oeuvre d'une application web et mobile de service linguistique sous la forme de tandems où chacun peut apprendre la langue de son partenaire.
 
-## Features
+ULEP est financé en partie par le plan **France Relance** dans le cadre de l'appel à projets DemoES 2021 **Démonstrateurs numériques dans l'enseignement supérieur** 
 
-TODO: List what the project can do. Maybe include images, gifs, or videos.
+ULEP est l'acronyme pour désigner : University Language Exchange Programme. Le principe a pour objectif de pratiquer une langue étrangère avec un natif. 
+
+- Les utilisateurs d'ULEP doivent faire partie d'universités qui sont préalablement configurées dans l'application.
+- Une de ces universités est l'université centrale, c'est elle qui dirige le programme.
+- Les personnes désirant s'inscrire au programme enregistrent leur profil, leurs compétences en langues et leurs souhaits pour les modalités d'échange en tandem.
+- L'algorithme d'ULEP propose des associations d'inscrits par paires, selon les données de chacun et concernant toujours au moins un inscrit de l'université centrale.
+- Quand deux personnes de langue maternelle différente sont appariés, elles s’engagent à se rencontrer régulièrement via l'application ou dans la vie réelle pour échanger dans leur langue et s’épauler dans leur apprentissage.
+- Les deux partenaires linguistiques sont entièrement autonomes : ils choisissent le rythme, le lieu, le contenu et le mode de leurs rencontres.
+- L’objectif est à la fois linguistique et culturel, permettant de s’initier à la culture de l’autre tout en pratiquant des langues étrangères.
+
+## Fonctionnalités
+
+L'application est constituée d'une partie back-office en mode web pour tout ce qui concerne le paramétrage des universités partenaires, pour la réalisation des tandems, pour le suivi des signalements. La deuxième partie de l'application se présente sous la forme d'une application mobile pour système Android ou iOS, complétée par une version web pour tout navigateur internet. 
+
+Les utilisateurs pourront : 
+
+- S'inscrire en renseignant des données personnelles de profil utilisateur.
+- Faire une demande de tandem en langue, en choisissant des options pour la pédagogie d'apprentissage. 
+- Dialoguer par chat, avec son partenaire de tandem, ou via un salon de discussion bilingue.
+- Dialoguer en appel visioconférence avec son partenaire de tandem.
+- Renseigner un journal d'apprentissage, par langue.
+- Créer des listes de vocabulaire et s'entraîner à mémoriser les listes avec un jeu sous forme de flashcards.
+- Consulter et ou créer des fiches d'apprentissage.
+- Lire des actualités en plusieurs langues, proposées par les universités.
+- S'inscrire à des événements proposés par les universités.
+
+## Documentation
+
+[Consulter notre wiki](https://github.com/univlorraine/ulep/wiki)
+
+## Licence
+
+**ULEP** est sous la licence [CeCILL-2.1](LICENCE).
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/08f9f01e-07bf-49fe-97c8-37103999a2a4" alt="logo-FranceRelance2030" />
+  <img width="462" height="140" alt="logo-ANR" src="https://github.com/user-attachments/assets/1038afb4-7ea7-4810-a116-e1c5384ca5d3" />
+</p>
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/f53e9c7c-10f4-4ea4-a6b6-55ec35775f8f" alt="logo-Academie-Nancy-Metz" />
+  <img src="https://github.com/user-attachments/assets/784c6b51-ee38-4554-b2d6-9caea49abada" alt="logo-PleiadesDemoES" />
+</p>
+
+<p align="center">
+  <img width="300" height="130" alt="logo-UnivLorraine" src="https://github.com/user-attachments/assets/b08f96a9-25c0-4a25-9ca4-b8d6aba5a727" />
+</p>
 
 ## Getting started
 
 TODO: List prerequisites and provide or point to information on how to start using the project.
-
-## Documentation
-
-[Check out our Wiki](https://github.com/univlorraine/ulep/wiki)
 
 ## Installation
 
