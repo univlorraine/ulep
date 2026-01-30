@@ -98,7 +98,7 @@ const JoinSessionButton: React.FC<JoinSessionButtonProps> = ({ tandem }) => {
         return history.push({
             pathname: '/jitsi',
             search: `?roomName=${tandem.id}`,
-            state: { tandemPartner: tandem.partner },
+            state: { tandemPartner: tandem.partner, learningLanguageId: tandem.learningLanguage.id },
         });
     };
     return (
