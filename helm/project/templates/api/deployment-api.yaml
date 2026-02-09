@@ -28,28 +28,29 @@ spec:
       {{- end }}
       serviceAccountName: {{ include "etandem.serviceAccountName" . }}
       securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}      
       initContainers:
-      - name: wait-for-database-and-migrate
-        image: "{{ .Values.api.initImage.repository }}:{{ .Values.api.initImage.tag | default .Chart.AppVersion }}"
-        imagePullPolicy: {{ .Values.api.initImage.pullPolicy }}
-        env:
-          - name: DB_NAME
-            value: "{{ .Values.postgresql.global.postgresql.auth.database }}"
-          - name: HOST_NAME
-            value: "{{ include "etandem.name" . }}-postgresql.{{ .Release.Namespace }}"
-          - name: DB_USER
-            value: "{{ .Values.postgresql.global.postgresql.auth.username }}"
-          - name: PGPASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
-                key: database-password
-          - name: DATABASE_URL
-            valueFrom:
-              secretKeyRef:
-                name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
-                key: database-url
+        - name: wait-for-database-and-migrate
+          image: "{{ .Values.api.initImage.repository }}:{{ .Values.api.initImage.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.api.initImage.pullPolicy }}
+          command: ["sh", "-c", "set -x; while [ $(pg_isready -d $DB_NAME -h $HOST_NAME -p 5432 -U $DB_USER -q; echo $?) -ne 0 ]; do sleep 5; done; pnpm dlx prisma@4.16.2 migrate deploy"]
+          env:
+            - name: DB_NAME
+              value: "{{ .Values.postgresql.global.postgresql.auth.database }}"
+            - name: HOST_NAME
+              value: "{{ include "etandem.name" . }}-postgresql.{{ .Release.Namespace }}"
+            - name: DB_USER
+              value: "{{ .Values.postgresql.global.postgresql.auth.username }}"
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
+                  key: database-password
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
+                  key: database-url
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
