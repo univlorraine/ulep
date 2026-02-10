@@ -72,6 +72,7 @@ import RoleRepresentation, {
   UpdateKeycloakUserProps,
   UserRepresentation,
   UserSession,
+  UserWithGroups,
 } from './keycloak.models';
 
 export interface Credentials {
@@ -1003,5 +1004,48 @@ export class KeycloakClient {
       },
     );
     await this.initialize();
+  }
+
+  public async getAdministratorsWithGroups(): Promise<UserWithGroups[]> {
+    
+    const groups = await this.getAllGroups();
+    
+    const adminGroups = groups.filter(g => 
+      Object.values(AdminGroup).includes(g.name as AdminGroup)
+    );    
+    
+    const usersWithGroupsMap = new Map<string, { user: any, groups: any[] }>();
+    
+    await Promise.all(
+      adminGroups.map(async (group) => {
+        const members = await this.getGroupMembers(group.id,false);
+        
+        members.forEach(user => {
+          if (!usersWithGroupsMap.has(user.id)) {
+            usersWithGroupsMap.set(user.id, { user, groups: [] });
+          }
+          usersWithGroupsMap.get(user.id).groups.push(group);
+        });
+      })
+    );
+    
+    return Array.from(usersWithGroupsMap.values());
+  }
+
+  async getGroupMembers(groupId: string, briefRepresentation = true) {
+    const url = `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/groups/${groupId}/members?briefRepresentation=${briefRepresentation}`;
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${await this.getAccessToken()}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to get group members: ${response.status}`);
+    }
+
+    return response.json();
   }
 }
