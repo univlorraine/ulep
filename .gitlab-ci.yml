@@ -95,7 +95,7 @@ stages:
   variables:
     WORKING_DIR: docker/keycloak
     IMAGE_NAME: ulep/auth-ul-theme
-    TAG: "1.0"
+    TAG: "1.7"
   rules:
     - changes:
         - docker/keycloak/**/*

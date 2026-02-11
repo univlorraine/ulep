@@ -1,0 +1,34 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-{{ .Release.Revision }}-api-init-preinstall
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "-5"    
+spec:
+  template:
+    spec:
+      containers:
+      - name: wait-for-database-and-migrate
+        image: "{{ .Values.api.initImage.repository }}:{{ .Values.api.initImage.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.api.initImage.pullPolicy }}
+        env:
+          - name: DB_NAME
+            value: "{{ .Values.postgresql.global.postgresql.auth.database }}"
+          - name: HOST_NAME
+            value: "{{ include "etandem.name" . }}-postgresql.{{ .Release.Namespace }}"
+          - name: DB_USER
+            value: "{{ .Values.postgresql.global.postgresql.auth.username }}"
+          - name: PGPASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
+                key: database-password
+          - name: DATABASE_URL
+            valueFrom:
+              secretKeyRef:
+                name: "{{ include "etandem.fullname" . }}-secret-{{ .Values.api.name }}"
+                key: database-url
+        
+      restartPolicy: Never
+      terminationGracePeriodSeconds: 0

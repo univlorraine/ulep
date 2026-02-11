@@ -38,24 +38,28 @@
  *
  */
 
-class Configuration {
-    constructor(
-        public readonly instanceName: string,
-        public readonly mainUniversityName: string,
-        public readonly emailContact: string,
-        public readonly cguUrl: string,
-        public readonly confidentialityUrl: string,
-        public readonly ressourceUrl: string,
-        public readonly primaryColor: string,
-        public readonly primaryDarkColor: string,
-        public readonly primaryBackgroundImageColor: string,
-        public readonly secondaryColor: string,
-        public readonly secondaryDarkColor: string,
-        public readonly secondaryBackgroundImageColor: string,
-        public readonly isInMaintenance: boolean,
-        public readonly logoURL: string,
-        public readonly faviconURL?: string
-    ) {}
-}
+@media (width >=480px) {
+  .logo-background {
+    margin-top: 20px;
+  }
 
-export default Configuration;
+  form {
+    margin-top: 10px;
+  }
+
+  .label-container {
+    font-size: 1rem;
+  }
+
+  .input-container > input {
+    font-size: 0.875rem;
+  }
+
+  .verification-code-cta {
+    margin-top: 10px;
+  }
+
+  .acceptance-inputs {
+    margin-top: 20px;
+  }
+}

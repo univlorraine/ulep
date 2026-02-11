@@ -50,6 +50,7 @@ import {
 } from 'src/core/ports/storage.interface';
 import {
   ASSETS_BUCKET,
+  FAVICON_FILEMANE,
   LOGO_FILENAME,
 } from 'src/providers/storage/minio.storage';
 
@@ -75,7 +76,14 @@ export class GetInstanceUsecase {
       60 * 60 * 24,
     );
 
+    const instanceFavicon = await this.storage.temporaryUrl(
+      ASSETS_BUCKET,
+      FAVICON_FILEMANE,
+      60 * 60 * 24,
+    );
+
     instance.logoURL = instanceLogo;
+    instance.faviconURL = instanceFavicon;
 
     return instance;
   }
