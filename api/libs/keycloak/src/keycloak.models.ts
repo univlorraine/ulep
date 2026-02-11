@@ -80,6 +80,11 @@ export interface UserRepresentation {
   language?: Language;
 }
 
+export interface UserWithGroups {
+  user: UserRepresentation;
+  groups: KeycloakGroup[];
+}
+
 interface UserProfileMetadata {
   attributes: UserProfileAttributeMetadata[];
 }

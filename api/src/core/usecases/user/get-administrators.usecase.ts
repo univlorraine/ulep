@@ -39,6 +39,7 @@
  */
 
 import { KeycloakClient, KeycloakUser } from '@app/keycloak';
+import { UserWithGroups } from '@app/keycloak/keycloak.models';
 import { Inject, Injectable } from '@nestjs/common';
 import {
   AdministratorsQuery,
@@ -67,34 +68,35 @@ export class GetAdministratorsUsecase {
   async execute(
     user?: KeycloakUser,
     query?: AdministratorsQuery,
-  ): Promise<UserRepresentationWithAvatar[]> {
-    const result = await this.keycloak.getAdministrators();
+  ): Promise<UserRepresentationWithAvatar[]> {    
+
+    const result = await this.keycloak.getAdministratorsWithGroups();   
 
     const administrators = await Promise.all(
       result.map(
-        async (administrator) =>
+        async (administratorGroup : UserWithGroups) =>
           ({
-            ...administrator,
-            groups: await this.keycloak.getUserGroups(administrator.id),
-            image: await this.mediaObjectRepository.findOne(administrator.id),
-            language: administrator.attributes?.languageId?.[0]
+            ...administratorGroup.user,
+            groups: administratorGroup.groups,
+            image: await this.mediaObjectRepository.findOne(administratorGroup.user.id),
+            language: administratorGroup.user.attributes?.languageId?.[0]
               ? await this.languageRepository.ofId(
-                  administrator.attributes?.languageId?.[0],
+                  administratorGroup.user.attributes?.languageId?.[0],
                 )
               : undefined,
           } as UserRepresentationWithAvatar),
       ),
     );
 
-    if (query) {
+    if (query) {      
       return this.filterByQuery(administrators, query);
     }
 
     if (user.realm_access.roles.includes(AdminRole.SUPER_ADMIN)) {
       return administrators;
-    }
-
-    return this.filterByUniversity(administrators, user.universityId);
+    }    
+    
+    return administrators;
   }
 
   filterByQuery(

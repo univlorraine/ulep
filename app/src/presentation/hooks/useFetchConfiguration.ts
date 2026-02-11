@@ -58,6 +58,7 @@ interface InstanceCommand {
     hasConnector: boolean;
     isInMaintenance: boolean;
     logoURL: string;
+    faviconURL?: string;
 }
 
 const useFetchConfiguration = (apiUrl: string) => {
@@ -92,7 +93,8 @@ const useFetchConfiguration = (apiUrl: string) => {
                     result.secondaryDarkColor,
                     result.secondaryBackgroundColor,
                     result.isInMaintenance,
-                    result.logoURL
+                    result.logoURL,
+                    result.faviconURL
                 )
             );
             document.documentElement.style.setProperty('--primary-color', result.primaryColor);
@@ -101,6 +103,19 @@ const useFetchConfiguration = (apiUrl: string) => {
             document.documentElement.style.setProperty('--secondary-color', result.secondaryColor);
             document.documentElement.style.setProperty('--secondary-dark-color', result.secondaryDarkColor);
             document.documentElement.style.setProperty('--secondary-background-color', result.secondaryBackgroundColor);
+
+            if (result.faviconURL) {
+                const existingLink = document.querySelector<HTMLLinkElement>("link[rel*='icon']");
+                if (existingLink) {
+                    existingLink.href = result.faviconURL;
+                } else {
+                    const link = document.createElement('link');
+                    link.type = 'image/x-icon';
+                    link.rel = 'shortcut icon';
+                    link.href = result.faviconURL;
+                    document.head.appendChild(link);
+                }
+            }
         } catch (error: any) {
             setError(error);
             showToast({ message: error.message, duration: 5000 });
