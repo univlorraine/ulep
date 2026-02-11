@@ -89,6 +89,11 @@ export class SentryInterceptor implements NestInterceptor {
       return false;
     }
 
+    if(request.body && request.body.password) {
+      return false;
+    }
+    
+
     if (exception instanceof DomainError) {
       return [
         DomainErrorCode.RESSOURCE_ALREADY_EXIST,

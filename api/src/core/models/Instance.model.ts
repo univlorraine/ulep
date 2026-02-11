@@ -103,6 +103,7 @@ export class Instance {
   readonly daysBeforeClosureNotification: number;
   readonly defaultCertificateFile?: MediaObject;
   logoURL: string;
+  faviconURL: string;
   editoMandatoryTranslations: EditoMandatoryTranslations[];
   editoCentralUniversityTranslations: Language[];
 

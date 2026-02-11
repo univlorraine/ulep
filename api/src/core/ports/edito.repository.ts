@@ -59,7 +59,7 @@ export type UpdateEditoCommand = {
 export interface EditoRepository {
   create(props: CreateEditoCommand): Promise<Edito>;
   findAll(): Promise<Edito[]>;
-  findById(id: string): Promise<Edito>;
-  findByUniversityId(universityId: string): Promise<Edito>;
+  findById(id: string): Promise<Edito | null>;
+  findByUniversityId(universityId: string): Promise<Edito | null>;
   update(props: UpdateEditoCommand): Promise<Edito>;
 }
