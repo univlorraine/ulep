@@ -42,6 +42,7 @@ import { useUpdate, useNotify, useRedirect, useTranslate, Edit } from 'react-adm
 import ActivityForm from '../../components/form/ActivityForm';
 import PageTitle from '../../components/PageTitle';
 import { ActivityExercise, ActivityVocabulary } from '../../entities/Activity';
+import queryClient from '../../queryClient';
 
 const EditActivity = () => {
     const translate = useTranslate();
@@ -108,7 +109,10 @@ const EditActivity = () => {
             'activities',
             { id: payload.id, data: formData },
             {
-                onSuccess: () => redirect('/activities'),
+                onSuccess: () => {
+                    redirect('/activities');
+                    queryClient.invalidateQueries({ queryKey: ['activities'] });
+                },
                 onError: (error) => {
                     console.error(error);
 

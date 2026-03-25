@@ -42,6 +42,7 @@ import { Edit, useNotify, useRedirect, useTranslate, useUpdate } from 'react-adm
 import EventForm from '../../components/form/EventForm';
 import PageTitle from '../../components/PageTitle';
 import { EventFormPayload, EventType } from '../../entities/Event';
+import queryClient from '../../queryClient';
 
 const EditEvent = () => {
     const translate = useTranslate();
@@ -104,6 +105,7 @@ const EditEvent = () => {
                 {
                     onSuccess: () => {
                         redirect('/events');
+                        queryClient.invalidateQueries({ queryKey: ['events'] });
                     },
                     onError: (error) => {
                         console.error(error);
