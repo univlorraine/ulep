@@ -1,10 +1,10 @@
 # eTandems ULEP
 
-Le projet **ULEP** porté par l'université de Lorraine a pour objectif de proposer un socle technique open source permettant la mise en oeuvre d'une application web et mobile de service linguistique sous la forme de tandems où chacun peut apprendre la langue de son partenaire.
+Le projet **ULEP** porté par l’université de Lorraine a pour objectif de proposer une application web et mobile open source d’apprentissage linguistique sous la forme de tandems où chacun peut apprendre la langue de son partenaire.
 
-ULEP est financé en partie par le plan **France Relance** dans le cadre de l'appel à projets DemoES 2021 **Démonstrateurs numériques dans l'enseignement supérieur** 
+ULEP a été financé en partie par le plan **France Relance 2030** dans le cadre de l'appel à projets DemoES 2021 **Démonstrateurs numériques dans l'enseignement supérieur** 
 
-ULEP est l'acronyme pour désigner : University Language Exchange Programme. Le principe a pour objectif de pratiquer une langue étrangère avec un natif. 
+ULEP est l'acronyme de : University Language Exchange Programme. Le principe a pour objectif de pratiquer une langue étrangère avec un natif. 
 
 - Les utilisateurs d'ULEP doivent faire partie d'universités qui sont préalablement configurées dans l'application.
 - Une de ces universités est l'université centrale, c'est elle qui dirige le programme.
@@ -23,7 +23,7 @@ Les utilisateurs pourront :
 - S'inscrire en renseignant des données personnelles de profil utilisateur.
 - Faire une demande de tandem en langue, en choisissant des options pour la pédagogie d'apprentissage. 
 - Dialoguer par chat, avec son partenaire de tandem, ou via un salon de discussion bilingue.
-- Dialoguer en appel visioconférence avec son partenaire de tandem.
+- Dialoguer en appel visioconférence (système interne à l'application) avec son partenaire de tandem.
 - Renseigner un journal d'apprentissage, par langue.
 - Créer des listes de vocabulaire et s'entraîner à mémoriser les listes avec un jeu sous forme de flashcards.
 - Consulter et ou créer des fiches d'apprentissage.
@@ -36,7 +36,9 @@ Les utilisateurs pourront :
 
 ## Licence
 
-**ULEP** est sous la licence [CeCILL-2.1](LICENCE).
+**ULEP** est sous la licence [CeCILL-2.1](LICENCE). L’application a été développée avec des technologies et des composants open source.
+
+L’université de Lorraine met à disposition le code source de l’application, dans le cadre de la licence précitée. L’université de Lorraine ne propose pas d’accompagnement à l’installation et au paramétrage du code source.
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/08f9f01e-07bf-49fe-97c8-37103999a2a4" alt="logo-FranceRelance2030" />
@@ -52,9 +54,21 @@ Les utilisateurs pourront :
   <img width="300" height="130" alt="logo-UnivLorraine" src="https://github.com/user-attachments/assets/b08f96a9-25c0-4a25-9ca4-b8d6aba5a727" />
 </p>
 
-## Getting started
+## Avant de démarrer
 
-TODO: List prerequisites and provide or point to information on how to start using the project.
+La construction de l’ensemble de l’architecture technique d’ULEP requiert des solides connaissances en informatique devOps. En plus des compétences en gestion de contenus conteneurisés, le projet requiert de savoir orchestrer les conteneurs avec la technologie Kubernetes. Pour préparer les versions d’applications mobiles compatibles smartphone, la compilation des exécutables nécessite les environnements de développement adhoc pour Android et iOS.
+
+L’équipe technique recommandée est structurée à minima par : 
+
+- 1 ingénieur.e DevOps
+- 1 ingénieur.e DevMobile
+- 1 ingénieur.e Infrastructures et réseaux
+
+Pour la gestion du projet il est nécessaire de constituer une équipe composée d’informaticiens, d’un administrateur fonctionnel de l’application (paramétrage, animation de la communauté des utilisateurs…) et de référents pédagogiques.
+
+Les sources de l’application sont fournies sans accompagnement technique ni garantie de la part de l’Université de Lorraine.
+
+Pour toute question sur la mise en place d’ULEP dans votre établissement vous pouvez contacter l’équipe de l’Université de Lorraine par mail ulep-contact@univ-lorraine.fr qui pourra vous orienter vers un prestataire en mesure de vous accompagner.
 
 ## Installation
 
@@ -148,8 +162,6 @@ You can generate a new migration from database schema with:
 make migration
 ```
 
-## Additional information
+## Information additionnelle
 
-TODO: Tell users more about the project: where to find more information, how to contribute, how to file issues, what
-response they can expect
-from the authors, and more.
+Pour toute demande d’informations complémentaires, vous pouvez nous contacter par email à l’adresse : ulep-contact@univ-lorraine.fr
