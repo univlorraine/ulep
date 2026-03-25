@@ -55,24 +55,30 @@ interface CreateActivityVocabularyContentProps {
     onSubmit: (vocabularies: { content: string; file?: File }[], vocabulariesToDelete?: string[]) => Promise<void>;
     onBackPressed: () => void;
     activityToUpdate?: Activity;
+    initialVocabularies?: { id?: string; content: string; file?: File; pronunciationUrl?: string }[];
 }
 
 export const CreateActivityVocabularyContent: React.FC<CreateActivityVocabularyContentProps> = ({
     onSubmit,
     onBackPressed,
     activityToUpdate,
+    initialVocabularies,
 }) => {
     const { t } = useTranslation();
     const [showToast] = useIonToast();
     const { recorderAdapter } = useConfig();
     const [vocabularies, setVocabularies] = useState<
         { id?: string; content: string; file?: File; pronunciationUrl?: string }[]
-    >(activityToUpdate?.vocabularies ?? []);
+    >(initialVocabularies ?? activityToUpdate?.vocabularies ?? []);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [recordingIndex, setRecordingIndex] = useState<number | null>(null);
 
     const { isRecording, audioFile, error, startRecording, stopRecording, clearAudioFile, clearError } =
         useAudioRecorder(recorderAdapter);
+
+    useEffect(() => {
+        setVocabularies(initialVocabularies ?? activityToUpdate?.vocabularies ?? []);
+    }, [initialVocabularies, activityToUpdate]);
 
     useEffect(() => {
         if (error) {

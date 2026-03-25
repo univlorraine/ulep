@@ -94,6 +94,20 @@ export interface UpdateActivityInformationsOutput {
     ressource?: File;
 }
 
+type ActivityExcerciseDraft = { content: string; order: number };
+type ActivityVocabularyDraft = {
+    id?: string;
+    content: string;
+    file?: File;
+    pronunciationUrl?: string;
+};
+
+const DEFAULT_EXCERCISES: ActivityExcerciseDraft[] = [
+    { content: '', order: 0 },
+    { content: '', order: 1 },
+    { content: '', order: 2 },
+];
+
 export const CreateActivityContent: React.FC<CreateActivityContentProps> = ({
     activityToUpdate,
     onBackPressed,
@@ -106,8 +120,23 @@ export const CreateActivityContent: React.FC<CreateActivityContentProps> = ({
     const [mode, setMode] = useState<CreateActivityMode>(CreateActivityMode.INFORMATIONS);
     const [informations, setInformations] = useState<
         CreateActivityInformationsOutput | UpdateActivityInformationsOutput
-    >();
-    const [excercises, setExcercises] = useState<{ content: string; order: number }[]>();
+    >(
+        activityToUpdate
+            ? {
+                  title: activityToUpdate.title,
+                  description: activityToUpdate.description,
+                  language: activityToUpdate.language,
+                  theme: activityToUpdate.activityTheme,
+                  level: activityToUpdate.languageLevel,
+                  creditImage: activityToUpdate.creditImage,
+                  ressourceUrl: activityToUpdate.ressourceUrl,
+              }
+            : undefined
+    );
+    const [excercises, setExcercises] = useState<ActivityExcerciseDraft[]>(
+        activityToUpdate?.exercises ?? DEFAULT_EXCERCISES
+    );
+    const [vocabularies, setVocabularies] = useState<ActivityVocabularyDraft[]>(activityToUpdate?.vocabularies ?? []);
     const [activity, setActivity] = useState<Activity>();
     const { createActivity, updateActivity } = useConfig();
 
@@ -162,19 +191,13 @@ export const CreateActivityContent: React.FC<CreateActivityContentProps> = ({
         setMode(CreateActivityMode.EXERCICES);
     };
 
-    const handleExcerciseSubmit = (data: { content: string; order: number }[]) => {
+    const handleExcerciseSubmit = (data: ActivityExcerciseDraft[]) => {
         setExcercises(data);
         setMode(CreateActivityMode.VOCABULARY);
     };
 
-    const handleVocabularySubmit = async (
-        data: {
-            id?: string;
-            content: string;
-            file?: File;
-            pronunciationUrl?: string;
-        }[]
-    ) => {
+    const handleVocabularySubmit = async (data: ActivityVocabularyDraft[]) => {
+        setVocabularies(data);
         if (!informations || !excercises) {
             return;
         }
@@ -226,6 +249,7 @@ export const CreateActivityContent: React.FC<CreateActivityContentProps> = ({
                         onBackPressed={handleBackPressed}
                         onSubmit={handleVocabularySubmit}
                         activityToUpdate={activityToUpdate}
+                        initialVocabularies={vocabularies}
                     />
                 )}
 
@@ -234,6 +258,7 @@ export const CreateActivityContent: React.FC<CreateActivityContentProps> = ({
                         onSubmit={handleExcerciseSubmit}
                         onBackPressed={handleBackPressed}
                         activityToUpdate={activityToUpdate}
+                        initialExcercises={excercises}
                     />
                 )}
 
@@ -245,6 +270,7 @@ export const CreateActivityContent: React.FC<CreateActivityContentProps> = ({
                         onBackPressed={handleBackPressed}
                         onSubmit={handleInformationsSubmit}
                         activityToUpdate={activityToUpdate}
+                        initialValues={informations}
                     />
                 )}
             </div>

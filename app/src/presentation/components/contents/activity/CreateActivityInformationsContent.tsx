@@ -59,6 +59,7 @@ interface CreateActivityInformationsContentProps {
     cefrLevelsDropDown: DropDownItem<CEFR>[];
     languagesDropDown: DropDownItem<Language>[];
     activityToUpdate?: Activity;
+    initialValues?: CreateActivityInformationsOutput | UpdateActivityInformationsOutput;
 }
 
 export const CreateActivityInformationsContent = ({
@@ -68,28 +69,55 @@ export const CreateActivityInformationsContent = ({
     cefrLevelsDropDown,
     languagesDropDown,
     activityToUpdate,
+    initialValues,
 }: CreateActivityInformationsContentProps) => {
     const { t } = useTranslation();
     const [showToast] = useIonToast();
     const { cameraAdapter, fileAdapter } = useConfig();
-    const [title, setTitle] = useState<string>(activityToUpdate?.title ?? '');
-    const [image, setImage] = useState<File>();
-    const [creditImage, setCreditImage] = useState<string | undefined>(activityToUpdate?.creditImage);
+    const [title, setTitle] = useState<string>(initialValues?.title ?? activityToUpdate?.title ?? '');
+    const [image, setImage] = useState<File | undefined>(initialValues?.image);
+    const [creditImage, setCreditImage] = useState<string | undefined>(
+        initialValues?.creditImage ?? activityToUpdate?.creditImage
+    );
     const [hideUrlImage, setHideUrlImage] = useState<boolean>(false);
-    const [description, setDescription] = useState<string>(activityToUpdate?.description ?? '');
-    const [language, setLanguage] = useState<Language | undefined>(activityToUpdate?.language);
+    const [description, setDescription] = useState<string>(initialValues?.description ?? activityToUpdate?.description ?? '');
+    const [language, setLanguage] = useState<Language | undefined>(initialValues?.language ?? activityToUpdate?.language);
     const [selectedThemeCategory, setSelectedThemeCategory] = useState<ActivityThemeCategory | undefined>();
     const [selectableThemesDropDown, setSelectableThemesDropDown] = useState<DropDownItem<ActivityTheme>[]>([]);
-    const [theme, setTheme] = useState<ActivityTheme | undefined>(activityToUpdate?.activityTheme);
-    const [level, setLevel] = useState<CEFR | undefined>(activityToUpdate?.languageLevel);
-    const [ressourceUrl, setRessourceUrl] = useState<string | undefined>(activityToUpdate?.ressourceUrl);
-    const [ressourceFile, setRessourceFile] = useState<File>();
-    const [isRessourceUrl, setIsRessourceUrl] = useState<boolean>(!!activityToUpdate?.ressourceUrl);
+    const [theme, setTheme] = useState<ActivityTheme | undefined>(initialValues?.theme ?? activityToUpdate?.activityTheme);
+    const [level, setLevel] = useState<CEFR | undefined>(initialValues?.level ?? activityToUpdate?.languageLevel);
+    const [ressourceUrl, setRessourceUrl] = useState<string | undefined>(
+        initialValues?.ressourceUrl ?? activityToUpdate?.ressourceUrl
+    );
+    const [ressourceFile, setRessourceFile] = useState<File | undefined>(initialValues?.ressource);
+    const [isRessourceUrl, setIsRessourceUrl] = useState<boolean>(
+        !!(initialValues?.ressourceUrl ?? activityToUpdate?.ressourceUrl)
+    );
     const [hideRessourceActivity, setHideRessourceActivity] = useState<boolean>(false);
     const [isCategorySelectedFromActivityToUpdate, setIsCategorySelectedFromActivityToUpdate] =
         useState<boolean>(false);
 
-    const imageRef = useRef<string | undefined>(activityToUpdate?.imageUrl);
+    const imageRef = useRef<string | undefined>(
+        initialValues?.image ? URL.createObjectURL(initialValues.image) : activityToUpdate?.imageUrl
+    );
+
+    useEffect(() => {
+        setTitle(initialValues?.title ?? activityToUpdate?.title ?? '');
+        setDescription(initialValues?.description ?? activityToUpdate?.description ?? '');
+        setLanguage(initialValues?.language ?? activityToUpdate?.language);
+        setTheme(initialValues?.theme ?? activityToUpdate?.activityTheme);
+        setLevel(initialValues?.level ?? activityToUpdate?.languageLevel);
+        setCreditImage(initialValues?.creditImage ?? activityToUpdate?.creditImage);
+        setImage(initialValues?.image);
+        setRessourceFile(initialValues?.ressource);
+        setRessourceUrl(initialValues?.ressourceUrl ?? activityToUpdate?.ressourceUrl);
+        setIsRessourceUrl(!!(initialValues?.ressourceUrl ?? activityToUpdate?.ressourceUrl));
+        setHideUrlImage(false);
+        setHideRessourceActivity(false);
+        imageRef.current = initialValues?.image
+            ? URL.createObjectURL(initialValues.image)
+            : activityToUpdate?.imageUrl;
+    }, [initialValues, activityToUpdate]);
 
     useEffect(() => {
         if (selectedThemeCategory && !isCategorySelectedFromActivityToUpdate) {
