@@ -38,16 +38,18 @@
  *
  */
 
-import { Edit, useNotify, useRedirect, useTranslate, useUpdate } from 'react-admin';
+import { Edit, useNotify, useRecordContext, useRedirect, useTranslate, useUpdate } from 'react-admin';
 import NewsForm from '../../components/form/NewsForm';
 import PageTitle from '../../components/PageTitle';
 import { NewsFormPayload } from '../../entities/News';
+import queryClient from '../../queryClient';
 
 const EditNews = () => {
     const translate = useTranslate();
     const [update] = useUpdate();
     const notify = useNotify();
     const redirect = useRedirect();
+    const record = useRecordContext(); // Ajoutez ceci
 
     const handleSubmit = async (payload: NewsFormPayload) => {
         if (!payload.id) {
@@ -97,6 +99,7 @@ const EditNews = () => {
                 { id: '', data: formData },
                 {
                     onSuccess: () => {
+                        queryClient.invalidateQueries({ queryKey: ['news'] });
                         redirect('/news');
                     },
                     onError: (error) => {
@@ -119,8 +122,8 @@ const EditNews = () => {
     return (
         <>
             <PageTitle>{translate('news.title')}</PageTitle>
-            <Edit>
-                <NewsForm handleSubmit={handleSubmit} />
+            <Edit mutationMode="pessimistic" queryOptions={{ refetchOnMount: true, staleTime: 0 }}>
+                <NewsForm key={record?.id} handleSubmit={handleSubmit} />
             </Edit>
         </>
     );
