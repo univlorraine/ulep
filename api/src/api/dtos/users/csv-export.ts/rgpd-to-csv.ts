@@ -105,7 +105,7 @@ export const userPersonalDataToCsv = (
           }
         }
       },
-      object: (value, { column }) => {
+      object: (value: any[], { column }: { column: string }) => {
         if (column === 'interests' || column === 'goals') {
           return JSON.stringify(
             value.map((item: Interest | LearningObjective) => {
