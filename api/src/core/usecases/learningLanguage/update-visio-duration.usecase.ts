@@ -80,13 +80,6 @@ export class UpdateVisioDurationUsecase {
       throw new RessourceDoesNotExist();
     }
 
-    const newLearningLanguage = new LearningLanguage({
-      ...learningLanguage,
-      visioDuration: learningLanguage.visioDuration + 1,
-    });
-
-    await this.learningLanguageRepository.update(newLearningLanguage);
-
     const logEntries = await this.logEntryRepository.findAllOfTypeToday(
       learningLanguage.id,
       LogEntryType.VISIO,
@@ -111,6 +104,8 @@ export class UpdateVisioDurationUsecase {
       otherParticipant?.updatedAt &&
       differenceInMinutes(new Date(), otherParticipant.updatedAt) < 2;
 
+    let durationToSet = 0;
+
     if (logEntry && otherEntryIsNow) {
       await this.logEntryRepository.update({
         id: logEntry.id,
@@ -122,6 +117,7 @@ export class UpdateVisioDurationUsecase {
           roomName: logEntry.roomName,
         },
       });
+      durationToSet = learningLanguage.visioDuration + 1;
     } else if (!logEntry) {
       await this.logEntryRepository.create({
         learningLanguageId: learningLanguage.id,
@@ -134,6 +130,7 @@ export class UpdateVisioDurationUsecase {
           roomName: command.roomName,
         },
       });
+      durationToSet = learningLanguage.visioDuration + 1;
     } else {
       await this.logEntryRepository.update({
         id: logEntry.id,
@@ -145,8 +142,15 @@ export class UpdateVisioDurationUsecase {
           roomName: logEntry.roomName,
         },
       });
+      durationToSet = learningLanguage.visioDuration;
     }
 
+    const newLearningLanguage = new LearningLanguage({
+      ...learningLanguage,
+      visioDuration: durationToSet,
+    });
+
+    await this.learningLanguageRepository.update(newLearningLanguage);
     return newLearningLanguage;
   }
 }
