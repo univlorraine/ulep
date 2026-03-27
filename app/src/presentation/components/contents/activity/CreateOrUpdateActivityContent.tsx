@@ -119,7 +119,7 @@ export const CreateActivityContent: React.FC<CreateActivityContentProps> = ({
     const { t } = useTranslation();
     const [mode, setMode] = useState<CreateActivityMode>(CreateActivityMode.INFORMATIONS);
     const [informations, setInformations] = useState<
-        CreateActivityInformationsOutput | UpdateActivityInformationsOutput
+        CreateActivityInformationsOutput | UpdateActivityInformationsOutput | undefined
     >(
         activityToUpdate
             ? {
