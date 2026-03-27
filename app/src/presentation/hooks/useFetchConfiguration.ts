@@ -116,6 +116,10 @@ const useFetchConfiguration = (apiUrl: string) => {
                     document.head.appendChild(link);
                 }
             }
+
+            if (result.name !== 'ULEP') {
+                document.title = `${result.name}`;
+            }
         } catch (error: any) {
             setError(error);
             showToast({ message: error.message, duration: 5000 });

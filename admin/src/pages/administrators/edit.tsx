@@ -42,6 +42,7 @@ import { Edit, useNotify, useRedirect, useTranslate, useUpdate, useRecordContext
 import AdministratorForm from '../../components/form/AdministratorForm';
 import ConfigPagesHeader from '../../components/tabs/ConfigPagesHeader';
 import Administrator, { AdministratorFormPayload } from '../../entities/Administrator';
+import queryClient from '../../queryClient';
 
 const AdministratorEditForm = () => {
     const record = useRecordContext<Administrator>();
@@ -69,7 +70,10 @@ const AdministratorEditForm = () => {
                 'users/administrators',
                 { id: '', data: formData },
                 {
-                    onSuccess: () => redirect('/users/administrators'),
+                    onSuccess: () => {
+                        redirect('/users/administrators');
+                        queryClient.invalidateQueries({ queryKey: ['administrators'] });
+                    },
                     onError: (error) => {
                         if (error.message === 'Email is already used') {
                             return notify('administrators.update.error_mail', { type: 'error' });

@@ -38,15 +38,19 @@
  *
  */
 
+import { stringify } from 'csv-stringify';
 import { Interest, Language, LearningObjective } from 'src/core/models';
 import { UserPersonalData } from 'src/core/usecases/user/get-user-personal-data.usecase';
 import { formatUserPersonalData } from './format-user-personal-data';
-import { stringify } from 'csv-stringify';
 
 interface UserPersonalDataToCsvParams {
   userData: UserPersonalData;
   avatarSignedUrl?: string;
 }
+
+type CsvLanguageLike = { code: string };
+type SuggestedLanguageItem = { code: string; suggestion_date: Date };
+type HistorizedTandemItem = { code: string; historization_date: Date };
 
 export const userPersonalDataToCsv = (
   { userData, avatarSignedUrl }: UserPersonalDataToCsvParams,
@@ -66,8 +70,9 @@ export const userPersonalDataToCsv = (
     minute: 'numeric',
     second: 'numeric',
   });
-  const csv = stringify(content, {
+  const csv = stringify(content as any, {
     header: true,
+    delimiter: ';',
     cast: {
       boolean: (value) =>
         translate(`export.values.${value ? 'true' : 'false'}`),
@@ -105,7 +110,10 @@ export const userPersonalDataToCsv = (
         }
       },
       object: (value, { column }) => {
-        if (column === 'interests' || column === 'goals') {
+        if (
+          (column === 'interests' || column === 'goals') &&
+          Array.isArray(value)
+        ) {
           return JSON.stringify(
             value.map((item: Interest | LearningObjective) => {
               return (
@@ -119,18 +127,29 @@ export const userPersonalDataToCsv = (
           column === 'native_language' ||
           column === 'learning_request_language'
         ) {
-          return translate(`languages_code.${value.code}`, {
-            ns: 'translation',
-          });
-        } else if (column === 'mastered_languages') {
+          if (
+            value &&
+            typeof value === 'object' &&
+            'code' in value &&
+            typeof (value as CsvLanguageLike).code === 'string'
+          ) {
+            return translate(
+              `languages_code.${(value as CsvLanguageLike).code}`,
+              {
+                ns: 'translation',
+              },
+            );
+          }
+          return JSON.stringify(value);
+        } else if (column === 'mastered_languages' && Array.isArray(value)) {
           return JSON.stringify(
             value.map((item: Language) =>
               translate(`languages_code.${item.code}`, { ns: 'translation' }),
             ),
           );
-        } else if (column === 'suggested_languages') {
+        } else if (column === 'suggested_languages' && Array.isArray(value)) {
           return JSON.stringify(
-            value.map((item) => ({
+            value.map((item: SuggestedLanguageItem) => ({
               [translate('export.headers.arrayKeys.language')]: translate(
                 `languages_code.${item.code}`,
                 { ns: 'translation' },
@@ -139,9 +158,9 @@ export const userPersonalDataToCsv = (
                 dateFormater.format(item.suggestion_date),
             })),
           );
-        } else if (column === 'historized_tandems') {
+        } else if (column === 'historized_tandems' && Array.isArray(value)) {
           return JSON.stringify(
-            value.map((item) => ({
+            value.map((item: HistorizedTandemItem) => ({
               [translate('export.headers.arrayKeys.language')]: translate(
                 `languages_code.${item.code}`,
                 { ns: 'translation' },
@@ -154,7 +173,7 @@ export const userPersonalDataToCsv = (
         return JSON.stringify(value);
       },
     },
-  });
+  } as any);
 
   return csv;
 };

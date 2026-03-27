@@ -112,6 +112,7 @@ const ProfileTab = () => {
     const translate = useTranslate();
     const recordContext = useRecordContext();
     const limitedFeatures = useLimitedFeatures();
+    const identity = useGetIdentity();
 
     return (
         <TabbedShowLayout syncWithLocation={false}>
@@ -208,7 +209,18 @@ const ProfileTab = () => {
                 <ArrayField source="learningLanguages">
                     <Datagrid
                         bulkActionButtons={false}
-                        rowClick={() => `/profiles/with-tandems-profiles/${recordContext?.id}/show`}
+                        rowClick={() => {
+                            const canOpenUser =
+                                identity.identity?.isCentralUniversity ||
+                                identity.identity?.data.realm_access.roles.includes('super-admin') ||
+                                identity.identity?.universityId === recordContext?.user?.university?.id;
+
+                            if (!canOpenUser) {
+                                return false;
+                            }
+
+                            return `/profiles/with-tandems-profiles/${recordContext?.id}/show`;
+                        }}
                     >
                         <FunctionField
                             render={(record: Pick<LearningLanguage, 'name' | 'code'>) =>

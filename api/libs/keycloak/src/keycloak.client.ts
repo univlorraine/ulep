@@ -484,7 +484,7 @@ export class KeycloakClient {
     const user = await this.getUserByEmail(
       props.previousEmail || props.newEmail,
     );
-    props.id = user.id;
+    props.id = props.id ? props.id : user.id;
 
     if (props.password) {
       const passwordResponse = await fetch(
@@ -1007,28 +1007,27 @@ export class KeycloakClient {
   }
 
   public async getAdministratorsWithGroups(): Promise<UserWithGroups[]> {
-    
     const groups = await this.getAllGroups();
-    
-    const adminGroups = groups.filter(g => 
-      Object.values(AdminGroup).includes(g.name as AdminGroup)
-    );    
-    
-    const usersWithGroupsMap = new Map<string, { user: any, groups: any[] }>();
-    
+
+    const adminGroups = groups.filter((g) =>
+      Object.values(AdminGroup).includes(g.name as AdminGroup),
+    );
+
+    const usersWithGroupsMap = new Map<string, { user: any; groups: any[] }>();
+
     await Promise.all(
       adminGroups.map(async (group) => {
-        const members = await this.getGroupMembers(group.id,false);
-        
-        members.forEach(user => {
+        const members = await this.getGroupMembers(group.id, false);
+
+        members.forEach((user) => {
           if (!usersWithGroupsMap.has(user.id)) {
             usersWithGroupsMap.set(user.id, { user, groups: [] });
           }
           usersWithGroupsMap.get(user.id).groups.push(group);
         });
-      })
+      }),
     );
-    
+
     return Array.from(usersWithGroupsMap.values());
   }
 
