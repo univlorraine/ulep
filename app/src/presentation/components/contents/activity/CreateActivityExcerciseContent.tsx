@@ -40,7 +40,7 @@
 
 import { IonButton, IonIcon } from '@ionic/react';
 import { addSharp, chevronDownOutline, chevronUpOutline, trashBinOutline } from 'ionicons/icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Activity } from '../../../../domain/entities/Activity';
 import TextInput from '../../TextInput';
@@ -50,16 +50,19 @@ interface CreateActivityExcerciseContentProps {
     onSubmit: (excercises: { content: string; order: number }[]) => void;
     onBackPressed: () => void;
     activityToUpdate?: Activity;
+    initialExcercises?: { content: string; order: number }[];
 }
 
 export const CreateActivityExcerciseContent: React.FC<CreateActivityExcerciseContentProps> = ({
     onSubmit,
     onBackPressed,
     activityToUpdate,
+    initialExcercises,
 }) => {
     const { t } = useTranslation();
     const [excercises, setExcercises] = useState<{ content: string; order: number }[]>(
-        activityToUpdate?.exercises ?? [
+        initialExcercises ??
+            activityToUpdate?.exercises ?? [
             {
                 content: '',
                 order: 0,
@@ -74,6 +77,12 @@ export const CreateActivityExcerciseContent: React.FC<CreateActivityExcerciseCon
             },
         ]
     );
+
+    useEffect(() => {
+        if (initialExcercises && initialExcercises.length > 0) {
+            setExcercises(initialExcercises);
+        }
+    }, [initialExcercises]);
 
     const allRequiredFieldsAreFilled = () => {
         return excercises.filter((excercise) => excercise.content.length > 0).length >= 3;

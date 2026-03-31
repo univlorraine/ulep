@@ -114,6 +114,7 @@ export class ExportLogEntriesUsecase {
     const passThrough = new PassThrough();
     const csvStringifier = stringify({
       header: true,
+      delimiter: ';',
       columns: ['Date', 'Activity', 'Titre', 'Quantité', 'Détail'],
     });
 
