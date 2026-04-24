@@ -92,24 +92,23 @@ const Sidebar: React.FC<SidebarProps> = ({
     return (
         <>
             <IonList lines="none" className={styles.container}>
-                {!limitedFeatures && (
-                    <IonItem
-                        button={true}
-                        className={`${styles.line} ${location.pathname === '/home' ? styles.active : ''}`}
-                        aria-current={location.pathname === '/home' ? 'location' : 'false'}
-                        onClick={navigateToHome}
-                        color={location.pathname === '/home' ? 'dark' : undefined}
-                    >
-                        <img
-                            alt={t('navigation.sidebar.home') as string}
-                            src={HomeSvg}
-                            aria-hidden={true}
-                            className={`${styles.image} ${location.pathname === '/home' ? styles.imageActive : ''}`}
-                        />
-                        <span className={styles.title}>{t('navigation.sidebar.home')}</span>
-                        {location.pathname === '/home' && <div className={styles.light}></div>}
-                    </IonItem>
-                )}
+                <IonItem
+                    button={true}
+                    className={`${styles.line} ${location.pathname === '/home' ? styles.active : ''}`}
+                    aria-current={location.pathname === '/home' ? 'location' : 'false'}
+                    onClick={navigateToHome}
+                    color={location.pathname === '/home' ? 'dark' : undefined}
+                >
+                    <img
+                        alt={t('navigation.sidebar.home') as string}
+                        src={HomeSvg}
+                        aria-hidden={true}
+                        className={`${styles.image} ${location.pathname === '/home' ? styles.imageActive : ''}`}
+                    />
+                    <span className={styles.title}>{t('navigation.sidebar.home')}</span>
+                    {location.pathname === '/home' && <div className={styles.light}></div>}
+                </IonItem>
+
                 <IonItem
                     button={true}
                     className={`${styles.line} ${location.pathname === '/learning' ? styles.active : ''}`}
