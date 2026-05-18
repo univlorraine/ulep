@@ -104,9 +104,9 @@ export class UpdateUserUsecase {
     }
 
     if (
-      command.firstname !== user.firstname ||
-      command.lastname !== user.lastname ||
-      command.email !== user.email
+      (command.firstname && command.firstname !== user.firstname) ||
+      (command.lastname && command.lastname !== user.lastname) ||
+      (command.email && command.email !== user.email)
     ) {
       await this.keycloakClient.updateUser({
         id: user.contactId,
