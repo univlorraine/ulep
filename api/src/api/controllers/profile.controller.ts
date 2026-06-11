@@ -79,6 +79,7 @@ import { CountActivitiesUsecase } from 'src/core/usecases/activity/count-activit
 import { GetSessionsForProfileUsecase } from 'src/core/usecases/session/get-sessions-for-profile.usecase';
 import { CountVocabulariesUsecase } from 'src/core/usecases/vocabulary/count-vocabularies.usecase';
 import { CollectionResponse, CurrentUser } from '../decorators';
+import { OwnerAllowed } from '../decorators/owner.decorator';
 import { Role, Roles } from '../decorators/roles.decorator';
 import {
   CreateProfileRequest,
@@ -139,6 +140,9 @@ export class ProfileController {
   }
 
   @Post('edit/:id')
+  @Roles(Role.ADMIN)
+  @OwnerAllowed((request) => request.params.id)
+  @UseGuards(AuthenticationGuard)
   @Swagger.ApiOperation({ summary: 'Edit profile ressource.' })
   @Swagger.ApiCreatedResponse({ type: () => ProfileResponse })
   async edit(
