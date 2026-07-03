@@ -43,6 +43,7 @@ import { Injectable } from '@nestjs/common';
 import {
   addMinutes,
   endOfTomorrow,
+  setMilliseconds,
   setSeconds,
   startOfTomorrow,
   subHours,
@@ -163,11 +164,21 @@ export class PrismaSessionRepository implements SessionRepository {
     const now = setSeconds(new Date(Date.now()), 0);
     const startOfFifteenMinutesLater = addMinutes(now, 15);
     const endOfFifteenMinutesLater = setSeconds(startOfFifteenMinutesLater, 59);
+
+    const startOfFifteenMinutesLaterNoMilliseconds = setMilliseconds(
+      startOfFifteenMinutesLater,
+      0,
+    );
+    const endOfFifteenMinutesLaterNoMilliseconds = setMilliseconds(
+      endOfFifteenMinutesLater,
+      0,
+    );
+
     const sessions = await this.prisma.sessions.findMany({
       where: {
         start_at: {
-          gt: startOfFifteenMinutesLater,
-          lt: endOfFifteenMinutesLater,
+          gte: startOfFifteenMinutesLaterNoMilliseconds,
+          lte: endOfFifteenMinutesLaterNoMilliseconds,
         },
         cancelled_at: null,
       },
