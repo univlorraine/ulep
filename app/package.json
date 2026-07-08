@@ -4,7 +4,7 @@
     "version": "0.60.0",
     "type": "module",
     "scripts": {
-        "dev": "vite",
+        "dev": "vite --host",
         "build": "tsc && vite build",
         "build:prod": "tsc && ionic build --prod",
         "build:android": "npx cap sync android && ionic capacitor run android -l --external --prod",
@@ -32,6 +32,7 @@
         "@capacitor/keyboard": "^7.0.1",
         "@capacitor/preferences": "^7.0.1",
         "@capacitor/push-notifications": "^7.0.1",
+        "@capacitor/share": "^7.0.4",
         "@capacitor/splash-screen": "^7.0.1",
         "@capacitor/status-bar": "^7.0.1",
         "@capawesome/capacitor-android-edge-to-edge-support": "^7.2.2",
