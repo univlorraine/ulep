@@ -43,7 +43,7 @@ This will build and run the project on your localhost. You now have access to th
 - [Keycloak](http://localhost:8080)
 - [Minio](http://localhost:9000)
 
-## Database initilization
+## Database initilization.
 
 To initialize database schema, run the migrations:
 
