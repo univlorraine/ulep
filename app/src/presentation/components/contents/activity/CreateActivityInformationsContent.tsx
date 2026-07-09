@@ -134,10 +134,11 @@ export const CreateActivityInformationsContent = ({
     }, [selectedThemeCategory]);
 
     const findAndSetActivityThemeCategory = (activityToUpdate: Activity | undefined) => {
-        if (!activityToUpdate) return;
+        const currentTheme = initialValues?.theme ?? activityToUpdate?.activityTheme;
+        if (!currentTheme) return;
 
         const activityThemeCategory = activityThemesCategoryDropDown.find((category) =>
-            category.value.themes.some((theme) => theme.id === activityToUpdate.activityTheme?.id)
+            category.value.themes.some((theme) => theme.id === currentTheme.id)
         )?.value;
 
         if (activityThemeCategory) {
@@ -159,7 +160,6 @@ export const CreateActivityInformationsContent = ({
 
         if (language) {
             setLanguage(language.value);
-            setLevel(activityToUpdate.languageLevel);
         }
     };
 
