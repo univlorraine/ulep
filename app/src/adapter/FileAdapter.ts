@@ -39,6 +39,7 @@
  */
 
 import { Directory, Filesystem } from '@capacitor/filesystem';
+import { Share } from '@capacitor/share';
 import { FilePicker, PickedFile } from '@capawesome/capacitor-file-picker';
 import DeviceAdapterInterface from './interfaces/DeviceAdapter.interface';
 import FileAdapterInterface from './interfaces/FileAdapter.interface';
@@ -82,14 +83,21 @@ class FileAdapter implements FileAdapterInterface {
         if (this.deviceAdapter.isNativePlatform()) {
             const base64Data = await this.convertBlobToBase64(blob);
             try {
-                await Filesystem.writeFile({
+                // Écriture en stockage applicatif (aucune permission requise), puis partage
+                // pour laisser l'utilisateur choisir où enregistrer le fichier.
+                const written = await Filesystem.writeFile({
                     path: filename,
                     data: base64Data,
-                    directory: Directory.Documents,
+                    directory: Directory.Cache,
                     recursive: true,
                 });
+
+                await Share.share({
+                    title: filename,
+                    url: written.uri,
+                });
             } catch (error) {
-                console.error("Erreur lors de l'écriture du fichier:", error);
+                console.error("Erreur lors de l'enregistrement du fichier:", error);
                 throw error;
             }
         } else {

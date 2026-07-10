@@ -57,11 +57,16 @@ class NotificationAdapter implements NotificationAdapterInterface {
     }
 
     async notificationPermission(): Promise<void> {
-        const permission = await PushNotifications.requestPermissions();
-        if (permission.receive === 'granted') {
-            await PushNotifications.register();
-        } else {
-            console.warn('Permission not granted');
+        try {
+            const permission = await PushNotifications.requestPermissions();
+            if (permission.receive === 'granted') {
+                await PushNotifications.register();
+            } else {
+                console.warn('Permission not granted');
+            }
+        } catch (error) {
+            // Firebase non configuré (pas de google-services.json) : on ignore en local.
+            console.warn('Push notifications indisponibles (Firebase non initialisé):', error);
         }
     }
 
@@ -79,10 +84,15 @@ class NotificationAdapter implements NotificationAdapterInterface {
 
     registrationListener(callback: Function) {
         PushNotifications.addListener('registration', async () => {
-            // Use this to get fcm token rather than apns token for ios
-            const { token } = await FCM.getToken();
+            try {
+                // Use this to get fcm token rather than apns token for ios
+                const { token } = await FCM.getToken();
 
-            return callback(token);
+                return callback(token);
+            } catch (error) {
+                // Firebase non configuré (pas de google-services.json) : on ignore en local.
+                console.warn('Récupération du token FCM impossible (Firebase non initialisé):', error);
+            }
         });
     }
 
