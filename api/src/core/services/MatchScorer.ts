@@ -69,6 +69,7 @@ export interface IMatchScorer {
     learningLanguage1: LearningLanguage,
     learningLanguage2: LearningLanguage,
     availableLanguages: Language[],
+    allowStaffStudentMatching?: boolean,
   ): Match;
 }
 
@@ -216,6 +217,9 @@ export class MatchScorer implements IMatchScorer {
     learningLanguage1: LearningLanguage,
     learningLanguage2: LearningLanguage,
     availableLanguages: Language[],
+    // Defaults to true (open matching) to preserve the historical behaviour of
+    // every existing caller and instance that does not restrict by profile type.
+    allowStaffStudentMatching = true,
   ): Match {
     const profile1 = learningLanguage1.profile;
     const profile2 = learningLanguage2.profile;
@@ -229,6 +233,7 @@ export class MatchScorer implements IMatchScorer {
         learningLanguage1,
         learningLanguage2,
         availableLanguages,
+        allowStaffStudentMatching,
       )
     ) {
       return new Match({
@@ -429,9 +434,19 @@ export class MatchScorer implements IMatchScorer {
     learningLanguage1: LearningLanguage,
     learningLanguage2: LearningLanguage,
     availableLanguages: Language[],
+    allowStaffStudentMatching = true,
   ): boolean {
     const profile1 = learningLanguage1.profile;
     const profile2 = learningLanguage2.profile;
+
+    // When the instance restricts matching by profile type, a student can only
+    // be matched with a student and a staff member only with a staff member.
+    if (
+      !allowStaffStudentMatching &&
+      profile1.user.role !== profile2.user.role
+    ) {
+      return false;
+    }
 
     // Check joker language have a match in available languages spoken by other profile
     if (learningLanguage1.language.isJokerLanguage()) {

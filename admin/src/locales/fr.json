@@ -408,6 +408,9 @@
         "primaryColor": "Couleur primaire de l'application",
         "primaryBackgroundColor": "Couleur primaire de l'image de fond de l'application",
         "maintenance": "Mise en maintenance",
+        "allowStaffStudentMatching": "Matching entre personnel et étudiant",
+        "allowStaffStudentMatchingOn": "Activé (matching ouvert entre personnel et étudiants)",
+        "allowStaffStudentMatchingOff": "Désactivé (cloisonnement strict par type de profil)",
         "defaultCertificateFile": "Modèle de certificat",
         "mainteance_update": "L'instance a bien été modifié",
         "primaryDarkColor": "Nuance sombre de la couleur primaire utilisé pour le fond de l'application",
@@ -443,7 +446,9 @@
             "secondaryDarkColor": "Couleur secondaire nuancé en sombre utilisé pour le fond de l'application",
             "title": "Mise à jour de l'instance",
             "defaultCertificateFile": "Modèle de certificat",
-            "editoMandatoryTranslations": "Langues obligatoires pour les éditos"
+            "editoMandatoryTranslations": "Langues obligatoires pour les éditos",
+            "allowStaffStudentMatching": "Matching entre personnel et étudiant",
+            "allowStaffStudentMatchingLabel": "Autoriser le matching entre le personnel et les étudiants"
         }
     },
     "interests": {

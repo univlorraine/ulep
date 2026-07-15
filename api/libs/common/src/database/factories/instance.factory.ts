@@ -57,6 +57,7 @@ export class InstanceFactory extends ModelFactory<Instance> {
       primaryDarkColor: 'test',
       secondaryDarkColor: 'test',
       isInMaintenance: false,
+      allowStaffStudentMatching: true,
       daysBeforeClosureNotification: 8,
       editoMandatoryTranslations: [],
     };

@@ -60,6 +60,10 @@ import {
   LanguageRepository,
 } from 'src/core/ports/language.repository';
 import {
+  INSTANCE_REPOSITORY,
+  InstanceRepository,
+} from 'src/core/ports/instance.repository';
+import {
   LEARNING_LANGUAGE_REPOSITORY,
   LearningLanguageRepository,
 } from 'src/core/ports/learning-language.repository';
@@ -104,6 +108,8 @@ export class GenerateTandemsUsecase {
     private readonly languageRepository: LanguageRepository,
     @Inject(REFUSED_TANDEMS_REPOSITORY)
     private readonly refusedTandemsRepository: RefusedTandemsRepository,
+    @Inject(INSTANCE_REPOSITORY)
+    private readonly instanceRepository: InstanceRepository,
     @Inject(EMAIL_GATEWAY)
     private readonly emailGateway: EmailGateway,
     @Inject(CHAT_SERVICE)
@@ -126,6 +132,9 @@ export class GenerateTandemsUsecase {
 
     const languagesThatCanBeLearnt =
       await this.languageRepository.getLanguagesProposedToLearning();
+
+    const instance = await this.instanceRepository.getInstance();
+    const allowStaffStudentMatching = instance?.allowStaffStudentMatching ?? true;
 
     const refusedTandems = await this.refusedTandemsRepository.getAll();
     const refusedTandemsIdMap = new Map<string, null>(
@@ -179,6 +188,7 @@ export class GenerateTandemsUsecase {
                   learningLanguageToPair,
                   potentialPairLearningLanguage,
                   languagesThatCanBeLearnt,
+                  allowStaffStudentMatching,
                 );
 
                 if (
