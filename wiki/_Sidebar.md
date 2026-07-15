@@ -15,6 +15,7 @@
     * [Mise en place de Mailjet](Mailjet)
     * [Utilisation du Back-office](BackOffice)
         * [Création d'un utilisateur Back-office](Création-d'un-utilisateur-du-Backoffice)
+        * [Cloisonnement du matching par type de profil](Cloisonnement-du-matching-par-type-de-profil)
     * [Utilisation de Keycloak](Keycloak)
     * [Utilisation de Weblate](Weblate)
         * [Trouver et changer le code d'un langage](Weblate-‐-Trouver-et-changer-le-code-d'une-langue)
