@@ -60,6 +60,7 @@ import { InMemoryLanguageRepository } from 'src/providers/persistance/repositori
 import { InMemoryLearningLanguageRepository } from 'src/providers/persistance/repositories/in-memory-learning-language-repository';
 import { InMemoryRefusedTandemsRepository } from 'src/providers/persistance/repositories/in-memory-refused-tandems-repository';
 import { InMemoryUniversityRepository } from 'src/providers/persistance/repositories/in-memory-university-repository';
+import { InMemoryInstanceRepository } from 'src/providers/persistance/repositories/in-memory-instance-repository';
 
 describe('Get learning languages match', () => {
   ///////// Repositories /////////
@@ -67,6 +68,7 @@ describe('Get learning languages match', () => {
   const languageRepository = new InMemoryLanguageRepository();
   const refusedTandemsRepository = new InMemoryRefusedTandemsRepository();
   const universityRepository = new InMemoryUniversityRepository();
+  const instanceRepository = new InMemoryInstanceRepository();
   const matchService = new MatchScorer();
 
   const uc = new GetLearningLanguageMatchesUsecase(
@@ -75,6 +77,7 @@ describe('Get learning languages match', () => {
     matchService,
     refusedTandemsRepository,
     universityRepository,
+    instanceRepository,
   );
 
   ///////// Data /////////

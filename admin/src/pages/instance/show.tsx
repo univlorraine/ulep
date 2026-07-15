@@ -178,6 +178,16 @@ const InstanceShow = () => {
                             )}
                         />
                         <FunctionField
+                            label={translate('instance.allowStaffStudentMatching')}
+                            render={(record: Instance) =>
+                                translate(
+                                    record?.allowStaffStudentMatching
+                                        ? 'instance.allowStaffStudentMatchingOn'
+                                        : 'instance.allowStaffStudentMatchingOff'
+                                )
+                            }
+                        />
+                        <FunctionField
                             label={translate('instance.actions')}
                             render={() => (
                                 <Box

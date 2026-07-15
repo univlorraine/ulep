@@ -79,6 +79,7 @@ export class PrismaInstanceRepository implements InstanceRepository {
         secondary_background_color: props.secondaryBackgroundColor,
         secondary_dark_color: props.secondaryDarkColor,
         is_in_maintenance: props.isInMaintenance,
+        allow_staff_student_matching: props.allowStaffStudentMatching,
         days_before_closure_notification: props.daysBeforeClosureNotification,
         edito_mandatory_translations: props.editoMandatoryTranslations || [],
         EditoCentralUniversityTranslations: {

@@ -63,6 +63,7 @@ const InstanceEditForm = () => {
         formData.append('secondaryBackgroundColor', payload.secondaryBackgroundColor);
         formData.append('secondaryDarkColor', payload.secondaryDarkColor);
         formData.append('daysBeforeClosureNotification', payload.daysBeforeClosureNotification.toString());
+        formData.append('allowStaffStudentMatching', payload.allowStaffStudentMatching.toString());
         payload.editoMandatoryTranslations.forEach((translation, index) => {
             formData.append(`editoMandatoryTranslations[${index}]`, translation);
         });

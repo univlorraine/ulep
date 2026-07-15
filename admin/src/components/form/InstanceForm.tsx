@@ -89,6 +89,9 @@ const InstanceForm: React.FC<InstanceFormProps> = ({ handleSubmit, instance }) =
     const [newDaysBeforeClosureNotification, setNewDaysBeforeClosureNotification] = useState<number>(
         instance.daysBeforeClosureNotification
     );
+    const [newAllowStaffStudentMatching, setNewAllowStaffStudentMatching] = useState<boolean>(
+        instance.allowStaffStudentMatching ?? true
+    );
     const [newDefaultCertificateFile, setNewDefaultCertificateFile] = useState<File>();
     const [newEditoMandatoryTranslations, setNewEditoMandatoryTranslations] = useState<EditoMandatoryTranslations[]>(
         instance.editoMandatoryTranslations
@@ -139,6 +142,7 @@ const InstanceForm: React.FC<InstanceFormProps> = ({ handleSubmit, instance }) =
             secondaryBackgroundColor: newSecondaryBackgroundColor,
             secondaryDarkColor: newSecondaryDarkColor,
             isInMaintenance: instance.isInMaintenance,
+            allowStaffStudentMatching: newAllowStaffStudentMatching,
             daysBeforeClosureNotification: newDaysBeforeClosureNotification,
             defaultCertificateFile: newDefaultCertificateFile,
             editoMandatoryTranslations: newEditoMandatoryTranslations,
@@ -221,6 +225,18 @@ const InstanceForm: React.FC<InstanceFormProps> = ({ handleSubmit, instance }) =
                                 required
                             />
                         </Box>
+                    </Box>
+
+                    <Box>
+                        <Typography variant="subtitle1">
+                            {translate(`instance.edit.allowStaffStudentMatching`)}
+                        </Typography>
+                        <FormControlLabel
+                            checked={newAllowStaffStudentMatching}
+                            control={<Switch />}
+                            label={translate('instance.edit.allowStaffStudentMatchingLabel')}
+                            onChange={(_, checked) => setNewAllowStaffStudentMatching(checked)}
+                        />
                     </Box>
 
                     {!limitedFeatures && (

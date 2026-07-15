@@ -66,6 +66,7 @@ export const instanceMapper = (instanceSnapshot: InstanceSnapshot) => {
     secondaryBackgroundColor: instanceSnapshot.secondary_background_color,
     secondaryDarkColor: instanceSnapshot.secondary_dark_color,
     isInMaintenance: instanceSnapshot.is_in_maintenance,
+    allowStaffStudentMatching: instanceSnapshot.allow_staff_student_matching,
     daysBeforeClosureNotification:
       instanceSnapshot.days_before_closure_notification,
     defaultCertificateFile:

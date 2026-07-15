@@ -70,6 +70,7 @@ export class UpdateInstanceCommand {
   editoMandatoryTranslations?: EditoMandatoryTranslations[];
   editoCentralUniversityTranslations?: string[];
   isInMaintenance?: boolean;
+  allowStaffStudentMatching?: boolean;
 }
 
 @Injectable()
