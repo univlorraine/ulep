@@ -52,6 +52,9 @@ stages:
 # Test
 🛡️ test:
   stage: 🔩 .pre
+  variables:
+    KUBERNETES_CPU_LIMIT: "1"
+    KUBERNETES_MEMORY_LIMIT: "2Gi"
   extends: .base
   needs:
     - job: ⚙️ dependencies
