@@ -61,6 +61,7 @@ export type UpdateInstanceProps = {
   secondaryBackgroundColor?: string;
   secondaryDarkColor?: string;
   isInMaintenance?: boolean;
+  allowStaffStudentMatching?: boolean;
   daysBeforeClosureNotification?: number;
   editoMandatoryTranslations?: string[];
   editoCentralUniversityTranslations?: string[];
@@ -80,6 +81,7 @@ interface InstanceProps {
   secondaryBackgroundColor: string;
   secondaryDarkColor: string;
   isInMaintenance: boolean;
+  allowStaffStudentMatching: boolean;
   daysBeforeClosureNotification: number;
   defaultCertificateFile?: MediaObject;
   editoMandatoryTranslations: EditoMandatoryTranslations[];
@@ -100,6 +102,7 @@ export class Instance {
   readonly secondaryBackgroundColor: string;
   readonly secondaryDarkColor: string;
   readonly isInMaintenance: boolean;
+  readonly allowStaffStudentMatching: boolean;
   readonly daysBeforeClosureNotification: number;
   readonly defaultCertificateFile?: MediaObject;
   logoURL: string;
@@ -121,6 +124,7 @@ export class Instance {
     this.secondaryBackgroundColor = instance.secondaryBackgroundColor;
     this.secondaryDarkColor = instance.secondaryDarkColor;
     this.isInMaintenance = instance.isInMaintenance;
+    this.allowStaffStudentMatching = instance.allowStaffStudentMatching;
     this.daysBeforeClosureNotification = instance.daysBeforeClosureNotification;
     this.defaultCertificateFile = instance.defaultCertificateFile;
     this.editoMandatoryTranslations = instance.editoMandatoryTranslations;

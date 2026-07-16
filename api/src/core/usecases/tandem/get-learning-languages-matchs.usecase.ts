@@ -48,6 +48,10 @@ import { RessourceDoesNotExist } from 'src/core/errors';
 import { LearningLanguageHasNoAssociatedProfile } from 'src/core/errors/tandem-exceptions';
 import { LearningLanguage, Match, MatchScores } from 'src/core/models';
 import {
+  INSTANCE_REPOSITORY,
+  InstanceRepository,
+} from 'src/core/ports/instance.repository';
+import {
   LANGUAGE_REPOSITORY,
   LanguageRepository,
 } from 'src/core/ports/language.repository';
@@ -83,6 +87,8 @@ export class GetLearningLanguageMatchesUsecase {
     private readonly refusedTandemsRepository: RefusedTandemsRepository,
     @Inject(UNIVERSITY_REPOSITORY)
     private readonly universityRepository: UniversityRepository,
+    @Inject(INSTANCE_REPOSITORY)
+    private readonly instanceRepository: InstanceRepository,
   ) {}
 
   async execute(command: GetUserMatchCommand): Promise<Collection<Match>> {
@@ -102,6 +108,9 @@ export class GetLearningLanguageMatchesUsecase {
     const languagesAvailableForLearning = (
       await this.languageRepository.getLanguagesProposedToLearning()
     ).filter((language) => !language.isJokerLanguage());
+
+    const instance = await this.instanceRepository.getInstance();
+    const allowStaffStudentMatching = instance?.allowStaffStudentMatching ?? true;
 
     let targets: LearningLanguage[] = [];
     if (learningLanguage.language.isJokerLanguage()) {
@@ -163,6 +172,7 @@ export class GetLearningLanguageMatchesUsecase {
           learningLanguage,
           target,
           languagesAvailableForLearning,
+          allowStaffStudentMatching,
         );
 
         potentialMatchs.push(match);

@@ -411,6 +411,9 @@
         "primaryColor": "Primary color of the application",
         "primaryBackgroundColor": "Primary color of the application's background image",
         "maintenance": "Maintenance",
+        "allowStaffStudentMatching": "Matching between staff and students",
+        "allowStaffStudentMatchingOn": "Enabled (open matching between staff and students)",
+        "allowStaffStudentMatchingOff": "Disabled (strict separation by profile type)",
         "mainteance_update": "Instance has been updated",
         "primaryDarkColor": "Dark shade of the primary color used for the application background",
         "secondaryColor": "Secondary color of the application",
@@ -444,7 +447,9 @@
             "secondaryBackgroundColor": "Secondary color of the application's background image",
             "secondaryDarkColor": "Secondary dark color used for the application background",
             "title": "Instance update",
-            "defaultCertificateFile": "Default certificate file"
+            "defaultCertificateFile": "Default certificate file",
+            "allowStaffStudentMatching": "Matching between staff and students",
+            "allowStaffStudentMatchingLabel": "Allow matching between staff and students"
         }
     },
     "interests": {

@@ -59,6 +59,7 @@ type Instance = {
     secondaryBackgroundColor: string;
     secondaryDarkColor: string;
     isInMaintenance: boolean;
+    allowStaffStudentMatching: boolean;
     daysBeforeClosureNotification: number;
     editoMandatoryTranslations: EditoMandatoryTranslations[];
     editoCentralUniversityTranslations: Language[];
@@ -77,6 +78,7 @@ export interface InstanceFormPayload {
     secondaryBackgroundColor: string;
     secondaryDarkColor: string;
     isInMaintenance: boolean;
+    allowStaffStudentMatching: boolean;
     daysBeforeClosureNotification: number;
     defaultCertificateFile: File | undefined;
     editoMandatoryTranslations: EditoMandatoryTranslations[];

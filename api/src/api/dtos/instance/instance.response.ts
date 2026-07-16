@@ -99,6 +99,11 @@ export class InstanceResponse {
   @Type(() => Boolean)
   isInMaintenance: boolean;
 
+  @ApiProperty({ type: 'boolean' })
+  @Expose({ groups: ['read'] })
+  @Type(() => Boolean)
+  allowStaffStudentMatching: boolean;
+
   @ApiProperty({ type: 'number' })
   @Expose({ groups: ['read'] })
   @Type(() => Number)
@@ -142,6 +147,7 @@ export class InstanceResponse {
       secondaryBackgroundColor: instance.secondaryBackgroundColor,
       secondaryDarkColor: instance.secondaryDarkColor,
       isInMaintenance: instance.isInMaintenance,
+      allowStaffStudentMatching: instance.allowStaffStudentMatching,
       daysBeforeClosureNotification: instance.daysBeforeClosureNotification,
       defaultCertificateFile: instance.defaultCertificateFile
         ? MediaObjectResponse.fromMediaObject(instance.defaultCertificateFile)

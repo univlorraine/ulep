@@ -39,9 +39,10 @@
  */
 
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import {
   IsArray,
+  IsBoolean,
   IsEmail,
   IsHexColor,
   IsNumber,
@@ -111,6 +112,14 @@ export class UpdateInstanceRequest {
   @IsOptional()
   @Type(() => Boolean)
   isInMaintenance?: boolean;
+
+  @ApiPropertyOptional({ type: 'boolean' })
+  @IsOptional()
+  // Sent as a multipart string ("true"/"false") from the config form, so we
+  // cannot rely on Boolean() (Boolean("false") === true). Parse explicitly.
+  @Transform(({ value }) => value === true || value === 'true')
+  @IsBoolean()
+  allowStaffStudentMatching?: boolean;
 
   @ApiPropertyOptional({ type: 'number' })
   @IsOptional()
