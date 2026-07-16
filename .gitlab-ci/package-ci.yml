@@ -67,6 +67,9 @@ stages:
 # Build
 .build:
   stage: 📦 build
+  variables:
+    KUBERNETES_CPU_LIMIT: "1"
+    KUBERNETES_MEMORY_LIMIT: "2Gi"
   extends: .base
   needs:
     - job: ⚙️ dependencies
@@ -126,6 +129,9 @@ stages:
 # Build de l'image
 🚀 container image:
   stage: 📦 build
+  variables:
+    KUBERNETES_CPU_LIMIT: "1"
+    KUBERNETES_MEMORY_LIMIT: "2Gi"
   needs:
     - job: 🛡️ lint
       optional: true
