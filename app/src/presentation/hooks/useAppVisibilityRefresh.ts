@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useConfig } from '../../context/ConfigurationContext';
+import { isVisibilityRefreshSuspended } from './visibilityRefreshControl';
 
 /**
  * Hook pour rafraîchir la page quand l'app revient au premier plan sur mobile
@@ -17,6 +18,12 @@ export const useAppVisibilityRefresh = () => {
         const handleVisibilityChange = () => {
             // Quand l'app redevient visible (revient au premier plan)
             if (!document.hidden) {
+                // Ne pas recharger si on revient d'un plugin natif volontaire
+                // (sélecteur de fichiers, caméra, partage…) : cela détruirait
+                // l'état React en cours (ex. le fichier sélectionné).
+                if (isVisibilityRefreshSuspended()) {
+                    return;
+                }
                 window.location.reload();
             }
         };
