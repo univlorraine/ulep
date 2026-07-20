@@ -93,13 +93,6 @@ const InstanceForm: React.FC<InstanceFormProps> = ({ handleSubmit, instance }) =
         instance.allowStaffStudentMatching ?? true
     );
     const [newDefaultCertificateFile, setNewDefaultCertificateFile] = useState<File>();
-    const [newWatermarkFile, setNewWatermarkFile] = useState<File>();
-    const [newFaviconFile, setNewFaviconFile] = useState<File>();
-    const [newManifestFile, setNewManifestFile] = useState<File>();
-    const [newTitleFontUrl, setNewTitleFontUrl] = useState<string>(instance.titleFontUrl ?? '');
-    const [newTitleFontFamily, setNewTitleFontFamily] = useState<string>(instance.titleFontFamily ?? '');
-    const [newBodyFontUrl, setNewBodyFontUrl] = useState<string>(instance.bodyFontUrl ?? '');
-    const [newBodyFontFamily, setNewBodyFontFamily] = useState<string>(instance.bodyFontFamily ?? '');
     const [newEditoMandatoryTranslations, setNewEditoMandatoryTranslations] = useState<EditoMandatoryTranslations[]>(
         instance.editoMandatoryTranslations
     );
@@ -152,15 +145,8 @@ const InstanceForm: React.FC<InstanceFormProps> = ({ handleSubmit, instance }) =
             allowStaffStudentMatching: newAllowStaffStudentMatching,
             daysBeforeClosureNotification: newDaysBeforeClosureNotification,
             defaultCertificateFile: newDefaultCertificateFile,
-            watermarkFile: newWatermarkFile,
-            faviconFile: newFaviconFile,
-            manifestFile: newManifestFile,
             editoMandatoryTranslations: newEditoMandatoryTranslations,
             editoCentralUniversityTranslations: newCentralUniversityTranslations,
-            titleFontUrl: newTitleFontUrl,
-            titleFontFamily: newTitleFontFamily,
-            bodyFontUrl: newBodyFontUrl,
-            bodyFontFamily: newBodyFontFamily,
         });
 
     return (
@@ -470,79 +456,6 @@ const InstanceForm: React.FC<InstanceFormProps> = ({ handleSubmit, instance }) =
                             onChange={(_, colors) => setNewSecondaryDarkColor(colors.hex)}
                             value={newSecondaryDarkColor}
                         />
-                    </Box>
-
-                    <Box>
-                        <Typography variant="subtitle1">{translate(`instance.edit.watermark`)}</Typography>
-                        <FileUploader
-                            accept="image/png,image/svg+xml"
-                            fileType="PNG / SVG"
-                            onFileSelect={setNewWatermarkFile}
-                        />
-                    </Box>
-
-                    <Box>
-                        <Typography variant="subtitle1">{translate(`instance.edit.favicon`)}</Typography>
-                        <FileUploader
-                            accept="image/x-icon,image/vnd.microsoft.icon,image/png"
-                            fileType="ICO / PNG"
-                            onFileSelect={setNewFaviconFile}
-                        />
-                    </Box>
-
-                    <Box>
-                        <Typography variant="subtitle1">{translate(`instance.edit.manifest`)}</Typography>
-                        <FileUploader
-                            accept="application/json,.json,.webmanifest"
-                            fileType="JSON"
-                            onFileSelect={setNewManifestFile}
-                        />
-                    </Box>
-
-                    <Box>
-                        <Typography variant="subtitle1">{translate(`instance.edit.titleFontUrl`)}</Typography>
-                        <Box alignItems="center" display="flex" flexDirection="row">
-                            <OutlinedInput
-                                name="TitleFontUrl"
-                                onChange={(e) => setNewTitleFontUrl(e.target.value)}
-                                type="url"
-                                value={newTitleFontUrl}
-                            />
-                        </Box>
-                    </Box>
-
-                    <Box>
-                        <Typography variant="subtitle1">{translate(`instance.edit.titleFontFamily`)}</Typography>
-                        <Box alignItems="center" display="flex" flexDirection="row">
-                            <OutlinedInput
-                                name="TitleFontFamily"
-                                onChange={(e) => setNewTitleFontFamily(e.target.value)}
-                                value={newTitleFontFamily}
-                            />
-                        </Box>
-                    </Box>
-
-                    <Box>
-                        <Typography variant="subtitle1">{translate(`instance.edit.bodyFontUrl`)}</Typography>
-                        <Box alignItems="center" display="flex" flexDirection="row">
-                            <OutlinedInput
-                                name="BodyFontUrl"
-                                onChange={(e) => setNewBodyFontUrl(e.target.value)}
-                                type="url"
-                                value={newBodyFontUrl}
-                            />
-                        </Box>
-                    </Box>
-
-                    <Box>
-                        <Typography variant="subtitle1">{translate(`instance.edit.bodyFontFamily`)}</Typography>
-                        <Box alignItems="center" display="flex" flexDirection="row">
-                            <OutlinedInput
-                                name="BodyFontFamily"
-                                onChange={(e) => setNewBodyFontFamily(e.target.value)}
-                                value={newBodyFontFamily}
-                            />
-                        </Box>
                     </Box>
                 </Box>
             </Box>

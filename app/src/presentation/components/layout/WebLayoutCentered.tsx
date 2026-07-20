@@ -40,7 +40,7 @@
 
 import { IonContent, IonPage } from '@ionic/react';
 import { ReactElement } from 'react';
-import Watermark from '../Watermark';
+import { ReactComponent as Background } from '../../../assets/background.svg';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 import styles from '../../pages/css/SignUp.module.css';
 import { HYBRID_MAX_WIDTH } from '../../utils';
@@ -71,9 +71,10 @@ const WebLayoutCentered: React.FC<WebLayoutCenteredProps> = ({
         <IonPage>
             {!isHybrid && (
                 <div className="background-image-container" style={{ backgroundColor: headerColor }}>
-                    <Watermark
+                    <Background
                         style={{ color: backgroundIconColor }}
                         className="background-image"
+                        aria-hidden={true}
                     />
                 </div>
             )}

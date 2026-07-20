@@ -65,10 +65,6 @@ export type UpdateInstanceProps = {
   daysBeforeClosureNotification?: number;
   editoMandatoryTranslations?: string[];
   editoCentralUniversityTranslations?: string[];
-  titleFontUrl?: string | null;
-  titleFontFamily?: string | null;
-  bodyFontUrl?: string | null;
-  bodyFontFamily?: string | null;
 };
 
 interface InstanceProps {
@@ -90,10 +86,6 @@ interface InstanceProps {
   defaultCertificateFile?: MediaObject;
   editoMandatoryTranslations: EditoMandatoryTranslations[];
   editoCentralUniversityTranslations: Language[];
-  titleFontUrl?: string | null;
-  titleFontFamily?: string | null;
-  bodyFontUrl?: string | null;
-  bodyFontFamily?: string | null;
 }
 
 export class Instance {
@@ -113,13 +105,8 @@ export class Instance {
   readonly allowStaffStudentMatching: boolean;
   readonly daysBeforeClosureNotification: number;
   readonly defaultCertificateFile?: MediaObject;
-  readonly titleFontUrl?: string | null;
-  readonly titleFontFamily?: string | null;
-  readonly bodyFontUrl?: string | null;
-  readonly bodyFontFamily?: string | null;
   logoURL: string;
   faviconURL: string;
-  watermarkURL?: string;
   editoMandatoryTranslations: EditoMandatoryTranslations[];
   editoCentralUniversityTranslations: Language[];
 
@@ -140,10 +127,6 @@ export class Instance {
     this.allowStaffStudentMatching = instance.allowStaffStudentMatching;
     this.daysBeforeClosureNotification = instance.daysBeforeClosureNotification;
     this.defaultCertificateFile = instance.defaultCertificateFile;
-    this.titleFontUrl = instance.titleFontUrl;
-    this.titleFontFamily = instance.titleFontFamily;
-    this.bodyFontUrl = instance.bodyFontUrl;
-    this.bodyFontFamily = instance.bodyFontFamily;
     this.editoMandatoryTranslations = instance.editoMandatoryTranslations;
     this.editoCentralUniversityTranslations =
       instance.editoCentralUniversityTranslations;

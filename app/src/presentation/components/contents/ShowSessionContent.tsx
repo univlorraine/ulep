@@ -44,7 +44,7 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Redirect, useHistory } from 'react-router';
 import { CancelledPng } from '../../../assets';
-import Watermark from '../Watermark';
+import { ReactComponent as Background } from '../../../assets/background.svg';
 import { useConfig } from '../../../context/ConfigurationContext';
 import Profile from '../../../domain/entities/Profile';
 import Session from '../../../domain/entities/Session';
@@ -128,9 +128,10 @@ const Content: React.FC<ShowSessionContentProps> = ({
             <div className={styles.show_session_content}>
                 {isSessionCancelled ? (
                     <div className={styles.block_cancelled} style={{ backgroundColor: configuration.primaryColor }}>
-                        <Watermark
+                        <Background
                             style={{ color: configuration.primaryBackgroundImageColor }}
                             className={styles.background_image}
+                            aria-hidden={true}
                         />
                         <div className={styles.cancelled_icon}>
                             <img src={CancelledPng} alt="" aria-hidden="true" />

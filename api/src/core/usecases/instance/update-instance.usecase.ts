@@ -71,10 +71,6 @@ export class UpdateInstanceCommand {
   editoCentralUniversityTranslations?: string[];
   isInMaintenance?: boolean;
   allowStaffStudentMatching?: boolean;
-  titleFontUrl?: string | null;
-  titleFontFamily?: string | null;
-  bodyFontUrl?: string | null;
-  bodyFontFamily?: string | null;
 }
 
 @Injectable()

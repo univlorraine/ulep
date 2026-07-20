@@ -43,36 +43,21 @@ import {
   Body,
   Controller,
   Get,
-  Inject,
   Logger,
   Param,
   Put,
-  Res,
-  UploadedFiles,
+  UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor } from '@nestjs/platform-express';
 import * as Swagger from '@nestjs/swagger';
-import { Response } from 'express';
 import { InstanceResponse } from 'src/api/dtos/instance/instance.response';
 import { UpdateInstanceRequest } from 'src/api/dtos/instance/update-instance.request';
 import { Env } from 'src/configuration';
 import { RessourceDoesNotExist } from 'src/core/errors';
-import {
-  StorageInterface,
-  STORAGE_INTERFACE,
-} from 'src/core/ports/storage.interface';
 import { GetInstanceUsecase, UpdateInstanceUsecase } from 'src/core/usecases';
 import { UploadInstanceDefaultCertificateUsecase } from 'src/core/usecases/media/upload-instance-default-certificate.usecase';
-import { UploadInstanceFaviconUsecase } from 'src/core/usecases/media/upload-instance-favicon.usecase';
-import { UploadInstanceManifestUsecase } from 'src/core/usecases/media/upload-instance-manifest.usecase';
-import { UploadInstanceWatermarkUsecase } from 'src/core/usecases/media/upload-instance-watermark.usecase';
-import {
-  ASSETS_BUCKET,
-  FAVICON_FILEMANE,
-  MANIFEST_FILENAME,
-} from 'src/providers/storage/minio.storage';
 
 @Controller('instance')
 @Swagger.ApiTags('Instance')
@@ -83,11 +68,6 @@ export class InstanceController {
     private readonly getInstanceUsecase: GetInstanceUsecase,
     private readonly updateInstanceUsecase: UpdateInstanceUsecase,
     private readonly uploadInstanceDefaultCertificateUsecase: UploadInstanceDefaultCertificateUsecase,
-    private readonly uploadInstanceWatermarkUsecase: UploadInstanceWatermarkUsecase,
-    private readonly uploadInstanceFaviconUsecase: UploadInstanceFaviconUsecase,
-    private readonly uploadInstanceManifestUsecase: UploadInstanceManifestUsecase,
-    @Inject(STORAGE_INTERFACE)
-    private readonly storage: StorageInterface,
     private readonly env: ConfigService<Env, true>,
     private readonly i18n: I18nService,
   ) {}
@@ -101,81 +81,23 @@ export class InstanceController {
     return InstanceResponse.fromDomain(instance);
   }
 
-  @Get('favicon')
-  @Swagger.ApiOperation({ summary: 'Get the instance favicon' })
-  async favicon(@Res() res: Response): Promise<void> {
-    await this.streamAsset(res, FAVICON_FILEMANE, 'image/x-icon');
-  }
-
-  @Get('manifest')
-  @Swagger.ApiOperation({ summary: 'Get the instance web manifest' })
-  async manifest(@Res() res: Response): Promise<void> {
-    await this.streamAsset(res, MANIFEST_FILENAME, 'application/manifest+json');
-  }
-
   @Put()
-  @UseInterceptors(
-    FileFieldsInterceptor([
-      { name: 'defaultCertificateFile', maxCount: 1 },
-      { name: 'watermarkFile', maxCount: 1 },
-      { name: 'faviconFile', maxCount: 1 },
-      { name: 'manifestFile', maxCount: 1 },
-    ]),
-  )
+  @UseInterceptors(FileInterceptor('defaultCertificateFile'))
   @Swagger.ApiOperation({ summary: 'Update the instance' })
   @Swagger.ApiCreatedResponse({ type: InstanceResponse })
   async updateInstance(
     @Body() body: UpdateInstanceRequest,
-    @UploadedFiles()
-    files: {
-      defaultCertificateFile?: Express.Multer.File[];
-      watermarkFile?: Express.Multer.File[];
-      faviconFile?: Express.Multer.File[];
-      manifestFile?: Express.Multer.File[];
-    },
+    @UploadedFile() defaultCertificateFile: Express.Multer.File,
   ): Promise<InstanceResponse> {
     const instance = await this.updateInstanceUsecase.execute(body);
 
-    const defaultCertificateFile = files?.defaultCertificateFile?.[0];
     if (defaultCertificateFile) {
       await this.uploadInstanceDefaultCertificateUsecase.execute({
         file: defaultCertificateFile,
       });
     }
 
-    const watermarkFile = files?.watermarkFile?.[0];
-    if (watermarkFile) {
-      await this.uploadInstanceWatermarkUsecase.execute({
-        file: watermarkFile,
-      });
-    }
-
-    const faviconFile = files?.faviconFile?.[0];
-    if (faviconFile) {
-      await this.uploadInstanceFaviconUsecase.execute({ file: faviconFile });
-    }
-
-    const manifestFile = files?.manifestFile?.[0];
-    if (manifestFile) {
-      await this.uploadInstanceManifestUsecase.execute({ file: manifestFile });
-    }
-
     return InstanceResponse.fromDomain(instance);
-  }
-
-  private async streamAsset(
-    res: Response,
-    filename: string,
-    contentType: string,
-  ): Promise<void> {
-    if (!(await this.storage.fileExists(ASSETS_BUCKET, filename))) {
-      throw new RessourceDoesNotExist();
-    }
-
-    const stream = await this.storage.read(ASSETS_BUCKET, filename);
-    res.setHeader('Content-Type', contentType);
-    res.setHeader('Cache-Control', 'public, max-age=3600');
-    stream.pipe(res);
   }
 
   @Get('locales/:lng/translation')

@@ -36,12 +36,6 @@ spec:
         command: ["/bin/sh"]
         args: ["-c", "cd /app && pnpm run build:prod && cp -r /app/dist/* /usr/share/nginx/html/"]
         env:
-          - name: VITE_APP_TITLE
-            value: "{{ .Values.webapp.title }}"
-          - name: VITE_APP_FAVICON
-            value: "{{ .Values.api.env.minioUrl }}/assets/favicon.png"
-          - name: VITE_APP_MANIFEST
-            value: "{{ .Values.api.env.minioUrl }}/assets/manifest.json"
           - name: VITE_API_URL
             value: "https://{{ .Values.apiUrl }}.{{ .Values.domain }}"
           - name: VITE_JITSI_URL

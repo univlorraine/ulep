@@ -241,9 +241,6 @@ import { DeleteLearningLanguageUsecase } from './usecases/learningLanguage/delet
 import { GetLearningLanguageTandemUsecase } from './usecases/learningLanguage/getLearningLanguageTandem.usecase';
 import { UpdateVisioDurationUsecase } from './usecases/learningLanguage/update-visio-duration.usecase';
 import { UploadInstanceDefaultCertificateUsecase } from './usecases/media/upload-instance-default-certificate.usecase';
-import { UploadInstanceFaviconUsecase } from './usecases/media/upload-instance-favicon.usecase';
-import { UploadInstanceManifestUsecase } from './usecases/media/upload-instance-manifest.usecase';
-import { UploadInstanceWatermarkUsecase } from './usecases/media/upload-instance-watermark.usecase';
 import { UploadUniversityDefaultCertificateUsecase } from './usecases/media/upload-university-default-certificate.usecase';
 import { CreateCustomLearningGoalUsecase } from './usecases/objective/create-custom-learning-goals.usecase';
 import { DeleteCustomLearningGoalUsecase } from './usecases/objective/delete-custom-learning-goal.usecase';
@@ -332,9 +329,6 @@ const usecases: Provider[] = [
   UploadAudioVocabularyActivityUsecase,
   UploadMediaActivityUsecase,
   UploadInstanceDefaultCertificateUsecase,
-  UploadInstanceFaviconUsecase,
-  UploadInstanceManifestUsecase,
-  UploadInstanceWatermarkUsecase,
   UploadUniversityDefaultCertificateUsecase,
   UploadLearningLanguageCertificateUsecase,
   UploadEventImageUsecase,

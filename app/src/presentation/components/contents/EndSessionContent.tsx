@@ -42,7 +42,7 @@ import { IonButton } from '@ionic/react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { StarPng } from '../../../assets';
-import Watermark from '../Watermark';
+import { ReactComponent as Background } from '../../../assets/background.svg';
 import { useConfig } from '../../../context/ConfigurationContext';
 import styles from './EndSessionContent.module.css';
 
@@ -57,9 +57,10 @@ const EndSessionContent: React.FC<EndSessionContentProps> = ({ onClose, onComple
 
     return (
         <div className={styles.container}>
-            <Watermark
+            <Background
                 style={{ color: configuration.primaryBackgroundImageColor }}
                 className={styles.background_image}
+                aria-hidden={true}
             />
             <div className={styles.header}>
                 <h1 className={styles.title}>{t('home_page.end_session.title')}</h1>

@@ -60,6 +60,8 @@ const ShowCustomGoalPage = () => {
         return <Redirect to="/" />;
     }
 
+    console.log('customLearningGoals', customLearningGoals);
+
     const goBack = () => {
         history.push('/goals', { learningLanguageId: learningLanguageId, customLearningGoals });
     };

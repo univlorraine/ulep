@@ -42,7 +42,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
 import { ArrowLeftSvg, CameraSvg, ChatSvg, CloseBlackSvg } from '../../../assets';
-import Watermark from '../Watermark';
+import { ReactComponent as Background } from '../../../assets/background.svg';
 import { useConfig } from '../../../context/ConfigurationContext';
 import Language from '../../../domain/entities/Language';
 import LearningLanguage from '../../../domain/entities/LearningLanguage';
@@ -102,7 +102,7 @@ const TandemProfile: React.FC<TandemProfileProps> = ({
             className={`content-wrapper ${styles.container}`}
             style={{ backgroundColor: configuration.secondaryColor }}
         >
-            <Watermark className={styles.image} style={{ color: configuration.secondaryBackgroundImageColor }} />
+            <Background className={styles.image} style={{ color: configuration.secondaryBackgroundImageColor }} />
             <div className={styles.actions}>
                 {isHybrid && (
                     <button

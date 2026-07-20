@@ -121,26 +121,6 @@ export class InstanceResponse {
   @Expose({ groups: ['read'] })
   faviconURL?: string;
 
-  @ApiPropertyOptional({ type: 'string', format: 'url' })
-  @Expose({ groups: ['read'] })
-  watermarkURL?: string;
-
-  @ApiPropertyOptional({ type: 'string', format: 'url' })
-  @Expose({ groups: ['read'] })
-  titleFontUrl?: string;
-
-  @ApiPropertyOptional({ type: 'string' })
-  @Expose({ groups: ['read'] })
-  titleFontFamily?: string;
-
-  @ApiPropertyOptional({ type: 'string', format: 'url' })
-  @Expose({ groups: ['read'] })
-  bodyFontUrl?: string;
-
-  @ApiPropertyOptional({ type: 'string' })
-  @Expose({ groups: ['read'] })
-  bodyFontFamily?: string;
-
   @ApiProperty({ type: 'array', items: { type: 'string' } })
   @Expose({ groups: ['read'] })
   editoMandatoryTranslations: string[];
@@ -174,11 +154,6 @@ export class InstanceResponse {
         : null,
       logoURL: instance.logoURL,
       faviconURL: instance.faviconURL,
-      watermarkURL: instance.watermarkURL,
-      titleFontUrl: instance.titleFontUrl,
-      titleFontFamily: instance.titleFontFamily,
-      bodyFontUrl: instance.bodyFontUrl,
-      bodyFontFamily: instance.bodyFontFamily,
       editoMandatoryTranslations: instance.editoMandatoryTranslations,
       editoCentralUniversityTranslations:
         instance.editoCentralUniversityTranslations.map((translation) =>

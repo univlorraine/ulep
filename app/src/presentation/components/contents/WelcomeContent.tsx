@@ -48,9 +48,7 @@ import {
     ChineseBubble,
     HiBubbleSvg,
 } from '../../../assets';
-import { useConfig } from '../../../context/ConfigurationContext';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
-import WatermarkBackground from '../WatermarkBackground';
 import { BACKGROUND_HYBRID_STYLE_INLINE, BACKGROUND_WEB_STYLE_INLINE, HYBRID_MAX_WIDTH } from '../../utils';
 import style from './WelcomeContent.module.css';
 
@@ -73,7 +71,6 @@ interface WelcomeContentProps {
 
 const WelcomeContent: React.FC<WelcomeContentProps> = ({ onPress }) => {
     const [currentTheme, setCurrentTheme] = useState<HomeTheme>(themes[0]);
-    const { configuration } = useConfig();
     const { width } = useWindowDimensions();
     const { t } = useTranslation();
     const isHybrid = width < HYBRID_MAX_WIDTH;
@@ -86,18 +83,20 @@ const WelcomeContent: React.FC<WelcomeContentProps> = ({ onPress }) => {
         setCurrentTheme(themes[Math.floor(Math.random() * themes.length)]);
     }, []);
 
-    const hasWatermark = Boolean(configuration.watermarkURL);
-    const backgroundImageStyle = isHybrid ? BACKGROUND_HYBRID_STYLE_INLINE : BACKGROUND_WEB_STYLE_INLINE;
-    const backgroundStyle = {
-        backgroundImage: hasWatermark ? 'none' : `url('${currentTheme.background}')`,
-        backgroundColor: currentTheme.color,
-        ...backgroundImageStyle,
-        ...(hasWatermark ? { position: 'relative' as const, isolation: 'isolate' as const } : {}),
-    };
+    const backgroundStyle = isHybrid
+        ? {
+              backgroundImage: `url('${currentTheme.background}')`,
+              backgroundColor: currentTheme.color,
+              ...BACKGROUND_HYBRID_STYLE_INLINE,
+          }
+        : {
+              backgroundImage: `url('${currentTheme.background}')`,
+              backgroundColor: currentTheme.color,
+              ...BACKGROUND_WEB_STYLE_INLINE,
+          };
     //TODO: Add mising logo on the top
     return (
         <div style={backgroundStyle} className={`content-wrapper container`}>
-            <WatermarkBackground backgroundColor={currentTheme.color} backgroundStyle={backgroundImageStyle} />
             <img src={currentTheme.image} alt={t('global.hello') as string} className={style['bubble']} />
             <h1 className={style['welcome-text']}>
                 {t('global.welcome')} <br />

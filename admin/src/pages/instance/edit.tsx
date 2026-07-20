@@ -71,25 +71,8 @@ const InstanceEditForm = () => {
             formData.append(`editoCentralUniversityTranslations[${index}]`, translation.code);
         });
 
-        formData.append('titleFontUrl', payload.titleFontUrl);
-        formData.append('titleFontFamily', payload.titleFontFamily);
-        formData.append('bodyFontUrl', payload.bodyFontUrl);
-        formData.append('bodyFontFamily', payload.bodyFontFamily);
-
         if (payload.defaultCertificateFile) {
             formData.append('defaultCertificateFile', payload.defaultCertificateFile);
-        }
-
-        if (payload.watermarkFile) {
-            formData.append('watermarkFile', payload.watermarkFile);
-        }
-
-        if (payload.faviconFile) {
-            formData.append('faviconFile', payload.faviconFile);
-        }
-
-        if (payload.manifestFile) {
-            formData.append('manifestFile', payload.manifestFile);
         }
 
         try {

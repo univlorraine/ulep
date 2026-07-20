@@ -52,7 +52,6 @@ import {
   ASSETS_BUCKET,
   FAVICON_FILEMANE,
   LOGO_FILENAME,
-  WATERMARK_FILENAME,
 } from 'src/providers/storage/minio.storage';
 
 @Injectable()
@@ -85,19 +84,6 @@ export class GetInstanceUsecase {
 
     instance.logoURL = instanceLogo;
     instance.faviconURL = instanceFavicon;
-
-    const watermarkExists = await this.storage.fileExists(
-      ASSETS_BUCKET,
-      WATERMARK_FILENAME,
-    );
-
-    if (watermarkExists) {
-      instance.watermarkURL = await this.storage.temporaryUrl(
-        ASSETS_BUCKET,
-        WATERMARK_FILENAME,
-        60 * 60 * 24,
-      );
-    }
 
     return instance;
   }
