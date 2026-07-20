@@ -69,6 +69,10 @@ export const instanceMapper = (instanceSnapshot: InstanceSnapshot) => {
     allowStaffStudentMatching: instanceSnapshot.allow_staff_student_matching,
     daysBeforeClosureNotification:
       instanceSnapshot.days_before_closure_notification,
+    titleFontUrl: instanceSnapshot.title_font_url,
+    titleFontFamily: instanceSnapshot.title_font_family,
+    bodyFontUrl: instanceSnapshot.body_font_url,
+    bodyFontFamily: instanceSnapshot.body_font_family,
     defaultCertificateFile:
       instanceSnapshot.DefaultCertificateFile &&
       new MediaObject({

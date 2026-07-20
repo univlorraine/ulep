@@ -448,7 +448,14 @@
             "defaultCertificateFile": "Modèle de certificat",
             "editoMandatoryTranslations": "Langues obligatoires pour les éditos",
             "allowStaffStudentMatching": "Matching entre personnel et étudiant",
-            "allowStaffStudentMatchingLabel": "Autoriser le matching entre le personnel et les étudiants"
+            "allowStaffStudentMatchingLabel": "Autoriser le matching entre le personnel et les étudiants",
+            "watermark": "Filigrane (image d'arrière-plan de l'application)",
+            "favicon": "Favicon (icône de l'onglet du navigateur)",
+            "manifest": "Manifest web (fichier manifest.json de la PWA)",
+            "titleFontUrl": "URL de la feuille de style de la police des titres",
+            "titleFontFamily": "Nom de la police des titres (font-family)",
+            "bodyFontUrl": "URL de la feuille de style de la police du texte",
+            "bodyFontFamily": "Nom de la police du texte (font-family)"
         }
     },
     "interests": {

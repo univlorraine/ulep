@@ -51,7 +51,10 @@ import FlipcardsQuiz from '../../components/flashcards/flipcards/FlipcardsQuiz';
 import useGetVocabularyFromListsId from '../../hooks/useGetVocabularyFromListsId';
 import { BACKGROUND_HYBRID_STYLE_INLINE } from '../../utils';
 import HeaderSubContent from '../HeaderSubContent';
+import WatermarkBackground from '../WatermarkBackground';
 import styles from './FlipcardsContent.module.css';
+
+const FLIPCARDS_BACKGROUND_COLOR = '#AC9DC9';
 
 type FlipcardsContentProps = {
     profile: Profile;
@@ -62,7 +65,7 @@ type FlipcardsContentProps = {
 
 const FlipcardsContent = ({ profile, selectedListsId, onBackPressed, learningLanguageId }: FlipcardsContentProps) => {
     const { t } = useTranslation();
-    const { createLogEntry } = useConfig();
+    const { configuration, createLogEntry } = useConfig();
     const [refresh, setRefresh] = useState<boolean>(false);
     const { vocabularies, error, isLoading } = useGetVocabularyFromListsId(selectedListsId, refresh);
     const [numberRightAnswers, setNumberRightAnswers] = useState<number>(0);
@@ -99,16 +102,24 @@ const FlipcardsContent = ({ profile, selectedListsId, onBackPressed, learningLan
         showToast({ message: t(error.message), duration: 5000 });
     }
 
+    const hasWatermark = Boolean(configuration.watermarkURL);
     const backgroundStyle = {
-        backgroundImage: isQuizFinished ? `url('${BackgroundPurplePng}')` : 'none',
-        backgroundColor: '#AC9DC9',
+        backgroundImage: isQuizFinished && !hasWatermark ? `url('${BackgroundPurplePng}')` : 'none',
+        backgroundColor: FLIPCARDS_BACKGROUND_COLOR,
         ...BACKGROUND_HYBRID_STYLE_INLINE,
+        ...(hasWatermark ? { position: 'relative' as const, isolation: 'isolate' as const } : {}),
     };
 
     return (
         <div className={styles.container}>
             <HeaderSubContent title={t('vocabulary.list.flashcard.title')} onBackPressed={onBackPressed} />
             <div className={styles.content} style={backgroundStyle}>
+                {isQuizFinished && (
+                    <WatermarkBackground
+                        backgroundColor={FLIPCARDS_BACKGROUND_COLOR}
+                        backgroundStyle={BACKGROUND_HYBRID_STYLE_INLINE}
+                    />
+                )}
                 {!isQuizFinished && (
                     <FlipcardsQuiz
                         isLoading={isLoading}

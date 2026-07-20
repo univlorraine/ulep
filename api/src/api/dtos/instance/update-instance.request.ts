@@ -136,4 +136,30 @@ export class UpdateInstanceRequest {
   @IsOptional()
   @IsArray()
   editoCentralUniversityTranslations?: string[];
+
+  @ApiPropertyOptional({ type: 'string', format: 'url' })
+  @IsOptional()
+  // Sent as a multipart string: an emptied field arrives as '' and must clear
+  // the value (null) instead of failing the url validation.
+  @Transform(({ value }) => (value === '' ? null : value))
+  @IsUrl()
+  titleFontUrl?: string | null;
+
+  @ApiPropertyOptional({ type: 'string' })
+  @IsOptional()
+  @Transform(({ value }) => (value === '' ? null : value))
+  @IsString()
+  titleFontFamily?: string | null;
+
+  @ApiPropertyOptional({ type: 'string', format: 'url' })
+  @IsOptional()
+  @Transform(({ value }) => (value === '' ? null : value))
+  @IsUrl()
+  bodyFontUrl?: string | null;
+
+  @ApiPropertyOptional({ type: 'string' })
+  @IsOptional()
+  @Transform(({ value }) => (value === '' ? null : value))
+  @IsString()
+  bodyFontFamily?: string | null;
 }

@@ -38,50 +38,54 @@
  *
  */
 
-import { IonContent } from '@ionic/react';
-import { Redirect, useHistory, useLocation } from 'react-router';
-import CustomLearningGoal from '../../../domain/entities/CustomLearningGoal';
-import { useStoreState } from '../../../store/storeTypes';
-import CustomGoalShowContent from '../../components/contents/CustomGoalShowContent';
+import React from 'react';
+import { ReactComponent as Background } from '../../assets/background.svg';
+import { useConfig } from '../../context/ConfigurationContext';
 
-interface ShowCustomGoalPageProps {
-    customLearningGoal: CustomLearningGoal;
-    learningLanguageId: string;
-    customLearningGoals: CustomLearningGoal[];
+interface WatermarkProps {
+    className?: string;
+    style?: React.CSSProperties;
 }
 
-const ShowCustomGoalPage = () => {
-    const history = useHistory();
-    const location = useLocation<ShowCustomGoalPageProps>();
-    const { customLearningGoal, learningLanguageId, customLearningGoals } = location.state;
-    const profile = useStoreState((state) => state.profile);
+// Renders the instance watermark uploaded from the back office when one is
+// configured, and falls back to the default ULEP background shape (tinted
+// through `style.color`) otherwise.
+const Watermark: React.FC<WatermarkProps> = ({ className, style }) => {
+    const { configuration } = useConfig();
 
-    if (!profile) {
-        return <Redirect to="/" />;
+    if (configuration.watermarkURL) {
+        // An <img> loads the SVG as an isolated external document, so CSS
+        // `color` can't reach its `fill: currentColor`. Instead the file is
+        // used as a CSS mask tinted with the inherited color. The callers'
+        // classes only position the watermark and rely on the image's
+        // intrinsic size, so a hidden <img> keeps that size and the mask
+        // layer is stacked on top of it in the same grid cell.
+        const maskStyle: React.CSSProperties = {
+            gridArea: '1 / 1',
+            backgroundColor: 'currentColor',
+            maskImage: `url("${configuration.watermarkURL}")`,
+            maskRepeat: 'no-repeat',
+            maskPosition: 'center',
+            maskSize: 'contain',
+            WebkitMaskImage: `url("${configuration.watermarkURL}")`,
+            WebkitMaskRepeat: 'no-repeat',
+            WebkitMaskPosition: 'center',
+            WebkitMaskSize: 'contain',
+        };
+
+        return (
+            <span className={className} style={{ display: 'grid', ...style }} aria-hidden={true}>
+                <img
+                    alt=""
+                    src={configuration.watermarkURL}
+                    style={{ gridArea: '1 / 1', visibility: 'hidden' }}
+                />
+                <span style={maskStyle} />
+            </span>
+        );
     }
 
-    const goBack = () => {
-        history.push('/goals', { learningLanguageId: learningLanguageId, customLearningGoals });
-    };
-
-    const onUpdateCustomGoalPressed = (customLearningGoal: CustomLearningGoal) => {
-        history.push('/update-custom-goal', { customLearningGoal, customLearningGoals });
-    };
-
-    const onShowAllGoalsPressed = (customLearningGoals?: CustomLearningGoal[]) => {
-        history.push('/goals', { customLearningGoals, learningLanguageId });
-    };
-
-    return (
-        <IonContent>
-            <CustomGoalShowContent
-                goBack={goBack}
-                customLearningGoal={customLearningGoal}
-                onUpdateCustomGoalPressed={onUpdateCustomGoalPressed}
-                onShowAllGoalsPressed={onShowAllGoalsPressed}
-            />
-        </IonContent>
-    );
+    return <Background className={className} style={style} aria-hidden={true} />;
 };
 
-export default ShowCustomGoalPage;
+export default Watermark;

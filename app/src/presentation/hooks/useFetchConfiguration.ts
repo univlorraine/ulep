@@ -58,8 +58,52 @@ interface InstanceCommand {
     hasConnector: boolean;
     isInMaintenance: boolean;
     logoURL: string;
-    faviconURL?: string;
+    watermarkURL?: string;
+    titleFontUrl?: string;
+    titleFontFamily?: string;
+    bodyFontUrl?: string;
+    bodyFontFamily?: string;
 }
+
+const injectFontStylesheet = (url: string) => {
+    if (document.querySelector(`link[rel='stylesheet'][href='${url}']`)) {
+        return;
+    }
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = url;
+    document.head.appendChild(link);
+};
+
+// 'Twemoji Country Flags' stays first so the flag emojis keep working whatever
+// the configured font is; the remaining fonts mirror the defaults declared in
+// theme/variables.css.
+const fontFamilyValue = (family: string) => `'Twemoji Country Flags', '${family}', 'Maven Pro', 'Roboto', sans-serif`;
+
+// The stylesheets hardcode various font-families (Maven Pro, Roboto, Poppins)
+// per component, so a global override is only injected when the instance
+// configures custom fonts: without configuration the rendering is untouched.
+const applyInstanceFonts = (titleFontFamily?: string, bodyFontFamily?: string) => {
+    if (!titleFontFamily && !bodyFontFamily) {
+        return;
+    }
+
+    const rules: string[] = [];
+    if (bodyFontFamily) {
+        document.documentElement.style.setProperty('--body-font-family', fontFamilyValue(bodyFontFamily));
+        rules.push('* { font-family: var(--body-font-family) !important; }');
+    }
+    if (titleFontFamily) {
+        document.documentElement.style.setProperty('--title-font-family', fontFamilyValue(titleFontFamily));
+        rules.push('h1, h2, h3, h4, h5, h6 { font-family: var(--title-font-family) !important; }');
+    }
+
+    const styleId = 'instance-typography';
+    const style = document.getElementById(styleId) ?? document.createElement('style');
+    style.id = styleId;
+    style.textContent = rules.join('\n');
+    document.head.appendChild(style);
+};
 
 const useFetchConfiguration = (apiUrl: string) => {
     const { t } = useTranslation();
@@ -94,7 +138,7 @@ const useFetchConfiguration = (apiUrl: string) => {
                     result.secondaryBackgroundColor,
                     result.isInMaintenance,
                     result.logoURL,
-                    result.faviconURL
+                    result.watermarkURL
                 )
             );
             document.documentElement.style.setProperty('--primary-color', result.primaryColor);
@@ -104,22 +148,13 @@ const useFetchConfiguration = (apiUrl: string) => {
             document.documentElement.style.setProperty('--secondary-dark-color', result.secondaryDarkColor);
             document.documentElement.style.setProperty('--secondary-background-color', result.secondaryBackgroundColor);
 
-            if (result.faviconURL) {
-                const existingLink = document.querySelector<HTMLLinkElement>("link[rel*='icon']");
-                if (existingLink) {
-                    existingLink.href = result.faviconURL;
-                } else {
-                    const link = document.createElement('link');
-                    link.type = 'image/x-icon';
-                    link.rel = 'shortcut icon';
-                    link.href = result.faviconURL;
-                    document.head.appendChild(link);
-                }
+            if (result.titleFontUrl) {
+                injectFontStylesheet(result.titleFontUrl);
             }
-
-            if (result.name !== 'ULEP') {
-                document.title = `${result.name}`;
+            if (result.bodyFontUrl) {
+                injectFontStylesheet(result.bodyFontUrl);
             }
+            applyInstanceFonts(result.titleFontFamily, result.bodyFontFamily);
         } catch (error: any) {
             setError(error);
             showToast({ message: error.message, duration: 5000 });

@@ -40,7 +40,7 @@
 
 import { IonPage } from '@ionic/react';
 import { ReactElement } from 'react';
-import { ReactComponent as Background } from '../../../assets/background.svg';
+import Watermark from '../Watermark';
 import styles from './SuccessLayout.module.css';
 
 interface SuccessLayoutProps {
@@ -60,7 +60,7 @@ const SuccessLayout: React.FC<SuccessLayoutProps> = ({
         <IonPage>
             <div className={styles['web-content']} style={{ backgroundColor: backgroundColorCode }}>
                 <div className={styles['main-content']} style={{ backgroundColor: colorCode }}>
-                    <Background className={styles.image} style={{ color: backgroundIconColor }} />
+                    <Watermark className={styles.image} style={{ color: backgroundIconColor }} />
                     <div className={styles['children-content']}>{children}</div>
                 </div>
             </div>

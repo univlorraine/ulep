@@ -54,7 +54,7 @@ class Configuration {
         public readonly secondaryBackgroundImageColor: string,
         public readonly isInMaintenance: boolean,
         public readonly logoURL: string,
-        public readonly faviconURL?: string
+        public readonly watermarkURL?: string
     ) {}
 }
 

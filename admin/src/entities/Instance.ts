@@ -63,6 +63,10 @@ type Instance = {
     daysBeforeClosureNotification: number;
     editoMandatoryTranslations: EditoMandatoryTranslations[];
     editoCentralUniversityTranslations: Language[];
+    titleFontUrl?: string | null;
+    titleFontFamily?: string | null;
+    bodyFontUrl?: string | null;
+    bodyFontFamily?: string | null;
 };
 
 export interface InstanceFormPayload {
@@ -81,8 +85,15 @@ export interface InstanceFormPayload {
     allowStaffStudentMatching: boolean;
     daysBeforeClosureNotification: number;
     defaultCertificateFile: File | undefined;
+    watermarkFile: File | undefined;
+    faviconFile: File | undefined;
+    manifestFile: File | undefined;
     editoMandatoryTranslations: EditoMandatoryTranslations[];
     editoCentralUniversityTranslations: Language[];
+    titleFontUrl: string;
+    titleFontFamily: string;
+    bodyFontUrl: string;
+    bodyFontFamily: string;
 }
 
 export default Instance;

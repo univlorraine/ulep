@@ -59,6 +59,8 @@ import { Readable } from 'stream';
 export const ASSETS_BUCKET = 'assets';
 export const LOGO_FILENAME = 'logo.png';
 export const FAVICON_FILEMANE = 'favicon.ico';
+export const WATERMARK_FILENAME = 'watermark';
+export const MANIFEST_FILENAME = 'manifest.json';
 
 @Injectable()
 export class MinioStorage implements StorageInterface {

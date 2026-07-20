@@ -38,50 +38,29 @@
  *
  */
 
-import { IonContent } from '@ionic/react';
-import { Redirect, useHistory, useLocation } from 'react-router';
-import CustomLearningGoal from '../../../domain/entities/CustomLearningGoal';
-import { useStoreState } from '../../../store/storeTypes';
-import CustomGoalShowContent from '../../components/contents/CustomGoalShowContent';
+import { Inject, Injectable } from '@nestjs/common';
+import {
+  ASSETS_BUCKET,
+  WATERMARK_FILENAME,
+} from 'src/providers/storage/minio.storage';
+import {
+  File,
+  StorageInterface,
+  STORAGE_INTERFACE,
+} from '../../ports/storage.interface';
 
-interface ShowCustomGoalPageProps {
-    customLearningGoal: CustomLearningGoal;
-    learningLanguageId: string;
-    customLearningGoals: CustomLearningGoal[];
+export class UploadInstanceWatermarkCommand {
+  file: File;
 }
 
-const ShowCustomGoalPage = () => {
-    const history = useHistory();
-    const location = useLocation<ShowCustomGoalPageProps>();
-    const { customLearningGoal, learningLanguageId, customLearningGoals } = location.state;
-    const profile = useStoreState((state) => state.profile);
+@Injectable()
+export class UploadInstanceWatermarkUsecase {
+  constructor(
+    @Inject(STORAGE_INTERFACE)
+    private readonly storage: StorageInterface,
+  ) {}
 
-    if (!profile) {
-        return <Redirect to="/" />;
-    }
-
-    const goBack = () => {
-        history.push('/goals', { learningLanguageId: learningLanguageId, customLearningGoals });
-    };
-
-    const onUpdateCustomGoalPressed = (customLearningGoal: CustomLearningGoal) => {
-        history.push('/update-custom-goal', { customLearningGoal, customLearningGoals });
-    };
-
-    const onShowAllGoalsPressed = (customLearningGoals?: CustomLearningGoal[]) => {
-        history.push('/goals', { customLearningGoals, learningLanguageId });
-    };
-
-    return (
-        <IonContent>
-            <CustomGoalShowContent
-                goBack={goBack}
-                customLearningGoal={customLearningGoal}
-                onUpdateCustomGoalPressed={onUpdateCustomGoalPressed}
-                onShowAllGoalsPressed={onShowAllGoalsPressed}
-            />
-        </IonContent>
-    );
-};
-
-export default ShowCustomGoalPage;
+  async execute(command: UploadInstanceWatermarkCommand): Promise<void> {
+    await this.storage.write(ASSETS_BUCKET, WATERMARK_FILENAME, command.file);
+  }
+}

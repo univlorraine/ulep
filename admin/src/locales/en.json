@@ -449,7 +449,14 @@
             "title": "Instance update",
             "defaultCertificateFile": "Default certificate file",
             "allowStaffStudentMatching": "Matching between staff and students",
-            "allowStaffStudentMatchingLabel": "Allow matching between staff and students"
+            "allowStaffStudentMatchingLabel": "Allow matching between staff and students",
+            "watermark": "Watermark (application background image)",
+            "favicon": "Favicon (browser tab icon)",
+            "manifest": "Web manifest (PWA manifest.json file)",
+            "titleFontUrl": "Titles font stylesheet URL",
+            "titleFontFamily": "Titles font name (font-family)",
+            "bodyFontUrl": "Body text font stylesheet URL",
+            "bodyFontFamily": "Body text font name (font-family)"
         }
     },
     "interests": {

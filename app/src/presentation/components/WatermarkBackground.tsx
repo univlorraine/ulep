@@ -38,50 +38,50 @@
  *
  */
 
-import { IonContent } from '@ionic/react';
-import { Redirect, useHistory, useLocation } from 'react-router';
-import CustomLearningGoal from '../../../domain/entities/CustomLearningGoal';
-import { useStoreState } from '../../../store/storeTypes';
-import CustomGoalShowContent from '../../components/contents/CustomGoalShowContent';
+import React from 'react';
+import { useConfig } from '../../context/ConfigurationContext';
 
-interface ShowCustomGoalPageProps {
-    customLearningGoal: CustomLearningGoal;
-    learningLanguageId: string;
-    customLearningGoals: CustomLearningGoal[];
+interface BackgroundImageStyle {
+    backgroundPosition: string;
+    backgroundRepeat: string;
+    backgroundSize: string;
 }
 
-const ShowCustomGoalPage = () => {
-    const history = useHistory();
-    const location = useLocation<ShowCustomGoalPageProps>();
-    const { customLearningGoal, learningLanguageId, customLearningGoals } = location.state;
-    const profile = useStoreState((state) => state.profile);
+interface WatermarkBackgroundProps {
+    backgroundColor: string;
+    backgroundStyle: BackgroundImageStyle;
+}
 
-    if (!profile) {
-        return <Redirect to="/" />;
+// Full-bleed variant of Watermark: renders the instance watermark as a tinted
+// mask layer behind the parent's content, tone-on-tone with the parent's
+// background color (like the default decorative background PNGs). Renders
+// nothing when no watermark is configured; the parent must be a positioned
+// stacking context (position: relative + isolation: isolate) and keep its own
+// backgroundColor so this negative z-index layer paints between the two.
+const WatermarkBackground: React.FC<WatermarkBackgroundProps> = ({ backgroundColor, backgroundStyle }) => {
+    const { configuration } = useConfig();
+
+    if (!configuration.watermarkURL) {
+        return null;
     }
 
-    const goBack = () => {
-        history.push('/goals', { learningLanguageId: learningLanguageId, customLearningGoals });
+    const maskUrl = `url("${configuration.watermarkURL}")`;
+    const style: React.CSSProperties = {
+        position: 'absolute',
+        inset: 0,
+        zIndex: -1,
+        backgroundColor: `color-mix(in srgb, ${backgroundColor} 90%, black)`,
+        maskImage: maskUrl,
+        maskPosition: backgroundStyle.backgroundPosition,
+        maskRepeat: backgroundStyle.backgroundRepeat,
+        maskSize: backgroundStyle.backgroundSize,
+        WebkitMaskImage: maskUrl,
+        WebkitMaskPosition: backgroundStyle.backgroundPosition,
+        WebkitMaskRepeat: backgroundStyle.backgroundRepeat,
+        WebkitMaskSize: backgroundStyle.backgroundSize,
     };
 
-    const onUpdateCustomGoalPressed = (customLearningGoal: CustomLearningGoal) => {
-        history.push('/update-custom-goal', { customLearningGoal, customLearningGoals });
-    };
-
-    const onShowAllGoalsPressed = (customLearningGoals?: CustomLearningGoal[]) => {
-        history.push('/goals', { customLearningGoals, learningLanguageId });
-    };
-
-    return (
-        <IonContent>
-            <CustomGoalShowContent
-                goBack={goBack}
-                customLearningGoal={customLearningGoal}
-                onUpdateCustomGoalPressed={onUpdateCustomGoalPressed}
-                onShowAllGoalsPressed={onShowAllGoalsPressed}
-            />
-        </IonContent>
-    );
+    return <div style={style} aria-hidden={true} />;
 };
 
-export default ShowCustomGoalPage;
+export default WatermarkBackground;

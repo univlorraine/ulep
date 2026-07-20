@@ -81,6 +81,10 @@ export class PrismaInstanceRepository implements InstanceRepository {
         is_in_maintenance: props.isInMaintenance,
         allow_staff_student_matching: props.allowStaffStudentMatching,
         days_before_closure_notification: props.daysBeforeClosureNotification,
+        title_font_url: props.titleFontUrl,
+        title_font_family: props.titleFontFamily,
+        body_font_url: props.bodyFontUrl,
+        body_font_family: props.bodyFontFamily,
         edito_mandatory_translations: props.editoMandatoryTranslations || [],
         EditoCentralUniversityTranslations: {
           set: [],

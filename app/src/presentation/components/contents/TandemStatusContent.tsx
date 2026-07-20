@@ -40,7 +40,7 @@
 
 import { useTranslation } from 'react-i18next';
 import { ArrowLeftSvg, ClockPng, CloseBlackSvg, TandemNotFoundPng } from '../../../assets';
-import { ReactComponent as Background } from '../../../assets/background.svg';
+import Watermark from '../Watermark';
 import { useConfig } from '../../../context/ConfigurationContext';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 import { HYBRID_MAX_WIDTH } from '../../utils';
@@ -65,7 +65,7 @@ const TandemStatusContent: React.FC<TandemStatusContentProps> = ({ onFindNewTand
             className={`${styles.container} content-wrapper`}
             style={{ backgroundColor: configuration.secondaryColor }}
         >
-            <Background className={styles.image} style={{ color: configuration.secondaryBackgroundImageColor }} />
+            <Watermark className={styles.image} style={{ color: configuration.secondaryBackgroundImageColor }} />
             <button
                 aria-label={t('global.close') as string}
                 className={styles['close-container']}

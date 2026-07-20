@@ -59,7 +59,10 @@ import {
 import ProficiencyTestCard from '../card/ProficiencyTestCard';
 import EditoContentModal from '../modals/EditoContentModal';
 import ProfileDetailsCard from '../profile/ProfileDetailsCard';
+import WatermarkBackground from '../WatermarkBackground';
 import styles from './ProfileContent.module.css';
+
+const PROFILE_BACKGROUND_COLOR = 'rgba(196, 186, 214, 1)';
 
 interface ProfileContentProps {
     onDisplaySettings: () => void;
@@ -74,7 +77,7 @@ const ProfileContent: React.FC<ProfileContentProps> = ({ onDisplaySettings, prof
     const [universityId, setUniversityId] = useState<string | undefined>(undefined);
     const { updateProfile } = useStoreActions((store) => store);
     const { language } = useStoreState((store) => store);
-    const { cameraAdapter, updateAvatar } = useConfig();
+    const { cameraAdapter, configuration, updateAvatar } = useConfig();
     const { width } = useWindowDimensions();
     const isHybrid = width < HYBRID_MAX_WIDTH;
     const history = useHistory();
@@ -140,16 +143,24 @@ const ProfileContent: React.FC<ProfileContentProps> = ({ onDisplaySettings, prof
         },
     ];
 
+    const hasWatermark = Boolean(configuration.watermarkURL);
     const backgroundStyle = {
-        backgroundImage: `url('${BackgroundPurpleProfilePng}')`,
-        backgroundColor: 'rgba(196, 186, 214, 1)',
+        backgroundImage: hasWatermark ? 'none' : `url('${BackgroundPurpleProfilePng}')`,
+        backgroundColor: PROFILE_BACKGROUND_COLOR,
         ...BACKGROUND_PROFILE_STYLE_INLINE,
+        ...(hasWatermark ? { position: 'relative' as const, isolation: 'isolate' as const } : {}),
     };
 
     return (
         <div className={`content-wrapper ${styles.container} ${isHybrid ? styles.hybrid : ''}`}>
             <div className={styles.content}>
                 <div className={styles.titleContainer} style={isHybrid ? backgroundStyle : {}}>
+                    {isHybrid && (
+                        <WatermarkBackground
+                            backgroundColor={PROFILE_BACKGROUND_COLOR}
+                            backgroundStyle={BACKGROUND_PROFILE_STYLE_INLINE}
+                        />
+                    )}
                     <h1 className={`title ${styles.title}`}>{t('profile_page.title')}</h1>
                 </div>
                 <div className={styles.cards}>
@@ -192,7 +203,6 @@ const ProfileContent: React.FC<ProfileContentProps> = ({ onDisplaySettings, prof
                         </div>
                     )}
                 </div>
-
                 <div className={styles.buttons}>
                     {buttonsProfile.map((button) => (
                         <button aria-label={button.label as string} className={styles.button} onClick={button.onClick}>
