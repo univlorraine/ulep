@@ -43,6 +43,10 @@ import { Share } from '@capacitor/share';
 import { FilePicker, PickedFile } from '@capawesome/capacitor-file-picker';
 import DeviceAdapterInterface from './interfaces/DeviceAdapter.interface';
 import FileAdapterInterface from './interfaces/FileAdapter.interface';
+import {
+    resumeVisibilityRefresh,
+    suspendVisibilityRefresh,
+} from '../presentation/hooks/visibilityRefreshControl';
 
 class FileAdapter implements FileAdapterInterface {
     deviceAdapter: DeviceAdapterInterface;
@@ -63,17 +67,27 @@ class FileAdapter implements FileAdapterInterface {
                 'application/vnd.oasis.opendocument.presentation' // .odp
             );
         }
-        const pickedFiles = await FilePicker.pickFiles({
-            types,
-            readData: true,
-        });
+        // Le sélecteur de fichiers met l'app en arrière-plan : on suspend le
+        // rafraîchissement au retour au premier plan pour ne pas perdre le
+        // fichier sélectionné (cf. useAppVisibilityRefresh).
+        suspendVisibilityRefresh();
+        try {
+            const pickedFiles = await FilePicker.pickFiles({
+                types,
+                readData: true,
+            });
 
-        if (pickedFiles.files.length > 0) {
-            const pickedFile = pickedFiles.files[0];
-            return this.createFileFromPickedFile(pickedFile);
+            if (pickedFiles.files.length > 0) {
+                const pickedFile = pickedFiles.files[0];
+                return this.createFileFromPickedFile(pickedFile);
+            }
+
+            return undefined;
+        } finally {
+            // On maintient la suspension un court instant : l'event
+            // `visibilitychange` arrive ~0,5 s APRÈS la résolution du picker.
+            setTimeout(resumeVisibilityRefresh, 2000);
         }
-
-        return undefined;
     }
 
     async saveFile(file: string, filename: string): Promise<void> {
