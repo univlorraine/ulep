@@ -117,6 +117,7 @@ stages:
 🖥️ admin:
   extends: .build
   script:
+    - env | grep -E "GENERATE_SOURCEMAP|DISABLE_ESLINT"
     - pnpm run build
     # - pnpm install --prod (génère une erreur dans le pod même en mode prod : Error: Cannot find module '@faker-js/faker')
   artifacts:
