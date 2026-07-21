@@ -44,17 +44,24 @@ import { MessageProps } from '../MessageComponent';
 import styles from '../MessageComponent.module.css';
 import LikeButton from './LikeButton';
 
-const MessageLink: React.FC<MessageProps> = ({ message, isCurrentUserMessage, currentMessageSearchId }) => {
+const MessageLink: React.FC<MessageProps> = ({
+    message,
+    isCurrentUserMessage,
+    isCommunity,
+    currentMessageSearchId,
+}) => {
     const messageClass = isCurrentUserMessage ? styles.currentUser : styles.otherUser;
+    const searchClass =
+        message.id === currentMessageSearchId
+            ? isCommunity
+                ? styles.searchMessageCommunity
+                : styles.searchMessage
+            : '';
     const linkRegex = /(https?:\/\/[^\s]+)/g;
     const parts = message.content.split(linkRegex);
 
     return (
-        <div
-            className={`${styles.messageLink} ${messageClass} ${
-                message.id === currentMessageSearchId ? styles.searchMessage : ''
-            } ${styles.outerContainer}`}
-        >
+        <div className={`${styles.messageLink} ${messageClass} ${searchClass} ${styles.outerContainer}`}>
             <OGCard
                 imageUrl={message.metadata?.openGraphResult?.ogImage?.[0]?.url}
                 title={message.metadata?.openGraphResult?.ogTitle}

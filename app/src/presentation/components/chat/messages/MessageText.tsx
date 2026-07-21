@@ -42,15 +42,22 @@ import { MessageProps } from '../MessageComponent';
 import styles from '../MessageComponent.module.css';
 import LikeButton from './LikeButton';
 
-const MessageText: React.FC<MessageProps> = ({ message, isCurrentUserMessage, currentMessageSearchId }) => {
+const MessageText: React.FC<MessageProps> = ({
+    message,
+    isCurrentUserMessage,
+    isCommunity,
+    currentMessageSearchId,
+}) => {
     const messageClass = isCurrentUserMessage ? styles.currentUser : styles.otherUser;
+    const searchClass =
+        message.id === currentMessageSearchId
+            ? isCommunity
+                ? styles.searchMessageCommunity
+                : styles.searchMessage
+            : '';
 
     return (
-        <div
-            className={`${styles.message} ${messageClass} ${
-                message.id === currentMessageSearchId ? styles.searchMessage : ''
-            }`}
-        >
+        <div className={`${styles.message} ${messageClass} ${searchClass}`}>
             {message.content}
             <LikeButton message={message} isCurrentUserMessage={isCurrentUserMessage} />
         </div>

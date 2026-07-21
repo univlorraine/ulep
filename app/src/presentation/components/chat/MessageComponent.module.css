@@ -84,6 +84,14 @@
     background-color: var(--secondary-color) !important;
 }
 
+/* Le fond d'un chat communauté (.messagesCommunity) est déjà #8bc4c4, soit la
+   valeur par défaut de --secondary-color : le surlignage se fondrait dans le
+   fond. On utilise donc une couleur contrastée pour la recherche en communauté. */
+.searchMessageCommunity {
+    background-color: var(--secondary-dark-color) !important;
+    color: #fff !important;
+}
+
 .messageContainer {
     display: flex;
     flex-direction: column;
