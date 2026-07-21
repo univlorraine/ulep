@@ -62,6 +62,7 @@ stages:
     # Optimisation mémoire suite aux limitations du pod infra
     GENERATE_SOURCEMAP: "false"
     DISABLE_ESLINT_PLUGIN: "true"
+    NODE_OPTIONS: "--max-old-space-size=1536"
   rules:
     - changes:
         - admin/**/*
