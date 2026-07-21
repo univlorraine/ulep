@@ -116,6 +116,8 @@ stages:
 # Build de l'admin (uniquement si on utilise un Dockerfile différent de celui par défaut)
 🖥️ admin:
   extends: .build
+  tags:
+    - sied
   script:
     - env | grep -E "GENERATE_SOURCEMAP|DISABLE_ESLINT"
     - pnpm run build
@@ -154,24 +156,26 @@ stages:
     - mkdir -p /kaniko/.docker
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"auth\":\"$(printf "%s:%s" "$CI_REGISTRY_USER" "$CI_REGISTRY_PASSWORD" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
   script:
-    # Ajout des options de target si elle est définie
+    # Options de target
     - >
-      if [ $DOCKER_TARGET ]; then
+      if [ -n "$DOCKER_TARGET" ]; then
         TARGET_OPTIONS="--target $DOCKER_TARGET --skip-unused-stages=true"
       fi
-    # Tag de l'image selon la version de l'app (cf package.json), si elle n'est pas fournie
+    # Tag de l'image (extraction propre depuis package.json)
     - >
-      if [ -z $TAG]; then
-        TAG=$(cat $CI_PROJECT_DIR/$WORKING_DIR/package.json | grep version | head -1 | awk -F= "{ print $2 }" | sed 's/[version:,\",]//g' | tr -d '[[:space:]]')
+      if [ -z "$TAG" ]; then
+        TAG=$(cat $CI_PROJECT_DIR/$WORKING_DIR/package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]')
       fi
-    # NODE_ENV_CI en "development" et suffixe avec le nom de la branche, si la branche n'est pas main
+    # Traitement selon la branche
     - >
-      if [ $CI_COMMIT_BRANCH != "main" ]; then
+      NODE_ENV_CI_BUILD_ARGS=""
+      if [ "$CI_COMMIT_BRANCH" != "main" ]; then
         NODE_ENV_CI_BUILD_ARGS="--build-arg NODE_ENV_CI=development"
-        TAG=$TAG-$CI_COMMIT_BRANCH
+        TAG="$TAG-$CI_COMMIT_BRANCH"
       fi
-    # Build de l'image docker et push sur harbor
-    - /kaniko/executor
+    # Exécution de Kaniko
+    - >
+      /kaniko/executor
       --context $CI_PROJECT_DIR/$WORKING_DIR
       --build-arg NODE_VERSION=$NODE_VERSION $NODE_ENV_CI_BUILD_ARGS
       --dockerfile $CI_PROJECT_DIR/$DOCKERFILE_PATH
