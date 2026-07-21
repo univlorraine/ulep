@@ -167,8 +167,8 @@ stages:
         TAG=$(cat $CI_PROJECT_DIR/$WORKING_DIR/package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]')
       fi
     # Traitement selon la branche
+    - NODE_ENV_CI_BUILD_ARGS=""
     - >
-      NODE_ENV_CI_BUILD_ARGS=""
       if [ "$CI_COMMIT_BRANCH" != "main" ]; then
         NODE_ENV_CI_BUILD_ARGS="--build-arg NODE_ENV_CI=development"
         TAG="$TAG-$CI_COMMIT_BRANCH"
