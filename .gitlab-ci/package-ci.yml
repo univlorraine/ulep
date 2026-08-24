@@ -166,7 +166,8 @@ stages:
 
       # Tag de version (extraction depuis package.json, ou TAG fourni manuellement)
       if [ -z "$TAG" ]; then
-        TAG=$(cat "$CI_PROJECT_DIR/$WORKING_DIR/package.json" | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]')
+        #TAG=$(cat "$CI_PROJECT_DIR/$WORKING_DIR/package.json" | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]')
+        TAG=$(awk -F '"' '/"version":/ {print $4; exit}' "$CI_PROJECT_DIR/$WORKING_DIR/package.json")
       fi
 
       # Cache des couches déposé dans le registre, sous forme d'un tag "buildcache" sur le
