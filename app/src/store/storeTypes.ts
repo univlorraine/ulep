@@ -118,6 +118,10 @@ interface SetRtlPayload {
     isRtl: boolean;
 }
 
+interface SetDeviceRtlPayload {
+    isDeviceRtl: boolean;
+}
+
 interface NewsFilterPayload {
     language: Language[];
 }
@@ -144,7 +148,10 @@ interface StoreInterface {
     currentLearningWorkspaceIndex?: number;
     socketChatUrl: string;
     jitsiUrl: string;
+    /** Text direction forced by the user in the settings, undefined until the user makes a choice */
     isRtl?: boolean;
+    /** Text direction detected from the device language */
+    isDeviceRtl: boolean;
     language: string;
     logout: Action<StoreInterface>;
     refreshToken: string;
@@ -153,6 +160,7 @@ interface StoreInterface {
     setApiUrl: Action<StoreInterface, ApiUrlPayload>;
     setLanguage: Action<StoreInterface, LanguagePayload>;
     setRtl: Action<StoreInterface, SetRtlPayload>;
+    setDeviceRtl: Action<StoreInterface, SetDeviceRtlPayload>;
     setNewsFilter: Action<StoreInterface, NewsFilterPayload>;
     setCurrentLearningWorkspace: Action<StoreInterface, CurrentLearningWorkspacePayload>;
     setProfile: Action<StoreInterface, ProfileStorePayload>;

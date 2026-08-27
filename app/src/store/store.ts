@@ -59,12 +59,16 @@ const Store = createStore<TokenStoreTypes>(
             refreshToken: '',
             refreshReports: false,
             isRtl: undefined,
+            isDeviceRtl: false,
             setCurrentLearningWorkspace: action((state, payload) => {
                 state.currentLearningWorkspace = payload.learningWorkspace;
                 state.currentLearningWorkspaceIndex = payload.index;
             }),
             setRtl: action((state, payload) => {
                 state.isRtl = payload.isRtl;
+            }),
+            setDeviceRtl: action((state, payload) => {
+                state.isDeviceRtl = payload.isDeviceRtl;
             }),
             setRefreshReports: action((state) => {
                 state.refreshReports = !state.refreshReports;
