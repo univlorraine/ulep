@@ -38,28 +38,20 @@
  *
  */
 
-import { HttpResponse } from '../../../adapter/BaseHttpAdapter';
-import { HttpAdapterInterface } from '../../../adapter/DomainHttpAdapter';
-import FileAdapterInterface from '../../../adapter/interfaces/FileAdapter.interface';
-import sanitizeFilename from '../../../utils/sanitizeFilename';
-import { Activity } from '../../entities/Activity';
-import GetActivityPdfUsecaseInterface from '../../interfaces/activity/GetActivityPdfUsecase.interface';
+import FileAdapterInterface from '../../../src/adapter/interfaces/FileAdapter.interface';
 
-class GetActivityPdfUsecase implements GetActivityPdfUsecaseInterface {
-    constructor(
-        private readonly domainHttpAdapter: HttpAdapterInterface,
-        private readonly fileService: FileAdapterInterface
-    ) {}
+class FileAdapter implements FileAdapterInterface {
+    getFile(): Promise<File | undefined> {
+        return Promise.resolve(undefined);
+    }
 
-    async execute(activity: Activity): Promise<void | Error> {
-        const httpResponse: HttpResponse<Blob> = await this.domainHttpAdapter.get(`/activities/pdf/${activity.id}`, {});
+    saveFile(): Promise<void> {
+        return Promise.resolve();
+    }
 
-        if (!httpResponse.parsedBody) {
-            return new Error('errors.global');
-        }
-
-        this.fileService.saveBlob(httpResponse.parsedBody, sanitizeFilename(`${activity.title.trim()}.pdf`));
+    saveBlob(): Promise<void> {
+        return Promise.resolve();
     }
 }
 
-export default GetActivityPdfUsecase;
+export default FileAdapter;

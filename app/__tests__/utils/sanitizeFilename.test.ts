@@ -38,28 +38,37 @@
  *
  */
 
-import { HttpResponse } from '../../../adapter/BaseHttpAdapter';
-import { HttpAdapterInterface } from '../../../adapter/DomainHttpAdapter';
-import FileAdapterInterface from '../../../adapter/interfaces/FileAdapter.interface';
-import sanitizeFilename from '../../../utils/sanitizeFilename';
-import { Activity } from '../../entities/Activity';
-import GetActivityPdfUsecaseInterface from '../../interfaces/activity/GetActivityPdfUsecase.interface';
+import sanitizeFilename from '../../src/utils/sanitizeFilename';
 
-class GetActivityPdfUsecase implements GetActivityPdfUsecaseInterface {
-    constructor(
-        private readonly domainHttpAdapter: HttpAdapterInterface,
-        private readonly fileService: FileAdapterInterface
-    ) {}
+describe('sanitizeFilename', () => {
+    it('replaces the characters Android rejects in a file name', () => {
+        // Vérifié sur device (Android 14) : MediaStore refuse " * / : < > ? \ | et les
+        // caractères de contrôle avec « File name contains invalid characters ».
+        expect(sanitizeFilename('Fiche : les verbes ?.pdf')).toBe('Fiche _ les verbes _.pdf');
+    });
 
-    async execute(activity: Activity): Promise<void | Error> {
-        const httpResponse: HttpResponse<Blob> = await this.domainHttpAdapter.get(`/activities/pdf/${activity.id}`, {});
+    it('collapses consecutive replacements into a single underscore', () => {
+        expect(sanitizeFilename('Prosper<>Merimee.pdf')).toBe('Prosper_Merimee.pdf');
+    });
 
-        if (!httpResponse.parsedBody) {
-            return new Error('errors.global');
-        }
+    it('strips leading and trailing dots and spaces', () => {
+        // Un point en tête masque le fichier, un point ou une espace en fin casse
+        // l'interopérabilité Windows/SMB si l'utilisateur déplace le PDF.
+        expect(sanitizeFilename('  .Le soir. ')).toBe('Le soir');
+    });
 
-        this.fileService.saveBlob(httpResponse.parsedBody, sanitizeFilename(`${activity.title.trim()}.pdf`));
-    }
-}
+    it('keeps the extension when trimming the end', () => {
+        expect(sanitizeFilename('.Le soir.pdf')).toBe('Le soir.pdf');
+    });
 
-export default GetActivityPdfUsecase;
+    it('falls back to a default name when nothing usable remains', () => {
+        expect(sanitizeFilename('...')).toBe('fichier');
+    });
+
+    it('truncates to the filesystem byte limit while keeping the extension', () => {
+        // 200 caractères chinois = 600 octets en UTF-8, bien au-delà des 255 d'ext4.
+        const result = sanitizeFilename(`${'\u591C'.repeat(200)}.pdf`);
+        expect(Buffer.byteLength(result, 'utf8')).toBeLessThanOrEqual(255);
+        expect(result.endsWith('.pdf')).toBe(true);
+    });
+});

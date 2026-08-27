@@ -38,28 +38,38 @@
  *
  */
 
-import { HttpResponse } from '../../../adapter/BaseHttpAdapter';
-import { HttpAdapterInterface } from '../../../adapter/DomainHttpAdapter';
-import FileAdapterInterface from '../../../adapter/interfaces/FileAdapter.interface';
-import sanitizeFilename from '../../../utils/sanitizeFilename';
-import { Activity } from '../../entities/Activity';
-import GetActivityPdfUsecaseInterface from '../../interfaces/activity/GetActivityPdfUsecase.interface';
+import { Filesystem } from '@capacitor/filesystem';
+import FileAdapter from '../../src/adapter/FileAdapter';
+import DeviceAdapterInterface from '../../src/adapter/interfaces/DeviceAdapter.interface';
 
-class GetActivityPdfUsecase implements GetActivityPdfUsecaseInterface {
-    constructor(
-        private readonly domainHttpAdapter: HttpAdapterInterface,
-        private readonly fileService: FileAdapterInterface
-    ) {}
+jest.mock('@capacitor/filesystem', () => ({
+    Directory: { Cache: 'CACHE' },
+    Filesystem: { writeFile: jest.fn().mockResolvedValue({ uri: 'file:///cache/file.pdf' }) },
+}));
+jest.mock('@capacitor/share', () => ({ Share: { share: jest.fn().mockResolvedValue(undefined) } }));
+jest.mock('@capawesome/capacitor-file-picker', () => ({ FilePicker: { pickFiles: jest.fn() } }));
 
-    async execute(activity: Activity): Promise<void | Error> {
-        const httpResponse: HttpResponse<Blob> = await this.domainHttpAdapter.get(`/activities/pdf/${activity.id}`, {});
+const nativeDevice = { isNativePlatform: () => true } as unknown as DeviceAdapterInterface;
 
-        if (!httpResponse.parsedBody) {
-            return new Error('errors.global');
-        }
+describe('FileAdapter', () => {
+    let fileAdapter: FileAdapter;
 
-        this.fileService.saveBlob(httpResponse.parsedBody, sanitizeFilename(`${activity.title.trim()}.pdf`));
-    }
-}
+    beforeEach(() => {
+        fileAdapter = new FileAdapter(nativeDevice);
+        global.fetch = jest.fn().mockResolvedValue({ blob: () => Promise.resolve(new Blob(['pdf'])) }) as any;
+    });
 
-export default GetActivityPdfUsecase;
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
+
+    it('sanitizes the file name before handing it to the filesystem', async () => {
+        expect.assertions(1);
+
+        await fileAdapter.saveFile('https://example.test/resource.pdf', 'Fiche : les verbes ?.pdf');
+
+        expect(Filesystem.writeFile).toHaveBeenCalledWith(
+            expect.objectContaining({ path: 'Fiche _ les verbes _.pdf' })
+        );
+    });
+});
