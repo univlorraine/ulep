@@ -40,26 +40,36 @@
 
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { VoiceRecorder } from 'capacitor-voice-recorder';
+import { resumeVisibilityRefresh, suspendVisibilityRefresh } from '../presentation/hooks/visibilityRefreshControl';
 import CameraAdapterInterface from './interfaces/CameraAdapter.interface';
 
 class CameraAdapter implements CameraAdapterInterface {
     getPictureFromGallery = async () => {
-        const image = await Camera.getPhoto({
-            quality: 70,
-            resultType: CameraResultType.Uri,
-            source: CameraSource.Photos,
-        });
+        // Le sélecteur photo met l'app en arrière-plan : on suspend le
+        // rafraîchissement au retour au premier plan pour ne pas perdre l'image
+        // sélectionnée (même garde-fou que FileAdapter.getFile).
+        suspendVisibilityRefresh();
+        try {
+            const image = await Camera.getPhoto({
+                quality: 70,
+                resultType: CameraResultType.Uri,
+                source: CameraSource.Photos,
+            });
 
-        if (image.webPath) {
-            const response = await fetch(image.webPath);
-            const blob = await response.blob();
-            const fileName = image.webPath?.split('/').pop() || 'avatar';
+            if (image.webPath) {
+                const response = await fetch(image.webPath);
+                const blob = await response.blob();
+                const fileName = image.webPath?.split('/').pop() || 'avatar';
 
-            const file = new File([blob], fileName + '.' + image.format, { type: blob.type });
-            return file;
+                const file = new File([blob], fileName + '.' + image.format, { type: blob.type });
+                return file;
+            }
+
+            return undefined;
+        } finally {
+            // Le `visibilitychange` arrive ~0,5 s APRÈS la résolution du picker.
+            setTimeout(resumeVisibilityRefresh, 2000);
         }
-
-        return undefined;
     };
 
     checkPermissions = async () => {
