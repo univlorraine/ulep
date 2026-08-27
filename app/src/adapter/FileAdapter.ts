@@ -38,15 +38,13 @@
  *
  */
 
+import { Capacitor } from '@capacitor/core';
 import { Directory, Filesystem } from '@capacitor/filesystem';
 import { Share } from '@capacitor/share';
 import { FilePicker, PickedFile } from '@capawesome/capacitor-file-picker';
+import { resumeVisibilityRefresh, suspendVisibilityRefresh } from '../presentation/hooks/visibilityRefreshControl';
 import DeviceAdapterInterface from './interfaces/DeviceAdapter.interface';
 import FileAdapterInterface from './interfaces/FileAdapter.interface';
-import {
-    resumeVisibilityRefresh,
-    suspendVisibilityRefresh,
-} from '../presentation/hooks/visibilityRefreshControl';
 
 class FileAdapter implements FileAdapterInterface {
     deviceAdapter: DeviceAdapterInterface;
@@ -72,9 +70,14 @@ class FileAdapter implements FileAdapterInterface {
         // fichier sélectionné (cf. useAppVisibilityRefresh).
         suspendVisibilityRefresh();
         try {
+            // readData reste true sur le web (on utilise le blob directement), mais
+            // false sur natif : charger le fichier en base64 en mémoire fait exploser
+            // la RAM sur les appareils limités (iPhone 8/iOS 16) et tue la WebView.
+            // Sur natif on récupère le `path` et on lit les octets à la demande.
+            const readData = !this.deviceAdapter.isNativePlatform();
             const pickedFiles = await FilePicker.pickFiles({
                 types,
-                readData: true,
+                readData,
             });
 
             if (pickedFiles.files.length > 0) {
@@ -148,9 +151,17 @@ class FileAdapter implements FileAdapterInterface {
 
     private async createFileFromPickedFile(pickedFile: PickedFile): Promise<File | undefined> {
         if (pickedFile.blob) {
-            // For web use the blob directly
+            // Web : le blob est fourni directement par le plugin.
             return new File([pickedFile.blob], pickedFile.name, { type: pickedFile.mimeType });
+        } else if (pickedFile.path) {
+            // Natif : on lit les octets depuis le path via une URL fetchable par la
+            // WebView (même approche que le CameraAdapter), sans base64 en mémoire.
+            const webPath = Capacitor.convertFileSrc(pickedFile.path);
+            const response = await fetch(webPath);
+            const blob = await response.blob();
+            return new File([blob], pickedFile.name, { type: pickedFile.mimeType || blob.type });
         } else if (pickedFile.data) {
+            // Fallback (si jamais des octets base64 sont tout de même fournis).
             const byteString = atob(pickedFile.data);
             const ab = new ArrayBuffer(byteString.length);
             const ia = new Uint8Array(ab);
