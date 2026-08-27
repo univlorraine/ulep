@@ -1,0 +1,5 @@
+allowBuilds:
+  '@sentry/capacitor': false
+  core-js: false
+  cypress: false
+  esbuild: false
