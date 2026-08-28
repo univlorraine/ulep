@@ -7,12 +7,12 @@ supportedArchitectures:
     - x64
     - arm64
 
-# Une install pnpm 11 échoue si des scripts de build ne sont ni autorisés ni
-# refusés. Ces scripts étaient déjà ignorés sous pnpm 10 : comportement inchangé,
-# simplement explicite. Le client Prisma est généré séparément dans le Dockerfile.
+# Une install pnpm 11 échoue si un script de build n'est ni autorisé ni refusé.
+# Ces scripts s'exécutaient déjà sous pnpm 10 : on les autorise explicitement,
+# pour reproduire le comportement à l'identique.
 allowBuilds:
-  '@nestjs/core': false
-  '@prisma/client': false
-  '@prisma/engines': false
-  prisma: false
-  sharp: false
+  '@nestjs/core': true
+  '@prisma/client': true
+  '@prisma/engines': true
+  prisma: true
+  sharp: true

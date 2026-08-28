@@ -1,11 +1,10 @@
-# Réglages pnpm : depuis pnpm 11, le champ "pnpm" de package.json n'est plus lu,
-# et une install échoue si des scripts de build ne sont ni autorisés ni refusés.
-# Ces scripts étaient déjà ignorés sous pnpm 10 : on ne change donc rien au
-# comportement, on le rend explicite. Le client Prisma est généré séparément
-# (cf. `pnpm prisma generate` dans le Dockerfile).
+# Réglages pnpm : depuis pnpm 11, le champ "pnpm" de package.json n'est plus lu.
+# Une install pnpm 11 échoue si un script de build n'est ni autorisé ni refusé.
+# Ces scripts s'exécutaient déjà sous pnpm 10 : on les autorise explicitement,
+# pour reproduire le comportement à l'identique.
 allowBuilds:
-  '@nestjs/core': false
-  '@prisma/client': false
-  '@prisma/engines': false
-  prisma: false
-  protobufjs: false
+  '@nestjs/core': true
+  '@prisma/client': true
+  '@prisma/engines': true
+  prisma: true
+  protobufjs: true
