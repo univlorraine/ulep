@@ -114,8 +114,10 @@ jobs:
     working_directory: ~/api
     steps:
       - checkout
-      - setup_remote_docker:
-          version: 20.10.24
+      # Pas de version epinglee : le client Docker de l'image cimg est maintenu avec
+      # le demon distant par defaut. Un pin obsolete (20.10.24, API 1.41) faisait
+      # echouer les builds des que l'image montait de version.
+      - setup_remote_docker
       - run:
           name: Install pnpm
           command: |
@@ -165,8 +167,10 @@ jobs:
     working_directory: ~/api
     steps:
       - checkout
-      - setup_remote_docker:
-          version: 20.10.24
+      # Pas de version epinglee : le client Docker de l'image cimg est maintenu avec
+      # le demon distant par defaut. Un pin obsolete (20.10.24, API 1.41) faisait
+      # echouer les builds des que l'image montait de version.
+      - setup_remote_docker
       - run:
           name: Install pnpm
           command: |
@@ -191,8 +195,10 @@ jobs:
     working_directory: ~/api
     steps:
       - checkout
-      - setup_remote_docker:
-          version: 20.10.24
+      # Pas de version epinglee : le client Docker de l'image cimg est maintenu avec
+      # le demon distant par defaut. Un pin obsolete (20.10.24, API 1.41) faisait
+      # echouer les builds des que l'image montait de version.
+      - setup_remote_docker
       - run:
           name: Run build image
           command: |
@@ -208,8 +214,10 @@ jobs:
     executor: node-executor
     steps:
       - checkout
-      - setup_remote_docker:
-          version: 20.10.24
+      # Pas de version epinglee : le client Docker de l'image cimg est maintenu avec
+      # le demon distant par defaut. Un pin obsolete (20.10.24, API 1.41) faisait
+      # echouer les builds des que l'image montait de version.
+      - setup_remote_docker
       - run:
           name: Build docker image
           command: |
@@ -226,8 +234,10 @@ jobs:
     executor: node-executor
     steps:
       - checkout
-      - setup_remote_docker:
-          version: 20.10.24
+      # Pas de version epinglee : le client Docker de l'image cimg est maintenu avec
+      # le demon distant par defaut. Un pin obsolete (20.10.24, API 1.41) faisait
+      # echouer les builds des que l'image montait de version.
+      - setup_remote_docker
       - run:
           name: Build docker image
           command: |
