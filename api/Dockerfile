@@ -51,6 +51,9 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /srv/app
 
 ENV COREPACK_DEFAULT_TO_LATEST=0
+# pnpm 11 refuse `config -g set` si le repertoire bin global n'est pas dans le PATH.
+ENV PNPM_HOME=/usr/local/share/pnpm
+ENV PATH=$PNPM_HOME/bin:$PATH
 RUN corepack enable && \
 	corepack prepare --activate pnpm@11.24.0 && \
 	pnpm config -g set store-dir /.pnpm-store
