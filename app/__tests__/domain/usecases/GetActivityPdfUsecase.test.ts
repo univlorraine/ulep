@@ -38,28 +38,36 @@
  *
  */
 
-import { HttpResponse } from '../../../adapter/BaseHttpAdapter';
-import { HttpAdapterInterface } from '../../../adapter/DomainHttpAdapter';
-import FileAdapterInterface from '../../../adapter/interfaces/FileAdapter.interface';
-import sanitizeFilename from '../../../utils/sanitizeFilename';
-import { Activity } from '../../entities/Activity';
-import GetActivityPdfUsecaseInterface from '../../interfaces/activity/GetActivityPdfUsecase.interface';
+import { Activity } from '../../../src/domain/entities/Activity';
+import GetActivityPdfUsecase from '../../../src/domain/usecases/activity/GetActivityPdfUsecase';
+import FileAdapter from '../../mocks/adapters/FileAdapter';
+import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
 
-class GetActivityPdfUsecase implements GetActivityPdfUsecaseInterface {
-    constructor(
-        private readonly domainHttpAdapter: HttpAdapterInterface,
-        private readonly fileService: FileAdapterInterface
-    ) {}
+const pdf = new Blob(['pdf']);
+const activityWithTitle = (title: string) => ({ id: 'id', title }) as Activity;
 
-    async execute(activity: Activity): Promise<void | Error> {
-        const httpResponse: HttpResponse<Blob> = await this.domainHttpAdapter.get(`/activities/pdf/${activity.id}`, {});
+describe('GetActivityPdfUsecase', () => {
+    let httpAdapter: DomainHttpAdapter;
+    let fileAdapter: FileAdapter;
+    let usecase: GetActivityPdfUsecase;
 
-        if (!httpResponse.parsedBody) {
-            return new Error('errors.global');
-        }
+    beforeEach(() => {
+        httpAdapter = new DomainHttpAdapter();
+        fileAdapter = new FileAdapter();
+        usecase = new GetActivityPdfUsecase(httpAdapter, fileAdapter);
+        httpAdapter.mockJson({ parsedBody: pdf });
+    });
 
-        this.fileService.saveBlob(httpResponse.parsedBody, sanitizeFilename(`${activity.title.trim()}.pdf`));
-    }
-}
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
 
-export default GetActivityPdfUsecase;
+    it('keeps a non-latin title in the generated file name', async () => {
+        expect.assertions(1);
+        jest.spyOn(fileAdapter, 'saveBlob');
+
+        await usecase.execute(activityWithTitle('夜晚 阿尔封斯'));
+
+        expect(fileAdapter.saveBlob).toHaveBeenCalledWith(pdf, '夜晚 阿尔封斯.pdf');
+    });
+});

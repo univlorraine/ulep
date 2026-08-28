@@ -43,6 +43,7 @@ import { Directory, Filesystem } from '@capacitor/filesystem';
 import { Share } from '@capacitor/share';
 import { FilePicker, PickedFile } from '@capawesome/capacitor-file-picker';
 import { resumeVisibilityRefresh, suspendVisibilityRefresh } from '../presentation/hooks/visibilityRefreshControl';
+import sanitizeFilename from '../utils/sanitizeFilename';
 import DeviceAdapterInterface from './interfaces/DeviceAdapter.interface';
 import FileAdapterInterface from './interfaces/FileAdapter.interface';
 
@@ -96,6 +97,10 @@ class FileAdapter implements FileAdapterInterface {
     async saveFile(file: string, filename: string): Promise<void> {
         const response = await fetch(file);
         const blob = await response.blob();
+        // Point de passage unique vers le système de fichiers : on nettoie ici plutôt que
+        // dans chaque appelant, pour qu'aucun nom construit depuis une saisie utilisateur
+        // ne puisse faire échouer l'écriture (cf. ULEP-17).
+        const safeFilename = sanitizeFilename(filename);
 
         if (this.deviceAdapter.isNativePlatform()) {
             const base64Data = await this.convertBlobToBase64(blob);
@@ -103,14 +108,14 @@ class FileAdapter implements FileAdapterInterface {
                 // Écriture en stockage applicatif (aucune permission requise), puis partage
                 // pour laisser l'utilisateur choisir où enregistrer le fichier.
                 const written = await Filesystem.writeFile({
-                    path: filename,
+                    path: safeFilename,
                     data: base64Data,
                     directory: Directory.Cache,
                     recursive: true,
                 });
 
                 await Share.share({
-                    title: filename,
+                    title: safeFilename,
                     url: written.uri,
                 });
             } catch (error) {
@@ -121,7 +126,7 @@ class FileAdapter implements FileAdapterInterface {
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = filename || 'true';
+            a.download = safeFilename;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);

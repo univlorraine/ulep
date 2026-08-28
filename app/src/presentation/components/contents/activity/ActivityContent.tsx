@@ -107,7 +107,16 @@ export const ActivityContent: React.FC<ActivityContentProps> = ({
             return;
         }
 
-        await fileAdapter.saveFile(activity.ressourceFileUrl, `${activity.title.trim().replace(/ /g, '_')}.pdf`);
+        try {
+            await fileAdapter.saveFile(activity.ressourceFileUrl, `${activity.title.trim().replace(/ /g, '_')}.pdf`);
+        } catch (error) {
+            // Sans ce catch, l'échec partait en unhandled rejection : aucun retour à
+            // l'utilisateur, le bouton semblait ne rien faire (cf. ULEP-17).
+            console.error('Erreur lors du téléchargement de la ressource:', error);
+            showToast({ message: t('errors.global'), duration: 2000 });
+            return;
+        }
+
         showToast({
             message: t('activity.show.ressource_file_downloaded'),
             duration: 2000,
