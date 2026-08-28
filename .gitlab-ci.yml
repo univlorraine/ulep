@@ -59,6 +59,10 @@ stages:
     DOCKERFILE_PATH: .gitlab-ci/Dockerfile.admin
     # DOCKER_TARGET: admin_prod # Génère une erreur : ERR_PNPM_BROKEN_LOCKFILE  The lockfile at "/srv/app/pnpm-lock.yaml" is broken: duplicated mapping key (1755:3)
     LINT: enabled
+    # Optimisation mémoire suite aux limitations du pod infra
+    GENERATE_SOURCEMAP: "false"
+    DISABLE_ESLINT_PLUGIN: "true"
+    NODE_OPTIONS: "--max-old-space-size=1536"
   rules:
     - changes:
         - admin/**/*
@@ -95,7 +99,7 @@ stages:
   variables:
     WORKING_DIR: docker/keycloak
     IMAGE_NAME: ulep/auth-ul-theme
-    TAG: "1.0"
+    TAG: "1.7"
   rules:
     - changes:
         - docker/keycloak/**/*

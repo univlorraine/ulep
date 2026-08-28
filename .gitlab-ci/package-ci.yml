@@ -52,6 +52,9 @@ stages:
 # Test
 🛡️ test:
   stage: 🔩 .pre
+  variables:
+    KUBERNETES_CPU_LIMIT: "1"
+    KUBERNETES_MEMORY_LIMIT: "2Gi"
   extends: .base
   needs:
     - job: ⚙️ dependencies
@@ -67,6 +70,9 @@ stages:
 # Build
 .build:
   stage: 📦 build
+  variables:
+    KUBERNETES_CPU_LIMIT: "1"
+    KUBERNETES_MEMORY_LIMIT: "2Gi"
   extends: .base
   needs:
     - job: ⚙️ dependencies
@@ -110,7 +116,10 @@ stages:
 # Build de l'admin (uniquement si on utilise un Dockerfile différent de celui par défaut)
 🖥️ admin:
   extends: .build
+  tags:
+    - sied
   script:
+    - env | grep -E "GENERATE_SOURCEMAP|DISABLE_ESLINT"
     - pnpm run build
     # - pnpm install --prod (génère une erreur dans le pod même en mode prod : Error: Cannot find module '@faker-js/faker')
   artifacts:
@@ -126,6 +135,10 @@ stages:
 # Build de l'image
 🚀 container image:
   stage: 📦 build
+  variables:
+    KUBERNETES_CPU_LIMIT: "1"
+    KUBERNETES_MEMORY_LIMIT: "2Gi"
+    BUILDKITD_FLAGS: --oci-worker-no-process-sandbox
   needs:
     - job: 🛡️ lint
       optional: true
@@ -138,32 +151,63 @@ stages:
     - job: ⚙️ chat
       optional: true
   image:
-    name: gcr.io/kaniko-project/executor:debug
+    name: moby/buildkit:rootless
     entrypoint: [""]
-  before_script: # Informations de connexion au registry Harbor dans un fichier de conf Kaniko
-    - mkdir -p /kaniko/.docker
-    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"auth\":\"$(printf "%s:%s" "$CI_REGISTRY_USER" "$CI_REGISTRY_PASSWORD" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
+  before_script: # Informations de connexion au registry Harbor dans la conf Docker
+    - mkdir -p ~/.docker
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"auth\":\"$(printf "%s:%s" "$CI_REGISTRY_USER" "$CI_REGISTRY_PASSWORD" | base64 | tr -d '\n')\"}}}" > ~/.docker/config.json
   script:
-    # Ajout des options de target si elle est définie
-    - >
-      if [ $DOCKER_TARGET ]; then
-        TARGET_OPTIONS="--target $DOCKER_TARGET --skip-unused-stages=true"
+    - |
+      # Option de target (BuildKit ignore déjà les stages non utilisés par défaut)
+      TARGET_OPTS=""
+      if [ -n "$DOCKER_TARGET" ]; then
+        TARGET_OPTS="--opt target=$DOCKER_TARGET"
       fi
-    # Tag de l'image selon la version de l'app (cf package.json), si elle n'est pas fournie
-    - >
-      if [ -z $TAG]; then
-        TAG=$(cat $CI_PROJECT_DIR/$WORKING_DIR/package.json | grep version | head -1 | awk -F= "{ print $2 }" | sed 's/[version:,\",]//g' | tr -d '[[:space:]]')
+
+      # Tag de version (extraction depuis package.json, ou TAG fourni manuellement)
+      if [ -z "$TAG" ]; then
+        #TAG=$(cat "$CI_PROJECT_DIR/$WORKING_DIR/package.json" | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]')
+        TAG=$(awk -F '"' '/"version":/ {print $4; exit}' "$CI_PROJECT_DIR/$WORKING_DIR/package.json")
       fi
-    # NODE_ENV_CI en "development" et suffixe avec le nom de la branche, si la branche n'est pas main
-    - >
-      if [ $CI_COMMIT_BRANCH != "main" ]; then
-        NODE_ENV_CI_BUILD_ARGS="--build-arg NODE_ENV_CI=development"
-        TAG=$TAG-$CI_COMMIT_BRANCH
+
+      # Cache des couches déposé dans le registre, sous forme d'un tag "buildcache" sur le
+      # repository de l'image elle-même (IMAGE_NAME peut contenir un namespace type "ulep/admin",
+      # ce qui est invalide comme TAG mais valide comme repository).
+      CACHE_REF="$CI_REGISTRY_IMAGE/$IMAGE_NAME:buildcache"
+
+      # Étiquettes :
+      #   <sha>     immuable, permet un déploiement reproductible, quelle que soit la branche
+      #   <version> numéro de package.json ; sur main c'est la version "officielle",
+      #             sur une autre branche elle est suffixée par le nom de la branche pour
+      #             ne pas écraser les images de main
+      #   latest    dernier build de la branche principale uniquement
+      BUILD_ARGS="--opt build-arg:NODE_VERSION=$NODE_VERSION"
+      if [ "$CI_COMMIT_BRANCH" = "main" ]; then
+        TAGS="$CI_COMMIT_SHORT_SHA $TAG latest"
+        # On ne réalimente le cache que depuis main : une branche d'essai en profite,
+        # mais ne le pollue pas.
+        EXPORT_CACHE="--export-cache type=registry,ref=$CACHE_REF,mode=max"
+      else
+        BUILD_ARGS="$BUILD_ARGS --opt build-arg:NODE_ENV_CI=development"
+        TAGS="$CI_COMMIT_SHORT_SHA $TAG-$CI_COMMIT_REF_SLUG"
+        EXPORT_CACHE=""
       fi
-    # Build de l'image docker et push sur harbor
-    - /kaniko/executor
-      --context $CI_PROJECT_DIR/$WORKING_DIR
-      --build-arg NODE_VERSION=$NODE_VERSION $NODE_ENV_CI_BUILD_ARGS
-      --dockerfile $CI_PROJECT_DIR/$DOCKERFILE_PATH
-      $TARGET_OPTIONS
-      --destination $CI_REGISTRY_IMAGE/$IMAGE_NAME:$TAG
+
+      # BuildKit attend toutes les destinations dans un seul champ « name », séparées par
+      # des virgules. Les guillemets échappés sont indispensables : sans eux, buildctl
+      # prendrait chaque virgule pour un nouveau paramètre.
+      NAMES=""
+      for T in $TAGS; do
+        NAMES="${NAMES:+$NAMES,}$CI_REGISTRY_IMAGE/$IMAGE_NAME:$T"
+      done
+
+      buildctl-daemonless.sh build \
+        --frontend dockerfile.v0 \
+        --local context="$CI_PROJECT_DIR/$WORKING_DIR" \
+        --local dockerfile="$CI_PROJECT_DIR/$(dirname "$DOCKERFILE_PATH")" \
+        --opt filename="$(basename "$DOCKERFILE_PATH")" \
+        $TARGET_OPTS \
+        $BUILD_ARGS \
+        --output type=image,\"name=$NAMES\",push=true \
+        --import-cache type=registry,ref="$CACHE_REF" \
+        $EXPORT_CACHE
