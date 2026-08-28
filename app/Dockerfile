@@ -38,7 +38,9 @@
 
 FROM node:22-alpine
 WORKDIR /app
-COPY package*.json /app/
+# pnpm-workspace.yaml doit arriver avant l'install : depuis pnpm 11, celle-ci echoue
+# si un script de build n'est ni autorise ni refuse.
+COPY package*.json pnpm-workspace.yaml /app/
 RUN npm install -g @ionic/cli
 RUN npm i -g pnpm@11.24.0
 RUN pnpm install
