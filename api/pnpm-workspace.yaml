@@ -1,0 +1,10 @@
+# Réglages pnpm : depuis pnpm 11, le champ "pnpm" de package.json n'est plus lu.
+# Une install pnpm 11 échoue si un script de build n'est ni autorisé ni refusé.
+# Ces scripts s'exécutaient déjà sous pnpm 10 : on les autorise explicitement,
+# pour reproduire le comportement à l'identique.
+allowBuilds:
+  '@nestjs/core': true
+  '@prisma/client': true
+  '@prisma/engines': true
+  prisma: true
+  protobufjs: true

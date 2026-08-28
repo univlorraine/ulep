@@ -127,5 +127,5 @@
     "schema": "libs/common/src/database/schema.prisma",
     "seed": "ts-node libs/common/src/database/seeds/index.ts"
   },
-  "packageManager": "pnpm@10.7.0"
+  "packageManager": "pnpm@11.24.0"
 }

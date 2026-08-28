@@ -36,10 +36,10 @@
 #   termes.
 #
 
-FROM node:18-alpine
+FROM node:22-alpine
 WORKDIR /app
 COPY package*.json /app/
 RUN npm install -g @ionic/cli
-RUN npm i -g pnpm@9.12.1
+RUN npm i -g pnpm@11.24.0
 RUN pnpm install
 COPY ./ /app/
