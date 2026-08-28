@@ -1,0 +1,4 @@
+# Réglages pnpm : depuis pnpm 11, le champ "pnpm" de package.json n'est plus lu.
+overrides:
+  ra-ui-materialui: 5.10.1
+  ra-core: 5.10.1

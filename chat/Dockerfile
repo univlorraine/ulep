@@ -39,7 +39,7 @@
 
 
 
-FROM node:18-alpine3.20 as chat_base
+FROM node:22-alpine3.20 as chat_base
 
 # install openssl - resolves the issue with the prisma client
 RUN apk update && apk upgrade
@@ -54,7 +54,7 @@ ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 ENV COREPACK_DEFAULT_TO_LATEST=0
 RUN corepack enable && \
-	corepack prepare pnpm@10.7.0 --activate
+	corepack prepare pnpm@11.24.0 --activate
 
 # Deps stage, preserve dependencies in cache as long as the lockfile isn't changed
 FROM chat_base AS chat_deps

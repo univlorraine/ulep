@@ -84,11 +84,5 @@
     "peerDependencies": {
         "lodash": "~4.17.5"
     },
-    "pnpm": {
-        "overrides": {
-            "ra-ui-materialui": "5.10.1",
-            "ra-core": "5.10.1"
-        }
-    },
-    "packageManager": "pnpm@10.7.0"
+    "packageManager": "pnpm@11.24.0"
 }

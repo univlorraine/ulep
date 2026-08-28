@@ -1,0 +1,8 @@
+# Réglages pnpm : depuis pnpm 11, le champ "pnpm" de package.json n'est plus lu.
+supportedArchitectures:
+  os:
+    - current
+    - linux
+  cpu:
+    - x64
+    - arm64
