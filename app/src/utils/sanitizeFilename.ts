@@ -45,6 +45,21 @@
  */
 const INVALID_CHARACTERS = /["*\/:<>?\\|\u0000-\u001F\u007F]/g;
 
+/**
+ * Caractères légaux pour le système de fichiers, mais retirés quand même : la virgule est
+ * refusée par MimeTypeMap.getFileExtensionFromUrl, qui n'accepte que [a-zA-Z_0-9.\-()%].
+ * Un nom non encodé la contenant fait silencieusement retomber le type MIME sur le
+ * type générique au lieu de application/pdf.
+ */
+const REMOVED_CHARACTERS = /,/g;
+
+/**
+ * Noms d'appareils réservés par Windows : un fichier ainsi nommé est refusé par l'explorateur
+ * et les partages SMB, quelles que soient la casse et l'extension. Sans objet sur Android, mais
+ * le fichier quitte l'app dès que l'utilisateur le partage.
+ */
+const WINDOWS_RESERVED_NAMES = /^(con|prn|aux|nul|com[0-9]|lpt[0-9])$/i;
+
 /** Limite d'un nom de fichier sur ext4 et MediaStore : 255 octets, et non 255 caractères. */
 const MAX_FILENAME_BYTES = 255;
 
@@ -77,17 +92,21 @@ const truncateToBytes = (value: string, maxBytes: number): string => {
  */
 const sanitizeFilename = (filename: string): string => {
     const sanitized = filename
+        .replace(REMOVED_CHARACTERS, '')
         .replace(INVALID_CHARACTERS, '_')
         .replace(/_+/g, '_')
         .replace(/^[.\s]+/, '')
         .replace(/[.\s]+$/, '');
 
     if (!sanitized) return DEFAULT_FILENAME;
-    if (utf8ByteLength(sanitized) <= MAX_FILENAME_BYTES) return sanitized;
 
     const extensionIndex = sanitized.lastIndexOf('.');
     const extension = extensionIndex > 0 ? sanitized.slice(extensionIndex) : '';
-    const base = extensionIndex > 0 ? sanitized.slice(0, extensionIndex) : sanitized;
+    const rawBase = extensionIndex > 0 ? sanitized.slice(0, extensionIndex) : sanitized;
+    const base = WINDOWS_RESERVED_NAMES.test(rawBase) ? `_${rawBase}` : rawBase;
+
+    const candidate = `${base}${extension}`;
+    if (utf8ByteLength(candidate) <= MAX_FILENAME_BYTES) return candidate;
 
     return `${truncateToBytes(base, MAX_FILENAME_BYTES - utf8ByteLength(extension))}${extension}`;
 };

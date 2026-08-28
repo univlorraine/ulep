@@ -71,4 +71,21 @@ describe('sanitizeFilename', () => {
         expect(Buffer.byteLength(result, 'utf8')).toBeLessThanOrEqual(255);
         expect(result.endsWith('.pdf')).toBe(true);
     });
+
+    it('removes commas, rejected by the Android mime detection helper', () => {
+        // MimeTypeMap.getFileExtensionFromUrl n'accepte que [a-zA-Z_0-9.\-()%] : une virgule
+        // fait retomber la détection sur */* au lieu de application/pdf.
+        expect(sanitizeFilename('Gérard, le cheval.pdf')).toBe('Gérard le cheval.pdf');
+    });
+
+    it('escapes Windows reserved device names', () => {
+        // CON, PRN, AUX, NUL, COM1-9 et LPT1-9 sont refusés par Windows et les partages SMB,
+        // quelles que soient la casse et l'extension. Le fichier part de l'app vers un poste
+        // Windows des que l'utilisateur le partage.
+        expect(sanitizeFilename('CON.pdf')).toBe('_CON.pdf');
+    });
+
+    it('escapes reserved names whatever the case', () => {
+        expect(sanitizeFilename('com1.pdf')).toBe('_com1.pdf');
+    });
 });
