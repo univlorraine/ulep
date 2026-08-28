@@ -2,3 +2,10 @@
 overrides:
   ra-ui-materialui: 5.10.1
   ra-core: 5.10.1
+
+# Une install pnpm 11 échoue si des scripts de build ne sont ni autorisés ni
+# refusés. Ces scripts étaient déjà ignorés sous pnpm 10 : comportement inchangé.
+allowBuilds:
+  core-js: false
+  core-js-pure: false
+  lint: false

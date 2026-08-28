@@ -1,0 +1,11 @@
+# Réglages pnpm : depuis pnpm 11, le champ "pnpm" de package.json n'est plus lu,
+# et une install échoue si des scripts de build ne sont ni autorisés ni refusés.
+# Ces scripts étaient déjà ignorés sous pnpm 10 : on ne change donc rien au
+# comportement, on le rend explicite. Le client Prisma est généré séparément
+# (cf. `pnpm prisma generate` dans le Dockerfile).
+allowBuilds:
+  '@nestjs/core': false
+  '@prisma/client': false
+  '@prisma/engines': false
+  prisma: false
+  protobufjs: false
