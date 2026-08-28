@@ -1,0 +1,4 @@
+# Le job CI lance `pnpm i` avant `docker build` : sans cette exclusion, le
+# node_modules de l'hote entre dans l'image et pnpm 11 refuse de le purger
+# sans TTY (ERR_PNPM_ABORTED_REMOVE_MODULES_DIR_NO_TTY).
+node_modules
