@@ -60,6 +60,7 @@ import ActivitiesQuery from '../queries/ActivitiesQuery';
 import AdministratorsQuery from '../queries/AdministratorsQuery';
 import ChatQuery from '../queries/ChatQuery';
 import CountriesQuery from '../queries/CountriesQuery';
+import CountSuggestedLanguagesQuery from '../queries/CountSuggestedLanguagesQuery';
 import EventsQuery from '../queries/EventsQuery';
 import InterestsQuery from '../queries/InterestsQuery';
 import LanguagesQuery from '../queries/LanguagesQuery';
@@ -69,6 +70,7 @@ import ProfilesQuery from '../queries/ProfilesQuery';
 import ProfilesWithTandemsQuery from '../queries/ProfilesWithTandemsQuery';
 import QuestionsQuery from '../queries/QuestionsQuery';
 import ReportsQuery from '../queries/ReportsQuery';
+import SuggestedLanguagesQuery from '../queries/SuggestedLanguagesQuery';
 import UniversitiesQuery from '../queries/UniversitiesQuery';
 import { http, refreshAuth } from './authProvider';
 import jwtManager from './jwtManager';
@@ -295,6 +297,12 @@ const customDataProvider = {
                 break;
             case 'languages':
                 url.search = LanguagesQuery(params);
+                break;
+            case 'languages/requests':
+                url.search = SuggestedLanguagesQuery(params);
+                break;
+            case 'languages/requests/count':
+                url.search = CountSuggestedLanguagesQuery(params);
                 break;
             case 'interests/categories':
                 url.search = InterestsQuery(params);
