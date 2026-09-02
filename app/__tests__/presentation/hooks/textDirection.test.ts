@@ -38,10 +38,49 @@
  *
  */
 
-window.REACT_APP_API_URL = 'http://0.0.0.0:3002';
-window.REACT_APP_SENTRY_DSN = '';
-window.REACT_APP_CHAT_URL = 'http://0.0.0.0:3003';
-window.REACT_APP_SOCKET_CHAT_URL = 'ws://0.0.0.0:5001';
-window.REACT_APP_JITSI_DOMAIN = 'jitsi.ulep.thestaging.io';
-window.REACT_APP_DEFAULT_TRANSLATION_LANGUAGE = 'FR';
-window.REACT_APP_LIMITED_FEATURES = 'false';
+import { isRtlLanguage, resolveDefaultLanguage, resolveIsRtl } from '../../../src/presentation/hooks/textDirection';
+
+describe('isRtlLanguage', () => {
+    it.each(['ar', 'he', 'fa', 'ur'])('returns true for the RTL language code "%s"', (code) => {
+        expect(isRtlLanguage(code)).toBe(true);
+    });
+
+    it.each(['fr', 'en', 'zh', 'de', 'es'])('returns false for the LTR language code "%s"', (code) => {
+        expect(isRtlLanguage(code)).toBe(false);
+    });
+
+    it('handles regional tags and casing', () => {
+        expect(isRtlLanguage('ar-SA')).toBe(true);
+        expect(isRtlLanguage('AR')).toBe(true);
+        expect(isRtlLanguage('fr-FR')).toBe(false);
+    });
+
+    it('returns false when the language is unknown', () => {
+        expect(isRtlLanguage(undefined)).toBe(false);
+        expect(isRtlLanguage('')).toBe(false);
+    });
+});
+
+describe('resolveIsRtl', () => {
+    it('falls back to the device detection when the user has not made a choice', () => {
+        expect(resolveIsRtl(undefined, true)).toBe(true);
+        expect(resolveIsRtl(undefined, false)).toBe(false);
+    });
+
+    it('lets the user choice win over the device detection', () => {
+        // user disabled RTL on an RTL device
+        expect(resolveIsRtl(false, true)).toBe(false);
+        // user forced RTL on an LTR device
+        expect(resolveIsRtl(true, false)).toBe(true);
+    });
+});
+
+describe('resolveDefaultLanguage', () => {
+    it('uses the device language on first launch', () => {
+        expect(resolveDefaultLanguage('', 'de')).toBe('de');
+    });
+
+    it('keeps the language chosen by the user on subsequent launches', () => {
+        expect(resolveDefaultLanguage('fr', 'de')).toBe('fr');
+    });
+});

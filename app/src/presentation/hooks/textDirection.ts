@@ -38,10 +38,25 @@
  *
  */
 
-window.REACT_APP_API_URL = 'http://0.0.0.0:3002';
-window.REACT_APP_SENTRY_DSN = '';
-window.REACT_APP_CHAT_URL = 'http://0.0.0.0:3003';
-window.REACT_APP_SOCKET_CHAT_URL = 'ws://0.0.0.0:5001';
-window.REACT_APP_JITSI_DOMAIN = 'jitsi.ulep.thestaging.io';
-window.REACT_APP_DEFAULT_TRANSLATION_LANGUAGE = 'FR';
-window.REACT_APP_LIMITED_FEATURES = 'false';
+/** Language codes (ISO 639-1) written from right to left. */
+export const RTL_LANGUAGES = ['ar', 'he', 'fa', 'ur'];
+
+/** Whether a language code or tag (e.g. "ar", "ar-SA") is written from right to left. */
+export const isRtlLanguage = (languageCode?: string): boolean => {
+    if (!languageCode) {
+        return false;
+    }
+    const [baseLanguage] = languageCode.toLowerCase().split(/[-_]/);
+    return RTL_LANGUAGES.includes(baseLanguage);
+};
+
+/**
+ * The text direction forced by the user in the settings wins over the direction detected
+ * from the device language. `userChoice` stays undefined until the user makes a choice.
+ */
+export const resolveIsRtl = (userChoice: boolean | undefined, isDeviceRtl: boolean): boolean =>
+    userChoice ?? isDeviceRtl;
+
+/** The language chosen by the user in the settings wins over the device language. */
+export const resolveDefaultLanguage = (persistedLanguage: string, deviceLanguage: string): string =>
+    persistedLanguage || deviceLanguage;

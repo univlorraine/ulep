@@ -38,10 +38,38 @@
  *
  */
 
-window.REACT_APP_API_URL = 'http://0.0.0.0:3002';
-window.REACT_APP_SENTRY_DSN = '';
-window.REACT_APP_CHAT_URL = 'http://0.0.0.0:3003';
-window.REACT_APP_SOCKET_CHAT_URL = 'ws://0.0.0.0:5001';
-window.REACT_APP_JITSI_DOMAIN = 'jitsi.ulep.thestaging.io';
-window.REACT_APP_DEFAULT_TRANSLATION_LANGUAGE = 'FR';
-window.REACT_APP_LIMITED_FEATURES = 'false';
+import { Filesystem } from '@capacitor/filesystem';
+import FileAdapter from '../../src/adapter/FileAdapter';
+import DeviceAdapterInterface from '../../src/adapter/interfaces/DeviceAdapter.interface';
+
+jest.mock('@capacitor/filesystem', () => ({
+    Directory: { Cache: 'CACHE' },
+    Filesystem: { writeFile: jest.fn().mockResolvedValue({ uri: 'file:///cache/file.pdf' }) },
+}));
+jest.mock('@capacitor/share', () => ({ Share: { share: jest.fn().mockResolvedValue(undefined) } }));
+jest.mock('@capawesome/capacitor-file-picker', () => ({ FilePicker: { pickFiles: jest.fn() } }));
+
+const nativeDevice = { isNativePlatform: () => true } as unknown as DeviceAdapterInterface;
+
+describe('FileAdapter', () => {
+    let fileAdapter: FileAdapter;
+
+    beforeEach(() => {
+        fileAdapter = new FileAdapter(nativeDevice);
+        global.fetch = jest.fn().mockResolvedValue({ blob: () => Promise.resolve(new Blob(['pdf'])) }) as any;
+    });
+
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
+
+    it('sanitizes the file name before handing it to the filesystem', async () => {
+        expect.assertions(1);
+
+        await fileAdapter.saveFile('https://example.test/resource.pdf', 'Fiche : les verbes ?.pdf');
+
+        expect(Filesystem.writeFile).toHaveBeenCalledWith(
+            expect.objectContaining({ path: 'Fiche _ les verbes _.pdf' })
+        );
+    });
+});

@@ -46,6 +46,7 @@ import Switch from 'react-switch';
 import { ArrowLeftSvg, ArrowRightSvg } from '../../../assets';
 import { useConfig } from '../../../context/ConfigurationContext';
 import { useStoreActions, useStoreState } from '../../../store/storeTypes';
+import useIsRtl from '../../hooks/useIsRtl';
 import Dropdown from '../DropDown';
 import ConfirmModal from '../modals/ConfirmModal';
 import styles from './SettingsContent.module.css';
@@ -62,7 +63,8 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
     const { askForAccountDeletion, browserAdapter, configuration, updateNotificationPermission } = useConfig();
     const setLanguage = useStoreActions((state) => state.setLanguage);
     const setRtl = useStoreActions((state) => state.setRtl);
-    const { language: currentLanguage, isRtl, profile, accessToken } = useStoreState((state) => state);
+    const isRtl = useIsRtl();
+    const { language: currentLanguage, profile } = useStoreState((state) => state);
     const setProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const [showToast] = useIonToast();
     const updateProfile = useStoreActions((state) => state.updateProfile);
@@ -98,8 +100,8 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
         }
     };
 
-    const onUpdateRtl = async () => {
-        setRtl({ isRtl: !currentLanguage });
+    const onUpdateRtl = () => {
+        setRtl({ isRtl: !isRtl });
     };
 
     const updateLanguage = (code: string) => {
@@ -158,12 +160,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
             </div>
             <button aria-label={t('home_page.settings.rtl') as string} className={styles['setting-container']}>
                 <span>{t('home_page.settings.rtl_button')}</span>
-                <Switch
-                    onChange={() => onUpdateRtl()}
-                    checked={Boolean(isRtl)}
-                    uncheckedIcon={false}
-                    checkedIcon={false}
-                />
+                <Switch onChange={() => onUpdateRtl()} checked={isRtl} uncheckedIcon={false} checkedIcon={false} />
             </button>
 
             <span className={styles.subtitle}>{t('home_page.settings.other')}</span>

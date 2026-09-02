@@ -1,7 +1,7 @@
 # CI de package
 
 variables:
-  NODE_VERSION: 20.19.0
+  NODE_VERSION: 22.23.2
   DOCKERFILE_PATH: $WORKING_DIR/Dockerfile
   # Base Postgres pour les tests
   POSTGRES_DB: ulep
@@ -18,7 +18,7 @@ stages:
   image: node:$NODE_VERSION-alpine
   before_script: # Activation de corepack pour pouvoir utiliser pnpm
     - corepack enable
-    - corepack prepare --activate pnpm@10.7.0
+    - corepack prepare --activate pnpm@11.24.0
     - cd $WORKING_DIR
     - apk update
     - apk add --no-cache openssl # pour les tests prisma

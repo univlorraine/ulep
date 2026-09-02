@@ -1,0 +1,10 @@
+# Réglages pnpm : depuis pnpm 11, le champ "pnpm" de package.json n'est plus lu.
+# Une install pnpm 11 échoue si un script de build n'est ni autorisé ni refusé.
+# Ces scripts s'exécutaient déjà sous pnpm 9 dans l'image webapp : on les autorise
+# explicitement, pour reproduire le comportement à l'identique. esbuild en
+# particulier installe son binaire natif, dont dépend le build Vite.
+allowBuilds:
+  '@sentry/capacitor': true
+  core-js: true
+  cypress: true
+  esbuild: true

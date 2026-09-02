@@ -38,10 +38,36 @@
  *
  */
 
-window.REACT_APP_API_URL = 'http://0.0.0.0:3002';
-window.REACT_APP_SENTRY_DSN = '';
-window.REACT_APP_CHAT_URL = 'http://0.0.0.0:3003';
-window.REACT_APP_SOCKET_CHAT_URL = 'ws://0.0.0.0:5001';
-window.REACT_APP_JITSI_DOMAIN = 'jitsi.ulep.thestaging.io';
-window.REACT_APP_DEFAULT_TRANSLATION_LANGUAGE = 'FR';
-window.REACT_APP_LIMITED_FEATURES = 'false';
+import { Activity } from '../../../src/domain/entities/Activity';
+import GetActivityPdfUsecase from '../../../src/domain/usecases/activity/GetActivityPdfUsecase';
+import FileAdapter from '../../mocks/adapters/FileAdapter';
+import DomainHttpAdapter from '../../mocks/adapters/HttpAdapter';
+
+const pdf = new Blob(['pdf']);
+const activityWithTitle = (title: string) => ({ id: 'id', title }) as Activity;
+
+describe('GetActivityPdfUsecase', () => {
+    let httpAdapter: DomainHttpAdapter;
+    let fileAdapter: FileAdapter;
+    let usecase: GetActivityPdfUsecase;
+
+    beforeEach(() => {
+        httpAdapter = new DomainHttpAdapter();
+        fileAdapter = new FileAdapter();
+        usecase = new GetActivityPdfUsecase(httpAdapter, fileAdapter);
+        httpAdapter.mockJson({ parsedBody: pdf });
+    });
+
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
+
+    it('keeps a non-latin title in the generated file name', async () => {
+        expect.assertions(1);
+        jest.spyOn(fileAdapter, 'saveBlob');
+
+        await usecase.execute(activityWithTitle('夜晚 阿尔封斯'));
+
+        expect(fileAdapter.saveBlob).toHaveBeenCalledWith(pdf, '夜晚 阿尔封斯.pdf');
+    });
+});

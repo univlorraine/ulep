@@ -38,10 +38,10 @@
  *
  */
 
-window.REACT_APP_API_URL = 'http://0.0.0.0:3002';
-window.REACT_APP_SENTRY_DSN = '';
-window.REACT_APP_CHAT_URL = 'http://0.0.0.0:3003';
-window.REACT_APP_SOCKET_CHAT_URL = 'ws://0.0.0.0:5001';
-window.REACT_APP_JITSI_DOMAIN = 'jitsi.ulep.thestaging.io';
-window.REACT_APP_DEFAULT_TRANSLATION_LANGUAGE = 'FR';
-window.REACT_APP_LIMITED_FEATURES = 'false';
+import { useStoreState } from '../../store/storeTypes';
+import { resolveIsRtl } from './textDirection';
+
+/** Effective text direction of the application: the user choice, or else the device detection. */
+const useIsRtl = (): boolean => useStoreState((state) => resolveIsRtl(state.isRtl, state.isDeviceRtl));
+
+export default useIsRtl;

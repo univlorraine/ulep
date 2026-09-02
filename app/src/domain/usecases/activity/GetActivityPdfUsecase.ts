@@ -41,6 +41,7 @@
 import { HttpResponse } from '../../../adapter/BaseHttpAdapter';
 import { HttpAdapterInterface } from '../../../adapter/DomainHttpAdapter';
 import FileAdapterInterface from '../../../adapter/interfaces/FileAdapter.interface';
+import sanitizeFilename from '../../../utils/sanitizeFilename';
 import { Activity } from '../../entities/Activity';
 import GetActivityPdfUsecaseInterface from '../../interfaces/activity/GetActivityPdfUsecase.interface';
 
@@ -57,15 +58,7 @@ class GetActivityPdfUsecase implements GetActivityPdfUsecaseInterface {
             return new Error('errors.global');
         }
 
-        const fileName = `${activity.title
-            .trim()
-            .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '')
-            .replace(/[^a-zA-Z0-9]/g, '-')
-            .replace(/-+/g, '-')
-            .toLowerCase()}.pdf`;
-
-        this.fileService.saveBlob(httpResponse.parsedBody, fileName);
+        this.fileService.saveBlob(httpResponse.parsedBody, sanitizeFilename(`${activity.title.trim()}.pdf`));
     }
 }
 

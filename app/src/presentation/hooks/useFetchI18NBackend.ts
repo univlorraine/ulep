@@ -39,29 +39,36 @@
  */
 
 import { Device } from '@capacitor/device';
+import { useStoreRehydrated } from 'easy-peasy';
 import { i18n } from 'i18next';
 import { useEffect, useState } from 'react';
 import initI18n from '../../i18n';
 import { useStoreActions, useStoreState } from '../../store/storeTypes';
-
-const RTL_LANGUAGES = ['ar', 'he', 'fa', 'ur'];
+import { isRtlLanguage, resolveDefaultLanguage } from './textDirection';
+import useIsRtl from './useIsRtl';
 
 const useFetchI18NBackend = (apiUrl: string): i18n => {
-    const isRtl = useStoreState((state) => state.isRtl);
+    const rehydrated = useStoreRehydrated();
+    const isRtl = useIsRtl();
     const language = useStoreState((state) => state.language);
     const setLanguage = useStoreActions((state) => state.setLanguage);
-    const setRtl = useStoreActions((state) => state.setRtl);
+    const setDeviceRtl = useStoreActions((state) => state.setDeviceRtl);
     const [i18nInstance, setI18nInstance] = useState<i18n>(initI18n());
-    useEffect(() => {
-        const setDefaultLanguage = async () => {
-            const deviceLanguage = await Device.getLanguageCode();
 
-            setLanguage({ language: deviceLanguage.value });
-            // if isRtl is true, user forced it on settings, else its undefined
-            setRtl({ isRtl: isRtl === true || RTL_LANGUAGES.includes(deviceLanguage.value) });
+    // Runs once the persisted store is rehydrated so that the choices made by the user
+    // in the settings (language, text direction) win over the device defaults.
+    useEffect(() => {
+        if (!rehydrated) {
+            return;
+        }
+        const applyDeviceDefaults = async () => {
+            const deviceLanguage = (await Device.getLanguageCode()).value;
+
+            setLanguage({ language: resolveDefaultLanguage(language, deviceLanguage) });
+            setDeviceRtl({ isDeviceRtl: isRtlLanguage(deviceLanguage) });
         };
-        setDefaultLanguage();
-    }, []);
+        applyDeviceDefaults();
+    }, [rehydrated]);
 
     useEffect(() => {
         const checkApiHealthAndSetLanguage = async () => {
@@ -78,11 +85,14 @@ const useFetchI18NBackend = (apiUrl: string): i18n => {
             }
 
             document.documentElement.lang = language;
-            document.documentElement.dir = isRtl ? 'rtl' : 'ltr';
         };
 
         checkApiHealthAndSetLanguage();
-    }, [apiUrl, language, isRtl]);
+    }, [apiUrl, language]);
+
+    useEffect(() => {
+        document.documentElement.dir = isRtl ? 'rtl' : 'ltr';
+    }, [isRtl]);
 
     return i18nInstance;
 };
