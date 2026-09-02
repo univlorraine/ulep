@@ -39,12 +39,15 @@
 
 
 
-# Base node image with pnpm enabled
-FROM node:22-alpine3.20 as admin_base
+# Runtime base: node and the static server, nothing else
+FROM node:22-alpine3.20 AS admin_runtime
 
 RUN apk add --no-cache libc6-compat
 
 WORKDIR /srv/app
+
+# Tooling base: adds pnpm for the stages that install and build
+FROM admin_runtime AS admin_base
 
 ENV COREPACK_DEFAULT_TO_LATEST=0
 # pnpm 11 refuse `config -g set` si le repertoire bin global n'est pas dans le PATH.
@@ -72,15 +75,18 @@ ENV PORT 3000
 CMD ["pnpm", "start"]
 
 # Build stage
-FROM admin_base AS admin_builder
-WORKDIR /srv/app
+FROM admin_deps AS admin_builder
 
-COPY --link . .
-COPY --from=admin_deps --link /srv/app/node_modules ./node_modules
-
+# Lets a memory-constrained CI skip the source maps
+# (`--build-arg GENERATE_SOURCEMAP=false`); unset, react-scripts keeps them.
+ARG GENERATE_SOURCEMAP
 RUN pnpm run build
 
-FROM admin_builder AS admin_prod
+# Production image: only the static build, served by `serve`. pnpm, the
+# sources, node_modules and the pnpm store stay in the tooling layers.
+# The deployment replaces build/env/config.js at startup (see the helm chart),
+# so the build directory must stay writable by the running user.
+FROM admin_runtime AS admin_prod
 
 ENV NODE_ENV production
 
@@ -88,8 +94,10 @@ RUN addgroup -S -g 1001 nodejs
 RUN adduser -S -u 1001 nestjs
 RUN npm i -g serve
 
+COPY --from=admin_builder --link /srv/app/build ./build
+
 EXPOSE 80
 
 ENV PORT 80
 
-CMD ["bash", "-c", "serve -s build -l 80"]
+CMD ["sh", "-c", "serve -s build -l 80"]

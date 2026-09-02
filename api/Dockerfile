@@ -39,7 +39,8 @@
 
 
 
-FROM node:22-alpine3.20 as api_base
+# Runtime base: what the running application needs, and nothing else
+FROM node:22-alpine3.20 AS api_runtime
 
 # install openssl - resolves the issue with the prisma client
 RUN apk update && apk upgrade
@@ -49,6 +50,9 @@ RUN apk add --no-cache openssl
 RUN apk add --no-cache libc6-compat
 
 WORKDIR /srv/app
+
+# Tooling base: adds pnpm for the stages that install and build
+FROM api_runtime AS api_base
 
 ENV COREPACK_DEFAULT_TO_LATEST=0
 # pnpm 11 refuse `config -g set` si le repertoire bin global n'est pas dans le PATH.
@@ -76,23 +80,29 @@ ENV PORT 3000
 
 CMD ["sh", "-c", "pnpm start:dev"]
 
-# Build stage
+# Build stage: compile, then drop the devDependencies so that the production
+# image only carries what `node dist/main` needs. The generated prisma client
+# lives inside @prisma/client (a runtime dependency) and survives the prune.
 FROM api_deps AS api_builder
 
-COPY --link . .
-COPY --from=api_deps --link /srv/app/node_modules ./node_modules
-
 RUN pnpm run build
+RUN pnpm prune --prod
 
-# Production image, copy all the files and run nest
-FROM api_builder AS api_prod
-
-WORKDIR /srv/app
+# Production image: start again from the runtime base and copy only what the
+# application needs. pnpm, the pnpm store, the sources, the tests and the
+# devDependencies stay in the tooling layers and never reach the image.
+FROM api_runtime AS api_prod
 
 ENV NODE_ENV production
 
 RUN addgroup -S -g 1001 nodejs
 RUN adduser -S -u 1001 nestjs
+
+COPY --from=api_builder --link /srv/app/package.json ./
+COPY --from=api_builder --link /srv/app/node_modules ./node_modules
+COPY --from=api_builder --link /srv/app/dist ./dist
+# Read at runtime by the mailer, relative to the working directory
+COPY --from=api_builder --link /srv/app/templates ./templates
 
 USER nestjs
 
@@ -100,10 +110,12 @@ EXPOSE 3000
 
 ENV PORT 3000
 
+# Same as `pnpm run start:prod`, without pnpm: as a non-root user pnpm 11 would
+# first download itself through corepack, then try to reinstall the
+# dependencies in the read-only /srv/app before running the script.
+CMD ["node", "dist/main"]
 
-CMD ["pnpm", "run", "start:prod"]
-
-# Production image, copy all the files and run nest
+# Init image: runs the migrations and the seed, so it needs the full toolchain
 FROM api_deps AS api_init
 
 RUN apk add --no-cache postgresql
