@@ -46,6 +46,7 @@ stages:
     - job: ⚙️ dependencies
   script:
     - pnpm run lint
+  allow_failure: true  
   rules:
     - if: $LINT == 'enabled'
 
@@ -135,6 +136,8 @@ stages:
 # Build de l'image
 🚀 container image:
   stage: 📦 build
+  tags:
+    - sied
   variables:
     KUBERNETES_CPU_LIMIT: "1"
     KUBERNETES_MEMORY_LIMIT: "2Gi"

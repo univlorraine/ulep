@@ -56,8 +56,8 @@ stages:
   variables:
     WORKING_DIR: admin
     IMAGE_NAME: ulep/admin
-    DOCKERFILE_PATH: .gitlab-ci/Dockerfile.admin
-    # DOCKER_TARGET: admin_prod # Génère une erreur : ERR_PNPM_BROKEN_LOCKFILE  The lockfile at "/srv/app/pnpm-lock.yaml" is broken: duplicated mapping key (1755:3)
+    #DOCKERFILE_PATH: .gitlab-ci/Dockerfile.admin
+    DOCKER_TARGET: admin_prod
     LINT: enabled
     # Optimisation mémoire suite aux limitations du pod infra
     GENERATE_SOURCEMAP: "false"
@@ -84,9 +84,9 @@ stages:
   variables:
     WORKING_DIR: api
     IMAGE_NAME: ulep/api
-    DOCKERFILE_PATH: .gitlab-ci/Dockerfile.api
-    DOCKER_TARGET: api_ul
-    # DOCKER_TARGET: api_prod
+    #DOCKERFILE_PATH: .gitlab-ci/Dockerfile.api
+    #DOCKER_TARGET: api_ul
+    DOCKER_TARGET: api_prod
     LINT: enabled
     TEST: enabled
   rules:
