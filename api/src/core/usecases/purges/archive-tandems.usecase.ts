@@ -206,12 +206,15 @@ export class ArchiveTandemsAndDeleteUsersUsecase {
     console.log(
       '[Purge] Delete users - Administrators retreived from Keycloak',
     );
-    // Retrieve the total number of users in keycloak
+    // Retrieve the total number of users in keycloak, to check we browsed them all
     const usersCount = await this.keycloak.getUsersCount();
     console.log('[Purge] Delete users - Users count retreived from Keycloak');
-    // Retrieve all users from keycloak
-    const keycloakUsers = await this.keycloak.getUsers({ max: usersCount });
-    console.log('[Purge] Delete users - Users retreived from Keycloak');
+    // Retrieve all users from keycloak, page by page: a realm holding thousands
+    // of users cannot be retrieved in a single request.
+    const keycloakUsers = await this.keycloak.getAllUsers();
+    console.log(
+      `[Purge] Delete users - Users retreived from Keycloak (${keycloakUsers.length}/${usersCount})`,
+    );
     // Loop through all users in keycloak
     for (const user of keycloakUsers) {
       // Check if the user is an administrator
@@ -223,7 +226,15 @@ export class ArchiveTandemsAndDeleteUsersUsecase {
         continue;
       }
       // If the user is not an administrator and does not have an active tandem, delete it
-      await this.keycloak.deleteUser(user.id);
+      try {
+        await this.keycloak.deleteUser(user.id);
+      } catch (error) {
+        // A user we cannot delete should not abort the whole purge.
+        this.logger.error(
+          `[Purge] Delete users - Failed to delete the keycloak user ${user.id}`,
+          error,
+        );
+      }
     }
     console.log('[Purge] Delete users - Keycloak users deleted');
 
