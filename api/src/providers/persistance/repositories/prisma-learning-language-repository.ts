@@ -55,6 +55,7 @@ import {
 import {
   historizedUnmatchedLearningLanguageMapper,
   HistorizedUnmatchedLearningLanguageRelation,
+  toUnmatchedLearningLanguageRows,
 } from 'src/providers/persistance/mappers/historizedUnmatchedLearningLanguage.mapper';
 import {
   learningLanguageMapper,
@@ -632,16 +633,14 @@ export class PrismaLearningLanguageRepository
     learningLanguages: LearningLanguage[],
     purgeId: string,
   ) {
-    await this.prisma.unmatchedLearningLanguages.deleteMany({});
+    const data = toUnmatchedLearningLanguageRows(learningLanguages, purgeId);
 
-    await this.prisma.unmatchedLearningLanguages.createMany({
-      data: learningLanguages.map((l) => ({
-        id: l.id,
-        user_id: l.profile.user.id,
-        purge_id: purgeId,
-        language_code_id: l.language.id,
-      })),
-    });
+    // Both statements run in a single transaction: a failing insert must not
+    // leave the previous purge's archive deleted.
+    await this.prisma.$transaction([
+      this.prisma.unmatchedLearningLanguages.deleteMany({}),
+      this.prisma.unmatchedLearningLanguages.createMany({ data }),
+    ]);
   }
 
   async getHistoricUnmatchedLearningLanguageByUserIdAndLanguageId(

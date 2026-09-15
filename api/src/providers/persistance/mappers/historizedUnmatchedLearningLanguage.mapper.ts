@@ -64,3 +64,45 @@ export const historizedUnmatchedLearningLanguageMapper = (
     createdAt: instance.created_at,
     language: languageMapper(instance.Language),
   });
+
+export interface UnmatchedLearningLanguageRow {
+  id: string;
+  user_id: string;
+  purge_id: string;
+  language_code_id: string;
+}
+
+interface ArchivableLearningLanguage {
+  id: string;
+  language: { id: string };
+  profile?: { user: { id: string } };
+}
+
+// A user may register several learning languages for the same language (an
+// ETANDEM and a TANDEM one for instance). The archive holds a single row per
+// (user, language) pair, so duplicates are collapsed and the first one wins.
+export const toUnmatchedLearningLanguageRows = (
+  learningLanguages: ArchivableLearningLanguage[],
+  purgeId: string,
+): UnmatchedLearningLanguageRow[] => {
+  const rowsByUserAndLanguage = new Map<string, UnmatchedLearningLanguageRow>();
+
+  for (const learningLanguage of learningLanguages) {
+    const userId = learningLanguage.profile.user.id;
+    const languageId = learningLanguage.language.id;
+    const key = `${userId}/${languageId}`;
+
+    if (rowsByUserAndLanguage.has(key)) {
+      continue;
+    }
+
+    rowsByUserAndLanguage.set(key, {
+      id: learningLanguage.id,
+      user_id: userId,
+      purge_id: purgeId,
+      language_code_id: languageId,
+    });
+  }
+
+  return [...rowsByUserAndLanguage.values()];
+};
