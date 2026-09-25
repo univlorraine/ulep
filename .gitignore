@@ -27,3 +27,5 @@ docker/minio/*
 *.values.yaml
 
 .codegpt
+
+chat/.pnpm-store
