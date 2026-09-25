@@ -46,10 +46,10 @@ services:
       KEYCLOAK_ADMIN: ${KEYCLOAK_USER}
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_PASSWORD}
 
-  minio:
+  rustfs:
     environment:
-      MINIO_ROOT_USER: ${MINIO_USER}
-      MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD}
+      RUSTFS_ACCESS_KEY: ${MINIO_USER}
+      RUSTFS_SECRET_KEY: ${MINIO_PASSWORD}
 
   database:
     environment:

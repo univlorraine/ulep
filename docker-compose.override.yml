@@ -90,10 +90,15 @@ services:
     ports:
       - ${AUTH_PORT:-8080}:8080
 
-  minio:
+  rustfs:
     ports:
       - ${MINIO_PORT:-9000}:9000
       - ${MINIO_CONSOLE_PORT:-9001}:9001
+    build: ./docker/rustfs
+    image: etandem-rustfs-local
+    environment:
+      PUBLIC_BUCKETS: assets certificates i18n
+      PRIVATE_BUCKETS: activity chat edito images
 
   mailer:
     image: schickling/mailcatcher
