@@ -38,37 +38,22 @@
  *
  */
 
-import React from 'react';
-import { FunctionField, useTranslate, Datagrid, List, TextField } from 'react-admin';
-import ConfigPagesHeader from '../../components/tabs/ConfigPagesHeader';
-import User from '../../entities/User';
+import qsAdapter from '../providers/qsAdapter';
 
-const SuggestedLanguagesList = () => {
-    const translation = useTranslate();
+export interface CountSuggestedLanguagesParams {
+    pagination: {
+        page: string;
+        perPage: string;
+    };
+}
 
-    return (
-        <>
-            <ConfigPagesHeader />
-            <List exporter={false} sort={{ field: 'email', order: 'ASC' }}>
-                <Datagrid bulkActionButtons={false}>
-                    <TextField label={translation('global.firstname')} sortable={false} source="user.firstname" />
-                    <TextField label={translation('global.lastname')} sortable={false} source="user.lastname" />
-                    <FunctionField
-                        label={translation('global.role')}
-                        render={(record: { user: User }) => translation(`global.${record.user.role.toLowerCase()}`)}
-                        sortable={false}
-                        source="user.role"
-                    />
-                    <TextField label={translation('global.email')} sortable={false} source="user.email" />
-                    <FunctionField
-                        label={translation('global.language')}
-                        render={(record: any) => translation(`languages_code.${record.language.code}`)}
-                        sortable={false}
-                    />
-                </Datagrid>
-            </List>
-        </>
-    );
+const CountSuggestedLanguagesQuery = (params: CountSuggestedLanguagesParams): string => {
+    const query = {
+        page: params.pagination.page,
+        limit: params.pagination.perPage,
+    };
+
+    return new URLSearchParams(qsAdapter().stringify(query)).toString();
 };
 
-export default SuggestedLanguagesList;
+export default CountSuggestedLanguagesQuery;

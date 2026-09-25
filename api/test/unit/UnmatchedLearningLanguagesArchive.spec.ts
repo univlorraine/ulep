@@ -38,37 +38,72 @@
  *
  */
 
-import React from 'react';
-import { FunctionField, useTranslate, Datagrid, List, TextField } from 'react-admin';
-import ConfigPagesHeader from '../../components/tabs/ConfigPagesHeader';
-import User from '../../entities/User';
+import { toUnmatchedLearningLanguageRows } from 'src/providers/persistance/mappers/historizedUnmatchedLearningLanguage.mapper';
 
-const SuggestedLanguagesList = () => {
-    const translation = useTranslate();
+const PURGE_ID = 'purge-2026';
 
-    return (
-        <>
-            <ConfigPagesHeader />
-            <List exporter={false} sort={{ field: 'email', order: 'ASC' }}>
-                <Datagrid bulkActionButtons={false}>
-                    <TextField label={translation('global.firstname')} sortable={false} source="user.firstname" />
-                    <TextField label={translation('global.lastname')} sortable={false} source="user.lastname" />
-                    <FunctionField
-                        label={translation('global.role')}
-                        render={(record: { user: User }) => translation(`global.${record.user.role.toLowerCase()}`)}
-                        sortable={false}
-                        source="user.role"
-                    />
-                    <TextField label={translation('global.email')} sortable={false} source="user.email" />
-                    <FunctionField
-                        label={translation('global.language')}
-                        render={(record: any) => translation(`languages_code.${record.language.code}`)}
-                        sortable={false}
-                    />
-                </Datagrid>
-            </List>
-        </>
+const learningLanguage = (id: string, userId: string, languageId: string) => ({
+  id,
+  language: { id: languageId },
+  profile: { user: { id: userId } },
+});
+
+describe('toUnmatchedLearningLanguageRows', () => {
+  it('maps every learning language to an archive row', () => {
+    const rows = toUnmatchedLearningLanguageRows(
+      [
+        learningLanguage('ll-1', 'user-1', 'lang-en'),
+        learningLanguage('ll-2', 'user-2', 'lang-de'),
+      ],
+      PURGE_ID,
     );
-};
 
-export default SuggestedLanguagesList;
+    expect(rows).toEqual([
+      {
+        id: 'll-1',
+        user_id: 'user-1',
+        purge_id: PURGE_ID,
+        language_code_id: 'lang-en',
+      },
+      {
+        id: 'll-2',
+        user_id: 'user-2',
+        purge_id: PURGE_ID,
+        language_code_id: 'lang-de',
+      },
+    ]);
+  });
+
+  // ULEP-57: a user may register several learning languages for the same
+  // language (ETANDEM and TANDEM for instance). The archive table is unique on
+  // (user_id, language_code_id), so those must collapse into a single row.
+  it('keeps a single row when a user has several learning languages for the same language', () => {
+    const rows = toUnmatchedLearningLanguageRows(
+      [
+        learningLanguage('ll-1', 'user-1', 'lang-en'),
+        learningLanguage('ll-2', 'user-1', 'lang-en'),
+        learningLanguage('ll-3', 'user-1', 'lang-de'),
+      ],
+      PURGE_ID,
+    );
+
+    expect(rows).toHaveLength(2);
+    expect(rows.map((row) => row.id)).toEqual(['ll-1', 'll-3']);
+  });
+
+  it('does not collapse the same language across different users', () => {
+    const rows = toUnmatchedLearningLanguageRows(
+      [
+        learningLanguage('ll-1', 'user-1', 'lang-en'),
+        learningLanguage('ll-2', 'user-2', 'lang-en'),
+      ],
+      PURGE_ID,
+    );
+
+    expect(rows).toHaveLength(2);
+  });
+
+  it('returns no row for an empty archive', () => {
+    expect(toUnmatchedLearningLanguageRows([], PURGE_ID)).toEqual([]);
+  });
+});
