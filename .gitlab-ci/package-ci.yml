@@ -1,7 +1,7 @@
 # CI de package
 
 variables:
-  NODE_VERSION: 22.23.4
+  NODE_VERSION: 22
   DOCKERFILE_PATH: $WORKING_DIR/Dockerfile
   # Base Postgres pour les tests
   POSTGRES_DB: ulep
