@@ -39,7 +39,7 @@
 
 
 
-FROM node:22-alpine3.20 as chat_base
+FROM node:22.23.4-alpine3.24 as chat_base
 
 # install openssl - resolves the issue with the prisma client
 RUN apk update && apk upgrade

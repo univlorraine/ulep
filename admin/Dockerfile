@@ -40,7 +40,7 @@
 
 
 # Runtime base: node and the static server, nothing else
-FROM node:22-alpine3.20 AS admin_runtime
+FROM node:22.23.4-alpine3.24 AS admin_runtime
 
 RUN apk add --no-cache libc6-compat
 

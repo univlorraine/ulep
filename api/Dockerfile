@@ -40,7 +40,7 @@
 
 
 # Runtime base: what the running application needs, and nothing else
-FROM node:22-alpine3.20 AS api_runtime
+FROM node:22.23.4-alpine3.24 AS api_runtime
 
 # install openssl - resolves the issue with the prisma client
 RUN apk update && apk upgrade
