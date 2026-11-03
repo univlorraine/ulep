@@ -777,6 +777,21 @@ export class KeycloakClient {
   }
 
   /*
+   * Remove user from every admin group, keeping their other groups
+   */
+  async removeUserFromAdminGroups(userId: string): Promise<void> {
+    const adminGroupNames = Object.values(AdminGroup) as string[];
+    const groups: { id: string; name: string }[] =
+      await this.getUserGroups(userId);
+
+    for (const group of groups) {
+      if (adminGroupNames.includes(group.name)) {
+        await this.removeUserFromAGroup(userId, group.id);
+      }
+    }
+  }
+
+  /*
    * Get all groups
    */
   async getAllGroups() {

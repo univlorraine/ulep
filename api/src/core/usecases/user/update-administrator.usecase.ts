@@ -83,6 +83,9 @@ export class UpdateAdministratorUsecase {
 
     if (command.shouldRemoveAdminRole) {
       await this.keycloakClient.removeRealmRoleToUser(admin.id, 'admin');
+      // The admin groups grant the admin role as well: a user left in one
+      // would keep every admin right.
+      await this.keycloakClient.removeUserFromAdminGroups(admin.id);
     }
 
     try {
