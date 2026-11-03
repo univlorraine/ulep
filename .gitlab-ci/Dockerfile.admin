@@ -1,9 +1,9 @@
 #syntax=docker/dockerfile:1.4
 
 # Valeur par défaut de l'argument NODE_VERSION
-ARG NODE_VERSION=18
+ARG NODE_VERSION=22.23.4
 
-FROM node:$NODE_VERSION-alpine3.20
+FROM node:$NODE_VERSION-alpine3.23
 
 # https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine
 RUN apk add --no-cache libc6-compat
