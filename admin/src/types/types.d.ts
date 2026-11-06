@@ -40,6 +40,8 @@
 
 declare global {
     type TranslatedLanguage = 'fr' | 'en' | 'zh';
+    // ignore prettier warning : behaviour different between two versions of prettier
+    /* eslint-disable-next-line prettier/prettier */
     type MeetFrequency =
         | 'ONCE_A_WEEK'
         | 'TWICE_A_WEEK'

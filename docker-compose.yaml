@@ -62,7 +62,7 @@ services:
       KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID:-api}
       KEYCLOAK_CLIENT_SECRET: ${KEYCLOAK_CLIENT_SECRET:-bN49BuApmmtAODeOWOG8iKOOuJdN3KE6}
       KEYCLOAK_ADMIN_ROLE_NAME: ${KEYCLOAK_ADMIN_ROLE_NAME:-admin}
-      S3_URL: ${S3_URL:-http://minio:9000}
+      S3_URL: ${S3_URL:-http://rustfs:9000}
       S3_REGION: ${S3_REGION:-eu-east-1}
       S3_ACCESS_KEY: ${MINIO_USER:-minio}
       S3_ACCESS_SECRET: ${MINIO_PASSWORD:-!ChangeMe!}
@@ -140,7 +140,7 @@ services:
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_PASSWORD:-!ChangeMe!}
       KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID:-api}
       KEYCLOAK_CLIENT_SECRET: ${KEYCLOAK_CLIENT_SECRET:-bN49BuApmmtAODeOWOG8iKOOuJdN3KE6}
-      S3_URL: ${S3_URL:-http://minio:9000}
+      S3_URL: ${S3_URL:-http://rustfs:9000}
       S3_REGION: ${S3_REGION:-eu-east-1}
       S3_ACCESS_KEY: ${MINIO_USER:-minio}
       S3_ACCESS_SECRET: ${MINIO_PASSWORD:-!ChangeMe!}
@@ -203,14 +203,17 @@ services:
       # you may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
       # - ./docker/database/data:/var/lib/postgresql/data
 
-  minio:
-    image: minio/minio:latest
-    command: server /data/minio --console-address :9001
+  rustfs:
+    image: rustfs/rustfs:1.0.0
     environment:
-      MINIO_ROOT_USER: ${MINIO_USER:-minio}
-      MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD:-!ChangeMe!}
+      RUSTFS_VOLUMES: /data
+      RUSTFS_ADDRESS: 0.0.0.0:9000
+      RUSTFS_CONSOLE_ADDRESS: 0.0.0.0:9001
+      RUSTFS_CONSOLE_ENABLE: 'true'
+      RUSTFS_ACCESS_KEY: ${MINIO_USER:-minio}
+      RUSTFS_SECRET_KEY: ${MINIO_PASSWORD:-!ChangeMe!}
     volumes:
-      - ./docker/minio:/data/minio
+      - rustfs_data:/data
 
     # weblate:
     #   image: weblate/weblate:latest
@@ -232,3 +235,4 @@ volumes:
   db_data:
   chat_data:
   redis_data:
+  rustfs_data:
