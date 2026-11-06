@@ -166,7 +166,6 @@ export interface UpdateKeycloakUserProps {
   newFirstName?: string;
   newLastName?: string;
   newEmail?: string;
-  previousEmail?: string;
   password?: string;
   universityId?: string;
   languageId?: string;
@@ -184,12 +183,7 @@ export interface UpdateKeycloakUserPayload {
     value: string;
     temporary: boolean;
   }[];
-  attributes?: {
-    universityId: string;
-    universityLogin: string;
-    languageId: string;
-    mimetype?: string;
-  };
+  attributes?: { [index: string]: string[] };
 }
 
 export interface GetUsersProps {

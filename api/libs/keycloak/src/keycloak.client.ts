@@ -479,21 +479,22 @@ export class KeycloakClient {
   async updateUser(
     props: UpdateKeycloakUserProps,
   ): Promise<UserRepresentation> {
+    // Keycloak replaces the whole attribute set on update: start from the
+    // stored attributes and only overwrite the ones given.
+    const existingUser = await this.getUserById(props.id);
     const payload: UpdateKeycloakUserPayload = {
       email: props.newEmail,
       firstName: props.newFirstName,
       lastName: props.newLastName,
       attributes: {
-        universityId: props.universityId,
-        universityLogin: props.universityLogin,
-        languageId: props.languageId,
+        ...this.toKeycloakAttributes(existingUser.attributes ?? {}),
+        ...this.toKeycloakAttributes({
+          universityId: props.universityId,
+          universityLogin: props.universityLogin,
+          languageId: props.languageId,
+        }),
       },
     };
-
-    const user = await this.getUserByEmail(
-      props.previousEmail || props.newEmail,
-    );
-    props.id = props.id ? props.id : user.id;
 
     if (props.password) {
       const passwordResponse = await fetch(
@@ -984,6 +985,27 @@ export class KeycloakClient {
     const administrators = await response.json();
 
     return administrators;
+  }
+
+  /*
+   * Drops undefined values and wraps single values in arrays, the form
+   * Keycloak stores attributes in.
+   */
+  private toKeycloakAttributes(
+    attributes: Record<string, string | string[] | undefined>,
+  ): Record<string, string[]> {
+    return Object.keys(attributes).reduce(
+      (result, name) => {
+        const value = attributes[name];
+
+        if (value === undefined) {
+          return result;
+        }
+
+        return { ...result, [name]: Array.isArray(value) ? value : [value] };
+      },
+      {} as Record<string, string[]>,
+    );
   }
 
   /*
