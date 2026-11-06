@@ -63,6 +63,7 @@ import RoleRepresentation, {
   CreateAdministratorProps,
   CreateUserProps,
   CredentialRepresentation,
+  GetAllUsersProps,
   GetUsersProps,
   KeycloakCertsResponse,
   KeycloakEmailAction,
@@ -79,6 +80,14 @@ export interface Credentials {
   accessToken: string;
   refreshToken: string;
 }
+
+type FetchResponse = Awaited<ReturnType<typeof fetch>>;
+
+/// Number of users retrieved per request when browsing the whole realm.
+const USERS_PAGE_SIZE = 100;
+
+/// Number of attempts before giving up on a page of users.
+const USERS_PAGE_ATTEMPTS = 3;
 
 // Could be optimized by caching the admin access token and the public keys
 // for a certain amount of time.
@@ -564,7 +573,7 @@ export class KeycloakClient {
    * Delete user in Keycloak.
    **/
   async deleteUser(id: string): Promise<void> {
-    await fetch(
+    const response = await fetch(
       `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users/${id}`,
       {
         method: 'DELETE',
@@ -574,6 +583,14 @@ export class KeycloakClient {
         },
       },
     );
+
+    if (!response.ok) {
+      const body = await response.text();
+      this.logger.error(
+        `Failed to delete the keycloak user ${id} (${response.status}): ${body}`,
+      );
+      throw new HttpException({ message: body }, response.status);
+    }
   }
 
   /*
@@ -591,6 +608,7 @@ export class KeycloakClient {
     max,
     enabled,
     attributes,
+    briefRepresentation,
   }: GetUsersProps): Promise<UserRepresentation[]> {
     const url = new URL(
       `${this.configuration.baseUrl}/admin/realms/${this.configuration.realm}/users`,
@@ -608,16 +626,20 @@ export class KeycloakClient {
       url.searchParams.append('enabled', enabled.toString());
     }
 
-    if (first) {
+    if (first !== undefined) {
       url.searchParams.append('first', first.toString());
     }
 
-    if (max) {
+    if (max !== undefined) {
       url.searchParams.append('max', max.toString());
     }
 
     if (attributes) {
       url.searchParams.append('q', `${attributes.key}:${attributes.value}`);
+    }
+
+    if (briefRepresentation) {
+      url.searchParams.append('briefRepresentation', 'true');
     }
 
     const response = await fetch(url.toString(), {
@@ -628,9 +650,101 @@ export class KeycloakClient {
       },
     });
 
-    const users = await response.json();
+    return this.readJson<UserRepresentation[]>(response, url.pathname);
+  }
 
-    return users;
+  /*
+   * Retrieves every user of the realm, page by page.
+   *
+   * Asking Keycloak for the whole realm in a single request makes it stream a
+   * response of several megabytes: any hiccup on the way (read timeout of a
+   * proxy, reset connection) truncates the body, and the JSON parsing then
+   * fails in the middle of it. Small pages keep each response short lived, and
+   * a page that fails can be retried without losing the previous ones.
+   */
+  async getAllUsers({
+    pageSize = USERS_PAGE_SIZE,
+    briefRepresentation = true,
+  }: GetAllUsersProps = {}): Promise<UserRepresentation[]> {
+    const users: UserRepresentation[] = [];
+
+    for (let first = 0; ; first += pageSize) {
+      const page = await this.getUsersPage({
+        first,
+        max: pageSize,
+        briefRepresentation,
+      });
+
+      users.push(...page);
+
+      // A page shorter than requested means we reached the end of the realm.
+      if (page.length < pageSize) {
+        return users;
+      }
+    }
+  }
+
+  /*
+   * Retrieves a single page of users, retrying the transient failures.
+   */
+  private async getUsersPage(
+    props: GetUsersProps,
+  ): Promise<UserRepresentation[]> {
+    for (let attempt = 1; ; attempt++) {
+      try {
+        return await this.getUsers(props);
+      } catch (error) {
+        const isLastAttempt = attempt >= USERS_PAGE_ATTEMPTS;
+        // Keycloak rejected the request itself, retrying will not help.
+        const isClientError =
+          error instanceof HttpException &&
+          error.getStatus() >= 400 &&
+          error.getStatus() < 500;
+
+        if (isLastAttempt || isClientError) {
+          throw error;
+        }
+
+        this.logger.warn(
+          `Failed to retrieve the users ${props.first} to ${
+            props.first + props.max
+          } (attempt ${attempt}/${USERS_PAGE_ATTEMPTS}), retrying`,
+        );
+
+        await new Promise((resolve) => setTimeout(resolve, attempt * 1000));
+      }
+    }
+  }
+
+  /*
+   * Reads the body of a response as JSON.
+   *
+   * Going through the raw text lets us report the status and the actual body
+   * when Keycloak (or anything standing in front of it) does not answer the
+   * JSON we expect: an error page, or a body truncated mid-stream, which
+   * `response.json()` would only surface as an unusable `SyntaxError`.
+   */
+  private async readJson<T>(
+    response: FetchResponse,
+    endpoint: string,
+  ): Promise<T> {
+    const body = await response.text();
+
+    if (!response.ok) {
+      this.logger.error(`${endpoint} answered ${response.status}: ${body}`);
+      throw new HttpException({ message: body }, response.status);
+    }
+
+    try {
+      return JSON.parse(body) as T;
+    } catch (error) {
+      this.logger.error(
+        `${endpoint} answered an unparsable body: ${body.length} bytes read for a content-length of ${
+          response.headers.get('content-length') ?? 'unknown'
+        } (${error})`,
+      );
+      throw new UnexpectedErrorException();
+    }
   }
 
   async getUsersCount(): Promise<number> {

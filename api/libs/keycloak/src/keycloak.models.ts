@@ -202,6 +202,16 @@ export interface GetUsersProps {
     key: string;
     value: string;
   };
+  /// Ask Keycloak for a lighter user representation (no attributes, no
+  /// credentials metadata). Divides the size of the response by several times
+  /// when only the identity of the users matters.
+  briefRepresentation?: boolean;
+}
+
+export interface GetAllUsersProps {
+  /// Number of users retrieved per request.
+  pageSize?: number;
+  briefRepresentation?: boolean;
 }
 
 export interface OpenIdConfiguration {
