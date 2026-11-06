@@ -56,8 +56,13 @@ stages:
   variables:
     WORKING_DIR: admin
     IMAGE_NAME: ulep/admin
+    #DOCKERFILE_PATH: .gitlab-ci/Dockerfile.admin
     DOCKER_TARGET: admin_prod
     LINT: enabled
+    # Optimisation mémoire suite aux limitations du pod infra
+    GENERATE_SOURCEMAP: "false"
+    DISABLE_ESLINT_PLUGIN: "true"
+    NODE_OPTIONS: "--max-old-space-size=1536"
   rules:
     - changes:
         - admin/**/*
@@ -79,6 +84,8 @@ stages:
   variables:
     WORKING_DIR: api
     IMAGE_NAME: ulep/api
+    #DOCKERFILE_PATH: .gitlab-ci/Dockerfile.api
+    #DOCKER_TARGET: api_ul
     DOCKER_TARGET: api_prod
     LINT: enabled
     TEST: enabled
@@ -92,7 +99,7 @@ stages:
   variables:
     WORKING_DIR: docker/keycloak
     IMAGE_NAME: ulep/auth-ul-theme
-    TAG: "1.0"
+    TAG: "1.7"
   rules:
     - changes:
         - docker/keycloak/**/*

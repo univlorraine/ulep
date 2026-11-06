@@ -64,7 +64,7 @@ const SettingsContent: React.FC<SettingsContentProps> = ({ onBackPressed, onDisc
     const setLanguage = useStoreActions((state) => state.setLanguage);
     const setRtl = useStoreActions((state) => state.setRtl);
     const isRtl = useIsRtl();
-    const { language: currentLanguage, profile, accessToken } = useStoreState((state) => state);
+    const { language: currentLanguage, profile } = useStoreState((state) => state);
     const setProfileSignUp = useStoreActions((state) => state.updateProfileSignUp);
     const [showToast] = useIonToast();
     const updateProfile = useStoreActions((state) => state.updateProfile);

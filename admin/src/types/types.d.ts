@@ -43,7 +43,11 @@ declare global {
     // ignore prettier warning : behaviour different between two versions of prettier
     /* eslint-disable-next-line prettier/prettier */
     type MeetFrequency =
-        'ONCE_A_WEEK' | 'TWICE_A_WEEK' | 'THREE_TIMES_A_WEEK' | 'TWICE_A_MONTH' | 'THREE_TIMES_A_MONTH';
+        | 'ONCE_A_WEEK'
+        | 'TWICE_A_WEEK'
+        | 'THREE_TIMES_A_WEEK'
+        | 'TWICE_A_MONTH'
+        | 'THREE_TIMES_A_MONTH';
     type LanguageStatus = 'PRIMARY' | 'SECONDARY' | 'UNACTIVE';
     type AvailabilitiesOptions = 'UNAVAILABLE' | 'AVAILABLE' | 'VERY_AVAILABLE';
     interface UserIdentity {
