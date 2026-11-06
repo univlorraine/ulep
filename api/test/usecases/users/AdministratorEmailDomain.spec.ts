@@ -31,6 +31,7 @@ describe('Administrator email domain', () => {
     getUserById: jest.fn(),
     createAdministrator: jest.fn(),
     addRealmRoleToUser: jest.fn(),
+    removeUserFromAdminGroups: jest.fn(),
     removeRealmRoleToUser: jest.fn(),
     getUserCredentials: jest.fn(),
     getAdministrators: jest.fn(),
