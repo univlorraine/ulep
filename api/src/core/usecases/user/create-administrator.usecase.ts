@@ -74,6 +74,12 @@ export class CreateAdministratorUsecase {
   async execute(command: CreateAdministratorCommand) {
     const university = await this.getUniversity(command.universityId);
 
+    if (!university.acceptsAdministratorEmail(command.email)) {
+      throw new BadRequestException(
+        'Email domain is not allowed for this university',
+      );
+    }
+
     let user = await this.keycloakClient.getUserByEmail(command.email);
 
     if (!user) {

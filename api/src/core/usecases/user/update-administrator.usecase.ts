@@ -41,6 +41,7 @@
 import { KeycloakClient, KeycloakGroup } from '@app/keycloak';
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { RessourceDoesNotExist } from 'src/core/errors';
+import { University } from 'src/core/models';
 import {
   UniversityRepository,
   UNIVERSITY_REPOSITORY,
@@ -68,10 +69,9 @@ export class UpdateAdministratorUsecase {
   ) {}
 
   async execute(command: UpdateAdministratorCommand) {
+    let university: University | undefined;
     if (command.universityId) {
-      const university = await this.universityRepository.ofId(
-        command.universityId,
-      );
+      university = await this.universityRepository.ofId(command.universityId);
       if (!university) {
         throw new RessourceDoesNotExist('University does not exist');
       }
@@ -79,6 +79,16 @@ export class UpdateAdministratorUsecase {
     const admin = await this.keycloakClient.getUserById(command.id);
     if (!admin) {
       throw new RessourceDoesNotExist('Administrator does not exist');
+    }
+
+    if (
+      university &&
+      !command.shouldRemoveAdminRole &&
+      !university.acceptsAdministratorEmail(command.email || admin.email)
+    ) {
+      throw new BadRequestException(
+        'Email domain is not allowed for this university',
+      );
     }
 
     if (command.shouldRemoveAdminRole) {

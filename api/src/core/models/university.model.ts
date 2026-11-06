@@ -149,6 +149,22 @@ export class University {
     return !this.parent;
   }
 
+  /*
+   * Central administrators must use an address on one of the university
+   * domains; partner universities accept any address.
+   */
+  public acceptsAdministratorEmail(email: string): boolean {
+    if (!this.isCentralUniversity() || !this.domains?.length) {
+      return true;
+    }
+
+    const address = email.toLowerCase();
+
+    return this.domains.some((domain) =>
+      address.endsWith(domain.toLowerCase()),
+    );
+  }
+
   public supportLanguage(
     language: Language,
     learningType?: LearningType,
